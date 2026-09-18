@@ -1,0 +1,231 @@
+# Third-party / experiment method registry — M0 initial.
+# Rules: URLs and papers are copied from the frozen spec (§2, §8, §17, §30) — none invented.
+# url_verification: UNVERIFIED = copied from spec, remote not contacted in M0.
+# pinned_commit: null until pinned at first setup (M6, spec §8.1 "pin the repository commit on first setup").
+# Status tags (spec §8): FAITHFUL_OFFICIAL | FAITHFUL_PAPER | CONTROLLED_ADAPTATION | BLOCKED_BY_SOURCE_GAP
+schema_version: m0-initial
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+methods:
+  - method_id: E00
+    method_name: Real-only
+    role: "Downstream lower bound (no synthetic generation)"
+    track: Binary
+    spec_sections: ["2 (R0)", "17"]
+    source_status: NOT_APPLICABLE
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: null
+    target_implementation_status: NOT_APPLICABLE
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: null
+    notes: "Downstream evaluators only (configs/frozen/downstream_resnet18.yaml, downstream_dinov3_vits16.yaml)."
+
+  - method_id: E01
+    method_name: FAS-Aug
+    role: "Handcrafted / physics synthetic baseline"
+    track: "Binary = native"
+    spec_sections: ["2 (R1)", "8.1", "17"]
+    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    official_repo: https://github.com/RizhaoCai/FAS_Aug
+    url_verification: UNVERIFIED
+    pinned_commit: null
+    paper: "R. Cai et al., Towards Data-Centric Face Anti-Spoofing: Improving Cross-domain Generalization via Physics-based Data Synthesis, IJCV 133, 2025. arXiv:2409.03501"
+    target_implementation_status: FAITHFUL_OFFICIAL
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/fas_aug.yaml (not yet created)
+    notes: "Uses target_live_id only; ignores source_spoof_id. Round-robin operator by pair_id; seed = SHA256(pair_id + global_seed) mod 2^31."
+
+  - method_id: E02
+    method_name: Frequency Substitution
+    role: "Direct frequency transfer baseline"
+    track: "Binary = native"
+    spec_sections: ["2 (R2)", "8.2", "17"]
+    source_status: PAPER_ONLY_SPEC_DEFINES_CONTROLLED_IMPLEMENTATION
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: "Y. Huang, W. Zhang, J. Wang, Deep Frequent Spatial Temporal Learning for Face Anti-Spoofing, 2020. arXiv:2002.03723"
+    target_implementation_status: CONTROLLED_ADAPTATION
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/freq_sub.yaml (not yet created)
+    notes: "Fully specified in spec §8.2 (r∈[0.20,0.50], 16×16 blocks, ≥75% eligible, 25% selected, target phase kept)."
+
+  - method_id: E03
+    method_name: STDN
+    role: "Learned spoof-trace transfer"
+    track: "Binary = native"
+    spec_sections: ["2 (R3)", "8.3", "17", "31"]
+    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    official_repo: https://github.com/yaojieliu/ECCV20-STDN
+    url_verification: UNVERIFIED
+    pinned_commit: null
+    paper: "Y. Liu, J. Stehouwer, X. Liu, On Disentangling Spoof Trace for Generic Face Anti-Spoofing, ECCV 2020. arXiv:2007.09273"
+    target_implementation_status: FAITHFUL_OFFICIAL
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/stdn.yaml (not yet created)
+    notes: "TensorFlow stack; isolated env/container if needed. PyTorch rewrite not allowed for main faithful row unless numerically validated and tagged separately."
+
+  - method_id: E04
+    method_name: Physics-Guided STD
+    role: "Frequency-aware trace transfer"
+    track: "Binary = native"
+    spec_sections: ["2 (R4)", "8.4", "17"]
+    source_status: PAPER_ONLY_NO_CODE_IN_SPEC
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: "Y. Liu, X. Liu, Physics-Guided Spoof Trace Disentanglement for Generic Face Anti-Spoofing, arXiv:2012.05185; IEEE TPAMI 2022, DOI 10.1109/TPAMI.2022.3176387"
+    target_implementation_status: FAITHFUL_PAPER
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/physics_std.yaml (not yet created)
+    notes: "FAITHFUL_PAPER unless a verified official release is found (Q-09). Needs methods/physics_std/source_traceability.md. Missing scientific details → BLOCKED_BY_SOURCE_GAP."
+
+  - method_id: E05
+    method_name: PCGAN (PMN artifact pattern conversion)
+    role: "Full-image learned artifact conversion"
+    track: "Binary = native"
+    spec_sections: ["2 (R5)", "8.5", "17", "31"]
+    source_status: PAPER_ONLY_NO_CODE_IN_SPEC
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: "S. Jung et al., Domain-generalizable Face Anti-Spoofing with Patch-based Multi-tasking and Artifact Pattern Conversion, Pattern Recognition 179 Part B, 113640, 2026. arXiv:2604.09018"
+    target_implementation_status: "FAITHFUL_PAPER or CONTROLLED_ADAPTATION (depends on code availability at implementation time)"
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/pcgan.yaml (not yet created)
+    notes: "Q-08: official code availability unknown. Must output full 256×256 RGB; may not reuse GPAT identity/landmark losses in main row."
+
+  - method_id: E06a
+    method_name: DSDG-BIN
+    role: "Equal-label-budget generative baseline (adapted binary variant)"
+    track: "Binary adapted"
+    spec_sections: ["2 (R6)", "5.1", "8.6", "17"]
+    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    official_repo: https://github.com/JDAI-CV/FaceX-Zoo/tree/main/addition_module/DSDG
+    url_verification: UNVERIFIED
+    pinned_commit: null
+    paper: "H. Wu, D. Zen, Y. Hu, H. Shi, T. Mei, Dual Spoof Disentanglement Generation for Face Anti-spoofing with Depth Uncertainty Learning, arXiv:2112.00568 / IEEE TCSVT"
+    target_implementation_status: CONTROLLED_ADAPTATION
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/dsdg_binary.yaml (not yet created)
+    notes: "All spoof-type labels collapsed to one class; mark 'adapted binary variant'. Not a pair method: generates N_syn, pairwise metrics N/A. Citation copied verbatim from spec §30 (author list unverified against the paper)."
+
+  - method_id: E06b
+    method_name: DSDG-NATIVE
+    role: "Original type-supervised setting"
+    track: Native
+    spec_sections: ["2 (R6)", "5.2", "8.6", "17", "31"]
+    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    official_repo: https://github.com/JDAI-CV/FaceX-Zoo/tree/main/addition_module/DSDG
+    url_verification: UNVERIFIED
+    pinned_commit: null
+    paper: "same as E06a (arXiv:2112.00568)"
+    target_implementation_status: FAITHFUL_OFFICIAL
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/dsdg_native.yaml (not yet created)
+    notes: "Spoof-type target = attack_macro. Identity pairing only from TRAIN identities with both live and spoof."
+
+  - method_id: E07a
+    method_name: DiffFAS-BIN
+    role: "Equal-label-budget diffusion baseline (adapted binary variant)"
+    track: "Binary adapted"
+    spec_sections: ["2 (R7)", "5.1", "8.7", "17"]
+    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    official_repo: https://github.com/murphytju/DiffFAS
+    url_verification: UNVERIFIED
+    pinned_commit: null
+    paper: "X. Ge, X. Liu, Z. Yu, J. Shi, C. Qi, J. Li, H. Kälviäinen, DiffFAS: Face Anti-Spoofing via Generative Diffusion Models, ECCV 2024. arXiv:2409.08572"
+    target_implementation_status: CONTROLLED_ADAPTATION
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/difffas_binary.yaml (not yet created)
+    notes: "All style_id collapsed to one spoof style; same-ID live/spoof reconstruction-pair structure kept; mark 'adapted binary variant'."
+
+  - method_id: E07b
+    method_name: DiffFAS-NATIVE
+    role: "Precise style + identity-consistent diffusion"
+    track: Native
+    spec_sections: ["2 (R7)", "5.2", "8.7", "17", "31"]
+    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    official_repo: https://github.com/murphytju/DiffFAS
+    url_verification: UNVERIFIED
+    pinned_commit: null
+    paper: "same as E07a (arXiv:2409.08572)"
+    target_implementation_status: FAITHFUL_OFFICIAL
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/difffas_native.yaml (not yet created)
+    notes: "style_id = dataset::attack_raw. Guide spoof from same style_id, different subject when possible."
+
+  - method_id: E08
+    method_name: GPAT-B0
+    role: "Proposed method — main fair (binary) configuration"
+    track: Binary
+    spec_sections: ["5.3", "9", "10", "17", "23.2"]
+    source_status: IN_HOUSE_SPEC_DEFINED
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: null
+    target_implementation_status: "Proposed method (spec §9-§10 frozen architecture)"
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/gpat_b0.yaml (created, spec §23.2 verbatim)
+    notes: "λ_type=0.0, λ_idadv=0.0. Open: DEV-003 lambda_dir. NAFBlock reference: NAFNet (R16) https://github.com/megvii-research/NAFNet (UNVERIFIED)."
+
+  - method_id: E09
+    method_name: GPAT-B1
+    role: "Attack-type supervision effect"
+    track: "+attack type (Native)"
+    spec_sections: ["5.3", "9.2", "10.5", "17"]
+    source_status: IN_HOUSE_SPEC_DEFINED
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: null
+    target_implementation_status: "Proposed method variant"
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/gpat_b1.yaml (not yet created)
+    notes: "λ_type=0.2, λ_idadv=0.0; 10-epoch E_art attack_macro warmup (AdamW lr=1e-4, batch 64, cosine)."
+
+  - method_id: E10
+    method_name: GPAT-B2
+    role: "Identity adversary effect"
+    track: "+identity (not Track A)"
+    spec_sections: ["5.1", "5.3", "9.2", "17"]
+    source_status: IN_HOUSE_SPEC_DEFINED
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: null
+    target_implementation_status: "Proposed method variant"
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/gpat_b2.yaml (not yet created)
+    notes: "λ_type=0.0, λ_idadv=0.1; GRL coef 1.0 + Linear(512, n_train_subjects). Open: Q-05 sign convention."
+
+  - method_id: E11
+    method_name: GPAT-B3
+    role: "Full GPAT supervision"
+    track: "+type+identity (Native)"
+    spec_sections: ["5.2", "5.3", "9.2", "10.5", "17"]
+    source_status: IN_HOUSE_SPEC_DEFINED
+    official_repo: null
+    url_verification: NOT_APPLICABLE
+    pinned_commit: null
+    paper: null
+    target_implementation_status: "Proposed method variant"
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/methods/gpat_b3.yaml (not yet created)
+    notes: "λ_type=0.2, λ_idadv=0.1; attack-type warmup as B1."

@@ -1,0 +1,49 @@
+# GPAT-TransferBench .gitignore
+# Policy: never ignore configs, manifests (incl. *.parquet), audit files, run metadata,
+# hashes, provenance records or source traceability. Only caches, local environments,
+# large raw/derived data and large binary weights are ignored; their provenance
+# (paths + SHA256) must be recorded in tracked manifests/registries instead.
+
+# Python / tooling caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local environments
+.venv/
+venv/
+env/
+.conda/
+
+# IDE / OS temp
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Secrets (must never be committed)
+.env
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+id_ecdsa*
+
+# Large raw / derived data (keep directory placeholders)
+data/raw/*/*
+!data/raw/*/.gitkeep
+data/processed/*/*
+!data/processed/*/.gitkeep
+cache/*/*
+!cache/*/.gitkeep
+
+# Large binary model weights / checkpoints anywhere (hash them in registries/run metadata)
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors

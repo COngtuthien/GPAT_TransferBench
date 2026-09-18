@@ -1,0 +1,986 @@
+GPAT-TRANSFERBENCH
+Frozen Research, Reimplementation, Training, Evaluation and Paper-Evidence Specification
+Version 1.0 — August 2026
+Standalone GPAT study — no PRISM-FAS-B components
+Figure 1. End-to-end experimental contract. All numbers are produced only after real runs; no placeholder may be reported as a result.
+EXECUTION CONTRACT: This document is intentionally prescriptive. Claude/Codex must implement the specification as written. It must not substitute models, invent hyperparameters, alter split logic, or silently simplify a baseline. Any unresolved detail must be surfaced as BLOCKED_BY_SOURCE_GAP or recorded in deviation_report.md before continuing.
+[Heading1] 0. Document status, scope and non-negotiable rules
+Scientific status: PROPOSED DESIGN / FROZEN IMPLEMENTATION SPECIFICATION. No experimental number in this document is a measured result. All result cells are intentionally shown as “—”.
+[ListBullet] Research scope: image-based Face Anti-Spoofing (FAS) synthetic data generation by transferring or synthesizing spoof evidence onto live faces.
+[ListBullet] Primary method under study: GPAT (Geometry-Preserving Artifact Transfer), evaluated as a standalone generator, not as part of PRISM-FAS-B.
+[ListBullet] Primary scientific question: under one frozen pooled dataset and one frozen downstream evaluator, which synthetic method best preserves the live target, transfers spoof evidence, and improves real held-out FAS performance?
+[ListBullet] Datasets used in this benchmark: the user’s local copies of CASIA-FASD, MSU-MFSD and SiW-Mv2. Local inventory is the source of truth; the code must not assume official sample counts.
+[ListBullet] Primary split: 70% train / 15% validation / 15% test, group-disjoint by subject within each dataset. Frame-random splitting is forbidden.
+[ListBullet] Final TEST contains only real samples. Synthetic samples are never inserted into the main TEST set.
+[ListBullet] Every baseline is retrained/reimplemented on this benchmark. Published paper numbers are literature context only, never mixed with our reimplementation results.
+[ListBullet] All self-run results are reported over seeds [42, 1337, 2026] as mean ± standard deviation; test thresholds come from VAL only.
+[ListBullet] No target/test-driven tuning, cherry-picking of one seed, or post-hoc changing of metrics is allowed.
+[Heading2] 0.1 Claude / Codex hard rules
+[ListNumber] Read this document completely before coding. Create a frozen_config_snapshot/ directory containing verbatim copies of every YAML/JSON configuration used.
+[ListNumber] Implement one milestone at a time. A milestone can be marked COMPLETE only after unit tests, acceptance checks and evidence files pass.
+[ListNumber] Never replace a named model with an “equivalent” model because installation is easier. If the named dependency cannot be installed, stop that milestone and write BLOCKED_BY_DEPENDENCY.
+[ListNumber] Never invent a missing third-party paper/repository detail. Follow the source-of-truth hierarchy defined in Section 8. If the source is genuinely underspecified and no benchmark override is defined here, write BLOCKED_BY_SOURCE_GAP.
+[ListNumber] Never alter split manifests after the first accepted split. Any new split requires a new protocol version and cannot overwrite v1.
+[ListNumber] Never train on TEST metadata or use TEST metrics for checkpoint, threshold, quality-gate or hyperparameter selection.
+[ListNumber] Never fabricate a result, interpolate a missing method, or copy a reported paper result into an “our reimplementation” table.
+[ListNumber] Every run must save code commit, config hash, dataset-manifest hash, model checkpoint hash, seed, environment lock and per-sample predictions.
+[ListNumber] Any deviation from this specification must be written to outputs/audit/deviation_report.md with reason, affected experiments and explicit status APPROVED/UNAPPROVED. Unapproved deviations cannot be used as main paper results.
+[Heading2] 0.2 Fixed project root and directory contract
+[CodeBlock] D:\AI on IOT\Anti_spoofing\GPAT_TransferBench
+├── configs\
+│   ├── frozen\
+│   ├── methods\
+│   └── experiments\
+├── data\
+│   ├── raw\casia_fasd\
+│   ├── raw\msu_mfsd\
+│   ├── raw\siwmv2\
+│   ├── processed\frames\
+│   └── processed\faces_256\
+├── manifests\
+├── cache\geometry\
+├── cache\identity\
+├── methods\
+│   ├── fas_aug\
+│   ├── freq_sub\
+│   ├── stdn\
+│   ├── physics_std\
+│   ├── pcgan\
+│   ├── dsdg\
+│   ├── difffas\
+│   └── gpat\
+├── probes\
+├── downstream\
+├── third_party\
+├── runs\
+├── outputs\tables\
+├── outputs\plots\
+├── outputs\qualitative\
+├── outputs\paper_pack\
+├── outputs\audit\
+└── tests/
+[Heading1] 1. Research method and hypotheses
+A sample for source-conditioned transfer contains a live target x_t and a real spoof source x_s. A generator G produces a synthetic spoof x_hat whose facial content should remain attributable to x_t while its attack evidence should be attributable to x_s.
+x_hat = G(x_t, x_s; supervision, method parameters)
+[ListBullet] H1 — Target preservation: GPAT has higher target identity similarity and lower geometric/topological drift than unconstrained full-image conversion methods.
+[ListBullet] H2 — Artifact transfer: GPAT does not “win” by producing an almost unchanged live face; source-to-synthetic artifact similarity and attack-family consistency must remain non-collapsed.
+[ListBullet] H3 — Downstream utility: replacing a fixed portion of real-spoof training examples with an equal-budget GPAT synthetic bank improves or maintains real held-out FAS performance relative to other generators.
+[ListBullet] H4 — Supervision effect: attack-type labels improve artifact controllability; identity supervision primarily reduces source-identity leakage. These effects are tested separately with GPAT B0/B1/B2/B3.
+[ListBullet] H5 — Hard wavelet constraint: γ=0 and wavelet residual output produce a better geometry–artifact Pareto trade-off than full RGB generation, RGB residual generation, or γ>0 variants.
+[ListBullet] H6 — Improvements are not explained by more synthetic data, a stronger evaluator, a different threshold, generator fingerprint, or data leakage.
+[Heading2] 1.1 Primary contribution claim allowed after experiments
+The paper may claim a “geometry-preserving, source-conditioned, bounded wavelet-residual spoof transfer framework” only if H1, H2 and H5 are supported. The broad statements “first spoof transfer”, “first frequency-domain FAS”, “first spoof map” and “first quality-aware FAS” are prohibited because related prior work exists.
+[Heading1] 2. Literature position and baseline set
+<TABLE>
+| ID | Method | Role in this benchmark | Dataset supervision used by original method | Core overlap with GPAT |
+| R0 | Real-only | Downstream lower bound | Live/Spoof | No synthetic generation |
+| R1 | FAS-Aug | Handcrafted / physics synthetic baseline | Does not require dataset attack-type label for basic operators | Creates spoof artifacts without learning source→target transfer |
+| R2 | Frequency Substitution | Direct frequency transfer baseline | Live/Spoof pair is sufficient | Transfers high-frequency spoof content directly |
+| R3 | STDN (ECCV 2020) | Learned spoof-trace transfer | Binary Live/Spoof in core method | Disentangles spoof trace then geometrically transfers it |
+| R4 | Physics-Guided STD / PAMI | Frequency-aware trace transfer | Weak/binary supervision in core method | Additive + inpainting spoof traces across frequency bands |
+| R5 | PCGAN–PMN (2026) | Full-image learned artifact conversion | Ground-truth Live/Attack labels for conversion | Disentangles content/artifact; generates full RGB mixed image |
+| R6 | DSDG | Generative/disentanglement secondary baseline | Uses spoof-type label; identity/spoof latent factors | Generates paired live/spoof from latent distribution |
+| R7 | DiffFAS (ECCV 2024) | Diffusion generation baseline | Precise spoof style labels + identity-consistent live/spoof pairs | Live→spoof full-image diffusion editing conditioned by spoof style |
+| P | GPAT | Proposed method | B0 binary; B1 +type; B2 +ID; B3 +type+ID | Learned bounded wavelet residual with hard LL preservation |
+</TABLE>
+LITERATURE SCOPE: MEGC (ICASSP 2022), Face De-Spoofing/noise modeling, generalized spoof-cue maps and later frequency-domain FAS works are required Related Work references but are not mandatory main generator rows because they do not provide the same source→target synthetic contract.
+[Heading1] 3. Dataset protocol: pooled held-out evaluation
+Figure 2. Two supervision tracks. Track A equalizes dataset-label information; Track B runs each method with its native supported supervision.
+[Heading2] 3.1 Dataset inventory is mandatory before splitting
+The implementation MUST inventory the user’s local copies instead of assuming that the local folders contain the full official release. For each dataset the adapter must enumerate canonical videos/sequences, subjects, live/spoof labels and raw attack labels when available.
+<TABLE>
+| Dataset | Local role | Known public characteristics used only for validation/context | Hard rule |
+| CASIA-FASD | Pooled dataset | Contains print-style and video/replay attacks; original ICB 2012 dataset | Use local inventory; do not assume sample count |
+| MSU-MFSD | Pooled dataset | Print and replay presentation attacks; associated with Wen et al. TIFS 2015 | Use local inventory; do not assume sample count |
+| SiW-Mv2 | Pooled dataset | 14 spoof types: print/replay, masks, makeup and partial/material attacks | Use local inventory; preserve all available raw attack labels |
+</TABLE>
+[Heading2] 3.2 Canonical metadata schema
+<TABLE>
+| Field | Type | Required | Definition |
+| sample_id | string | Yes | Stable hash from dataset + canonical_video_id + sampled_frame_index |
+| dataset | enum | Yes | casia_fasd | msu_mfsd | siwmv2 |
+| subject_id_raw | string | Yes | Dataset-native subject identity token |
+| subject_id_global | string | Yes | dataset::subject_id_raw |
+| video_id | string | Yes | Stable canonical video/sequence ID |
+| frame_index | int | Yes | Original frame index |
+| label_binary | int | Yes | 0=live, 1=spoof |
+| attack_raw | string | Spoof only | Dataset-native attack/style label |
+| attack_macro | enum | Yes | live | print | replay | mask_2d | mask_3d | makeup | partial | other_spoof |
+| style_id | string | Spoof if available | dataset::attack_raw; used only by Native/Full methods that need precise style |
+| source_path | string | Yes | Raw file or image-sequence path |
+| sha256 | string | Yes | Hash of original frame bytes or canonical extracted PNG |
+</TABLE>
+[Heading2] 3.3 Frozen attack-label harmonization
+<TABLE>
+| Dataset raw concept | attack_macro |
+| CASIA warped printed photograph | print |
+| CASIA cut-eye printed photograph | print |
+| CASIA video attack | replay |
+| MSU printed photograph | print |
+| MSU replay/video attack | replay |
+| SiW-Mv2 print | print |
+| SiW-Mv2 replay | replay |
+| SiW-Mv2 paper mask | mask_2d |
+| SiW-Mv2 half mask | mask_3d |
+| SiW-Mv2 transparent mask | mask_3d |
+| SiW-Mv2 silicone mask | mask_3d |
+| SiW-Mv2 mannequin | mask_3d |
+| SiW-Mv2 partial eye | partial |
+| SiW-Mv2 funny eye glasses | partial |
+| SiW-Mv2 partial mouth | partial |
+| SiW-Mv2 paper glasses | partial |
+| SiW-Mv2 cosmetic makeup | makeup |
+| SiW-Mv2 impersonation makeup | makeup |
+| SiW-Mv2 obfuscation makeup | makeup |
+| Any explicitly documented spoof token not listed above | other_spoof (record raw token; do not guess another class) |
+</TABLE>
+NO SILENT LABEL GUESSING: If an adapter sees an unknown raw token, it must write outputs/audit/unmapped_attack_tokens.csv. It may map the token to other_spoof for the binary benchmark, but Native/Full experiments that require exact style are BLOCKED until the raw token is explicitly added to attack_map_v1.yaml.
+[Heading2] 3.4 Frame sampling from videos / image sequences
+[ListBullet] Sample exactly 8 unique frames per canonical video/sequence whenever at least 8 valid frames exist.
+[ListBullet] Normalized sample positions are fixed at [0.10, 0.2142857, 0.3285714, 0.4428571, 0.5571429, 0.6714286, 0.7857143, 0.90] of the valid frame range; choose the nearest unique valid frame indices.
+[ListBullet] For sequences shorter than 8 valid frames, use every unique valid frame once; never duplicate a frame to reach eight.
+[ListBullet] Decode with the same backend and record decoder/version. Extract canonical PNGs losslessly before downstream preprocessing.
+[ListBullet] No temporal model is used in the core benchmark; the eight frames are independent training samples. Video-level test score is the arithmetic mean of the eight frame probabilities.
+[Heading2] 3.5 Frozen split algorithm — 70/15/15 subject-disjoint
+[ListBullet] Split independently inside each dataset, then pool the dataset-specific TRAIN/VAL/TEST partitions.
+[ListBullet] Grouping key = subject_id_global. A subject must appear in exactly one split.
+[ListBullet] Target ratios by number of canonical videos are TRAIN 0.70, VAL 0.15, TEST 0.15.
+[ListBullet] Deterministic split_seed = 20260814.
+[ListBullet] Allocator objective: minimize absolute deviation from target video counts plus penalties for missing binary class and attack_macro coverage. If an attack macro has fewer than 10 unique subjects, coverage across all three splits is not forced; this limitation is reported.
+[ListBullet] No video fallback is allowed in the main protocol. If a dataset adapter cannot recover subject ID, the split milestone is BLOCKED_BY_MISSING_SUBJECT_ID. A video-disjoint fallback may be implemented only as a separately named protocol_v1_video_fallback, never as the main result.
+[CodeBlock] split_v1.parquet must contain:
+sample_id, dataset, subject_id_global, video_id, frame_index,
+label_binary, attack_raw, attack_macro, split, sha256
+
+Acceptance:
+- subject intersection TRAIN∩VAL = TRAIN∩TEST = VAL∩TEST = ∅
+- video intersection across splits = ∅
+- frame/sample intersection across splits = ∅
+- each dataset represented in all feasible splits
+- split manifest SHA256 recorded in outputs/audit/split_v1.sha256
+[Heading1] 4. Preprocessing and frozen auxiliary models
+<TABLE>
+| Component | Frozen choice | Exact config / purpose |
+| Face detector | SCRFD ONNX | input 320; score threshold 0.50; choose largest detected face; detector weights must be hashed |
+| Crop | Square padded face | center on SCRFD bbox; side = 1.25×max(w,h); clamp to image; no random padding |
+| Master face resolution | 256×256 RGB | INTER_AREA when downscaling; INTER_CUBIC when upscaling; uint8 sRGB canonical crop |
+| Geometry cache | FaceXFormer, frozen | parsing logits/mask, landmarks, yaw-pitch-roll; offline cache only |
+| Identity cache | AdaFace IR-50, frozen | store L2-normalized embedding; follow model’s official BGR/input normalization |
+| Wavelet | ptwt Haar | level 1, boundary_mode=reflect; per RGB channel |
+| High-pass operator | Gaussian residual | HP(x)=x-GaussianBlur(x,kernel=9, sigma=1.5) |
+</TABLE>
+FROZEN AUXILIARIES: SCRFD, FaceXFormer and AdaFace are preprocessing/evaluation teachers. They are never fine-tuned on this pooled benchmark. Their model IDs, code commits and weight hashes must be stored in models/registry.yaml.
+[Heading1] 5. Two supervision tracks and information budget
+[Heading2] 5.1 Track A — COMMON / BINARY
+[ListBullet] Dataset supervision visible to the generator is restricted to image + label_binary. attack_raw, attack_macro, style_id and subject identity labels must not be used in generator optimization.
+[ListBullet] Pretrained face/geometry models may still be used if they are intrinsic components of the method; this must be disclosed as external pretrained supervision, not dataset metadata.
+[ListBullet] DSDG-BIN: retain DSDG architecture but collapse all spoof-type labels into one spoof class. Mark result as “adapted binary variant”, not faithful DSDG.
+[ListBullet] DIFFFAS-BIN: retain DiffFAS architecture but collapse the spoofing style pool to one spoof style label. Same-ID live/spoof pairing may still be used as structural data pairing; the dataset identity token cannot be fed as a class label. Mark as “adapted binary variant”.
+[ListBullet] GPAT-B0 is the proposed binary configuration. GPAT-B2 is not part of Track A because it uses identity labels.
+[Heading2] 5.2 Track B — NATIVE / FULL
+<TABLE>
+| Method | Native/full supervision allowed |
+| FAS-Aug | No dataset attack label required by the operator engine; synthetic operator identity is internal provenance only |
+| Frequency Substitution | Live/Spoof pairing only |
+| STDN | Binary Live/Spoof |
+| Physics-Guided STD | Binary/weak Live/Spoof core supervision |
+| PCGAN | Ground-truth Live/Attack labels for conversion |
+| DSDG-NATIVE | Spoof-type label for spoof-pattern classifier; use identity factorization as original design permits |
+| DIFFFAS-NATIVE | Precise style_id labels + same-ID live/spoof reconstruction pairs; guide spoof supplies style |
+| GPAT-B3 | Binary + attack_macro + subject identity adversary |
+</TABLE>
+SHORTCUT CONTROL: dataset ID, camera ID and device ID are never fed to GPAT or the common detector. They may be used only for stratification, audit and post-hoc subgroup analysis.
+[Heading2] 5.3 GPAT supervision ablation
+<TABLE>
+| Variant | Binary label | Attack type | Identity label | λ_type | λ_idadv |
+| GPAT-B0 | Yes | No | No | 0.0 | 0.0 |
+| GPAT-B1 | Yes | Yes (attack_macro) | No | 0.2 | 0.0 |
+| GPAT-B2 | Yes | No | Yes (GRL adversary) | 0.0 | 0.1 |
+| GPAT-B3 | Yes | Yes (attack_macro) | Yes (GRL adversary) | 0.2 | 0.1 |
+</TABLE>
+[Heading1] 6. Common source→target pair manifest
+Figure 3. Fairness contract: generators may train differently, but downstream evaluation variables are locked.
+[ListBullet] Build pairs only from TRAIN. Each TRAIN spoof frame is one source row and therefore defines one intended synthetic sample. Thus N_syn,intended = number of TRAIN spoof frames.
+[ListBullet] Target live candidates must come from the same dataset as the spoof source and from a different subject.
+[ListBullet] For every source spoof, deterministically sample up to 64 candidate live frames using a hash of (source_sample_id, split_seed). If fewer than 64 eligible candidates exist, use all candidates.
+[ListBullet] Compute pose distance from FaceXFormer yaw/pitch/roll after z-normalization inside TRAIN; scale distance from log face-box area ratio; luminance distance from normalized Y-channel mean.
+d_pair = 0.50·d_pose + 0.30·d_scale + 0.20·d_luma
+Choose the candidate with minimum d_pair; tie-break by lexical sample_id. The same pair_id is fed to every source-conditioned method that can consume a live target and spoof guide/source.
+<TABLE>
+| pair_id | target_live_id | source_spoof_id | dataset | target_subject | source_subject | attack_macro | d_pose | d_scale | d_luma | seed |
+| P000001 | — | — | — | — | — | — | — | — | — | 20260814 |
+</TABLE>
+METHOD CONTRACT: FAS-Aug uses target_live_id from the pair row and ignores source_spoof_id. DSDG is not a source→target pair method; it generates exactly the same count N_syn but pairwise metrics are reported N/A. DiffFAS uses the pair row at inference; its training also requires a same-ID live/spoof reconstruction-pair manifest described in its method card.
+[Heading1] 7. Synthetic budget and two fairness views
+[ListBullet] Main intended budget: N_syn = N_train_spoof_frames.
+[ListBullet] Every synthetic output must be returned as canonical 256×256 RGB uint8, regardless of the method’s internal resolution.
+[ListBullet] RAW-MATCHED view: retain every numerically valid generated output; only NaN/Inf, decode failure or missing output is excluded. This view isolates the raw generator.
+[ListBullet] QUALITY-MATCHED view: each method may apply its native documented filtering/quality mechanism. Determine N_common = minimum number of valid/accepted outputs among compared methods; deterministically subsample every method to N_common using pair_id/synthetic_id hash. This prevents GPAT quality filtering from receiving a larger or smaller training budget.
+[ListBullet] Report both RAW-MATCHED and QUALITY-MATCHED downstream results. The paper must state which one is the primary table before inspecting TEST.
+[Heading1] 8. Third-party reimplementation policy and method cards
+Source-of-truth hierarchy for third-party methods: (1) official repository at pinned commit; (2) official supplementary material; (3) published paper equations/architecture; (4) the controlled benchmark override below. Claude must never skip directly to an ad-hoc implementation when a higher-priority source exists.
+<TABLE>
+| Status tag | Meaning |
+| FAITHFUL_OFFICIAL | Official code/config used; only dataset paths/adapters and output wrapper changed |
+| FAITHFUL_PAPER | No usable official code; architecture/equations reconstructed from paper without method-changing assumptions |
+| CONTROLLED_ADAPTATION | Paper idea reimplemented under an explicitly frozen adaptation defined here |
+| BLOCKED_BY_SOURCE_GAP | A required method detail is missing and no override is defined; stop this method rather than guess |
+</TABLE>
+[Heading2] 8.1 FAS-Aug
+[ListBullet] Implementation status target: FAITHFUL_OFFICIAL. Use official FAS-Aug repository; pin the repository commit on first setup and store commit hash. Do not modify published augmentation ranges in the main run.
+[ListBullet] Input: pair-manifest target live 256×256. Source spoof image is not used.
+[ListBullet] Synthetic operator selection: deterministic round-robin by pair_id across the official FAS-Aug operator set; operator parameters are generated with seed = SHA256(pair_id + global_seed) mod 2^31 and follow the official repository defaults.
+[ListBullet] Output: one spoof-labeled canonical 256×256 image per intended pair. Save operator name and all sampled parameters in provenance.
+[ListBullet] Track A and Track B are identical for this method because dataset attack labels are not required for basic FAS-Aug synthesis.
+[Heading2] 8.2 Frequency Substitution — controlled implementation of Huang et al. synthesis idea
+[ListBullet] Status: CONTROLLED_ADAPTATION because the paper describes random high-frequency block substitution but does not fully fix every block geometry/implementation detail needed for a deterministic modern implementation.
+[ListBullet] Compute per-channel FFT2 of target and source at 256×256. Let A_t, φ_t and A_s be target magnitude, target phase and source magnitude after fftshift.
+[ListBullet] Eligible high-frequency region: radial normalized frequency r ∈ [0.20, 0.50] where r=0 at spectrum center and r=0.5 at Nyquist edge.
+[ListBullet] Partition the shifted magnitude spectrum into non-overlapping 16×16 blocks. Eligible block if at least 75% of its pixels lie in the eligible high-frequency region.
+[ListBullet] Select exactly 25% of eligible blocks using pair-specific RNG seed. Replace target magnitude with source magnitude in selected blocks and the conjugate-symmetric counterparts. Preserve target phase.
+[ListBullet] Reconstruct complex spectrum A_mix·exp(jφ_t), inverse shift, inverse FFT, real part, clip to [0,255]. No spatial post-filter.
+[ListBullet] Binary and Native tracks are identical. Save block mask as the method’s edit map for diagnostics.
+[Heading2] 8.3 STDN — On Disentangling Spoof Trace for Generic FAS
+[ListBullet] Status: FAITHFUL_OFFICIAL. Official code: yaojieliu/ECCV20-STDN. Preserve its model/loss/training defaults; change only dataset adapter, canonical input/output paths and reproducibility logging.
+[ListBullet] Core dataset supervision for this benchmark: binary Live/Spoof only. Do not add attack-type labels to STDN.
+[ListBullet] Geometry input required by the method must be produced deterministically from the frozen geometry cache or the official method’s required landmark/3D fitting preprocessing; record this as auxiliary pretrained geometry, not dataset label supervision.
+[ListBullet] Generation: use the disentangled spoof trace from source_spoof_id, apply the method’s geometric correction to target_live_id, and output only the synthetic spoof direction for common comparison.
+[ListBullet] If the original TensorFlow stack cannot be reproduced in the current environment, create an isolated environment/container. Rewriting the model in PyTorch is not allowed for the main faithful row unless validated numerically against official checkpoints and tagged separately.
+[Heading2] 8.4 Physics-Guided Spoof Trace Disentanglement / PAMI
+[ListBullet] Target status: FAITHFUL_PAPER unless a verified official code release is found. The paper models spoof generation with three additive components at different frequency scales plus one inpainting component.
+[ListBullet] Reuse the STDN-compatible geometric alignment/correction machinery. Implement exactly the paper’s additive/inpainting decomposition and its published losses. Store an equation-to-code traceability table in methods/physics_std/source_traceability.md.
+[ListBullet] When the paper omits a non-scientific engineering parameter such as dataloader workers, use global benchmark defaults. If a tensor dimension, architecture block, loss coefficient or optimization setting that changes the scientific method is missing, mark BLOCKED_BY_SOURCE_GAP instead of choosing one.
+[ListBullet] Core supervision: binary/weak Live/Spoof. Do not add attack-type labels.
+[Heading2] 8.5 PCGAN artifact pattern conversion
+[ListBullet] Status: FAITHFUL_PAPER / CONTROLLED_ADAPTATION depending on official code availability at implementation time. The scientific contract is fixed: separate facial-content and spoof-artifact latent representations, combine them via the paper’s conversion generator, and produce a full RGB synthetic attack image.
+[ListBullet] Training uses pooled TRAIN live/attack labels. No attack-type supervision is added.
+[ListBullet] For common source→target generation, source_spoof_id supplies spoof-artifact representation and target_live_id supplies facial-content representation. Only Live→Spoof output is evaluated in the main generator table; a symmetric Spoof→Live output may be trained if required by the original losses but is not used as a positive result row.
+[ListBullet] The method must output a full 256×256 RGB synthetic image. It may not reuse GPAT identity/landmark losses in the main PCGAN row. A separate PCGAN+geometry-loss diagnostic row is allowed only in the GPAT ablation section.
+[Heading2] 8.6 DSDG
+[ListBullet] Status: FAITHFUL_OFFICIAL for DSDG-NATIVE using FaceX-Zoo addition_module/DSDG.
+[ListBullet] Native method: spoof-pattern latent is explicitly supervised by spoof-type cross-entropy. Use attack_macro as the spoof-type target because it is the frozen harmonized label available across all three datasets.
+[ListBullet] DSDG-BIN adaptation: collapse every spoof-type target into one spoof class while retaining the rest of the architecture. Mark adapted variant.
+[ListBullet] Training live/spoof identity pairing uses only TRAIN identities that possess both live and spoof samples. Log usable identity coverage by dataset.
+[ListBullet] Generate exactly N_syn samples for each seed. DSDG does not consume the common pair manifest; target-to-synthetic ID metrics are N/A unless an explicit identity-conditioned pair can be traced by the official generator.
+[Heading2] 8.7 DiffFAS
+[ListBullet] Status: FAITHFUL_OFFICIAL whenever the official murphytju/DiffFAS code path can execute. The repository is the architecture/config source of truth; this spec fixes dataset adaptation and evaluation only.
+[ListBullet] Native training: construct same-dataset, same-identity live/spoof reconstruction pairs from TRAIN. style_id = dataset::attack_raw is the precise spoof-style label. Guide spoof image is sampled from the same style_id and a different subject when possible.
+[ListBullet] Native inference: target_live_id from common pair manifest is edited using source_spoof_id as the spoof-style guide; output one canonical 256×256 synthetic spoof.
+[ListBullet] DIFFFAS-BIN adaptation: collapse all style_id values into one spoof style while preserving the same live/spoof reconstruction-pair structure. Mark adapted binary variant.
+[ListBullet] If the local dataset lacks enough same-ID live/spoof pairs for a dataset, report the coverage. Do not synthesize identity labels or pair different identities for the reconstruction target merely to increase count.
+[Heading1] 9. GPAT exact architecture — frozen proposed method
+Figure 4. Frozen GPAT generator architecture for this benchmark.
+[Heading2] 9.1 Input/output contract
+z_a = E_art(x_s)
+DWT(x_t) = {LL_t, LH_t, HL_t, HH_t}
+{ΔLL, ΔLH, ΔHL, ΔHH, M} = G_res(DWT(x_t), z_a)
+x_hat = IDWT(LL_t + γΔLL, LH_t + M⊙ΔLH, HL_t + M⊙ΔHL, HH_t + M⊙ΔHH)
+Main configuration: γ=0.0. Therefore the generator has no path to alter the target LL band in the primary GPAT result. γ ∈ {0.02, 0.05, 0.10} is an ablation only.
+[Heading2] 9.2 Artifact Encoder E_art — exact implementation
+[ListBullet] Backbone: torchvision ResNet-18 with IMAGENET1K_V1 initialization.
+[ListBullet] Input tensor size: 12×256×256. Channels = 3 high-pass RGB channels + upsampled source detail bands [LH_s, HL_s, HH_s] concatenated as 9 channels.
+[ListBullet] Modify conv1 from 3 input channels to 12. Initialize channels 0:3 with official pretrained conv1 weights. Initialize each extra channel with mean(pretrained conv1 over RGB)/3 so the total initial response scale remains bounded.
+[ListBullet] Spatial artifact code = layer3 output (256 channels, approximately 16×16 at 256 input). Global artifact code = L2-normalized GAP(layer4), 512-D.
+[ListBullet] Attack-type auxiliary head: Linear(512, number_of_attack_macro_classes_seen_in_TRAIN), active only in GPAT-B1/B3.
+[ListBullet] Identity adversary: GRL coefficient 1.0 followed by Linear(512, number_of_train_subjects), loss weight λ_idadv=0.1, active only in GPAT-B2/B3.
+[Heading2] 9.3 Residual generator G_res — NAFResidualUNet
+<TABLE>
+| Stage | Resolution | Channels | Blocks / operation |
+| Input | 128×128 | 12 | Concatenate target LL/LH/HL/HH (3 channels each); Conv3×3 → 32 |
+| Enc1 | 128×128 | 32 | 2 NAFBlocks + FiLM(global z_a); downsample stride-2 |
+| Enc2 | 64×64 | 64 | 2 NAFBlocks + FiLM; downsample |
+| Enc3 | 32×32 | 128 | 4 NAFBlocks + FiLM; downsample |
+| Enc4 | 16×16 | 256 | 8 NAFBlocks + FiLM; downsample |
+| Bottleneck | 8×8 | 512 | Project spatial z_a 256→512, adaptive-pool to 8×8, concat with target stream, 1×1 fuse 1024→512, then 12 NAFBlocks |
+| Dec4 | 16×16 | 256 | Upsample ×2 + skip Enc4 + 2 NAFBlocks + FiLM |
+| Dec3 | 32×32 | 128 | Upsample ×2 + skip Enc3 + 2 NAFBlocks + FiLM |
+| Dec2 | 64×64 | 64 | Upsample ×2 + skip Enc2 + 2 NAFBlocks + FiLM |
+| Dec1 | 128×128 | 32 | Upsample ×2 + skip Enc1 + 2 NAFBlocks + FiLM |
+| Output | 128×128 | 13 | Conv3×3: 12 delta channels + 1 mask channel |
+</TABLE>
+[ListBullet] HF delta activation = tanh; scale_hf = 0.15 in normalized image range [-1,1].
+[ListBullet] LL delta activation = tanh; scale_ll = 0.05 before multiplication by γ. Since γ=0 in main run, ΔLL is ignored at reconstruction.
+[ListBullet] Mask M = sigmoid(mask_logit). M is shared across RGB channels and resized only if a future wavelet level changes; no hard threshold during training.
+[ListBullet] All upsampling = bilinear ×2 followed by Conv3×3; no transposed convolution.
+[Heading2] 9.4 Artifact provenance map
+A_rgb = mean_channel(|x_hat − x_t|)
+A_freq = upsample(|ΔLH| + |ΔHL| + |ΔHH| + γ|ΔLL|)
+A = Normalize(M ⊙ [0.5·A_rgb + 0.5·A_freq])
+A is stored for every GPAT synthetic sample. It is NOT used by the common downstream detector in the main generator comparison. Artifact-map detector supervision is a separate GPAT-only extension experiment so that the generator comparison remains isolated.
+[Heading1] 10. GPAT losses and exact training configuration
+[Heading2] 10.1 Geometry losses
+L_id = 1 − cos(F_id(x_t), F_id(x_hat))
+L_lm = mean_k ||H_k(x_t) − H_k(x_hat)||_1
+L_parse = 1 − Dice(P(x_t), P(x_hat)) + 0.1·KL(P(x_t) || P(x_hat))
+L_low = ||LL(x_hat) − LL(x_t)||_1
+[Heading2] 10.2 Artifact and regularization losses
+L_artcon = 1 − cos(F_art(x_hat), F_art(x_s)) + max(0, cos(F_art(x_hat),F_art(x_t)) − cos(F_art(x_hat),F_art(x_s)) + 0.2)
+L_spec = ||S_radial(x_hat) − S_radial(x_s)||_1 + 0.5·||S_orient(x_hat) − S_orient(x_s)||_1
+L_budget = max(0,0.01−mean(A)) + max(0,mean(A)−0.25)
+L_TV = TV(M) + 0.25·[TV(ΔLH)+TV(ΔHL)+TV(ΔHH)]
+L_bg = ||(1−M_face_dilated)⊙(x_hat−x_t)||_1
+F_art in the generator loss is a frozen ResNet-18 ImageNet feature extractor operating on the same fixed high-pass transform; it is not trained with attack labels and therefore does not leak Track-B metadata into GPAT-B0.
+[Heading2] 10.3 Loss weights
+<TABLE>
+| Weight | Value | Active in |
+| λ_id | 1.0 | All GPAT |
+| λ_lm | 1.0 | All GPAT |
+| λ_parse | 0.5 | All GPAT |
+| λ_low | 2.0 | All GPAT |
+| λ_con | 1.0 | All GPAT |
+| λ_spec | 0.5 | All GPAT |
+| λ_adv | 0.1 | Full curriculum stage |
+| λ_type | 0.0 or 0.2 | B1/B3 only |
+| λ_idadv | 0.0 or 0.1 | B2/B3 only |
+| λ_budget | 0.5 | All GPAT |
+| λ_tv | 0.05 | All GPAT |
+| λ_bg | 1.0 | All GPAT |
+</TABLE>
+L_G = λ_id L_id + λ_lm L_lm + λ_parse L_parse + λ_low L_low + λ_con L_artcon + λ_spec L_spec + λ_adv L_Gadv + λ_type L_type + λ_budget L_budget + λ_tv L_TV + λ_bg L_bg − λ_idadv L_identity-adversary
+[Heading2] 10.4 PatchGAN discriminator
+[ListBullet] Input = concatenate RGB image and fixed high-pass RGB → 6 channels, 256×256.
+[ListBullet] 70×70 PatchGAN style: Conv4×4 s2 6→64; Conv4×4 s2 64→128 + InstanceNorm + LeakyReLU(0.2); Conv4×4 s2 128→256; Conv4×4 s1 256→512; Conv4×4 s1 512→1.
+[ListBullet] Real positive = real TRAIN spoof. Fake negative = current synthetic output. Use non-saturating BCE adversarial objective.
+[ListBullet] D optimizer is independent from G optimizer; no discriminator sees VAL/TEST.
+[Heading2] 10.5 Training schedule — frozen
+<TABLE>
+| Item | Frozen value |
+| Resolution | 256×256 |
+| DWT | Haar level 1, reflect |
+| Main γ | 0.0 |
+| Effective batch | 8 pairs |
+| Physical batch | 4 pairs |
+| Gradient accumulation | 2 |
+| Epochs | 60 |
+| Optimizer G/E_art | Adam, lr=2e-4, β=(0.5,0.999), weight_decay=0 |
+| Optimizer D | Adam, lr=2e-4, β=(0.5,0.999), weight_decay=0 |
+| LR schedule | 5-epoch linear warmup to 2e-4, cosine decay to 2e-6 at epoch 60 |
+| AMP | fp16 when CUDA; GradScaler enabled |
+| Gradient clip | global norm 1.0 |
+| EMA | decay 0.999; start end of epoch 5 |
+| Training seeds | 42, 1337, 2026 |
+</TABLE>
+<TABLE>
+| Epoch stage | Residual scale | Adversarial weight | Artifact weights | Purpose |
+| 1–5 | linear 0.02→0.05 | 0 | λ_con=0.5, λ_spec=0.25 | Geometry-first warmup |
+| 6–15 | 0.10 | 0.05 | λ_con=1.0, λ_spec=0.5 | Introduce artifact realism |
+| 16–60 | 0.15 | 0.10 | full frozen weights | Full training |
+</TABLE>
+SUPERVISION-SPECIFIC WARMUP: For B1/B3, run a 10-epoch E_art warmup attack_macro classifier before the 60 generator epochs: AdamW lr=1e-4, batch=64, cosine schedule, no synthetic images. For B0/B2, skip this attack-type warmup. Identity adversary is active during generator training only for B2/B3.
+[Heading2] 10.6 Generator checkpoint selection
+[ListBullet] Evaluate EMA checkpoint at every epoch 10–60 on VAL pairs fixed in val_pairs_v1.parquet.
+[ListBullet] For each epoch compute ID cosine, NME, parsing Dice, low-frequency relative error and pairwise artifact similarity.
+[ListBullet] Convert each metric to percentile rank across candidate epochs, oriented so higher is better.
+[ListBullet] SelectionScore = 0.25·rank(ID) + 0.15·rank(Dice) + 0.25·rank(ArtSim) + 0.20·rank(−NME) + 0.15·rank(−LFErr).
+[ListBullet] Choose maximum SelectionScore; tie-break by higher ArtSim, then earlier epoch. The TEST set is never involved.
+[Heading1] 11. GPAT quality score and fairness isolation
+Quality weighting is a secondary experiment, not a prerequisite for the main generator comparison. The RAW-MATCHED table uses GPAT outputs without semantic quality filtering except technical invalidity.
+q_i = exp(Σ_k w_k · log(ε + g_tilde_k(i)))
+[ListBullet] Technical invalidity hard reject: missing image, NaN/Inf, face detector failure, invalid dimensions, or image outside legal numeric range.
+[ListBullet] QUALITY-MATCHED GPAT q uses normalized VAL-calibrated metrics: identity similarity, inverse NME, parsing Dice, inverse low-frequency error, artifact-source similarity and discriminator realism.
+[ListBullet] Metric normalization bounds are 5th/95th percentiles measured on VAL generation only; clip normalized values to [0,1]. Equal weights w_k=1/6.
+[ListBullet] No threshold is chosen on TEST. For quality filtering, accept top q-ranked samples until the common budget N_common is reached.
+[Heading1] 12. Independent probes for generator evaluation
+[Heading2] 12.1 ArtifactProbeNet
+[ListBullet] Purpose: independent evaluation of whether synthetic samples preserve source attack-family evidence; it is never the GPAT E_art network.
+[ListBullet] Backbone: torchvision ResNet-18 IMAGENET1K_V1.
+[ListBullet] Input: 224×224 high-pass RGB using Gaussian residual k=9, σ=1.5.
+[ListBullet] Labels: attack_macro over real TRAIN only. Using fine-grained labels in this evaluation probe is permitted even for Binary Track because the labels are not fed back to the generator or downstream detector.
+[ListBullet] Loss: class-weighted cross-entropy with inverse-frequency weights clipped to [0.5, 3.0].
+[ListBullet] Optimizer: AdamW lr=1e-4, weight_decay=1e-4; batch 64; 30 epochs; cosine decay; AMP; seeds [42] only because this is a frozen measurement tool.
+[ListBullet] Checkpoint: maximum VAL macro-F1; freeze thereafter. Penultimate 512-D L2-normalized embedding is the artifact embedding.
+[Heading2] 12.2 Fingerprint probe
+[ListBullet] Extract 512-D high-pass features using the frozen ArtifactProbeNet backbone before its classifier.
+[ListBullet] Train logistic regression C=1.0 to classify real spoof vs synthetic spoof. Balance classes 1:1.
+[ListBullet] Use 5-fold GroupKFold with group = subject_id_global of the image’s visible face/target. Report mean ROC-AUC. AUC close to 0.5 is better; do not force it to exactly 0.5.
+[ListBullet] Run separately per generator and per dataset to identify dataset-specific generator fingerprints.
+[Heading1] 13. Generator-quality metrics — exact formulas
+<TABLE>
+| Metric | Definition | Direction | Applicable methods |
+| Face success | fraction synthetic successfully detected by frozen SCRFD | ↑ | All |
+| Identity cosine | cos(AdaFace(target), AdaFace(synthetic)) | ↑ | Methods with target traceability |
+| Landmark NME | mean landmark L2 / sqrt(face_bbox_w·face_bbox_h) | ↓ | Methods with target traceability |
+| Parsing macro Dice | mean Dice over non-background facial parsing classes | ↑ | Methods with target traceability |
+| LPIPS target drift | LPIPS-Alex(target, synthetic) | ↓ | Methods with target traceability; diagnostic |
+| Low-frequency rel. L1 | ||LL_syn−LL_target||1 / (||LL_target||1+1e-8) | ↓ | Methods with target traceability |
+| Artifact embedding cosine | cos(ArtifactProbe(source), ArtifactProbe(synthetic)) | ↑ | Source-conditioned methods |
+| Attack consistency | synthetic predicted attack_macro equals source attack_macro | ↑ | Source-conditioned methods |
+| Radial spectrum L1 | L1 distance between normalized log radial power spectra of source and synthetic | ↓ | Source-conditioned methods |
+| Wavelet detail distance | mean L1 between normalized |LH/HL/HH| summary histograms | ↓ | Source-conditioned methods |
+| KID | Kernel Inception Distance real-spoof vs synthetic distribution | ↓ | All |
+| Fingerprint probe AUC | 5-fold real-spoof vs synthetic linear-probe AUC | →0.5 | All |
+| Generation time | wall-clock seconds per accepted image | ↓ | All |
+| Peak VRAM | maximum CUDA allocated memory during generation | ↓ | All |
+</TABLE>
+[Heading1] 14. Downstream evaluator — primary frozen ResNet-18
+The common downstream detector is deliberately simple and does NOT consume GPAT artifact maps or q in the main comparison. It receives only RGB images and binary Live/Spoof labels. One detector is trained independently for every synthetic method/track/seed.
+<TABLE>
+| Item | Frozen value |
+| Backbone | torchvision ResNet-18 IMAGENET1K_V1 |
+| Input | 224×224 RGB; ImageNet normalization |
+| Head | replace FC with Linear(512,1) |
+| Loss | BCEWithLogitsLoss |
+| Real-only batch | 64 = 32 live + 32 real spoof |
+| Mixed batch | 64 = 32 live + 16 real spoof + 16 synthetic spoof |
+| Synthetic share | 25% of total batch; spoof class remains 32/64 |
+| Epochs | 40 |
+| Optimizer | AdamW |
+| Backbone LR | 1e-4 |
+| Head LR | 5e-4 |
+| Weight decay | 1e-4 |
+| Warmup | 3 epochs linear |
+| Scheduler | cosine to 1e-6 |
+| AMP | enabled on CUDA |
+| Gradient clip | 1.0 |
+| Seeds | 42, 1337, 2026 |
+| Checkpoint rule | minimum VAL video-level ACER; tie-break maximum VAL video-level AUC |
+</TABLE>
+[Heading2] 14.1 FAS-safe augmentation — frozen
+[ListBullet] RandomResizedCrop(224, scale=(0.92,1.00), ratio=(0.95,1.05), interpolation=BICUBIC).
+[ListBullet] RandomHorizontalFlip(p=0.5).
+[ListBullet] ColorJitter(brightness=0.05, contrast=0.05, saturation=0.05, hue=0.01) with probability 0.5.
+[ListBullet] No Gaussian blur, no JPEG compression, no strong downsampling, no MixUp/CutMix, no RandAugment in the main benchmark because those can erase or replace the subtle FAS cues being compared.
+[Heading2] 14.2 Secondary evaluator — mandatory FULL profile
+<TABLE>
+| Item | Frozen value |
+| Backbone | facebook/dinov3-vits16-pretrain-lvd1689m |
+| Input | 224×224 |
+| Head | single binary logit from CLS token |
+| Epochs | 40 |
+| Epoch 1–3 | freeze backbone; train head only |
+| Epoch 4–40 | unfreeze last 4 transformer blocks |
+| Optimizer | AdamW |
+| Backbone LR | 1e-5 |
+| Head LR | 1e-4 |
+| Weight decay | 0.05 |
+| Batch composition | same as ResNet-18 |
+| Augmentation | same as ResNet-18 |
+| Seeds | 42,1337,2026 |
+| Checkpoint/threshold rules | same as ResNet-18 |
+</TABLE>
+[Heading1] 15. Validation threshold and test aggregation
+[ListBullet] Frame probability = sigmoid(binary logit).
+[ListBullet] Video probability = arithmetic mean of all sampled frame probabilities belonging to that canonical video.
+[ListBullet] Primary reported metrics are video-level; frame-level metrics are secondary diagnostics.
+[ListBullet] For each seed/method, compute threshold on VAL video scores by minimizing ACER. Sweep all unique score midpoints plus 0 and 1. Tie-break by threshold closest to 0.5.
+[ListBullet] Freeze the selected threshold and apply it once to TEST. AUC and EER are threshold-free/derived and still use the same frozen TEST scores.
+[Heading1] 16. Downstream metrics
+APCER = # spoof videos predicted live / # spoof videos
+BPCER = # live videos predicted spoof / # live videos
+ACER = (APCER + BPCER) / 2
+[ListBullet] Primary: ACER ↓, AUC ↑, EER ↓.
+[ListBullet] Secondary: APCER ↓, BPCER ↓, accuracy, balanced accuracy, F1, TPR@FPR=1%, TPR@FPR=5%.
+[ListBullet] Subgroups: dataset-wise ACER/AUC; attack_macro-wise APCER; SiW-Mv2 raw 14-type APCER when raw label coverage is valid.
+[ListBullet] Report both frame-level and video-level tables, but video-level is the main paper result.
+[Heading1] 17. Required experiment matrix
+<TABLE>
+| Experiment ID | Synthetic source | Track | Evaluator | Purpose |
+| E00 | None / real-only | Binary | ResNet18 + DINOv3 | Lower bound |
+| E01 | FAS-Aug | Binary=native | Both | Handcrafted/physics baseline |
+| E02 | FreqSub controlled | Binary=native | Both | Direct frequency-transfer baseline |
+| E03 | STDN | Binary=native | Both | Learned trace transfer |
+| E04 | Physics-STD | Binary=native | Both | Physics/frequency trace transfer |
+| E05 | PCGAN | Binary=native | Both | Full RGB pattern conversion |
+| E06a | DSDG-BIN | Binary adapted | Both | Equal-label-budget generative baseline |
+| E06b | DSDG-NATIVE | Native | Both | Original type-supervised setting |
+| E07a | DiffFAS-BIN | Binary adapted | Both | Equal-label-budget diffusion baseline |
+| E07b | DiffFAS-NATIVE | Native | Both | Precise style + identity-consistent diffusion |
+| E08 | GPAT-B0 | Binary | Both | Main fair GPAT |
+| E09 | GPAT-B1 | +attack type | Both | Attack-type supervision effect |
+| E10 | GPAT-B2 | +identity | Both | Identity adversary effect |
+| E11 | GPAT-B3 | +type+identity | Both | Full GPAT supervision |
+</TABLE>
+[Heading2] 17.1 GPAT architectural ablation
+<TABLE>
+| Ablation | Change from GPAT-B0 | All else locked |
+| A0 Full RGB | generator outputs full RGB image instead of residual | Yes |
+| A1 RGB residual | x_hat=x_t+bounded RGB residual; no DWT | Yes |
+| A2 Wavelet γ=0.10 | allow small LL transfer | Yes |
+| A3 Wavelet γ=0.05 | allow smaller LL transfer | Yes |
+| A4 Wavelet γ=0.02 | allow minimal LL transfer | Yes |
+| A5 Wavelet γ=0.00 | main hard-lock GPAT | Yes |
+</TABLE>
+[Heading2] 17.2 GPAT provenance / quality extension ablation
+<TABLE>
+| Variant | Common detector input | Special use |
+| G0 | RGB only | GPAT synthetic, equal weight |
+| G1 | RGB only | GPAT synthetic weighted by q in detector loss |
+| G2 | RGB + local supervision branch | Artifact map A used as soft token/patch target; separate extension detector, not main generator comparison |
+| G3 | RGB + local supervision + q | Full optional GPAT extension |
+| Shuffle control | same as G2 but artifact maps randomly permuted across synthetic images | Causal check that map alignment matters |
+</TABLE>
+[Heading1] 18. Statistical analysis — frozen
+[ListBullet] For every self-run downstream condition: seeds [42,1337,2026]; report mean ± sample standard deviation.
+[ListBullet] Subject-level bootstrap 95% confidence interval: 10,000 bootstrap resamples of TEST subjects within each dataset, preserving all videos of a sampled subject. Compute CI for ACER and AUC.
+[ListBullet] Primary paired comparison: GPAT-B0 vs each Binary-track baseline on identical TEST predictions. Use paired subject-level bootstrap for ΔACER and ΔAUC.
+[ListBullet] Multiple-comparison correction: Holm–Bonferroni over the family of GPAT-B0 vs Binary-track baselines.
+[ListBullet] Report effect size as absolute ΔACER percentage points and ΔAUC, not only p-values.
+[ListBullet] A result is not described as “better” when the mean moves favorably but the CI/pairwise analysis is inconclusive; use “numerically lower/higher” instead.
+[Heading1] 19. Required result tables — exact outputs
+<TABLE>
+| Output file | Required content |
+| T01_dataset_inventory.csv | Counts by dataset, split, binary class, attack_macro, subject, video, frame. |
+| T02_supervision_matrix.csv | For each method: binary/type/identity/style/pair requirements and status faithful/adapted. |
+| T03_reimplementation_fidelity.csv | Paper/repo commit, deviations, source gaps, code status. |
+| T04_generator_pair_metrics.csv | Pair-based generator metrics: ID, NME, Dice, LF error, ArtSim, spectrum, attack consistency. |
+| T05_generator_distribution_metrics.csv | All methods: face success, KID, fingerprint AUC, runtime, VRAM. |
+| T06_downstream_resnet18_video.csv | Primary video-level downstream metrics mean±std + CI. |
+| T07_downstream_dinov3_video.csv | Secondary evaluator results. |
+| T08_downstream_frame.csv | Frame-level diagnostic metrics. |
+| T09_binary_vs_native.csv | Binary vs native/full delta for DSDG, DiffFAS, GPAT. |
+| T10_gpat_supervision_ablation.csv | B0/B1/B2/B3 generator + downstream metrics. |
+| T11_gpat_gamma_outputspace_ablation.csv | Full RGB/RGB residual/γ sweep Pareto + downstream. |
+| T12_quality_raw_vs_matched.csv | RAW-MATCHED vs QUALITY-MATCHED downstream results and coverage. |
+| T13_attackwise_apcer.csv | Attack macro + SiW-Mv2 raw 14-type APCER. |
+| T14_datasetwise_metrics.csv | CASIA/MSU/SiW-Mv2 test subgroup metrics. |
+| T15_compute.csv | Params, training time, gen sec/image, evaluator time, peak VRAM. |
+| T16_statistics.csv | Pairwise deltas, bootstrap CI, corrected p-values. |
+| T17_failures.csv | Generation failures, invalid counts, reject reasons, coverage. |
+</TABLE>
+[Heading2] 19.1 Paper-ready table templates (all cells remain “—” until measured)
+<TABLE>
+| Method | ID cos ↑ | NME ↓ | Dice ↑ | LF err ↓ | ArtSim ↑ | KID ↓ | Fingerprint AUC→0.5 |
+| FAS-Aug | — | — | — | — | N/A | — | — |
+| FreqSub | — | — | — | — | — | — | — |
+| STDN | — | — | — | — | — | — | — |
+| Physics-STD | — | — | — | — | — | — | — |
+| PCGAN | — | — | — | — | — | — | — |
+| DSDG | N/A* | N/A* | N/A* | N/A* | N/A | — | — |
+| DiffFAS | — | — | — | — | — | — | — |
+| GPAT-B0 | — | — | — | — | — | — | — |
+</TABLE>
+<TABLE>
+| Synthetic method | APCER ↓ | BPCER ↓ | ACER ↓ | AUC ↑ | EER ↓ | 95% CI ACER |
+| Real only | — | — | — | — | — | — |
+| FAS-Aug | — | — | — | — | — | — |
+| FreqSub | — | — | — | — | — | — |
+| STDN | — | — | — | — | — | — |
+| Physics-STD | — | — | — | — | — | — |
+| PCGAN | — | — | — | — | — | — |
+| DSDG-BIN | — | — | — | — | — | — |
+| DiffFAS-BIN | — | — | — | — | — | — |
+| GPAT-B0 | — | — | — | — | — | — |
+</TABLE>
+[Heading1] 20. Required figures and plot catalog
+Every plot is generated automatically from CSV/Parquet outputs. No values are typed manually into plotting scripts. For metrics that are useful in more than one visual form, the spec explicitly requests multiple views.
+Figure 5. Generator plot templates. These panels contain no results; they define required visualization types.
+Figure 6. Downstream plot templates.
+Figure 7. Ablation and diagnostic plot templates.
+<TABLE>
+| Filename | Visualization | Data source |
+| fig01_pipeline.png | Protocol schematic | Static spec figure |
+| fig02_split_distribution.png | Stacked bars: dataset × split × class | T01 |
+| fig03_supervision_tracks.png | Track schematic | Static |
+| fig04_pair_examples_grid.png | Same live/source → outputs from every pair-based generator | pair manifest + images |
+| fig05_id_cosine_bar.png | Mean ID cosine + 95% CI | T04 |
+| fig05b_id_cosine_box.png | Subject-level ID cosine boxplots | per-sample metrics |
+| fig06_nme_bar.png | Mean NME + CI | T04 |
+| fig06b_nme_violin.png | NME distribution violin | per-sample |
+| fig07_artifact_similarity_bar.png | Artifact similarity + CI | T04 |
+| fig07b_artifact_similarity_violin.png | Artifact similarity distribution | per-sample |
+| fig08_lowfreq_error_bar.png | Low-frequency error | T04 |
+| fig09_generator_radar.png | Normalized generator metric radar; diagnostic only | T04/T05 |
+| fig10_geometry_artifact_pareto.png | ID/NME vs ArtSim Pareto | T04 |
+| fig11_attack_consistency_heatmap.png | Source attack vs synthetic predicted attack | probe predictions |
+| fig12_fingerprint_roc.png | Real-spoof vs synthetic fingerprint ROC per method | probe outputs |
+| fig13_artifact_embedding_umap.png | UMAP of real/synthetic artifact embeddings | probe embeddings |
+| fig14_downstream_acer_bar.png | Video ACER mean±std + CI | T06 |
+| fig14b_downstream_acer_box.png | Seed/subject bootstrap ACER view | bootstrap output |
+| fig15_downstream_auc_bar.png | AUC mean±std | T06 |
+| fig16_downstream_eer_bar.png | EER mean±std | T06 |
+| fig17_downstream_roc.png | ROC curves; one panel primary methods | predictions |
+| fig18_det_curve.png | DET curve | predictions |
+| fig19_attackwise_apcer.png | Grouped APCER by attack macro/raw type | T13 |
+| fig20_datasetwise_metrics.png | CASIA/MSU/SiW subgroup ACER+AUC | T14 |
+| fig21_binary_vs_native_delta.png | Paired delta plot Binary→Native | T09 |
+| fig22_gpat_supervision_ablation.png | B0/B1/B2/B3 bar + generator metrics | T10 |
+| fig23_gamma_pareto.png | γ sweep Pareto curve | T11 |
+| fig24_training_curves.png | Train/VAL losses and ACER/AUC per epoch | run logs |
+| fig25_compute_tradeoff.png | ACER vs generation cost bubble plot | T15 |
+| fig26_quality_risk_coverage.png | q threshold vs retained coverage vs VAL downstream risk | T12 |
+| fig27_method_ranking_parallel.png | Parallel coordinates normalized metrics | T04/T06/T15 |
+| fig28_failure_counts.png | Failure/reject reasons | T17 |
+</TABLE>
+[Heading1] 21. Qualitative figure protocol
+[ListBullet] Preselect qualitative pair IDs from VAL before viewing method outputs: 4 print, 4 replay, 4 mask, 4 makeup/partial if available; balance datasets.
+[ListBullet] For each pair show columns: live target | real spoof source | FreqSub | STDN | Physics-STD | PCGAN | DiffFAS | GPAT | GPAT artifact map.
+[ListBullet] Do not hand-pick only successful GPAT cases. The list of pair IDs must be saved before generation comparison.
+[ListBullet] Generate difference magnitudes and high-pass zoom crops for eye, cheek, mouth and boundary regions when face parsing allows.
+[ListBullet] Any visually failed sample shown in failure analysis must keep its pair_id, method, seed and failure reason.
+[Heading1] 22. Prediction, manifest and run schemas
+[Heading2] 22.1 Synthetic manifest
+[CodeBlock] synthetic_id, method_id, track_id, seed, pair_id,
+target_live_id, source_spoof_id, generated_image_path,
+edit_map_path, attack_macro_source, style_id_source,
+status, failure_reason, quality_q,
+id_cosine, landmark_nme, parsing_dice, lowfreq_rel_l1,
+artifact_cosine, attack_consistent, radial_spectrum_l1,
+generator_checkpoint_sha256, method_config_sha256,
+code_commit, created_at
+[Heading2] 22.2 Downstream prediction file
+[CodeBlock] sample_id, dataset, subject_id_global, video_id, frame_index,
+y_true, attack_raw, attack_macro,
+p_frame, threshold, pred_frame,
+video_score, pred_video,
+method_id, track_id, evaluator_id, seed,
+checkpoint_sha256, split_manifest_sha256
+[Heading2] 22.3 Run metadata JSON
+[CodeBlock] {
+  "run_id": "...",
+  "method": "GPAT-B0",
+  "track": "binary",
+  "seed": 42,
+  "git_commit": "...",
+  "config_sha256": "...",
+  "split_manifest_sha256": "...",
+  "pair_manifest_sha256": "...",
+  "environment_lock_sha256": "...",
+  "gpu": "...",
+  "start_time": "...",
+  "end_time": "...",
+  "status": "COMPLETED|FAILED|BLOCKED",
+  "deviations": []
+}
+[Heading1] 23. Frozen configuration files to create
+<TABLE>
+| Config | Purpose |
+| configs/frozen/data_v1.yaml | Dataset roots, 8-frame policy, preprocessing, label mapping |
+| configs/frozen/split_v1.yaml | 70/15/15 subject split and seed |
+| configs/frozen/pairs_v1.yaml | candidate count 64 and distance weights |
+| configs/frozen/downstream_resnet18.yaml | Primary evaluator |
+| configs/frozen/downstream_dinov3_vits16.yaml | Secondary evaluator |
+| configs/frozen/artifact_probe.yaml | Independent probe |
+| configs/methods/fas_aug.yaml | FAS-Aug wrapper |
+| configs/methods/freq_sub.yaml | Controlled FFT substitution |
+| configs/methods/stdn.yaml | Official wrapper |
+| configs/methods/physics_std.yaml | Paper reimplementation |
+| configs/methods/pcgan.yaml | Pattern conversion |
+| configs/methods/dsdg_binary.yaml | Adapted binary |
+| configs/methods/dsdg_native.yaml | Native |
+| configs/methods/difffas_binary.yaml | Adapted binary |
+| configs/methods/difffas_native.yaml | Native |
+| configs/methods/gpat_b0.yaml | Binary GPAT |
+| configs/methods/gpat_b1.yaml | + type |
+| configs/methods/gpat_b2.yaml | + ID |
+| configs/methods/gpat_b3.yaml | + type + ID |
+</TABLE>
+[Heading2] 23.1 Canonical downstream_resnet18.yaml
+[CodeBlock] model:
+  name: torchvision_resnet18_imagenet1k_v1
+  input_size: 224
+  output_logits: 1
+training:
+  epochs: 40
+  seeds: [42, 1337, 2026]
+  batch_size: 64
+  mixed_batch: {real_live: 32, real_spoof: 16, synthetic_spoof: 16}
+  real_only_batch: {real_live: 32, real_spoof: 32}
+  optimizer: AdamW
+  lr_backbone: 1.0e-4
+  lr_head: 5.0e-4
+  weight_decay: 1.0e-4
+  warmup_epochs: 3
+  scheduler: cosine
+  min_lr: 1.0e-6
+  amp: true
+  grad_clip_norm: 1.0
+augmentation:
+  random_resized_crop: {size: 224, scale: [0.92, 1.00], ratio: [0.95, 1.05]}
+  horizontal_flip_p: 0.5
+  color_jitter: {p: 0.5, brightness: 0.05, contrast: 0.05, saturation: 0.05, hue: 0.01}
+  blur: false
+  jpeg: false
+selection:
+  checkpoint: min_val_video_acer_then_max_auc
+  threshold: min_val_video_acer_then_nearest_0.5
+[Heading2] 23.2 Canonical GPAT-B0 YAML
+[CodeBlock] method: GPAT-B0
+supervision: binary_only
+input_resolution: 256
+wavelet: {library: ptwt, family: haar, level: 1, boundary_mode: reflect}
+gamma: 0.0
+artifact_encoder:
+  backbone: torchvision_resnet18_imagenet1k_v1
+  input_channels: 12
+  highpass: {kernel: 9, sigma: 1.5}
+  attack_type_head: false
+  identity_adversary: false
+residual_generator:
+  name: NAFResidualUNet
+  width: 32
+  enc_blocks: [2, 2, 4, 8]
+  middle_blocks: 12
+  dec_blocks: [2, 2, 2, 2]
+  delta_scale_hf: 0.15
+  delta_scale_ll: 0.05
+  output_channels: 13
+training:
+  epochs: 60
+  physical_batch: 4
+  grad_accum: 2
+  effective_batch: 8
+  optimizer: Adam
+  lr: 2.0e-4
+  betas: [0.5, 0.999]
+  weight_decay: 0.0
+  warmup_epochs: 5
+  min_lr: 2.0e-6
+  amp: true
+  grad_clip_norm: 1.0
+  ema_decay: 0.999
+  seeds: [42, 1337, 2026]
+loss:
+  lambda_id: 1.0
+  lambda_lm: 1.0
+  lambda_parse: 0.5
+  lambda_kl: 0.1
+  lambda_low: 2.0
+  lambda_con: 1.0
+  triplet_margin: 0.2
+  lambda_spec: 0.5
+  lambda_dir: 0.5
+  lambda_adv: 0.1
+  lambda_type: 0.0
+  lambda_idadv: 0.0
+  lambda_budget: 0.5
+  artifact_min: 0.01
+  artifact_max: 0.25
+  lambda_tv: 0.05
+  tv_delta_scale: 0.25
+  lambda_bg: 1.0
+[Heading1] 24. CLI contract — commands Claude must implement
+[CodeBlock] python -m gpatbench.cli inventory --config configs/frozen/data_v1.yaml
+python -m gpatbench.cli preprocess --config configs/frozen/data_v1.yaml
+python -m gpatbench.cli split --config configs/frozen/split_v1.yaml
+python -m gpatbench.cli audit-split --manifest manifests/split_v1.parquet
+python -m gpatbench.cli build-pairs --config configs/frozen/pairs_v1.yaml
+python -m gpatbench.cli train-probe --config configs/frozen/artifact_probe.yaml
+
+python -m gpatbench.cli train-generator --method GPAT-B0 --seed 42
+python -m gpatbench.cli generate-bank --method GPAT-B0 --seed 42
+# Repeat for every required method/track/seed.
+
+python -m gpatbench.cli evaluate-generator --all-methods
+python -m gpatbench.cli train-downstream --evaluator resnet18 --all-methods --all-seeds
+python -m gpatbench.cli train-downstream --evaluator dinov3_vits16 --all-methods --all-seeds
+python -m gpatbench.cli evaluate-downstream --all
+python -m gpatbench.cli statistics --all
+python -m gpatbench.cli make-tables --paper-pack
+python -m gpatbench.cli make-plots --paper-pack
+python -m gpatbench.cli validate-paper-pack
+[Heading1] 25. Milestones and hard acceptance gates
+<TABLE>
+| Milestone | Deliverable | Acceptance / hard stop |
+| M0 Bootstrap | repo skeleton, env locks, third-party registry | all dependencies/version hashes recorded; no method trained |
+| M1 Inventory | inventory.parquet + dataset_report.html | all local files indexed; unknown labels listed; no duplicate sample IDs |
+| M2 Preprocess | faces_256 + geometry/identity caches | SCRFD success report; deterministic rerun hashes for sampled subset |
+| M3 Split | split_v1.parquet | zero subject/video leakage; exact hash frozen |
+| M4 Pair manifests | pairs_train_v1.parquet + native pair manifests | different target/source subject; deterministic rerun |
+| M5 Probe | ArtifactProbeNet checkpoint | VAL macro-F1 saved; checkpoint frozen before synthetic evaluation |
+| M6 Baselines | method adapters + method_status.csv | each row tagged faithful/adapted/blocked; no silent simplification |
+| M7 GPAT | B0/B1/B2/B3 generator checkpoints | zero-residual sanity test; DWT→IDWT reconstruction; generator selection from VAL only |
+| M8 Banks | all synthetic banks | same intended budget; provenance complete; failure counts saved |
+| M9 Generator eval | T04/T05 + plots | all applicable per-sample metrics saved; N/A used correctly |
+| M10 ResNet downstream | T06 primary | 3 seeds/method; same config hash; TEST untouched before checkpoint/threshold freeze |
+| M11 DINOv3 downstream | T07 secondary | same rules; full profile only after M10 passes |
+| M12 Ablations | T09–T12 | B0/B1/B2/B3, γ sweep, raw/quality matched, map/q extension |
+| M13 Statistics | T16 + CIs | 10k subject bootstrap; Holm correction |
+| M14 Paper pack | all tables/figures/predictions/configs | validate-paper-pack PASS; no placeholder numeric cells falsely marked measured |
+</TABLE>
+[Heading1] 26. Unit tests and scientific sanity tests
+[ListBullet] DWT→IDWT reconstruction error < 1e-5 in float32 on 100 random crops.
+[ListBullet] GPAT γ=0 and all ΔHF=0 yields x_hat≈x_t (max absolute normalized error < 1e-5).
+[ListBullet] GPAT artifact_scale=0 reduces output to target independent of spoof source.
+[ListBullet] Pair manifest never pairs same subject; no pair references VAL/TEST for TRAIN synthesis.
+[ListBullet] Split audit checks subject/video/sample intersections exactly empty.
+[ListBullet] Downstream mixed sampler produces exactly 32 live / 16 real spoof / 16 synthetic per full batch; tail batches may be dropped.
+[ListBullet] Threshold code reproduces ACER from confusion counts and is identical across methods.
+[ListBullet] Video score aggregation uses only frames of that video and simple arithmetic mean.
+[ListBullet] Plot scripts reject input tables that contain non-measured placeholders except in template mode.
+[ListBullet] A full deterministic smoke test on a 2-subject-per-class toy subset must finish before full runs.
+[Heading1] 27. Failure modes and mandatory handling
+<TABLE>
+| Failure | Required action |
+| Missing subject IDs | BLOCK main split; do not silently use frame split |
+| Third-party repo incompatible | isolated env/container; if still blocked, record dependency issue |
+| Paper architecture underspecified | use explicit benchmark override only if defined; otherwise BLOCKED_BY_SOURCE_GAP |
+| Generator produces too few valid samples | report failure count; do not duplicate images; QUALITY-MATCHED uses N_common |
+| One attack type absent from TRAIN | do not invent examples; class absent from native classifier and report coverage |
+| VAL class/attack absent | metric shown N/A; no resampling from TEST |
+| GPU OOM | reduce physical batch and increase gradient accumulation while keeping effective batch fixed; log deviation as implementation-only |
+| Method output different resolution | resize exactly once to 256 with canonical interpolation; log original resolution |
+| One seed fails | rerun same seed after technical fix; never replace with a different seed |
+| Unexpectedly high fingerprint AUC | do not hide; report and inspect difference maps/shortcuts |
+</TABLE>
+[Heading1] 28. Paper-ready evidence package
+[CodeBlock] outputs/paper_pack/
+├── tables/                 # T01–T17 CSV + formatted DOCX/LaTeX exports
+├── figures/                # fig01–fig28 PNG + PDF/SVG when vector-safe
+├── predictions/            # per-sample and per-video predictions
+├── generator_metrics/      # per-synthetic metrics
+├── qualitative/            # precommitted pair grids + failures
+├── statistics/             # bootstrap distributions, CI, corrected p-values
+├── configs/                # exact frozen YAML snapshot
+├── manifests/              # inventory, split, pair manifests + SHA256
+├── checkpoints_index.csv   # checkpoint hashes and selection evidence
+├── environment/            # pip/conda locks, CUDA/GPU info
+├── audit/                  # leakage, deviations, blocked methods
+└── README_EVIDENCE.md      # one-page map from paper claim → evidence file
+[ListBullet] Every paper claim must reference at least one evidence file.
+[ListBullet] Tables derived from published papers, if shown in Related Work, must be visually separated and explicitly labeled “reported by original authors”. They cannot share a numeric column with our reimplementation results without a provenance column.
+[ListBullet] Negative results and failed baselines remain in the evidence package; they are not deleted to make the proposed method look cleaner.
+[Heading1] 29. Recommended paper narrative after experiments
+[ListNumber] Problem: existing spoof-transfer approaches can alter facial content, directly copy frequency blocks, or generate the full image without an architectural preservation guarantee.
+[ListNumber] Method: GPAT learns source-conditioned spoof evidence but restricts generation to bounded wavelet residuals; γ=0 hard-preserves target LL structure.
+[ListNumber] Controlled benchmark: all methods are retrained on one pooled CASIA-FASD + MSU-MFSD + SiW-Mv2 subject-disjoint split and evaluated through the same downstream detector.
+[ListNumber] Evidence 1: target preservation vs artifact transfer Pareto.
+[ListNumber] Evidence 2: downstream benefit on real held-out test, not synthetic test.
+[ListNumber] Evidence 3: Binary vs Native supervision distinguishes architectural benefit from metadata benefit.
+[ListNumber] Evidence 4: ablations isolate hard wavelet lock, attack-type label, identity adversary, q and artifact-map extensions.
+[ListNumber] Limitations: pooled held-out protocol measures within-pool subject/video generalization, not standard cross-dataset DG; conclusions must stay within this scope.
+[Heading1] 30. Reference list and quick lookup links
+<TABLE>
+| Ref | Citation | Paper / official page | Code |
+| R1 | Y. Liu, J. Stehouwer, X. Liu, “On Disentangling Spoof Trace for Generic Face Anti-Spoofing,” ECCV 2020. arXiv:2007.09273. | https://arxiv.org/abs/2007.09273 | https://github.com/yaojieliu/ECCV20-STDN |
+| R2 | Y. Liu, X. Liu, “Physics-Guided Spoof Trace Disentanglement for Generic Face Anti-Spoofing,” arXiv:2012.05185; later “Spoof Trace Disentanglement for Generic Face Anti-Spoofing,” IEEE TPAMI, 2022, DOI 10.1109/TPAMI.2022.3176387. | https://arxiv.org/abs/2012.05185 |  |
+| R3 | Y. Huang, W. Zhang, J. Wang, “Deep Frequent Spatial Temporal Learning for Face Anti-Spoofing,” 2020. arXiv:2002.03723. | https://arxiv.org/abs/2002.03723 |  |
+| R4 | R. Cai, C. Soh, Z. Yu, H. Li, W. Yang, A. C. Kot, “Towards Data-Centric Face Anti-Spoofing: Improving Cross-domain Generalization via Physics-based Data Synthesis,” IJCV 133, 1689–1710, 2025. arXiv:2409.03501. | https://arxiv.org/abs/2409.03501 | https://github.com/RizhaoCai/FAS_Aug |
+| R5 | H. Wu, D. Zen, Y. Hu, H. Shi, T. Mei, “Dual Spoof Disentanglement Generation for Face Anti-spoofing with Depth Uncertainty Learning,” arXiv:2112.00568 / IEEE TCSVT. | https://arxiv.org/abs/2112.00568 | https://github.com/JDAI-CV/FaceX-Zoo/tree/main/addition_module/DSDG |
+| R6 | X. Ge, X. Liu, Z. Yu, J. Shi, C. Qi, J. Li, H. Kälviäinen, “DiffFAS: Face Anti-Spoofing via Generative Diffusion Models,” ECCV 2024. arXiv:2409.08572. | https://arxiv.org/abs/2409.08572 | https://github.com/murphytju/DiffFAS |
+| R7 | S. Jung et al., “Domain-generalizable Face Anti-Spoofing with Patch-based Multi-tasking and Artifact Pattern Conversion,” Pattern Recognition 179 Part B, 113640, 2026. arXiv:2604.09018. | https://arxiv.org/abs/2604.09018 |  |
+| R8 | Y. Bian et al., “Learning Multiple Explainable and Generalizable Cues for Face Anti-spoofing,” ICASSP 2022. arXiv:2202.10187. | https://arxiv.org/abs/2202.10187 |  |
+| R9 | Z. Zhang, J. Yan, S. Liu, Z. Lei, D. Yi, S. Z. Li, “A face antispoofing database with diverse attacks,” ICB 2012, DOI 10.1109/ICB.2012.6199754. |  |  |
+| R10 | D. Wen, H. Han, A. K. Jain, “Face Spoof Detection With Image Distortion Analysis,” IEEE TIFS 10(4), 746–761, 2015, DOI 10.1109/TIFS.2015.2400395. |  |  |
+| R11 | X. Guo, Y. Liu, A. Jain, X. Liu, “Multi-domain Learning for Updating Face Anti-spoofing Models,” ECCV 2022. arXiv:2208.11148; introduces/uses SiW-Mv2. | https://arxiv.org/abs/2208.11148 | https://github.com/CHELSEA234/Multi-domain-learning-FAS |
+| R12 | SiW-Mv2 official dataset page — Michigan State University Computer Vision Lab. | https://cvlab.cse.msu.edu/siw-mv2-dataset.html |  |
+| R13 | M. Kim et al., “AdaFace: Quality Adaptive Margin for Face Recognition,” CVPR 2022. |  | https://github.com/mk-minchul/AdaFace |
+| R14 | K. Narayan et al., “FaceXFormer: A Unified Transformer for Facial Analysis,” ICCV 2025 / arXiv:2403.12960. | https://arxiv.org/abs/2403.12960 | https://github.com/Kartik-3004/facexformer |
+| R15 | O. Siméoni et al., “DINOv3,” arXiv:2508.10104, 2025. | https://arxiv.org/abs/2508.10104 | https://github.com/facebookresearch/dinov3 |
+| R16 | C. Chen et al., “Simple Baselines for Image Restoration / NAFNet,” ECCV 2022. |  | https://github.com/megvii-research/NAFNet |
+| R17 | InsightFace / SCRFD model family. |  | https://github.com/deepinsight/insightface |
+| R18 | PyTorch Wavelet Toolbox (ptwt). |  | https://github.com/v0lta/PyTorch-Wavelet-Toolbox |
+</TABLE>
+[Heading1] 31. Literature-derived supervision facts that must not be altered
+[ListBullet] STDN explicitly positions its core spoof-trace learning as using only binary live-vs-spoof labels; spoof-type labels are not part of the main training supervision.
+[ListBullet] DSDG explicitly uses a classifier on the spoof-pattern latent with y defined as the spoofing-type label.
+[ListBullet] DiffFAS explicitly lists precise spoofing style label, texture preservation and identity consistency as critical properties; its training uses a Spoofing Style Pool and live-spoof pair images.
+[ListBullet] PCGAN uses ground-truth live/attack labels to choose artifact conversion pairs; its PMN is a two-class live/attack detector.
+[ListBullet] FAS-Aug creates task-specific artifacts from physical capture/recapture simulations rather than requiring a real spoof source for each synthetic sample.
+[ListBullet] SiW-Mv2 has 14 named spoof types; the exact local availability must still be verified by inventory before Native/Full training.
+[Heading1] 32. Final go/no-go checklist before any full training
+[ListBullet] ☐ inventory_report.html reviewed; local data completeness known.
+[ListBullet] ☐ attack_map_v1.yaml contains every observed raw attack token required by Native/Full track.
+[ListBullet] ☐ faces_256 preprocessing complete; detector/crop hashes frozen.
+[ListBullet] ☐ split_v1 leakage audit PASS and SHA256 frozen.
+[ListBullet] ☐ pair manifests deterministic; different-subject check PASS.
+[ListBullet] ☐ ArtifactProbeNet frozen before synthetic evaluation.
+[ListBullet] ☐ method_status.csv identifies faithful/adapted/blocked state for all methods.
+[ListBullet] ☐ all frozen YAML configs version-controlled and hashed.
+[ListBullet] ☐ smoke test passes for generator → bank → evaluator → metrics → plots.
+[ListBullet] ☐ no numeric “result” has been entered manually into tables or plots.
+[Heading1] Appendix A. Minimal pseudocode for the full benchmark
+[CodeBlock] # DATA
+inventory = inventory_all_three_datasets()
+frames = sample_8_frames_per_video(inventory)
+faces = scrfd_crop_256(frames)
+cache_facexformer_and_adaface(faces)
+split = subject_group_split(faces, ratios=(0.70,0.15,0.15), seed=20260814)
+assert_no_leakage(split)
+pairs_train = build_common_pairs(split.TRAIN)
+pairs_val = build_common_pairs(split.VAL)
+
+# MEASUREMENT PROBE (real TRAIN only)
+artifact_probe = train_artifact_probe(split.TRAIN, validate=split.VAL)
+freeze(artifact_probe)
+
+# GENERATORS
+for method in REQUIRED_METHODS:
+    for track in method.required_tracks:
+        for seed in [42,1337,2026]:
+            train_method(method, track, split.TRAIN, validate=split.VAL, seed=seed)
+            bank = generate_fixed_budget(method, pairs_train, N_syn=len(train_spoof_frames))
+            evaluate_generator(bank, pairs_val, artifact_probe)
+
+# COMMON DOWNSTREAM EVALUATION
+for evaluator in [ResNet18Primary, DINOv3ViTS16Secondary]:
+    for method_bank in ALL_BANKS:
+        for seed in [42,1337,2026]:
+            model = train_binary_fas(evaluator, split.TRAIN.real, method_bank, seed)
+            checkpoint = select_on_VAL(model)
+            threshold = select_threshold_on_VAL(checkpoint)
+            predictions = predict_REAL_TEST(checkpoint, threshold, split.TEST)
+            save_per_sample_and_video_predictions(predictions)
+
+aggregate_metrics()
+subject_bootstrap_statistics(n=10000)
+make_all_tables_and_plots()
+validate_paper_pack()
+[Heading1] Appendix B. What Claude is allowed to tune vs. not allowed to tune
+<TABLE>
+| Category | Allowed? | Rule |
+| Dataset split ratios/seed | No | Frozen 70/15/15, seed 20260814 |
+| Frame count | No | 8/video |
+| Face detector/crop | No | Frozen preprocessing |
+| Main GPAT architecture | No | Frozen in Section 9 |
+| Main GPAT loss weights | No for primary | Use frozen values; only named ablations may vary |
+| γ | Only named ablation | Main γ=0; ablation 0.02/0.05/0.10 |
+| Downstream evaluator config | No | Frozen in Section 14 |
+| Training seeds | No | 42/1337/2026 |
+| Threshold rule | No | VAL min-ACER |
+| Third-party native hyperparameters | No arbitrary changes | Official source-of-truth; deviations logged |
+| GPU physical batch due OOM | Yes implementation-only | Keep effective batch by grad accumulation; record |
+| DataLoader workers | Yes | May adapt to OS; no scientific impact |
+| Plot cosmetics | Yes | Cannot change data/statistics; must preserve axes/units |
+</TABLE>
+[Heading1] Appendix C. Interpretation rules for common outcomes
+<TABLE>
+| Observed outcome | Permitted conclusion |
+| GPAT preserves identity/geometry but ArtSim≈0 | GPAT is over-constrained; H1 alone is insufficient; artifact transfer not supported. |
+| GPAT generator metrics are strong but downstream does not improve | GPAT produces controlled synthetic images but their utility for FAS training is not demonstrated. |
+| Downstream improves but fingerprint AUC is very high | Improvement may rely on generator shortcut; contribution requires additional controls. |
+| GPAT-B3 > B0 but B0 ≈ baselines | Metadata supervision contributes strongly; do not attribute all gain to architecture. |
+| GPAT-B0 > binary baselines on both evaluators | Strong evidence that the transfer architecture itself contributes under equal label budget. |
+| γ=0 has best geometry but γ>0 has clearly better downstream/ArtSim | Hard LL lock may be too restrictive; report Pareto and choose claim accordingly rather than forcing γ=0. |
+| Only one seed is good | No robust improvement claim; report mean±std and investigate variance. |
+</TABLE>
+=== core.xml ===
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title/><dc:subject/><dc:creator>python-docx</dc:creator><cp:keywords/><dc:description>generated by python-docx</dc:description><cp:lastModifiedBy/><cp:revision>1</cp:revision><dcterms:created xsi:type="dcterms:W3CDTF">2013-12-23T23:15:00Z</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">2013-12-23T23:15:00Z</dcterms:modified><cp:category/></cp:coreProperties>
+=== app.xml ===
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
+  <Template>Normal.dotm</Template>
+  <TotalTime>0</TotalTime>
+  <Pages>1</Pages>
+  <Words>0</Words>
+  <Characters>0</Characters>
+  <Application>Microsoft Macintosh Word</Application>
+  <DocSecurity>0</DocSecurity>
+  <Lines>0</Lines>
+  <Paragraphs>0</Paragraphs>
+  <ScaleCrop>false</ScaleCrop>
+  <HeadingPairs>
+    <vt:vector size="2" baseType="variant">
+      <vt:variant>
+        <vt:lpstr>Title</vt:lpstr>
+      </vt:variant>
+      <vt:variant>
+        <vt:i4>1</vt:i4>
+      </vt:variant>
+    </vt:vector>
+  </HeadingPairs>
+  <TitlesOfParts>
+    <vt:vector size="1" baseType="lpstr">
+      <vt:lpstr/>
+    </vt:vector>
+  </TitlesOfParts>
+  <Manager/>
+  <Company/>
+  <LinksUpToDate>false</LinksUpToDate>
+  <CharactersWithSpaces>0</CharactersWithSpaces>
+  <SharedDoc>false</SharedDoc>
+  <HyperlinkBase/>
+  <HyperlinksChanged>false</HyperlinksChanged>
+  <AppVersion>14.0000</AppVersion>
+</Properties>
+

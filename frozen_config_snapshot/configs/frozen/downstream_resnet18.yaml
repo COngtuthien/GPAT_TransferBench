@@ -1,0 +1,28 @@
+model:
+  name: torchvision_resnet18_imagenet1k_v1
+  input_size: 224
+  output_logits: 1
+training:
+  epochs: 40
+  seeds: [42, 1337, 2026]
+  batch_size: 64
+  mixed_batch: {real_live: 32, real_spoof: 16, synthetic_spoof: 16}
+  real_only_batch: {real_live: 32, real_spoof: 32}
+  optimizer: AdamW
+  lr_backbone: 1.0e-4
+  lr_head: 5.0e-4
+  weight_decay: 1.0e-4
+  warmup_epochs: 3
+  scheduler: cosine
+  min_lr: 1.0e-6
+  amp: true
+  grad_clip_norm: 1.0
+augmentation:
+  random_resized_crop: {size: 224, scale: [0.92, 1.00], ratio: [0.95, 1.05]}
+  horizontal_flip_p: 0.5
+  color_jitter: {p: 0.5, brightness: 0.05, contrast: 0.05, saturation: 0.05, hue: 0.01}
+  blur: false
+  jpeg: false
+selection:
+  checkpoint: min_val_video_acer_then_max_auc
+  threshold: min_val_video_acer_then_nearest_0.5

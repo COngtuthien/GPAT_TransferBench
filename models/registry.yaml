@@ -1,0 +1,73 @@
+# Frozen auxiliary / backbone model registry (spec §4 "Their model IDs, code commits and
+# weight hashes must be stored in models/registry.yaml").
+# M0: identities and sources from the spec only; local files listed as UNVERIFIED candidates.
+# weight_sha256 / code_commit stay null until verified and hashed at M2 (or first use).
+schema_version: m0-initial
+models:
+  scrfd:
+    role: "Face detector (frozen, never fine-tuned)"
+    spec: "§4: SCRFD ONNX; input 320; score threshold 0.50; choose largest face; weights must be hashed"
+    source_repo: https://github.com/deepinsight/insightface   # spec §30 R17; UNVERIFIED
+    variant: null   # not named in spec — Q-02
+    local_candidates:
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx", size_bytes: 16923827}
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/det_2.5g.onnx", size_bytes: 3292009}
+    code_commit: null
+    weight_sha256: null
+    status: NEEDS_M2_VERIFICATION
+  facexformer:
+    role: "Geometry cache: parsing logits/mask, landmarks, yaw-pitch-roll (frozen, offline only)"
+    spec: "§4"
+    source_repo: https://github.com/Kartik-3004/facexformer   # spec §30 R14; UNVERIFIED
+    local_candidates:
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_geometry/ckpts/model.pt", size_bytes: 1104869851, note: "identity inferred from directory name only"}
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/code/facexformer/", note: "vendored code candidate"}
+    code_commit: null
+    weight_sha256: null
+    status: NEEDS_M2_VERIFICATION
+  adaface_ir50:
+    role: "Identity cache: L2-normalized embedding; official BGR/input normalization (frozen)"
+    spec: "§4"
+    source_repo: https://github.com/mk-minchul/AdaFace   # spec §30 R13; UNVERIFIED
+    variant: null   # training-set checkpoint not named — Q-03
+    local_candidates:
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/pretrained_model/model.pt", size_bytes: 174611121, note: "identity inferred from directory name only"}
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/code/adaface/", note: "vendored code candidate"}
+    code_commit: null
+    weight_sha256: null
+    status: NEEDS_M2_VERIFICATION
+  resnet18_imagenet1k_v1:
+    role: "Backbone for GPAT E_art, frozen F_art, ArtifactProbeNet, primary downstream evaluator"
+    spec: "§9.2, §10.2, §12.1, §14"
+    source: "torchvision ResNet-18 IMAGENET1K_V1"
+    weight_sha256: null
+    status: NOT_DOWNLOADED
+  dinov3_vits16:
+    role: "Secondary downstream evaluator (FULL profile)"
+    spec: "§14.2"
+    source: "facebook/dinov3-vits16-pretrain-lvd1689m (Hugging Face ID from spec); code https://github.com/facebookresearch/dinov3 (spec §30 R15; UNVERIFIED)"
+    revision: null
+    weight_sha256: null
+    status: NOT_DOWNLOADED
+  nafnet_block_reference:
+    role: "Architecture reference for NAFBlocks in G_res (not a weight dependency)"
+    spec: "§9.3, §30 R16"
+    source_repo: https://github.com/megvii-research/NAFNet   # UNVERIFIED
+    code_commit: null
+    status: REFERENCE_ONLY
+  ptwt:
+    role: "Haar DWT level 1, boundary_mode=reflect"
+    spec: "§4, §30 R18"
+    source_repo: https://github.com/v0lta/PyTorch-Wavelet-Toolbox   # UNVERIFIED
+    version: null
+    status: NOT_INSTALLED
+  lpips_alex:
+    role: "LPIPS target drift metric (diagnostic)"
+    spec: "§13"
+    source: null   # not named in spec — Q-10
+    status: SOURCE_NOT_SPECIFIED
+  kid_feature_extractor:
+    role: "Kernel Inception Distance"
+    spec: "§13"
+    source: null   # not named in spec — Q-10
+    status: SOURCE_NOT_SPECIFIED

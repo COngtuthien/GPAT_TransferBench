@@ -1,0 +1,58 @@
+# Preliminary data source registry — M0 DISCOVERY ONLY.
+# No dataset was decoded, extracted, hashed or inventoried. Local inventory at M1 is the
+# source of truth (spec §0, §3.1). Raw data locations are treated as READ-ONLY.
+# Discovery method: `ls` of /media/cong/Data/AI on IOT/Anti_spoofing/Dataset and
+# `find /home/cong /media/cong -maxdepth 6 -type d -iname '*casia*|*msu*|*siw*'`.
+# GPU-side copies: UNKNOWN (GPU not accessible at M0).
+schema_version: m0-preliminary
+generated_utc: "2026-09-18"
+datasets:
+  casia_fasd:
+    expected_name: CASIA-FASD
+    candidate_paths:
+      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd"
+        observed_top_level: [train, test]
+        note: "Extracted directory (mtime 2026-07-18)."
+      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd.zip"
+        observed_top_level: null
+        note: "Archive, 2195546821 bytes; contents not listed."
+    selected_path: null
+    status: NEEDS_M1_AUDIT
+    read_only: true
+    notes: >-
+      Top-level train/test is the dataset's native protocol folder layout; the benchmark uses
+      its own subject-disjoint split (spec §3.5), so native train/test must not be treated
+      as the benchmark split. Subject-ID recoverability to be verified at M1.
+  msu_mfsd:
+    expected_name: MSU-MFSD
+    candidate_paths:
+      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip"
+        observed_top_level: [DecFrames.m, DecFrames_attack_scene01.m, DecFrames_real_scene01.m, ffmpeg, README.txt, scene01, test_sub_list.txt, train_sub_list.txt]
+        note: "A DIRECTORY named MSU-MFSD-Publish.zip (extracted contents)."
+      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip.001 .. .0NN"
+        observed_top_level: null
+        note: "Multi-part archive parts (.001 = 734003200 bytes; at least .001-.011 present)."
+    selected_path: null
+    status: NEEDS_M1_AUDIT
+    read_only: true
+    notes: "Native train/test subject lists present; benchmark split is independent (spec §3.5)."
+  siwmv2:
+    expected_name: SiW-Mv2
+    candidate_paths:
+      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2/SiW-Mv2"
+        observed_top_level: [DRA.pdf, Live, README.pdf, Spoof, live, spoof]
+        note: "Both 'Live'/'Spoof' and 'live'/'spoof' exist (case-distinct dirs) — must be reconciled at M1."
+      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2.zip"
+        observed_top_level: null
+        note: "Archive, 20268115012 bytes; contents not listed."
+    selected_path: null
+    status: NEEDS_M1_AUDIT
+    read_only: true
+    notes: >-
+      Spec §3.3 expects 14 raw spoof types; local availability unknown until M1 inventory.
+      Old PRISM evidence archives reference SiW/MSU validity audits on GPU
+      (/home/cong/PRISM_FAS_C_GPU_EVIDENCE_ARCHIVE_20260908/e7_three_fold/...); not used as evidence here.
+out_of_scope_sources_seen:
+  - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/OULU_NPU.zip"
+  - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/CelebA-Spoof-zips/"
+  - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/Anti-Spoofing-Replay-Dataset-main/"
