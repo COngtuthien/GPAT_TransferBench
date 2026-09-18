@@ -16,7 +16,7 @@ from gpatbench.audit.ledger import sha256_file  # noqa: E402
 
 INDEX = ROOT / "outputs" / "audit" / "ARTIFACT_INDEX.csv"
 EXCLUDE_FILES = {INDEX, ROOT / "outputs" / "audit" / "EXECUTION_LEDGER.jsonl"}
-EXCLUDE_DIR_PARTS = {".git", "__pycache__"}
+EXCLUDE_DIR_PARTS = {".git", "__pycache__", ".venv"}  # .venv is git-ignored; its lock is indexed instead
 EXCLUDE_PREFIXES = ("data/raw/", "data/processed/", "cache/")
 
 

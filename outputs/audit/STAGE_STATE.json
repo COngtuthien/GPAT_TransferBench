@@ -58,7 +58,51 @@
     },
     "M1": {
       "name": "Inventory",
-      "status": "NOT_STARTED"
+      "status": "COMPLETE",
+      "started_utc": "2026-09-18",
+      "start_commit": "af0b2b87f8e31d7be2038a5911d9df15e58e108b",
+      "completed_utc": "2026-09-18",
+      "deliverables": {
+        "inventory": "manifests/inventory.parquet",
+        "report": "outputs/audit/dataset_report.html",
+        "inventory_sha256": "3cfd1323ebb8e72f5bdf99430fda4ede96aafb50d3153d4f1bec11b00cf7343e"
+      },
+      "gate": {
+        "all_local_files_indexed": "PASS (125841 files, 0 unreadable)",
+        "unknown_labels_listed": "PASS (11 tokens in unmapped_attack_tokens.csv)",
+        "no_duplicate_sample_ids": "PASS (20640 unique)",
+        "deterministic_rerun": "PASS (runs B/C byte-identical)",
+        "raw_unchanged": "PASS"
+      },
+      "pending_owner_review": [
+        "DEV-005",
+        "DEV-006 (Q-04 resolution)",
+        "DEV-007",
+        "DEV-008",
+        "DEV-009",
+        "Q-12 CASIA HR_1 label",
+        "Q-13 attack-map proposals",
+        "Q-14 SiW subject IDs",
+        "Q-15 CASIA 112px crops vs spec \u00a74",
+        "Q-16 SiW duplicate Replay videos"
+      ],
+      "later_milestone_preconditions": {
+        "M2": {
+          "casia_fasd": "OWNER_QUESTION Q-15 (inputs are 112x112 face crops)",
+          "msu_mfsd": "READY",
+          "siwmv2": "READY"
+        },
+        "M3_main_split": {
+          "casia_fasd": "BLOCKED_BY_LABEL_CONFLICT (Q-12, 50 HR_1 videos); subject IDs recovered (DEV-008 pending)",
+          "msu_mfsd": "READY (subject IDs recovered)",
+          "siwmv2": "BLOCKED_BY_MISSING_SUBJECT_ID (0/1700 videos)"
+        },
+        "native_full_track": {
+          "casia_fasd": "BLOCKED (10 unmapped tokens)",
+          "msu_mfsd": "READY",
+          "siwmv2": "BLOCKED for token 'Paper' only"
+        }
+      }
     },
     "M2": {
       "name": "Preprocess",

@@ -32,5 +32,7 @@ truth, audit); GPU `/home/sparc/workdir/longnm/GPAT_TransferBench` (heavy execut
 ## Tests
 
 ```
-python3 -m unittest discover -s tests -v
+.venv/bin/python -m unittest discover -s tests -v   # M1+ needs the project venv (environments/m1_inventory_laptop.lock.txt)
 ```
+
+M1 inventory: `.venv/bin/python -m gpatbench.cli inventory --config configs/frozen/data_v1.yaml`

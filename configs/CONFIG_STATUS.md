@@ -6,7 +6,8 @@ below are intentionally absent until their milestone.
 
 | Config | Spec basis | Status | Blocking inputs |
 |---|---|---|---|
-| `configs/frozen/data_v1.yaml` | §3.2–3.4, §4 | NOT CREATED (M1/M2) | dataset roots (NEEDS_M1_AUDIT), attack_map_v1 raw tokens, Q-02/Q-03/Q-04 |
+| `configs/frozen/data_v1.yaml` | §3.2–3.4, §4, §23 | **CREATED M1** (spec values + M1 interpretations DEV-005/006, laptop root bindings); snapshotted | SCRFD variant still null (Q-02) |
+| `configs/frozen/attack_map_v1.yaml` | §3.3 | **CREATED M1** — status PARTIAL_PENDING_OWNER_APPROVAL (MSU 3 + SiW 13 tokens mapped; CASIA 10 + SiW `Paper` pending) | Q-12, Q-13 |
 | `configs/frozen/split_v1.yaml` | §3.5 | NOT CREATED (M3) | allocator penalty weights/procedure (Q-01) |
 | `configs/frozen/pairs_v1.yaml` | §6 | NOT CREATED (M4) | — (values fully in spec: 64 candidates; weights 0.50/0.30/0.20; seed 20260814) |
 | `configs/frozen/downstream_resnet18.yaml` | §23.1 | **CREATED — spec verbatim** (extracted programmatically from DOCX) | — |
@@ -28,4 +29,5 @@ below are intentionally absent until their milestone.
 
 Verbatim copies of created configs are in `frozen_config_snapshot/` (spec §0.1 rule 1);
 SHA256 in `outputs/audit/ARTIFACT_INDEX.csv`. Tests assert the two stay byte-identical.
-`configs/data_source_registry.yaml` is a preliminary discovery registry, not a frozen config.
+`configs/data_source_registry.yaml` records the selected dataset sources (M1 final); it is a registry, not a frozen config.
+

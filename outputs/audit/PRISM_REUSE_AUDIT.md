@@ -73,3 +73,17 @@ Keyword counts = number of `*.py` files under `src/ scripts/ tests/` containing 
 
 All items: **DISCOVERY ONLY — reuse NOT decided.** Decisions belong to M1 (adapters) and
 M2 (auxiliaries) with explicit provenance (source repo, commit, file hash) for anything reused.
+
+---
+
+## 7. M1 reuse decisions (2026-09-18)
+
+Reference read (read-only): `/home/cong/PRISM_FAS_C_LLM_Project_E10_DEV/src/prism_fas/data/adapters/adapters.py` (89 lines) at worktree HEAD `528120f8915a1f4a28da2b412ecdc737b3a72b84` (worktree dirty overall; `git status --porcelain -- <file>` is empty for this file, so it is clean; last changed in commit `d32c190`).
+
+| Old module / function | New requirement | Semantic difference found | Decision |
+|---|---|---|---|
+| `CasiaFasdAdapter` (grouping by split/label/subject/video) | Stable canonical video + subject identity (spec §3.2, §3.5) | PRISM `subject_id = k[2]` is the **bare subject number**, shared by train s1 and test s1. M1 visual evidence shows these are different people, so this would merge subjects and corrupt subject-disjointness. It also does not separate the `bs*`/`fs*` derived copies | **REJECT** → REIMPLEMENT (`gpatbench/data/casia_fasd.py`) |
+| `MsuMfsdAdapter` (README naming + protocol lists, overlap check) | Same README-based parsing | Logic equivalent in intent; the new adapter adds an explicit file classification for every file and keeps the native lists as provenance only | **REIMPLEMENT** (no code copied) |
+| `SiWMv2Adapter` (opaque ids, `subject_id=None`, "labels withheld" target mode) | Full inventory of labels and attack folders | PRISM treated SiW as a target/test-only set with withheld labels, a different role from this benchmark's pooled use. It agrees that subject is unrecoverable | **REJECT** → REIMPLEMENT |
+
+No PRISM code, manifest, split or inventory was copied. M1 inventoried the current local data from scratch.

@@ -1,0 +1,88 @@
+# data_v1 — frozen data configuration (spec §23: dataset roots, 8-frame policy, preprocessing, label mapping).
+# Scientific values are copied from the spec; absolute paths are machine bindings (laptop), not
+# hyperparameters. Items marked M1_INTERPRETATION are operational decisions recorded in
+# outputs/audit/deviation_report.md for owner review.
+version: data_v1
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+host_binding: cong-ThinkBook-16-G7-AHP
+
+datasets:
+  casia_fasd:
+    root: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd"
+    source_type: extracted_image_sequences_face_crops_112px   # repackaged copy; no documentation shipped
+    adapter: gpatbench.data.casia_fasd
+    read_only: true
+    archives_crosscheck:
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd.zip", strip_prefix: ""}
+  msu_mfsd:
+    root: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip"   # a DIRECTORY
+    source_type: extracted_original_videos
+    adapter: gpatbench.data.msu_mfsd
+    read_only: true
+    archives_crosscheck: []   # multi-part .zip.001-.016 pieces not cross-checked (would need joining)
+  siwmv2:
+    root: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2/SiW-Mv2"
+    source_type: extracted_original_videos
+    adapter: gpatbench.data.siwmv2
+    read_only: true
+    archives_crosscheck:
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2.zip", strip_prefix: "SiW-Mv2/"}
+
+canonical_schema: "spec §3.2"
+subject_id_global_format: "{dataset}::{subject_id_raw}"
+style_id_format: "{dataset}::{attack_raw}"
+sample_id: "sha256(json.dumps(['gpatbench.sample_id.v1', dataset, video_id, frame_index], separators=(',',':'))) hex"
+
+frame_sampling:                     # spec §3.4
+  frames_per_video: 8
+  positions: [0.10, 0.2142857, 0.3285714, 0.4428571, 0.5571429, 0.6714286, 0.7857143, 0.90]
+  never_duplicate: true
+  fewer_than_8_valid: use_every_valid_frame_once
+  selection_rule: >-          # M1_INTERPRETATION (spec: 'choose the nearest unique valid frame indices')
+    over the valid index range [lo, hi]: target_k = lo + p_k*(hi-lo); take the nearest valid index not
+    already chosen, processing k in order; ties -> smaller index
+  extraction: deferred_to_M2   # canonical lossless PNG extraction happens in M2
+
+valid_frame:                        # Q-04, M1_INTERPRETATION (decoder robustness)
+  image_sequence: "frame index = filename frame number; valid iff the file decodes (cv2.imdecode IMREAD_COLOR) to a non-empty image"
+  video_file: >-
+    frame index = 0-based decode position with cv2.VideoCapture(path, cv2.CAP_FFMPEG), one position per read();
+    position i is valid iff read() returns ok and a non-empty array; a failed read marks position i invalid and
+    decoding continues; the stream ends after 5 consecutive failed reads (those trailing failures are not positions);
+    the container-declared frame count is recorded, not trusted; FFmpeg stderr lines are counted per video
+  orientation: "OpenCV default CAP_PROP_ORIENTATION_AUTO (recorded; affects pixels in M2, not indices)"
+
+decoder:                            # spec §3.4 'decode with the same backend and record decoder/version'
+  library: opencv-python-headless
+  version: "5.0.0.93"
+  ffmpeg_avcodec: "62.28.101"
+  ffmpeg_avformat: "62.12.101"
+
+hashing:
+  raw_files: "sha256 + crc32 of every file under the selected roots (manifests/raw_file_index.parquet)"
+  sample_sha256: >-
+    image_sequence -> sha256 of the original frame file bytes (sha256_kind=original_frame_bytes);
+    video_file -> null until M2 extracts the canonical PNG (sha256_kind=PENDING_M2_CANONICAL_PNG)
+
+excluded_from_samples: [DERIVED_AUGMENTATION_COPY, DATASET_METADATA, DOCUMENTATION, AUXILIARY_TOOL]
+attack_map: configs/frozen/attack_map_v1.yaml
+
+preprocessing:                      # spec §4 — applied in M2, not M1
+  face_detector: {model: SCRFD ONNX, input: 320, score_threshold: 0.50, selection: largest_face, variant: null}  # variant: Q-02
+  crop: {shape: square_padded, center: scrfd_bbox, side: "1.25*max(w,h)", clamp_to_image: true, random_padding: false}
+  master_resolution: {size: 256, color: RGB, dtype: uint8, downscale: INTER_AREA, upscale: INTER_CUBIC}
+
+environment_lock: environments/m1_inventory_laptop.lock.txt
+outputs:
+  inventory: manifests/inventory.parquet
+  inventory_videos: manifests/inventory_videos.parquet
+  raw_file_index: manifests/raw_file_index.parquet
+  summary_csv: outputs/audit/dataset_inventory_summary.csv
+  attack_coverage_csv: outputs/audit/dataset_attack_coverage.csv
+  unmapped_csv: outputs/audit/unmapped_attack_tokens.csv
+  issues_csv: outputs/audit/dataset_integrity_issues.csv
+  archive_csv: outputs/audit/dataset_archive_crosscheck.csv
+  duplicates_csv: outputs/audit/dataset_duplicate_hashes.csv
+  facts_json: outputs/audit/m1_inventory_facts.json
+  report_html: outputs/audit/dataset_report.html
+  run_json: outputs/audit/m1_inventory_run.json

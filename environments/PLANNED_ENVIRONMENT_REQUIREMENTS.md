@@ -41,3 +41,11 @@ created environment (`pip freeze` / `conda list --explicit` + SHA256), never fro
 2. Save as `environments/<env_id>_<host>.lock.txt`; record SHA256 in `outputs/audit/ARTIFACT_INDEX.csv`.
 3. Record CUDA/driver/cuDNN/GPU via `nvidia-smi` and `torch.version.cuda` / `torch.backends.cudnn.version()`.
 4. Every run's metadata JSON (§22.3) stores `environment_lock_sha256`.
+
+## Update 2026-09-18 (M1) — first created environment
+
+| Env ID | Host | Lock | SHA256 | Contents |
+|---|---|---|---|---|
+| m1-inventory (project `.venv`, git-ignored) | laptop | `environments/m1_inventory_laptop.lock.txt` | `5aa911becda8bc8ffd51ed71273b19ebb095b736f4cad95f28c5fe6a29d0c005` | Python 3.12.3; numpy 2.5.3, opencv-python-headless 5.0.0.93 (bundled FFmpeg avcodec 62.28.101), pandas 3.0.6, pyarrow 25.0.1, PyYAML 6.0.3, python-dateutil 2.9.0.post0, six 1.17.0; pip 24.0 (ensurepip). Index: PyPI default |
+
+Laptop status changes: pandas, pyarrow, opencv-python-headless and numpy are now AVAILABLE **inside the venv only**; the system interpreter is unchanged. torch, ptwt, onnxruntime and the rest remain MISSING (not needed for M1). M2 must reuse opencv-python-headless 5.0.0.93 or re-verify the frame indices (DEV-006).

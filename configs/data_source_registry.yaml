@@ -1,57 +1,61 @@
-# Preliminary data source registry — M0 DISCOVERY ONLY.
-# No dataset was decoded, extracted, hashed or inventoried. Local inventory at M1 is the
-# source of truth (spec §0, §3.1). Raw data locations are treated as READ-ONLY.
-# Discovery method: `ls` of /media/cong/Data/AI on IOT/Anti_spoofing/Dataset and
-# `find /home/cong /media/cong -maxdepth 6 -type d -iname '*casia*|*msu*|*siw*'`.
-# GPU-side copies: UNKNOWN (GPU not accessible at M0).
-schema_version: m0-preliminary
+# Data source registry — M1 FINAL (supersedes the M0 preliminary version; see git history 1823aba).
+# Counts are copied from the measured M1 inventory (outputs/audit/dataset_inventory_summary.csv,
+# run C, 2026-09-18); the CSV is authoritative if anything differs.
+# All sources are READ-ONLY and referenced in place (nothing copied into data/raw/).
+schema_version: m1-final
 generated_utc: "2026-09-18"
+inventory_config: configs/frozen/data_v1.yaml
 datasets:
   casia_fasd:
     expected_name: CASIA-FASD
     candidate_paths:
-      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd"
-        observed_top_level: [train, test]
-        note: "Extracted directory (mtime 2026-07-18)."
-      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd.zip"
-        observed_top_level: null
-        note: "Archive, 2195546821 bytes; contents not listed."
-    selected_path: null
-    status: NEEDS_M1_AUDIT
+      - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd"
+      - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd.zip"
+    selected_path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/casia-fasd"
+    source_type: extracted_image_sequences_face_crops_112px (repackaged; no documentation shipped)
+    status: SELECTED_M1_INVENTORIED
     read_only: true
-    notes: >-
-      Top-level train/test is the dataset's native protocol folder layout; the benchmark uses
-      its own subject-disjoint split (spec §3.5), so native train/test must not be treated
-      as the benchmark split. Subject-ID recoverability to be verified at M1.
+    adapter: gpatbench.data.casia_fasd
+    hash_strategy: sha256 + crc32 of every file; sample sha256 = original frame file bytes
+    local_counts: {indexed_files: 123533, canonical_frame_images: 110859, derived_copies: 12674, canonical_videos: 600,
+                   live_videos: 100, spoof_videos: 500, subjects: 50, sampled_frame_rows: 4800}
+    raw_label_coverage: "10 spoof codes (3-8, HR_1-HR_4); all UNMAPPED pending owner approval; 50 HR_1 videos have a label conflict"
+    archive_crosscheck: "casia-fasd.zip: 123533/123533 entries match extracted files by size+CRC32"
+    notes: "subject_id_raw = {partition}_s{N} (DEV-008). Derived bs*/fs* copies excluded (DEV-007)."
   msu_mfsd:
     expected_name: MSU-MFSD
     candidate_paths:
-      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip"
-        observed_top_level: [DecFrames.m, DecFrames_attack_scene01.m, DecFrames_real_scene01.m, ffmpeg, README.txt, scene01, test_sub_list.txt, train_sub_list.txt]
-        note: "A DIRECTORY named MSU-MFSD-Publish.zip (extracted contents)."
-      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip.001 .. .0NN"
-        observed_top_level: null
-        note: "Multi-part archive parts (.001 = 734003200 bytes; at least .001-.011 present)."
-    selected_path: null
-    status: NEEDS_M1_AUDIT
+      - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip   (directory)"
+      - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip.001..016   (multi-part archive, unused)"
+    selected_path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/MSU-MFSD/MSU-MFSD-Publish.zip"
+    source_type: extracted_original_videos (directory whose name ends in .zip)
+    status: SELECTED_M1_INVENTORIED
     read_only: true
-    notes: "Native train/test subject lists present; benchmark split is independent (spec §3.5)."
+    adapter: gpatbench.data.msu_mfsd
+    hash_strategy: sha256 + crc32 of every file; sample sha256 pending M2 canonical PNG
+    local_counts: {indexed_files: 606, canonical_videos: 280, live_videos: 70, spoof_videos: 210, subjects: 35,
+                   sampled_frame_rows: 2240}
+    raw_label_coverage: "printed_photo, ipad_video, iphone_video; all mapped (SPEC + README.txt)"
+    archive_crosscheck: "not performed (multi-part archive)"
+    notes: "2 videos with one undecodable frame position; 6 videos with FFmpeg ProRes error lines."
   siwmv2:
     expected_name: SiW-Mv2
     candidate_paths:
-      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2/SiW-Mv2"
-        observed_top_level: [DRA.pdf, Live, README.pdf, Spoof, live, spoof]
-        note: "Both 'Live'/'Spoof' and 'live'/'spoof' exist (case-distinct dirs) — must be reconciled at M1."
-      - path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2.zip"
-        observed_top_level: null
-        note: "Archive, 20268115012 bytes; contents not listed."
-    selected_path: null
-    status: NEEDS_M1_AUDIT
+      - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2/SiW-Mv2"
+      - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2.zip"
+    selected_path: "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/SiW-Mv2/SiW-Mv2"
+    source_type: extracted_original_videos
+    status: SELECTED_M1_INVENTORIED
     read_only: true
+    adapter: gpatbench.data.siwmv2
+    hash_strategy: sha256 + crc32 of every file; sample sha256 pending M2 canonical PNG
+    local_counts: {indexed_files: 1702, canonical_videos: 1700, live_videos: 785, spoof_videos: 915, subjects_recovered: 0,
+                   attack_folders: 14, sampled_frame_rows: 13600}
+    raw_label_coverage: "14/14 attack folders present; 13 mapped; 'Paper' UNMAPPED pending owner approval"
+    archive_crosscheck: "SiW-Mv2.zip: 1702/1702 entries match extracted files by size+CRC32"
     notes: >-
-      Spec §3.3 expects 14 raw spoof types; local availability unknown until M1 inventory.
-      Old PRISM evidence archives reference SiW/MSU validity audits on GPU
-      (/home/cong/PRISM_FAS_C_GPU_EVIDENCE_ARCHIVE_20260908/e7_three_fold/...); not used as evidence here.
+      Subject IDs NOT recoverable locally, so the M3 main split is BLOCKED_BY_MISSING_SUBJECT_ID for SiW-Mv2.
+      6 exact-byte duplicate Replay video pairs. The M0 note about lowercase live/spoof dirs was a misread (DEV-009).
 out_of_scope_sources_seen:
   - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/OULU_NPU.zip"
   - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/CelebA-Spoof-zips/"

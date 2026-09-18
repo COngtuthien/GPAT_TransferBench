@@ -14,6 +14,11 @@ changes are appended as dated updates under the entry.
 | DEV-002 | APPROVED | INFRASTRUCTURE_ADAPTATION | 2026-09-18 |
 | DEV-003 | UNAPPROVED | UNRESOLVED — must be resolved before M7 | 2026-09-18 |
 | DEV-004 | APPROVED | APPROVED_OPERATIONAL_DEVIATION (with conditions) | 2026-09-18 |
+| DEV-005 | UNAPPROVED | M1 frame-selection collision rule — owner review | 2026-09-18 |
+| DEV-006 | UNAPPROVED | Q-04 valid-frame definition — owner review | 2026-09-18 |
+| DEV-007 | UNAPPROVED | CASIA derived copies excluded — owner review | 2026-09-18 |
+| DEV-008 | UNAPPROVED | CASIA subject = partition + number — owner review | 2026-09-18 |
+| DEV-009 | UNAPPROVED | M0 record correction (SiW lowercase dirs) | 2026-09-18 |
 
 ---
 
@@ -91,3 +96,53 @@ marked BLOCKED_BY_SOURCE_GAP.
 | Q-09 | M6 | 8.4, 30 | Physics-Guided STD (R2) has no code link; FAITHFUL_PAPER unless a verified official release is found. |
 | Q-10 | M9 | 13 | LPIPS-Alex and KID (Inception feature extractor) implementations/weights not named. |
 | Q-11 | M1 | 0 | Datasets are ≥ 3 local sources with mixed packaging (see `configs/data_source_registry.yaml`); whether raw data is referenced in place (read-only external path) or placed under `data/raw/` is not stated. |
+
+---
+
+## M1 entries (2026-09-18)
+
+## DEV-005 — M1 frame-selection interpretation (spec §3.4 "nearest unique valid frame indices")
+
+- **Spec:** positions fixed; "choose the nearest unique valid frame indices"; the collision rule is not stated.
+- **Implemented (data_v1.yaml `frame_sampling.selection_rule`):** target_k = lo + p_k·(hi − lo) over the valid index range; for each k in order, take the nearest valid index not already chosen; ties go to the smaller index. With fewer than 8 valid frames, every valid frame is used once.
+- **Scientific impact:** only matters when two targets share a nearest index. The number of affected videos is measured by the inventory (`SAMPLING_COLLISION_RESOLUTION_USED` issues).
+- **Affected experiments:** all (sample identity).
+- **Status:** UNAPPROVED — owner review required.
+
+## DEV-006 — Q-04 valid-frame operational definition (decoder robustness)
+
+- **Implemented (data_v1.yaml `valid_frame`):**
+  - image sequences: valid iff the file decodes to a non-empty image.
+  - videos: 0-based decode positions with pinned opencv-python-headless 5.0.0.93 / CAP_FFMPEG, one position per `read()`. Position i is valid iff `read()` returns a non-empty frame. A failed read marks that single position invalid and decoding continues. The stream ends after 5 consecutive failed reads. The declared frame count is recorded but not trusted.
+- **Why "continue", not "stop at first failure":** in run A (superseded), MSU `attack_client008_laptop_SD_ipad_video` decoded 127 good, 1 failed, then 172 good frames (127+1+172 = 300 declared). `attack_client023_laptop_SD_iphone_video` decoded 247 + 1 + 53 = 301. Stopping at the first failure would have discarded 57% and 18% of those videos and shifted their sampling range. A failed read consumes exactly one position, which is consistent with the declared counts.
+- **Other evidence:**
+  - declared ≠ decoded at the end of stream (137 SiW-Mv2 videos short by 2–5 frames; MSU as above);
+  - FFmpeg error-concealed frames are logged per video (`decoder_error_lines`) and raised as WARNING issues.
+- **Limitation:** a run of ≥5 consecutive failed reads inside a stream would be treated as end of stream. Such cases would show `n_valid + n_invalid < declared` and are visible in `inventory_videos.parquet`.
+- **Scientific impact:** decides which frame indices are sampleable; frame content is untouched. M2 must reuse the pinned decoder or re-verify the indices.
+- **Status:** UNAPPROVED — owner review required. This is the proposed Q-04 resolution.
+
+## DEV-007 — CASIA-FASD derived copies excluded from samples
+
+- `train/live/fs*` files (exact horizontal flips) and `bs*` files (brightened copies) of canonical frames are indexed as DERIVED_AUGMENTATION_COPY and are **not** sampled. Evidence: `m1_inventory_facts.json` and `M1_DATASET_EVIDENCE.md` §1.
+- **Status:** UNAPPROVED — owner review required.
+
+## DEV-008 — CASIA-FASD subject identity = native partition + number
+
+- `subject_id_raw = {train|test}_s{N}`. The bare number is shared by different people across the native partitions (visual check of all 20 overlapping numbers).
+- **Status:** UNAPPROVED — owner review required. This rule decides CASIA subject-disjointness in M3.
+
+## DEV-009 — Correction of an M0 record (SiW-Mv2 lowercase directories)
+
+- M0 `data_source_registry.yaml` / report said SiW-Mv2 had both `Live/Spoof` and `live/spoof`. This was a misread of two concatenated `ls` outputs. The lowercase entries belonged to CASIA `train/`. Corrected in M1 with evidence (`M1_DATASET_EVIDENCE.md` §3). The M0 text is kept for history.
+- **Status:** UNAPPROVED (record correction; no scientific impact).
+
+## Open data questions raised in M1 (owner decisions needed)
+
+| ID | Blocks | Question |
+|---|---|---|
+| Q-12 | M3 (CASIA), Native track | CASIA `HR_1` videos are stored under `spoof/` locally but are genuine per the published protocol and look live. Which label is authoritative? |
+| Q-13 | Native/Full track; M3 attack_macro coverage | Approve or reject the CASIA code → attack_macro proposals and SiW `Paper` → print (see `attack_map_v1.yaml` `unmapped_pending_approval`). |
+| Q-14 | M3 (SiW-Mv2) | SiW-Mv2 subject IDs are not in the local copy. Can the official per-sample naming or subject list be obtained? If not, spec §3.5 blocks the main split for SiW-Mv2 (`BLOCKED_BY_MISSING_SUBJECT_ID`). A `protocol_v1_video_fallback` is allowed only as a separately named protocol. |
+| Q-15 | M2 (CASIA) | The local CASIA copy holds 112×112 face crops, not original frames. How should spec §4 (SCRFD on the frame, 1.25× crop, 256 master) apply? |
+| Q-16 | M3 (SiW-Mv2) | 6 pairs of SiW-Mv2 Replay videos are byte-identical (e.g. `Replay_76.mov` = `Replay_83.mov`; full list in `dataset_duplicate_hashes.csv`). Both copies are kept and inventoried as separate canonical videos; nothing was merged or deleted. How should M3 treat them (keep both, keep one, or force them into the same split)? |

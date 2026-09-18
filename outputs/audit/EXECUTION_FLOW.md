@@ -41,3 +41,19 @@ any TEST access, GPU deployment.
 9. M0 → **COMPLETE**. Finalization commit "M0: record remote publication provenance" records this. The owner pushes it and verifies it; no further provenance commit is made for that push.
 
 Open carry-overs: DEV-003 UNRESOLVED (before M7). GPU audit PENDING (before any GPU execution). Q-01…Q-11 open for their milestones.
+
+## M1 — Dataset inventory (2026-09-18)
+
+1. Verified start state (HEAD = origin/main = af0b2b8, clean). M1 set IN_PROGRESS.
+2. Re-read spec §3.1–3.5, §25, App. A. Read local docs: MSU README.txt + protocol lists; SiW README.pdf/DRA.pdf; CASIA has none.
+3. Evidence gathering: filename grammars, CASIA derived copies (flip/brightness), CASIA subject identity (visual, scratchpad only), CASIA HR_1 conflict, SiW lowercase-dir misread (M0 correction), decode behaviour.
+4. Created project `.venv` (pandas, pyarrow, numpy, opencv-python-headless, PyYAML) → `environments/m1_inventory_laptop.lock.txt`.
+5. Implemented `gpatbench/data/{base,casia_fasd,msu_mfsd,siwmv2,frames,inventory,report}.py` and `gpatbench/cli.py inventory`, plus `configs/frozen/{data_v1,attack_map_v1}.yaml`.
+6. Runs:
+   - trial run (aborted);
+   - run A (completed; superseded after it exposed mid-stream decode failures and duplicate files);
+   - final run B (8 workers) and rerun C (6 workers): byte-identical outputs.
+7. Outputs: `manifests/{inventory,inventory_videos,raw_file_index}.parquet`, `outputs/audit/dataset_*.csv`, `unmapped_attack_tokens.csv`, `dataset_report.html`, `m1_inventory_{facts,run}.json`.
+8. M1 → COMPLETE, with owner-review items (DEV-005…009, Q-12…Q-16) and M3 blockers recorded in STAGE_STATE.
+
+Not done (by design): frame extraction, face detection, crops, caches, split, pairs, training, GPU access.

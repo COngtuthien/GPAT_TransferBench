@@ -75,9 +75,15 @@ class TestVerbatimConfigs(unittest.TestCase):
             self.assertEqual((ROOT / rel).read_bytes(), (ROOT / "frozen_config_snapshot" / rel).read_bytes())
             self.assertIsInstance(yaml.safe_load((ROOT / rel).read_text()), dict)
 
-    def test_no_unfrozen_configs_present(self):
-        present = {p.relative_to(ROOT).as_posix() for p in (ROOT / "configs").glob("*/*.yaml")}
-        self.assertEqual(present, set(VERBATIM_CONFIGS))
+    def test_every_frozen_config_is_snapshotted(self):
+        # Stage-aware (M1+): every frozen/method config must have a byte-identical snapshot.
+        present = sorted(p.relative_to(ROOT).as_posix()
+                         for sub in ("configs/frozen", "configs/methods") for p in (ROOT / sub).glob("*.yaml"))
+        self.assertTrue(set(VERBATIM_CONFIGS) <= set(present))
+        for rel in present:
+            snap = ROOT / "frozen_config_snapshot" / rel
+            self.assertTrue(snap.is_file(), rel)
+            self.assertEqual(snap.read_bytes(), (ROOT / rel).read_bytes(), rel)
 
 
 class TestRegistries(unittest.TestCase):
@@ -101,10 +107,15 @@ class TestRegistries(unittest.TestCase):
     def test_data_source_registry(self):
         reg = yaml.safe_load((ROOT / "configs/data_source_registry.yaml").read_text(encoding="utf-8"))
         self.assertEqual(set(reg["datasets"]), {"casia_fasd", "msu_mfsd", "siwmv2"})
-        for d in reg["datasets"].values():
+        data_cfg = ROOT / "configs/frozen/data_v1.yaml"
+        roots = yaml.safe_load(data_cfg.read_text())["datasets"] if data_cfg.exists() else {}
+        for name, d in reg["datasets"].items():
             self.assertIs(d["read_only"], True)
-            self.assertIsNone(d["selected_path"])
-            self.assertEqual(d["status"], "NEEDS_M1_AUDIT")
+            self.assertIn(d["status"], {"NEEDS_M1_AUDIT", "SELECTED_M1_INVENTORIED", "DATA_BLOCK"})
+            if d["selected_path"] is None:
+                self.assertNotEqual(d["status"], "SELECTED_M1_INVENTORIED")
+            else:  # a selected source must be the frozen data_v1 root
+                self.assertEqual(d["selected_path"], roots[name]["root"])
 
 
 class TestAuditState(unittest.TestCase):
@@ -115,8 +126,11 @@ class TestAuditState(unittest.TestCase):
         self.assertEqual(list(ms), [f"M{i}" for i in range(15)])
         for k, v in ms.items():
             self.assertIn(v["status"], allowed, k)
-        for i in range(1, 15):
-            self.assertEqual(ms[f"M{i}"]["status"], "NOT_STARTED")
+        # Stage-aware: M0 COMPLETE; milestones advance in order, one at a time.
+        self.assertEqual(ms["M0"]["status"], "COMPLETE")
+        statuses = [ms[f"M{i}"]["status"] for i in range(15)]
+        first_open = next((i for i, s in enumerate(statuses) if s != "COMPLETE"), 15)
+        self.assertTrue(all(s == "NOT_STARTED" for s in statuses[first_open + 1:]), statuses)
 
     def test_ledger_jsonl(self):
         keys = {"timestamp_utc", "host", "user", "cwd", "milestone", "purpose", "command", "git_commit",
@@ -146,13 +160,24 @@ class TestNoLaterMilestoneArtifacts(unittest.TestCase):
     def _nonplaceholder(self, rel):
         return [p for p in (ROOT / rel).rglob("*") if p.is_file() and p.name != ".gitkeep"]
 
+    # Stage-aware since M1: manifests/ may hold only the M1 inventory manifests.
+    M1_MANIFESTS = {"manifests/inventory.parquet", "manifests/inventory_videos.parquet",
+                    "manifests/raw_file_index.parquet"}
+
     def test_empty_runtime_dirs(self):
-        for rel in ["manifests", "runs", "data/raw", "data/processed", "cache", "probes", "downstream",
+        for rel in ["runs", "data/raw", "data/processed", "cache", "probes", "downstream",
                     "outputs/tables", "outputs/plots", "outputs/qualitative", "outputs/paper_pack"]:
             self.assertEqual(self._nonplaceholder(rel), [], rel)
 
-    def test_no_parquet_anywhere(self):
-        self.assertEqual([p for p in ROOT.rglob("*.parquet") if ".git" not in p.parts], [])
+    def test_manifests_only_m1(self):
+        present = {p.relative_to(ROOT).as_posix() for p in self._nonplaceholder("manifests")}
+        self.assertTrue(present <= self.M1_MANIFESTS, present - self.M1_MANIFESTS)
+
+    def test_no_split_or_pair_parquet(self):
+        parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet")
+                   if not ({".git", ".venv"} & set(p.parts))}
+        self.assertTrue(parquet <= self.M1_MANIFESTS, parquet - self.M1_MANIFESTS)
+        self.assertFalse(any("split" in p or "pair" in p for p in parquet))
 
 
 if __name__ == "__main__":
