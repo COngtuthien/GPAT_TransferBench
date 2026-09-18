@@ -12,11 +12,9 @@
   "milestones": {
     "M0": {
       "name": "Bootstrap",
-      "status": "IN_PROGRESS",
-      "phase": "FINALIZATION: owner approvals recorded; awaiting M0 commit + GitHub push",
-      "blockers": [
-        "GIT_IDENTITY_NOT_CONFIGURED: no local/global identity; owner must provide GIT_NAME/GIT_EMAIL (used only via git -c, not persisted)"
-      ],
+      "status": "COMPLETE",
+      "phase": "FINALIZED",
+      "blockers": [],
       "deviations": {
         "DEV-001": "APPROVED",
         "DEV-002": "APPROVED",
@@ -27,8 +25,36 @@
         "GPU audit PENDING (SSH requires interactive password)"
       ],
       "prism_integrity_check_2026-09-18": "PASS (HEAD, dirty counts, porcelain entries unchanged; 0 files with mtime after session start)",
-      "commit": null,
-      "github_publication": "NOT_STARTED"
+      "commit": "1823abad4e501cd640369f93026508f10d3950f2",
+      "github_publication": {
+        "status": "COMPLETE",
+        "remote": "origin",
+        "remote_url": "https://github.com/COngtuthien/GPAT_TransferBench.git",
+        "branch": "main",
+        "published_commit": "1823abad4e501cd640369f93026508f10d3950f2",
+        "remote_main_sha_verified": "1823abad4e501cd640369f93026508f10d3950f2",
+        "verified_utc": "2026-09-18"
+      },
+      "finalization_commit": "this commit ('M0: record remote publication provenance'); its SHA and push are reported to the owner and deliberately not recorded here, to avoid a provenance-commit loop",
+      "acceptance": {
+        "spec_identity": "PASS (SHA256 match; 33 pages confirmed externally per owner, not rendered locally)",
+        "full_spec_read": "PASS",
+        "project_root": "PASS (DEV-001 APPROVED)",
+        "git_repo": "PASS",
+        "skeleton": "PASS",
+        "environment_state_recorded": "PASS (DEV-004 APPROVED_WITH_CONDITIONS)",
+        "dataset_paths_recorded": "PASS",
+        "prism_unchanged": "PASS",
+        "third_party_registry": "PASS",
+        "audit_infrastructure": "PASS",
+        "no_training": "PASS",
+        "no_test_access": "PASS",
+        "no_invented_hyperparameters": "PASS",
+        "deviations_recorded": "PASS",
+        "m0_tests": "PASS",
+        "m0_commit": "PASS",
+        "remote_push": "PASS"
+      }
     },
     "M1": {
       "name": "Inventory",

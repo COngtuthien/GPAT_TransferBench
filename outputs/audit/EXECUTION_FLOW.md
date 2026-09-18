@@ -37,3 +37,7 @@ any TEST access, GPU deployment.
 5. M0 tests re-run.
 6. M0 commit → push `main` to `origin` (https://github.com/C0ngtuthien/GPAT_TransferBench.git), with no force push.
 7. Post-push provenance (commit SHA, remote SHA) recorded in the ledger and STAGE_STATE via a follow-up provenance commit.
+8. M0 commit `1823abad4e501cd640369f93026508f10d3950f2` pushed interactively by the owner to `origin` = https://github.com/COngtuthien/GPAT_TransferBench.git (`main`). The remote `main` SHA was verified equal to local HEAD, both by the owner and by the agent's `ls-remote`.
+9. M0 → **COMPLETE**. Finalization commit "M0: record remote publication provenance" records this. The owner pushes it and verifies it; no further provenance commit is made for that push.
+
+Open carry-overs: DEV-003 UNRESOLVED (before M7). GPU audit PENDING (before any GPU execution). Q-01…Q-11 open for their milestones.
