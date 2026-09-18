@@ -1,7 +1,8 @@
 # Frozen auxiliary / backbone model registry (spec §4 "Their model IDs, code commits and
 # weight hashes must be stored in models/registry.yaml").
 # M0: identities and sources from the spec only; local files listed as UNVERIFIED candidates.
-# weight_sha256 / code_commit stay null until verified and hashed at M2 (or first use).
+# weight_sha256 / code_commit stay null until verified at M2. candidate_sha256 (dataset-resolution pass) only
+# fingerprints local candidate files; it does not verify that a file is the spec-required model.
 schema_version: m0-initial
 models:
   scrfd:
@@ -10,8 +11,10 @@ models:
     source_repo: https://github.com/deepinsight/insightface   # spec §30 R17; UNVERIFIED
     variant: null   # not named in spec — Q-02
     local_candidates:
-      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx", size_bytes: 16923827}
-      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/det_2.5g.onnx", size_bytes: 3292009}
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx", size_bytes: 16923827,
+         candidate_sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91, hashed_utc: "2026-09-18"}
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/det_2.5g.onnx", size_bytes: 3292009,
+         candidate_sha256: 041f73f47371333d1d17a6fee6c8ab4e6aecabefe398ff32cca4e2d5eaee0af9, hashed_utc: "2026-09-18"}
     code_commit: null
     weight_sha256: null
     status: NEEDS_M2_VERIFICATION
@@ -20,7 +23,9 @@ models:
     spec: "§4"
     source_repo: https://github.com/Kartik-3004/facexformer   # spec §30 R14; UNVERIFIED
     local_candidates:
-      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_geometry/ckpts/model.pt", size_bytes: 1104869851, note: "identity inferred from directory name only"}
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_geometry/ckpts/model.pt", size_bytes: 1104869851, note: "identity inferred from directory name only",
+         candidate_sha256: 327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d, hashed_utc: "2026-09-18",
+         hf_download_metadata: {revision: fd12148d0b1949bb98602544d4b257f42eef774d, etag_equals_sha256: true, repo_id: null}}
       - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/code/facexformer/", note: "vendored code candidate"}
     code_commit: null
     weight_sha256: null
@@ -31,7 +36,9 @@ models:
     source_repo: https://github.com/mk-minchul/AdaFace   # spec §30 R13; UNVERIFIED
     variant: null   # training-set checkpoint not named — Q-03
     local_candidates:
-      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/pretrained_model/model.pt", size_bytes: 174611121, note: "identity inferred from directory name only"}
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/pretrained_model/model.pt", size_bytes: 174611121, note: "identity inferred from directory name only",
+         candidate_sha256: 43bd2d570584d95d4a17ce81f26449034c45dbeed750afcab651872abc0e1496, hashed_utc: "2026-09-18",
+         hf_download_metadata: {revision: 60a65befbcf7e19284c4f3ac730f56867ed29594, etag_equals_sha256: true, repo_id: null}}
       - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/code/adaface/", note: "vendored code candidate"}
     code_commit: null
     weight_sha256: null

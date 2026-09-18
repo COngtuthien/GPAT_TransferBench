@@ -49,3 +49,11 @@ created environment (`pip freeze` / `conda list --explicit` + SHA256), never fro
 | m1-inventory (project `.venv`, git-ignored) | laptop | `environments/m1_inventory_laptop.lock.txt` | `5aa911becda8bc8ffd51ed71273b19ebb095b736f4cad95f28c5fe6a29d0c005` | Python 3.12.3; numpy 2.5.3, opencv-python-headless 5.0.0.93 (bundled FFmpeg avcodec 62.28.101), pandas 3.0.6, pyarrow 25.0.1, PyYAML 6.0.3, python-dateutil 2.9.0.post0, six 1.17.0; pip 24.0 (ensurepip). Index: PyPI default |
 
 Laptop status changes: pandas, pyarrow, opencv-python-headless and numpy are now AVAILABLE **inside the venv only**; the system interpreter is unchanged. torch, ptwt, onnxruntime and the rest remain MISSING (not needed for M1). M2 must reuse opencv-python-headless 5.0.0.93 or re-verify the frame indices (DEV-006).
+
+## Update 2026-09-18/19 (dataset-resolution pass) — decoder-audit environment
+
+| Env ID | Host | Lock | SHA256 | Contents |
+|---|---|---|---|---|
+| m1-decoder-audit (venv OUTSIDE the project root; diagnostic only) | laptop | `environments/m1_decoder_audit_laptop.lock.txt` | `9609488126d9d731dbe5a1dc76a6dc773863074ac0d795acf1e7b60da6458abc` | av 18.1.0 (bundled FFmpeg avcodec 62.28.102), opencv-python-headless 5.0.0.93, numpy 2.5.3, pyarrow 25.0.1, PyYAML 6.0.3 |
+
+Used only for `tools/audit_decoder_index.py`. The inventory environment (`m1_inventory_laptop.lock.txt`) is unchanged. torch/onnxruntime are still MISSING (the AdaFace audit was not run).

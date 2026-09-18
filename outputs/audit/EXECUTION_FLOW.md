@@ -73,3 +73,21 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
 5. Code, config and tests changed; `attack_map_v1` rev 2 and `data_v1` rev 2 snapshotted.
 6. Runs D and E: byte-identical outputs; raw index identical to ce12a58; sample set unchanged.
 7. M1 → COMPLETE (corrected). Pending owner review: DEV-005, DEV-006 implementation, Q-14/15/16.
+
+## M1 — Dataset-resolution / final freeze pass (2026-09-18/19, base 112506b, not pushed)
+
+1. DEV-005 APPROVED (owner), with toy tests.
+2. DEV-006: independent decoder audit (PyAV 18.1.0) on the targeted videos and a global timestamp check of all 1,980 videos → continuity proven → APPROVED.
+3. CASIA:
+   - independent disk re-audit (0 manifest mismatches, all frames 112×112);
+   - final original-source search: none found;
+   - resize frequency audit (diagnostic);
+   - DEV-011 adaptation proposed.
+4. SiW:
+   - official repo @8667dbc re-verified;
+   - protocol entries traced to video stems;
+   - no video→person mapping (Q-14 CASE C);
+   - AdaFace audit not applicable (0 candidate groups);
+   - duplicate audit (Q-16);
+   - Paper → print re-confirmed.
+5. Readiness matrix and resolution report; frozen config rev1 preserved in history with diffs; manifests unchanged.

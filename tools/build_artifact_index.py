@@ -1,7 +1,7 @@
 """Rebuild outputs/audit/ARTIFACT_INDEX.csv: path, size, SHA256 of every project file.
 
-Excluded: .git/, __pycache__/, .gitkeep placeholders, git-ignored large data dirs, the index
-itself, and the append-only EXECUTION_LEDGER.jsonl (its hash changes on every append; its
+Excluded: everything git-ignored (listing via `git ls-files --cached --others --exclude-standard`),
+.gitkeep placeholders, large data dirs, the index itself, and the append-only EXECUTION_LEDGER.jsonl (its hash changes on every append; its
 integrity is protected by append-only policy + Git history instead).
 
 Usage: python3 tools/build_artifact_index.py
@@ -21,8 +21,12 @@ EXCLUDE_PREFIXES = ("data/raw/", "data/processed/", "cache/")
 
 
 def iter_files():
-    for p in sorted(ROOT.rglob("*")):
-        rel = p.relative_to(ROOT).as_posix()
+    """Files Git would track: tracked + untracked-but-not-ignored (respects .gitignore)."""
+    import subprocess
+    out = subprocess.run(["git", "-C", str(ROOT), "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+                         capture_output=True, check=True).stdout.decode("utf-8")
+    for rel in sorted(r for r in out.split("\0") if r):
+        p = ROOT / rel
         if not p.is_file() or p in EXCLUDE_FILES or p.name == ".gitkeep":
             continue
         if EXCLUDE_DIR_PARTS & set(p.relative_to(ROOT).parts) or rel.startswith(EXCLUDE_PREFIXES):

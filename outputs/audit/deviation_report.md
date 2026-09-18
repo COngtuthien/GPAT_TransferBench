@@ -14,12 +14,13 @@ changes are appended as dated updates under the entry.
 | DEV-002 | APPROVED | INFRASTRUCTURE_ADAPTATION | 2026-09-18 |
 | DEV-003 | UNAPPROVED | UNRESOLVED — must be resolved before M7 | 2026-09-18 |
 | DEV-004 | APPROVED | APPROVED_OPERATIONAL_DEVIATION (with conditions) | 2026-09-18 |
-| DEV-005 | UNAPPROVED | Frame-selection collision rule — exact rule documented; owner review | 2026-09-18 |
-| DEV-006 | UNAPPROVED (semantic definition APPROVED) | Q-04 index-bounded implementation rev 2 — owner confirmation | 2026-09-18 |
+| DEV-005 | APPROVED | IMPLEMENTATION_DETAIL — frame-selection tie/collision rule | 2026-09-18 |
+| DEV-006 | APPROVED | Q-04 valid frame + index-bounded decode; index continuity proven (DECODER_INDEX_AUDIT.md) | 2026-09-18 |
 | DEV-007 | APPROVED | APPROVED_WITH_EVIDENCE — CASIA derived copies excluded | 2026-09-18 |
 | DEV-008 | UNAPPROVED | NOT APPROVED — superseded by DEV-010 | 2026-09-18 |
 | DEV-010 | APPROVED | CASIA code semantics + subject ids train N / test 20+N (owner decision) | 2026-09-18 |
 | DEV-009 | APPROVED | M0 record correction (SiW lowercase dirs) | 2026-09-18 |
+| DEV-011 | UNAPPROVED | PROPOSED CASIA_PRE_CROPPED_112_ADAPTATION (CONTROLLED_DATASET_ADAPTATION) — owner decision | 2026-09-18 |
 
 ---
 
@@ -118,6 +119,9 @@ marked BLOCKED_BY_SOURCE_GAP.
   - **Boundaries:** p ∈ [0.10, 0.90], so every target lies strictly inside [lo, hi] and never needs a frame outside the valid range. With |V| ≥ 8 the fallback always finds an unused index.
   - **Against the frozen wording "choose the nearest unique valid frame indices":** the output is always 8 unique valid indices, and each is the nearest valid index to its target unless that index was taken by an earlier target. The wording does not say which target keeps a contested index; this rule gives it to the earlier (lower-p) target.
   - **Measured:** the collision fallback was used for **0** videos in the final inventory (`SAMPLING_COLLISION_RESOLUTION_USED` issues = 0). With |V| ≥ 10 the targets are at least 1.03 indices apart.
+- **Status update 2026-09-18 (dataset-resolution pass, owner decision):**
+  - **Status:** APPROVED
+  - Owner classification: IMPLEMENTATION_DETAIL. Approved rule exactly as documented above: lower index wins exact ties; the earlier p_k keeps a contested frame; the next nearest unused index uses the same key. The frozen positions stay exactly [0.10, 0.2142857, 0.3285714, 0.4428571, 0.5571429, 0.6714286, 0.7857143, 0.90]. Measured collision fallback usage: 0 videos. Toy tests: `tests/test_dataset_resolution.py`.
 
 ## DEV-006 — Q-04 valid-frame operational definition (decoder robustness)
 
@@ -136,6 +140,15 @@ marked BLOCKED_BY_SOURCE_GAP.
   - **image sequences:** index = existing source file's frame number; valid iff it decodes non-empty.
   - **Justification that read() k ↔ original index k:** in run A, MSU client008 decoded 127 good + 1 failed + 172 good = 300 = declared, and client023 247 + 1 + 53 = 301 = declared. A failed read therefore consumes exactly one position.
   - **Status:** UNAPPROVED — the semantic definition is APPROVED by the owner; the index-bounded implementation (revision 2) awaits owner confirmation. Measured outcomes are in the final inventory (`decode_status`, `frames_beyond_declared`).
+- **Status update 2026-09-18 (dataset-resolution pass):**
+  - **Status:** APPROVED
+  - Evidence: `DECODER_INDEX_AUDIT.md`, `decoder_index_audit.csv`, `decoder_index_global.csv`.
+    - The independent decoder (PyAV 18.1.0) fails on the same packets (MSU client008 @127, client023 @247).
+    - Every later frame content-aligns at offset 0 (thumbnail diff 0.000).
+    - All 1,980 videos have OpenCV timestamps equal to PyAV packet PTS for every valid index.
+    - The 137 SiW trailing invalid indices equal declared − packets exactly: they are non-existent frames.
+  - Caveat recorded for M2: OpenCV `CAP_PROP_POS_FRAMES` lags by 1 after a failed read and must never be used as the frame index.
+  - Owner-approved semantic definition, with the implementation now proven.
 
 ## DEV-007 — CASIA-FASD derived copies excluded from samples
 
@@ -198,3 +211,25 @@ marked BLOCKED_BY_SOURCE_GAP.
 | Q-16 | **OPEN (no action in M1)** — 6 byte-identical SiW Replay pairs kept as separate raw entries | `dataset_duplicate_hashes.csv`; re-check against subject/split boundaries once subject metadata exists |
 
 Note: supplementary Table 1 names the 72-video mask type "Full Mask", while the local folder is `Mask_HalfMask` (spec concept "half mask"). The mapping to mask_3d is unaffected; recorded for traceability.
+
+---
+
+## Dataset-resolution pass (2026-09-18) — new entries
+
+## DEV-011 — PROPOSED: CASIA_PRE_CROPPED_112_ADAPTATION (CONTROLLED_DATASET_ADAPTATION)
+
+- **Why:** the only local CASIA-FASD data are 112×112 face crops (`CASIA_SOURCE_AUDIT.md`: 110,859/110,859 canonical PNGs are 112×112 RGB; no original copy exists on the laptop). The spec §4 SCRFD raw-frame path cannot be executed for CASIA.
+- **Proposal (full text: `CASIA_CONTROLLED_ADAPTATION_PROPOSAL.md`):** decode the canonical 112 crop → RGB → INTER_CUBIC to 256×256; SCRFD/1.25× crop skipped for CASIA only; identical for all methods.
+- **Measured impact** (`CASIA_RESIZE_FREQUENCY_AUDIT.md`, diagnostic): after upscaling, relative high-frequency power on the 256 grid drops by about 5–6×; live and spoof are affected alike. **Not equivalent** to the nominal pipeline.
+- **Affected experiments:** every experiment that uses CASIA (all of them, through the pooled benchmark).
+- **Status:** UNAPPROVED — owner decision required before M2 for CASIA.
+
+## Final classification of dataset questions (dataset-resolution pass)
+
+| ID | Final status | Evidence |
+|---|---|---|
+| Q-04 | RESOLVED (DEV-006 APPROVED) | `DECODER_INDEX_AUDIT.md` |
+| Q-14 | **BLOCKED_BY_MISSING_SUBJECT_ID** (CASE C: no trustworthy mapping; 0/1,700 videos). Official protocol entries are video stems (`preprocessing.py` L31 → `config_siwm.py` L162–164), not person IDs. The AdaFace audit was not applicable (0 source-derived candidate groups) and was not run; no pseudo IDs were created | `SIW_PROTOCOL_NAME_SEMANTICS.md`, `siw_subject_mapping_candidate.csv`, `siw_subject_recovery/ADAFACE_AUDIT_STATUS.md` |
+| Q-15 | **UNRESOLVED → DEV-011 proposed**. Final read-only search found no original CASIA copy (every zip ≥ 100 MB on the data volume listed; the 76-part CelebA-Spoof archive not listable; one unrelated .rar not opened; the GPU server not inspected) | `CASIA_SOURCE_AUDIT.md` |
+| Q-16 | **OPEN, preserved**. 6 byte-identical SiW Replay pairs, all UNRESOLVED_DUPLICATE; 3 pairs sit in official testlist_all vs trainlist_all | `SIW_DUPLICATE_VIDEO_AUDIT.md/.csv` |
+| Q-17 (new) | **INFO**. The official SiW-Mv2 protocol lists reference 1,764 stems, 64 of which are absent from the local release (e.g. `Live_892…902`); the official lists cannot be applied verbatim to the local copy | `SIW_PROTOCOL_NAME_SEMANTICS.md` §3 |

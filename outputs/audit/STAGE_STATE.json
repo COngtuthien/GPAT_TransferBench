@@ -75,36 +75,42 @@
         "raw_unchanged": "PASS (size+mtime snapshot; raw_file_index identical to ce12a58)"
       },
       "pending_owner_review": [
-        "DEV-005 frame-selection collision rule (exact rule documented)",
-        "DEV-006 Q-04 index-bounded implementation rev 2 (semantic definition approved)",
-        "Q-14 SiW subject IDs (BLOCKED)",
-        "Q-15 CASIA 112px crops vs spec \u00a74 (no original copy found)",
-        "Q-16 SiW duplicate Replay videos"
+        "DEV-011 CASIA_PRE_CROPPED_112_ADAPTATION (Q-15)",
+        "Q-14 SiW-Mv2 subject IDs: BLOCKED_BY_MISSING_SUBJECT_ID (CASE C)",
+        "Q-16 SiW duplicate policy for M3 (recommend split-atomic by sha256)"
       ],
       "later_milestone_preconditions": {
         "M2": {
-          "casia_fasd": "BLOCKED_PENDING_OWNER_DEVIATION Q-15 (only 112x112 face-crop repack exists locally)",
+          "casia_fasd": "BLOCKED_PENDING_CONTROLLED_ADAPTATION (DEV-011)",
           "msu_mfsd": "READY",
           "siwmv2": "READY"
         },
         "M3_main_split": {
-          "casia_fasd": "READY (50 subjects, labels resolved by DEV-010)",
-          "msu_mfsd": "READY (35 subjects)",
-          "siwmv2": "BLOCKED_BY_MISSING_SUBJECT_ID (0/1700)"
+          "casia_fasd": "READY",
+          "msu_mfsd": "READY",
+          "siwmv2": "BLOCKED_BY_MISSING_SUBJECT_ID"
         },
         "native_full_track": {
-          "casia_fasd": "READY (all spoof codes mapped)",
+          "casia_fasd": "READY",
           "msu_mfsd": "READY",
-          "siwmv2": "READY (all 14 folders mapped)"
+          "siwmv2": "READY"
         }
       },
-      "phase": "CORRECTED",
+      "phase": "CORRECTED_AND_DATASET_RESOLVED",
       "correction_pass": {
         "started_utc": "2026-09-18",
         "base_commit": "ce12a58fc9e0aca7b3cf56255d73cb85d696b36a",
         "reason": "owner M1 review: CASIA label/subject semantics, Q-04 revision, SiW subject + Paper investigation, CASIA original-data search",
         "completed_utc": "2026-09-18",
         "result": "CASIA semantics corrected (DEV-010), Q-04 index-bounded rev 2, SiW Paper->print, runs D/E byte-identical; raw_file_index identical to ce12a58"
+      },
+      "dataset_resolution_pass": {
+        "date": "2026-09-18/19",
+        "base_commit": "112506bae2d5b676b9dd3e72b26645ce5cf390cc",
+        "report": "outputs/audit/DATASET_RESOLUTION_REPORT.md",
+        "matrix": "outputs/audit/DATASET_READINESS_MATRIX.csv",
+        "manifests_regenerated": false,
+        "inventory_sha256_unchanged": "f3a882c91eb3de808ded61e92f2bf20a6b611d21669420f1e1a64e244a979173"
       }
     },
     "M2": {
