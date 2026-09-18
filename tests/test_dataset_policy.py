@@ -189,7 +189,13 @@ class TestFrozenPolicy(unittest.TestCase):
             self.assertEqual(r["pairing_rule"], D[ds]["pairing"]["rule"])
         import json
         s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
-        self.assertEqual((s["M1"]["status"], s["M2"]["status"], s["M3"]["status"]), ("COMPLETE", "NOT_STARTED", "NOT_STARTED"))
+        # Stage-aware since M2A: M1 COMPLETE, M3 NOT_STARTED, M2 may be IN_PROGRESS/BLOCKED but never COMPLETE
+        # while no full-M2 output exists (data/processed and cache must still be empty).
+        self.assertEqual((s["M1"]["status"], s["M3"]["status"]), ("COMPLETE", "NOT_STARTED"))
+        self.assertIn(s["M2"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED"})
+        produced = [p for rel in ("data/processed", "cache") for p in (ROOT / rel).rglob("*") if p.is_file() and p.name != ".gitkeep"]
+        if not produced:
+            self.assertNotEqual(s["M2"]["status"], "COMPLETE")
 
     def test_sanity_json(self):
         import json

@@ -279,3 +279,30 @@ Note: supplementary Table 1 names the 72-video mask type "Full Mask", while the 
 | Q-16 | **RESOLVED_WITH_EXACT_CONTENT_GROUPING** (6 groups; raw records preserved) |
 | Q-17 | DOCUMENTED LIMITATION: 64 official protocol names absent locally (`SIW_PROTOCOL_COVERAGE_AUDIT.md`); local inventory is the source of truth |
 | Q-01 | OPEN (allocator objective/weights), required before M3 execution |
+
+---
+
+## M2A — auxiliary model resolution (2026-09-19)
+
+No new deviation is proposed in M2A. The items below are open questions for the owner. Implementation details are listed separately; they are not scientific choices.
+
+| ID | Status | Blocks M2B | Summary (full text: `M2A_AUX_MODEL_RESOLUTION.md`) |
+|---|---|---|---|
+| Q-02 | **OWNER_DECISION_REQUIRED** | YES | Two official SCRFD KPS candidates, identified structurally: A = SCRFD_10G_KPS (`scrfd_10g_bnkps.onnx`, sha `5838f7fe…`), B = SCRFD_2.5G_KPS (`det_2.5g.onnx`, sha `041f73f4…`). The spec does not name a variant, and neither file is hash-verified against an official pack (downloads of 407 MB / 313 MB not performed). Labelled recommendation: A |
+| Q-03 | **OWNER_DECISION_REQUIRED** (local identity RESOLVED_AUTHORITATIVE) | YES | Local = HF `minchul/cvlface_adaface_ir50_webface4m` @ `60a65bef` (sha `43bd2d57…`, exact). Alternatives: CVLFace IR-50 CASIA / MS1MV2 (RGB) or original-repo IR-50 .ckpt (BGR) |
+| Q-18 | OPEN (new) | YES | AdaFace colour order: spec says "BGR"; the local checkpoint's official contract is RGB. Smoke cos(RGB-input, BGR-input embeddings) = 0.81–0.97 |
+| Q-19 | OPEN (new) | YES | AdaFace needs a 5-point-aligned 112×112 face; the canonical face is an unaligned 256 crop; the spec has no alignment step |
+| Q-20 | OPEN (new) | NO | FaceXFormer official demo framing (MTCNN + 50% margin) vs spec App. A canonical faces (implemented as spec) |
+| Q-21 | OPEN (new) | NO for M2B; YES before M9 / §21 | FaceXFormer's 11 parsing classes have no documented names |
+| Q-22 | OPEN (new) | YES | Crop borders: "square padded face" vs "clamp to image". Smoke: 3/8 SiW crops clamped |
+| Q-23 | OPEN (new) | YES | Parsing-logit cache: float32 ≈ 45.6 GB for 20,640 samples; dtype/resolution decision |
+
+**Implementation details (recorded, not scientific choices):**
+- SCRFD NMS 0.4 (official default); official letterbox and normalisation;
+- largest-face tie-break;
+- crop integer rounding;
+- PNG compression level 3;
+- FaceXFormer swin_b constructed with `weights=None` and then a strict checkpoint load (identical final weights, no ImageNet download);
+- FaceXFormer one forward per task;
+- landmark 224→256 pixel-centre mapping;
+- deterministic threading (torch 4, ORT 1).

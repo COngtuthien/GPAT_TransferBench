@@ -1,0 +1,71 @@
+# preprocess_v1 — PROPOSED (NOT FROZEN). Blocked fields are null/OPEN with their Q-IDs.
+# It becomes configs/frozen/preprocess_v1.yaml only after the owner resolves Q-02, Q-03, Q-18, Q-19, Q-22, Q-23.
+version: preprocess_v1
+status: PROPOSED_BLOCKED
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+references:
+  data_config: configs/frozen/data_v1.yaml
+  dataset_policy: configs/frozen/dataset_protocol_policy_v1.yaml
+  model_registry: models/registry.yaml
+  contract_doc: outputs/audit/M2A_PREPROCESS_CONTRACT.md
+routes:
+  casia_fasd: PRECROPPED_112_RGB_TO_256_INTER_CUBIC     # DEV-011; scrfd_applied=false; scrfd_status=N/A
+  msu_mfsd: SPEC_SECTION_4_SCRFD
+  siwmv2: SPEC_SECTION_4_SCRFD
+frame_extraction:
+  decoder: {library: opencv-python-headless, version: "5.0.0.93", api: "cv2.VideoCapture(path, cv2.CAP_FFMPEG)", indexing: loop_counter_DEV-006}
+  pos_frames_forbidden_as_identity: true
+  on_decode_failure: error_no_fallback
+  png: {codec: opencv_png, compression: 3, lossless: true}
+scrfd:
+  registry_key: scrfd
+  model: null                                   # Q-02 OWNER_DECISION_REQUIRED (candidate A scrfd_10g_bnkps.onnx | B det_2.5g.onnx)
+  input_size: 320                               # spec §4
+  score_threshold: 0.50                         # spec §4
+  letterbox: {keep_aspect: true, resize: cv2_default_INTER_LINEAR, placement: top_left, pad_value: 0}   # official
+  normalization: {swapRB: true, mean: 127.5, std: 128.0}                                              # official
+  nms_iou: 0.4                                  # official default (spec silent)
+  selection: {rule: largest_bbox_area_original_pixels, tie_break: [score_desc, x1_asc, y1_asc, index_asc]}
+  on_no_face: SCRFD_NO_FACE_no_fallback
+crop:
+  shape: square
+  scale: 1.25                                   # spec §4
+  center: scrfd_bbox_center
+  integer_rule: "side_px=round(side); x0=round(cx-side_px/2) (half-to-even); half-open box"
+  border: null                                  # Q-22 OPEN (smoke provisional: literal clamp intersection)
+  random_padding: false
+canonical_face:
+  size: 256
+  channels: RGB
+  dtype: uint8
+  color: sRGB_as_decoded
+  downscale: INTER_AREA
+  upscale: INTER_CUBIC
+  interpolation_decision_for_nonsquare: null     # part of Q-22 (smoke provisional: larger side)
+facexformer:
+  registry_key: facexformer
+  status: VERIFIED
+  input: {pil_resize: [224, 224], interpolation: BICUBIC, to_tensor: true, normalize_mean: [0.485, 0.456, 0.406], normalize_std: [0.229, 0.224, 0.225]}
+  tasks: {parsing: 0, landmarks: 1, headpose: 2}
+  outputs: {parsing_logits: "[11,224,224] float32", parsing_mask: "[224,224] uint8 argmax", landmarks_norm: "[68,2] float32 [-1,1]",
+            landmarks_px224: "[68,2] float32", landmarks_px256: "[68,2] float32", pose_pitch_yaw_roll_rad: "[3] float32 radians"}
+  parsing_class_names: null                     # Q-21 (not blocking M2B)
+  input_framing_note: "canonical face per spec App. A (Q-20, non-blocking)"
+adaface:
+  registry_key: adaface_ir50
+  checkpoint: null                              # Q-03 OWNER_DECISION_REQUIRED (local = CVLFace IR-50 WebFace4M)
+  color_order: null                             # Q-18 OPEN (smoke provisional RGB)
+  geometric_adapter: null                       # Q-19 OPEN (smoke provisional resize 256->112 INTER_AREA)
+  normalization: {mean: 0.5, std: 0.5, scale: "x/255"}   # both official lines
+  input_size: [112, 112]
+  output: {embedding: "[512] float32 L2-normalised (tol 1e-5)", raw_norm: float32}
+cache:
+  geometry_parsing_logits_storage: null         # Q-23 OPEN (float32 ~45.6 GB)
+  serialization: "per-field .npy shards (allow_pickle=False) + Parquet index with per-row sha256"
+  provenance_keys: [sample_id, canonical_face_sha256, model_weight_sha256, model_code_fingerprint, preprocess_config_sha256, environment_lock_sha256]
+determinism:
+  torch_threads: 4
+  ort_threads: 1
+  torch_deterministic_algorithms: true
+  inference_mode: true
+environment_lock: environments/m2_preprocess_laptop.lock.txt

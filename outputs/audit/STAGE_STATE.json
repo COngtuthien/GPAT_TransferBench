@@ -114,7 +114,37 @@
     },
     "M2": {
       "name": "Preprocess",
-      "status": "NOT_STARTED"
+      "status": "BLOCKED",
+      "phase": "M2A_AUXILIARY_MODEL_RESOLUTION_AND_SMOKE_DONE",
+      "started_utc": "2026-09-19",
+      "start_commit": "bc947fdd49ebc8f44bc5dff4728c2b48847be428",
+      "blockers": [
+        "Q-02 SCRFD variant (OWNER_DECISION_REQUIRED)",
+        "Q-03 AdaFace checkpoint (OWNER_DECISION_REQUIRED)",
+        "Q-18 AdaFace colour order",
+        "Q-19 AdaFace geometric alignment adapter",
+        "Q-22 crop border handling",
+        "Q-23 parsing-logit cache storage"
+      ],
+      "non_blocking_open": [
+        "Q-20 FaceXFormer framing",
+        "Q-21 FaceXFormer parsing class names (blocks M9, not M2B)"
+      ],
+      "m2a": {
+        "smoke": "24/24 OK (DIAGNOSTIC_ONLY, provisional settings)",
+        "determinism": "PASS 208/208 byte-identical (same host/env)",
+        "environment_lock": "environments/m2_preprocess_laptop.lock.txt",
+        "proposed_config": "configs/proposed/preprocess_v1.proposed.yaml",
+        "reports": [
+          "M2A_AUX_MODEL_RESOLUTION.md",
+          "M2A_PREPROCESS_CONTRACT.md",
+          "M2A_SMOKE_REPORT.md",
+          "M2A_DETERMINISM_REPORT.md",
+          "M2A_ENVIRONMENT_REPORT.md",
+          "M2A_MODEL_PROVENANCE.csv"
+        ]
+      },
+      "full_m2b": "NOT STARTED; gate requires owner resolution of the blockers and review of the M2A report"
     },
     "M3": {
       "name": "Split",

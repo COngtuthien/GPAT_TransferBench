@@ -125,3 +125,20 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    - *Why:* M2–M4 must follow one explicit, versioned policy. The allocator objective is deliberately left undefined (Q-01) to avoid a hidden scientific choice.
 10. **Future M2**, after owner review and push: CASIA via DEV-011; MSU and SiW via spec §4.
 11. **Future M3:** first an owner-approved allocator objective, then per-dataset grouped 70/15/15 splits with the policy's distribution audit.
+
+## M2A — Auxiliary model resolution, contracts, environment, smoke (2026-09-19; base bc947fd = origin/main)
+
+1. **Verified state and re-read the spec §4, the policy, data_v1 and the registry.**
+   - *Why:* M2 must follow the frozen artifacts, not memory.
+2. **Traced official sources at pinned commits** (InsightFace, FaceXFormer, AdaFace, CVLFace) and the HF APIs, without downloading any weights.
+   - *Why:* model identities must be authoritative (owner provenance hierarchy).
+   - Result: FaceXFormer weights and code verified exactly. The AdaFace local file is identified exactly as CVLFace IR-50 WebFace4M. The two SCRFD files are identified only structurally.
+3. **Built an isolated M2 environment** `~/.venvs/gpatbench-m2` (CPU torch 2.14.0; no CUDA on the laptop) and froze its lock before any smoke run.
+   - *Why:* DEV-004 condition 3.
+4. **Implemented `gpatbench/preprocess/`:** contracts, a SCRFD reimplementation, frame extraction, and the FaceXFormer/AdaFace adapters with code and weight hash guards.
+5. **Ran the smoke:** 24-sample deterministic manifest; runs 1–2, then a code refactor, then runs 3–4 on the final code.
+   - *Why:* validate the full path end-to-end and its determinism before any full run.
+   - Result: 24/24 OK; 208/208 files byte-identical.
+6. **Opened questions** Q-18…Q-23 and marked Q-02/Q-03 as owner decisions. M2 → **BLOCKED**.
+   - *Why:* the spec and the official model contracts leave genuine gaps (AdaFace colour and alignment, crop borders, logits storage). Choosing silently would be a hidden scientific decision.
+7. **Next:** the owner resolves the blockers; the contract is then frozen (`configs/frozen/preprocess_v1.yaml`), the M2B smoke is repeated on the chosen host, and only then does full M2B run.
