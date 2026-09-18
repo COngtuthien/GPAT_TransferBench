@@ -3,14 +3,16 @@
 Read-only: files are only opened for reading; nothing is written or extracted here.
 
 image_sequence: frame i is valid iff its file decodes (cv2.imdecode) to a non-empty image.
-video_file:     decode sequentially from frame 0 with cv2.VideoCapture(path, cv2.CAP_FFMPEG).
-                Each read() is one frame position in decode order. Position i is valid iff
-                read() returns ok and a non-empty array; a failed read marks position i
-                invalid and decoding CONTINUES. The stream is considered ended after
-                END_OF_STREAM_FAILS consecutive failed reads; those trailing failures are not
-                frame positions. The container-declared frame count is recorded, not trusted.
-                (M1 trial evidence: MSU client008/023 have one failed read followed by 172/53
-                decodable frames, and failed-read positions + good reads = declared count.)
+video_file:     index-bounded decode over the container-declared frame range [0, N_declared):
+                cv2.VideoCapture(path, cv2.CAP_FFMPEG); for each original index i in that range,
+                one sequential read() is attempted; success with a non-empty array => valid,
+                failure => invalid (index i is preserved; decoding continues with i+1).
+                Evidence that one read() = one frame position, including failed reads: M1
+                run A, MSU client008 127 good + 1 failed + 172 good = 300 declared; client023
+                247 + 1 + 53 = 301. After the range, one extra read() is attempted as evidence
+                only: success => frames_beyond_declared=True (never sampled).
+                Fallback: if N_declared <= 0 the range is unknown -> decode_status
+                DECLARED_COUNT_UNAVAILABLE, no valid frames (reported as ERROR, never guessed).
                 FFmpeg may also return error-concealed frames (read() ok) while logging decode
                 errors to stderr; those log lines are captured per video (fd 2 redirected
                 inside the worker process) and counted as decoder_error_lines for review.
@@ -25,7 +27,6 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-END_OF_STREAM_FAILS = 5
 
 
 def decoder_info() -> dict:
@@ -52,7 +53,7 @@ def probe_image_sequence(root: str, frame_files: dict[int, str]) -> dict:
     return {"declared_frames": len(frame_files), "valid_indices": valid, "invalid_indices": invalid,
             "decode_status": "OK" if not invalid else "SOME_FRAMES_UNDECODABLE",
             "frame_sizes": sorted(shapes), "fps": None, "resumed_after_failure": False,
-            "decoder_error_lines": 0, "decoder_error_sample": []}
+            "frames_beyond_declared": False, "decoder_error_lines": 0, "decoder_error_sample": []}
 
 
 def probe_video(root: str, rel: str) -> dict:
@@ -78,34 +79,34 @@ def _probe_video(root: str, rel: str) -> dict:
     cap = cv2.VideoCapture(str(Path(root) / rel), cv2.CAP_FFMPEG)
     if not cap.isOpened():
         return {"declared_frames": None, "valid_indices": [], "invalid_indices": [], "decode_status": "OPEN_FAILED",
-                "frame_sizes": [], "fps": None, "resumed_after_failure": False}
+                "frame_sizes": [], "fps": None, "resumed_after_failure": False, "frames_beyond_declared": False}
     declared = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     fps = float(cap.get(cv2.CAP_PROP_FPS))
     valid, invalid, shapes = [], [], set()
-    pending_fail: list[int] = []   # failed positions not yet known to be inside the stream
-    i = 0
-    while len(pending_fail) < END_OF_STREAM_FAILS:
+    if declared <= 0:
+        cap.release()
+        return {"declared_frames": declared, "valid_indices": [], "invalid_indices": [],
+                "decode_status": "DECLARED_COUNT_UNAVAILABLE", "frame_sizes": [], "fps": fps,
+                "resumed_after_failure": False, "frames_beyond_declared": False}
+    for i in range(declared):
         ok, frame = cap.read()
         if ok and frame is not None and frame.size > 0:
-            invalid.extend(pending_fail)   # failures followed by a good frame are real positions
-            pending_fail = []
             valid.append(i)
             shapes.add(f"{frame.shape[1]}x{frame.shape[0]}")
         else:
-            pending_fail.append(i)
-        i += 1
-    resumed = bool(invalid)
+            invalid.append(i)
+    beyond = bool(cap.read()[0])
     cap.release()
+    # an invalid index followed by a valid one = failure inside the stream
+    resumed = any(i < valid[-1] for i in invalid) if valid else False
     if not valid:
         status = "NO_DECODABLE_FRAMES"
-    elif invalid:
+    elif resumed:
         status = "SOME_FRAMES_UNDECODABLE"
-    elif declared and len(valid) < declared:
-        status = "DECODED_LT_DECLARED"
-    elif declared and len(valid) > declared:
-        status = "DECODED_GT_DECLARED"
+    elif invalid:
+        status = "TRAILING_FRAMES_UNDECODABLE"
     else:
         status = "OK"
     return {"declared_frames": declared, "valid_indices": valid, "invalid_indices": invalid,
             "decode_status": status, "frame_sizes": sorted(shapes), "fps": fps,
-            "resumed_after_failure": bool(resumed)}
+            "resumed_after_failure": bool(resumed), "frames_beyond_declared": beyond}

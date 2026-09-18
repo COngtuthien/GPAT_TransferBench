@@ -40,3 +40,44 @@ SiW-Mv2 images were not viewed because its DRA forbids displaying subject faces.
 - Declared vs decoded frame counts differ in practice: SiW `Live/Live_889.mp4` declares 111 frames and decodes 108, with both OpenCV 4.6.0 (apt) and 5.0.0 (pip). The declared count cannot be trusted.
 - A failed read can be followed by decodable frames. MSU client008 (laptop, iPad) decodes 127 good, 1 failed, then 172 good frames, totalling the declared 300; client023 decodes 247 + 1 + 53 = 301. The video rule therefore treats a failed read as one invalid position and continues (end of stream = 5 consecutive failures).
 - FFmpeg can return frames while logging decode errors (ProRes "ac tex damaged", "invalid plane data size" in the trial run). Such frames are error-concealed, and OpenCV's API cannot flag them per frame. The inventory therefore counts stderr lines per video (`decoder_error_lines`) and raises a WARNING issue, so these videos are visible for review rather than silently accepted.
+
+---
+
+## 5. M1 correction pass (2026-09-18) — appended; the sections above are kept as the original record
+
+### 5.1 CASIA-FASD (supersedes the §1 rows on subject identity and HR_1 label)
+
+- **Code semantics (owner-provided protocol evidence):**
+  - live: 1 real_normal, 2 real_low, HR_1 real_high;
+  - print: 3 warped_normal, 4 warped_low, HR_2 warped_high, 5 cut_normal, 6 cut_low, HR_3 cut_high;
+  - replay: 7 video_normal, 8 video_low, HR_4 video_high.
+
+  → HR_1 is LIVE. The local packager's `spoof/` placement is overridden and each override is logged (`FOLDER_LABEL_OVERRIDDEN`). The §1 visual observation ("HR_1 looks live") agrees.
+- **Subject identity:** canonical identities are train 1..20 and test 21..50, so train sN → "N" and test sN → "20+N". Checked against all 600 local sequences:
+  - train has exactly s1..s20 and test exactly s1..s30;
+  - each subject has all 12 codes;
+  - the result is 50 unique ids.
+
+  No local evidence contradicts the mapping. The §1 visual check (train sN ≠ test sN) is consistent with it. `{partition}_s{N}` (DEV-008) is withdrawn.
+- **Original-video search (Q-15):** none found locally. There are three copies of the same 112px PNG repack:
+  - the selected root;
+  - `casia-fasd.zip`;
+  - `/media/cong/Data/AI on IOT/Anti_spoofing/PRISM_FAS_C_LLM_Project/data/raw/casia_fasd` (123,533 PNG; 20/20 random spot-check byte-identical).
+
+  An old PRISM-FAS-B note (`reports/m2/casia_media_verification.md`) shows that project grouped `bs*`/`fs*` files into the canonical sequence (e.g. "`s10v1` begins at `train/live/bs10v1f0.png`"). GPAT-TransferBench does not do this (DEV-007).
+
+### 5.2 SiW-Mv2 (official sources checked)
+
+- **Official repository** github.com/CHELSEA234/Multi-domain-learning-FAS, pinned HEAD `8667dbcd316b38141729c057adf7517fe0602608` (git ls-remote, 2026-09-18). Files fetched to the session scratchpad only; nothing vendored.
+- **`Paper` token → print:**
+  - `source_SiW_Mv2/config_siwm.py` L63–69 `spoof_type_dict` contains `'Paper': 'Mask_Paper'` and `'Print': 'Paper'` (sha256 `ebe37e87…`);
+  - `csv_parser.py` L145–177 puts `Paper` videos in `print_list`, after routing `Mask_Paper` and `Partial_Paperglass` elsewhere (sha256 `59159f5d…`);
+  - the README folder list includes both `Print` and `Mask_PaperMask`;
+  - ECCV'22 supplementary Table 1 (sha256 `b9dba0ff…`) gives video counts per type that equal the local folder counts for **all 14** types (Print 135 = `Paper` 135; Paper Mask 17 = `Mask_PaperMask` 17; …). It calls the 72-video type "Full Mask", which is the local `Mask_HalfMask`.
+- **Subject IDs:** still unrecoverable.
+  - The official protocol lists contain video names only; the README calls them "subject names", repeated "for balancing".
+  - The supplementary gives only per-type subject counts.
+  - No mapping file ships with the dataset or the repo.
+  - PRISM's audit JSON records `all_frame_subject_null: true`.
+
+  → `BLOCKED_BY_MISSING_SUBJECT_ID` for the SiW-Mv2 M3 main split. No heuristic applied.

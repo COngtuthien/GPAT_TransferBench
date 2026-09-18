@@ -125,7 +125,7 @@ class FixtureRun(unittest.TestCase):
 
     def test_subject_ids(self):
         tr, te = self._v("casia_fasd", "train/live/s1v1"), self._v("casia_fasd", "test/live/s1v1")
-        self.assertEqual((tr["subject_id_raw"], te["subject_id_raw"]), ("train_s1", "test_s1"))
+        self.assertEqual((tr["subject_id_raw"], te["subject_id_raw"]), ("1", "21"))   # test N -> 20+N
         self.assertNotEqual(tr["subject_id_global"], te["subject_id_global"])
         m = self._v("msu_mfsd", "scene01/real/real_client002_laptop_SD_scene01")
         self.assertEqual((m["subject_id_raw"], m["subject_id_global"], m["native_protocol_split"]),
@@ -141,21 +141,24 @@ class FixtureRun(unittest.TestCase):
         self.assertEqual(self._v("casia_fasd", "train/live/s1v1")["label_binary"], 0)
         c = self._v("casia_fasd", "train/spoof/s1v3")
         self.assertEqual((c["label_binary"], c["attack_raw"], c["attack_macro"], c["attack_map_status"], c["style_id"]),
-                         (1, "3", "other_spoof", "UNMAPPED_OTHER_SPOOF", "casia_fasd::3"))
-        self.assertIsNotNone(self._v("casia_fasd", "train/spoof/s1vHR_1")["label_conflict"])
+                         (1, "3", "print", "MAPPED", "casia_fasd::3"))
+        h = self._v("casia_fasd", "train/spoof/s1vHR_1")   # stored under spoof/ locally, HR_1 = real_high
+        self.assertEqual((h["label_binary"], h["attack_raw"], h["attack_macro"], h["label_conflict"]), (0, None, "live", None))
+        self.assertTrue(json.loads(h["native_meta_json"])["folder_label_overridden"])
+        issues = (self.fx["project_root"] / "outputs/audit/dataset_integrity_issues.csv").read_text()
+        self.assertIn("FOLDER_LABEL_OVERRIDDEN,train/spoof/s1vHR_1", issues)
         m = self._v("msu_mfsd", "scene01/attack/attack_client001_android_SD_printed_photo_scene01")
         self.assertEqual((m["attack_raw"], m["attack_macro"]), ("printed_photo", "print"))
         r = self._v("siwmv2", "Spoof/Replay/Replay_1.mov")
         self.assertEqual((r["attack_raw"], r["attack_macro"], r["attack_map_status"]), ("Replay", "replay", "MAPPED"))
         p = self._v("siwmv2", "Spoof/Paper/Paper_7.mov")
-        self.assertEqual((p["attack_raw"], p["attack_macro"]), ("Paper", "other_spoof"))
+        self.assertEqual((p["attack_raw"], p["attack_macro"], p["attack_map_status"]), ("Paper", "print", "MAPPED"))
         live = [v for v in self.videos if v["label_binary"] == 0]
         self.assertTrue(all(v["attack_macro"] == "live" and v["attack_raw"] is None for v in live))
 
     def test_unmapped_csv(self):
         text = (self.fx["project_root"] / "outputs/audit/unmapped_attack_tokens.csv").read_text()
-        self.assertIn("siwmv2,Paper,1,other_spoof,print", text)
-        self.assertIn("casia_fasd,HR_1", text)
+        self.assertEqual(text.strip().splitlines()[1:], [])   # every observed token is mapped at revision 2
 
     def test_samples(self):
         sids = self.samples.column("sample_id").to_pylist()
@@ -246,13 +249,35 @@ class TestVideoDecodeLoop(unittest.TestCase):
         with mock.patch.object(frames.cv2, "VideoCapture", FakeCap):
             return frames._probe_video("/nonexistent", "x.mov")
 
-    def test_failure_inside_stream_continues(self):
+    def test_failure_inside_range_preserves_index(self):
         r = self._run([1, 1, 1, 0, 1, 1], declared=6)
-        self.assertEqual(r["valid_indices"], [0, 1, 2, 4, 5])
-        self.assertEqual(r["invalid_indices"], [3])
-        self.assertEqual(r["decode_status"], "SOME_FRAMES_UNDECODABLE")
+        self.assertEqual((r["valid_indices"], r["invalid_indices"], r["decode_status"]),
+                         ([0, 1, 2, 4, 5], [3], "SOME_FRAMES_UNDECODABLE"))
 
-    def test_trailing_failures_are_end_of_stream(self):
+    def test_trailing_failures_are_invalid_indices(self):
         r = self._run([1, 1, 1], declared=5)
         self.assertEqual((r["valid_indices"], r["invalid_indices"], r["decode_status"]),
-                         ([0, 1, 2], [], "DECODED_LT_DECLARED"))
+                         ([0, 1, 2], [3, 4], "TRAILING_FRAMES_UNDECODABLE"))
+        self.assertFalse(r["frames_beyond_declared"])
+
+    def test_frames_beyond_declared_are_evidence_only(self):
+        r = self._run([1] * 7, declared=5)
+        self.assertEqual((r["valid_indices"], r["decode_status"], r["frames_beyond_declared"]),
+                         ([0, 1, 2, 3, 4], "OK", True))
+
+    def test_unknown_declared_count(self):
+        r = self._run([1, 1], declared=0)
+        self.assertEqual((r["valid_indices"], r["decode_status"]), ([], "DECLARED_COUNT_UNAVAILABLE"))
+
+
+class TestCasiaSemantics(unittest.TestCase):
+    def test_code_semantics_complete(self):
+        self.assertEqual(set(casia_fasd.CODE_SEMANTICS), {str(i) for i in range(1, 9)} | {f"HR_{i}" for i in range(1, 5)})
+        self.assertEqual({c for c, s in casia_fasd.CODE_SEMANTICS.items() if s.startswith("real_")}, casia_fasd.LIVE_CODES)
+
+    def test_subject_mapping_and_range(self):
+        self.assertEqual([casia_fasd.subject_id("train", n) for n in (1, 20)], ["1", "20"])
+        self.assertEqual([casia_fasd.subject_id("test", n) for n in (1, 30)], ["21", "50"])
+        for part, n in (("train", 21), ("test", 31), ("train", 0)):
+            with self.assertRaises(ValueError):
+                casia_fasd.subject_id(part, n)

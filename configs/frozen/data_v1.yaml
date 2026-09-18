@@ -1,4 +1,4 @@
-# data_v1 — frozen data configuration (spec §23: dataset roots, 8-frame policy, preprocessing, label mapping).
+# data_v1 — frozen data configuration (revision 2: M1 correction pass; revision 1 = commit ce12a58) (spec §23: dataset roots, 8-frame policy, preprocessing, label mapping).
 # Scientific values are copied from the spec; absolute paths are machine bindings (laptop), not
 # hyperparameters. Items marked M1_INTERPRETATION are operational decisions recorded in
 # outputs/audit/deviation_report.md for owner review.
@@ -43,13 +43,14 @@ frame_sampling:                     # spec §3.4
     already chosen, processing k in order; ties -> smaller index
   extraction: deferred_to_M2   # canonical lossless PNG extraction happens in M2
 
-valid_frame:                        # Q-04, M1_INTERPRETATION (decoder robustness)
-  image_sequence: "frame index = filename frame number; valid iff the file decodes (cv2.imdecode IMREAD_COLOR) to a non-empty image"
+valid_frame:                        # Q-04 (DEV-006 revised): a valid frame is an original frame/index that
+                                    # successfully decodes into a non-empty image with the pinned decoder
+  image_sequence: "index = filename frame number of an existing source file; valid iff cv2.imdecode(IMREAD_COLOR) returns a non-empty image"
   video_file: >-
-    frame index = 0-based decode position with cv2.VideoCapture(path, cv2.CAP_FFMPEG), one position per read();
-    position i is valid iff read() returns ok and a non-empty array; a failed read marks position i invalid and
-    decoding continues; the stream ends after 5 consecutive failed reads (those trailing failures are not positions);
-    the container-declared frame count is recorded, not trusted; FFmpeg stderr lines are counted per video
+    index-bounded: original indices 0..N_declared-1 from the container (cv2.CAP_PROP_FRAME_COUNT); one sequential
+    read() per index with cv2.VideoCapture(path, cv2.CAP_FFMPEG); success + non-empty => valid, failure => invalid,
+    index preserved and decoding continues; one extra read() after the range is evidence only (frames_beyond_declared,
+    never sampled); N_declared <= 0 => DECLARED_COUNT_UNAVAILABLE (no valid frames, ERROR); FFmpeg stderr lines counted per video
   orientation: "OpenCV default CAP_PROP_ORIENTATION_AUTO (recorded; affects pixels in M2, not indices)"
 
 decoder:                            # spec §3.4 'decode with the same backend and record decoder/version'

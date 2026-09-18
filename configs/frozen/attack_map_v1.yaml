@@ -1,13 +1,31 @@
 # attack_map_v1 — frozen attack-label harmonization (spec §3.3).
-# Only tokens whose mapping traces to SPEC and/or DATASET_DOCUMENTATION/local dataset tokens are
-# under `mapped`. Observed tokens without such a trace are under `unmapped_pending_approval`:
-# the inventory assigns them attack_macro=other_spoof (binary benchmark only) and the
-# Native/Full track is BLOCKED for them until the owner approves an explicit mapping here.
+# Every mapped token traces to SPEC plus DATASET_DOCUMENTATION / official source / owner-provided
+# protocol evidence. Unmapped spoof tokens (none at this revision) would get attack_macro=other_spoof
+# for the binary benchmark only, with Native/Full BLOCKED for them.
 # Any change to this file requires an owner-approved entry in outputs/audit/deviation_report.md.
 version: attack_map_v1
+revision: 2
+revision_history:
+  - {revision: 1, commit: ce12a58fc9e0aca7b3cf56255d73cb85d696b36a, status: PARTIAL_PENDING_OWNER_APPROVAL,
+     note: "MSU 3 + SiW 13 mapped; CASIA 10 codes and SiW 'Paper' pending"}
+  - {revision: 2, commit: "M1 correction pass (this commit)", status: COMPLETE_FOR_OBSERVED_TOKENS,
+     note: "CASIA codes mapped from owner-provided protocol evidence (Q-12/Q-13 RESOLVED); SiW 'Paper' -> print traced to official code (Q-13 RESOLVED)"}
 spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
-status: PARTIAL_PENDING_OWNER_APPROVAL
+status: COMPLETE_FOR_OBSERVED_TOKENS
 mapped:
+  casia_fasd:
+    # Code semantics: owner-provided external CASIA-FASD protocol evidence (M1 review, 2026-09-18):
+    # 1 real_normal, 2 real_low, HR_1 real_high (LIVE, not attack tokens); spoof codes below.
+    # Visual spot check (M1_DATASET_EVIDENCE.md §1) is consistent: cut-eye holes in 5/HR_3, prints in 3/HR_2, screens in 7/HR_4.
+    "3":  {attack_macro: print,  semantics: warped_normal, trace: ["SPEC §3.3: 'CASIA warped printed photograph -> print'", "OWNER_PROTOCOL_EVIDENCE: 3 = warped_normal"]}
+    "4":  {attack_macro: print,  semantics: warped_low,    trace: ["SPEC §3.3: 'CASIA warped printed photograph -> print'", "OWNER_PROTOCOL_EVIDENCE: 4 = warped_low"]}
+    HR_2: {attack_macro: print,  semantics: warped_high,   trace: ["SPEC §3.3: 'CASIA warped printed photograph -> print'", "OWNER_PROTOCOL_EVIDENCE: HR_2 = warped_high"]}
+    "5":  {attack_macro: print,  semantics: cut_normal,    trace: ["SPEC §3.3: 'CASIA cut-eye printed photograph -> print'", "OWNER_PROTOCOL_EVIDENCE: 5 = cut_normal"]}
+    "6":  {attack_macro: print,  semantics: cut_low,       trace: ["SPEC §3.3: 'CASIA cut-eye printed photograph -> print'", "OWNER_PROTOCOL_EVIDENCE: 6 = cut_low"]}
+    HR_3: {attack_macro: print,  semantics: cut_high,      trace: ["SPEC §3.3: 'CASIA cut-eye printed photograph -> print'", "OWNER_PROTOCOL_EVIDENCE: HR_3 = cut_high"]}
+    "7":  {attack_macro: replay, semantics: video_normal,  trace: ["SPEC §3.3: 'CASIA video attack -> replay'", "OWNER_PROTOCOL_EVIDENCE: 7 = video_normal"]}
+    "8":  {attack_macro: replay, semantics: video_low,     trace: ["SPEC §3.3: 'CASIA video attack -> replay'", "OWNER_PROTOCOL_EVIDENCE: 8 = video_low"]}
+    HR_4: {attack_macro: replay, semantics: video_high,    trace: ["SPEC §3.3: 'CASIA video attack -> replay'", "OWNER_PROTOCOL_EVIDENCE: HR_4 = video_high"]}
   msu_mfsd:
     printed_photo:
       attack_macro: print
@@ -22,10 +40,16 @@ mapped:
       trace: ["SPEC §3.3: 'MSU replay/video attack -> replay'",
               "DATASET_DOCUMENTATION README.txt §4: 'mobile phone replay video attacks using an iPhone 5S screen'; attackType 'iphone_video'"]
   siwmv2:
-    # Local token = spoof folder name (dataset-native). Each entry is a literal name match to a spec concept.
+    # Local token = spoof folder name. Official source: github.com/CHELSEA234/Multi-domain-learning-FAS
+    # @ 8667dbcd316b38141729c057adf7517fe0602608 (source_SiW_Mv2/config_siwm.py spoof_type_dict,
+    # csv_parser.py) and ECCV'22 supplementary Table 1 (video counts equal local folder counts for all 14 types).
     Replay:                  {attack_macro: replay,  trace: ["SPEC §3.3: 'SiW-Mv2 replay -> replay'", "LOCAL_TOKEN folder 'Replay'"]}
-    Mask_PaperMask:          {attack_macro: mask_2d, trace: ["SPEC §3.3: 'SiW-Mv2 paper mask -> mask_2d'", "LOCAL_TOKEN folder 'Mask_PaperMask'"]}
-    Mask_HalfMask:           {attack_macro: mask_3d, trace: ["SPEC §3.3: 'SiW-Mv2 half mask -> mask_3d'", "LOCAL_TOKEN folder 'Mask_HalfMask'"]}
+    Paper:                   {attack_macro: print,   trace: ["SPEC §3.3: 'SiW-Mv2 print -> print'",
+                                                             "OFFICIAL_CODE config_siwm.py L67 / csv_parser.py L149 @8667dbc: spoof_type_dict 'Print': 'Paper' (paper mask is separately 'Paper': 'Mask_Paper'); csv_parser appends 'Paper' videos to print_list after excluding Mask_Paper and Partial_Paperglass",
+                                                             "OFFICIAL_README source_SiW_Mv2/README.md: dataset folder list contains 'Print' and 'Mask_PaperMask' as distinct types",
+                                                             "SUPPLEMENTARY Table 1: Print = 135 videos = local 'Paper' folder count; Paper Mask = 17 = local 'Mask_PaperMask' count"]}
+    Mask_PaperMask:          {attack_macro: mask_2d, trace: ["SPEC §3.3: 'SiW-Mv2 paper mask -> mask_2d'", "LOCAL_TOKEN folder 'Mask_PaperMask' (file prefix 'Mask_Paper' = official 'Paper' mask type)"]}
+    Mask_HalfMask:           {attack_macro: mask_3d, trace: ["SPEC §3.3: 'SiW-Mv2 half mask -> mask_3d'", "LOCAL_TOKEN folder 'Mask_HalfMask' (supplementary Table 1 names this 72-video type 'Full Mask'; macro unchanged)"]}
     Mask_TransparentMask:    {attack_macro: mask_3d, trace: ["SPEC §3.3: 'SiW-Mv2 transparent mask -> mask_3d'", "LOCAL_TOKEN folder 'Mask_TransparentMask'"]}
     Silicone:                {attack_macro: mask_3d, trace: ["SPEC §3.3: 'SiW-Mv2 silicone mask -> mask_3d'", "LOCAL_TOKEN folder 'Silicone' (file prefix 'Mask_Silicone')"]}
     Mannequin:               {attack_macro: mask_3d, trace: ["SPEC §3.3: 'SiW-Mv2 mannequin -> mask_3d'", "LOCAL_TOKEN folder 'Mannequin' (file prefix 'Mask_Mann')"]}
@@ -36,20 +60,4 @@ mapped:
     Makeup_Cosmetic:         {attack_macro: makeup,  trace: ["SPEC §3.3: 'SiW-Mv2 cosmetic makeup -> makeup'", "LOCAL_TOKEN folder 'Makeup_Cosmetic'"]}
     Makeup_Impersonation:    {attack_macro: makeup,  trace: ["SPEC §3.3: 'SiW-Mv2 impersonation makeup -> makeup'", "LOCAL_TOKEN folder 'Makeup_Impersonation'"]}
     Makeup_Obfuscation:      {attack_macro: makeup,  trace: ["SPEC §3.3: 'SiW-Mv2 obfuscation makeup -> makeup'", "LOCAL_TOKEN folder 'Makeup_Obfuscation'"]}
-  casia_fasd: {}
-unmapped_pending_approval:
-  casia_fasd:
-    # The local CASIA copy ships no documentation; code -> concept requires the published CASIA-FASD
-    # protocol (external). Proposals below are NOT applied.
-    "3":    {proposed_attack_macro: print,  basis: "published CASIA-FASD protocol: codes 3,4 = warped printed photo (external); visual spot check consistent"}
-    "4":    {proposed_attack_macro: print,  basis: "published CASIA-FASD protocol: codes 3,4 = warped printed photo (external)"}
-    "5":    {proposed_attack_macro: print,  basis: "published CASIA-FASD protocol: codes 5,6 = cut-eye printed photo (external); visual spot check shows cut eye holes"}
-    "6":    {proposed_attack_macro: print,  basis: "published CASIA-FASD protocol: codes 5,6 = cut-eye printed photo (external)"}
-    "7":    {proposed_attack_macro: replay, basis: "published CASIA-FASD protocol: codes 7,8 = video replay (external)"}
-    "8":    {proposed_attack_macro: replay, basis: "published CASIA-FASD protocol: codes 7,8 = video replay (external)"}
-    HR_1:   {proposed_attack_macro: null,   basis: "LABEL CONFLICT: published protocol lists HR_1 as genuine high-resolution video, but local copy stores it under spoof/; visual spot check looks live. Owner must decide the label before any mapping."}
-    HR_2:   {proposed_attack_macro: print,  basis: "published CASIA-FASD protocol: HR_2 = high-res warped printed photo (external)"}
-    HR_3:   {proposed_attack_macro: print,  basis: "published CASIA-FASD protocol: HR_3 = high-res cut-eye photo (external); visual spot check shows cut eye holes"}
-    HR_4:   {proposed_attack_macro: replay, basis: "published CASIA-FASD protocol: HR_4 = high-res video replay (external)"}
-  siwmv2:
-    Paper:  {proposed_attack_macro: print,  basis: "the only local folder without a literal spec concept match; spec concept 'SiW-Mv2 print' is the only unmatched concept (14 folders <-> 14 concepts). Name 'Paper' is ambiguous with 'paper mask', so not applied without owner approval."}
+unmapped_pending_approval: {}

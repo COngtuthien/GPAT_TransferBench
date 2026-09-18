@@ -87,3 +87,8 @@ Reference read (read-only): `/home/cong/PRISM_FAS_C_LLM_Project_E10_DEV/src/pris
 | `SiWMv2Adapter` (opaque ids, `subject_id=None`, "labels withheld" target mode) | Full inventory of labels and attack folders | PRISM treated SiW as a target/test-only set with withheld labels, a different role from this benchmark's pooled use. It agrees that subject is unrecoverable | **REJECT** → REIMPLEMENT |
 
 No PRISM code, manifest, split or inventory was copied. M1 inventoried the current local data from scratch.
+
+### 7.1 Addendum (M1 correction pass, 2026-09-18)
+
+- The PRISM-FAS-B report `/home/cong/PRISM_FAS_B_Project/reports/m2/casia_media_verification.md` (read-only) shows that project grouped CASIA `bs*`/`fs*` derived copies into the canonical sequences. This is another reason for REJECT. PRISM-B is excluded by the spec in any case.
+- `/media/cong/Data/AI on IOT/Anti_spoofing/PRISM_FAS_C_LLM_Project/data/raw/casia_fasd` is another copy of the same 112px PNG repack (123,533 files; 20/20 spot-check byte-identical to the selected root). It is not an original-video source.

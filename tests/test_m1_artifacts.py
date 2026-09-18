@@ -82,6 +82,29 @@ class TestM1Artifacts(unittest.TestCase):
             if v["subject_id_raw"] is not None:
                 self.assertEqual(v["subject_id_global"], f"{v['dataset']}::{v['subject_id_raw']}")
 
+    def test_casia_corrected_semantics(self):
+        """Sanity derived from structure, not hard-coded totals (M1 correction pass)."""
+        c = [v for v in self.videos if v["dataset"] == "casia_fasd"]
+        meta = [json.loads(v["native_meta_json"]) for v in c]
+        n_train = len({m["subject_number"] for m in meta if m["partition"] == "train"})
+        n_test = len({m["subject_number"] for m in meta if m["partition"] == "test"})
+        subjects = sorted({int(v["subject_id_raw"]) for v in c})
+        self.assertEqual(subjects, list(range(1, n_train + n_test + 1)))
+        per = collections.Counter((v["subject_id_raw"], v["label_binary"]) for v in c)
+        for sid in subjects:   # each identity: 3 live codes (1, 2, HR_1) + 9 spoof codes
+            self.assertEqual((per[(str(sid), 0)], per[(str(sid), 1)]), (3, 9), sid)
+        spoof_macros = {v["attack_macro"] for v in c if v["label_binary"] == 1}
+        self.assertEqual(spoof_macros, {"print", "replay"})
+        self.assertTrue(all(v["attack_map_status"] in ("LIVE", "MAPPED") and v["label_conflict"] is None for v in c))
+        self.assertTrue(all(v["attack_raw"] is None for v in c if v["label_binary"] == 0))
+        for v, m in zip(c, meta):
+            self.assertEqual(v["subject_id_raw"], str(m["subject_number"] + (0 if m["partition"] == "train" else 20)))
+
+    def test_siw_paper_is_print(self):
+        paper = [v for v in self.videos if v["dataset"] == "siwmv2" and v["attack_raw"] == "Paper"]
+        self.assertTrue(paper)
+        self.assertTrue(all(v["attack_macro"] == "print" for v in paper))
+
     def test_unknown_labels_listed(self):
         observed = {(v["dataset"], v["attack_raw"]) for v in self.videos if v["attack_map_status"] == "UNMAPPED_OTHER_SPOOF"}
         listed = {(r["dataset"], r["attack_raw"]) for r in _csv("unmapped_csv")}

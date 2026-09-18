@@ -2,20 +2,19 @@
 
 Local layout observed in M1 (no documentation file ships with this copy):
     {train|test}/{live|spoof}/s{N}v{CODE}f{F}.png      canonical frames (112x112 face crops)
-    train/live/{b|f}s{N}v{CODE}f{F}.png                 packager-derived copies (see below)
+    train/live/{b|f}s{N}v{CODE}f{F}.png                 packager-derived copies (DEV-007, approved)
 CODE is 1..8 or HR_1..HR_4 (CASIA-FASD native video code). F is the frame index.
 
-Rules (evidence in outputs/audit/M1_DATASET_EVIDENCE.md):
-- canonical video_id = "{partition}/{class_dir}/s{N}v{CODE}" (one image sequence).
-- subject_id_raw = "{partition}_s{N}": subject numbers restart per native partition
-  (train s1..s20, test s1..s30) and visually belong to different people, so the bare
-  number is NOT a global identity.
-- label_binary from the local class directory (live=0, spoof=1).
-- attack_raw = CODE for spoof videos (dataset-native token, preserved verbatim).
-- fs* files are exact horizontal flips and bs* files are brightened copies of the s* frame
-  with the same name: DERIVED_AUGMENTATION_COPY, indexed but never used as samples.
-- CODE HR_1 found under spoof/ is flagged: the published CASIA-FASD protocol (external
-  context, not local documentation) lists HR_1 as a genuine high-quality video.
+Semantics (M1 correction pass; owner-provided external CASIA-FASD protocol evidence, recorded in
+outputs/audit/deviation_report.md DEV-010 / Q-12 / Q-13):
+- CODE semantics: 1 real_normal, 2 real_low, HR_1 real_high; 3 warped_normal, 4 warped_low,
+  HR_2 warped_high; 5 cut_normal, 6 cut_low, HR_3 cut_high; 7 video_normal, 8 video_low, HR_4 video_high.
+- label_binary is derived from CODE (live for 1, 2, HR_1). The local packager stored HR_1 under
+  spoof/; that folder label is overridden and the disagreement is recorded per video.
+- attack_raw = CODE for spoof videos only (live acquisition codes are not attack tokens).
+- subject identity: canonical CASIA-FASD identities are train 1..20 and test 21..50, so
+  train s{N} -> "N" and test s{N} -> str(20 + N). Numbers outside train 1..20 / test 1..30 are a
+  hard error (the mapping would be undefined).
 """
 from __future__ import annotations
 
@@ -28,13 +27,27 @@ DATASET = "casia_fasd"
 _CODE = r"(?P<code>[1-8]|HR_[1-4])"
 CANONICAL_RE = re.compile(rf"^(?P<part>train|test)/(?P<cls>live|spoof)/s(?P<subj>\d+)v{_CODE}f(?P<frame>\d+)\.png$")
 DERIVED_RE = re.compile(rf"^(?P<part>train|test)/(?P<cls>live|spoof)/(?P<aug>[bf])s(?P<subj>\d+)v{_CODE}f(?P<frame>\d+)\.png$")
-LABELS = {"live": 0, "spoof": 1}
-# Published CASIA-FASD protocol codes that denote genuine accesses (external context only).
-PUBLISHED_GENUINE_CODES = {"1", "2", "HR_1"}
+
+CODE_SEMANTICS = {
+    "1": "real_normal", "2": "real_low", "HR_1": "real_high",
+    "3": "warped_normal", "4": "warped_low", "HR_2": "warped_high",
+    "5": "cut_normal", "6": "cut_low", "HR_3": "cut_high",
+    "7": "video_normal", "8": "video_low", "HR_4": "video_high",
+}
+LIVE_CODES = {"1", "2", "HR_1"}
+FOLDER_LABEL = {"live": 0, "spoof": 1}
+PARTITION_SUBJECTS = {"train": (1, 20, 0), "test": (1, 30, 20)}   # (min N, max N, identity offset)
 
 
 def video_key(part: str, cls: str, subj: str, code: str) -> str:
     return f"{part}/{cls}/s{int(subj)}v{code}"
+
+
+def subject_id(part: str, n: int) -> str:
+    lo, hi, offset = PARTITION_SUBJECTS[part]
+    if not lo <= n <= hi:
+        raise ValueError(f"{DATASET}: subject number {n} outside {part} range {lo}..{hi}; identity mapping undefined")
+    return str(n + offset)
 
 
 def classify(rel: str) -> FileClass:
@@ -60,24 +73,21 @@ def build_videos(classified: list[tuple[str, FileClass]]) -> list[VideoRecord]:
     for vid in sorted(seqs):
         part, cls, stem = vid.split("/")
         m = re.fullmatch(r"s(\d+)v(.+)", stem)
-        subj, code = m.group(1), m.group(2)
-        label = LABELS[cls]
-        conflict = None
-        if label == 1 and code in PUBLISHED_GENUINE_CODES:
-            conflict = (f"CASIA_CODE_{code}_IN_SPOOF_DIR: local folder says spoof; published CASIA-FASD "
-                        f"protocol lists code {code} as genuine. Owner decision required.")
-        elif label == 0 and code not in PUBLISHED_GENUINE_CODES:
-            conflict = (f"CASIA_CODE_{code}_IN_LIVE_DIR: local folder says live; published CASIA-FASD "
-                        f"protocol lists code {code} as an attack. Owner decision required.")
+        n, code = int(m.group(1)), m.group(2)
+        label = 0 if code in LIVE_CODES else 1
+        folder_disagrees = FOLDER_LABEL[cls] != label
         out.append(VideoRecord(
             dataset=DATASET, video_id=vid,
-            subject_id_raw=f"{part}_s{int(subj)}", subject_id_status=SUBJECT_RECOVERED,
-            subject_id_source="path: native partition dir + filename s{N} (numbers restart per partition)",
-            label_binary=label, label_source=f"local class directory '{cls}/'",
+            subject_id_raw=subject_id(part, n), subject_id_status=SUBJECT_RECOVERED,
+            subject_id_source="path: native partition + s{N}; train N -> N, test N -> 20+N (canonical CASIA-FASD identities 1..50)",
+            label_binary=label,
+            label_source=f"CASIA-FASD video code {code} = {CODE_SEMANTICS[code]} (owner-provided protocol evidence, Q-12)"
+                         + (f"; local folder '{cls}/' disagrees and is overridden" if folder_disagrees else ""),
             attack_raw=code if label == 1 else None,
             native_protocol_split=part,
-            native_meta={"partition": part, "class_dir": cls, "subject_number": int(subj), "video_code": code},
-            source_kind="image_sequence", source_path=f"{part}/{cls}/s{subj}v{code}f{{frame}}.png",
-            frame_files=seqs[vid], label_conflict=conflict,
+            native_meta={"partition": part, "class_dir": cls, "subject_number": n, "video_code": code,
+                         "code_semantics": CODE_SEMANTICS[code], "folder_label_overridden": folder_disagrees},
+            source_kind="image_sequence", source_path=f"{part}/{cls}/s{m.group(1)}v{code}f{{frame}}.png",
+            frame_files=seqs[vid], label_conflict=None,
         ))
     return out

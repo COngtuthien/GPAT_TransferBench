@@ -14,11 +14,12 @@ changes are appended as dated updates under the entry.
 | DEV-002 | APPROVED | INFRASTRUCTURE_ADAPTATION | 2026-09-18 |
 | DEV-003 | UNAPPROVED | UNRESOLVED — must be resolved before M7 | 2026-09-18 |
 | DEV-004 | APPROVED | APPROVED_OPERATIONAL_DEVIATION (with conditions) | 2026-09-18 |
-| DEV-005 | UNAPPROVED | M1 frame-selection collision rule — owner review | 2026-09-18 |
-| DEV-006 | UNAPPROVED | Q-04 valid-frame definition — owner review | 2026-09-18 |
-| DEV-007 | UNAPPROVED | CASIA derived copies excluded — owner review | 2026-09-18 |
-| DEV-008 | UNAPPROVED | CASIA subject = partition + number — owner review | 2026-09-18 |
-| DEV-009 | UNAPPROVED | M0 record correction (SiW lowercase dirs) | 2026-09-18 |
+| DEV-005 | UNAPPROVED | Frame-selection collision rule — exact rule documented; owner review | 2026-09-18 |
+| DEV-006 | UNAPPROVED (semantic definition APPROVED) | Q-04 index-bounded implementation rev 2 — owner confirmation | 2026-09-18 |
+| DEV-007 | APPROVED | APPROVED_WITH_EVIDENCE — CASIA derived copies excluded | 2026-09-18 |
+| DEV-008 | UNAPPROVED | NOT APPROVED — superseded by DEV-010 | 2026-09-18 |
+| DEV-010 | APPROVED | CASIA code semantics + subject ids train N / test 20+N (owner decision) | 2026-09-18 |
+| DEV-009 | APPROVED | M0 record correction (SiW lowercase dirs) | 2026-09-18 |
 
 ---
 
@@ -108,6 +109,15 @@ marked BLOCKED_BY_SOURCE_GAP.
 - **Scientific impact:** only matters when two targets share a nearest index. The number of affected videos is measured by the inventory (`SAMPLING_COLLISION_RESOLUTION_USED` issues).
 - **Affected experiments:** all (sample identity).
 - **Status:** UNAPPROVED — owner review required.
+- **Status update 2026-09-18 (owner M1 review): NOT APPROVED YET.** The exact rule is documented below. The implementation is unchanged because it does not violate the frozen wording.
+  - **Exact rule** (`gpatbench/data/base.py:select_frame_indices`):
+    - Let V be the sorted unique valid indices, lo = V[0], hi = V[-1], and P = the 8 frozen positions.
+    - If |V| < 8, return V (every valid frame once).
+    - Otherwise, for k = 1..8 in order: t_k = lo + p_k·(hi − lo) as a float. Pick the element of V minimising (|i − t_k|, i), so ties go to the smaller index.
+    - If that element was already chosen for an earlier position, pick instead the element of V \ chosen minimising (|i − t_k|, i).
+  - **Boundaries:** p ∈ [0.10, 0.90], so every target lies strictly inside [lo, hi] and never needs a frame outside the valid range. With |V| ≥ 8 the fallback always finds an unused index.
+  - **Against the frozen wording "choose the nearest unique valid frame indices":** the output is always 8 unique valid indices, and each is the nearest valid index to its target unless that index was taken by an earlier target. The wording does not say which target keeps a contested index; this rule gives it to the earlier (lower-p) target.
+  - **Measured:** the collision fallback was used for **0** videos in the final inventory (`SAMPLING_COLLISION_RESOLUTION_USED` issues = 0). With |V| ≥ 10 the targets are at least 1.03 indices apart.
 
 ## DEV-006 — Q-04 valid-frame operational definition (decoder robustness)
 
@@ -121,21 +131,33 @@ marked BLOCKED_BY_SOURCE_GAP.
 - **Limitation:** a run of ≥5 consecutive failed reads inside a stream would be treated as end of stream. Such cases would show `n_valid + n_invalid < declared` and are visible in `inventory_videos.parquet`.
 - **Scientific impact:** decides which frame indices are sampleable; frame content is untouched. M2 must reuse the pinned decoder or re-verify the indices.
 - **Status:** UNAPPROVED — owner review required. This is the proposed Q-04 resolution.
+- **Status update 2026-09-18 (owner M1 review):** the semantic definition is APPROVED by the owner: "a valid frame is an original frame/index that successfully decodes into a non-empty image using the pinned decoder/backend". The "stop after 5 consecutive failures" rule was **not accepted** and has been **replaced** (revision 2, `gpatbench/data/frames.py`, data_v1 revision 2):
+  - **videos:** index-bounded over the container-declared range [0, N_declared). One sequential `read()` per original index; a failure marks that index invalid, the index is preserved, and decoding continues. One extra `read()` after the range is recorded as evidence only (`frames_beyond_declared`, never sampled). If N_declared ≤ 0: `DECLARED_COUNT_UNAVAILABLE`, ERROR, no valid frames.
+  - **image sequences:** index = existing source file's frame number; valid iff it decodes non-empty.
+  - **Justification that read() k ↔ original index k:** in run A, MSU client008 decoded 127 good + 1 failed + 172 good = 300 = declared, and client023 247 + 1 + 53 = 301 = declared. A failed read therefore consumes exactly one position.
+  - **Status:** UNAPPROVED — the semantic definition is APPROVED by the owner; the index-bounded implementation (revision 2) awaits owner confirmation. Measured outcomes are in the final inventory (`decode_status`, `frames_beyond_declared`).
 
 ## DEV-007 — CASIA-FASD derived copies excluded from samples
 
 - `train/live/fs*` files (exact horizontal flips) and `bs*` files (brightened copies) of canonical frames are indexed as DERIVED_AUGMENTATION_COPY and are **not** sampled. Evidence: `m1_inventory_facts.json` and `M1_DATASET_EVIDENCE.md` §1.
 - **Status:** UNAPPROVED — owner review required.
+- **Status update 2026-09-18 (owner M1 review):**
+  - **Status:** APPROVED
+  - Owner classification: APPROVED_WITH_EVIDENCE. `bs*`/`fs*` files stay in the raw file index and are excluded from canonical sampling. Evidence: `fs` = exact horizontal flip (6337/6337); `bs` = brightness derivative.
 
 ## DEV-008 — CASIA-FASD subject identity = native partition + number
 
 - `subject_id_raw = {train|test}_s{N}`. The bare number is shared by different people across the native partitions (visual check of all 20 overlapping numbers).
 - **Status:** UNAPPROVED — owner review required. This rule decides CASIA subject-disjointness in M3.
+- **Status update 2026-09-18 (owner M1 review): NOT APPROVED — SUPERSEDED by DEV-010.** The `{partition}_s{N}` identity is withdrawn. The visual evidence that train sN ≠ test sN remains valid and is consistent with DEV-010.
 
 ## DEV-009 — Correction of an M0 record (SiW-Mv2 lowercase directories)
 
 - M0 `data_source_registry.yaml` / report said SiW-Mv2 had both `Live/Spoof` and `live/spoof`. This was a misread of two concatenated `ls` outputs. The lowercase entries belonged to CASIA `train/`. Corrected in M1 with evidence (`M1_DATASET_EVIDENCE.md` §3). The M0 text is kept for history.
 - **Status:** UNAPPROVED (record correction; no scientific impact).
+- **Status update 2026-09-18 (owner M1 review):**
+  - **Status:** APPROVED
+  - The M0 observation error is acknowledged. The M0 evidence and ledger rows are preserved; this correction is appended.
 
 ## Open data questions raised in M1 (owner decisions needed)
 
@@ -146,3 +168,33 @@ marked BLOCKED_BY_SOURCE_GAP.
 | Q-14 | M3 (SiW-Mv2) | SiW-Mv2 subject IDs are not in the local copy. Can the official per-sample naming or subject list be obtained? If not, spec §3.5 blocks the main split for SiW-Mv2 (`BLOCKED_BY_MISSING_SUBJECT_ID`). A `protocol_v1_video_fallback` is allowed only as a separately named protocol. |
 | Q-15 | M2 (CASIA) | The local CASIA copy holds 112×112 face crops, not original frames. How should spec §4 (SCRFD on the frame, 1.25× crop, 256 master) apply? |
 | Q-16 | M3 (SiW-Mv2) | 6 pairs of SiW-Mv2 Replay videos are byte-identical (e.g. `Replay_76.mov` = `Replay_83.mov`; full list in `dataset_duplicate_hashes.csv`). Both copies are kept and inventoried as separate canonical videos; nothing was merged or deleted. How should M3 treat them (keep both, keep one, or force them into the same split)? |
+
+---
+
+## M1 correction pass (2026-09-18) — new entries
+
+## DEV-010 — CASIA-FASD code semantics and subject identities (supersedes DEV-008)
+
+- **Source:** owner-provided external CASIA-FASD protocol evidence (M1 review, 2026-09-18). Code semantics:
+  - live: 1 real_normal, 2 real_low, HR_1 real_high;
+  - print: 3 warped_normal, 4 warped_low, HR_2 warped_high, 5 cut_normal, 6 cut_low, HR_3 cut_high;
+  - replay: 7 video_normal, 8 video_low, HR_4 video_high.
+- **Implemented:**
+  - `label_binary` is taken from the code (HR_1 = live). The local folder label is overridden where it disagrees (HR_1 under `spoof/`) and each override is logged as a `FOLDER_LABEL_OVERRIDDEN` issue.
+  - `attack_raw` = code for spoof videos only.
+  - `subject_id_raw`: train sN → "N", test sN → str(20+N). A number outside train 1..20 / test 1..30 is a hard error.
+- **Verification against all 600 local sequences** (before re-inventory): train has s1..s20 and test has s1..s30 exactly; every subject has all 12 codes; the mapping yields 50 unique ids 1..50. The only disagreement with local evidence is the HR_1 folder placement.
+- **Status:** APPROVED (owner decision, recorded 2026-09-18).
+
+## Resolution of M1 open questions (2026-09-18)
+
+| ID | Resolution | Trace |
+|---|---|---|
+| Q-12 | **RESOLVED** — CASIA HR_1 = real_high → LIVE | Owner-provided CASIA protocol evidence; DEV-010 |
+| Q-13 (CASIA) | **RESOLVED** — 3,4,HR_2,5,6,HR_3 → print; 7,8,HR_4 → replay; 1,2,HR_1 live (no attack_raw) | SPEC §3.3 + owner protocol evidence; `attack_map_v1.yaml` rev 2 |
+| Q-13 (SiW `Paper`) | **RESOLVED** — `Paper` → print | Official code github.com/CHELSEA234/Multi-domain-learning-FAS @ `8667dbcd316b38141729c057adf7517fe0602608`: `source_SiW_Mv2/config_siwm.py` L63–69 `spoof_type_dict` has `'Print': 'Paper'` and separately `'Paper': 'Mask_Paper'` (sha256 ebe37e87…); `csv_parser.py` L145–177 routes `Paper` videos to `print_list` after excluding `Mask_Paper` and `Partial_Paperglass` (sha256 59159f5d…); official README folder list has both `Print` and `Mask_PaperMask`; ECCV'22 supplementary Table 1 (sha256 b9dba0ff…): Print = 135 videos = local `Paper`; Paper Mask = 17 = local `Mask_PaperMask` |
+| Q-14 | **STILL BLOCKED** — no video→subject mapping found | Checked: local README.pdf/DRA.pdf; official repo @8667dbc (README, protocol lists `pro_3_text/*.txt` and FASMD `SIWM_list/*.txt` list video names only, which the README calls "subject names", repeated "for balancing"; `combine_label_illu.csv` is SiW v1 naming); ECCV'22 supplementary (per-type subject counts only); `Dataset request/` (agreement forms only); PRISM archive `FULL_SIW_PHYSICAL_AUDIT.json` (`all_frame_subject_null: true`). → `BLOCKED_BY_MISSING_SUBJECT_ID` for the SiW-Mv2 M3 main split |
+| Q-15 | **UNRESOLVED** — no original CASIA-FASD video copy found locally | Read-only search of /home/cong and /media/cong/Data: no CASIA `.avi`, no `train_release`/`test_release`, no `HR_*` video files. Copies found are all the same 112px PNG repack: the selected root, `casia-fasd.zip` (CRC-identical), and `PRISM_FAS_C_LLM_Project/data/raw/casia_fasd` (123,533 PNG; 20/20 spot-check byte-identical). M2 CASIA needs an explicit owner deviation decision |
+| Q-16 | **OPEN (no action in M1)** — 6 byte-identical SiW Replay pairs kept as separate raw entries | `dataset_duplicate_hashes.csv`; re-check against subject/split boundaries once subject metadata exists |
+
+Note: supplementary Table 1 names the 72-video mask type "Full Mask", while the local folder is `Mask_HalfMask` (spec concept "half mask"). The mapping to mask_3d is unaffected; recorded for traceability.

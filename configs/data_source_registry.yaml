@@ -1,6 +1,6 @@
 # Data source registry — M1 FINAL (supersedes the M0 preliminary version; see git history 1823aba).
 # Counts are copied from the measured M1 inventory (outputs/audit/dataset_inventory_summary.csv,
-# run C, 2026-09-18); the CSV is authoritative if anything differs.
+# M1 correction pass, run E, 2026-09-18); the CSV is authoritative if anything differs.
 # All sources are READ-ONLY and referenced in place (nothing copied into data/raw/).
 schema_version: m1-final
 generated_utc: "2026-09-18"
@@ -18,10 +18,10 @@ datasets:
     adapter: gpatbench.data.casia_fasd
     hash_strategy: sha256 + crc32 of every file; sample sha256 = original frame file bytes
     local_counts: {indexed_files: 123533, canonical_frame_images: 110859, derived_copies: 12674, canonical_videos: 600,
-                   live_videos: 100, spoof_videos: 500, subjects: 50, sampled_frame_rows: 4800}
-    raw_label_coverage: "10 spoof codes (3-8, HR_1-HR_4); all UNMAPPED pending owner approval; 50 HR_1 videos have a label conflict"
+                   live_videos: 150, spoof_videos: 450, subjects: 50, sampled_frame_rows: 4800}
+    raw_label_coverage: "live codes 1,2,HR_1; 9 spoof codes all mapped (print: 3,4,5,6,HR_2,HR_3; replay: 7,8,HR_4); 50 HR_1 folder labels overridden (DEV-010)"
     archive_crosscheck: "casia-fasd.zip: 123533/123533 entries match extracted files by size+CRC32"
-    notes: "subject_id_raw = {partition}_s{N} (DEV-008). Derived bs*/fs* copies excluded (DEV-007)."
+    notes: "subject_id_raw: train sN -> N, test sN -> 20+N (DEV-010; DEV-008 withdrawn). Derived bs*/fs* copies excluded (DEV-007 APPROVED). No original-video copy found locally (Q-15 unresolved)."
   msu_mfsd:
     expected_name: MSU-MFSD
     candidate_paths:
@@ -51,11 +51,11 @@ datasets:
     hash_strategy: sha256 + crc32 of every file; sample sha256 pending M2 canonical PNG
     local_counts: {indexed_files: 1702, canonical_videos: 1700, live_videos: 785, spoof_videos: 915, subjects_recovered: 0,
                    attack_folders: 14, sampled_frame_rows: 13600}
-    raw_label_coverage: "14/14 attack folders present; 13 mapped; 'Paper' UNMAPPED pending owner approval"
+    raw_label_coverage: "14/14 attack folders present; all mapped; Paper -> print traced to official code @8667dbc (config_siwm.py spoof_type_dict)"
     archive_crosscheck: "SiW-Mv2.zip: 1702/1702 entries match extracted files by size+CRC32"
     notes: >-
       Subject IDs NOT recoverable locally, so the M3 main split is BLOCKED_BY_MISSING_SUBJECT_ID for SiW-Mv2.
-      6 exact-byte duplicate Replay video pairs. The M0 note about lowercase live/spoof dirs was a misread (DEV-009).
+      6 exact-byte duplicate Replay video pairs. The M0 note about lowercase live/spoof dirs was a misread (DEV-009 APPROVED). Official repo + supplementary checked: no video->subject mapping (Q-14).
 out_of_scope_sources_seen:
   - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/OULU_NPU.zip"
   - "/media/cong/Data/AI on IOT/Anti_spoofing/Dataset/CelebA-Spoof-zips/"

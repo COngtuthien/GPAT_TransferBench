@@ -160,7 +160,7 @@ VIDEO_SCHEMA = pa.schema([
     ("last_valid_index", pa.int32()), ("decode_status", pa.string()), ("resumed_after_failure", pa.bool_()),
     ("frame_sizes", pa.string()), ("fps", pa.float64()), ("n_sampled", pa.int8()),
     ("sampled_frame_indices", pa.string()), ("collision_resolution_used", pa.bool_()),
-    ("decoder_error_lines", pa.int32()),
+    ("decoder_error_lines", pa.int32()), ("frames_beyond_declared", pa.bool_()),
 ])
 FILE_SCHEMA = pa.schema([
     ("dataset", pa.string()), ("rel_path", pa.string()), ("size_bytes", pa.int64()), ("category", pa.string()),
@@ -279,13 +279,19 @@ def run_inventory(config_path: str, workers: int | None = None, project_root: Pa
                     "sampled_frame_indices": json.dumps(chosen, separators=(",", ":")),
                     "collision_resolution_used": fallback,
                     "decoder_error_lines": pr["decoder_error_lines"],
+                    "frames_beyond_declared": pr["frames_beyond_declared"],
                 })
                 if pr["decode_status"] not in ("OK",):
-                    sev = ("ERROR" if pr["decode_status"] in ("OPEN_FAILED", "NO_DECODABLE_FRAMES")
+                    sev = ("ERROR" if pr["decode_status"] in ("OPEN_FAILED", "NO_DECODABLE_FRAMES", "DECLARED_COUNT_UNAVAILABLE")
                            else "WARNING" if pr["decode_status"] == "SOME_FRAMES_UNDECODABLE" else "INFO")
                     issue(ds, sev, f"DECODE_{pr['decode_status']}", v.video_id,
                           f"declared={pr['declared_frames']} valid={len(vi)} invalid={len(pr['invalid_indices'])}"
                           + (f" invalid_positions={pr['invalid_indices'][:20]}" if pr["invalid_indices"] else ""))
+                if pr["frames_beyond_declared"]:
+                    issue(ds, "WARNING", "FRAMES_BEYOND_DECLARED", v.video_id,
+                          f"a read succeeded after declared={pr['declared_frames']} frames; extra frames are not sampled")
+                if v.native_meta.get("folder_label_overridden"):
+                    issue(ds, "INFO", "FOLDER_LABEL_OVERRIDDEN", v.video_id, v.label_source)
                 if pr["decoder_error_lines"]:
                     issue(ds, "WARNING", "DECODER_ERRORS_REPORTED", v.video_id,
                           f"{pr['decoder_error_lines']} FFmpeg stderr lines; frames may be error-concealed; e.g. "
@@ -412,6 +418,8 @@ def run_inventory(config_path: str, workers: int | None = None, project_root: Pa
                "label_conflict_videos": sum(r["label_conflict"] is not None for r in vr),
                "videos_decode_not_ok": sum(r["decode_status"] != "OK" for r in vr),
                "videos_with_decoder_errors": sum(r["decoder_error_lines"] > 0 for r in vr),
+               "videos_frames_beyond_declared": sum(bool(r["frames_beyond_declared"]) for r in vr),
+               "videos_folder_label_overridden": sum(json.loads(r["native_meta_json"]).get("folder_label_overridden", False) for r in vr),
                "videos_lt_8_valid_frames": sum(r["n_sampled"] < len(positions) for r in vr),
                "sampled_frame_rows": sum(r["n_sampled"] for r in vr),
                "valid_frames_total": sum(r["n_valid_frames"] for r in vr)}

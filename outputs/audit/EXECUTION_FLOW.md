@@ -57,3 +57,19 @@ Open carry-overs: DEV-003 UNRESOLVED (before M7). GPU audit PENDING (before any 
 8. M1 → COMPLETE, with owner-review items (DEV-005…009, Q-12…Q-16) and M3 blockers recorded in STAGE_STATE.
 
 Not done (by design): frame extraction, face detection, crops, caches, split, pairs, training, GPU access.
+
+## M1 — Correction pass after owner review (2026-09-18, on top of ce12a58, which was not pushed)
+
+1. Owner decisions:
+   - CASIA code semantics and identities: train N, test 20+N (DEV-010, supersedes DEV-008);
+   - DEV-007 and DEV-009 APPROVED;
+   - DEV-005 exact rule requested;
+   - Q-04 revised to an index-bounded rule.
+2. Verified the owner mapping against all 600 CASIA sequences: no contradiction.
+3. Official SiW-Mv2 sources checked (repo @8667dbc, supplementary):
+   - `Paper` → print traced to `config_siwm.py`;
+   - no video→subject mapping exists (Q-14 BLOCKED).
+4. CASIA original-video search (read-only): none found (Q-15 unresolved).
+5. Code, config and tests changed; `attack_map_v1` rev 2 and `data_v1` rev 2 snapshotted.
+6. Runs D and E: byte-identical outputs; raw index identical to ce12a58; sample set unchanged.
+7. M1 → COMPLETE (corrected). Pending owner review: DEV-005, DEV-006 implementation, Q-14/15/16.

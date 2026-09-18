@@ -104,17 +104,25 @@ def write_report(cfg: dict, project_root: Path) -> Path:
     overlap = sorted(subj_nums["train"] & subj_nums["test"])
     sizes = collections.Counter(v["frame_sizes"] for v in c)
     dstats = facts.get("derived_copy_checks", {}).get("casia_fasd", {})
+    overridden = collections.Counter((json.loads(v["native_meta_json"])["class_dir"], json.loads(v["native_meta_json"])["video_code"])
+                                     for v in c if json.loads(v["native_meta_json"]).get("folder_label_overridden"))
+    cstat = collections.Counter(v["attack_map_status"] for v in c)
+    ids = sorted({int(v["subject_id_raw"]) for v in c if v["subject_id_raw"] is not None})
+    sid_range = f"{len(ids)} ids, {ids[0]}..{ids[-1]}" if ids else "none"
     parts.append("<h3>CASIA-FASD</h3><ul>"
                  f"<li>Local copy is a repackaged image-sequence version: {S['casia_fasd']['files_canonical_frame_image']} canonical frame PNGs; frame sizes {E(dict(sizes).__repr__())}. "
                  "No documentation file ships with this copy (all files are PNG).</li>"
                  f"<li>Folder layout <code>{{train|test}}/{{live|spoof}}/</code>; canonical sequences per native partition: {dict(parts_)}. "
                  f"Codes by class directory: {E(str(sorted(codes.items())))}.</li>"
                  f"<li>Subject numbers per partition: train {len(subj_nums['train'])}, test {len(subj_nums['test'])}; numbers present in both partitions: {len(overlap)}. "
-                 "Rule: <code>subject_id_raw = {partition}_s{N}</code> (numbers restart per partition; see M1_DATASET_EVIDENCE.md).</li>"
+                 "Subject numbers restart per partition (see M1_DATASET_EVIDENCE.md).</li>"
                  f"<li>Derived copies (<code>bs*</code>/<code>fs*</code>, train/live only): {S['casia_fasd']['files_derived_augmentation_copy']} files, indexed but excluded from samples. "
                  f"Measured: {E(json.dumps(dstats, sort_keys=True))}.</li>"
-                 f"<li>Attack parse rule: <code>attack_raw</code> = native video code; no local documentation maps codes to attack concepts, so all CASIA spoof codes are UNMAPPED (see C).</li>"
-                 f"<li>Label conflicts: {S['casia_fasd']['label_conflict_videos']} videos (code HR_1 stored under <code>spoof/</code>).</li></ul>")
+                 f"<li>Label rule: label from the native video code (live codes 1, 2, HR_1); <code>attack_raw</code> = code for spoof videos only. "
+                 f"Videos whose local folder label was overridden by the code: {S['casia_fasd']['videos_folder_label_overridden']} "
+                 f"({E(str(sorted(overridden.items())))}). Attack-map status by video: {E(str(sorted(cstat.items())))}.</li>"
+                 f"<li>Subject rule: train s{{N}} -> N, test s{{N}} -> 20+N; subject ids observed: {E(sid_range)}.</li>"
+                 f"<li>Label conflicts remaining: {S['casia_fasd']['label_conflict_videos']}.</li></ul>")
     m = by_ds["msu_mfsd"]
     splits = collections.Counter(v["native_protocol_split"] for v in m)
     cams = collections.Counter(json.loads(v["native_meta_json"])["camera"] for v in m)
