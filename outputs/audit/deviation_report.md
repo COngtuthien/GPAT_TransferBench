@@ -20,7 +20,9 @@ changes are appended as dated updates under the entry.
 | DEV-008 | UNAPPROVED | NOT APPROVED — superseded by DEV-010 | 2026-09-18 |
 | DEV-010 | APPROVED | CASIA code semantics + subject ids train N / test 20+N (owner decision) | 2026-09-18 |
 | DEV-009 | APPROVED | M0 record correction (SiW lowercase dirs) | 2026-09-18 |
-| DEV-011 | UNAPPROVED | PROPOSED CASIA_PRE_CROPPED_112_ADAPTATION (CONTROLLED_DATASET_ADAPTATION) — owner decision | 2026-09-18 |
+| DEV-011 | APPROVED | APPROVED_CONTROLLED_DATASET_ADAPTATION — CASIA pre-cropped 112→256 INTER_CUBIC, SCRFD N/A | 2026-09-19 |
+| DEV-012 | APPROVED | SiW-Mv2 video-disjoint split fallback (content-group, exact-byte sha256) — subject IDs unavailable | 2026-09-19 |
+| DEV-013 | APPROVED | SiW-Mv2 pairing fallback: different video AND different content group (not different-person) | 2026-09-19 |
 
 ---
 
@@ -223,6 +225,11 @@ Note: supplementary Table 1 names the 72-video mask type "Full Mask", while the 
 - **Measured impact** (`CASIA_RESIZE_FREQUENCY_AUDIT.md`, diagnostic): after upscaling, relative high-frequency power on the 256 grid drops by about 5–6×; live and spoof are affected alike. **Not equivalent** to the nominal pipeline.
 - **Affected experiments:** every experiment that uses CASIA (all of them, through the pooled benchmark).
 - **Status:** UNAPPROVED — owner decision required before M2 for CASIA.
+- **Status update 2026-09-19 (owner decision, dataset policy freeze):**
+  - **Status:** APPROVED
+  - Owner classification: APPROVED_CONTROLLED_DATASET_ADAPTATION. The CASIA M2 path is the canonical 112×112 RGB crop → INTER_CUBIC 256×256 uint8 sRGB → common pipeline. SCRFD is not applied (`scrfd_applied=false`, SCRFD status N/A, never reported as detector success).
+  - Fairness conditions and required disclosures are frozen in `configs/frozen/dataset_protocol_policy_v1.yaml`.
+  - Not equivalent to the nominal §4 path; the frequency audit is preserved as evidence.
 
 ## Final classification of dataset questions (dataset-resolution pass)
 
@@ -233,3 +240,42 @@ Note: supplementary Table 1 names the 72-video mask type "Full Mask", while the 
 | Q-15 | **UNRESOLVED → DEV-011 proposed**. Final read-only search found no original CASIA copy (every zip ≥ 100 MB on the data volume listed; the 76-part CelebA-Spoof archive not listable; one unrelated .rar not opened; the GPU server not inspected) | `CASIA_SOURCE_AUDIT.md` |
 | Q-16 | **OPEN, preserved**. 6 byte-identical SiW Replay pairs, all UNRESOLVED_DUPLICATE; 3 pairs sit in official testlist_all vs trainlist_all | `SIW_DUPLICATE_VIDEO_AUDIT.md/.csv` |
 | Q-17 (new) | **INFO**. The official SiW-Mv2 protocol lists reference 1,764 stems, 64 of which are absent from the local release (e.g. `Live_892…902`); the official lists cannot be applied verbatim to the local copy | `SIW_PROTOCOL_NAME_SEMANTICS.md` §3 |
+
+---
+
+## Final dataset policy freeze (2026-09-19) — new entries
+
+## DEV-012 — SiW-Mv2 video-disjoint fallback due to unavailable subject identity
+
+- **Original frozen behaviour (spec §3.5):** subject-disjoint split; a dataset without a recoverable subject ID blocks the main split (`BLOCKED_BY_MISSING_SUBJECT_ID`); a video fallback is allowed only as a separately named protocol.
+- **Approved behaviour:** SiW-Mv2 is split inside the dataset by deterministic **canonical-video-disjoint** allocation.
+  - The grouping unit is `content_group_id = siwmv2::sha256:<raw video sha256>`: videos with identical raw bytes share one unit and always land in the same split.
+  - All sampled frames inherit the video's split; frame-level splitting is forbidden.
+  - Ratios are 70/15/15 by canonical-video count, with seed 20260814.
+  - Balancing priorities follow `dataset_protocol_policy_v1.yaml`.
+  - CASIA-FASD and MSU-MFSD stay subject-disjoint.
+- **Evidence:** Q-14 investigation (`SIW_PROTOCOL_NAME_SEMANTICS.md`, `siw_subject_mapping_candidate.csv`): no trustworthy video→person mapping exists. Duplicates: `SIW_DUPLICATE_VIDEO_AUDIT.md`, `siw_content_groups.csv` (1,700 videos → 1,694 content groups).
+- **Scientific limitation (must never be hidden):** the same physical person may appear in more than one SiW-Mv2 split. The pooled benchmark is not uniformly subject-disjoint. This replaces the main-protocol rule of §3.5 for SiW-Mv2; it is not a separately named side protocol.
+- **Affected:** M3 (split), M4 (pairs, see DEV-013), M5–M13 (every model trained or evaluated on the pooled split), downstream pooled evaluation, T01/T14 reporting, paper limitations.
+- **Status:** APPROVED (owner decision, 2026-09-19).
+
+## DEV-013 — SiW-Mv2 different-video pairing fallback due to unavailable subject identity
+
+- **Original frozen behaviour (spec §6):** the target live candidate comes from the same dataset and a **different subject**.
+- **Approved behaviour for SiW-Mv2:** `source_video_id != target_video_id` **and** `source_content_group_id != target_content_group_id`. CASIA and MSU keep different-subject pairing.
+- **Scientific limitation:** SiW-Mv2 pairs are different-video / different-exact-content pairs, **not proven different-person pairs**, and must never be described as such. The GPAT identity-preservation metric (AdaFace cosine target vs synthetic) is unaffected, because it needs no dataset subject label.
+- **Affected:** M4 pair manifests, M8 banks, M9 pair metrics, the fingerprint probe's GroupKFold grouping (§12.2 groups by subject: SiW needs the same fallback key, to be set in the M5/M9 contract), and the paper.
+- **Status:** APPROVED (owner decision, 2026-09-19). Recorded only; no pairs built.
+
+## Latest status of dataset questions (policy freeze)
+
+| ID | Latest status |
+|---|---|
+| Q-04 | RESOLVED (DEV-006 APPROVED) |
+| Q-12 | RESOLVED (HR_1 = live; DEV-010) |
+| Q-13 | RESOLVED (CASIA codes; SiW Paper → print) |
+| Q-14 | **SUBJECT_ID_UNAVAILABLE_ACCEPTED_WITH_VIDEO_DISJOINT_DEVIATION** (DEV-012/013); no pseudo IDs |
+| Q-15 | **RESOLVED_WITH_CONTROLLED_ADAPTATION** (DEV-011 APPROVED) |
+| Q-16 | **RESOLVED_WITH_EXACT_CONTENT_GROUPING** (6 groups; raw records preserved) |
+| Q-17 | DOCUMENTED LIMITATION: 64 official protocol names absent locally (`SIW_PROTOCOL_COVERAGE_AUDIT.md`); local inventory is the source of truth |
+| Q-01 | OPEN (allocator objective/weights), required before M3 execution |

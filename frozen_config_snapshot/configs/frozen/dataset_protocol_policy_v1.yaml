@@ -1,0 +1,140 @@
+# dataset_protocol_policy_v1 — FROZEN final dataset-handling policy for M2/M3/M4 (owner-approved 2026-09-19).
+# Scope: grouping, split ratios, leakage constraints, balancing priorities, preprocessing deviation state,
+# future pairing rules, fidelity labels and mandatory disclosures. It does NOT contain an allocator
+# objective or weights (see split.allocator). Any change requires a new version (v2) + owner approval;
+# this file is never edited in place. Snapshot: frozen_config_snapshot/configs/frozen/.
+version: dataset_protocol_policy_v1
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+approved_by: owner
+approved_utc: "2026-09-19"
+depends_on:
+  data_config: configs/frozen/data_v1.yaml            # rev 2 (frame sampling DEV-005, valid frame DEV-006)
+  attack_map: configs/frozen/attack_map_v1.yaml       # rev 2 (all observed tokens mapped)
+  inventory: manifests/inventory_videos.parquet       # M1; unchanged by this policy
+
+split:
+  seed: 20260814                                      # spec §3.5
+  ratios: {train: 0.70, val: 0.15, test: 0.15}        # spec §3.5
+  size_measure: canonical_video_count                 # spec §3.5 "by number of canonical videos"
+  split_within_dataset_then_pool: true                # spec §3.5
+  unit_of_assignment: grouping_unit                   # a whole group goes to exactly one split
+  frame_level_split_forbidden: true                   # sampled frames inherit their canonical video's split
+  exact_duplicate_content_must_not_cross_splits: true # all datasets; key = raw canonical-file sha256
+  exact_ratios_not_required_if_grouping_prevents: true
+  never_break_grouping_for_ratios_or_balance: true
+  priority_order:                                     # owner-approved priority hierarchy of requirements (NOT an allocator objective)
+    - grouping_and_leakage_safety
+    - total_canonical_video_counts_near_ratios
+    - binary_class_distribution
+    - attack_macro_distribution
+    - attack_raw_distribution_secondary
+  balancing:
+    binary_class_distribution: true                   # every split holds live and spoof when a grouped allocation allows it
+    attack_macro_distribution: true
+    attack_raw_distribution_secondary: true           # where raw labels exist and are meaningful (all three datasets here)
+    no_sample_duplication: true
+    report_infeasible_coverage: true                  # classes with too few grouping units -> reported, not forced
+  allocator:
+    status: NOT_DEFINED_IN_THIS_POLICY
+    objective: null
+    weights: null
+    tie_breaking: null
+    requirement: >-
+      Before M3 execution the exact objective, weights or lexicographic rules and tie-breaking must be
+      derived unambiguously from approved evidence or proposed to and approved by the owner (spec §3.5 names
+      the terms but not the weights; open question Q-01). No hidden scientific choice.
+  m3_audit_requirements:                              # per dataset x split
+    - dataset
+    - split
+    - subject_count_where_available
+    - canonical_video_count
+    - sample_frame_count
+    - live_count
+    - spoof_count
+    - attack_macro_counts
+    - attack_raw_counts_where_available
+    - percentages
+    - severe_imbalance_flags
+    - siwmv2_attack_raw_by_split_table
+
+datasets:
+  casia_fasd:
+    split_grouping: SUBJECT
+    group_key: subject_id_global
+    subject_required: true
+    subject_identity_status: VERIFIED
+    subject_mapping: "train/s1..s20 -> 1..20; test/s1..s30 -> 21..50; subject_id_global = casia_fasd::<subject_id_raw>"  # DEV-010
+    content_grouping: exact_raw_sha256_constraint_only   # measured cross-video exact duplicates: 0
+    balancing: {binary: true, attack_macro: true, attack_raw_secondary: true}
+    split_fidelity: SUBJECT_DISJOINT
+    preprocessing:
+      path: PRECROPPED_112_RGB_TO_256_INTER_CUBIC     # DEV-011
+      input: "canonical local 112x112 RGB crop (M1-selected frame index)"
+      resize: {size: 256, interpolation: INTER_CUBIC, output: uint8_sRGB}
+      scrfd_applied: false
+      scrfd_status: N/A
+      scrfd_status_reason: "approved pre-cropped-source adaptation (DEV-011); never reported as detector success"
+      downstream: "common FaceXFormer / AdaFace / later pipeline on the 256x256 image"
+      fidelity: APPROVED_CONTROLLED_DATASET_ADAPTATION
+      evidence: [outputs/audit/CASIA_CONTROLLED_ADAPTATION_PROPOSAL.md, outputs/audit/CASIA_RESIZE_FREQUENCY_AUDIT.md]
+      fairness_conditions:
+        - every method receives the same adapted CASIA 256x256 images
+        - no method receives a higher-resolution CASIA source
+        - interpolation fixed and deterministic
+        - CASIA results separately reportable
+        - resize/frequency audit preserved
+        - adaptation disclosed in the paper
+    pairing: {rule: DIFFERENT_SUBJECT, constraint: "source_subject_id_global != target_subject_id_global"}
+    derived_files: "bs*/fs* indexed, never canonical samples (DEV-007)"
+  msu_mfsd:
+    split_grouping: SUBJECT
+    group_key: subject_id_global
+    subject_required: true
+    subject_identity_status: VERIFIED
+    subject_mapping: "clientID from README naming protocol; subject_id_global = msu_mfsd::<clientID>"
+    content_grouping: exact_raw_sha256_constraint_only   # measured cross-video exact duplicates: 0
+    balancing: {binary: true, attack_macro: true, attack_raw_secondary: true}
+    split_fidelity: STRICT_SPEC
+    preprocessing: {path: SPEC_SECTION_4_SCRFD, scrfd_applied: true, fidelity: STRICT_SPEC}
+    pairing: {rule: DIFFERENT_SUBJECT, constraint: "source_subject_id_global != target_subject_id_global"}
+  siwmv2:
+    split_grouping: CANONICAL_VIDEO_CONTENT_GROUP
+    group_key: content_group_id
+    subject_required: false
+    subject_identity_status: UNAVAILABLE                  # Q-14; no pseudo IDs may be created
+    pseudo_subject_ids_forbidden: true
+    content_group:
+      definition: "sha256 of the raw canonical video file bytes (manifests/raw_file_index.parquet sha256)"
+      id_format: "siwmv2::sha256:<hex>"
+      perceptual_deduplication: false
+      is_person_identity: false
+      raw_records_preserved: true                       # duplicates are never deleted/merged/renamed
+      evidence: [outputs/audit/siw_content_groups.csv, outputs/audit/SIW_DUPLICATE_VIDEO_AUDIT.csv]
+    balancing: {binary: true, attack_macro: true, attack_raw_secondary: true}
+    split_fidelity: APPROVED_VIDEO_DISJOINT_DEVIATION   # DEV-012
+    preprocessing: {path: SPEC_SECTION_4_SCRFD, scrfd_applied: true, fidelity: STRICT_SPEC}
+    pairing:
+      rule: DIFFERENT_VIDEO_AND_DIFFERENT_CONTENT_GROUP  # DEV-013
+      constraints: ["source_video_id != target_video_id", "source_content_group_id != target_content_group_id"]
+      claim_wording: "different-video / different-exact-content pairs (NOT proven different-person)"
+
+identity_preservation_metric_note: >-
+  GPAT target-identity preservation (ID cosine = cos(F_id(x_target), F_id(x_synthetic)), frozen AdaFace) does not
+  need dataset subject labels and is unaffected by the SiW subject-ID limitation. Only split and pairing guarantees change.
+
+pooled_benchmark_fidelity: MIXED   # never STRICT_SPEC as a whole
+required_disclosures:
+  - "CASIA-FASD comes from a pre-cropped 112x112 local derivative."
+  - "CASIA-FASD uses approved deterministic 112->256 INTER_CUBIC controlled preprocessing (no SCRFD)."
+  - "CASIA-FASD and MSU-MFSD benchmark splits are subject-disjoint."
+  - "SiW-Mv2 uses a deterministic video-disjoint split with exact-content duplicate grouping because reliable subject identifiers were unavailable."
+  - "The pooled benchmark is therefore NOT uniformly subject-disjoint."
+  - "SiW-Mv2 source-target pairs are guaranteed different-video and different-exact-content, not different-person."
+forbidden_statements:
+  - "All three datasets are subject-disjoint."
+  - "CASIA preprocessing reproduces the raw SCRFD path."
+  - "SiW-Mv2 pairs are different-person pairs."
+allowed_wording_example: >-
+  CASIA-FASD and MSU-MFSD are partitioned by subject. For the available SiW-Mv2 release, reliable subject
+  identifiers were unavailable; therefore a deterministic video-disjoint partition with exact-content duplicate
+  grouping is used.

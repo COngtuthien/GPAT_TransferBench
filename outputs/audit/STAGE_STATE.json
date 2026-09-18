@@ -75,20 +75,19 @@
         "raw_unchanged": "PASS (size+mtime snapshot; raw_file_index identical to ce12a58)"
       },
       "pending_owner_review": [
-        "DEV-011 CASIA_PRE_CROPPED_112_ADAPTATION (Q-15)",
-        "Q-14 SiW-Mv2 subject IDs: BLOCKED_BY_MISSING_SUBJECT_ID (CASE C)",
-        "Q-16 SiW duplicate policy for M3 (recommend split-atomic by sha256)"
+        "Q-01 split allocator objective/weights (required before M3 execution)"
       ],
       "later_milestone_preconditions": {
         "M2": {
-          "casia_fasd": "BLOCKED_PENDING_CONTROLLED_ADAPTATION (DEV-011)",
+          "casia_fasd": "READY_WITH_APPROVED_CONTROLLED_ADAPTATION (DEV-011)",
           "msu_mfsd": "READY",
           "siwmv2": "READY"
         },
         "M3_main_split": {
-          "casia_fasd": "READY",
-          "msu_mfsd": "READY",
-          "siwmv2": "BLOCKED_BY_MISSING_SUBJECT_ID"
+          "casia_fasd": "READY (SUBJECT)",
+          "msu_mfsd": "READY (SUBJECT)",
+          "siwmv2": "READY_WITH_APPROVED_VIDEO_DISJOINT_DEVIATION (DEV-012)",
+          "all": "allocator objective (Q-01) must be approved before execution"
         },
         "native_full_track": {
           "casia_fasd": "READY",
@@ -96,7 +95,7 @@
           "siwmv2": "READY"
         }
       },
-      "phase": "CORRECTED_AND_DATASET_RESOLVED",
+      "phase": "CORRECTED_DATASET_RESOLVED_POLICY_FROZEN",
       "correction_pass": {
         "started_utc": "2026-09-18",
         "base_commit": "ce12a58fc9e0aca7b3cf56255d73cb85d696b36a",
@@ -165,5 +164,12 @@
       "name": "Paper pack",
       "status": "NOT_STARTED"
     }
+  },
+  "dataset_policy": {
+    "artifact": "configs/frozen/dataset_protocol_policy_v1.yaml",
+    "frozen_utc": "2026-09-19",
+    "readiness_matrix": "outputs/audit/DATASET_READINESS_MATRIX.csv",
+    "decisions": "outputs/audit/DATASET_PROTOCOL_DECISIONS.md",
+    "note": "READY means prerequisites satisfied; it does not mean a milestone has started. M2/M3 remain NOT_STARTED."
   }
 }

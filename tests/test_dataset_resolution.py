@@ -166,8 +166,14 @@ class TestReadiness(unittest.TestCase):
         for ds, r in rows.items():
             missing = int(summary[ds]["videos_missing_subject_id"])
             self.assertEqual(r["subject_id_ready"], "NO" if missing else "YES", ds)
-            if missing:
-                self.assertEqual(r["M3_ready"], "BLOCKED_BY_MISSING_SUBJECT_ID")
+            if missing:   # missing subjects: blocked unless the frozen policy + an APPROVED deviation allow it
+                policy = yaml.safe_load((ROOT / "configs/frozen/dataset_protocol_policy_v1.yaml").read_text()) \
+                    if (ROOT / "configs/frozen/dataset_protocol_policy_v1.yaml").exists() else None
+                dev = (AUDIT / "deviation_report.md").read_text()
+                allowed = (policy is not None and policy["datasets"][ds]["subject_required"] is False
+                           and "| DEV-012 | APPROVED |" in dev)
+                self.assertEqual(r["M3_ready"], "READY_WITH_APPROVED_VIDEO_DISJOINT_DEVIATION" if allowed
+                                 else "BLOCKED_BY_MISSING_SUBJECT_ID")
             unmapped = int(summary[ds]["unmapped_attack_tokens"])
             self.assertEqual(r["attack_macro_ready"], "NO" if unmapped else "YES")
             for col in ("evidence_file",):

@@ -91,3 +91,37 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    - duplicate audit (Q-16);
    - Paper → print re-confirmed.
 5. Readiness matrix and resolution report; frozen config rev1 preserved in history with diffs; manifests unchanged.
+
+## Consolidated narrative M0 → dataset policy freeze (written 2026-09-19; each step says WHY)
+
+1. **M0 bootstrap** (1823aba, af0b2b8; pushed).
+   - Spec identified and hashed; skeleton, registries, audit infrastructure.
+   - *Why:* nothing scientific may run before provenance exists.
+2. **M1 initial inventory** (ce12a58, unpushed).
+   - Indexed all 125,841 local files; built a deterministic 8-frame sample (20,640 rows).
+   - *Why:* the spec makes the local inventory the source of truth.
+   - Two runs were superseded because they revealed decoder behaviour: a trial run aborted, and run A.
+3. **CASIA label/subject correction** (112506b, unpushed).
+   - The owner review showed HR_1 is live and test subjects are 21–50.
+   - *Why:* the first adapter trusted the packager's folder labels and used a partition-local subject key.
+   - The fix was verified against all 600 sequences.
+4. **Decoder-index investigation** (be428bf).
+   - PyAV was used as an independent reference and all 1,980 videos were audited.
+   - *Why:* the owner rejected the "stop after 5 failures" rule. Index continuity had to be proven, not assumed.
+   - It was proven; OpenCV `POS_FRAMES` was found to lag after a failure.
+5. **SiW authoritative-metadata investigation** (be428bf).
+   - Traced the official repo @8667dbc.
+   - *Why:* Q-14 blocked M3 for SiW.
+   - Protocol names turned out to be video stems; no person mapping exists; AdaFace was not used to invent IDs.
+6. **CASIA resize-frequency audit** (be428bf).
+   - *Why:* only 112 px crops exist locally, and GPAT works on high-frequency detail. The impact of 112→256 had to be quantified before any decision.
+   - Result: roughly 5–6× lower relative high-frequency power.
+7. **Owner decision: accept the controlled CASIA preprocessing** (DEV-011, this pass).
+   - *Why:* no original source exists locally, and the adaptation is applied identically to all methods and disclosed.
+8. **Owner decision: SiW video-disjoint fallback** (DEV-012) **and different-video/content pairing** (DEV-013), this pass.
+   - *Why:* blocking SiW would remove 1,700 videos and 14 attack types from the benchmark. The limitation is disclosed rather than hidden, and exact duplicates are grouped to avoid content leakage.
+9. **Dataset policy freeze** (this pass).
+   - Artifact: `configs/frozen/dataset_protocol_policy_v1.yaml`.
+   - *Why:* M2–M4 must follow one explicit, versioned policy. The allocator objective is deliberately left undefined (Q-01) to avoid a hidden scientific choice.
+10. **Future M2**, after owner review and push: CASIA via DEV-011; MSU and SiW via spec §4.
+11. **Future M3:** first an owner-approved allocator objective, then per-dataset grouped 70/15/15 splits with the policy's distribution audit.
