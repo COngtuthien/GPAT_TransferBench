@@ -153,11 +153,16 @@ class TestBalancing(unittest.TestCase):
 
 
 class TestNoLaterArtifacts(unittest.TestCase):
-    def test_19_20_21_no_m2_m3_m4_artifacts(self):
+    def test_19_20_21_no_unstarted_milestone_artifacts(self):
+        import stage_guard
+        # in-repo heavy dirs stay empty: M2 outputs live on the external runtime volume (DEV-017)
         for rel in ("data/processed", "cache", "runs", "probes", "downstream"):
             self.assertEqual([p for p in (ROOT / rel).rglob("*") if p.is_file() and p.name != ".gitkeep"], [], rel)
+        parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet")
+                   if not ({".git", ".venv"} & set(p.parts))}
+        self.assertEqual(stage_guard.forbidden_parquet(parquet), [])
         names = {p.name for p in ROOT.rglob("*") if not ({".git", ".venv"} & set(p.parts))}
-        for bad in ("split_v1.parquet", "pairs_train_v1.parquet", "val_pairs_v1.parquet"):
+        for bad in ("pairs_train_v1.parquet", "val_pairs_v1.parquet"):
             self.assertNotIn(bad, names)
         self.assertFalse(any(n.startswith("pairs_") and n.endswith(".parquet") for n in names))
 
@@ -190,8 +195,16 @@ class TestFrozenPolicy(unittest.TestCase):
         import json
         s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
         # Stage-aware: M1 COMPLETE and M3 NOT_STARTED at every stage up to and including M2.
-        self.assertEqual((s["M1"]["status"], s["M3"]["status"]), ("COMPLETE", "NOT_STARTED"))
+        self.assertEqual(s["M1"]["status"], "COMPLETE")
+        # M3 may be COMPLETE, but only with a manifest whose recorded hash matches the file.
+        if s["M3"]["status"] == "COMPLETE":
+            import hashlib
+            rec = json.loads((AUDIT / "split_v1.sha256").read_text())
+            mp = ROOT / "manifests/split_v1.parquet"
+            self.assertTrue(mp.is_file())
+            self.assertEqual(hashlib.sha256(mp.read_bytes()).hexdigest(), rec["sha256"])
         self.assertIn(s["M2"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        self.assertEqual(s["M4"]["status"], "NOT_STARTED")
         # M2 may only be COMPLETE when the full run really happened and its audit passed. Under DEV-017
         # the artifacts live on the external runtime volume, so the in-repo dirs stay empty and the
         # evidence is the audit itself plus the physical roots named by the execution config.

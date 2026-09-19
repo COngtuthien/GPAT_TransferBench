@@ -1,0 +1,212 @@
+{
+  "manifest": "/home/cong/GPAT_TransferBench/manifests/split_v1.parquet",
+  "manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+  "rows": 20615,
+  "columns": [
+    "sample_id",
+    "dataset",
+    "subject_id_global",
+    "video_id",
+    "frame_index",
+    "label_binary",
+    "attack_raw",
+    "attack_macro",
+    "split",
+    "sha256",
+    "sha256_kind",
+    "content_group_id",
+    "allocation_group_id",
+    "m2_status"
+  ],
+  "row_order": [
+    "dataset",
+    "video_id",
+    "frame_index",
+    "sample_id"
+  ],
+  "leakage": {
+    "videos_with_multiple_splits": [],
+    "casia_fasd": {
+      "grouping": "SUBJECT",
+      "group_key": "subject_id_global",
+      "allocation_group_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "video_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "sample_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "subject_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "fidelity": "subject-disjoint"
+    },
+    "msu_mfsd": {
+      "grouping": "SUBJECT",
+      "group_key": "subject_id_global",
+      "allocation_group_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "video_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "sample_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "subject_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "fidelity": "subject-disjoint"
+    },
+    "siwmv2": {
+      "grouping": "CANONICAL_VIDEO_CONTENT_GROUP",
+      "group_key": "content_group_id",
+      "allocation_group_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "video_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "sample_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "subject_leakage": "N/A",
+      "subject_leakage_reason": "trustworthy subject identity unavailable (Q-14)",
+      "subject_id_global_all_null": true,
+      "content_group_leakage": {
+        "TRAIN&VAL": [],
+        "TRAIN&TEST": [],
+        "VAL&TEST": []
+      },
+      "content_groups_spanning_splits": [],
+      "fidelity": "canonical-video / content-group-disjoint",
+      "subject_disjoint_claim": "FORBIDDEN"
+    }
+  },
+  "counts": {
+    "casia_fasd": {
+      "TRAIN": {
+        "usable_samples": 3360,
+        "canonical_videos": 420,
+        "allocation_groups": 35,
+        "live_videos": 105,
+        "spoof_videos": 315
+      },
+      "VAL": {
+        "usable_samples": 768,
+        "canonical_videos": 96,
+        "allocation_groups": 8,
+        "live_videos": 24,
+        "spoof_videos": 72
+      },
+      "TEST": {
+        "usable_samples": 672,
+        "canonical_videos": 84,
+        "allocation_groups": 7,
+        "live_videos": 21,
+        "spoof_videos": 63
+      },
+      "_total": {
+        "usable_samples": 4800,
+        "canonical_videos": 600,
+        "allocation_groups": 50
+      }
+    },
+    "msu_mfsd": {
+      "TRAIN": {
+        "usable_samples": 1600,
+        "canonical_videos": 200,
+        "allocation_groups": 25,
+        "live_videos": 50,
+        "spoof_videos": 150
+      },
+      "VAL": {
+        "usable_samples": 320,
+        "canonical_videos": 40,
+        "allocation_groups": 5,
+        "live_videos": 10,
+        "spoof_videos": 30
+      },
+      "TEST": {
+        "usable_samples": 320,
+        "canonical_videos": 40,
+        "allocation_groups": 5,
+        "live_videos": 10,
+        "spoof_videos": 30
+      },
+      "_total": {
+        "usable_samples": 2240,
+        "canonical_videos": 280,
+        "allocation_groups": 35
+      }
+    },
+    "siwmv2": {
+      "TRAIN": {
+        "usable_samples": 9507,
+        "canonical_videos": 1190,
+        "allocation_groups": 1190,
+        "live_videos": 549,
+        "spoof_videos": 641
+      },
+      "VAL": {
+        "usable_samples": 2033,
+        "canonical_videos": 255,
+        "allocation_groups": 249,
+        "live_videos": 118,
+        "spoof_videos": 137
+      },
+      "TEST": {
+        "usable_samples": 2035,
+        "canonical_videos": 255,
+        "allocation_groups": 255,
+        "live_videos": 118,
+        "spoof_videos": 137
+      },
+      "_total": {
+        "usable_samples": 13575,
+        "canonical_videos": 1700,
+        "allocation_groups": 1694
+      }
+    }
+  },
+  "checks": {
+    "required_columns_present": true,
+    "unique_sample_ids": true,
+    "rows_equal_m2_complete": true,
+    "no_failed_row_present": true,
+    "missing_complete_rows": [],
+    "every_row_has_a_split": true,
+    "canonical_row_order": true,
+    "allocation_group_leakage_total": 0,
+    "video_leakage_total": 0,
+    "sample_leakage_total": 0,
+    "subject_leakage_total_casia_msu": 0,
+    "content_group_leakage_total_siw": 0,
+    "every_dataset_in_every_split": true
+  },
+  "ok": true
+}

@@ -306,3 +306,36 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    persisted and `manifests/split_v1.parquet` does not exist.
 9. **M3 stays NOT_STARTED.** Allocator code and a frozen config do not start the milestone; M3 begins
    when the authoritative split is created.
+
+## M3 — Authoritative split execution (2026-09-19; base d0111c3a)
+
+1. **Verified the starting state** (HEAD == `origin/main` == `d0111c3a`, clean, M2 COMPLETE/FINALIZED,
+   M3 NOT_STARTED, `split_v1.yaml` sha `9dc04ede…`, 245 tests PASS) and **recomputed the M2 population
+   from the manifests** rather than trusting the earlier report: 20,640 sampled, 20,615 COMPLETE,
+   25 FAILED (all `SCRFD_NO_FACE`, SiW), 0 zero-usable canonical videos.
+2. **Resolved the `sha256` lineage without inventing a meaning.** M1 filled the column for CASIA
+   (`original_frame_bytes`) and left MSU/SiW as `PENDING_M2_CANONICAL_PNG`; M2 produced exactly that
+   canonical frame PNG, so the placeholder is resolved with M2's `frame_png_sha256` and `sha256_kind`
+   records which lineage applies. For CASIA the two agree on all 4,800 rows (asserted at build time).
+3. **Proved the profile-class reduction before using it.** For every class, the per-group contribution
+   vector — canonical-video count plus binary/macro/raw counts — must be identical, since the solver
+   optimises per-class counts. Group size is part of the signature because it enters P1 directly. All
+   three datasets pass; a test injects a forced collision to show the checker actually refuses one.
+4. **Ran the frozen allocator per dataset** (never pooled) through `python -m gpatbench.cli split`,
+   which is the same code path as the library call — there is no execution route that bypasses the
+   frozen allocator, and the CLI refuses a config that is not the frozen one.
+5. **Wrote `manifests/split_v1.parquet`** with 20,615 rows: only M2 COMPLETE samples, spec columns
+   first, canonical order `dataset > video_id > frame_index > sample_id`, and frozen Parquet writer
+   settings. A small `split_groups_v1.parquet` records the group-level assignment.
+6. **Audited leakage from the written artifact**, not from memory: CASIA and MSU subject/video/sample
+   intersections empty; SiW content-group/video/sample intersections empty and all six exact-byte
+   duplicate groups intact. SiW subject leakage is reported as **N/A** with its reason — the split is
+   canonical-video / content-group-disjoint and is never described as subject-disjoint.
+7. **Re-ran the whole allocator three times in fresh interpreters**, twice with deliberately permuted
+   input metadata and under three different `PYTHONHASHSEED` values. All four runs produced a
+   **byte-identical** manifest, so the hash was frozen rather than merely the assignment.
+   - *Why the permuted runs matter:* an assignment can be stable while serialization is not; requiring
+     identical bytes is what makes the manifest hash citable.
+8. **Froze `outputs/audit/split_v1.sha256`** with the manifest hash, the schema signature, the writer
+   settings, the split-config hash and the hashes of every frozen input the split was derived from.
+9. **M3 → COMPLETE / FINALIZED.** M4 remains NOT_STARTED; no pairs were built and nothing was trained.

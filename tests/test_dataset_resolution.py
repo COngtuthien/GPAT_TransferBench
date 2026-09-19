@@ -187,8 +187,9 @@ class TestNoM2M3Artifacts(unittest.TestCase):
         for rel in ("data/processed", "cache", "runs", "probes", "downstream"):
             files = [p for p in (ROOT / rel).rglob("*") if p.is_file() and p.name != ".gitkeep"]
             self.assertEqual(files, [], rel)
+        import stage_guard
         parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet") if not ({".git", ".venv", ".venv-audit"} & set(p.parts))}
-        self.assertFalse(any("split" in p or "pair" in p for p in parquet))
+        self.assertEqual(stage_guard.forbidden_parquet(parquet), [])
         diag = ROOT / "outputs/audit/siw_subject_recovery"
         self.assertFalse(any(p.suffix in (".npy", ".npz", ".pt") for p in diag.rglob("*")))
 

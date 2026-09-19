@@ -1,0 +1,40 @@
+{
+  "artifact": "manifests/split_v1.parquet",
+  "sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+  "rows": 20615,
+  "schema": "sample_id:string;dataset:string;subject_id_global:string;video_id:string;frame_index:int64;label_binary:int64;attack_raw:string;attack_macro:string;split:string;sha256:string;sha256_kind:string;content_group_id:string;allocation_group_id:string;m2_status:string",
+  "schema_sha256": "205fbce061c3ab51b676c43e4ad255498981c19ae93430b94705f9ce7adc24bf",
+  "row_order": [
+    "dataset",
+    "video_id",
+    "frame_index",
+    "sample_id"
+  ],
+  "parquet_writer": {
+    "compression": "zstd",
+    "compression_level": 9,
+    "write_statistics": true,
+    "version": "2.6",
+    "use_dictionary": false,
+    "row_group_size": 65536,
+    "store_schema": true,
+    "write_page_index": false
+  },
+  "group_artifact": "manifests/split_groups_v1.parquet",
+  "group_sha256": "4490d7e021b106d79ee29d8739ce1d23f4b681a1cb29484c7f51d4c9c9a461d8",
+  "split_config": "configs/frozen/split_v1.yaml",
+  "split_config_sha256": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+  "inputs": {
+    "manifests/inventory.parquet": "f3a882c91eb3de808ded61e92f2bf20a6b611d21669420f1e1a64e244a979173",
+    "manifests/inventory_videos.parquet": "35c49c4d7afedad3b6905436baf4bcdf57c6c638c2113b7ef0a4bce61a5d255a",
+    "manifests/m2_sample_accounting.parquet": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+    "configs/frozen/data_v1.yaml": "7227c1bd589a29750495971899f0caf685976585d8610dbcbdeb77a730902885",
+    "configs/frozen/dataset_protocol_policy_v1.yaml": "e928eded918395f56d98f7a325fcc2650535fda895d4d3305ba0212253159eca",
+    "configs/frozen/preprocess_v1.yaml": "265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e"
+  },
+  "generated_at_git_commit": "d0111c3a5f3f3e96a78f29653f46b28f5e4b96c6",
+  "generated_at_git_note": "the working tree was dirty at generation; the M3 commit that follows contains these artifacts",
+  "command": "python -m gpatbench.cli split --config configs/frozen/split_v1.yaml",
+  "solver": "HiGHS via scipy.optimize.milp 1.18.1, threads 1, mip_rel_gap 0.0",
+  "split_seed": 20260814
+}

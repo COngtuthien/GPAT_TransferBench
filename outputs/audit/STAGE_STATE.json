@@ -324,7 +324,7 @@
     },
     "M3": {
       "name": "Split",
-      "status": "NOT_STARTED",
+      "status": "COMPLETE",
       "preflight": {
         "phase": "Q01_RESOLVED_ALLOCATOR_FROZEN_NO_SPLIT_CREATED",
         "date": "2026-09-19",
@@ -390,7 +390,167 @@
           "outputs/audit/M3_ALLOCATOR_OBJECTIVE.json",
           "outputs/audit/M2_FAILURE_CONCENTRATION.md"
         ]
-      }
+      },
+      "phase": "FINALIZED",
+      "started_utc": "2026-09-19",
+      "completed_utc": "2026-09-19",
+      "start_commit": "d0111c3a5f3f3e96a78f29653f46b28f5e4b96c6",
+      "execution": {
+        "command": "python -m gpatbench.cli split --config configs/frozen/split_v1.yaml",
+        "config_sha256": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+        "manifest": "manifests/split_v1.parquet",
+        "manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+        "rows": 20615,
+        "group_manifest": "manifests/split_groups_v1.parquet",
+        "group_manifest_sha256": "4490d7e021b106d79ee29d8739ce1d23f4b681a1cb29484c7f51d4c9c9a461d8",
+        "hash_record": "outputs/audit/split_v1.sha256",
+        "row_order": [
+          "dataset",
+          "video_id",
+          "frame_index",
+          "sample_id"
+        ],
+        "parquet_writer": {
+          "compression": "zstd",
+          "compression_level": 9,
+          "write_statistics": true,
+          "version": "2.6",
+          "use_dictionary": false,
+          "row_group_size": 65536,
+          "store_schema": true,
+          "write_page_index": false
+        },
+        "solver": "HiGHS via scipy.optimize.milp 1.18.1, threads 1, mip_rel_gap 0.0",
+        "split_seed": 20260814,
+        "population": {
+          "m2_sampled": 20640,
+          "m2_complete_in_manifest": 20615,
+          "m2_failed_excluded_but_accounted": 25
+        },
+        "counts": {
+          "casia_fasd": {
+            "TRAIN": {
+              "usable_samples": 3360,
+              "canonical_videos": 420,
+              "allocation_groups": 35,
+              "live_videos": 105,
+              "spoof_videos": 315
+            },
+            "VAL": {
+              "usable_samples": 768,
+              "canonical_videos": 96,
+              "allocation_groups": 8,
+              "live_videos": 24,
+              "spoof_videos": 72
+            },
+            "TEST": {
+              "usable_samples": 672,
+              "canonical_videos": 84,
+              "allocation_groups": 7,
+              "live_videos": 21,
+              "spoof_videos": 63
+            }
+          },
+          "msu_mfsd": {
+            "TRAIN": {
+              "usable_samples": 1600,
+              "canonical_videos": 200,
+              "allocation_groups": 25,
+              "live_videos": 50,
+              "spoof_videos": 150
+            },
+            "VAL": {
+              "usable_samples": 320,
+              "canonical_videos": 40,
+              "allocation_groups": 5,
+              "live_videos": 10,
+              "spoof_videos": 30
+            },
+            "TEST": {
+              "usable_samples": 320,
+              "canonical_videos": 40,
+              "allocation_groups": 5,
+              "live_videos": 10,
+              "spoof_videos": 30
+            }
+          },
+          "siwmv2": {
+            "TRAIN": {
+              "usable_samples": 9507,
+              "canonical_videos": 1190,
+              "allocation_groups": 1190,
+              "live_videos": 549,
+              "spoof_videos": 641
+            },
+            "VAL": {
+              "usable_samples": 2033,
+              "canonical_videos": 255,
+              "allocation_groups": 249,
+              "live_videos": 118,
+              "spoof_videos": 137
+            },
+            "TEST": {
+              "usable_samples": 2035,
+              "canonical_videos": 255,
+              "allocation_groups": 255,
+              "live_videos": 118,
+              "spoof_videos": 137
+            }
+          }
+        },
+        "objectives_recomputed_from_manifest": true,
+        "leakage": {
+          "casia_subject": 0,
+          "msu_subject": 0,
+          "siw_subject": "N/A (identity unavailable, Q-14)",
+          "siw_content_group": 0,
+          "video": 0,
+          "sample": 0,
+          "siw_fidelity": "canonical-video / content-group-disjoint (never subject-disjoint)"
+        },
+        "determinism": {
+          "status": "PASS",
+          "runs": 4,
+          "fresh_processes": 3,
+          "shuffled_input_runs": 2,
+          "byte_identical": true
+        },
+        "evidence": [
+          "outputs/audit/M3_SPLIT_REPORT.md",
+          "outputs/audit/M3_SPLIT_COUNTS.csv",
+          "outputs/audit/M3_LEAKAGE_AUDIT.md",
+          "outputs/audit/M3_LEAKAGE_AUDIT.json",
+          "outputs/audit/M3_DISTRIBUTION_BINARY.csv",
+          "outputs/audit/M3_DISTRIBUTION_ATTACK_MACRO.csv",
+          "outputs/audit/M3_DISTRIBUTION_ATTACK_RAW.csv",
+          "outputs/audit/M3_FAILED_SAMPLE_SPLIT_ACCOUNTING.csv",
+          "outputs/audit/M3_DETERMINISM_REPORT.md",
+          "outputs/audit/M3_DETERMINISM_COMPARE.json",
+          "outputs/audit/split_v1.sha256"
+        ]
+      },
+      "gate": {
+        "authoritative_split_generated": "PASS",
+        "split_row_count_correct": "PASS",
+        "all_complete_rows_assigned": "PASS",
+        "all_failed_rows_excluded_but_accounted": "PASS",
+        "casia_subject_leakage_zero": "PASS",
+        "msu_subject_leakage_zero": "PASS",
+        "siw_content_group_leakage_zero": "PASS",
+        "video_leakage_zero": "PASS",
+        "sample_leakage_zero": "PASS",
+        "siw_exact_duplicates_grouped": "PASS",
+        "all_datasets_in_all_splits": "PASS",
+        "deterministic_rerun": "PASS",
+        "byte_identical_manifest_rerun": "PASS",
+        "split_v1_sha256_frozen": "PASS",
+        "tests_pass": "PASS",
+        "frozen_inputs_unchanged": "PASS",
+        "audit_complete": "PASS"
+      },
+      "non_blocking_open": [
+        "Q-21 FaceXFormer parsing class names (deferred to M9; unrelated to M3)"
+      ]
     },
     "M4": {
       "name": "Pair manifests",

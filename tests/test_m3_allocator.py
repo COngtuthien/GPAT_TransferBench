@@ -414,11 +414,18 @@ class TestFrozenSplitConfig(unittest.TestCase):
 
 
 class TestNoRealSplitArtifact(unittest.TestCase):
-    def test_no_split_or_pair_manifest_exists(self):
-        for pat in ("split_v1.parquet", "split_v1.sha256", "pairs_*.parquet"):
-            self.assertEqual(list(ROOT.rglob(pat)), [], pat)
+    def test_split_artifacts_only_exist_once_m3_has_started(self):
+        import stage_guard
+        started = stage_guard.started("M3")
+        for pat in ("split_v1.parquet", "split_v1.sha256"):
+            found = list(ROOT.rglob(pat))
+            if started:
+                self.assertTrue(found, f"{pat} missing although M3 has started")
+            else:
+                self.assertEqual(found, [], pat)
+        self.assertEqual(list(ROOT.rglob("pairs_*.parquet")), [], "M4 pair manifest before M4")
 
-    def test_feasibility_report_persists_no_membership(self):
+    def test_preflight_feasibility_report_persists_no_membership(self):
         p = AUDIT / "M3_ALLOCATOR_FEASIBILITY.md"
         if not p.is_file():
             self.skipTest("feasibility report not generated yet")
@@ -430,10 +437,11 @@ class TestNoRealSplitArtifact(unittest.TestCase):
                 self.assertNotIn("class_counts", ds)
                 self.assertNotIn("groups_by_split", ds)
 
-    def test_m3_is_not_started(self):
+    def test_stage_order_is_respected(self):
         s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
-        self.assertEqual(s["M3"]["status"], "NOT_STARTED")
         self.assertEqual(s["M2"]["status"], "COMPLETE")
+        self.assertIn(s["M3"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        self.assertEqual(s["M4"]["status"], "NOT_STARTED")
 
 
 if __name__ == "__main__":

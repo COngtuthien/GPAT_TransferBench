@@ -215,9 +215,11 @@ class TestIntegrity(unittest.TestCase):
         for rel in ("data/processed", "cache"):
             self.assertEqual([p for p in (ROOT / rel).rglob("*") if p.is_file() and p.name != ".gitkeep"], [], rel)
 
-    def test_24_no_m3_artifacts(self):
-        names = {p.name for p in ROOT.rglob("*.parquet") if ".git" not in p.parts}
-        self.assertFalse(any("split" in n or "pair" in n for n in names))
+    def test_24_no_unstarted_milestone_artifacts(self):
+        import stage_guard
+        parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet")
+                   if not ({".git", ".venv", ".venv-audit"} & set(p.parts))}
+        self.assertEqual(stage_guard.forbidden_parquet(parquet), [])
 
     def test_25_no_weights_tracked(self):
         tracked = subprocess.run(["git", "-C", str(ROOT), "ls-files"], capture_output=True, text=True, check=True).stdout.split()

@@ -163,18 +163,11 @@ class TestNoLaterMilestoneArtifacts(unittest.TestCase):
     # Stage-aware since M1: manifests/ may hold only the M1 inventory manifests.
     M1_MANIFESTS = {"manifests/inventory.parquet", "manifests/inventory_videos.parquet",
                     "manifests/raw_file_index.parquet"}
-    # Stage-aware: M2 contributes exactly one manifest (its per-sample accounting/provenance). It is
-    # allowed only once M2 has actually started; M3/M4 manifests remain forbidden at every stage.
-    M2_MANIFESTS = {"manifests/m2_sample_accounting.parquet"}
-
-    @staticmethod
-    def _m2_started() -> bool:
-        import json
-        s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]["M2"]["status"]
-        return s in {"IN_PROGRESS", "BLOCKED", "COMPLETE"}
-
+    # Stage-aware: each milestone may contribute only its own manifests, and only once it has
+    # actually started. M4 pair manifests stay forbidden at every stage reached so far.
     def _allowed_manifests(self):
-        return self.M1_MANIFESTS | (self.M2_MANIFESTS if self._m2_started() else set())
+        import stage_guard
+        return stage_guard.allowed_manifests()
 
     def test_empty_runtime_dirs(self):
         # Under DEV-017 the M2 artifacts live on the external runtime volume, so these in-repo
@@ -189,12 +182,12 @@ class TestNoLaterMilestoneArtifacts(unittest.TestCase):
         self.assertTrue(present <= allowed, present - allowed)
         self.assertTrue(self.M1_MANIFESTS <= present, self.M1_MANIFESTS - present)
 
-    def test_no_split_or_pair_parquet(self):
+    def test_no_unaccounted_or_pair_parquet(self):
+        import stage_guard
         parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet")
                    if not ({".git", ".venv"} & set(p.parts))}
-        allowed = self._allowed_manifests()
-        self.assertTrue(parquet <= allowed, parquet - allowed)
-        self.assertFalse(any("split" in p or "pair" in p for p in parquet))
+        self.assertEqual(stage_guard.forbidden_parquet(parquet), [])
+        self.assertFalse(any("pairs_" in p for p in parquet), "M4 pair manifest before M4")
 
 
 if __name__ == "__main__":
