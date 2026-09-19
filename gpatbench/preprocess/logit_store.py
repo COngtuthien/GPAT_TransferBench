@@ -183,3 +183,65 @@ def read_block(shard_path, byte_offset: int, byte_length: int) -> np.ndarray:
     if len(blob) != byte_length:
         raise ValueError(f"short read at {byte_offset} in {shard_path}")
     return decode_block(blob)
+
+
+# ------------------------------------------------------------------ integrity audit
+def verify_shard_index(index_rows, shard_dir, *, check_blocks: bool = True) -> dict:
+    """Audit a logit-shard index: no duplicates, no orphans, every block hash verifies.
+
+    `index_rows` are the rows produced by `ShardWriter.add` (or read back from the cache index).
+    Returns a report; `ok` is True only when every check passes. This is the reusable core of the
+    M2B cache-integrity audit, so the same code path is exercised by the tests and by the run.
+    """
+    from pathlib import Path as _Path
+    shard_dir = _Path(shard_dir)
+    rows = list(index_rows)
+    seen, dup = set(), []
+    missing_shards, bad_hash, bad_shape, overlaps = [], [], [], []
+    by_shard: dict[str, list] = {}
+    for r in rows:
+        if r["sample_id"] in seen:
+            dup.append(r["sample_id"])
+        seen.add(r["sample_id"])
+        by_shard.setdefault(r["shard"], []).append(r)
+
+    for shard, rs in by_shard.items():
+        path = shard_dir / shard
+        if not path.is_file():
+            missing_shards.append(shard)
+            continue
+        spans = sorted((r["byte_offset"], r["byte_offset"] + r["byte_length"], r["sample_id"]) for r in rs)
+        for (a0, a1, sid_a), (b0, _b1, sid_b) in zip(spans, spans[1:]):
+            if b0 < a1:
+                overlaps.append((sid_a, sid_b))
+        size = path.stat().st_size
+        covered = sum(r["byte_length"] for r in rs)
+        if covered != size:
+            missing_shards.append(f"{shard}: index covers {covered} of {size} bytes (orphan bytes)")
+        if not check_blocks:
+            continue
+        for r in rs:
+            # A corrupt block must be REPORTED, never raised: this audit runs over a whole cache.
+            with open(path, "rb") as f:
+                f.seek(r["byte_offset"])
+                blob = f.read(r["byte_length"])
+            if sha256(blob) != r["block_sha256"]:
+                bad_hash.append(r["sample_id"])
+                continue
+            try:
+                arr = decode_block(blob)
+            except Exception:
+                bad_hash.append(r["sample_id"])
+                continue
+            if sha256(npy_bytes(arr)) != r["npy_sha256"]:
+                bad_hash.append(r["sample_id"])
+            if list(arr.shape) != list(r["shape"]) or arr.dtype != np.dtype(r["dtype"]):
+                bad_shape.append(r["sample_id"])
+
+    orphan_files = sorted(p.name for p in shard_dir.glob("*.bin") if p.name not in by_shard)
+    rep = {"rows": len(rows), "unique_sample_ids": len(seen), "duplicate_sample_ids": sorted(set(dup)),
+           "missing_or_short_shards": missing_shards, "orphan_shard_files": orphan_files,
+           "overlapping_blocks": overlaps, "bad_block_hashes": sorted(set(bad_hash)),
+           "bad_shape_or_dtype": sorted(set(bad_shape)), "blocks_verified": check_blocks}
+    rep["ok"] = not (dup or missing_shards or orphan_files or overlaps or bad_hash or bad_shape)
+    return rep

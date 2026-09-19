@@ -181,3 +181,41 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    - Only 3 canonical faces differ from the previous pass — exactly the SiW crops that touch a frame border.
 9. **M2 → IN_PROGRESS**, phase `M2A_COMPLETE_AWAITING_OWNER_REVIEW_FOR_M2B`. M2 is deliberately **not**
    COMPLETE and M3 remains NOT_STARTED; no full preprocessing, cache or pair work was started.
+
+## M2B — Storage preflight and hard safety gate (2026-09-19; base d92239bd, cwd `/home/cong/GPAT_TransferBench`)
+
+1. **Verified the starting state**: HEAD == `origin/main` == `d92239bd` (the owner pushed both M2A commits),
+   clean tree, M2 `IN_PROGRESS` / `M2A_COMPLETE_AWAITING_OWNER_REVIEW_FOR_M2B`, M3 `NOT_STARTED`.
+2. **Re-read the frozen contracts** (spec §0.2/§3.4/§4/App. A, `data_v1`, `dataset_protocol_policy_v1`,
+   `preprocess_v1`, the registry and every M2A report) before any execution.
+3. **Verified the frozen auxiliaries** against `models/registry.yaml`: SCRFD, FaceXFormer and AdaFace all
+   hash-match. **Verified the frozen M1 inputs** are unchanged (3 manifests + 2 frozen configs).
+   - *Why:* §3 and §25 require both before a full run is even considered.
+4. **Ran the mandatory storage preflight** (`tools/m2b_storage_preflight.py`).
+   - Basis: the exact frozen M1 counts (20,640 samples over 6 dataset/resolution classes, taken from
+     `inventory_videos.frame_sizes`) plus per-component byte measurements from the existing deterministic
+     24-sample smoke. No new scientific sample was processed for the estimate.
+   - Every per-sample size uses the **maximum** observed value, with the mean reported alongside.
+   - *Why the per-resolution split:* CASIA is a 112×112 image sequence, while 11,760 of the 13,600 SiW
+     samples are 1920×1080 video frames. One pooled average would have hidden the dominant term.
+5. **Established the CASIA frame policy from the contract, not by guessing**: CASIA's M1-selected source is
+   already a lossless canonical PNG, the frozen route consumes it directly and records
+   `frame_png_sha256 = source_file_sha256`, and the frame-extraction block describes a video decoder. So no
+   duplicated CASIA frame artifact is produced, and only 15,840 MSU/SiW frames are persisted.
+6. **Result: `BLOCKED_BY_STORAGE_CAPACITY`.** `data/processed` and `cache` resolve to the project
+   filesystem (`/dev/nvme0n1p7`, ext4, `/home`) with **36.50 GiB** free. M2B needs **63.92 GiB**
+   (51.92 persistent + 2.00 temporary peak + the owner's 10 GiB reserve) — a **27.42 GiB** shortfall.
+   - The two terms missing from the earlier ≈37.5 GB figure: **16.27 GiB** of spec-required lossless
+     MSU/SiW frame PNGs, and the fact that that figure was compared against the *external* volume.
+   - Not marginal: even mean sizes, compressed masks and zero allowances still need 48.16 GiB.
+7. **Stopped before full preprocessing**, per the owner's hard rule. The dataset was **not** partially
+   processed, `data/processed` and `cache` remain empty (test-enforced), and no cache component was
+   redirected to another filesystem. Remediation options are reported for the owner, not acted on.
+8. **Added the tests that are meaningful at this gate** (preflight arithmetic, the 10 GiB reserve, the gate
+   decision, the CASIA frame policy, bounded streaming shard construction, and the shard-index integrity
+   audit that the M2B cache audit will reuse). Tests for resume semantics and full-cache completeness are
+   deliberately not written as stubs: they belong with the M2B execution code, which is not implemented
+   while the gate blocks.
+9. **Next:** the owner chooses a storage remedy; then the preflight is re-run and must return `PASS`
+   before M2B executes. If the outputs move to another filesystem, the M2A determinism smoke must be
+   repeated on that path first.

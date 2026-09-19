@@ -1,0 +1,383 @@
+{
+  "generated_for": "M2B storage preflight (mandatory hard gate)",
+  "cwd": "/home/cong/GPAT_TransferBench",
+  "preconditions": {
+    "frozen_models": {
+      "scrfd": {
+        "path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx",
+        "expected_sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+        "actual_sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+        "size_bytes": 16923827,
+        "match": true
+      },
+      "facexformer": {
+        "path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_geometry/ckpts/model.pt",
+        "expected_sha256": "327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d",
+        "actual_sha256": "327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d",
+        "size_bytes": 1104869851,
+        "match": true
+      },
+      "adaface_ir50": {
+        "path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/adaface_original/adaface_ir50_webface4m.ckpt",
+        "expected_sha256": "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8",
+        "actual_sha256": "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8",
+        "size_bytes": 596517267,
+        "match": true
+      }
+    },
+    "model_hashes": "PASS",
+    "m1_frozen_inputs": {
+      "manifests/inventory.parquet": {
+        "recorded_sha256": "f3a882c91eb3de808ded61e92f2bf20a6b611d21669420f1e1a64e244a979173",
+        "actual_sha256": "f3a882c91eb3de808ded61e92f2bf20a6b611d21669420f1e1a64e244a979173",
+        "match": true
+      },
+      "manifests/inventory_videos.parquet": {
+        "recorded_sha256": "35c49c4d7afedad3b6905436baf4bcdf57c6c638c2113b7ef0a4bce61a5d255a",
+        "actual_sha256": "35c49c4d7afedad3b6905436baf4bcdf57c6c638c2113b7ef0a4bce61a5d255a",
+        "match": true
+      },
+      "manifests/raw_file_index.parquet": {
+        "recorded_sha256": "e3c9f5978c208ca7a0fad68704730df088b87927775e3967d355a686bf99ed8b",
+        "actual_sha256": "e3c9f5978c208ca7a0fad68704730df088b87927775e3967d355a686bf99ed8b",
+        "match": true
+      },
+      "configs/frozen/data_v1.yaml": {
+        "recorded_sha256": "7227c1bd589a29750495971899f0caf685976585d8610dbcbdeb77a730902885",
+        "actual_sha256": "7227c1bd589a29750495971899f0caf685976585d8610dbcbdeb77a730902885",
+        "match": true
+      },
+      "configs/frozen/dataset_protocol_policy_v1.yaml": {
+        "recorded_sha256": "e928eded918395f56d98f7a325fcc2650535fda895d4d3305ba0212253159eca",
+        "actual_sha256": "e928eded918395f56d98f7a325fcc2650535fda895d4d3305ba0212253159eca",
+        "match": true
+      }
+    },
+    "m1_integrity": "PASS"
+  },
+  "sample_counts_by_dataset": {
+    "casia_fasd": 4800,
+    "msu_mfsd": 2240,
+    "siwmv2": 13600
+  },
+  "sample_counts_by_resolution": {
+    "casia_fasd": {
+      "112x112": 4800
+    },
+    "msu_mfsd": {
+      "720x480": 1120,
+      "640x480": 1120
+    },
+    "siwmv2": {
+      "1920x1080": 11760,
+      "720x1080": 1352,
+      "1280x720": 488
+    }
+  },
+  "total_samples": 20640,
+  "measurement_basis": {
+    "run_tag": "runC",
+    "frame_bytes_per_pixel": {
+      "msu_mfsd|640x480": {
+        "n": 6,
+        "min": 1.2291666666666667,
+        "mean": 1.4031591796875,
+        "max": 1.51146484375
+      },
+      "msu_mfsd|720x480": {
+        "n": 2,
+        "min": 0.9080266203703704,
+        "mean": 0.9744241898148148,
+        "max": 1.0408217592592592
+      },
+      "siwmv2|1280x720": {
+        "n": 1,
+        "min": 0.8791395399305556,
+        "mean": 0.8791395399305556,
+        "max": 0.8791395399305556
+      },
+      "siwmv2|1920x1080": {
+        "n": 6,
+        "min": 0.4344521604938272,
+        "mean": 0.5432884837962962,
+        "max": 0.6338136574074074
+      },
+      "siwmv2|720x1080": {
+        "n": 1,
+        "min": 0.6611882716049383,
+        "mean": 0.6611882716049383,
+        "max": 0.6611882716049383
+      }
+    },
+    "face_png_bytes": {
+      "casia_fasd": {
+        "n": 8,
+        "min": 61569,
+        "mean": 68949.375,
+        "max": 77544
+      },
+      "msu_mfsd": {
+        "n": 8,
+        "min": 86613,
+        "mean": 96365.875,
+        "max": 103275
+      },
+      "siwmv2": {
+        "n": 8,
+        "min": 74354,
+        "mean": 82357.75,
+        "max": 87926
+      }
+    },
+    "parsing_logits_compressed_bytes": {
+      "n": 24,
+      "min": 1670406,
+      "mean": 1682901.5833333333,
+      "max": 1693141
+    },
+    "parsing_mask_npy_bytes": {
+      "n": 24,
+      "min": 50304,
+      "mean": 50304,
+      "max": 50304
+    },
+    "parsing_mask_compressed_bytes": {
+      "n": 24,
+      "min": 1164,
+      "mean": 1420.0416666666667,
+      "max": 1914
+    },
+    "geometry_other_bytes_per_sample": 1644,
+    "identity_bytes_per_sample": 2048
+  },
+  "components": {
+    "frames": {
+      "files": 15840,
+      "bytes_mean": 15198831959.999998,
+      "bytes_max": 17469301560.0,
+      "by_class": {
+        "msu_mfsd|720x480": {
+          "samples": 1120,
+          "width": 720,
+          "height": 480,
+          "pixels_per_frame": 345600,
+          "bytes_per_pixel_mean": 0.9744241898148148,
+          "bytes_per_pixel_max": 1.0408217592592592,
+          "measured_from_n_smoke_frames": 2,
+          "bytes_mean": 377172320.0,
+          "bytes_max": 402872960.0
+        },
+        "msu_mfsd|640x480": {
+          "samples": 1120,
+          "width": 640,
+          "height": 480,
+          "pixels_per_frame": 307200,
+          "bytes_per_pixel_mean": 1.4031591796875,
+          "bytes_per_pixel_max": 1.51146484375,
+          "measured_from_n_smoke_frames": 6,
+          "bytes_mean": 482776560.0,
+          "bytes_max": 520040640.0
+        },
+        "siwmv2|1920x1080": {
+          "samples": 11760,
+          "width": 1920,
+          "height": 1080,
+          "pixels_per_frame": 2073600,
+          "bytes_per_pixel_mean": 0.5432884837962962,
+          "bytes_per_pixel_max": 0.6338136574074074,
+          "measured_from_n_smoke_frames": 6,
+          "bytes_mean": 13248380879.999998,
+          "bytes_max": 15455885759.999998
+        },
+        "siwmv2|720x1080": {
+          "samples": 1352,
+          "width": 720,
+          "height": 1080,
+          "pixels_per_frame": 777600,
+          "bytes_per_pixel_mean": 0.6611882716049383,
+          "bytes_per_pixel_max": 0.6611882716049383,
+          "measured_from_n_smoke_frames": 1,
+          "bytes_mean": 695117280.0,
+          "bytes_max": 695117280.0
+        },
+        "siwmv2|1280x720": {
+          "samples": 488,
+          "width": 1280,
+          "height": 720,
+          "pixels_per_frame": 921600,
+          "bytes_per_pixel_mean": 0.8791395399305556,
+          "bytes_per_pixel_max": 0.8791395399305556,
+          "measured_from_n_smoke_frames": 1,
+          "bytes_mean": 395384920.0,
+          "bytes_max": 395384920.0
+        }
+      }
+    },
+    "faces_256": {
+      "files": 20640,
+      "bytes_mean": 1666881960.0,
+      "bytes_max": 1799340800,
+      "by_dataset": {
+        "casia_fasd": {
+          "samples": 4800,
+          "bytes_per_file_mean": 68949.375,
+          "bytes_per_file_max": 77544,
+          "bytes_mean": 330957000.0,
+          "bytes_max": 372211200
+        },
+        "msu_mfsd": {
+          "samples": 2240,
+          "bytes_per_file_mean": 96365.875,
+          "bytes_per_file_max": 103275,
+          "bytes_mean": 215859560.0,
+          "bytes_max": 231336000
+        },
+        "siwmv2": {
+          "samples": 13600,
+          "bytes_per_file_mean": 82357.75,
+          "bytes_per_file_max": 87926,
+          "bytes_mean": 1120065400.0,
+          "bytes_max": 1195793600
+        }
+      }
+    },
+    "geometry_parsing_logits": {
+      "samples": 20640,
+      "bytes_per_sample_max": 1693141,
+      "bytes_mean": 34735088680.0,
+      "bytes_max": 34946430240,
+      "uncompressed_reference_bytes": 45567836160
+    },
+    "geometry_parsing_masks": {
+      "samples": 20640,
+      "bytes_uncompressed": 1038274560,
+      "bytes_compressed": 39504960,
+      "bytes_mean": 1038274560,
+      "bytes_max": 1038274560
+    },
+    "geometry_other_tensors": {
+      "samples": 20640,
+      "bytes_per_sample": 1644,
+      "bytes_mean": 33932160,
+      "bytes_max": 33932160
+    },
+    "identity_cache": {
+      "samples": 20640,
+      "bytes_per_sample": 2048,
+      "bytes_mean": 42270720,
+      "bytes_max": 42270720
+    },
+    "metadata_indexes": {
+      "bytes_mean": 209715200,
+      "bytes_max": 209715200
+    },
+    "filesystem_overhead": {
+      "bytes_mean": 209715200,
+      "bytes_max": 209715200,
+      "note": "ext4 4096 B block rounding over ~36480 small files plus directory inodes"
+    },
+    "persistent_total": {
+      "bytes_mean": 53134710440,
+      "bytes_max": 55748980440
+    }
+  },
+  "filesystems": {
+    "project_root": {
+      "path": "/home/cong/GPAT_TransferBench",
+      "realpath": "/home/cong/GPAT_TransferBench",
+      "device": "/dev/nvme0n1p7",
+      "fstype": "ext4",
+      "mountpoint": "/home",
+      "total_bytes": 65992781824,
+      "free_bytes": 39194451968,
+      "used_bytes": 23412899840
+    },
+    "data_processed": {
+      "path": "/home/cong/GPAT_TransferBench/data/processed",
+      "realpath": "/home/cong/GPAT_TransferBench/data/processed",
+      "device": "/dev/nvme0n1p7",
+      "fstype": "ext4",
+      "mountpoint": "/home",
+      "total_bytes": 65992781824,
+      "free_bytes": 39194451968,
+      "used_bytes": 23412899840
+    },
+    "cache": {
+      "path": "/home/cong/GPAT_TransferBench/cache",
+      "realpath": "/home/cong/GPAT_TransferBench/cache",
+      "device": "/dev/nvme0n1p7",
+      "fstype": "ext4",
+      "mountpoint": "/home",
+      "total_bytes": 65992781824,
+      "free_bytes": 39194451968,
+      "used_bytes": 23412899840
+    },
+    "outputs": {
+      "path": "/home/cong/GPAT_TransferBench/outputs",
+      "realpath": "/home/cong/GPAT_TransferBench/outputs",
+      "device": "/dev/nvme0n1p7",
+      "fstype": "ext4",
+      "mountpoint": "/home",
+      "total_bytes": 65992781824,
+      "free_bytes": 39194451968,
+      "used_bytes": 23412899840
+    },
+    "external_model_cache": {
+      "path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache",
+      "realpath": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache",
+      "device": "/dev/nvme0n1p5",
+      "fstype": "ntfs3",
+      "mountpoint": "/media/cong/Data",
+      "total_bytes": 388891668480,
+      "free_bytes": 69916213248,
+      "used_bytes": 318975455232
+    }
+  },
+  "decision": {
+    "target_filesystem": {
+      "path": "/home/cong/GPAT_TransferBench/data/processed",
+      "realpath": "/home/cong/GPAT_TransferBench/data/processed",
+      "device": "/dev/nvme0n1p7",
+      "fstype": "ext4",
+      "mountpoint": "/home",
+      "total_bytes": 65992781824,
+      "free_bytes": 39194451968,
+      "used_bytes": 23412899840
+    },
+    "all_outputs_on_one_filesystem": true,
+    "free_bytes_before": 39194451968,
+    "projected_persistent_bytes": 55748980440,
+    "projected_persistent_bytes_mean_basis": 53134710440,
+    "temporary_peak_allowance_bytes": 2147483648,
+    "predicted_maximum_occupied_bytes": 57896464088,
+    "minimum_safety_reserve_bytes": 10737418240,
+    "required_bytes": 68633882328,
+    "predicted_remaining_free_bytes": -18702012120,
+    "shortfall_bytes": 29439430360,
+    "gate": "BLOCKED_BY_STORAGE_CAPACITY",
+    "remediation_options": [
+      {
+        "option": "A",
+        "summary": "Owner approves relocating data/processed and cache to the external data volume",
+        "target": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache",
+        "fstype": "ntfs3",
+        "free_bytes": 69916213248,
+        "fits": true,
+        "margin_beyond_required_bytes": 1282330920,
+        "caveats": "only ~1.19 GiB of headroom beyond the required total, so the volume must not be shared with another large job; it is ntfs3, whose permissions/mtime semantics and case handling differ from ext4 and would need a fresh determinism smoke on that path before M2B is trusted; section 8 forbids moving storage roots without owner approval"
+      },
+      {
+        "option": "B",
+        "summary": "Free at least the shortfall on the project filesystem",
+        "target": "/home/cong/GPAT_TransferBench/data/processed",
+        "needed_bytes": 29439430360,
+        "caveats": "no project-owned data of this size was identified; this is an owner/system decision"
+      },
+      {
+        "option": "C",
+        "summary": "Attach additional storage for data/processed and cache",
+        "caveats": "needs at least the required total plus normal growth headroom"
+      }
+    ]
+  }
+}

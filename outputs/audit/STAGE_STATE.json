@@ -115,10 +115,12 @@
     "M2": {
       "name": "Preprocess",
       "status": "IN_PROGRESS",
-      "phase": "M2A_COMPLETE_AWAITING_OWNER_REVIEW_FOR_M2B",
+      "phase": "M2B_BLOCKED_BY_STORAGE_CAPACITY",
       "started_utc": "2026-09-19",
       "start_commit": "bc947fdd49ebc8f44bc5dff4728c2b48847be428",
-      "blockers": [],
+      "blockers": [
+        "M2B storage capacity: data/processed and cache resolve to /dev/nvme0n1p7 (ext4, mount /home) with 36.50 GiB free; M2B needs 63.92 GiB (persistent 51.92 + temporary peak 2.00 + 10 GiB owner reserve). Shortfall 27.42 GiB. Owner decision required (see outputs/audit/M2B_STORAGE_PREFLIGHT.md section 7)."
+      ],
       "non_blocking_open": [
         "Q-21 FaceXFormer parsing class names (blocks M9 / \u00a721 region crops, not M2B)"
       ],
@@ -137,7 +139,7 @@
         ],
         "frozen_config": "configs/frozen/preprocess_v1.yaml"
       },
-      "full_m2b": "NOT STARTED; awaiting owner review of the M2A owner-decision report. M2 must not be marked COMPLETE before M2B produces and verifies the full caches.",
+      "full_m2b": "NOT STARTED. The mandatory storage preflight returned BLOCKED_BY_STORAGE_CAPACITY; per the owner's hard rule the dataset was not partially processed and no cache component was redirected to another filesystem. M2 cannot be COMPLETE.",
       "owner_decision_pass": {
         "date": "2026-09-19",
         "base_commit": "0688103a2d26191365c063739a78e48aeeba2adb",
@@ -173,6 +175,36 @@
           "M2A_ENVIRONMENT_REPORT.md",
           "M2A_PREPROCESS_CONTRACT.md"
         ]
+      },
+      "m2b": {
+        "phase": "STORAGE_PREFLIGHT_ONLY",
+        "date": "2026-09-19",
+        "base_commit": "d92239bd7d11215796674475a555ecbf2d93f663",
+        "cwd": "/home/cong/GPAT_TransferBench",
+        "gate": "BLOCKED_BY_STORAGE_CAPACITY",
+        "preflight": [
+          "outputs/audit/M2B_STORAGE_PREFLIGHT.md",
+          "outputs/audit/M2B_STORAGE_PREFLIGHT.json"
+        ],
+        "preconditions": {
+          "frozen_model_hashes": "PASS",
+          "m1_frozen_input_integrity": "PASS"
+        },
+        "inventory_samples_verified": 20640,
+        "budget_gib": {
+          "persistent_max_basis": 51.92,
+          "persistent_mean_basis": 49.49,
+          "temporary_peak_allowance": 2.0,
+          "predicted_peak": 53.92,
+          "safety_reserve": 10.0,
+          "required": 63.92,
+          "free_on_target": 36.5,
+          "shortfall": 27.42
+        },
+        "full_preprocessing_started": false,
+        "samples_processed": 0,
+        "outputs_written": "none; data/processed and cache remain empty (test-enforced)",
+        "note": "The M2A ~37.5 GB figure omitted the spec-required lossless frame PNGs for MSU/SiW (16.27 GiB) and was compared against the external volume rather than the project filesystem that data/processed and cache actually resolve to."
       }
     },
     "M3": {
