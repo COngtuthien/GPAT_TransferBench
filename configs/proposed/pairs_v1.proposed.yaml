@@ -1,0 +1,197 @@
+# pairs_v1 — PROPOSED, NOT FROZEN.
+#
+# Deliberately NOT under configs/frozen/: four execution-affecting details of the common pairing
+# rule are not fixed by the frozen specification and have no approved project decision (Q-24..Q-27).
+# Freezing them here would be a hidden scientific choice, so every contested field below carries an
+# explicit OWNER_DECISION_REQUIRED marker and the proposal alongside it.
+#
+# Analysis: outputs/audit/M4_PAIR_CONTRACT_ANALYSIS.md
+# Feasibility: outputs/audit/M4_COMMON_PAIR_FEASIBILITY.md
+# Distance sensitivity: outputs/audit/M4_PAIR_DISTANCE_ANALYSIS.md
+# Native methods: outputs/audit/M4_NATIVE_PAIR_REQUIREMENTS.md
+version: pairs_v1
+status: PROPOSED_BLOCKED
+blocking_questions: [Q-24, Q-25, Q-26, Q-27]
+non_blocking_questions: [Q-28, Q-29]   # native-method scope; do not block the common manifest
+spec_basis: "§6 common source->target pair manifest; §8.1 FAS-Aug pair_id seed; App. A build_common_pairs"
+references:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  split_config: configs/frozen/split_v1.yaml
+  dataset_policy: configs/frozen/dataset_protocol_policy_v1.yaml
+  implementation: gpatbench/pairs/common.py
+
+# ---------------------------------------------------------------- settled by the spec
+settled:
+  build_from_splits: [TRAIN, VAL]        # App. A: pairs_train = build_common_pairs(split.TRAIN),
+                                         # pairs_val = build_common_pairs(split.VAL); §19 requires
+                                         # val_pairs_v1.parquet for generator checkpoint selection
+  test_pairs: NOT_REQUIRED               # no spec requirement; none will be built
+  one_pair_per_spoof_source: true        # §6: each TRAIN spoof frame is one source row
+  n_syn_intended_equals_train_spoof_frames: true
+  source_label: SPOOF
+  target_label: LIVE
+  target_same_dataset_as_source: true
+  target_reuse_allowed: true             # no spec constraint forbids a live target serving several
+                                         # sources; no one-to-one matching is imposed without evidence
+  candidate_cap: 64
+  split_seed: 20260814
+  weights: {pose: 0.50, scale: 0.30, luma: 0.20}   # never tuned, never dataset-specific
+  selection: minimum_d_pair
+  tie_break: lexical_target_sample_id    # §6 "tie-break by lexical sample_id"; candidates differ
+                                         # only in the target, so it is the target's sample_id
+  tie_tolerance: none                    # exact comparison; no fuzzy epsilon
+  numeric_dtype: float64
+  usable_rows_only: M2_COMPLETE          # the 25 M2 FAILED rows can never be a source or a target
+  split_boundary: >-
+    A TRAIN pair references only TRAIN rows and a VAL pair only VAL rows. No pair may cross splits,
+    and TEST never appears in any pair or in any statistic.
+
+eligibility:
+  casia_fasd: {rule: DIFFERENT_SUBJECT, key: subject_id_global}
+  msu_mfsd: {rule: DIFFERENT_SUBJECT, key: subject_id_global}
+  siwmv2:
+    rule: DIFFERENT_VIDEO_AND_DIFFERENT_CONTENT_GROUP     # DEV-013
+    keys: [video_id, content_group_id]
+    claim_wording: "different-video / different-exact-content pairs (NOT proven different-person)"
+    forbidden_claims: ["different subject", "different person", "subject-disjoint pairing"]
+    pseudo_subject_ids_forbidden: true
+
+# ---------------------------------------------------------------- NOT settled
+open_questions:
+  Q-24:
+    field: candidate_selection
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "deterministically sample up to 64 candidate live frames using a hash of (source_sample_id, split_seed)"
+    gap: >-
+      The spec names the hash inputs but not the sampling algorithm: per-candidate hash ranking, a
+      seeded PRNG shuffle, or reservoir sampling all satisfy the wording and select different
+      subsets. The cap binds for EVERY source in both splits (measured), so this decides the
+      evaluated candidate set of every pair, not a corner case.
+    proposal:
+      algorithm: per_candidate_hash_rank
+      hash: sha256
+      namespace: gpatbench.pairs_v1.candidate.v1
+      preimage: "<namespace>|<source_sample_id>|<target_sample_id>|<split_seed>"
+      digest: lowercase_hex
+      ordering: "ascending digest, then ascending target_sample_id"
+      selection: "keep the first 64; if eligible <= 64 keep all"
+      permutation_invariance: "depends only on ids and the seed, never on input order"
+    also_affects: >-
+      pair_id, because spec §8.1 derives FAS-Aug operator parameters from SHA256(pair_id +
+      global_seed). pair_id numbering is bookkeeping in itself but becomes scientifically
+      load-bearing downstream, so its assignment rule must be frozen together with this.
+    pair_id_proposal:
+      format: "P%06d"
+      assignment: "index over canonical source order (dataset, then sample_id), per manifest"
+      scientific_role: "bookkeeping, but consumed by the FAS-Aug seed (spec 8.1)"
+  Q-25:
+    field: pose_distance
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "pose distance from FaceXFormer yaw/pitch/roll after z-normalization inside TRAIN"
+    gap: >-
+      Unspecified: (a) whether statistics are pooled over all TRAIN or fitted per dataset; (b)
+      population vs sample standard deviation; (c) the distance norm (L1/L2/other) - "distance"
+      alone does not name a norm; (d) zero-variance handling.
+    measured_sensitivity: >-
+      Per-dataset std differs substantially from the pooled std (e.g. SiW yaw 0.283 vs pooled 0.232,
+      CASIA yaw 0.052), and the L1/L2 median ratio is about 1.47, which rescales the 0.50-weighted
+      term relative to the other two. Population vs sample std differs by only 3.5e-05 here but can
+      still flip exact ties.
+    proposal:
+      scope: train_pooled
+      std: population
+      norm: l2
+      axes: "each of pitch/yaw/roll normalized independently"
+      zero_variance: error
+      val_pairs_use: "TRAIN-fitted statistics (VAL must not define its own representation)"
+      test_contribution: never
+  Q-26:
+    field: scale_distance
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "scale distance from log face-box area ratio"
+    gap: >-
+      CASIA-FASD has NO face box at all: the approved DEV-011 route runs no SCRFD, so 0 of 4,800
+      CASIA rows carry a detector bbox. This is a missing quantity, not a choice of convention, and
+      it affects roughly a third of all sources. Separately unspecified even where a box exists:
+      which box (detector bbox vs the 1.25x requested square), whether area is raw pixels or a
+      fraction of the frame (frames differ in resolution, so raw pixel area is not comparable across
+      videos), the log base, the guard for non-positive area, and the distance form.
+    candidate_resolutions_for_casia:
+      - "treat the whole 112x112 CASIA source frame as the face box (makes d_scale identically 0 for every CASIA pair)"
+      - "derive a face box from the frozen FaceXFormer landmarks on the canonical face"
+      - "drop the scale term for CASIA and renormalize the weights (changes the metric for CASIA)"
+      - "exclude CASIA from common pairs (changes the benchmark population)"
+    proposal: NONE_WITHOUT_OWNER_DECISION
+    note: "Every listed resolution changes the scientific metric for a large share of sources."
+  Q-27:
+    field: luminance_distance
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "luminance distance from normalized Y-channel mean"
+    gap: >-
+      The Y standard is not named (BT.601 vs BT.709 vs an OpenCV conversion), nor what "normalized"
+      means (unit interval, z-scored inside TRAIN like the pose term, or something else), nor the
+      distance form.
+    measured_sensitivity: >-
+      BT.601 and BT.709 differ by up to 0.0132 per image (mean 0.0054) on a quantity whose whole
+      observed range is about 0.55; OpenCV BGR2YCrCb matches BT.601 to ~1e-4.
+    proposal:
+      image: frozen canonical 256x256 RGB face (never a generated image)
+      standard: bt601
+      range: unit_interval
+      distance: abs_difference
+      normalized_meaning: "pixel values scaled to [0,1]; NOT z-scored"
+
+# ---------------------------------------------------------------- statistics artifact
+train_statistics_artifact:
+  path: manifests/pair_train_stats_v1.json
+  status: NOT_CREATED_IN_THIS_PASS
+  must_record: [split_manifest_sha256, pair_config_sha256, dataset_scope, pose_mean, pose_std,
+                std_convention, formulas, dtype, sha256]
+  must_not_record: "any TEST-derived quantity"
+
+# ---------------------------------------------------------------- manifest design
+manifests:
+  train: manifests/pairs_train_v1.parquet
+  val: manifests/val_pairs_v1.parquet
+  expected_rows: {train: 8838, val: 1905}      # = spoof sources per split (measured)
+  spec_columns: [pair_id, target_live_id, source_spoof_id, dataset, target_subject, source_subject,
+                 attack_macro, d_pose, d_scale, d_luma, seed]
+  audit_columns: [split, d_pair, source_video_id, target_video_id, source_content_group_id,
+                  target_content_group_id, candidate_count_eligible, candidate_count_evaluated,
+                  pairing_policy, source_sha256, target_sha256, split_manifest_sha256,
+                  pair_config_sha256]
+  siw_subject_columns: "target_subject and source_subject stay null for SiW; identity is never fabricated"
+  row_order: [split, dataset, source_spoof_id]
+  parquet_writer: {compression: zstd, compression_level: 9, write_statistics: true, version: "2.6",
+                   use_dictionary: false, row_group_size: 65536, store_schema: true,
+                   write_page_index: false}    # same contract proven byte-deterministic in M3
+
+# ---------------------------------------------------------------- native methods
+native_manifests:
+  dsdg_identity_pairs_v1:
+    method: [DSDG, DSDG-BIN]
+    scope: TRAIN
+    row_unit: one live/spoof identity pair
+    supported: [casia_fasd, msu_mfsd]
+    unsupported: [siwmv2]
+    question: Q-28
+  difffas_recon_pairs_v1:
+    method: [DiffFAS, DIFFFAS-BIN]
+    scope: TRAIN
+    row_unit: same-identity live/spoof reconstruction pair plus a same-style guide spoof
+    style_id: "dataset::attack_raw"
+    supported: [casia_fasd, msu_mfsd]
+    unsupported: [siwmv2]
+    question: Q-29
+  binary_variants_do_not_rescue_siw: >-
+    DIFFFAS-BIN collapses style_id but preserves the reconstruction-pair structure, and DSDG-BIN
+    collapses the spoof-type target only. The missing information for SiW is identity, not style.
+  dev013_scope: >-
+    DEV-013 resolves the COMMON source->target pairing rule for SiW. It must NOT be extended to a
+    same-identity native training requirement; that would be a distinct and much stronger claim.
+
+determinism_contract:
+  invariant_to: [input_row_order, filesystem_order, python_hash_randomization, worker_count, process_count]
+  tested: "tests/test_m4_pair_preflight.py"
+membership_in_this_file: false

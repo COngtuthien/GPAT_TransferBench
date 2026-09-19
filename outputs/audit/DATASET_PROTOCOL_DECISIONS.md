@@ -37,3 +37,14 @@
 Dataset subject labels (used for split and pairing guarantees) are **not** the same thing as GPAT
 identity preservation (AdaFace cosine target vs synthetic). The latter needs no dataset label and is
 unaffected by DEV-012/013.
+
+## M4 pre-flight additions (2026-09-19)
+
+| ID | Topic | Basis | Status | Decision | Effective | Needed by | Next step |
+|---|---|---|---|---|---|---|---|
+| Q-24 | 64-candidate sampler + pair_id rule | spec §6 names hash inputs only; §8.1 consumes pair_id | OPEN | none | **OWNER_DECISION_REQUIRED** | M4 execution | owner picks the sampling algorithm |
+| Q-25 | Pose z-normalization scope/std/norm | spec §6 wording | OPEN | none | **OWNER_DECISION_REQUIRED** | M4 execution | owner picks scope, std convention and norm |
+| Q-26 | Scale face-box definition; CASIA has no bbox | spec §6 + DEV-011 | OPEN | none | **OWNER_DECISION_REQUIRED** | M4 execution | owner resolves the missing CASIA quantity |
+| Q-27 | Luminance Y standard and normalization | spec §6 wording | OPEN | none | **OWNER_DECISION_REQUIRED** | M4 execution | owner picks BT.601 vs BT.709 and the range |
+| Q-28 | DSDG native identity pairing for SiW | spec §8.6 | OPEN | none | OWNER_DECISION_REQUIRED (non-blocking) | M6 | owner sets scope; coverage already measured (0) |
+| Q-29 | DiffFAS native same-ID pairs for SiW | spec §8.7 | OPEN | none | OWNER_DECISION_REQUIRED (non-blocking) | M6 | owner sets scope; spec forbids fabricating identity |

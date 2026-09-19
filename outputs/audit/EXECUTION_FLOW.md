@@ -339,3 +339,41 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
 8. **Froze `outputs/audit/split_v1.sha256`** with the manifest hash, the schema signature, the writer
    settings, the split-config hash and the hashes of every frozen input the split was derived from.
 9. **M3 → COMPLETE / FINALIZED.** M4 remains NOT_STARTED; no pairs were built and nothing was trained.
+
+## M4 — Pre-flight: pair contract analysis (2026-09-19; base b0c59e1e, no pairs written)
+
+1. **Verified the starting state** (HEAD == `origin/main` == `b0c59e1e`, clean, M3 COMPLETE/FINALIZED,
+   split manifest sha `fb9aeb36…`, 20,615 rows, 278 tests PASS) and re-read the spec's §6 pairing
+   contract, §8.6 DSDG and §8.7 DiffFAS method cards rather than working from memory.
+2. **Separated what the spec settles from what it does not.** Settled: build from TRAIN *and* VAL
+   (App. A `pairs_val = build_common_pairs(split.VAL)`; §19 needs `val_pairs_v1.parquet`), no TEST
+   pairs, one pair per spoof source, the 64 cap, the 0.50/0.30/0.20 weights, minimum `d_pair`, the
+   lexical tie-break and the seed. Target reuse is left unconstrained, so no one-to-one matching was
+   invented.
+3. **Measured feasibility before designing anything.** TRAIN has 8,838 spoof sources and VAL 1,905;
+   **zero** sources in any dataset or split lack an eligible target, so nothing would have to be
+   skipped. Every source has at least 64 eligible targets (tightest: MSU VAL at exactly 64), which
+   turns the candidate sampler from a corner case into something that decides the evaluated set of
+   *every* pair.
+4. **Found that three of the four minimised quantities are undefined**, and quantified each rather
+   than asserting it mattered: the pose norm changes the 0.50-weighted term by ≈1.47× (L1/L2 median
+   ratio) and per-dataset std differs sharply from pooled; BT.601 vs BT.709 luminance differs by up
+   to 0.0132 per image on a ≈0.55 range.
+5. **Hit a harder problem in the scale term.** "log face-box area ratio" presumes a face box, but
+   CASIA has **none** — the approved DEV-011 route runs no SCRFD, so 0 of 4,800 CASIA rows carry a
+   bbox while CASIA supplies 2,520 of the 8,838 TRAIN sources. That is a missing quantity, not a
+   choice between conventions, and every candidate resolution changes the metric for a large share of
+   the benchmark.
+   - *Why it was not patched:* treating the 112×112 frame as the box would silently make `d_scale`
+     identically zero for every CASIA pair, which is a scientific change disguised as a default.
+6. **Built the machinery so that a silent default is impossible.** `gpatbench/pairs/common.py` takes
+   every contested convention as a *required* policy field with no default, so no pair can be
+   computed without stating which convention produced it, and `PairMetricPolicy.frozen` stays False.
+7. **Audited the native methods.** CASIA and MSU have full TRAIN identity coverage (35/35 and 25/25
+   identities with both live and spoof); SiW has zero, so DSDG identity pairing and DiffFAS
+   same-identity reconstruction are not instantiable there. Binary variants do not rescue it — the
+   missing information is identity, not style — and DEV-013 was explicitly not stretched from common
+   pairing to a same-identity requirement.
+8. **Recorded six questions** (Q-24..Q-27 blocking, Q-28/Q-29 native scope) with proposals, put the
+   contract in `configs/proposed/pairs_v1.proposed.yaml` rather than `configs/frozen/`, and **created
+   no pair manifest**. M4 remains NOT_STARTED.

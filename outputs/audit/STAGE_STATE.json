@@ -554,7 +554,75 @@
     },
     "M4": {
       "name": "Pair manifests",
-      "status": "NOT_STARTED"
+      "status": "NOT_STARTED",
+      "preflight": {
+        "phase": "PAIR_CONTRACT_ANALYSED_OWNER_DECISION_REQUIRED",
+        "date": "2026-09-19",
+        "base_commit": "b0c59e1e21d1dc45981caf506573b4c096b0ce3c",
+        "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+        "proposed_config": "configs/proposed/pairs_v1.proposed.yaml",
+        "proposed_config_sha256": "dd0547d3535f1b8539115dfaae7d1f4bfbf1d22be8a8214d4bba803bc642bc76",
+        "frozen_config_created": false,
+        "pair_manifests_created": false,
+        "membership_persisted": false,
+        "blocking_questions": [
+          "Q-24",
+          "Q-25",
+          "Q-26",
+          "Q-27"
+        ],
+        "non_blocking_questions": [
+          "Q-28",
+          "Q-29"
+        ],
+        "settled_by_spec": {
+          "build_from_splits": [
+            "TRAIN",
+            "VAL"
+          ],
+          "test_pairs": "NOT_REQUIRED",
+          "candidate_cap": 64,
+          "weights": {
+            "pose": 0.5,
+            "scale": 0.3,
+            "luma": 0.2
+          },
+          "split_seed": 20260814,
+          "one_pair_per_spoof_source": true,
+          "usable_rows_only": "M2_COMPLETE",
+          "target_reuse_allowed": true
+        },
+        "feasibility": {
+          "train_spoof_sources": 8838,
+          "val_spoof_sources": 1905,
+          "zero_candidate_sources": 0,
+          "candidate_cap_binds_for_every_source": true,
+          "n_syn_intended": 8838
+        },
+        "native": {
+          "dsdg": {
+            "casia_fasd": "SUPPORTED",
+            "msu_mfsd": "SUPPORTED",
+            "siwmv2": "NOT_INSTANTIABLE (no subject identity)"
+          },
+          "difffas": {
+            "casia_fasd": "SUPPORTED",
+            "msu_mfsd": "SUPPORTED",
+            "siwmv2": "NOT_INSTANTIABLE (no subject identity)"
+          },
+          "dev013_not_extended_to_native_same_identity": true
+        },
+        "key_blocker": "CASIA carries no face box at all (DEV-011 route, 0/4800 rows), so the spec's 'log face-box area ratio' is undefined for 2,520 of the 8,838 TRAIN sources",
+        "evidence": [
+          "outputs/audit/M4_PAIR_CONTRACT_ANALYSIS.md",
+          "outputs/audit/M4_COMMON_PAIR_FEASIBILITY.md",
+          "outputs/audit/M4_NATIVE_PAIR_REQUIREMENTS.md",
+          "outputs/audit/M4_PAIR_DISTANCE_ANALYSIS.md",
+          "outputs/audit/M4_PAIR_PREFLIGHT.json",
+          "configs/proposed/pairs_v1.proposed.yaml"
+        ],
+        "note": "M4 begins only when the authoritative pair manifests are created; analysis and a proposed config do not start it."
+      }
     },
     "M5": {
       "name": "Probe",

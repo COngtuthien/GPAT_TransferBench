@@ -1,0 +1,272 @@
+{
+  "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+  "split_rows": 20615,
+  "counts": {
+    "TEST|casia_fasd|live": 168,
+    "TEST|casia_fasd|spoof": 504,
+    "TEST|msu_mfsd|live": 80,
+    "TEST|msu_mfsd|spoof": 240,
+    "TEST|siwmv2|live": 943,
+    "TEST|siwmv2|spoof": 1092,
+    "TRAIN|casia_fasd|live": 840,
+    "TRAIN|casia_fasd|spoof": 2520,
+    "TRAIN|msu_mfsd|live": 400,
+    "TRAIN|msu_mfsd|spoof": 1200,
+    "TRAIN|siwmv2|live": 4389,
+    "TRAIN|siwmv2|spoof": 5118,
+    "VAL|casia_fasd|live": 192,
+    "VAL|casia_fasd|spoof": 576,
+    "VAL|msu_mfsd|live": 80,
+    "VAL|msu_mfsd|spoof": 240,
+    "VAL|siwmv2|live": 944,
+    "VAL|siwmv2|spoof": 1089
+  },
+  "feasibility": {
+    "TRAIN": {
+      "casia_fasd": {
+        "spoof_sources": 2520,
+        "live_targets": 840,
+        "eligible_min": 816,
+        "eligible_median": 816,
+        "eligible_max": 816,
+        "sources_with_zero_candidates": 0,
+        "sources_with_1_to_63": 0,
+        "sources_with_64_or_more": 2520,
+        "rule": "different subject_id_global"
+      },
+      "msu_mfsd": {
+        "spoof_sources": 1200,
+        "live_targets": 400,
+        "eligible_min": 384,
+        "eligible_median": 384,
+        "eligible_max": 384,
+        "sources_with_zero_candidates": 0,
+        "sources_with_1_to_63": 0,
+        "sources_with_64_or_more": 1200,
+        "rule": "different subject_id_global"
+      },
+      "siwmv2": {
+        "spoof_sources": 5118,
+        "live_targets": 4389,
+        "eligible_min": 4389,
+        "eligible_median": 4389,
+        "eligible_max": 4389,
+        "sources_with_zero_candidates": 0,
+        "sources_with_1_to_63": 0,
+        "sources_with_64_or_more": 5118,
+        "rule": "different video AND different exact-content group (DEV-013)"
+      },
+      "_total": {
+        "spoof_sources": 8838,
+        "sources_with_zero_candidates": 0
+      }
+    },
+    "VAL": {
+      "casia_fasd": {
+        "spoof_sources": 576,
+        "live_targets": 192,
+        "eligible_min": 168,
+        "eligible_median": 168,
+        "eligible_max": 168,
+        "sources_with_zero_candidates": 0,
+        "sources_with_1_to_63": 0,
+        "sources_with_64_or_more": 576,
+        "rule": "different subject_id_global"
+      },
+      "msu_mfsd": {
+        "spoof_sources": 240,
+        "live_targets": 80,
+        "eligible_min": 64,
+        "eligible_median": 64,
+        "eligible_max": 64,
+        "sources_with_zero_candidates": 0,
+        "sources_with_1_to_63": 0,
+        "sources_with_64_or_more": 240,
+        "rule": "different subject_id_global"
+      },
+      "siwmv2": {
+        "spoof_sources": 1089,
+        "live_targets": 944,
+        "eligible_min": 944,
+        "eligible_median": 944,
+        "eligible_max": 944,
+        "sources_with_zero_candidates": 0,
+        "sources_with_1_to_63": 0,
+        "sources_with_64_or_more": 1089,
+        "rule": "different video AND different exact-content group (DEV-013)"
+      },
+      "_total": {
+        "spoof_sources": 1905,
+        "sources_with_zero_candidates": 0
+      }
+    },
+    "blocker_zero_candidate_sources": 0
+  },
+  "native": {
+    "casia_fasd": {
+      "subject_ids_available": true,
+      "rows": 3360,
+      "rows_with_subject_id": 3360,
+      "train_identities": 35,
+      "identities_with_live_and_spoof": 35,
+      "coverage_pct": 100.0,
+      "dsdg_native_identity_pairing": "SUPPORTED",
+      "difffas_native_same_id_reconstruction": "SUPPORTED",
+      "style_ids": [
+        "casia_fasd::3",
+        "casia_fasd::4",
+        "casia_fasd::5",
+        "casia_fasd::6",
+        "casia_fasd::7",
+        "casia_fasd::8",
+        "casia_fasd::HR_2",
+        "casia_fasd::HR_3",
+        "casia_fasd::HR_4"
+      ],
+      "style_ids_with_more_than_one_subject": 9,
+      "difffas_guide_different_subject": "ALWAYS_POSSIBLE"
+    },
+    "msu_mfsd": {
+      "subject_ids_available": true,
+      "rows": 1600,
+      "rows_with_subject_id": 1600,
+      "train_identities": 25,
+      "identities_with_live_and_spoof": 25,
+      "coverage_pct": 100.0,
+      "dsdg_native_identity_pairing": "SUPPORTED",
+      "difffas_native_same_id_reconstruction": "SUPPORTED",
+      "style_ids": [
+        "msu_mfsd::ipad_video",
+        "msu_mfsd::iphone_video",
+        "msu_mfsd::printed_photo"
+      ],
+      "style_ids_with_more_than_one_subject": 3,
+      "difffas_guide_different_subject": "ALWAYS_POSSIBLE"
+    },
+    "siwmv2": {
+      "subject_ids_available": false,
+      "rows": 9507,
+      "rows_with_subject_id": 0,
+      "identities_with_live_and_spoof": 0,
+      "dsdg_native_identity_pairing": "NOT_INSTANTIABLE (no subject identity, Q-14)",
+      "difffas_native_same_id_reconstruction": "NOT_INSTANTIABLE (no subject identity, Q-14)",
+      "style_ids": [
+        "siwmv2::Makeup_Cosmetic",
+        "siwmv2::Makeup_Impersonation",
+        "siwmv2::Makeup_Obfuscation",
+        "siwmv2::Mannequin",
+        "siwmv2::Mask_HalfMask",
+        "siwmv2::Mask_PaperMask",
+        "siwmv2::Mask_TransparentMask",
+        "siwmv2::Paper",
+        "siwmv2::Partial_Eye",
+        "siwmv2::Partial_FunnyeyeGlasses",
+        "siwmv2::Partial_Mouth",
+        "siwmv2::Partial_PaperGlasses",
+        "siwmv2::Replay",
+        "siwmv2::Silicone"
+      ],
+      "difffas_guide_different_subject": "NOT_DECIDABLE (no subject identity)"
+    }
+  },
+  "distances": {
+    "diagnostic_sample_rows": 400,
+    "salt": "gpatbench.m4_preflight.diag.v1|",
+    "pose": {
+      "train_rows_fitted": 14467,
+      "mean_rad": [
+        -0.023073,
+        0.008509,
+        -0.016004
+      ],
+      "std_population": [
+        0.151126,
+        0.231691,
+        0.083488
+      ],
+      "std_sample": [
+        0.151131,
+        0.231699,
+        0.083491
+      ],
+      "std_relative_difference": [
+        3.5e-05,
+        3.5e-05,
+        3.5e-05
+      ],
+      "zero_variance_axes": [],
+      "per_dataset_std": {
+        "casia_fasd": [
+          0.077981,
+          0.051887,
+          0.05637
+        ],
+        "msu_mfsd": [
+          0.1021,
+          0.057406,
+          0.043483
+        ],
+        "siwmv2": [
+          0.175045,
+          0.283055,
+          0.095737
+        ]
+      },
+      "d_pose_l2": {
+        "min": 0.31246293347528614,
+        "median": 1.450522679389544,
+        "max": 20.826630780353714
+      },
+      "d_pose_l1": {
+        "min": 0.48158643239816373,
+        "median": 2.126799159837314,
+        "max": 33.134864290648565
+      },
+      "l1_over_l2_median_ratio": 1.4662
+    },
+    "scale": {
+      "rows_with_face_box": {
+        "casia_fasd": 0,
+        "msu_mfsd": 46,
+        "siwmv2": 260
+      },
+      "rows_without_face_box": {
+        "casia_fasd": 94,
+        "msu_mfsd": 0,
+        "siwmv2": 0
+      },
+      "casia_has_no_face_box": true,
+      "note": "CASIA ran no SCRFD (DEV-011), so no detector box exists for any CASIA row; every scale_box variant needing one is undefined there.",
+      "d_scale_abs_log_bbox": {
+        "n": 22,
+        "min": 0.010863185172613787,
+        "median": 0.2702503606334272,
+        "max": 2.1264623552979782
+      },
+      "d_scale_abs_log_frame_fraction": {
+        "n": 22,
+        "min": 0.010863185172613787,
+        "median": 0.5731384728568626,
+        "max": 2.1899269946740794
+      },
+      "variants_differ": true
+    },
+    "luma": {
+      "bt601": {
+        "min": 0.19517615356445311,
+        "mean": 0.41030766172446453,
+        "max": 0.7442042107077205
+      },
+      "bt709": {
+        "min": 0.19211123125861668,
+        "mean": 0.4049693616768332,
+        "max": 0.7410956654387829
+      },
+      "max_abs_difference_per_image": 0.01324965783212706,
+      "mean_abs_difference_per_image": 0.005359357136266366,
+      "note": "OpenCV BGR2YCrCb matches BT.601 to ~1e-4; the BT.601/BT.709 gap is far larger."
+    }
+  },
+  "membership_persisted": false,
+  "pair_manifest_created": false
+}

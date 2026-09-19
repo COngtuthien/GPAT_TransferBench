@@ -456,3 +456,25 @@ lives in this file, and because it must be attributable.
 - **Evidence:** `M3_ALLOCATOR_DESIGN.md`, `M3_ALLOCATOR_FEASIBILITY.md`, `M3_ALLOCATOR_OBJECTIVE.json`,
   `M2_FAILURE_CONCENTRATION.md`, `tests/test_m3_allocator.py`.
 - **Final status: RESOLVED_BY_OWNER_LEXICOGRAPHIC_ALLOCATOR.**
+
+---
+
+## M4 pre-flight — new open questions (2026-09-19)
+
+None of these is a deviation: each is a gap the frozen specification leaves open, surfaced rather
+than filled silently. Q-24..Q-27 **block** the common pair manifest; Q-28/Q-29 concern native-method
+scope and do not block it. Evidence: `M4_PAIR_CONTRACT_ANALYSIS.md`,
+`M4_COMMON_PAIR_FEASIBILITY.md`, `M4_PAIR_DISTANCE_ANALYSIS.md`, `M4_NATIVE_PAIR_REQUIREMENTS.md`.
+Proposal (not frozen): `configs/proposed/pairs_v1.proposed.yaml`.
+
+| ID | Milestone | Spec § | Question | Blocks M4 |
+|---|---|---|---|---|
+| Q-24 | M4 | 6, 8.1 | The 64-candidate sampler is described only as "a hash of (source_sample_id, split_seed)". Per-candidate hash ranking, a seeded PRNG shuffle and reservoir sampling all satisfy that wording and pick different subsets. The cap binds for **every** source in both splits, so this decides the evaluated candidate set of every pair. `pair_id` assignment must be frozen with it, because §8.1 derives FAS-Aug operator parameters from `SHA256(pair_id + global_seed)`. | **YES** |
+| Q-25 | M4 | 6 | "z-normalization inside TRAIN" does not fix: pooled vs per-dataset statistics, population vs sample std, the distance norm (L1/L2/other — "distance" names no norm), or zero-variance handling. Measured: per-dataset std differs sharply from pooled, and the L1/L2 median ratio is ≈1.47, which rescales the 0.50-weighted term. | **YES** |
+| Q-26 | M4 | 6, 4 | "log face-box area ratio" presumes a face box, but **CASIA has none** — the approved DEV-011 route runs no SCRFD, so 0/4,800 CASIA rows carry a bbox, and CASIA supplies 2,520 of the 8,838 TRAIN sources. This is a missing quantity, not a choice of convention. Also open where a box exists: which box, raw pixel area vs fraction of the frame (frames differ in resolution), log base, non-positive-area guard, distance form. | **YES** |
+| Q-27 | M4 | 6 | "normalized Y-channel mean" names neither the Y standard (BT.601 / BT.709 / OpenCV) nor what "normalized" means nor the distance form. Measured BT.601 vs BT.709 gap up to 0.0132 per image on a range of ≈0.55. | **YES** |
+| Q-28 | M4/M6 | 8.6 | DSDG native identity pairing "uses only TRAIN identities that possess both live and spoof samples"; SiW has **zero** such identities (no trustworthy subject id, Q-14), yet DSDG must still "generate exactly N_syn samples" where N_syn counts SiW sources. Whether DSDG-native trains on CASIA+MSU identities while generating the full pooled budget, or is marked blocked for SiW, is not stated. | no |
+| Q-29 | M4/M6 | 8.7 | DiffFAS native training needs same-dataset **same-identity** live/spoof reconstruction pairs; SiW can supply none. The spec already forbids the wrong answer ("do not synthesize identity labels or pair different identities … merely to increase count") and asks for coverage to be reported, so what remains is scope: run DiffFAS-native on CASIA+MSU only, or treat it as blocked. DEV-013 resolves **common** pairing for SiW and must not be extended to a same-identity requirement. | no |
+
+**Nothing here was decided.** `configs/frozen/pairs_v1.yaml` does not exist, no pair manifest was
+written, and M4 remains NOT_STARTED.
