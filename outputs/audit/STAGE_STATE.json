@@ -114,15 +114,13 @@
     },
     "M2": {
       "name": "Preprocess",
-      "status": "IN_PROGRESS",
-      "phase": "M2B_BLOCKED_BY_STORAGE_CAPACITY",
+      "status": "COMPLETE",
+      "phase": "FINALIZED",
       "started_utc": "2026-09-19",
       "start_commit": "bc947fdd49ebc8f44bc5dff4728c2b48847be428",
-      "blockers": [
-        "M2B storage capacity: data/processed and cache resolve to /dev/nvme0n1p7 (ext4, mount /home) with 36.50 GiB free; M2B needs 63.92 GiB (persistent 51.92 + temporary peak 2.00 + 10 GiB owner reserve). Shortfall 27.42 GiB. Owner decision required (see outputs/audit/M2B_STORAGE_PREFLIGHT.md section 7)."
-      ],
+      "blockers": [],
       "non_blocking_open": [
-        "Q-21 FaceXFormer parsing class names (blocks M9 / \u00a721 region crops, not M2B)"
+        "Q-21 FaceXFormer parsing class names (deferred to M9; raw class-channel order and full logits are preserved)"
       ],
       "m2a": {
         "smoke": "24/24 OK (DIAGNOSTIC_ONLY, frozen contract; runC/runD)",
@@ -139,7 +137,7 @@
         ],
         "frozen_config": "configs/frozen/preprocess_v1.yaml"
       },
-      "full_m2b": "NOT STARTED. The mandatory storage preflight returned BLOCKED_BY_STORAGE_CAPACITY; per the owner's hard rule the dataset was not partially processed and no cache component was redirected to another filesystem. M2 cannot be COMPLETE.",
+      "full_m2b": "COMPLETE: 20,640/20,640 accounted (20,615 COMPLETE, 25 SCRFD_NO_FACE); caches finalized and verified.",
       "owner_decision_pass": {
         "date": "2026-09-19",
         "base_commit": "0688103a2d26191365c063739a78e48aeeba2adb",
@@ -177,34 +175,134 @@
         ]
       },
       "m2b": {
-        "phase": "STORAGE_PREFLIGHT_ONLY",
+        "phase": "FULL_PREPROCESSING_COMPLETE",
         "date": "2026-09-19",
-        "base_commit": "d92239bd7d11215796674475a555ecbf2d93f663",
+        "base_commit": "1fdb73c80361c12400650151ea222a11a115a331",
         "cwd": "/home/cong/GPAT_TransferBench",
-        "gate": "BLOCKED_BY_STORAGE_CAPACITY",
-        "preflight": [
-          "outputs/audit/M2B_STORAGE_PREFLIGHT.md",
-          "outputs/audit/M2B_STORAGE_PREFLIGHT.json"
-        ],
-        "preconditions": {
-          "frozen_model_hashes": "PASS",
-          "m1_frozen_input_integrity": "PASS"
+        "storage_decision": {
+          "deviation": "DEV-017",
+          "old_target": "/dev/nvme0n1p7 (ext4, /home) -> BLOCKED_BY_STORAGE_CAPACITY (36.50 GiB free, 63.92 GiB required)",
+          "new_target": "/dev/nvme0n1p5 (ntfs3, /media/cong/Data) -> PASS",
+          "runtime_root": "/media/cong/Data/GPAT_TransferBench_runtime",
+          "execution_config": "configs/execution/m2b_laptop_external_storage.yaml",
+          "symlinks_used": false,
+          "trail": "outputs/audit/M2B_STORAGE_DECISION_TRAIL.md"
         },
-        "inventory_samples_verified": 20640,
-        "budget_gib": {
-          "persistent_max_basis": 51.92,
-          "persistent_mean_basis": 49.49,
-          "temporary_peak_allowance": 2.0,
-          "predicted_peak": 53.92,
-          "safety_reserve": 10.0,
-          "required": 63.92,
-          "free_on_target": 36.5,
-          "shortfall": 27.42
+        "preflight_external": {
+          "gate": "PASS",
+          "required_gib": 63.92,
+          "free_before_gib": 65.11,
+          "safety_reserve_gib": 10.0
         },
-        "full_preprocessing_started": false,
-        "samples_processed": 0,
-        "outputs_written": "none; data/processed and cache remain empty (test-enforced)",
-        "note": "The M2A ~37.5 GB figure omitted the spec-required lossless frame PNGs for MSU/SiW (16.27 GiB) and was compared against the external volume rather than the project filesystem that data/processed and cache actually resolve to."
+        "external_smoke_equivalence": {
+          "status": "PASS",
+          "files": 210,
+          "byte_identical": 210,
+          "manifest_sha256": "138f5929f81313069e4a4cb74c4ed54e4957432fe9ebc93cc52fdd14100dbce7",
+          "manifest_reselected": false
+        },
+        "inventory": {
+          "expected": 20640,
+          "complete": 20615,
+          "failed": 25,
+          "missing_state": 0,
+          "by_dataset": {
+            "casia_fasd": {
+              "COMPLETE": 4800
+            },
+            "msu_mfsd": {
+              "COMPLETE": 2240
+            },
+            "siwmv2": {
+              "COMPLETE": 13575,
+              "FAILED": 25
+            }
+          }
+        },
+        "failure_classes": {
+          "SCRFD_NO_FACE": 25
+        },
+        "scrfd": {
+          "msu_mfsd": {
+            "applicable": 2240,
+            "success": 2240,
+            "no_face": 0,
+            "other_error": 0,
+            "success_pct": 100.0
+          },
+          "siwmv2": {
+            "applicable": 13600,
+            "success": 13575,
+            "no_face": 25,
+            "other_error": 0,
+            "success_pct": 99.8162
+          },
+          "casia_fasd": "N/A (DEV-011; excluded from every denominator)"
+        },
+        "artifacts": {
+          "processed_frames_root": {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/data/processed/frames",
+            "bytes": 16221361490,
+            "gib": 15.11
+          },
+          "faces_256_root": {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/data/processed/faces_256",
+            "bytes": 1719918932,
+            "gib": 1.6
+          },
+          "geometry_cache_root": {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/cache/geometry",
+            "bytes": 35845944462,
+            "gib": 33.38
+          },
+          "identity_cache_root": {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/cache/identity",
+            "bytes": 53991900,
+            "gib": 0.05
+          }
+        },
+        "artifacts_total_gib": 50.14,
+        "external_free_after_gib": 14.65,
+        "safety_reserve_maintained": true,
+        "cache_integrity": "PASS",
+        "deterministic_validation": {
+          "status": "PASS",
+          "samples": 72,
+          "max_abs_diff": {
+            "parsing_logits": 0.0,
+            "embedding": 0.0
+          },
+          "hand_picked": false
+        },
+        "workers": 2,
+        "wall_clock_s": 8656,
+        "evidence": [
+          "M2B_STORAGE_PREFLIGHT_EXTERNAL.md",
+          "M2B_STORAGE_DECISION_TRAIL.md",
+          "M2B_EXTERNAL_SMOKE_COMPARE.json",
+          "M2_CACHE_INTEGRITY.md",
+          "M2_SCRFD_SUCCESS_REPORT.md",
+          "M2_PADDING_AUDIT.md",
+          "M2_DETERMINISTIC_VALIDATION.json",
+          "M2_CACHE_SHARD_INDEX.csv",
+          "manifests/m2_sample_accounting.parquet"
+        ]
+      },
+      "completed_utc": "2026-09-19",
+      "gate": {
+        "storage_preflight_external": "PASS",
+        "external_storage_smoke": "PASS",
+        "scientific_equivalence_with_prior_smoke": "PASS",
+        "full_inventory_accounted": "PASS",
+        "faces_256_finalized": "PASS",
+        "geometry_cache_finalized": "PASS",
+        "identity_cache_finalized": "PASS",
+        "processed_frames_finalized": "PASS",
+        "scrfd_report": "PASS",
+        "cache_integrity": "PASS",
+        "deterministic_final_validation": "PASS",
+        "m1_frozen_inputs_unchanged": "PASS",
+        "provenance_recorded": "PASS"
       }
     },
     "M3": {

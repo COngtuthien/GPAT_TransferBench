@@ -219,3 +219,47 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
 9. **Next:** the owner chooses a storage remedy; then the preflight is re-run and must return `PASS`
    before M2B executes. If the outputs move to another filesystem, the M2A determinism smoke must be
    repeated on that path first.
+
+## M2B — Storage relocation and full preprocessing (2026-09-19; base 1fdb73c8, cwd `/home/cong/GPAT_TransferBench`)
+
+1. **Verified the starting state**: HEAD == `origin/main` == `1fdb73c8`, clean tree, M2 `IN_PROGRESS` /
+   `M2B_BLOCKED_BY_STORAGE_CAPACITY`, M3 `NOT_STARTED`.
+2. **Audited the external volume before writing anything** (`findmnt`, `df -B1`, `stat -f`) and proved it
+   supports `fsync`, atomic `rename`, directory `fsync` and case-sensitive names. `/dev/nvme0n1p5`, ntfs3,
+   65.11 GiB free, writable by the current user.
+   - *Why:* the scientific outputs were about to move to a different filesystem type; correctness of the
+     atomic-write protocol had to be established on it first, not assumed.
+3. **Created the owner-named runtime root** and an execution config
+   (`configs/execution/m2b_laptop_external_storage.yaml`, infrastructure only, recorded as **DEV-017**).
+   The repository stayed in `/home`; no project directory was replaced by a symlink; the runner refuses a
+   config whose roots escape the approved runtime root or whose frozen-contract hash has changed.
+4. **Re-ran the storage preflight against the new physical roots** with the same conservative model and
+   the same 10 GiB reserve — the reserve was not reduced to force a pass. Result **PASS**: 65.11 GiB free
+   against 63.92 GiB required. The previous blocked preflight was left untouched, and
+   `M2B_STORAGE_DECISION_TRAIL.md` records PREVIOUS → OWNER DECISION → NEW.
+   - Flagged honestly: the margin is only ~1.19 GiB, so free space is checked at every chunk boundary.
+5. **Proved relocation changes nothing scientific**: re-ran the frozen 24-sample smoke manifest
+   (sha256 `138f5929…`, not reselected) onto the new filesystem and compared with the frozen `/home` run —
+   **210/210 files byte-identical**, results equal except timing.
+6. **Implemented the resumable execution engine** (`gpatbench/preprocess/m2b.py`, `tools/m2b_run.py`)
+   *before* processing anything: deterministic ordinal → shard assignment that is a pure function of the
+   frozen manifest, per-sample states, append-only crash-safe state logs, hash-verified artifact reuse,
+   atomic writes everywhere, and bounded streaming shards (one in-flight shard per field; no uncompressed
+   whole-cache copy ever exists).
+   - Grouping a video's eight samples into one sequential decode pass (`read_video_frames`) keeps the
+     DEV-006 loop-counter identity while cutting decode work ~4x; proven equal to the per-sample decoder.
+7. **Validated the engine on a 2-shard pilot before the full run**, then validated resume for real:
+   an unchanged chunk skipped in 0.0 s; a deliberately corrupted face was detected on resume, the chunk was
+   rebuilt, and both the face and the shard came back **byte-identical** with the event recorded.
+   - *Why:* "resume never silently accepts a corrupted output" had to be demonstrated, not asserted.
+   - This exposed a real gap first: the fast skip trusted finalized chunks without re-verifying face
+     hashes. Closed before the full run.
+8. **Ran the full frozen inventory**, 2 independent worker processes over disjoint shards, each with the
+   frozen determinism settings. **20,640/20,640 accounted**: 20,615 COMPLETE, 25 FAILED — all
+   `SCRFD_NO_FACE` (SiW), the correct no-fallback outcome. ~2.4 h wall clock.
+9. **Audited and validated**: full block-level cache integrity **PASS** across all 7 fields (567 shards,
+   no duplicate, orphan, overlapping, mis-shaped, non-finite or hash-failing entry); deterministic final
+   validation re-computed 72 samples (the 24 frozen smoke plus 48 hash-selected, none hand-picked) from
+   raw sources and found **max abs difference 0.0** against the stored artifacts.
+10. **M2 → COMPLETE / FINALIZED.** M3 remains `NOT_STARTED`; no split, pair or training work was started.
+    Q-21 stays deferred to M9 as agreed.

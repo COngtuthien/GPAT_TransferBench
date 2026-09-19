@@ -189,13 +189,27 @@ class TestFrozenPolicy(unittest.TestCase):
             self.assertEqual(r["pairing_rule"], D[ds]["pairing"]["rule"])
         import json
         s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
-        # Stage-aware since M2A: M1 COMPLETE, M3 NOT_STARTED, M2 may be IN_PROGRESS/BLOCKED but never COMPLETE
-        # while no full-M2 output exists (data/processed and cache must still be empty).
+        # Stage-aware: M1 COMPLETE and M3 NOT_STARTED at every stage up to and including M2.
         self.assertEqual((s["M1"]["status"], s["M3"]["status"]), ("COMPLETE", "NOT_STARTED"))
-        self.assertIn(s["M2"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED"})
-        produced = [p for rel in ("data/processed", "cache") for p in (ROOT / rel).rglob("*") if p.is_file() and p.name != ".gitkeep"]
-        if not produced:
-            self.assertNotEqual(s["M2"]["status"], "COMPLETE")
+        self.assertIn(s["M2"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        # M2 may only be COMPLETE when the full run really happened and its audit passed. Under DEV-017
+        # the artifacts live on the external runtime volume, so the in-repo dirs stay empty and the
+        # evidence is the audit itself plus the physical roots named by the execution config.
+        if s["M2"]["status"] == "COMPLETE":
+            integ = json.loads((AUDIT / "M2_CACHE_INTEGRITY.json").read_text())
+            self.assertTrue(integ["ok"])
+            acc = integ["accounting"]
+            self.assertEqual(acc["missing_state"], 0)
+            self.assertEqual(acc["complete"] + acc["failed"], acc["expected"])
+            self.assertEqual(json.loads((AUDIT / "M2_DETERMINISTIC_VALIDATION.json").read_text())["status"], "PASS")
+            import yaml as _yaml
+            x = _yaml.safe_load((ROOT / "configs/execution/m2b_laptop_external_storage.yaml").read_text())
+            for role, root in x["storage"]["roots"].items():
+                self.assertTrue(any(Path(root).rglob("*")), f"{role} is empty but M2 is COMPLETE")
+        else:
+            produced = [p for rel in ("data/processed", "cache") for p in (ROOT / rel).rglob("*")
+                        if p.is_file() and p.name != ".gitkeep"]
+            self.assertEqual(produced, [])
 
     def test_sanity_json(self):
         import json

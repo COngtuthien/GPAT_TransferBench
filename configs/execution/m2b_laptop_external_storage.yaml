@@ -1,0 +1,66 @@
+# M2B execution configuration — OPERATIONAL / INFRASTRUCTURE ONLY.
+#
+# This file selects WHERE M2B writes and HOW it is driven. It contains no scientific value.
+# Every scientific choice (routes, detector, thresholds, crop geometry, adapters, codec, dtypes)
+# lives in configs/frozen/preprocess_v1.yaml and is NOT repeated or overridable here; the loader
+# refuses any key that collides with a frozen scientific field.
+#
+# Owner decision (2026-09-19, DEV-017): the physical storage of M2 generated artifacts moves off
+# the /home filesystem (36.50 GiB free, insufficient per the M2B preflight) to /media/cong/Data.
+# The Git repository, configs, manifests, tests, tools and audit records stay in /home.
+version: m2b_execution_v1
+status: ACTIVE
+created_utc: "2026-09-19"
+kind: EXECUTION_INFRASTRUCTURE          # never a scientific contract
+scientific_contract: configs/frozen/preprocess_v1.yaml
+scientific_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+deviation: DEV-017                      # APPROVED_OPERATIONAL_STORAGE_RELOCATION
+
+storage:
+  # The owner-approved external runtime root. Logical artifact roles keep their project-relative
+  # names; only the physical prefix changes. Scientific identity never depends on these strings.
+  runtime_root: /media/cong/Data/GPAT_TransferBench_runtime
+  roots:
+    processed_frames_root: /media/cong/Data/GPAT_TransferBench_runtime/data/processed/frames
+    faces_256_root: /media/cong/Data/GPAT_TransferBench_runtime/data/processed/faces_256
+    geometry_cache_root: /media/cong/Data/GPAT_TransferBench_runtime/cache/geometry
+    identity_cache_root: /media/cong/Data/GPAT_TransferBench_runtime/cache/identity
+  runstate_root: /media/cong/Data/GPAT_TransferBench_runtime/runstate
+  tmp_root: /media/cong/Data/GPAT_TransferBench_runtime/tmp
+  logical_roles:                        # role -> project-relative logical name (audit/reporting)
+    processed_frames_root: data/processed/frames
+    faces_256_root: data/processed/faces_256
+    geometry_cache_root: cache/geometry
+    identity_cache_root: cache/identity
+  containment: all physical roots must resolve inside runtime_root
+  symlinks_used: false                  # no project directory is replaced by a symlink
+  min_free_reserve_bytes: 10737418240   # 10 GiB; execution halts at a resumable boundary below this
+  free_space_check_every_n_samples: 100
+
+execution:
+  workers: 2                            # independent processes over disjoint shards; see note below
+  workers_note: >-
+    Each worker applies the frozen determinism settings (torch 4 intra-op threads, 1 ORT thread) in
+    its own process and owns a disjoint set of shards (shard_index % workers == worker), its own
+    append-only state log and its own output files. Samples are computed independently, so the
+    worker count cannot change any stored value; the deterministic final validation re-proves it.
+    Chosen as 2 because each process peaks at ~1.8 GiB RSS on a 13 GiB machine.
+  torch_threads: 4                      # frozen determinism setting, restated for the runner
+  ort_threads: 1
+  shard_rows: 256                       # equals logit_store.SHARD_ROWS; asserted at load
+  progress_every_n_samples: 50
+  log_path_relative_to: runstate_root
+  order: >-
+    deterministic: the frozen M1 inventory sorted by (dataset, video_id, frame_index, sample_id).
+    The ordinal fixes the shard (ordinal // shard_rows), so shard membership is a pure function of
+    the frozen manifest, independent of run history, worker count or failures. Grouping a video's
+    samples together also lets one sequential decode pass serve all of them, which is the same
+    decoder semantics (DEV-006 loop-counter identity) at far less decode work.
+
+resume:
+  enabled: true
+  state_db: runstate/m2b_state.jsonl    # append-only, crash-safe; last record per sample_id wins
+  verify_existing_artifacts_by_hash: true
+  on_hash_mismatch: REGENERATE          # never silently accept a corrupted or foreign artifact
+  never_resample_frames: true
+  atomic_writes: true                   # write tmp -> flush -> fsync -> verify -> atomic rename

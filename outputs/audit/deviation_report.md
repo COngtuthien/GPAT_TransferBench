@@ -26,6 +26,7 @@ changes are appended as dated updates under the entry.
 | DEV-014 | APPROVED | AdaFace runs on the frozen canonical face; no MTCNN/landmark alignment stage (owner decision Q-19) | 2026-09-19 |
 | DEV-015 | APPROVED | FaceXFormer runs on the frozen canonical face; no MTCNN 50%-margin recrop (closes Q-20) | 2026-09-19 |
 | DEV-016 | APPROVED | Q-22 operational interpretation of "clamp to image": the requested square is preserved with zero padding; clamping applies to the source read region | 2026-09-19 |
+| DEV-017 | APPROVED | APPROVED_OPERATIONAL_STORAGE_RELOCATION — M2 generated artifacts physically stored on /media/cong/Data; no scientific change | 2026-09-19 |
 
 ---
 
@@ -369,3 +370,43 @@ kept as history; this section records the resolutions and the three new deviatio
 - **Status: APPROVED** (owner, 2026-09-19). Classification: OWNER_RESOLVED_IMPLEMENTATION_INTERPRETATION.
 - **Evidence:** `M2A_BORDER_CASES.csv` (real samples, with pads and pre-resize shapes) and exhaustive
   synthetic unit tests (no contact, four edges, both corners, square larger than one source dimension).
+
+---
+
+## DEV-017 — M2 generated artifacts physically stored outside the project filesystem
+
+- **Classification:** `APPROVED_OPERATIONAL_STORAGE_RELOCATION` (infrastructure; not a scientific deviation).
+- **Spec basis:** §0.2 fixes a *directory contract* with `data/processed/frames`, `data/processed/faces_256`,
+  `cache/geometry` and `cache/identity`. It names logical artifact roles; it does not bind them to a
+  filesystem. DEV-001 already approved a project root that differs from the spec's literal path.
+- **Reason:** the M2B storage preflight (`M2B_STORAGE_PREFLIGHT.md`) measured that the project filesystem
+  (`/dev/nvme0n1p7`, ext4, `/home`) has 36.50 GiB free while M2B needs 63.92 GiB — a 27.42 GiB shortfall —
+  and returned `BLOCKED_BY_STORAGE_CAPACITY`. The owner then approved relocating the physical storage.
+- **Deviation:** the four M2 output roles are written under the owner-named runtime root
+
+  ```
+  /media/cong/Data/GPAT_TransferBench_runtime/data/processed/frames
+  /media/cong/Data/GPAT_TransferBench_runtime/data/processed/faces_256
+  /media/cong/Data/GPAT_TransferBench_runtime/cache/geometry
+  /media/cong/Data/GPAT_TransferBench_runtime/cache/identity
+  ```
+
+  The Git repository stays at `/home/cong/GPAT_TransferBench` and remains authoritative for code,
+  configs, manifests, tests, tools, audit records and hashes. No project directory was replaced by a
+  symlink; the physical roots come from an execution config
+  (`configs/execution/m2b_laptop_external_storage.yaml`), which is infrastructure only and is refused by
+  the runner if it collides with a frozen scientific field or escapes the approved runtime root.
+- **Affected scientific protocol: NONE.** The frozen `configs/frozen/preprocess_v1.yaml` is unchanged
+  (its sha256 is asserted by the runner before execution). Scientific identity is `sample_id` plus content
+  hashes; no scientific value depends on an absolute path string, so moving these artifacts again would
+  not change any sample identity.
+- **Evidence that relocation changed nothing:** the frozen 24-sample M2A smoke manifest (sha256
+  `138f5929…`, not reselected) was re-run writing to the new filesystem and compared against the frozen
+  `/home` run: **210/210 files byte-identical**, results equal except timing
+  (`M2B_EXTERNAL_SMOKE_COMPARE.json`). The deterministic final validation repeats this against the
+  finalized full-M2 artifacts.
+- **Operational caveats recorded honestly:** the volume is `ntfs3`, not ext4 (verified to support fsync,
+  atomic rename, directory fsync and case-sensitive names before use), and the post-relocation preflight
+  passes with only ~1.19 GiB of headroom beyond the required total, so free space is monitored during the
+  run and execution halts at a resumable boundary if it approaches the 10 GiB reserve.
+- **Status: APPROVED** (owner, 2026-09-19).

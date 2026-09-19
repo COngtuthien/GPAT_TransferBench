@@ -163,20 +163,37 @@ class TestNoLaterMilestoneArtifacts(unittest.TestCase):
     # Stage-aware since M1: manifests/ may hold only the M1 inventory manifests.
     M1_MANIFESTS = {"manifests/inventory.parquet", "manifests/inventory_videos.parquet",
                     "manifests/raw_file_index.parquet"}
+    # Stage-aware: M2 contributes exactly one manifest (its per-sample accounting/provenance). It is
+    # allowed only once M2 has actually started; M3/M4 manifests remain forbidden at every stage.
+    M2_MANIFESTS = {"manifests/m2_sample_accounting.parquet"}
+
+    @staticmethod
+    def _m2_started() -> bool:
+        import json
+        s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]["M2"]["status"]
+        return s in {"IN_PROGRESS", "BLOCKED", "COMPLETE"}
+
+    def _allowed_manifests(self):
+        return self.M1_MANIFESTS | (self.M2_MANIFESTS if self._m2_started() else set())
 
     def test_empty_runtime_dirs(self):
+        # Under DEV-017 the M2 artifacts live on the external runtime volume, so these in-repo
+        # directories must stay empty even after M2 completes: no heavy generated data in Git.
         for rel in ["runs", "data/raw", "data/processed", "cache", "probes", "downstream",
                     "outputs/tables", "outputs/plots", "outputs/qualitative", "outputs/paper_pack"]:
             self.assertEqual(self._nonplaceholder(rel), [], rel)
 
-    def test_manifests_only_m1(self):
+    def test_manifests_are_stage_appropriate(self):
         present = {p.relative_to(ROOT).as_posix() for p in self._nonplaceholder("manifests")}
-        self.assertTrue(present <= self.M1_MANIFESTS, present - self.M1_MANIFESTS)
+        allowed = self._allowed_manifests()
+        self.assertTrue(present <= allowed, present - allowed)
+        self.assertTrue(self.M1_MANIFESTS <= present, self.M1_MANIFESTS - present)
 
     def test_no_split_or_pair_parquet(self):
         parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet")
                    if not ({".git", ".venv"} & set(p.parts))}
-        self.assertTrue(parquet <= self.M1_MANIFESTS, parquet - self.M1_MANIFESTS)
+        allowed = self._allowed_manifests()
+        self.assertTrue(parquet <= allowed, parquet - allowed)
         self.assertFalse(any("split" in p or "pair" in p for p in parquet))
 
 

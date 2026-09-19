@@ -15,8 +15,14 @@ projection is reported per dataset and per resolution class, never as one pooled
 CASIA is a 112x112 image sequence while MSU/SiW are videos at 4 different resolutions.
 
     /home/cong/.venvs/gpatbench-m2/bin/python tools/m2b_storage_preflight.py [--run-tag runC]
+        [--exec-config configs/execution/<file>.yaml] [--out-stem M2B_STORAGE_PREFLIGHT_EXTERNAL]
 
-Writes outputs/audit/M2B_STORAGE_PREFLIGHT.{md,json} and exits 0 (PASS) or 1 (BLOCKED).
+Without `--exec-config` the target roots are the in-repo `data/processed` and `cache` (the original
+blocked pass). With it, the physical roots come from that execution config, so the same conservative
+model is applied to the relocated storage. Earlier preflight outputs are never overwritten when a
+different `--out-stem` is given: the audit trail keeps both the blocked and the post-relocation runs.
+
+Writes outputs/audit/<out-stem>.{md,json} and exits 0 (PASS) or 1 (BLOCKED).
 """
 from __future__ import annotations
 
@@ -45,8 +51,7 @@ TEMP_PEAK_ALLOWANCE_BYTES = 2 * GIB          # bounded streaming; justified in t
 METADATA_ALLOWANCE_BYTES = 200 * 1024 ** 2   # manifests, indexes, per-sample provenance, audit CSVs
 FS_OVERHEAD_ALLOWANCE_BYTES = 200 * 1024 ** 2
 
-MD_OUT = ROOT / "outputs/audit/M2B_STORAGE_PREFLIGHT.md"
-JSON_OUT = ROOT / "outputs/audit/M2B_STORAGE_PREFLIGHT.json"
+DEFAULT_OUT_STEM = "M2B_STORAGE_PREFLIGHT"
 
 
 # ---------------------------------------------------------------- filesystem facts
@@ -233,21 +238,41 @@ def project(per_ds: dict, per_res: dict, basis: dict) -> dict:
     return comp
 
 
+def _arg(name: str, default=None):
+    return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else default
+
+
 def main() -> int:
-    tag = "runC"
-    if "--run-tag" in sys.argv:
-        tag = sys.argv[sys.argv.index("--run-tag") + 1]
+    tag = _arg("--run-tag", "runC")
+    exec_cfg_rel = _arg("--exec-config")
+    out_stem = _arg("--out-stem", DEFAULT_OUT_STEM)
+    md_out = ROOT / f"outputs/audit/{out_stem}.md"
+    json_out = ROOT / f"outputs/audit/{out_stem}.json"
+
+    exec_cfg = None
+    if exec_cfg_rel:
+        import yaml
+        exec_cfg = yaml.safe_load((ROOT / exec_cfg_rel).read_text())
     pre = preconditions()
     per_ds, per_res = counts()
     basis = smoke_basis(tag)
     comp = project(per_ds, per_res, basis)
 
+    if exec_cfg is None:
+        roles = {"data_processed": ROOT / "data/processed", "cache": ROOT / "cache"}
+        target_key = "data_processed"
+    else:
+        r = exec_cfg["storage"]["roots"]
+        roles = {"processed_frames_root": r["processed_frames_root"], "faces_256_root": r["faces_256_root"],
+                 "geometry_cache_root": r["geometry_cache_root"], "identity_cache_root": r["identity_cache_root"],
+                 "runstate_root": exec_cfg["storage"]["runstate_root"], "tmp_root": exec_cfg["storage"]["tmp_root"]}
+        target_key = "processed_frames_root"
     targets = {name: fs_facts(p) for name, p in (
-        ("project_root", ROOT), ("data_processed", ROOT / "data/processed"), ("cache", ROOT / "cache"),
-        ("outputs", ROOT / "outputs"),
-        ("external_model_cache", "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache"))}
-    same_fs = targets["data_processed"]["device"] == targets["cache"]["device"] == targets["project_root"]["device"]
-    target = targets["data_processed"]
+        [("project_root", ROOT), ("outputs", ROOT / "outputs"),
+         ("external_model_cache", "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache")]
+        + list(roles.items()))}
+    target = targets[target_key]
+    same_fs = all(targets[k]["device"] == target["device"] for k in roles)
     free = target["free_bytes"]
 
     persistent = int(comp["persistent_total"]["bytes_max"])
@@ -287,13 +312,23 @@ def main() -> int:
         {"option": "C", "summary": "Attach additional storage for data/processed and cache",
          "caveats": "needs at least the required total plus normal growth headroom"},
     ]
+    if exec_cfg is not None:
+        rt = os.path.realpath(exec_cfg["storage"]["runtime_root"])
+        escaping = sorted(k for k, v in roles.items() if not os.path.realpath(v).startswith(rt + os.sep))
+        decision["output_roots"] = {k: os.path.realpath(v) for k, v in roles.items()}
+        decision["runtime_root"] = rt
+        decision["roots_escaping_runtime_root"] = escaping
+        decision["writable"] = os.access(rt, os.W_OK)
+        if escaping or not decision["writable"]:
+            decision["gate"] = "BLOCKED_BY_OUTPUT_ROOT_CONTAINMENT"
+            ok = False
     rep = {"generated_for": "M2B storage preflight (mandatory hard gate)", "cwd": str(ROOT),
-           "preconditions": pre,
+           "execution_config": exec_cfg_rel, "preconditions": pre,
            "sample_counts_by_dataset": per_ds, "sample_counts_by_resolution": per_res,
            "total_samples": sum(per_ds.values()), "measurement_basis": basis,
            "components": comp, "filesystems": targets, "decision": decision}
-    JSON_OUT.write_text(json.dumps(rep, indent=2) + "\n", encoding="utf-8")
-    write_md(rep)
+    json_out.write_text(json.dumps(rep, indent=2) + "\n", encoding="utf-8")
+    write_md(rep, md_out)
     print(json.dumps({"gate": decision["gate"], "model_hashes": pre["model_hashes"],
                       "m1_integrity": pre["m1_integrity"], "free_gib": round(free / GIB, 2),
                       "persistent_gib": round(persistent / GIB, 2),
@@ -302,7 +337,7 @@ def main() -> int:
     return 0 if ok else 1
 
 
-def write_md(rep: dict) -> None:
+def write_md(rep: dict, md_out) -> None:
     g = lambda b: f"{b / GIB:,.2f} GiB"                                            # noqa: E731
     d, c = rep["decision"], rep["components"]
     t = d["target_filesystem"]
@@ -339,9 +374,15 @@ def write_md(rep: dict) -> None:
         lines.append(f"| `{name}` | `{f['realpath']}` | `{f['device']}` | {f['fstype']} | `{f['mountpoint']}` | "
                      f"{g(f['total_bytes'])} | {g(f['used_bytes'])} | {g(f['free_bytes'])} |")
     lines += ["",
-              f"`data/processed`, `cache` and the project root resolve to the **same** filesystem "
-              f"(`{t['device']}`, {t['fstype']}): **{str(rep['decision']['all_outputs_on_one_filesystem']).lower()}**. "
+              f"All output roots resolve to the **same** filesystem (`{t['device']}`, {t['fstype']}): "
+              f"**{str(rep['decision']['all_outputs_on_one_filesystem']).lower()}**. "
               "No symlink redirects any output root.",
+              ("" if rep.get("execution_config") is None else
+               f"\nPhysical output roots come from `{rep['execution_config']}` (execution/infrastructure config, "
+               f"DEV-017). Containment check against `{rep['decision'].get('runtime_root')}`: "
+               f"escaping roots = {rep['decision'].get('roots_escaping_runtime_root')}, "
+               f"writable = {rep['decision'].get('writable')}.\n"
+               + "\n".join(f"- `{k}` → `{v}`" for k, v in rep['decision'].get('output_roots', {}).items())),
               "",
               "## 2. Sample counts (frozen M1, not assumed)",
               "",
@@ -454,7 +495,7 @@ def write_md(rep: dict) -> None:
             "move the scientific outputs onto a different filesystem type, so the M2A determinism smoke should "
             "be repeated on that path before M2B is trusted there.",
         ]
-    MD_OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    md_out.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

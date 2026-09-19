@@ -37,6 +37,42 @@ def read_video_frame(path, frame_index: int) -> np.ndarray:
         cap.release()
 
 
+def read_video_frames(path, frame_indices) -> dict[int, np.ndarray]:
+    """Return {frame_index: BGR uint8} for several indices of one video in ONE sequential pass.
+
+    Identical semantics to calling `read_video_frame` once per index: the same decoder reads
+    frames 0, 1, 2, ... in order and the loop counter is the frame identity (DEV-006);
+    `CAP_PROP_POS_FRAMES` is never used. The only difference is that the shared prefix of the
+    sequential reads is decoded once instead of once per requested index, which is why M2B groups
+    a video's 8 samples together. A failed read at a requested index is an error; there is no
+    fallback to a neighbouring frame.
+    """
+    want = sorted(set(int(i) for i in frame_indices))
+    if not want:
+        return {}
+    cap = cv2.VideoCapture(str(path), cv2.CAP_FFMPEG)
+    if not cap.isOpened():
+        raise FrameReadError(f"cannot open {path}")
+    try:
+        declared = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        for i in want:
+            if not 0 <= i < declared:
+                raise FrameReadError(f"index {i} outside [0, {declared})")
+        out, pending = {}, set(want)
+        for i in range(want[-1] + 1):
+            ok, fr = cap.read()
+            if i in pending:
+                if not ok or fr is None or fr.size == 0:
+                    raise FrameReadError(f"decode failed at index {i} (no fallback)")
+                out[i] = np.ascontiguousarray(fr)
+                pending.discard(i)
+        if pending:
+            raise FrameReadError(f"indices never reached: {sorted(pending)}")
+        return out
+    finally:
+        cap.release()
+
+
 def read_image_frame(path) -> np.ndarray:
     img = cv2.imdecode(np.fromfile(str(path), np.uint8), cv2.IMREAD_COLOR)
     if img is None or img.size == 0:

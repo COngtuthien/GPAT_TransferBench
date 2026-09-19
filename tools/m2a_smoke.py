@@ -8,6 +8,11 @@
              -> outputs/exploratory/m2a_smoke/<run_tag>/ (git-ignored) + <run_tag>_results.csv there
   compare  : byte/numeric comparison of two runs -> JSON on stdout
 
+`run` and `compare` accept `--outroot <dir>` (and `--outroot-b <dir>` for the second side of a
+compare) so a run can be written to, and compared across, a different physical filesystem. The
+output root is infrastructure only: it never enters a scientific value, and `compare` reports
+path-derived fields separately from scientific ones.
+
 Run with the M2 environment:  /home/cong/.venvs/gpatbench-m2/bin/python tools/m2a_smoke.py <cmd> ...
 """
 from __future__ import annotations
@@ -88,13 +93,17 @@ def build_manifest(path=MANIFEST) -> None:
     print(json.dumps({"rows": len(rows), "sha256": sha(Path(path).read_bytes())}))
 
 
-def run(tag: str) -> None:
+def _outdir(tag: str, outroot=None) -> Path:
+    return (Path(outroot) if outroot else OUTROOT) / tag
+
+
+def run(tag: str, outroot=None) -> None:
     import torch
     from gpatbench.preprocess.aux_models import AdaFaceAdapter, FaceXFormerAdapter, set_deterministic
     from gpatbench.preprocess.scrfd import SCRFD
     set_deterministic(FROZEN["torch_threads"])
     cfg = yaml.safe_load((ROOT / "configs/frozen/data_v1.yaml").read_text())
-    out = OUTROOT / tag
+    out = _outdir(tag, outroot)
     if out.exists():
         raise SystemExit(f"{out} exists; runs must start from clean diagnostic outputs")
     for d in ("frames", "faces", "geometry", "identity", "logit_shards"):
@@ -194,8 +203,8 @@ def run(tag: str) -> None:
                       "codec": LS.codec_provenance(), "logit_blocks": len(shards.index)}))
 
 
-def compare(a: str, b: str) -> None:
-    A, B = OUTROOT / a, OUTROOT / b
+def compare(a: str, b: str, outroot_a=None, outroot_b=None) -> None:
+    A, B = _outdir(a, outroot_a), _outdir(b, outroot_b)
     files = sorted(p.relative_to(A).as_posix() for p in A.rglob("*") if p.is_file() and not p.name.endswith("_results.csv"))
     other = sorted(p.relative_to(B).as_posix() for p in B.rglob("*") if p.is_file() and not p.name.endswith("_results.csv"))
     rep = {"same_file_set": files == other, "n_files": len(files), "byte_identical": 0, "differs": [], "max_abs_diff": {}}
@@ -217,10 +226,21 @@ def compare(a: str, b: str) -> None:
 
     rows_a, rows_b = _rows(A / f"{a}_results.csv"), _rows(B / f"{b}_results.csv")
     rep["results_equal_except_timing"] = rows_a == rows_b
+    if not rep["results_equal_except_timing"]:
+        diff = [{"row": i, "field": k, a: ra.get(k), b: rb.get(k)}
+                for i, (ra, rb) in enumerate(zip(rows_a, rows_b)) for k in ra if ra.get(k) != rb.get(k)]
+        rep["results_field_differences"] = diff[:50]
+    rep["roots"] = {a: str(A), b: str(B)}
     print(json.dumps(rep, indent=1))
+
+
+def _opt(name, default=None):
+    return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else default
 
 
 if __name__ == "__main__":
     cmd = sys.argv[1]
-    {"manifest": lambda: build_manifest(), "run": lambda: run(sys.argv[2]),
-     "compare": lambda: compare(sys.argv[2], sys.argv[3])}[cmd]()
+    {"manifest": lambda: build_manifest(),
+     "run": lambda: run(sys.argv[2], _opt("--outroot")),
+     "compare": lambda: compare(sys.argv[2], sys.argv[3], _opt("--outroot"), _opt("--outroot-b")),
+     }[cmd]()
