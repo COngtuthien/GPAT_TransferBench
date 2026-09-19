@@ -1,7 +1,9 @@
-# M2A — Preprocessing Contract (PROPOSED; not frozen)
+# M2A — Preprocessing Contract (FROZEN 2026-09-19)
 
-Machine-readable form: `configs/proposed/preprocess_v1.proposed.yaml` (deliberately **not** under
-`configs/frozen/`, because Q-02, Q-03, Q-18, Q-19, Q-22 and Q-23 are open). Code: `gpatbench/preprocess/`.
+Machine-readable form: **`configs/frozen/preprocess_v1.yaml`** (sha256 in `ARTIFACT_INDEX.csv`;
+byte-identical snapshot under `frozen_config_snapshot/`). The earlier proposal
+`configs/proposed/preprocess_v1.proposed.yaml` is preserved unchanged as history. Owner decisions and
+their evidence: `M2A_OWNER_DECISIONS.md`. Code: `gpatbench/preprocess/`.
 
 ## 1. Routes (dataset_protocol_policy_v1)
 
@@ -24,7 +26,7 @@ After the canonical face, FaceXFormer and then AdaFace run for all datasets.
 
 | Item | Value |
 |---|---|
-| Model | **OPEN (Q-02)**: candidate A `scrfd_10g_bnkps.onnx` or B `det_2.5g.onnx` |
+| Model | **SCRFD_10G_KPS** `scrfd_10g_bnkps.onnx`, sha256 `5838f7fe…5b91`, OFFICIAL_BYTE_HASH_CONFIRMED (Q-02 resolved). `det_2.5g.onnx` is refused by hash |
 | Detector input | 320×320 (spec) |
 | Channel order | source frame BGR (cv2); `blobFromImage(..., swapRB=True)` gives RGB into the network |
 | Resize / letterbox | keep aspect ratio; `cv2.resize` default (INTER_LINEAR); image at top-left; zero padding |
@@ -33,14 +35,14 @@ After the canonical face, FaceXFormer and then AdaFace run for all datasets.
 | Threshold | score ≥ 0.50 (spec) |
 | NMS | IoU 0.4, official default, stable sort by score |
 | Coordinates | bbox / det_scale (det_scale = new_height / frame_height) gives original-frame pixels [x1, y1, x2, y2] |
-| Largest face | max area (x2−x1)(y2−y1); tie → score ↓ → x1 ↑ → y1 ↑ → index (IMPLEMENTATION_DETAIL) |
+| Largest face | max area (x2−x1)(y2−y1) in original-frame pixels; equal-area tie → higher score → lower x1 → lower y1 → remaining bbox coordinates lexicographically (owner-frozen) |
 | No face | `SCRFD_NO_FACE`; the sample stops. No whole frame, centre crop, previous bbox, other detector or lower threshold |
 
 ## 4. Crop and canonical face
 
 - **Box:** side = 1.25·max(w, h); centre = bbox centre; side_px = round(side); x0 = round(cx − side_px/2), same for y. The box is half-open.
-- **Border:** **OPEN (Q-22).** The PROVISIONAL smoke rule is a literal intersection with the image (the crop may become non-square).
-- **Resize:** INTER_AREA if the larger crop side ≥ 256, else INTER_CUBIC. The larger-side rule is PROVISIONAL, as part of Q-22.
+- **Border (Q-22 resolved):** the requested square is constructed first and never shrunk or shifted; only the SOURCE READ region is clamped to the image; every requested-square pixel outside the image is constant **zero**. No reflect/replicate/random padding. The pre-resize region is always a true `side_px × side_px` square. Recorded per sample: requested square, source intersection, pad_left/top/right/bottom, side_px, pre-resize shape.
+- **Resize:** INTER_AREA if `side_px ≥ 256`, else INTER_CUBIC. Because the crop is always square, the resize never changes the aspect ratio.
 - **Canonical:** 256×256×3 uint8, RGB channel order, sRGB as decoded. No colour management; files carry no ICC profile.
 - **PNG:** OpenCV, compression 3, lossless, deterministic bytes.
 
@@ -58,13 +60,15 @@ After the canonical face, FaceXFormer and then AdaFace run for all datasets.
 | `landmarks_px256` | [68, 2] float32 | linear pixel-centre map to the canonical 256 grid: (p+0.5)·256/224 − 0.5 |
 | `pose_pitch_yaw_roll_rad` | [3] float32 | **order (pitch, yaw, roll), radians** (official `inference.py` multiplies by 180/π to print degrees). No unit conversion is stored; yaw = element 1 |
 
-## 6. AdaFace adapter (model identity VERIFIED; contract OPEN)
+## 6. AdaFace adapter (VERIFIED; contract FROZEN)
 
-- **Load:** HF `minchul/cvlface_adaface_ir50_webface4m` `model.pt`, with the `net.` prefix stripped, into the official `net.py` `ir_50` using `strict=True`.
-- **Input (PROVISIONAL):**
-  - geometry: canonical 256 → `cv2.resize` 112×112 INTER_AREA (Q-19);
-  - channel order: **RGB**, per the checkpoint's `model.yaml` (Q-18);
-  - normalisation: ((x/255) − 0.5)/0.5, mean = std = 0.5 in both official lines;
+- **Load:** the ORIGINAL `mk-minchul/AdaFace` release **R50 / WebFace4M** `adaface_ir50_webface4m.ckpt`
+  (sha256 `52cca7c6…b4f8`): `torch.load(...)["state_dict"]`, the 467 keys prefixed `model.` stripped, into the
+  official `net.py` `ir_50` with `strict=True` (All keys matched). The CVLFace export is refused by hash.
+- **Input (frozen; module constants, not parameters):**
+  - geometry: canonical 256 → `cv2.resize` 112×112 INTER_AREA, **no MTCNN/alignment/second detector** (Q-19, DEV-014);
+  - channel order: **BGR** (Q-18), per the original repository's contract and the spec wording;
+  - normalisation: ((x/255) − 0.5)/0.5, computed exactly as the official `inference.py` `to_input`;
   - tensor: [1, 3, 112, 112] float32.
 - **Output:** `net.py` returns (feature/‖feature‖, ‖feature‖). The adapter re-normalises explicitly and stores float32 [512]. Smoke L2 norms were in [0.99999994, 1.00000012] (tolerance 1e-5).
 
@@ -76,11 +80,13 @@ After the canonical face, FaceXFormer and then AdaFace run for all datasets.
   - `preprocess_config_sha256`;
   - adapter version;
   - environment lock sha256.
-- **Geometry arrays:** `parsing_logits` (dtype and resolution OPEN, Q-23), `parsing_mask` uint8 [224,224], `landmarks_norm`/`px224`/`px256` float32 [68,2], `pose_pitch_yaw_roll_rad` float32 [3].
+- **Geometry arrays:** `parsing_logits` **float32 [11,224,224]** stored losslessly (Q-23 resolved; codec `npy1+shuffle4+zstd` level 10, zstandard 0.25.0 / libzstd 1.5.7, 256 rows per shard, sha256 per block/npy/shard), `parsing_mask` uint8 [224,224] = argmax **of the stored logits**, `landmarks_norm`/`px224`/`px256` float32 [68,2], `pose_pitch_yaw_roll_rad` float32 [3].
 - **Identity arrays:** `embedding` float32 [512] (L2 = 1 ± 1e-5), `raw_norm` float32.
 - **Serialization (proposed):**
   - per dataset and field, fixed-order shards of raw `.npy` arrays (deterministic header, no pickle, `allow_pickle=False`);
   - a Parquet index maps `sample_id` → shard/row and holds the sha256 of each row's bytes, so the cache can be validated without rerunning models.
   - `.npz` is avoided because zip timestamps break byte determinism.
 - **Location (future M2B):** `cache/geometry/`, `cache/identity/` (git-ignored); only the index plus hashes are committed.
-- **Storage estimate (Q-23):** logits float32 ≈ 45.6 GB; mask ≈ 1.0 GB; landmarks, pose and embeddings < 0.1 GB.
+- **Storage (Q-23 measured, not estimated):** logits float32 uncompressed 45.57 GB → **34.74 GB** lossless
+  (ratio 1.312, exact reconstruction on 24/24 smoke samples); mask ≈ 1.04 GB; `faces_256` ≈ 1.70 GB;
+  landmarks, pose and embeddings < 0.1 GB. See `M2A_COMPRESSION_PILOT.md`.

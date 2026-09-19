@@ -1,0 +1,103 @@
+{
+  "generated_for": "M2A owner decision resolution",
+  "cwd": "/home/cong/GPAT_TransferBench",
+  "scrfd": {
+    "question": "Q-02",
+    "owner_decision": "candidate A scrfd_10g_bnkps.onnx (SCRFD_10G_KPS)",
+    "official_source": "https://github.com/deepinsight/insightface/releases/download/v0.7/antelopev2.zip",
+    "official_member": "antelopev2/scrfd_10g_bnkps.onnx",
+    "local_path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx",
+    "local_sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+    "local_size_bytes": 16923827,
+    "not_selected_candidate": {
+      "path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/det_2.5g.onnx",
+      "sha256": "041f73f47371333d1d17a6fee6c8ab4e6aecabefe398ff32cca4e2d5eaee0af9",
+      "status": "NOT_SELECTED_FOR_FINAL_M2"
+    },
+    "official_package_available": true,
+    "official_package_path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/_provenance_tmp/antelopev2.zip",
+    "official_package_sha256": "8e182f14fc6e80b3bfa375b33eb6cff7ee05d8ef7633e738d1c89021dcf0c5c5",
+    "official_package_size_bytes": 360662982,
+    "official_package_members": [
+      {
+        "name": "antelopev2/",
+        "size": 0
+      },
+      {
+        "name": "antelopev2/genderage.onnx",
+        "size": 1322532
+      },
+      {
+        "name": "antelopev2/2d106det.onnx",
+        "size": 5030888
+      },
+      {
+        "name": "antelopev2/1k3d68.onnx",
+        "size": 143607619
+      },
+      {
+        "name": "antelopev2/glintr100.onnx",
+        "size": 260665334
+      },
+      {
+        "name": "antelopev2/scrfd_10g_bnkps.onnx",
+        "size": 16923827
+      }
+    ],
+    "official_member_sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+    "official_member_size_bytes": 16923827,
+    "match": "OFFICIAL_BYTE_HASH_CONFIRMED"
+  },
+  "adaface": {
+    "question": "Q-03/Q-18/Q-19",
+    "owner_decision": "original mk-minchul/AdaFace R50 / WebFace4M",
+    "official_readme": "https://github.com/mk-minchul/AdaFace/blob/c60eaa786a42c03444f3df7096dbaf9d57ae010d/README.md",
+    "official_link": "https://drive.google.com/file/d/1BmDRrhPsHSbXcWZoYFPJg2KJn1sd3QpN/view?usp=sharing",
+    "direct_url": "https://drive.usercontent.google.com/download?id=1BmDRrhPsHSbXcWZoYFPJg2KJn1sd3QpN&export=download&confirm=t",
+    "code_commit": "c60eaa786a42c03444f3df7096dbaf9d57ae010d",
+    "local_path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/adaface_original/adaface_ir50_webface4m.ckpt",
+    "size_bytes": 596517267,
+    "sha256": "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8",
+    "checkpoint_top_keys": [
+      "state_dict"
+    ],
+    "n_state_dict_tensors": 471,
+    "n_model_tensors": 467,
+    "strict_load": "OK",
+    "strict_load_detail": "missing=[] unexpected=[]",
+    "architecture": "ir_50 (IR-50 / R50)",
+    "training_dataset": "WebFace4M",
+    "embedding_dim": 512,
+    "embedding_l2": 1.0,
+    "cvlface_comparison": {
+      "cvlface_path": "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/pretrained_model/model.pt",
+      "cvlface_sha256": "43bd2d570584d95d4a17ce81f26449034c45dbeed750afcab651872abc0e1496",
+      "same_key_set": true,
+      "n_tensors": 467,
+      "n_tensors_differing": 1,
+      "differing_keys": [
+        "input_layer.0.weight"
+      ],
+      "first_conv_is_exact_channel_reversal": true,
+      "conclusion": "The two official releases hold the SAME trained AdaFace IR-50 WebFace4M weights; the CVLFace export differs only by an exact reversal of the input convolution's channel axis, i.e. it is the BGR model re-expressed for RGB input. Selecting the original release + BGR input therefore follows the spec wording literally without changing the trained model.",
+      "status": "NOT_SELECTED_FOR_FINAL_M2 (kept as historical candidate evidence)"
+    }
+  },
+  "logit_codec": {
+    "codec_id": "npy1+shuffle4+zstd",
+    "library": "zstandard",
+    "library_version": "0.25.0",
+    "libzstd_version": "1.5.7",
+    "backend": "cext",
+    "level": 10,
+    "write_checksum": false,
+    "write_content_size": true,
+    "threads": 0,
+    "byte_shuffle_element_size": 4,
+    "container": "npy v1.0 (allow_pickle=False)",
+    "dtype": "<f4",
+    "order": "C",
+    "shard_rows": 256,
+    "lossy": false
+  }
+}

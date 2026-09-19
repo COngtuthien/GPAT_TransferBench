@@ -8,6 +8,7 @@ Spec §0.1 rule 1 / owner rule §23: frozen configs are never silently overwritt
 | data_v1.yaml | 2 (current) | 112506b | `7227c1bd589a29750495971899f0caf685976585d8610dbcbdeb77a730902885` | M1 inventory runs D/E (current manifests); no M2+ run |
 | attack_map_v1.yaml | 1 | ce12a58 | `ca8791ac3f9111568fc66302fefd1a38cbdf74f79925409ebb64dae65bb5f3b1` | M1 trial run, run A and runs B/C (all superseded); no M2+ run |
 | attack_map_v1.yaml | 2 (current) | 112506b | `3755a479de9c57a4d92db6a5370bff2b902511ac88395d84ce5ae94212419c0d` | M1 inventory runs D/E; no M2+ run |
+| preprocess_v1.yaml | 1 (current) | this commit | `265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e` | none yet — frozen in the M2A owner-decision pass; M2B has not run. The diagnostic smoke runC/runD used exactly these values |
 
 Reasons: revision 2 of both files implements owner decisions DEV-010 / Q-12 / Q-13 and the revised Q-04 index-bounded decoder rule (DEV-006). No revision is made in the dataset-resolution pass: the current files stay at revision 2.
 
@@ -128,3 +129,31 @@ Reasons: revision 2 of both files implements owner decisions DEV-010 / Q-12 / Q-
 -    Paper:  {proposed_attack_macro: print,  basis: "the only local folder without a literal spec concept match; spec concept 'SiW-Mv2 print' is the only unmatched concept (14 folders <-> 14 concepts). Name 'Paper' is ambiguous with 'paper mask', so not applied without owner approval."}
 +unmapped_pending_approval: {}
 ```
+
+
+## preprocess_v1.yaml — promotion from proposal to frozen (2026-09-19)
+
+`configs/frozen/preprocess_v1.yaml` revision 1 is a **promotion**, not an overwrite: there is no earlier
+frozen revision. The proposal it supersedes, `configs/proposed/preprocess_v1.proposed.yaml`
+(sha256 `969b838a3163ea816c55853af26611a896fc585d2a637424a61d412a5b77ba2b`, commit 0688103a), is kept
+**byte-unchanged** as proposal history and still carries `status: PROPOSED_BLOCKED`; nothing was rewritten
+in it, so `frozen_config_snapshot/history/` gains no entry for this promotion. A byte-identical snapshot of
+the frozen file is at `frozen_config_snapshot/configs/frozen/preprocess_v1.yaml`.
+
+What changed relative to the proposal — every change is an owner decision recorded in
+`M2A_OWNER_DECISIONS.md`; nothing was decided by a benchmark measurement:
+
+| Field in the proposal | Frozen value |
+|---|---|
+| `scrfd.model: null` (Q-02) | `variant: SCRFD_10G_KPS`, `weight_sha256: 5838f7fe…`, `weight_provenance: OFFICIAL_BYTE_HASH_CONFIRMED` |
+| `crop.border: null` (Q-22) | `REQUESTED_SQUARE_ZERO_PAD` + explicit semantics and per-sample recorded fields |
+| `canonical_face.interpolation_decision_for_nonsquare: null` | removed: the crop is always square, so `downscale`/`upscale` fully determine the rule |
+| `adaface.checkpoint: null` (Q-03) | original repo R50 / WebFace4M, `weight_sha256: 52cca7c6…`, `code_commit: c60eaa78…` |
+| `adaface.color_order: null` (Q-18) | `BGR` |
+| `adaface.geometric_adapter: null` (Q-19) | `RESIZE_256_TO_112_INTER_AREA`, `additional_alignment: none` |
+| `cache.geometry_parsing_logits_storage: null` (Q-23) | full float32 representation + lossless codec block with library/level/shard/byte-order/dtype |
+| — | added `owner_decisions`, `open_non_blocking`, `facexformer.mtcnn_margin_recrop: false`, `parsing_class_channel_order`, selection tie-break made explicit |
+
+The only remaining `null` is `facexformer.parsing_class_names` (Q-21), which the owner confirmed does not
+block M2B: the cache preserves the full logits, the raw class-channel order and the argmax mask. A test
+asserts that this is the *only* null in the frozen file.

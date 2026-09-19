@@ -142,3 +142,42 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
 6. **Opened questions** Q-18…Q-23 and marked Q-02/Q-03 as owner decisions. M2 → **BLOCKED**.
    - *Why:* the spec and the official model contracts leave genuine gaps (AdaFace colour and alignment, crop borders, logits storage). Choosing silently would be a hidden scientific decision.
 7. **Next:** the owner resolves the blockers; the contract is then frozen (`configs/frozen/preprocess_v1.yaml`), the M2B smoke is repeated on the chosen host, and only then does full M2B run.
+
+## M2A — Owner decision resolution and contract freeze (2026-09-19; base 0688103a, additive, cwd `/home/cong/GPAT_TransferBench`)
+
+1. **Verified the starting state** (HEAD `0688103a`, clean tree, 1 commit ahead of `origin/main`, M2 BLOCKED)
+   and re-read every M2A artifact plus the relevant frozen-spec sections before touching code.
+2. **Q-02 — verified the owner's SCRFD selection against the official source.** Downloaded the official
+   InsightFace release pack `antelopev2.zip` into a non-Git cache and compared its member
+   `antelopev2/scrfd_10g_bnkps.onnx` with the local file: **byte-identical**.
+   - *Why:* the previous pass could only identify the file structurally. The owner's selection stands either
+     way, but a byte identity removes the last inference from the detector's provenance.
+   - `det_2.5g.onnx` stays in the registry as an unselected candidate and is now refused by hash in code.
+3. **Q-03 — obtained the original AdaFace R50 / WebFace4M checkpoint** from the link published in the official
+   README at the pinned commit, into the external model cache (never in Git). Hashed, strict-loaded into the
+   official `ir_50`, recorded.
+   - *Why:* the owner chose the original release so the spec's "official BGR" wording is followed literally.
+   - **Finding:** the CVLFace export and this checkpoint are the *same trained model* — 466/467 tensors
+     bit-identical, and `input_layer.0.weight` is an exact channel-axis reversal. So "original + BGR" and
+     "CVLFace + RGB" are the same function; the decision restores spec compliance without changing the
+     identity space. Verified end-to-end: cos = 1.0 (to float32) on every unchanged canonical face.
+4. **Q-18 / Q-19 — froze the AdaFace adapter** as module constants, not parameters: canonical 256 → 112
+   INTER_AREA → RGB→BGR → official `to_input` arithmetic → IR-50 → 512-D L2. No MTCNN, no alignment, no
+   second detector (**DEV-014**), recorded transparently as an adapter deviation rather than a claim to run
+   the full standalone AdaFace photo pipeline.
+5. **Q-22 — implemented the owner's square/zero-padding semantics.** The requested square is built first and
+   never shrunk or shifted; only the source read region is clamped; outside pixels are constant zero
+   (**DEV-016**). Exhaustive synthetic unit tests plus real border evidence.
+6. **Q-23 — froze the scientific representation and piloted the storage.** Full float32 11×224×224 logits and
+   a uint8 mask derived from the *stored* logits; lossless deterministic `npy1+shuffle4+zstd` shards.
+   - *Why:* the owner forbids any lossy reduction, so the size question had to be answered by compression,
+     not by dtype. Measured on the existing 24 smoke logits: 45.57 GB → 34.74 GB, exact reconstruction 24/24.
+   - `zstandard` 0.25.0 was added to the M2 environment for this and only this; lock and runtime facts regenerated.
+7. **Promoted the contract**: `configs/proposed/preprocess_v1.proposed.yaml` (kept byte-unchanged as history)
+   → `configs/frozen/preprocess_v1.yaml` + byte-identical snapshot. A test asserts the only remaining null is
+   `facexformer.parsing_class_names` (Q-21, which blocks M9, not M2B).
+8. **Re-ran the same 24-sample manifest** (deliberately not reselected) on the frozen contract, twice, from
+   clean directories with the final code: `runC`/`runD`, 24/24 OK, **210/210 files byte-identical**.
+   - Only 3 canonical faces differ from the previous pass — exactly the SiW crops that touch a frame border.
+9. **M2 → IN_PROGRESS**, phase `M2A_COMPLETE_AWAITING_OWNER_REVIEW_FOR_M2B`. M2 is deliberately **not**
+   COMPLETE and M3 remains NOT_STARTED; no full preprocessing, cache or pair work was started.

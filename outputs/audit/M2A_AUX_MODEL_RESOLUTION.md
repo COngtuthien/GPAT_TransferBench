@@ -1,5 +1,11 @@
 # M2A — Auxiliary Model Resolution (2026-09-19)
 
+> **Superseded in part by `M2A_OWNER_DECISIONS.md` (same day, owner-decision pass).** Everything below is
+> the investigation as it stood before the owner decided, and is kept unchanged as history. Q-02, Q-03,
+> Q-18, Q-19, Q-22 and Q-23 are now resolved; the SCRFD "hash match to an official release: NOT VERIFIED"
+> line below has since been closed — the local `scrfd_10g_bnkps.onnx` was confirmed **byte-identical** to
+> the member of the official `antelopev2.zip`. See `M2A_OFFICIAL_VERIFICATION.json`.
+
 Evidence table: `M2A_MODEL_PROVENANCE.csv`. Official sources were inspected with lightweight operations only:
 `git ls-remote`, shallow fetch of pinned commits for small repos, raw files, and the Hugging Face model API
 (LFS SHA-256 without downloading weights). No model weight was downloaded; nothing was selected by
@@ -78,3 +84,23 @@ benchmark performance.
 - **Canonical PNG:** OpenCV PNG, compression level 3, lossless; RGB stored.
 - **Torch:** `use_deterministic_algorithms(True)`, 4 intra-op threads, `inference_mode`, `eval()`.
 - **FaceXFormer:** one forward per task with batch 1, following the official demo. All heads are computed each time and `tasks` only filters rows.
+
+---
+
+## 6. Owner resolution pass (2026-09-19, additive)
+
+| Q | Outcome | Evidence |
+|---|---|---|
+| Q-02 | SCRFD_10G_KPS selected; **OFFICIAL_BYTE_HASH_CONFIRMED** against `antelopev2.zip` (sha256 `8e182f14…`) | `M2A_OFFICIAL_VERIFICATION.json` |
+| Q-03 | Original repo R50/WebFace4M `adaface_ir50_webface4m.ckpt` sha256 `52cca7c6…`; strict load OK | same |
+| Q-18 | BGR (official `inference.py` contract reproduced exactly) | `M2A_OWNER_DECISIONS.md` |
+| Q-19 | Canonical face → 112 INTER_AREA; no MTCNN/alignment (DEV-014) | `M2A_OWNER_DECISIONS.md` |
+| Q-22 | Requested square preserved with zero padding (DEV-016 interpretation) | `M2A_BORDER_CASES.csv` |
+| Q-23 | Full float32 logits + uint8 mask, lossless `npy1+shuffle4+zstd` level 10 | `M2A_COMPRESSION_PILOT.md` |
+| Q-20 | Closed as DEV-015 (canonical face is the FaceXFormer source image) | `deviation_report.md` |
+| Q-21 | Still OPEN; not required for M2B | `deviation_report.md` |
+
+New authoritative finding: the CVLFace export and the original AdaFace release hold the **same trained
+weights**; 466/467 tensors are bit-identical and `input_layer.0.weight` is an exact channel-axis reversal.
+The §3 note above ("two release lines, RGB vs BGR") is therefore literally about the *input convention*,
+not about two differently trained models.

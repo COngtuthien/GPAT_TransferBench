@@ -8,7 +8,7 @@
     "BLOCKED",
     "COMPLETE"
   ],
-  "updated_utc": "2026-09-18",
+  "updated_utc": "2026-09-19",
   "milestones": {
     "M0": {
       "name": "Bootstrap",
@@ -114,27 +114,19 @@
     },
     "M2": {
       "name": "Preprocess",
-      "status": "BLOCKED",
-      "phase": "M2A_AUXILIARY_MODEL_RESOLUTION_AND_SMOKE_DONE",
+      "status": "IN_PROGRESS",
+      "phase": "M2A_COMPLETE_AWAITING_OWNER_REVIEW_FOR_M2B",
       "started_utc": "2026-09-19",
       "start_commit": "bc947fdd49ebc8f44bc5dff4728c2b48847be428",
-      "blockers": [
-        "Q-02 SCRFD variant (OWNER_DECISION_REQUIRED)",
-        "Q-03 AdaFace checkpoint (OWNER_DECISION_REQUIRED)",
-        "Q-18 AdaFace colour order",
-        "Q-19 AdaFace geometric alignment adapter",
-        "Q-22 crop border handling",
-        "Q-23 parsing-logit cache storage"
-      ],
+      "blockers": [],
       "non_blocking_open": [
-        "Q-20 FaceXFormer framing",
-        "Q-21 FaceXFormer parsing class names (blocks M9, not M2B)"
+        "Q-21 FaceXFormer parsing class names (blocks M9 / \u00a721 region crops, not M2B)"
       ],
       "m2a": {
-        "smoke": "24/24 OK (DIAGNOSTIC_ONLY, provisional settings)",
-        "determinism": "PASS 208/208 byte-identical (same host/env)",
+        "smoke": "24/24 OK (DIAGNOSTIC_ONLY, frozen contract; runC/runD)",
+        "determinism": "PASS 210/210 byte-identical (same host/env)",
         "environment_lock": "environments/m2_preprocess_laptop.lock.txt",
-        "proposed_config": "configs/proposed/preprocess_v1.proposed.yaml",
+        "proposed_config": "configs/proposed/preprocess_v1.proposed.yaml (history; superseded by configs/frozen/preprocess_v1.yaml)",
         "reports": [
           "M2A_AUX_MODEL_RESOLUTION.md",
           "M2A_PREPROCESS_CONTRACT.md",
@@ -142,9 +134,46 @@
           "M2A_DETERMINISM_REPORT.md",
           "M2A_ENVIRONMENT_REPORT.md",
           "M2A_MODEL_PROVENANCE.csv"
-        ]
+        ],
+        "frozen_config": "configs/frozen/preprocess_v1.yaml"
       },
-      "full_m2b": "NOT STARTED; gate requires owner resolution of the blockers and review of the M2A report"
+      "full_m2b": "NOT STARTED; awaiting owner review of the M2A owner-decision report. M2 must not be marked COMPLETE before M2B produces and verifies the full caches.",
+      "owner_decision_pass": {
+        "date": "2026-09-19",
+        "base_commit": "0688103a2d26191365c063739a78e48aeeba2adb",
+        "cwd": "/home/cong/GPAT_TransferBench",
+        "resolved": {
+          "Q-02": "RESOLVED_BY_OWNER_SELECTION (SCRFD_10G_KPS; OFFICIAL_BYTE_HASH_CONFIRMED vs antelopev2.zip)",
+          "Q-03": "RESOLVED_BY_OWNER_SELECTION (original AdaFace R50/WebFace4M, sha256 52cca7c6...)",
+          "Q-18": "RESOLVED_BY_OWNER (BGR)",
+          "Q-19": "RESOLVED_BY_OWNER_CANONICAL_FACE_ADAPTER (DEV-014)",
+          "Q-20": "CLOSED as DEV-015",
+          "Q-22": "RESOLVED_BY_OWNER (requested square + zero padding; DEV-016)",
+          "Q-23": "RESOLVED_BY_OWNER_FLOAT32_FULL_LOGITS (lossless npy1+shuffle4+zstd level 10)"
+        },
+        "frozen_config": "configs/frozen/preprocess_v1.yaml",
+        "frozen_config_sha256": "265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e",
+        "new_deviations": [
+          "DEV-014",
+          "DEV-015",
+          "DEV-016"
+        ],
+        "smoke_rerun": "same frozen M2A_SMOKE_MANIFEST (sha256 138f5929...); runC 24/24 OK, SCRFD_NO_FACE 0",
+        "determinism": "PASS 210/210 byte-identical (runC vs runD, clean dirs, final code)",
+        "storage_pilot": "45.57 GB raw -> 34.74 GB lossless (ratio 1.312); exact reconstruction 24/24",
+        "environment_change": "zstandard 0.25.0 added to ~/.venvs/gpatbench-m2 for lossless logit storage; lock and runtime facts regenerated",
+        "reports": [
+          "M2A_OWNER_DECISIONS.md",
+          "M2A_OFFICIAL_VERIFICATION.json",
+          "M2A_COMPRESSION_PILOT.md",
+          "M2A_BORDER_CASES.csv",
+          "M2A_CONTRACT_CHANGE_IMPACT.json",
+          "M2A_SMOKE_REPORT.md",
+          "M2A_DETERMINISM_REPORT.md",
+          "M2A_ENVIRONMENT_REPORT.md",
+          "M2A_PREPROCESS_CONTRACT.md"
+        ]
+      }
     },
     "M3": {
       "name": "Split",

@@ -1,0 +1,133 @@
+# preprocess_v1 — FROZEN (2026-09-19).
+#
+# Promoted from configs/proposed/preprocess_v1.proposed.yaml after the owner resolved every
+# M2B-blocking question. The proposal is preserved unchanged as proposal history; the diff and
+# the reasoning are in outputs/audit/M2A_OWNER_DECISIONS.md and outputs/audit/CONFIG_REVISION_LOG.md.
+# No field that affects M2 scientific execution is null or OPEN.
+version: preprocess_v1
+status: FROZEN
+frozen_utc: "2026-09-19"
+supersedes: configs/proposed/preprocess_v1.proposed.yaml
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+owner_decisions:                       # recorded historically; see M2A_OWNER_DECISIONS.md
+  Q-02: RESOLVED_BY_OWNER_SELECTION            # SCRFD variant
+  Q-03: RESOLVED_BY_OWNER_SELECTION            # AdaFace checkpoint
+  Q-18: RESOLVED_BY_OWNER                      # AdaFace colour order
+  Q-19: RESOLVED_BY_OWNER_CANONICAL_FACE_ADAPTER
+  Q-22: RESOLVED_BY_OWNER                      # crop border
+  Q-23: RESOLVED_BY_OWNER_FLOAT32_FULL_LOGITS  # parsing-logit representation
+open_non_blocking:
+  Q-20: "FaceXFormer framing = spec App. A canonical face (documented; DEV-015)"
+  Q-21: "FaceXFormer parsing class names; not required for M2B (full logits + raw channel order + argmax mask stored); required before M9"
+references:
+  data_config: configs/frozen/data_v1.yaml
+  dataset_policy: configs/frozen/dataset_protocol_policy_v1.yaml
+  model_registry: models/registry.yaml
+  contract_doc: outputs/audit/M2A_PREPROCESS_CONTRACT.md
+  owner_decisions_doc: outputs/audit/M2A_OWNER_DECISIONS.md
+  official_verification: outputs/audit/M2A_OFFICIAL_VERIFICATION.json
+routes:
+  casia_fasd: PRECROPPED_112_RGB_TO_256_INTER_CUBIC     # DEV-011; scrfd_applied=false; scrfd_status=N/A
+  msu_mfsd: SPEC_SECTION_4_SCRFD
+  siwmv2: SPEC_SECTION_4_SCRFD
+frame_extraction:
+  decoder: {library: opencv-python-headless, version: "5.0.0.93", api: "cv2.VideoCapture(path, cv2.CAP_FFMPEG)", indexing: loop_counter_DEV-006}
+  pos_frames_forbidden_as_identity: true
+  on_decode_failure: error_no_fallback
+  png: {codec: opencv_png, compression: 3, lossless: true}
+scrfd:
+  registry_key: scrfd
+  variant: SCRFD_10G_KPS                        # Q-02 owner selection
+  model_file: scrfd_10g_bnkps.onnx
+  model_path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx"
+  weight_sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91
+  weight_provenance: OFFICIAL_BYTE_HASH_CONFIRMED   # == antelopev2.zip member antelopev2/scrfd_10g_bnkps.onnx
+  code_commit: 1480e705287bc5d59f923b46c260ec6e3e4150f6    # official inference math reimplemented in gpatbench/preprocess/scrfd.py
+  input_size: 320                               # spec §4
+  score_threshold: 0.50                         # spec §4
+  letterbox: {keep_aspect: true, resize: cv2_default_INTER_LINEAR, placement: top_left, pad_value: 0}   # official
+  normalization: {swapRB: true, mean: 127.5, std: 128.0}                                              # official
+  nms_iou: 0.4                                  # official default (spec silent)
+  coordinate_mapping: "boxes / det_scale (det_scale = letterbox_height / frame_height) -> original-frame pixels"
+  selection: {rule: largest_bbox_area_original_pixels, tie_break: [score_desc, x1_asc, y1_asc, remaining_bbox_coords_lexicographic]}
+  on_no_face: SCRFD_NO_FACE_no_fallback
+crop:
+  shape: square
+  scale: 1.25                                   # spec §4
+  center: scrfd_bbox_center
+  integer_rule: "side_px=round(1.25*max(w,h)); x0=round(cx-side_px/2) (half-to-even); half-open box"
+  border: REQUESTED_SQUARE_ZERO_PAD             # Q-22 owner decision
+  border_semantics: >-
+    The full requested square extent is constructed FIRST and is never shrunk or shifted. Only the
+    SOURCE READ region is clamped to valid image coordinates; every requested-square pixel outside
+    the source image is filled with constant zero. No reflect/replicate/random padding. The
+    pre-resize region is therefore always a true square of side_px.
+  random_padding: false
+  recorded_per_sample: [bbox, requested_square, source_intersection, pad_left, pad_top, pad_right, pad_bottom, side_px, pre_resize_shape, touches_border]
+canonical_face:
+  size: 256
+  channels: RGB
+  dtype: uint8
+  color: sRGB_as_decoded
+  downscale: INTER_AREA                         # side_px >= 256
+  upscale: INTER_CUBIC                          # side_px < 256
+  aspect_ratio_preserved: true                  # guaranteed by the Q-22 square
+facexformer:
+  registry_key: facexformer
+  status: VERIFIED
+  weight_sha256: 327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d
+  weight_source: "hf:kartiknarayan/facexformer@fd12148d0b1949bb98602544d4b257f42eef774d ckpts/model.pt"
+  code_commit: 10fe8291f8a64e2ca1daf938e3e0007bd860303b
+  input: {source_image: frozen_canonical_face_256, pil_resize: [224, 224], interpolation: BICUBIC, to_tensor: true,
+          normalize_mean: [0.485, 0.456, 0.406], normalize_std: [0.229, 0.224, 0.225]}
+  mtcnn_margin_recrop: false                    # Q-20 / DEV-015: the benchmark uses the canonical face
+  tasks: {parsing: 0, landmarks: 1, headpose: 2}
+  outputs: {parsing_logits: "[11,224,224] float32", parsing_mask: "[224,224] uint8 argmax of the stored logits",
+            landmarks_norm: "[68,2] float32 [-1,1]", landmarks_px224: "[68,2] float32", landmarks_px256: "[68,2] float32",
+            pose_pitch_yaw_roll_rad: "[3] float32 radians"}
+  parsing_class_channel_order: RAW_FACEXFORMER_ORDER_PRESERVED
+  parsing_class_names: null                     # Q-21: official metadata not published; does NOT block M2B (see open_non_blocking)
+adaface:
+  registry_key: adaface_ir50
+  release: original_mk-minchul_AdaFace          # Q-03 owner selection (NOT the CVLFace export)
+  architecture: IR-50
+  training_dataset: WebFace4M
+  checkpoint_file: adaface_ir50_webface4m.ckpt
+  checkpoint_path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/adaface_original/adaface_ir50_webface4m.ckpt"
+  weight_sha256: 52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8
+  code_commit: c60eaa786a42c03444f3df7096dbaf9d57ae010d
+  load: "torch.load(ckpt)['state_dict']; keys with prefix 'model.' stripped; build_model('ir_50'); strict=True"
+  geometric_adapter: RESIZE_256_TO_112_INTER_AREA   # Q-19: the frozen canonical face is the common geometry frame
+  additional_alignment: none                    # no MTCNN, no landmark alignment, no second detector (DEV-014)
+  color_order: BGR                              # Q-18 owner decision; matches the original repo contract
+  normalization: {scale: "x/255", mean: 0.5, std: 0.5, arithmetic: "((x/255.0) - 0.5) / 0.5 as official inference.py to_input"}
+  input_size: [112, 112]
+  tensor_dtype: float32
+  output: {embedding: "[512] float32 L2-normalised (tol 1e-5)", raw_norm: float32}
+cache:
+  geometry_parsing_logits:                      # Q-23 owner decision
+    representation: FULL_FLOAT32_LOGITS
+    dtype: float32
+    shape: [11, 224, 224]
+    lossy_reduction_forbidden: true             # no float16, no mask-only, no quantisation
+    storage_codec_id: "npy1+shuffle4+zstd"
+    container: "npy v1.0 (allow_pickle=False), C order"
+    byte_order: little_endian
+    dtype_descr: "<f4"
+    byte_shuffle: {element_size: 4, invertible: true}
+    compressor: {library: zstandard, library_version: "0.25.0", libzstd_version: "1.5.7", backend: cext,
+                 level: 10, write_checksum: false, write_content_size: true, threads: 0}
+    shard: {rows_per_shard: 256, layout: concatenated_blocks, addressing: [shard, byte_offset, byte_length]}
+    integrity: {per_block: sha256, per_uncompressed_npy: sha256, per_shard: sha256}
+    lossless_requirement: "np.array_equal(original, decoded) and byte-equal .npy representation; no tolerance"
+    compression_settings_are: OPERATIONAL_STORAGE_CHOICE   # not a scientific hyper-parameter
+    pilot: outputs/audit/M2A_COMPRESSION_PILOT.md
+  parsing_mask: {dtype: uint8, shape: [224, 224], derivation: "argmax over the stored logits"}
+  serialization: "per-field .npy shards (allow_pickle=False) + Parquet index with per-row sha256"
+  provenance_keys: [sample_id, canonical_face_sha256, model_weight_sha256, model_code_fingerprint, preprocess_config_sha256, environment_lock_sha256]
+determinism:
+  torch_threads: 4
+  ort_threads: 1
+  torch_deterministic_algorithms: true
+  inference_mode: true
+environment_lock: environments/m2_preprocess_laptop.lock.txt

@@ -3,21 +3,25 @@
 # M0: identities and sources from the spec only; local files listed as UNVERIFIED candidates.
 # weight_sha256 / code_commit stay null until verified at M2. candidate_sha256 (dataset-resolution pass) only
 # fingerprints local candidate files; it does not verify that a file is the spec-required model.
-schema_version: m0-initial   # M2A: resolution blocks added 2026-09-19 (candidate history preserved)
+schema_version: m0-initial   # M2A: resolution blocks added 2026-09-19; owner resolution blocks added 2026-09-19 (all candidate history preserved)
 models:
   scrfd:
     role: "Face detector (frozen, never fine-tuned)"
     spec: "§4: SCRFD ONNX; input 320; score threshold 0.50; choose largest face; weights must be hashed"
-    source_repo: https://github.com/deepinsight/insightface   # spec §30 R17; UNVERIFIED
-    variant: null   # not named in spec — Q-02
+    source_repo: https://github.com/deepinsight/insightface   # spec §30 R17
+    variant: SCRFD_10G_KPS                                            # Q-02 owner selection (2026-09-19)
+    active_candidate: candidate_A                                     # scrfd_10g_bnkps.onnx
     local_candidates:
       - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx", size_bytes: 16923827,
-         candidate_sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91, hashed_utc: "2026-09-18"}
+         candidate_sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91, hashed_utc: "2026-09-18",
+         selection: SELECTED_FOR_FINAL_M2}
       - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/det_2.5g.onnx", size_bytes: 3292009,
-         candidate_sha256: 041f73f47371333d1d17a6fee6c8ab4e6aecabefe398ff32cca4e2d5eaee0af9, hashed_utc: "2026-09-18"}
+         candidate_sha256: 041f73f47371333d1d17a6fee6c8ab4e6aecabefe398ff32cca4e2d5eaee0af9, hashed_utc: "2026-09-18",
+         selection: NOT_SELECTED_FOR_FINAL_M2}
     code_commit: 1480e705287bc5d59f923b46c260ec6e3e4150f6          # official inference math (scrfd.py) reimplemented in gpatbench/preprocess/scrfd.py
-    weight_sha256: null                                               # not frozen: Q-02
-    status: OWNER_DECISION_REQUIRED                                    # M2A (history: NEEDS_M2_VERIFICATION at M0)
+    weight_sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91
+    weight_path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_detectors/scrfd_10g_bnkps.onnx"
+    status: VERIFIED                                                   # M2A owner pass (history: OWNER_DECISION_REQUIRED at M2A; NEEDS_M2_VERIFICATION at M0)
     m2a_resolution:
       candidate_A: {file: scrfd_10g_bnkps.onnx, sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91, identified_as: SCRFD_10G_KPS, basis: "structural (9 KPS outputs; 4,225,835 params = official 4.23M); official antelopev2 pack filename", hash_verified_against_official: false}
       candidate_B: {file: det_2.5g.onnx, sha256: 041f73f47371333d1d17a6fee6c8ab4e6aecabefe398ff32cca4e2d5eaee0af9, identified_as: SCRFD_2.5G_KPS, basis: "structural (9 KPS outputs; 817,955 params = official 0.82M); official buffalo_m pack detector", hash_verified_against_official: false}
@@ -25,6 +29,19 @@ models:
       input_contract: "BGR frame -> letterbox 320 (keep aspect, INTER_LINEAR, top-left, zero pad) -> blobFromImage(1/128, mean 127.5, swapRB) -> RGB NCHW"
       nms_iou: 0.4
       evidence: [outputs/audit/M2A_MODEL_PROVENANCE.csv, outputs/audit/M2A_AUX_MODEL_RESOLUTION.md]
+    m2a_owner_resolution:                                              # 2026-09-19 (additive; candidate history above is preserved)
+      question: Q-02
+      decision: RESOLVED_BY_OWNER_SELECTION
+      selected: candidate_A (scrfd_10g_bnkps.onnx)
+      official_package: "deepinsight/insightface release v0.7, asset antelopev2.zip (exact URL in outputs/audit/M2A_OFFICIAL_VERIFICATION.json and M2A_MODEL_PROVENANCE.csv)"
+      official_package_sha256: 8e182f14fc6e80b3bfa375b33eb6cff7ee05d8ef7633e738d1c89021dcf0c5c5
+      official_member: "antelopev2/scrfd_10g_bnkps.onnx"
+      official_member_sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91
+      verification: OFFICIAL_BYTE_HASH_CONFIRMED                       # local file == official release member, byte for byte
+      downloaded_utc: "2026-09-19"
+      package_location: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/_provenance_tmp/antelopev2.zip (outside Git; never committed)"
+      not_selected: {file: det_2.5g.onnx, sha256: 041f73f47371333d1d17a6fee6c8ab4e6aecabefe398ff32cca4e2d5eaee0af9, status: NOT_SELECTED_FOR_FINAL_M2, retained_as: historical_candidate_evidence, enforcement: "gpatbench/preprocess/scrfd.py refuses this hash"}
+      evidence: [outputs/audit/M2A_OFFICIAL_VERIFICATION.json, outputs/audit/M2A_OWNER_DECISIONS.md]
   facexformer:
     role: "Geometry cache: parsing logits/mask, landmarks, yaw-pitch-roll (frozen, offline only)"
     spec: "§4"
@@ -43,19 +60,32 @@ models:
       input_contract: "PIL RGB Resize(224x224,BICUBIC) -> ToTensor -> Normalize(ImageNet)"
       output_contract: "parsing logits [11,224,224]; landmarks [68,2] in [-1,1]; headpose (pitch,yaw,roll) radians"
       open_questions: [Q-20 (non-blocking), Q-21 (non-blocking for M2B)]
+    m2a_owner_resolution:                                              # 2026-09-19
+      verification_unchanged: true                                     # no contradictory authoritative evidence found
+      framing: "frozen canonical 256 face is the FaceXFormer source image; no MTCNN 50%-margin recrop (Q-20 -> DEV-015)"
+      parsing_storage: "full float32 11x224x224 logits + uint8 argmax mask (Q-23); raw class-channel order preserved"
+      Q-21: "OPEN: official class metadata not published; required before M9, not for M2B"
   adaface_ir50:
     role: "Identity cache: L2-normalized embedding; official BGR/input normalization (frozen)"
     spec: "§4"
-    source_repo: https://github.com/mk-minchul/AdaFace   # spec §30 R13; UNVERIFIED
-    variant: null   # training-set checkpoint not named — Q-03
+    source_repo: https://github.com/mk-minchul/AdaFace   # spec §30 R13
+    variant: IR-50                                                    # Q-03 owner selection (2026-09-19)
+    training_dataset: WebFace4M
+    release_line: original_repository                                  # NOT the CVLFace export
+    active_candidate: original_r50_webface4m
     local_candidates:
+      - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/adaface_original/adaface_ir50_webface4m.ckpt", size_bytes: 596517267,
+         candidate_sha256: 52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8, hashed_utc: "2026-09-19",
+         selection: SELECTED_FOR_FINAL_M2, note: "downloaded 2026-09-19 from the link published in the official README"}
       - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/pretrained_model/model.pt", size_bytes: 174611121, note: "identity inferred from directory name only",
          candidate_sha256: 43bd2d570584d95d4a17ce81f26449034c45dbeed750afcab651872abc0e1496, hashed_utc: "2026-09-18",
-         hf_download_metadata: {revision: 60a65befbcf7e19284c4f3ac730f56867ed29594, etag_equals_sha256: true, repo_id: null}}
+         hf_download_metadata: {revision: 60a65befbcf7e19284c4f3ac730f56867ed29594, etag_equals_sha256: true, repo_id: null},
+         selection: NOT_SELECTED_FOR_FINAL_M2}
       - {path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/code/adaface/", note: "vendored code candidate"}
     code_commit: c60eaa786a42c03444f3df7096dbaf9d57ae010d          # github mk-minchul/AdaFace net.py (vendored adaface_net.py byte-identical)
-    weight_sha256: null                                               # not frozen: checkpoint choice is Q-03
-    status: OWNER_DECISION_REQUIRED                                    # M2A (history: NEEDS_M2_VERIFICATION at M0)
+    weight_sha256: 52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8
+    weight_path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/face_identity/adaface_original/adaface_ir50_webface4m.ckpt"
+    status: VERIFIED                                                   # M2A owner pass (history: OWNER_DECISION_REQUIRED at M2A; NEEDS_M2_VERIFICATION at M0)
     m2a_resolution:
       local_candidate_identity: "hf:minchul/cvlface_adaface_ir50_webface4m@60a65befbcf7e19284c4f3ac730f56867ed29594 pretrained_model/model.pt"
       local_candidate_identity_status: VERIFIED                        # LFS sha256 + revision match
@@ -64,6 +94,30 @@ models:
       alternatives: ["hf:minchul/cvlface_adaface_ir50_casia", "hf:minchul/cvlface_adaface_ir50_ms1mv2", "original AdaFace repo IR-50 .ckpt (CASIA / WebFace4M / MS1MV2; BGR input)"]
       open_questions: [Q-03, Q-18, Q-19]
       evidence: [outputs/audit/M2A_MODEL_PROVENANCE.csv, outputs/audit/M2A_AUX_MODEL_RESOLUTION.md]
+    m2a_owner_resolution:                                              # 2026-09-19 (additive; candidate history above is preserved)
+      questions: [Q-03, Q-18, Q-19]
+      decision: RESOLVED_BY_OWNER_SELECTION
+      selected_checkpoint: adaface_ir50_webface4m.ckpt
+      architecture: "IR-50 (R50)"
+      training_dataset: WebFace4M
+      official_source: "mk-minchul/AdaFace README table row 'R50 | WebFace4M' @ c60eaa786a42c03444f3df7096dbaf9d57ae010d"
+      official_url: "published in that README row (exact URL in outputs/audit/M2A_OFFICIAL_VERIFICATION.json and M2A_MODEL_PROVENANCE.csv)"
+      downloaded_utc: "2026-09-19"
+      size_bytes: 596517267
+      weight_sha256: 52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8
+      publisher_hash_available: false                                  # the official README publishes no checksum
+      load_compatibility: "torch.load()['state_dict']; 467 keys with prefix 'model.'; strict=True into official net.py build_model('ir_50') -> All keys matched; 512-D L2-normalised output"
+      color_order: BGR                                                 # Q-18
+      geometric_adapter: RESIZE_256_TO_112_INTER_AREA                  # Q-19; no MTCNN, no second detector
+      relationship_to_not_selected_candidate: >-
+        Tensor-by-tensor comparison with the CVLFace export: 466 of 467 tensors are bit-identical and the
+        only difference, input_layer.0.weight, is an EXACT reversal of the input convolution's channel
+        axis. The two official releases therefore hold the same trained model, expressed for BGR
+        (original) and RGB (CVLFace) input respectively.
+      not_selected: {file: "pretrained_model/model.pt", sha256: 43bd2d570584d95d4a17ce81f26449034c45dbeed750afcab651872abc0e1496,
+                     status: NOT_SELECTED_FOR_FINAL_M2, retained_as: historical_candidate_evidence,
+                     file_retained_on_disk: true, enforcement: "gpatbench/preprocess/aux_models.py refuses this hash"}
+      evidence: [outputs/audit/M2A_OFFICIAL_VERIFICATION.json, outputs/audit/M2A_OWNER_DECISIONS.md]
   resnet18_imagenet1k_v1:
     role: "Backbone for GPAT E_art, frozen F_art, ArtifactProbeNet, primary downstream evaluator"
     spec: "§9.2, §10.2, §12.1, §14"

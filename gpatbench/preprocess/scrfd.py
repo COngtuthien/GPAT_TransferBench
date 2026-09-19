@@ -9,7 +9,11 @@ python-package/insightface/model_zoo/scrfd.py (sha256 c06275fe...). Reproduced e
   * 9-output KPS models: strides [8,16,32], 2 anchors; distance2bbox / distance2kps with pred*stride
   * keep scores >= threshold (spec 0.50); boxes/kps / det_scale -> original-frame coordinates
   * stable sort by score, NMS IoU threshold 0.4 (official default; spec silent), official +1 area
-Only the model file differs between candidates (Q-02). Nothing is imported from the insightface package.
+Model file (Q-02 = RESOLVED_BY_OWNER_SELECTION, byte-verified): scrfd_10g_bnkps.onnx, the detector of
+the official InsightFace `antelopev2` model pack (release v0.7). Its sha256 was confirmed EXACTLY equal
+to the member `antelopev2/scrfd_10g_bnkps.onnx` of the official antelopev2.zip. The unselected candidate
+det_2.5g.onnx (SCRFD_2.5G_KPS, buffalo_m) is refused here and kept only as registry history.
+Nothing is imported from the insightface package.
 """
 from __future__ import annotations
 
@@ -20,6 +24,15 @@ import numpy as np
 
 NMS_THRESH = 0.4            # official InsightFace default (IMPLEMENTATION_DETAIL; spec silent)
 INPUT_MEAN, INPUT_STD = 127.5, 128.0
+
+# Q-02 owner selection: SCRFD_10G_KPS (scrfd_10g_bnkps.onnx), byte-identical to the official
+# antelopev2 pack member. Any other detector file is refused by this class.
+SELECTED_VARIANT = "SCRFD_10G_KPS"
+SELECTED_WEIGHT_SHA256 = "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91"
+NOT_SELECTED_SHA256 = {
+    "041f73f47371333d1d17a6fee6c8ab4e6aecabefe398ff32cca4e2d5eaee0af9":
+        "det_2.5g.onnx (SCRFD_2.5G_KPS, buffalo_m); NOT_SELECTED_FOR_FINAL_M2",
+}
 
 
 def _sha256(path) -> str:
@@ -60,10 +73,17 @@ def nms(dets, thresh=NMS_THRESH):
 
 class SCRFD:
     def __init__(self, model_path, expected_sha256: str | None = None, input_size: int = 320, providers=("CPUExecutionProvider",)):
+        """`expected_sha256` defaults to the owner-selected 10G weights; an unselected candidate
+        (e.g. det_2.5g.onnx) is refused with an explicit message and can never become active
+        by passing its own hash."""
         import onnxruntime as ort
         self.sha256 = _sha256(model_path)
-        if expected_sha256 and self.sha256 != expected_sha256:
-            raise ValueError(f"SCRFD weight hash mismatch: {self.sha256} != {expected_sha256}")
+        if self.sha256 in NOT_SELECTED_SHA256:
+            raise ValueError(f"refusing a detector the owner did not select: {NOT_SELECTED_SHA256[self.sha256]}")
+        expected = expected_sha256 or SELECTED_WEIGHT_SHA256
+        if self.sha256 != expected:
+            raise ValueError(f"SCRFD weight hash mismatch: {self.sha256} != {expected}")
+        self.variant = SELECTED_VARIANT
         so = ort.SessionOptions()
         so.intra_op_num_threads = 1          # determinism
         so.inter_op_num_threads = 1

@@ -23,6 +23,9 @@ changes are appended as dated updates under the entry.
 | DEV-011 | APPROVED | APPROVED_CONTROLLED_DATASET_ADAPTATION — CASIA pre-cropped 112→256 INTER_CUBIC, SCRFD N/A | 2026-09-19 |
 | DEV-012 | APPROVED | SiW-Mv2 video-disjoint split fallback (content-group, exact-byte sha256) — subject IDs unavailable | 2026-09-19 |
 | DEV-013 | APPROVED | SiW-Mv2 pairing fallback: different video AND different content group (not different-person) | 2026-09-19 |
+| DEV-014 | APPROVED | AdaFace runs on the frozen canonical face; no MTCNN/landmark alignment stage (owner decision Q-19) | 2026-09-19 |
+| DEV-015 | APPROVED | FaceXFormer runs on the frozen canonical face; no MTCNN 50%-margin recrop (closes Q-20) | 2026-09-19 |
+| DEV-016 | APPROVED | Q-22 operational interpretation of "clamp to image": the requested square is preserved with zero padding; clamping applies to the source read region | 2026-09-19 |
 
 ---
 
@@ -306,3 +309,63 @@ No new deviation is proposed in M2A. The items below are open questions for the 
 - FaceXFormer one forward per task;
 - landmark 224→256 pixel-centre mapping;
 - deterministic threading (torch 4, ORT 1).
+
+---
+
+## M2A — owner decision pass (2026-09-19)
+
+Full text and evidence: `M2A_OWNER_DECISIONS.md`. The M2A investigation table above the previous section is
+kept as history; this section records the resolutions and the three new deviations they make explicit.
+
+| ID | Owner decision | Final status |
+|---|---|---|
+| Q-02 | SCRFD_10G_KPS `scrfd_10g_bnkps.onnx` (candidate A) | RESOLVED_BY_OWNER_SELECTION; **OFFICIAL_BYTE_HASH_CONFIRMED** against `antelopev2.zip` |
+| Q-03 | original `mk-minchul/AdaFace` R50 / WebFace4M checkpoint | RESOLVED_BY_OWNER_SELECTION |
+| Q-18 | BGR | RESOLVED_BY_OWNER |
+| Q-19 | canonical-face adapter, no extra alignment | RESOLVED_BY_OWNER_CANONICAL_FACE_ADAPTER (DEV-014) |
+| Q-20 | canonical face is the FaceXFormer source image | CLOSED (DEV-015) |
+| Q-21 | class names not needed for M2B | **OPEN** — required before M9 / §21 region crops |
+| Q-22 | requested square preserved with zero padding | RESOLVED_BY_OWNER (DEV-016) |
+| Q-23 | full float32 logits + uint8 argmax mask, lossless storage | RESOLVED_BY_OWNER_FLOAT32_FULL_LOGITS |
+
+## DEV-014 — AdaFace identity cache omits the official MTCNN alignment stage
+
+- **Spec basis:** §4 names AdaFace IR-50 with its official BGR/input normalisation, and App. A defines the
+  identity cache on the canonical `faces`. It defines no alignment step.
+- **Deviation:** the official AdaFace inference pipeline aligns an arbitrary photograph with MTCNN 5-point
+  alignment before the 112×112 crop. This benchmark does not run that stage. The frozen canonical 256×256
+  face is resized to 112×112 with INTER_AREA and fed directly.
+- **Reason:** the benchmark must score real and *synthetic* 256×256 images in one common geometry frame.
+  Adding an aligner would introduce a second face model into the identity path, a transform with no spec
+  basis, and a stage that generated images can fail. The owner decided the canonical face is that frame.
+- **Affected:** every identity-based number (ID cosine, ID retention). They are **not comparable** with
+  published AdaFace verification benchmarks; this must be disclosed wherever identity results are reported.
+- **Not affected:** the choice is applied identically to every method and every dataset.
+- **Status: APPROVED** (owner, 2026-09-19). Classification: IMPLEMENTATION_ADAPTER_DEVIATION.
+- **Enforcement:** the adapter has no alignment code path; tests assert that no MTCNN/alignment/detector
+  module is imported and that exactly one resize (112×112, INTER_AREA) occurs.
+
+## DEV-015 — FaceXFormer geometry cache omits the official demo's MTCNN margin recrop (closes Q-20)
+
+- **Spec basis:** App. A defines the geometry cache on the canonical `faces`.
+- **Deviation:** the official FaceXFormer demo crops an MTCNN box with a 50 % margin before resizing to 224.
+  The benchmark feeds the frozen canonical face instead.
+- **Reason:** identical to DEV-014 — one common frame for real and synthetic images, no extra face model.
+- **Affected:** parsing/landmark/pose caches; applied identically everywhere.
+- **Status: APPROVED** (owner, 2026-09-19). Classification: IMPLEMENTATION_ADAPTER_DEVIATION.
+
+## DEV-016 — Operational interpretation of spec §4 "clamp to image" for the 1.25× square crop
+
+- **Spec basis:** §4 requires a "Square **padded** face … side = 1.25×max(w,h); clamp to image; no random
+  padding". Taken literally, clamping the *output* region makes the crop non-square, and resizing a
+  non-square region to 256×256 distorts the aspect ratio — which contradicts "square" in the same row.
+- **Interpretation (owner):** "clamp" applies to the SOURCE READ region. The requested square is
+  constructed first, is never shrunk or shifted, and every requested pixel outside the image is filled with
+  constant **zero**. No reflect/replicate border and no random padding, so "no random padding" is honoured.
+- **Affected:** only crops whose square extends past a frame edge. Measured on the frozen 24-sample smoke:
+  3/8 SiW, 0/8 MSU, 0/8 CASIA (CASIA does not use SCRFD). The previous provisional rule produced different
+  canonical faces for exactly those 3 samples and identical faces for the other 21
+  (`M2A_CONTRACT_CHANGE_IMPACT.json`).
+- **Status: APPROVED** (owner, 2026-09-19). Classification: OWNER_RESOLVED_IMPLEMENTATION_INTERPRETATION.
+- **Evidence:** `M2A_BORDER_CASES.csv` (real samples, with pads and pre-resize shapes) and exhaustive
+  synthetic unit tests (no contact, four edges, both corners, square larger than one source dimension).

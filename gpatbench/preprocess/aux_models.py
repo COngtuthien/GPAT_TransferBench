@@ -11,11 +11,19 @@ FaceXFormer (VERIFIED weights): Kartik-3004/facexformer @ 10fe8291 (code), HF ka
   Constructor calls swin_b(weights='IMAGENET1K_V1'); we build it with weights=None (no download) and then
   load the checkpoint with strict=True, so every parameter/buffer comes from the checkpoint.
 
-AdaFace: weights = HF minchul/cvlface_adaface_ir50_webface4m @ 60a65bef pretrained_model/model.pt
-  (CVLFace release; model.yaml: input 3x112x112, color_space RGB, output 512), loaded (prefix 'net.' removed,
-  strict=True) into the official AdaFace net.py (mk-minchul/AdaFace @ c60eaa78), whose forward returns the
-  L2-normalised feature. Colour order and geometric alignment are OPEN (Q-18, Q-19): the adapter makes them
-  explicit parameters; the M2A smoke uses the PROVISIONAL setting documented in the report.
+AdaFace (owner-resolved Q-03/Q-18/Q-19): weights = the ORIGINAL mk-minchul/AdaFace release
+  "R50 / WebFace4M" (official README table, repo @ c60eaa78), file adaface_ir50_webface4m.ckpt,
+  sha256 52cca7c6...; loaded as the official inference.py does (torch.load(...)["state_dict"],
+  keys starting with "model." with that prefix stripped, strict=True) into the official net.py
+  build_model("ir_50"), whose forward returns the L2-normalised feature and its norm.
+  The CVLFace export (sha256 43bd2d57...) is NOT selected: it is the same trained model with the
+  input convolution's channel axis reversed for RGB input, kept in models/registry.yaml as
+  historical candidate evidence only, and refused by this adapter.
+  Frozen input contract (no parameters, no alternatives):
+    canonical 256x256 RGB uint8 -> cv2.resize 112x112 INTER_AREA -> RGB->BGR reversal ->
+    ((x/255) - 0.5)/0.5 exactly as official inference.py to_input -> float32 [1,3,112,112].
+  No MTCNN, no landmark alignment and no second face detector run inside this adapter: the
+  benchmark's frozen canonical face is the common geometry frame (DEV-014).
 """
 from __future__ import annotations
 
@@ -24,6 +32,8 @@ import sys
 from pathlib import Path
 
 import numpy as np
+
+from .logit_store import mask_from_logits
 
 FACEXFORMER_CODE_SHA256 = {   # official Kartik-3004/facexformer @ 10fe8291f8a64e2ca1daf938e3e0007bd860303b
     "network/__init__.py": "31b03a6fb9c51b9c56d6482604b6e4a97ee4638719f7c3e0c32764e90a6f6c29",
@@ -35,7 +45,19 @@ ADAFACE_CODE_SHA256 = {       # official mk-minchul/AdaFace @ c60eaa786a42c03444
     "adaface_net.py": "b4db4eb0174a385fd29e5f616391b50d443f455990c8b88dcab1f8021af8ba4c",
 }
 FACEXFORMER_WEIGHT_SHA256 = "327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d"
-ADAFACE_WEIGHT_SHA256 = "43bd2d570584d95d4a17ce81f26449034c45dbeed750afcab651872abc0e1496"
+# Owner selection (Q-03): the ORIGINAL AdaFace repository release R50 / WebFace4M.
+ADAFACE_WEIGHT_SHA256 = "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8"
+ADAFACE_SELECTED = {"variant": "IR-50 (R50)", "training_dataset": "WebFace4M",
+                    "source": "https://github.com/mk-minchul/AdaFace README -> adaface_ir50_webface4m.ckpt",
+                    "code_commit": "c60eaa786a42c03444f3df7096dbaf9d57ae010d"}
+# Investigated but NOT SELECTED for the final M2 identity cache (kept so it cannot silently return).
+ADAFACE_NOT_SELECTED_SHA256 = {
+    "43bd2d570584d95d4a17ce81f26449034c45dbeed750afcab651872abc0e1496":
+        "CVLFace export hf:minchul/cvlface_adaface_ir50_webface4m (RGB input); NOT_SELECTED_FOR_FINAL_M2",
+}
+ADAFACE_COLOR_ORDER = "BGR"                                  # Q-18 RESOLVED_BY_OWNER
+ADAFACE_GEOMETRIC = "RESIZE_256_TO_112_INTER_AREA"           # Q-19 RESOLVED_BY_OWNER
+ADAFACE_INPUT = 112
 IMAGENET_MEAN, IMAGENET_STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
 FX_INPUT = 224
 FX_TASKS = {"parsing": 0, "landmarks": 1, "headpose": 2}
@@ -101,7 +123,7 @@ class FaceXFormerAdapter:
                     out["landmarks_norm"] = lm.view(-1, 68, 2)[0].float().cpu().numpy()  # [-1, 1], 224 input
                 else:
                     out["pose_pitch_yaw_roll_rad"] = hp[0].float().cpu().numpy()         # (3,) radians
-        out["parsing_mask"] = out["parsing_logits"].argmax(axis=0).astype(np.uint8)       # official: argmax
+        out["parsing_mask"] = mask_from_logits(out["parsing_logits"])   # official argmax OF the stored logits (Q-23)
         # official denorm_points (align_corners=False) to the 224 input grid, then linear map to canonical 256
         lm224 = ((out["landmarks_norm"] + 1.0) * FX_INPUT - 1.0) / 2.0
         out["landmarks_px224"] = lm224.astype(np.float32)
@@ -110,31 +132,42 @@ class FaceXFormerAdapter:
 
 
 class AdaFaceAdapter:
-    def __init__(self, code_dir, weight_path, color_order: str, geometric: str, device="cpu"):
+    """Frozen identity adapter. The colour order and the geometric adapter are OWNER-FROZEN
+    module constants, not arguments: there is no code path to RGB input, to another checkpoint,
+    to MTCNN/landmark alignment or to a second face detection."""
+
+    def __init__(self, code_dir, weight_path, device="cpu"):
         import torch
         verify_code(code_dir, ADAFACE_CODE_SHA256)
-        if _sha(weight_path) != ADAFACE_WEIGHT_SHA256:
-            raise ValueError("AdaFace weight hash mismatch")
-        if color_order not in ("RGB", "BGR"):
-            raise ValueError(color_order)
-        if geometric not in ("RESIZE_256_TO_112_INTER_AREA",):
-            raise ValueError(f"geometric adapter {geometric!r} not implemented (Q-19 open)")
+        got = _sha(weight_path)
+        if got in ADAFACE_NOT_SELECTED_SHA256:
+            raise ValueError(f"refusing a checkpoint that the owner did not select: {ADAFACE_NOT_SELECTED_SHA256[got]}")
+        if got != ADAFACE_WEIGHT_SHA256:
+            raise ValueError(f"AdaFace weight hash mismatch: {got} != {ADAFACE_WEIGHT_SHA256}")
         sys.path.insert(0, str(code_dir))
         import adaface_net
         self.model = adaface_net.build_model("ir_50")
-        st = torch.load(weight_path, map_location="cpu", weights_only=False)
-        self.model.load_state_dict({k[4:]: v for k, v in st.items() if k.startswith("net.")}, strict=True)
+        ck = torch.load(weight_path, map_location="cpu", weights_only=False)
+        state = {k[6:]: v for k, v in ck["state_dict"].items() if k.startswith("model.")}   # official inference.py
+        self.model.load_state_dict(state, strict=True)
         self.model.eval().to(device)
-        self.color_order, self.geometric, self.device = color_order, geometric, device
+        self.color_order, self.geometric, self.device = ADAFACE_COLOR_ORDER, ADAFACE_GEOMETRIC, device
+        self.weight_sha256 = got
 
     def preprocess(self, rgb_uint8: np.ndarray):
+        """Canonical 256 RGB uint8 -> official AdaFace input tensor.
+
+        Numerically identical to the official inference.py `to_input` applied to the 112x112
+        image: the scaling is done in float64 (as in the official code) and the tensor is float32.
+        """
         import cv2
         import torch
-        img = cv2.resize(rgb_uint8, (112, 112), interpolation=cv2.INTER_AREA)    # PROVISIONAL (Q-19)
-        if self.color_order == "BGR":
-            img = img[:, :, ::-1]
-        x = ((img.astype(np.float32) / 255.0) - 0.5) / 0.5                          # official mean=std=0.5
-        return torch.from_numpy(np.ascontiguousarray(x.transpose(2, 0, 1)))[None].to(self.device)
+        if rgb_uint8.shape != (256, 256, 3) or rgb_uint8.dtype != np.uint8:
+            raise ValueError(f"AdaFace expects the canonical 256x256x3 uint8 face, got {rgb_uint8.shape} {rgb_uint8.dtype}")
+        img = cv2.resize(rgb_uint8, (ADAFACE_INPUT, ADAFACE_INPUT), interpolation=cv2.INTER_AREA)   # Q-19
+        bgr = np.asarray(img)[:, :, ::-1]                                     # Q-18: RGB -> BGR (official)
+        x = ((bgr / 255.0) - 0.5) / 0.5                                       # official to_input arithmetic
+        return torch.tensor(np.ascontiguousarray(x.transpose(2, 0, 1))[None]).float().to(self.device)
 
     def __call__(self, rgb_uint8: np.ndarray) -> dict:
         import torch

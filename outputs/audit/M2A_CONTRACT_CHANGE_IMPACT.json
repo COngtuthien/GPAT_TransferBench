@@ -1,0 +1,20 @@
+{
+  "old_run": "run3",
+  "old_contract": "PROVISIONAL (CVLFace checkpoint + RGB input; literal clamp crop)",
+  "new_run": "runC",
+  "new_contract": "FROZEN (original AdaFace R50-WebFace4M + BGR input; requested square + zero padding)",
+  "canonical_faces_unchanged": 21,
+  "canonical_faces_changed": 3,
+  "changed_sample_ids": [
+    "09cbbfbccb912650a9f02b7242fd447a10c5bf7048b0ec59685e058557586920",
+    "322276f887a2f5f13be74501e07b681aabf1fc287c194c3a3de03d5394201754",
+    "8783c1c15d7a894490e1e48816828cba2e8e9f8e3c556c10ac0eecbbf63d5fe4"
+  ],
+  "changed_reason": "Q-22: these are exactly the crops that touch the frame border; the square is now preserved with zero padding instead of being clamped to a non-square region",
+  "facexformer_logits_byte_identical_on_unchanged_faces": "21/21",
+  "adaface_cosine_on_unchanged_faces": {
+    "min": 0.9999999403953552,
+    "max": 1.0000001192092896
+  },
+  "interpretation": "On the faces that did not change, the new identity embeddings agree with the previous ones to float32 precision. That is expected and is itself evidence: the CVLFace export and the original release hold the same trained weights, differing only by the input convolution's channel order, so 'CVLFace + RGB' and 'original + BGR' are the same function. The owner decision therefore restores literal compliance with the spec's official-BGR wording without changing the identity space. It must not be confused with the earlier diagnostic cos(RGB-input, BGR-input) = 0.81-0.97, which fed ONE checkpoint the wrong channel order."
+}
