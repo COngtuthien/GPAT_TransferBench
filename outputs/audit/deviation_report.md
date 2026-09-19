@@ -282,7 +282,7 @@ Note: supplementary Table 1 names the 72-video mask type "Full Mask", while the 
 | Q-15 | **RESOLVED_WITH_CONTROLLED_ADAPTATION** (DEV-011 APPROVED) |
 | Q-16 | **RESOLVED_WITH_EXACT_CONTENT_GROUPING** (6 groups; raw records preserved) |
 | Q-17 | DOCUMENTED LIMITATION: 64 official protocol names absent locally (`SIW_PROTOCOL_COVERAGE_AUDIT.md`); local inventory is the source of truth |
-| Q-01 | OPEN (allocator objective/weights), required before M3 execution |
+| Q-01 | **RESOLVED_BY_OWNER_LEXICOGRAPHIC_ALLOCATOR** (2026-09-19); frozen in configs/frozen/split_v1.yaml |
 
 ---
 
@@ -410,3 +410,49 @@ kept as history; this section records the resolutions and the three new deviatio
   passes with only ~1.19 GiB of headroom beyond the required total, so free space is monitored during the
   run and execution halts at a resumable boundary if it approaches the 10 GiB reserve.
 - **Status: APPROVED** (owner, 2026-09-19).
+
+---
+
+## Q-01 — RESOLVED_BY_OWNER_LEXICOGRAPHIC_ALLOCATOR (2026-09-19)
+
+**Not a deviation**: the spec leaves the allocator's weights and search procedure unspecified, and
+this is the owner's decision filling that gap. It is recorded here because the decision registry
+lives in this file, and because it must be attributable.
+
+- **Classification:** OWNER_BENCHMARK_DESIGN_DECISION. It is **not** literature-derived and must not
+  be presented as such.
+- **What the spec fixed:** §3.5 ratios 70/15/15, seed 20260814, group-disjoint within each dataset
+  then pooled, balancing terms named (video-count deviation; binary and attack_macro coverage).
+- **What was missing (Q-01):** the relative importance of those terms, their weights, and the search
+  procedure.
+- **Owner resolution:** a strict **lexicographic** priority order instead of one weighted sum, so no
+  trade-off is hidden in an unchosen weight:
+
+  | level | meaning |
+  |---|---|
+  | P0 | hard grouping / leakage feasibility (constraint, never a penalty) |
+  | P1 | total canonical-video ratio |
+  | P2 | binary live/spoof distribution |
+  | P3 | attack_macro distribution |
+  | P4 | attack_raw distribution |
+  | P5 | deterministic seeded tie-break (seed 20260814) |
+
+  Each level is minimized and then pinned as an exact equality constraint, so a later priority can
+  never worsen an earlier one.
+- **Population contract:** the allocator balances **canonical videos**, each weighing exactly one
+  video regardless of how many sampled frames survived M2; only M2 COMPLETE rows become usable
+  downstream image samples, and FAILED rows stay provenance-only. A canonical video with zero usable
+  frames has no owner policy and raises rather than being silently dropped (measured: zero such
+  videos).
+- **Normalization:** per-category weights `W_c = SCALE // N_c` with `SCALE = 10**6`, frozen as *the
+  definition* rather than as a float approximation. The exact rational form would need
+  `lcm(N_c) ≈ 1.2e17` at the SiW attack_raw level, which no float64 MILP backend can represent; the
+  divergence bound of the fixed-point form is stated in `split_v1.yaml` rather than hidden.
+- **Optimality status:** EXACT. HiGHS via `scipy.optimize.milp` (scipy 1.18.1, 1 thread, `mip_rel_gap = 0`)
+  proves a global optimum at every level; the objective is independently recomputed in exact Python
+  integers and the P0 invariants re-checked on the produced assignment.
+- **Frozen artifact:** `configs/frozen/split_v1.yaml` (+ byte-identical snapshot). It contains no
+  membership.
+- **Evidence:** `M3_ALLOCATOR_DESIGN.md`, `M3_ALLOCATOR_FEASIBILITY.md`, `M3_ALLOCATOR_OBJECTIVE.json`,
+  `M2_FAILURE_CONCENTRATION.md`, `tests/test_m3_allocator.py`.
+- **Final status: RESOLVED_BY_OWNER_LEXICOGRAPHIC_ALLOCATOR.**

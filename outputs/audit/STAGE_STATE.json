@@ -303,11 +303,94 @@
         "deterministic_final_validation": "PASS",
         "m1_frozen_inputs_unchanged": "PASS",
         "provenance_recorded": "PASS"
+      },
+      "post_completion_audits": {
+        "m2_failure_concentration": {
+          "date": "2026-09-19",
+          "read_only": true,
+          "total_failed": 25,
+          "affected_canonical_videos": 23,
+          "max_failed_frames_in_one_video": 2,
+          "min_complete_frames_in_affected_video": 6,
+          "zero_usable_canonical_videos": 0,
+          "gate": "PASS",
+          "evidence": [
+            "outputs/audit/M2_FAILURE_CONCENTRATION.md",
+            "outputs/audit/M2_FAILURE_CONCENTRATION.csv"
+          ],
+          "m2_artifacts_mutated": false
+        }
       }
     },
     "M3": {
       "name": "Split",
-      "status": "NOT_STARTED"
+      "status": "NOT_STARTED",
+      "preflight": {
+        "phase": "Q01_RESOLVED_ALLOCATOR_FROZEN_NO_SPLIT_CREATED",
+        "date": "2026-09-19",
+        "base_commit": "493d6ed18ea735e4f3f961409166a73a88bf79ef",
+        "q01": "RESOLVED_BY_OWNER_LEXICOGRAPHIC_ALLOCATOR",
+        "frozen_config": "configs/frozen/split_v1.yaml",
+        "frozen_config_sha256": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+        "snapshot_sha256": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+        "implementation": "gpatbench/split/allocator.py",
+        "algorithm": "lexicographic sequential integer programming (P0..P5)",
+        "status_kind": "EXACT",
+        "solver": "HiGHS via scipy.optimize.milp 1.18.1, 1 thread, mip_rel_gap 0",
+        "population_contract": "canonical-video balancing; M2 COMPLETE-only usable rows; FAILED rows provenance-only",
+        "feasibility": {
+          "casia_fasd": {
+            "allocation_groups": 50,
+            "profile_classes": 1,
+            "integer_variables": 3,
+            "objectives": {
+              "P1_total": 1200,
+              "P2_binary": 3999600,
+              "P3_attack_macro": 5999400,
+              "P4_attack_raw": 19999800
+            },
+            "solve_seconds": 0.392,
+            "all_levels_globally_optimal": true
+          },
+          "msu_mfsd": {
+            "allocation_groups": 35,
+            "profile_classes": 1,
+            "integer_variables": 3,
+            "objectives": {
+              "P1_total": 800,
+              "P2_binary": 5713600,
+              "P3_attack_macro": 8570800,
+              "P4_attack_raw": 11428000
+            },
+            "solve_seconds": 0.068,
+            "all_levels_globally_optimal": true
+          },
+          "siwmv2": {
+            "allocation_groups": 1694,
+            "profile_classes": 16,
+            "integer_variables": 48,
+            "objectives": {
+              "P1_total": 0,
+              "P2_binary": 236500,
+              "P3_attack_macro": 10167460,
+              "P4_attack_raw": 32792250
+            },
+            "solve_seconds": 2.48,
+            "all_levels_globally_optimal": true
+          }
+        },
+        "rare_categories_unable_to_span_three_splits": "none at any level on the real data",
+        "split_created": false,
+        "membership_persisted": false,
+        "split_manifest_exists": false,
+        "note": "M3 begins only when the authoritative split assignment is created; allocator code and config alone do not start it.",
+        "evidence": [
+          "outputs/audit/M3_ALLOCATOR_DESIGN.md",
+          "outputs/audit/M3_ALLOCATOR_FEASIBILITY.md",
+          "outputs/audit/M3_ALLOCATOR_OBJECTIVE.json",
+          "outputs/audit/M2_FAILURE_CONCENTRATION.md"
+        ]
+      }
     },
     "M4": {
       "name": "Pair manifests",

@@ -30,7 +30,7 @@
 | Q-15 | CASIA pre-cropped source | `CASIA_SOURCE_AUDIT.md` | UNRESOLVED | Accept the local source under DEV-011 | **RESOLVED_WITH_CONTROLLED_ADAPTATION** | M2 | see DEV-011 |
 | Q-16 | Byte-identical SiW Replay videos (6 pairs) | `SIW_DUPLICATE_VIDEO_AUDIT.*`, `siw_content_groups.csv` | OPEN | Group by exact raw sha256 for splitting | **RESOLVED_WITH_EXACT_CONTENT_GROUPING** | M3, M4 | same content → same split; raw records preserved |
 | Q-17 | Official SiW protocol names absent locally | `SIW_PROTOCOL_COVERAGE_AUDIT.*` (64 names) | INFO | Keep as a documented limitation | **DOCUMENTED LIMITATION** | reporting | local inventory is the source of truth |
-| Q-01 | Split allocator objective weights | spec §3.5 names terms only | OPEN | Not decided in this pass | **OPEN** | M3 (before execution) | propose or derive, then owner approval |
+| Q-01 | Split allocator objective weights | spec §3.5 names terms only | RESOLVED | Owner lexicographic allocator P0-P5 (2026-09-19) | **RESOLVED_BY_OWNER_LEXICOGRAPHIC_ALLOCATOR** | frozen in configs/frozen/split_v1.yaml | see M3_ALLOCATOR_DESIGN.md |
 
 ## Distinction to keep
 

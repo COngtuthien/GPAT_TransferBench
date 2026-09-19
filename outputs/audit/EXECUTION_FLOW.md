@@ -263,3 +263,46 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    raw sources and found **max abs difference 0.0** against the stored artifacts.
 10. **M2 → COMPLETE / FINALIZED.** M3 remains `NOT_STARTED`; no split, pair or training work was started.
     Q-21 stays deferred to M9 as agreed.
+
+## PRE-M3 — M2 failure audit and Q-01 allocator freeze (2026-09-19; base 493d6ed1, no split created)
+
+1. **Verified the starting state** (HEAD == `origin/main` == `493d6ed1`, clean tree, M2 COMPLETE/
+   FINALIZED, M3 NOT_STARTED) and confirmed no M2 scientific process was still writing — only stale
+   watcher shells from the previous pass, which are not workers.
+2. **Audited M2's 25 failures at canonical-video level** (read-only; nothing in the external runtime
+   volume was touched). All 25 are `SCRFD_NO_FACE` on SiW, spread over **23** distinct videos, at most
+   **2** frames each, leaving at least **6** usable frames per affected video.
+   - **Zero-usable-video hard gate: PASS** — 0 of the 2,580 canonical videos lost all their samples,
+     so no video silently leaves the benchmark and no deletion/substitution policy is needed.
+   - *Why this mattered first:* if any video had ended with zero usable frames, Q-01 could not be
+     frozen — it would have been an owner policy question, not an allocator question.
+3. **Froze the M3 population contract**: the allocator balances **canonical videos**, each weighing
+   exactly one video regardless of how many frames survived; only M2 COMPLETE rows become usable
+   image rows; FAILED rows stay provenance-only.
+   - *Why:* balancing on surviving frame counts would let a detector failure quietly reweight the
+     benchmark, making a 7-frame video "lighter" than an 8-frame one.
+4. **Resolved Q-01 as a lexicographic contract** (P0 constraints → P1 video ratio → P2 binary → P3
+   attack_macro → P4 attack_raw → P5 seeded tie-break), each level pinned as an exact equality before
+   the next is minimized, so no later priority can worsen an earlier one.
+   - *Why lexicographic rather than one weighted sum:* the spec names the terms but not their
+     weights; a single weighted objective would have buried an unchosen trade-off in a number.
+5. **Made the objective exactly representable.** The idealised per-category normalisation is rational
+   and its exact integer form needs `lcm(N_c) ≈ 1.2e17` at the SiW raw level — unrepresentable in the
+   float64 arithmetic any MILP backend uses. The frozen objective is therefore a fixed-point integer
+   form (`W_c = 10**6 // N_c`) declared as *the definition*, with its divergence bound stated rather
+   than hidden.
+6. **Found the structure that makes an exact optimum cheap:** groups with an identical category
+   profile are interchangeable, collapsing 50/35/1694 allocation groups to **1/1/16** profile classes.
+   The real problems become 3–48 integer variables, and HiGHS proves a global optimum at every level
+   in under 3 s.
+7. **Pinned both sources of arbitrariness.** The optimal *count vector* is made unique by minimising
+   each column in a seeded order (iterating splits naturally would have systematically starved VAL);
+   the *concrete groups* are then ordered by the frozen seeded hash. Tested against permuted inputs,
+   repeated runs and three `PYTHONHASHSEED` values in fresh interpreters.
+8. **Measured feasibility on the real metadata without creating a split.** Achieved shapes: CASIA
+   70.000/16.000/14.000, MSU 71.429/14.286/14.286, SiW 70.000/15.000/15.000 (group granularity, not
+   allocator weakness, explains CASIA/MSU). No category at any level has fewer than three allocation
+   groups. The assignment produced during the measurement was **discarded**; no membership was
+   persisted and `manifests/split_v1.parquet` does not exist.
+9. **M3 stays NOT_STARTED.** Allocator code and a frozen config do not start the milestone; M3 begins
+   when the authoritative split is created.

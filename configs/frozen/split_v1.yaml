@@ -1,0 +1,196 @@
+# split_v1 — FROZEN (2026-09-19). Owner resolution of Q-01.
+#
+# This file freezes HOW the TRAIN/VAL/TEST split is computed. It deliberately contains no
+# membership: which group lands in which split is produced by M3 and recorded in
+# manifests/split_v1.parquet, which does not exist yet.
+#
+# Implementation: gpatbench/split/allocator.py. Design note: outputs/audit/M3_ALLOCATOR_DESIGN.md.
+# Feasibility evidence on the real metadata: outputs/audit/M3_ALLOCATOR_FEASIBILITY.md.
+version: split_v1
+status: FROZEN
+frozen_utc: "2026-09-19"
+resolves: Q-01
+q01_status: RESOLVED_BY_OWNER_LEXICOGRAPHIC_ALLOCATOR
+decision_provenance: >-
+  Owner benchmark-design decision (2026-09-19). Spec §3.5 names the allocator terms (video-count
+  deviation plus binary/attack_macro coverage) but not their weights or the search procedure; the
+  owner resolved that gap with the lexicographic priority order below. This is an owner decision,
+  NOT a literature-derived or spec-derived formula.
+spec_basis: "§3.5 (70/15/15, group-disjoint within dataset, seed 20260814, split then pool)"
+references:
+  dataset_policy: configs/frozen/dataset_protocol_policy_v1.yaml
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  implementation: gpatbench/split/allocator.py
+  design_note: outputs/audit/M3_ALLOCATOR_DESIGN.md
+  feasibility: outputs/audit/M3_ALLOCATOR_FEASIBILITY.md
+  m2_failure_audit: outputs/audit/M2_FAILURE_CONCENTRATION.md
+
+ratios: {train: 0.70, val: 0.15, test: 0.15}     # spec §3.5
+integer_percentages: {TRAIN: 70, VAL: 15, TEST: 15}   # the objective uses integers, never floats
+split_seed: 20260814                              # spec §3.5
+split_within_dataset_then_pool: true              # spec §3.5; no cross-dataset trade-offs
+splits: [TRAIN, VAL, TEST]
+
+# ---------------------------------------------------------------- population contract
+population:
+  allocation_object: canonical_video
+  allocation_weight: >-
+    Every canonical video counts as exactly ONE video in every objective, regardless of how many of
+    its sampled frames survived M2. A frame-level technical failure must never make a video lighter
+    in the split objective.
+  unit_of_assignment: allocation_group             # a whole group goes to exactly one split
+  frame_level_split_forbidden: true
+  usable_sample_rule: >-
+    Only rows with M2 final_status == COMPLETE become usable downstream image samples. All COMPLETE
+    frames of a canonical video inherit that video's split.
+  m2_failed_rows: PROVENANCE_ONLY                  # never a TRAIN/VAL/TEST image row
+  zero_usable_canonical_video: BLOCKED_BY_ZERO_USABLE_CANONICAL_VIDEO
+  zero_usable_policy_note: >-
+    No owner policy exists for a canonical video with zero COMPLETE samples. The allocator raises
+    UnresolvedPolicyError rather than dropping or substituting it. The M2 audit measured zero such
+    videos (M2_FAILURE_CONCENTRATION.md), so this path is a guard, not a live case.
+
+# ---------------------------------------------------------------- per-dataset allocation keys
+allocation_keys:
+  casia_fasd:
+    group_key: subject_id_global
+    grouping: SUBJECT
+    fidelity: SUBJECT_DISJOINT
+    note: "a subject appears in exactly one split"
+  msu_mfsd:
+    group_key: subject_id_global
+    grouping: SUBJECT
+    fidelity: SUBJECT_DISJOINT
+    note: "a subject appears in exactly one split"
+  siwmv2:
+    group_key: content_group_id
+    grouping: CANONICAL_VIDEO_CONTENT_GROUP
+    fidelity: APPROVED_VIDEO_DISJOINT_DEVIATION      # DEV-012; never described as subject-disjoint
+    id_format: "siwmv2::sha256:<raw_video_sha256>"
+    note: >-
+      Trustworthy subject identity is unavailable for the local SiW-Mv2 release (Q-14), so exact
+      raw-byte duplicate videos are grouped and never separated. Pseudo-subject identities are
+      forbidden. Correct wording is canonical-video / content-group-disjoint.
+
+# ---------------------------------------------------------------- lexicographic objective (Q-01)
+priority_order:
+  - id: P0
+    name: hard_grouping_and_leakage_constraints
+    kind: CONSTRAINT                 # feasibility, never a penalty term
+    requires:
+      - "every allocation group is assigned to exactly one of TRAIN/VAL/TEST"
+      - "CASIA subjects never cross splits"
+      - "MSU subjects never cross splits"
+      - "SiW exact-content groups never cross splits"
+      - "all canonical videos of one group receive the same split"
+      - "no frame-random assignment"
+      - "no COMPLETE frame inherits a split different from its canonical video"
+      - "no M2 FAILED frame enters the usable downstream sample population"
+      - "no canonical video appears in more than one split"
+    on_infeasible: STOP
+  - id: P1
+    name: total_canonical_video_ratio
+    formula: "E1 = sum_s |100 * n_s - pct_s * N|"
+    where: "N = canonical videos in the dataset; n_s = canonical videos assigned to split s"
+    arithmetic: integer
+  - id: P2
+    name: binary_live_spoof_distribution
+    formula: "E2 = sum_c sum_s W_c * |100 * n_cs - pct_s * N_c|"
+    where: "c ranges over label_binary; N_c = canonical videos of class c; W_c = SCALE // N_c"
+    intent: "equal weight per binary class, so the majority class cannot dominate by size"
+    arithmetic: integer_fixed_point
+  - id: P3
+    name: attack_macro_distribution
+    formula: "E3 = sum_c sum_s W_c * |100 * n_cs - pct_s * N_c|"
+    where: "c ranges over attack_macro (including the frozen 'live' category)"
+    intent: "equal weight per attack_macro category"
+    arithmetic: integer_fixed_point
+    label_semantics: "categories come from the frozen attack_map_v1 mapping; none are invented"
+  - id: P4
+    name: attack_raw_distribution
+    formula: "E4 = sum_c sum_s W_c * |100 * n_cs - pct_s * N_c|"
+    where: "c ranges over attack_raw; live rows use the single category '(none)'"
+    intent: "equal weight per raw attack label, notably the SiW-Mv2 raw taxonomy"
+    arithmetic: integer_fixed_point
+    label_semantics: "no attack_raw label is fabricated where it is genuinely absent"
+  - id: P5
+    name: deterministic_seeded_tie_break
+    kind: TIE_BREAK
+    applies_after: "P1-P4 are all pinned at their optima"
+monotonicity: >-
+  Each level is minimized and then pinned as an exact equality constraint before the next level is
+  minimized, so a later priority can never worsen the optimum already achieved by an earlier one.
+
+# ---------------------------------------------------------------- normalization
+normalization:
+  representation: fixed_point_integer
+  scale: 1000000                      # SCALE = 10**6
+  weight_rule: "W_c = SCALE // N_c (floor division; integer)"
+  rounding: floor
+  is_the_definition: true
+  rationale: >-
+    The idealised objective is the rational sum_c sum_s |100*n_cs - pct_s*N_c| / N_c. Its exact
+    integer form needs a common denominator of lcm(N_c), which reaches ~1.2e17 for the SiW attack_raw
+    level and cannot be represented exactly in the float64 arithmetic any MILP backend uses. The
+    frozen objective is therefore the fixed-point form above, which IS the definition rather than an
+    approximation evaluated at runtime: every coefficient and every deviation is an integer, so the
+    objective value is an exact integer and a solver optimum is an exact optimum of it.
+  divergence_bound: "|E_fixed_point/SCALE - E_rational| < (sum of all deviations)/SCALE"
+  exactness_of_solve: >-
+    With SCALE = 10**6 every coefficient is <= 10**6 and every objective value observed is < 5e9,
+    far inside the exactly representable integer range of float64 (2**53), so no rounding can occur
+    inside the solve and the reported objective equals the independently recomputed integer value.
+  ordering_stability_tests: tests/test_m3_allocator.py::TestObjectiveArithmetic
+
+# ---------------------------------------------------------------- tie-break
+tie_break:
+  namespace: gpatbench.split_v1.tie.v1
+  group_rank: "sha256('gpatbench.split_v1.tie.v1|<dataset>|<allocation_group_id>|<split_seed>')"
+  digest_representation: lowercase_hex
+  group_order: "ascending stable_group_rank, then ascending allocation_group_id"
+  assignment_order: "TRAIN, then VAL, then TEST, taking the counts decided by P1-P4"
+  count_vector_canonicalisation: >-
+    The count vector itself is made unique before groups are named: after P1-P4 are pinned, each
+    count column is minimized one at a time and pinned, in an order given by
+    sha256('gpatbench.split_v1.tie.v1|canon|<dataset>|<class>|<split>|<split_seed>'). The solver is
+    therefore never left free to choose among equally optimal vectors, and the seed rather than the
+    code layout decides which split absorbs an unavoidable remainder.
+  independent_of:
+    [input_row_order, filesystem_order, python_hash_randomization, process_count, thread_timing,
+     hostname, wall_clock_time, solver_internal_ordering]
+
+# ---------------------------------------------------------------- rare categories
+rare_categories:
+  force_three_way_coverage: false
+  rule: >-
+    Grouping constraints are never violated to improve category coverage. A category carried by
+    fewer than three independent allocation groups cannot occupy all three splits; this is minimized
+    under the higher priorities and reported honestly rather than treated as an error.
+  reporting: outputs/audit/M3_ALLOCATOR_FEASIBILITY.md
+  measured_on_real_data: "no category at any level has fewer than 3 allocation groups"
+
+# ---------------------------------------------------------------- algorithm identity
+algorithm:
+  name: lexicographic_sequential_integer_programming
+  status: EXACT
+  reduction: >-
+    Allocation groups carrying an identical multiset of (label_binary, attack_macro, attack_raw) are
+    interchangeable for every P1-P4 term and are collapsed into profile classes, so the decision
+    variables are per-class counts. On the real data this reduces 50/35/1694 groups to 1/1/16
+    classes, which is why a proven global optimum is cheap.
+  solver: HiGHS
+  interface: scipy.optimize.milp
+  scipy_version: "1.18.1"
+  threads: 1
+  options: {mip_rel_gap: 0.0, presolve: true, time_limit: 600}
+  optimality_requirement: "every level must terminate with status 0 and mip_gap 0.0"
+  verification: >-
+    The objective of the returned assignment is recomputed independently in exact Python integers
+    and must equal the solver's value, and the P0 invariants are re-checked on the assignment.
+  environment_lock: environments/m2_preprocess_laptop.lock.txt
+
+outputs_of_m3:                       # for reference; produced by M3, not by this config
+  manifest: manifests/split_v1.parquet
+  manifest_hash_record: outputs/audit/split_v1.sha256
+  audit_requirements_source: configs/frozen/dataset_protocol_policy_v1.yaml
+membership_in_this_file: false

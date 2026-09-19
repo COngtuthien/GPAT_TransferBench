@@ -1,0 +1,441 @@
+{
+  "purpose": "PRE-M3 feasibility only; no allocation is persisted",
+  "allocator": "gpatbench.split.allocator (frozen Q-01 lexicographic contract)",
+  "membership_persisted": false,
+  "datasets": {
+    "casia_fasd": {
+      "dimensions": {
+        "canonical_videos": 600,
+        "allocation_groups": 50,
+        "group_size_distribution": {
+          "12": 50
+        },
+        "profile_classes_after_reduction": 1,
+        "usable_samples": 4800,
+        "failed_samples_provenance_only": 0,
+        "category_counts": {
+          "P2_binary": {
+            "1": 450,
+            "0": 150
+          },
+          "P3_attack_macro": {
+            "print": 300,
+            "live": 150,
+            "replay": 150
+          },
+          "P4_attack_raw": {
+            "(none)": 150,
+            "3": 50,
+            "4": 50,
+            "5": 50,
+            "6": 50,
+            "7": 50,
+            "8": 50,
+            "HR_2": 50,
+            "HR_3": 50,
+            "HR_4": 50
+          }
+        },
+        "model_integer_variables": 3,
+        "model_deviation_variables": 48,
+        "model_total_columns": 51,
+        "model_constraint_rows": 97,
+        "naive_variables_without_reduction": 150
+      },
+      "rare_categories": {
+        "P2_binary": {},
+        "P3_attack_macro": {},
+        "P4_attack_raw": {}
+      },
+      "category_group_counts": {
+        "P2_binary": {
+          "0": 50,
+          "1": 50
+        },
+        "P3_attack_macro": {
+          "live": 50,
+          "print": 50,
+          "replay": 50
+        },
+        "P4_attack_raw": {
+          "(none)": 50,
+          "3": 50,
+          "4": 50,
+          "5": 50,
+          "6": 50,
+          "7": 50,
+          "8": 50,
+          "HR_2": 50,
+          "HR_3": 50,
+          "HR_4": 50
+        }
+      },
+      "objectives": {
+        "P1_total": 1200,
+        "P2_binary": 3999600,
+        "P3_attack_macro": 5999400,
+        "P4_attack_raw": 19999800
+      },
+      "solver_evidence": [
+        {
+          "level": "P1_total",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 1200,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 1200.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P2_binary",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 3999600,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 3999600.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P3_attack_macro",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 5999400,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 5999400.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P4_attack_raw",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 19999800,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 19999800.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        }
+      ],
+      "achieved_split_shape": {
+        "TRAIN": {
+          "canonical_videos": 420,
+          "video_pct": 70.0,
+          "usable_samples": 3360,
+          "live_videos": 105,
+          "spoof_videos": 315
+        },
+        "VAL": {
+          "canonical_videos": 96,
+          "video_pct": 16.0,
+          "usable_samples": 768,
+          "live_videos": 24,
+          "spoof_videos": 72
+        },
+        "TEST": {
+          "canonical_videos": 84,
+          "video_pct": 14.0,
+          "usable_samples": 672,
+          "live_videos": 21,
+          "spoof_videos": 63
+        }
+      },
+      "solve_seconds": 0.392,
+      "feasible": true
+    },
+    "msu_mfsd": {
+      "dimensions": {
+        "canonical_videos": 280,
+        "allocation_groups": 35,
+        "group_size_distribution": {
+          "8": 35
+        },
+        "profile_classes_after_reduction": 1,
+        "usable_samples": 2240,
+        "failed_samples_provenance_only": 0,
+        "category_counts": {
+          "P2_binary": {
+            "1": 210,
+            "0": 70
+          },
+          "P3_attack_macro": {
+            "replay": 140,
+            "print": 70,
+            "live": 70
+          },
+          "P4_attack_raw": {
+            "ipad_video": 70,
+            "iphone_video": 70,
+            "printed_photo": 70,
+            "(none)": 70
+          }
+        },
+        "model_integer_variables": 3,
+        "model_deviation_variables": 30,
+        "model_total_columns": 33,
+        "model_constraint_rows": 61,
+        "naive_variables_without_reduction": 105
+      },
+      "rare_categories": {
+        "P2_binary": {},
+        "P3_attack_macro": {},
+        "P4_attack_raw": {}
+      },
+      "category_group_counts": {
+        "P2_binary": {
+          "0": 35,
+          "1": 35
+        },
+        "P3_attack_macro": {
+          "live": 35,
+          "print": 35,
+          "replay": 35
+        },
+        "P4_attack_raw": {
+          "(none)": 35,
+          "ipad_video": 35,
+          "iphone_video": 35,
+          "printed_photo": 35
+        }
+      },
+      "objectives": {
+        "P1_total": 800,
+        "P2_binary": 5713600,
+        "P3_attack_macro": 8570800,
+        "P4_attack_raw": 11428000
+      },
+      "solver_evidence": [
+        {
+          "level": "P1_total",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 800,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 800.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P2_binary",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 5713600,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 5713600.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P3_attack_macro",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 8570800,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 8570800.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P4_attack_raw",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 11428000,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 11428000.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        }
+      ],
+      "achieved_split_shape": {
+        "TRAIN": {
+          "canonical_videos": 200,
+          "video_pct": 71.4286,
+          "usable_samples": 1600,
+          "live_videos": 50,
+          "spoof_videos": 150
+        },
+        "VAL": {
+          "canonical_videos": 40,
+          "video_pct": 14.2857,
+          "usable_samples": 320,
+          "live_videos": 10,
+          "spoof_videos": 30
+        },
+        "TEST": {
+          "canonical_videos": 40,
+          "video_pct": 14.2857,
+          "usable_samples": 320,
+          "live_videos": 10,
+          "spoof_videos": 30
+        }
+      },
+      "solve_seconds": 0.068,
+      "feasible": true
+    },
+    "siwmv2": {
+      "dimensions": {
+        "canonical_videos": 1700,
+        "allocation_groups": 1694,
+        "group_size_distribution": {
+          "1": 1688,
+          "2": 6
+        },
+        "profile_classes_after_reduction": 16,
+        "usable_samples": 13575,
+        "failed_samples_provenance_only": 25,
+        "category_counts": {
+          "P2_binary": {
+            "1": 915,
+            "0": 785
+          },
+          "P3_attack_macro": {
+            "live": 785,
+            "partial": 341,
+            "mask_3d": 189,
+            "print": 135,
+            "makeup": 135,
+            "replay": 98,
+            "mask_2d": 17
+          },
+          "P4_attack_raw": {
+            "(none)": 785,
+            "Partial_FunnyeyeGlasses": 179,
+            "Paper": 135,
+            "Replay": 98,
+            "Partial_PaperGlasses": 76,
+            "Mask_HalfMask": 72,
+            "Makeup_Impersonation": 61,
+            "Mask_TransparentMask": 60,
+            "Partial_Eye": 57,
+            "Makeup_Cosmetic": 52,
+            "Mannequin": 40,
+            "Partial_Mouth": 29,
+            "Makeup_Obfuscation": 22,
+            "Mask_PaperMask": 17,
+            "Silicone": 17
+          }
+        },
+        "model_integer_variables": 48,
+        "model_deviation_variables": 75,
+        "model_total_columns": 123,
+        "model_constraint_rows": 166,
+        "naive_variables_without_reduction": 5082
+      },
+      "rare_categories": {
+        "P2_binary": {},
+        "P3_attack_macro": {},
+        "P4_attack_raw": {}
+      },
+      "category_group_counts": {
+        "P2_binary": {
+          "0": 785,
+          "1": 909
+        },
+        "P3_attack_macro": {
+          "live": 785,
+          "makeup": 135,
+          "mask_2d": 17,
+          "mask_3d": 189,
+          "partial": 341,
+          "print": 135,
+          "replay": 92
+        },
+        "P4_attack_raw": {
+          "(none)": 785,
+          "Makeup_Cosmetic": 52,
+          "Makeup_Impersonation": 61,
+          "Makeup_Obfuscation": 22,
+          "Mannequin": 40,
+          "Mask_HalfMask": 72,
+          "Mask_PaperMask": 17,
+          "Mask_TransparentMask": 60,
+          "Paper": 135,
+          "Partial_Eye": 57,
+          "Partial_FunnyeyeGlasses": 179,
+          "Partial_Mouth": 29,
+          "Partial_PaperGlasses": 76,
+          "Replay": 92,
+          "Silicone": 17
+        }
+      },
+      "objectives": {
+        "P1_total": 0,
+        "P2_binary": 236500,
+        "P3_attack_macro": 10167460,
+        "P4_attack_raw": 32792250
+      },
+      "solver_evidence": [
+        {
+          "level": "P1_total",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 0,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 0.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P2_binary",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 236500,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 236500.0,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P3_attack_macro",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 10167460,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 10167460.000000002,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        },
+        {
+          "level": "P4_attack_raw",
+          "status": 0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+          "objective": 32792250,
+          "mip_gap": 0.0,
+          "mip_dual_bound": 32792249.999999978,
+          "optimality": "GLOBAL_OPTIMUM_PROVEN"
+        }
+      ],
+      "achieved_split_shape": {
+        "TRAIN": {
+          "canonical_videos": 1190,
+          "video_pct": 70.0,
+          "usable_samples": 9507,
+          "live_videos": 549,
+          "spoof_videos": 641
+        },
+        "VAL": {
+          "canonical_videos": 255,
+          "video_pct": 15.0,
+          "usable_samples": 2033,
+          "live_videos": 118,
+          "spoof_videos": 137
+        },
+        "TEST": {
+          "canonical_videos": 255,
+          "video_pct": 15.0,
+          "usable_samples": 2035,
+          "live_videos": 118,
+          "spoof_videos": 137
+        }
+      },
+      "solve_seconds": 2.48,
+      "feasible": true
+    }
+  },
+  "backend": {
+    "algorithm": "lexicographic sequential integer programming (P1->P2->P3->P4, each pinned)",
+    "kind": "EXACT",
+    "backend": "HiGHS via scipy.optimize.milp",
+    "scipy_version": "1.18.1",
+    "threads": 1,
+    "deterministic_options": {
+      "mip_rel_gap": 0.0,
+      "presolve": true,
+      "time_limit": 600
+    },
+    "objective_arithmetic": "integer coefficients; fixed-point normalisation SCALE=1000000",
+    "tie_break_groups": "sha256('gpatbench.split_v1.tie.v1|<dataset>|<group_id>|<seed>') lowercase hex, then group_id",
+    "tie_break_counts": "columns pinned in seeded order sha256('gpatbench.split_v1.tie.v1|canon|<dataset>|<class>|<split>|<seed>')",
+    "split_seed": 20260814
+  }
+}
