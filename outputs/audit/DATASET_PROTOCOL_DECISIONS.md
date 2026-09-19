@@ -57,5 +57,17 @@ unaffected by DEV-012/013.
 | Q-25 | Pose normalization + distance | spec §6 under-specified | RESOLVED | per-dataset TRAIN z-score, population std ddof=0, Euclidean L2 | **RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2** |
 | Q-26 | Scale face-box definition | spec §6 under-specified; CASIA has no bbox | RESOLVED | clipped-visible bbox fraction of frame area, natural-log ratio; CASIA d_scale = 0 (DEV-018) | **RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO** |
 | Q-27 | Luminance definition | spec §6 under-specified | RESOLVED | BT.601 Y on canonical 256 face, [0,1], full-image mean, absolute difference | **RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF** |
-| Q-28 | DSDG native scope for SiW | spec §8.6 | OPEN | none | OWNER_DECISION_REQUIRED (non-blocking for common pairs) |
-| Q-29 | DiffFAS native scope for SiW | spec §8.7 | OPEN | none | OWNER_DECISION_REQUIRED (non-blocking for common pairs) |
+| Q-28 | DSDG native scope for SiW | spec §8.6 | OPEN at 2026-09-19; see below | none | OWNER_DECISION_REQUIRED (non-blocking for common pairs) |
+| Q-29 | DiffFAS native scope for SiW | spec §8.7 | OPEN at 2026-09-19; see below | none | OWNER_DECISION_REQUIRED (non-blocking for common pairs) |
+
+## M4 pre-execution correction (2026-09-20)
+
+| ID | Topic | Basis | Status | Decision | Effective |
+|---|---|---|---|---|---|
+| Q-24 | Candidate preimage byte layout | frozen contract was written ambiguously | CORRECTED | candidate preimage hashes the **RAW 32-byte** source digest concatenated with `UTF8("\|gpatbench.pair.candidate.v1\|" + target_sample_id)`; hex-text variant forbidden and test-guarded | **PRE_EXECUTION_CONTRACT_IMPLEMENTATION_CORRECTION** (owner contract unchanged; 0/240 candidate sets changed) |
+| Q-28 | DSDG native manifest scope | spec §8.6 | RESOLVED | `dsdg_identity_pairs_v1` = CASIA + MSU only; SiW `NOT_INSTANTIABLE_MISSING_SUBJECT_ID`, coverage 0, no fake rows | **RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE** |
+| Q-29 | DiffFAS native manifest scope | spec §8.7 | RESOLVED | `difffas_recon_pairs_v1` = CASIA + MSU only; same dataset + same trustworthy identity + live/spoof; DIFFFAS-BIN does not rescue SiW | **RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE** |
+
+Q-28/Q-29 fix **M4 manifest scope only**; the later M6 DSDG / DiffFAS adaptation strategy for SiW
+remains an open, separate decision. DEV-013 stays confined to the common pairing contract and is
+never a same-identity substitute.

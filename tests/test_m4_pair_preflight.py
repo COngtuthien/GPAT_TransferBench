@@ -475,8 +475,11 @@ class TestFrozenPairConfig(unittest.TestCase):
             "Q-24": "RESOLVED_BY_OWNER_HASH_RANKING",
             "Q-25": "RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2",
             "Q-26": "RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO",
-            "Q-27": "RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF"})
-        self.assertEqual(self.cfg["non_blocking_open"], ["Q-28", "Q-29"])
+            "Q-27": "RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF",
+            "Q-28": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE",
+            "Q-29": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE"})
+        self.assertEqual(self.cfg["non_blocking_open"], [])
+        self.assertEqual(self.cfg["resolves_for_m4_native_manifest_scope_only"], ["Q-28", "Q-29"])
 
     def test_no_unresolved_field(self):
         bad = []
@@ -569,3 +572,144 @@ class TestPreflightEvidence(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ------------------------------------------------------------------ Q-24 exact preimage bytes
+class TestQ24Preimage(unittest.TestCase):
+    """The frozen candidate preimage hashes the RAW 32-byte source digest.
+
+    This class exists specifically so the raw-byte contract and the forbidden hex-text formulation
+    cannot be confused again. Every expectation is rebuilt from hashlib by hand.
+    """
+    SRC = "casia_fasd/train_release/1/HR_2.avi#000123"
+    TGT = "casia_fasd/train_release/9/HR_1.avi#000045"
+    SEED = P.SPLIT_SEED
+
+    def _expected_source_bytes(self):
+        return f"gpatbench.pair.source_seed.v1|{self.SRC}|{self.SEED}".encode("utf-8")
+
+    def _expected_candidate_suffix(self):
+        return f"|gpatbench.pair.candidate.v1|{self.TGT}".encode("utf-8")
+
+    def test_source_digest_is_the_raw_32_bytes_of_the_utf8_preimage(self):
+        import hashlib
+        got = P.source_seed_digest(self.SRC, self.SEED)
+        self.assertEqual(got, hashlib.sha256(self._expected_source_bytes()).digest())
+        self.assertIsInstance(got, bytes)
+        self.assertNotIsInstance(got, str)
+        self.assertEqual(len(got), 32)
+
+    def test_candidate_digest_hashes_raw_source_bytes_then_utf8_suffix(self):
+        import hashlib
+        sd = hashlib.sha256(self._expected_source_bytes()).digest()
+        expected = hashlib.sha256(sd + self._expected_candidate_suffix()).digest()
+        self.assertEqual(P.candidate_rank_digest(sd, self.TGT), expected)
+        self.assertEqual(P.candidate_rank_key(self.SRC, self.TGT, self.SEED),
+                         (int.from_bytes(expected, "big", signed=False), self.TGT))
+
+    def test_forbidden_hex_formulation_gives_a_different_digest(self):
+        """The hex-text variant is a DIFFERENT function of the same inputs, not a restatement."""
+        import hashlib
+        seed_hex = hashlib.sha256(self._expected_source_bytes()).hexdigest()
+        forbidden = hashlib.sha256(
+            f"gpatbench.pair.candidate.v1|{seed_hex}|{self.TGT}".encode("utf-8")).digest()
+        frozen = P.candidate_rank_digest(P.source_seed_digest(self.SRC, self.SEED), self.TGT)
+        self.assertNotEqual(frozen, forbidden)
+        self.assertNotEqual(P.candidate_rank_key(self.SRC, self.TGT, self.SEED)[0],
+                            int.from_bytes(forbidden, "big", signed=False))
+
+    def test_hex_rendering_of_the_source_digest_is_not_fed_forward(self):
+        """Feeding the hex text in as if it were the digest must not reproduce the frozen value."""
+        sd = P.source_seed_digest(self.SRC, self.SEED)
+        self.assertNotEqual(P.candidate_rank_digest(sd, self.TGT),
+                            P.candidate_rank_digest(sd.hex().encode("utf-8"), self.TGT))
+
+    def test_no_hex_source_seed_formulation_exists_in_the_package(self):
+        hits = []
+        for f in sorted((ROOT / "gpatbench").rglob("*.py")):
+            src = f.read_text()
+            if "source_seed_hex" in src or "seed_hex" in src:
+                hits.append(f.relative_to(ROOT).as_posix())
+        self.assertEqual(hits, [], f"forbidden hex formulation present in: {hits}")
+
+    def test_selection_is_permutation_invariant_under_the_raw_byte_rule(self):
+        live = [S("t%05d" % i, label=0, subject="s%d" % i) for i in range(400)]
+        src = S("src", subject="zz")
+        want = [t.sample_id for t in P.select_candidates(src, live)]
+        self.assertEqual(len(want), P.CANDIDATE_CAP)
+        for seed in (1, 7, 99):
+            sh = list(live)
+            random.Random(seed).shuffle(sh)
+            self.assertEqual([t.sample_id for t in P.select_candidates(src, sh)], want)
+
+    def test_frozen_config_states_the_byte_representation(self):
+        cfg = yaml.safe_load(FROZEN.read_text())["candidate_selection"]
+        self.assertEqual(cfg["source_seed_digest"]["source_digest_representation"],
+                         "RAW_32_BYTE_SHA256_DIGEST")
+        parts = cfg["candidate_rank_digest"]["preimage_parts"]
+        self.assertEqual(parts[0]["encoding"], "RAW_32_BYTE_SHA256_DIGEST")
+        self.assertEqual(parts[0]["length_bytes"], 32)
+        self.assertEqual(parts[1]["encoding"], "utf_8")
+        self.assertIn("HEX_TEXT_SOURCE_SEED", [v["id"] for v in cfg["forbidden_variants"]])
+
+
+# ------------------------------------------------------------------ Q-28 / Q-29 native scope
+class TestNativeManifestScope(unittest.TestCase):
+    def setUp(self):
+        self.nat = yaml.safe_load(FROZEN.read_text())["native_manifests"]
+
+    def test_dsdg_scope_is_casia_and_msu_only(self):
+        d = self.nat["dsdg_identity_pairs_v1"]["datasets"]
+        self.assertEqual(d["casia_fasd"], "SUPPORTED")
+        self.assertEqual(d["msu_mfsd"], "SUPPORTED")
+        self.assertEqual(d["siwmv2"], "NOT_INSTANTIABLE_MISSING_SUBJECT_ID")
+        self.assertEqual(self.nat["dsdg_identity_pairs_v1"]["status"],
+                         "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE")
+
+    def test_difffas_scope_is_casia_and_msu_only(self):
+        d = self.nat["difffas_recon_pairs_v1"]["datasets"]
+        self.assertEqual(d["casia_fasd"], "SUPPORTED")
+        self.assertEqual(d["msu_mfsd"], "SUPPORTED")
+        self.assertEqual(d["siwmv2"], "NOT_INSTANTIABLE_MISSING_SUBJECT_ID")
+        self.assertEqual(self.nat["difffas_recon_pairs_v1"]["requires"],
+                         ["same_dataset", "same_trustworthy_identity", "live_and_spoof"])
+
+    def test_siw_native_coverage_is_zero_and_never_fake_rows(self):
+        for k in ("dsdg_identity_pairs_v1", "difffas_recon_pairs_v1"):
+            rep = self.nat[k]["siw_representation"]
+            self.assertEqual(rep["native_identity_pair_coverage"], 0)
+            self.assertEqual(rep["status"], "NOT_INSTANTIABLE_MISSING_SUBJECT_ID")
+            self.assertEqual(rep["represented_in"], "audit_coverage_table")
+            self.assertEqual(rep["fake_rows"], "forbidden")
+
+    def test_dev013_is_not_usable_as_a_same_identity_substitute(self):
+        forb = self.nat["forbidden_identity_substitutes"]
+        for item in ("DEV-013_as_a_same_identity_substitute",
+                     "content_group_id_as_person_identity",
+                     "video_id_as_person_identity",
+                     "invented_or_pseudo_siw_subject_ids"):
+            self.assertIn(item, forb)
+        self.assertIn("never a", self.nat["dev013_boundary"])
+
+    def test_native_scope_does_not_settle_later_milestones(self):
+        cfg = yaml.safe_load(FROZEN.read_text())
+        self.assertIn("M6", cfg["later_milestone_questions_not_settled_here"])
+        self.assertIn("scope_note", self.nat)
+
+    def test_no_native_manifest_exists_yet(self):
+        for name in ("dsdg_identity_pairs_v1.parquet", "difffas_recon_pairs_v1.parquet"):
+            self.assertFalse((ROOT / "manifests" / name).exists(),
+                             f"{name} must not exist before M4 execution")
+
+    def test_siw_has_no_trustworthy_subject_id_in_the_real_split(self):
+        """The exclusion is a property of the data, not a policy preference."""
+        import pyarrow.parquet as pq
+        rows = pq.read_table(ROOT / "manifests/split_v1.parquet").to_pylist()
+        siw = [r for r in rows if r["dataset"] == "siwmv2"]
+        self.assertTrue(siw)
+        self.assertEqual({r["subject_id_global"] for r in siw}, {None})
+        for ds in ("casia_fasd", "msu_mfsd"):
+            other = [r for r in rows if r["dataset"] == ds]
+            self.assertTrue(other)
+            self.assertNotIn(None, {r["subject_id_global"] for r in other})
+

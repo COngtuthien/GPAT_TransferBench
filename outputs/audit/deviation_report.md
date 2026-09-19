@@ -496,8 +496,7 @@ benchmark-design decisions, **not** literature-derived facts.
 | Q-26 | **RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO** | MSU/SiW use the original SCRFD box clipped to the frame, as a fraction of frame area (removes resolution dependence); `d_scale = |ln f_t − ln f_s|`, natural log, no epsilon; invalid geometry is a hard error. CASIA handled by **DEV-018**. |
 | Q-27 | **RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF** | BT.601 `Y = 0.299R + 0.587G + 0.114B` on the frozen canonical 256×256 RGB face, channels in [0,1], full-image mean including zero-padded pixels, `d_luma = |ΔY_mean|`. No OpenCV YCrCb, no BT.709, no z-scoring. |
 
-Q-28 and Q-29 (native DSDG / DiffFAS scope for SiW) remain **OPEN and explicitly non-blocking** for
-common-pair execution. DEV-013 still applies only to the common pairing contract.
+Q-28 and Q-29 were still OPEN at that date; they are resolved for M4 manifest scope below.
 
 ## DEV-018 — CASIA common-pair scale term is unavailable (controlled adaptation)
 
@@ -518,3 +517,54 @@ common-pair execution. DEV-013 still applies only to the common pairing contract
 - **Verified:** on the real split, CASIA `d_scale` unique values = `[0.0]`
   (`M4_PAIR_PREFLIGHT.json` → `frozen_diagnostic`).
 - **Status: APPROVED** (owner, 2026-09-19).
+
+## M4 pre-execution correction (2026-09-20) — Q-24 preimage + Q-28/Q-29 manifest scope
+
+### Q-24 preimage — `PRE_EXECUTION_CONTRACT_IMPLEMENTATION_CORRECTION`
+
+**Not a new scientific decision.** The owner's Q-24 contract did not change. What changed is how the
+candidate preimage is written down. The frozen rule is, in explicit byte terms:
+
+```
+source_seed_digest_bytes = SHA256(UTF8("gpatbench.pair.source_seed.v1|" + source_sample_id + "|" + str(split_seed))).digest()
+                           -> RAW 32 BYTES, never rendered as hex/base64/decimal/text
+candidate_rank_digest    = SHA256(source_seed_digest_bytes || UTF8("|gpatbench.pair.candidate.v1|" + target_sample_id)).digest()
+```
+
+The forbidden variant `SHA256(UTF8("gpatbench.pair.candidate.v1|" + source_seed_hex + "|" +
+target_sample_id))` is a different function of the same inputs and is now named and test-guarded.
+
+Findings, verified rather than asserted:
+
+- `gpatbench/pairs/common.py` **already implemented the raw-byte rule** and needed no change. Proven
+  by importing the module as committed at `e4d167b` (blob sha256 `8f2faaa3…`) and re-running
+  selection: **0 of 240** candidate-64 sets changed.
+- Counterfactual on the forbidden hex variant: **200 of 240 (83.33%)** sets would have differed.
+  MSU VAL is 0% only because every MSU VAL source has exactly 64 eligible targets.
+- The defect was in the prose of `configs/frozen/pairs_v1.yaml` (under-specified) and in §3 of the
+  2026-09-19 owner decision report (which described the hex variant). Both are corrected.
+- No authoritative pair manifest, `pair_train_stats_v1.json` or native manifest existed, so **no
+  scientific result and no frozen pair membership was invalidated**.
+- Config sha256 `16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398` →
+  **SUPERSEDED_BY_Q24_PREIMAGE_CORRECTION**, retained as history. Current:
+  `f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985`.
+
+Record: `M4_Q24_PREIMAGE_CORRECTION.md`. Q-25, Q-26, Q-27 and DEV-018 were not reopened.
+
+### Q-28 / Q-29 — native manifest scope
+
+| ID | Final status | Decision |
+|---|---|---|
+| Q-28 | **RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE** | `dsdg_identity_pairs_v1.parquet` contains CASIA + MSU only. SiW: `NOT_INSTANTIABLE_MISSING_SUBJECT_ID`, `native_identity_pair_coverage = 0`, represented in the audit coverage table, never as rows. |
+| Q-29 | **RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE** | `difffas_recon_pairs_v1.parquet` contains CASIA + MSU only. Same-dataset, same-trustworthy-identity, live/spoof. SiW not instantiable; DIFFFAS-BIN does not rescue it, because binary style collapse does not recover identity. |
+
+Forbidden in both: invented or pseudo SiW subject ids, `content_group_id` or `video_id` as person
+identity, DEV-013 as a same-identity substitute, and pairing arbitrary live/spoof rows to imitate
+same-ID reconstruction.
+
+**Scope limit:** these resolve M4 **manifest scope only**. The complete M6 DSDG and DiffFAS
+training-adaptation strategy for SiW-Mv2 is a separate later decision and is not settled here.
+
+**DEV-013 boundary (reasserted):** DEV-013 governs the COMMON SiW pairing rule (different video AND
+different exact-content group). It is a different-video / different-exact-content guarantee, never a
+same-person or different-person claim, and it does not extend to native same-identity pairing.

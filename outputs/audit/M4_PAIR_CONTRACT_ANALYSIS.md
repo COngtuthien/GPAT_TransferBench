@@ -7,6 +7,13 @@
 > `RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF`. The decision record is
 > `M4_PAIR_OWNER_DECISIONS.md`. **The text below is preserved unchanged as the analysis that
 > motivated those decisions**, so the gaps and their measured sensitivity stay on record.
+>
+> **Revised 2026-09-20.** The Q-24 candidate preimage is now stated in explicit byte terms
+> (`M4_Q24_PREIMAGE_CORRECTION.md`) and Q-28/Q-29 are resolved for M4 native manifest scope
+> (`RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE`: CASIA + MSU only; SiW
+> `NOT_INSTANTIABLE_MISSING_SUBJECT_ID`). The owner contract did not change and no candidate
+> membership changed. Current config sha256
+> `f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985`.
 
 Status at the time of writing: **OWNER_DECISION_REQUIRED**. Four execution-affecting details of the
 common pairing rule were not fixed by the frozen specification and had no approved project decision.

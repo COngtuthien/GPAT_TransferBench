@@ -1,6 +1,16 @@
-# M4 — Common Pair Owner Decisions (Q-24 … Q-27)
+# M4 — Common Pair Owner Decisions (Q-24 … Q-27, and Q-28/Q-29 manifest scope)
 
-Frozen contract: `configs/frozen/pairs_v1.yaml` (sha256 `16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398`), implemented in
+> **Revised 2026-09-20 — `PRE_EXECUTION_CONTRACT_IMPLEMENTATION_CORRECTION`.** The Q-24 candidate
+> preimage is now stated in unambiguous byte terms and Q-28/Q-29 are resolved for M4 native manifest
+> scope. The owner's Q-24 contract did not change and `gpatbench/pairs/common.py` needed no change:
+> it already hashed the RAW 32-byte source digest (0 of 240 candidate-64 sets changed, measured
+> against the code committed at `e4d167b`). The config SHA256 below is therefore the
+> **pre-correction** value, retained as history and marked
+> `SUPERSEDED_BY_Q24_PREIMAGE_CORRECTION`; the current value is
+> `f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985`. Full record:
+> `M4_Q24_PREIMAGE_CORRECTION.md`. Q-25, Q-26, Q-27 and DEV-018 were not reopened.
+
+Frozen contract: `configs/frozen/pairs_v1.yaml` (sha256 `16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398`, SUPERSEDED_BY_Q24_PREIMAGE_CORRECTION), implemented in
 `gpatbench/pairs/common.py`, tested in `tests/test_m4_pair_preflight.py`. The pre-owner-decision
 proposal is preserved unchanged at `configs/proposed/pairs_v1.proposed.yaml`.
 
@@ -150,9 +160,51 @@ all candidates evaluated. Every component finite and non-negative in every cell.
 
 No formula was changed on the basis of these distributions, and TEST was never inspected.
 
-## Q-28 / Q-29 unchanged
+## Q-28 — DSDG native manifest scope · RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE
 
-DSDG and DiffFAS native identity pairing remains SUPPORTED on CASIA and MSU and not instantiable on
-SiW, whose subject identity is unavailable. DEV-013 applies only to the **common** different-target
-pairing contract and is still not extended to same-identity native training. Both remain explicitly
-non-blocking for common-pair execution.
+*(Owner decision, 2026-09-20. Scope: which datasets may appear in the M4 native manifest. Nothing
+else.)*
+
+`manifests/dsdg_identity_pairs_v1.parquet` (TRAIN, one same-identity live/spoof pair per row):
+
+| dataset | status |
+|---|---|
+| casia_fasd | SUPPORTED |
+| msu_mfsd | SUPPORTED |
+| siwmv2 | NOT_INSTANTIABLE_MISSING_SUBJECT_ID |
+
+The manifest contains **CASIA + MSU only**. For SiW: `native_identity_pair_coverage = 0`,
+`status = NOT_INSTANTIABLE_MISSING_SUBJECT_ID`, represented in the audit coverage table and never as
+manifest rows. Forbidden: invented or pseudo SiW subject ids, `content_group_id` or `video_id` used
+as person identity, and DEV-013 used as a same-identity substitute.
+
+**This does not decide the later M6 DSDG training-adaptation strategy for SiW.** That is a separate
+question and is deliberately left open.
+
+## Q-29 — DiffFAS native manifest scope · RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE
+
+*(Owner decision, 2026-09-20. Same scope limit.)*
+
+DiffFAS native reconstruction pairs require **same dataset + same trustworthy identity + LIVE/SPOOF**.
+`manifests/difffas_recon_pairs_v1.parquet` (TRAIN):
+
+| dataset | status |
+|---|---|
+| casia_fasd | SUPPORTED |
+| msu_mfsd | SUPPORTED |
+| siwmv2 | NOT_INSTANTIABLE_MISSING_SUBJECT_ID |
+
+The manifest contains **CASIA + MSU only**. Forbidden for SiW: pairing by same video, pairing by
+content group, inferring identity, invoking DEV-013, and pairing arbitrary live/spoof rows to
+imitate same-ID reconstruction. **DIFFFAS-BIN does not rescue SiW** — collapsing `style_id` to a
+binary label leaves the reconstruction-pair structure intact, and the missing information is
+identity, not style.
+
+**This does not silently settle every later DiffFAS M6 adaptation question.**
+
+## DEV-013 boundary (reasserted)
+
+DEV-013 resolves the **COMMON** source→target pairing rule for SiW: different canonical video **AND**
+different exact-content group. That is a different-video / different-exact-content guarantee. It is
+**not** a same-person claim and not a different-person claim. It does **not** apply to DSDG
+same-identity native pairing or to DiffFAS same-identity reconstruction pairing.

@@ -320,6 +320,15 @@
           ],
           "m2_artifacts_mutated": false
         }
+      },
+      "cache_count_units": {
+        "logical_shard_groups": 81,
+        "fields": 7,
+        "data_shard_files_all_fields": 567,
+        "index_files_all_fields": 567,
+        "total_physical_cache_files": 1134,
+        "entries_per_field": 20615,
+        "note": "See M2_CACHE_COUNT_RECONCILIATION.md. Read-only reconciliation; no M2 artifact changed."
       }
     },
     "M3": {
@@ -556,7 +565,7 @@
       "name": "Pair manifests",
       "status": "NOT_STARTED",
       "preflight": {
-        "phase": "COMMON_PAIR_CONTRACT_FROZEN_AWAITING_M4_EXECUTION",
+        "phase": "COMMON_AND_NATIVE_SCOPE_FROZEN_AWAITING_M4_EXECUTION",
         "date": "2026-09-19",
         "base_commit": "b0c59e1e21d1dc45981caf506573b4c096b0ce3c",
         "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
@@ -566,10 +575,7 @@
         "pair_manifests_created": false,
         "membership_persisted": false,
         "blocking_questions": [],
-        "non_blocking_questions": [
-          "Q-28",
-          "Q-29"
-        ],
+        "non_blocking_questions": [],
         "settled_by_spec": {
           "build_from_splits": [
             "TRAIN",
@@ -605,7 +611,11 @@
             "msu_mfsd": "SUPPORTED",
             "siwmv2": "NOT_INSTANTIABLE (no subject identity)"
           },
-          "dev013_not_extended_to_native_same_identity": true
+          "dev013_not_extended_to_native_same_identity": true,
+          "q28": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE",
+          "q29": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE",
+          "manifest_scope": "CASIA + MSU only; SiW NOT_INSTANTIABLE_MISSING_SUBJECT_ID (coverage 0)",
+          "m6_adaptation_strategy_settled": false
         },
         "key_blocker": "CASIA carries no face box at all (DEV-011 route, 0/4800 rows), so the spec's 'log face-box area ratio' is undefined for 2,520 of the 8,838 TRAIN sources",
         "evidence": [
@@ -628,8 +638,8 @@
           },
           "new_deviation": "DEV-018 (CASIA_PAIR_SCALE_UNAVAILABLE_CONTROLLED_ADAPTATION)",
           "frozen_config": "configs/frozen/pairs_v1.yaml",
-          "frozen_config_sha256": "16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398",
-          "snapshot_sha256": "16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398",
+          "frozen_config_sha256": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
+          "snapshot_sha256": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
           "proposal_preserved": "configs/proposed/pairs_v1.proposed.yaml",
           "unresolved_common_pair_fields": 0,
           "casia_d_scale_unique_values": [
@@ -642,6 +652,32 @@
             "outputs/audit/M4_PAIR_OWNER_DECISIONS.md",
             "configs/frozen/pairs_v1.yaml",
             "outputs/audit/M4_PAIR_PREFLIGHT.json"
+          ],
+          "superseded_config_sha256": {
+            "16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398": "SUPERSEDED_BY_Q24_PREIMAGE_CORRECTION"
+          }
+        },
+        "frozen_config_sha256": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
+        "correction_pass": {
+          "date": "2026-09-20",
+          "base_commit": "e4d167b9ea3502cebbb97f730a5499060bb4ce26",
+          "classification": "PRE_EXECUTION_CONTRACT_IMPLEMENTATION_CORRECTION",
+          "owner_contract_changed": false,
+          "implementation_changed": false,
+          "candidate_sets_changed_vs_prior": 0,
+          "sources_compared": 240,
+          "counterfactual_hex_variant_sets_changed": 200,
+          "resolved": {
+            "Q-28": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE",
+            "Q-29": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE"
+          },
+          "pair_manifests_created": false,
+          "native_manifests_created": false,
+          "m2_cache_counts_reconciled": true,
+          "evidence": [
+            "outputs/audit/M4_Q24_PREIMAGE_CORRECTION.md",
+            "outputs/audit/M2_CACHE_COUNT_RECONCILIATION.md",
+            "configs/frozen/pairs_v1.yaml"
           ]
         }
       }

@@ -258,6 +258,8 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    frozen determinism settings. **20,640/20,640 accounted**: 20,615 COMPLETE, 25 FAILED — all
    `SCRFD_NO_FACE` (SiW), the correct no-fallback outcome. ~2.4 h wall clock.
 9. **Audited and validated**: full block-level cache integrity **PASS** across all 7 fields (567 shards,
+   *clarification appended 2026-09-20: "567 shards" means 567 **data shard files**, i.e. 7 fields ×
+   81 shard groups; see `M2_CACHE_COUNT_RECONCILIATION.md` for every unit*,
    no duplicate, orphan, overlapping, mis-shaped, non-finite or hash-failing entry); deterministic final
    validation re-computed 72 samples (the 24 frozen smoke plus 48 hash-selected, none hand-picked) from
    raw sources and found **max abs difference 0.0** against the stored artifacts.
@@ -417,3 +419,30 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    remains null/TODO/OWNER_DECISION_REQUIRED.
 9. **Created no pair manifest and no train-stats artifact.** M4 remains NOT_STARTED; Q-28/Q-29
    (native DSDG/DiffFAS scope for SiW) stay open and explicitly non-blocking for common pairs.
+
+## M4 pre-execution correction (2026-09-20) — still NOT_STARTED
+
+1. **Stated the Q-24 candidate preimage in byte terms.** The frozen rule hashes the **RAW 32-byte**
+   source-seed digest concatenated with `UTF8("|gpatbench.pair.candidate.v1|" + target_sample_id)`.
+   The hex-text variant is now named as forbidden in the config and guarded by
+   `TestQ24Preimage`. Describing the rule merely as "two-stage SHA-256" is no longer sufficient.
+2. **Found the implementation was already correct.** `gpatbench/pairs/common.py` needed no change.
+   `tools/m4_q24_preimage_audit.py` imports the module *as committed at `e4d167b`* and re-runs
+   selection on the same deterministic sample: **0 of 240** candidate-64 sets changed. The
+   counterfactual hex variant would have changed **200 of 240 (83.33%)**. The defect was in the
+   config prose and in §3 of the 2026-09-19 owner report, not in executable code.
+3. **Classified it honestly** as `PRE_EXECUTION_CONTRACT_IMPLEMENTATION_CORRECTION`, not a new
+   scientific decision: the owner contract did not change, and no pair manifest, train-stats artifact
+   or native manifest existed to invalidate.
+4. **Resolved Q-28 and Q-29 for M4 manifest scope.** Both native manifests contain **CASIA + MSU
+   only**; SiW is `NOT_INSTANTIABLE_MISSING_SUBJECT_ID` with `native_identity_pair_coverage = 0`,
+   recorded in the audit coverage table and never as manifest rows. DIFFFAS-BIN does not rescue SiW.
+   The later M6 adaptation strategy is explicitly **not** settled by this.
+5. **Reasserted the DEV-013 boundary.** It governs the common SiW pairing rule only — different video
+   AND different exact-content group — and is never a same-person claim or a same-identity
+   substitute for native pairing.
+6. **Reconciled the M2 cache counts** read-only: 81 shard groups × 7 fields, 20,615 entries per
+   field, 567 data shard files + 567 index files = 1,134 physical cache files. The earlier "567
+   shards" and the M4 report's "972 / 162" counted different units and were both arithmetically
+   right; `M2_CACHE_COUNT_RECONCILIATION.md` defines every unit. No M2 artifact was modified.
+7. **Created no manifest of any kind.** M4 is still NOT_STARTED.

@@ -1,4 +1,14 @@
-# pairs_v1 — FROZEN (2026-09-19). Owner resolution of Q-24, Q-25, Q-26, Q-27.
+# pairs_v1 — FROZEN (2026-09-19; revised 2026-09-20). Owner resolution of Q-24..Q-27, and of
+# Q-28/Q-29 for M4 native manifest SCOPE only.
+#
+# 2026-09-20 revision (PRE_EXECUTION_CONTRACT_IMPLEMENTATION_CORRECTION): the Q-24 candidate
+# preimage is now stated in unambiguous byte terms, the forbidden hex-text variant is named
+# explicitly, and the native manifest scope is frozen. The owner's Q-24 contract did NOT change and
+# gpatbench/pairs/common.py needed no change: it already hashed the RAW 32-byte source digest.
+# Measured on the deterministic diagnostic sample, 0 of 240 candidate-64 sets changed. The earlier
+# config SHA256 16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398 is
+# SUPERSEDED_BY_Q24_PREIMAGE_CORRECTION and is retained in the audit history.
+# Correction record: outputs/audit/M4_Q24_PREIMAGE_CORRECTION.md
 #
 # The frozen specification fixes the shape of the common pairing rule (§6) but left the candidate
 # sampler and the three distance formulas under-specified. The owner resolved those four questions;
@@ -15,12 +25,19 @@ status: FROZEN
 frozen_utc: "2026-09-19"
 supersedes: configs/proposed/pairs_v1.proposed.yaml
 resolves: [Q-24, Q-25, Q-26, Q-27]
+resolves_for_m4_native_manifest_scope_only: [Q-28, Q-29]
 question_status:
   Q-24: RESOLVED_BY_OWNER_HASH_RANKING
   Q-25: RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2
   Q-26: RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO
   Q-27: RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF
-non_blocking_open: [Q-28, Q-29]        # native-method scope only; they do not block common pairs
+  Q-28: RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE
+  Q-29: RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE
+non_blocking_open: []                  # nothing left open that affects any M4 manifest
+later_milestone_questions_not_settled_here: >-
+  Q-28 and Q-29 are resolved ONLY for which datasets may appear in the M4 native manifests. The
+  complete M6 DSDG and DiffFAS training-adaptation strategy for SiW-Mv2 is a separate later
+  decision and is deliberately NOT settled by this file.
 decision_provenance: >-
   Owner benchmark-design decisions (2026-09-19) filling gaps in spec §6. The spec's own settled
   elements (splits, one pair per spoof source, the 64 cap, the 0.50/0.30/0.20 weights, minimum
@@ -77,12 +94,35 @@ candidate_selection:
     algorithm: sha256
     namespace: gpatbench.pair.source_seed.v1
     preimage: "UTF8('gpatbench.pair.source_seed.v1|' + source_sample_id + '|' + str(split_seed))"
+    preimage_encoding: utf_8
     output: raw_32_byte_digest
+    source_digest_representation: RAW_32_BYTE_SHA256_DIGEST
+    representation_note: >-
+      The 32 raw digest bytes are carried forward AS BYTES. They are never rendered as hex, base64,
+      decimal or any other text before the candidate preimage is built.
   candidate_rank_digest:
     algorithm: sha256
     namespace: gpatbench.pair.candidate.v1
     preimage: "source_seed_digest_bytes || UTF8('|gpatbench.pair.candidate.v1|' + target_sample_id)"
+    preimage_parts:
+      - {part: 1, content: source_seed_digest_bytes, encoding: RAW_32_BYTE_SHA256_DIGEST, length_bytes: 32}
+      - {part: 2, content: "'|gpatbench.pair.candidate.v1|' + target_sample_id", encoding: utf_8}
+    concatenation: byte_concatenation_part1_then_part2
     output: raw_32_byte_digest
+  forbidden_variants:
+    - id: HEX_TEXT_SOURCE_SEED
+      preimage: "UTF8('gpatbench.pair.candidate.v1|' + source_seed_hex + '|' + target_sample_id)"
+      reason: >-
+        Renders the source digest as 64 hex characters and re-orders the namespace. It is a
+        DIFFERENT function of the same inputs and is not the frozen rule. It must not exist in the
+        codebase, not even behind a flag. Counterfactual impact measured on the deterministic
+        diagnostic sample: 200 of 240 candidate-64 sets (83.33%) would have differed.
+      test: tests/test_m4_pair_preflight.py::TestQ24Preimage
+    - id: AMBIGUOUS_PROSE
+      description: >-
+        Describing the rule merely as "two-stage SHA-256" or "hash(source, target, seed)" is not a
+        specification: it does not fix the byte layout. Any restatement must name the encoding of
+        every preimage part.
   ranking:
     primary: "candidate_rank_digest as an unsigned big-endian 256-bit integer, ascending"
     secondary: "lexical target_sample_id ascending (defensive; a digest collision is not expected)"
@@ -233,6 +273,64 @@ manifests:
   parquet_writer: {compression: zstd, compression_level: 9, write_statistics: true, version: "2.6",
                    use_dictionary: false, row_group_size: 65536, store_schema: true,
                    write_page_index: false}     # the writer contract proven byte-deterministic in M3
+
+# ---------------------------------------------------------------- Q-28 / Q-29 native manifest scope
+native_manifests:
+  scope_note: >-
+    Freezes ONLY which datasets may appear in the M4 native manifests. Method hyper-parameters and
+    the later M6 adaptation strategy are out of scope here.
+  created_by: M4_execution                      # NOT created in this pre-flight pass
+  identity_requirement: >-
+    A native pair row requires a TRUSTWORTHY subject identity from the dataset itself. SiW-Mv2 has
+    none (Q-14), so no SiW native pair row can be constructed.
+  dsdg_identity_pairs_v1:
+    question: Q-28
+    status: RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE
+    path: manifests/dsdg_identity_pairs_v1.parquet
+    method: [DSDG, DSDG-BIN]
+    scope: TRAIN
+    row_unit: one same-identity live/spoof pair
+    datasets:
+      casia_fasd: SUPPORTED
+      msu_mfsd: SUPPORTED
+      siwmv2: NOT_INSTANTIABLE_MISSING_SUBJECT_ID
+    siw_representation:
+      native_identity_pair_coverage: 0
+      status: NOT_INSTANTIABLE_MISSING_SUBJECT_ID
+      represented_in: audit_coverage_table       # never as manifest rows
+      fake_rows: forbidden
+  difffas_recon_pairs_v1:
+    question: Q-29
+    status: RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE
+    path: manifests/difffas_recon_pairs_v1.parquet
+    method: [DiffFAS, DIFFFAS-BIN]
+    scope: TRAIN
+    row_unit: same-identity live/spoof reconstruction pair plus a same-style guide spoof
+    requires: [same_dataset, same_trustworthy_identity, live_and_spoof]
+    style_id: "dataset::attack_raw"
+    datasets:
+      casia_fasd: SUPPORTED
+      msu_mfsd: SUPPORTED
+      siwmv2: NOT_INSTANTIABLE_MISSING_SUBJECT_ID
+    siw_representation:
+      native_identity_pair_coverage: 0
+      status: NOT_INSTANTIABLE_MISSING_SUBJECT_ID
+      represented_in: audit_coverage_table
+      fake_rows: forbidden
+    binary_variant_note: >-
+      DIFFFAS-BIN collapses style_id but preserves the same-identity reconstruction structure, so it
+      is equally not instantiable for SiW. The missing information is identity, not style.
+  forbidden_identity_substitutes:
+    - invented_or_pseudo_siw_subject_ids
+    - content_group_id_as_person_identity
+    - video_id_as_person_identity
+    - DEV-013_as_a_same_identity_substitute
+    - pairing_arbitrary_live_and_spoof_rows_to_imitate_same_id_reconstruction
+  dev013_boundary: >-
+    DEV-013 resolves the COMMON source->target pairing rule for SiW (different video AND different
+    exact-content group). It is a different-video / different-exact-content guarantee, never a
+    same-person or different-person claim, and it does NOT extend to DSDG same-identity native
+    pairing or to DiffFAS same-identity reconstruction pairing.
 
 determinism_contract:
   invariant_to: [input_row_order, filesystem_order, python_hash_randomization, worker_count,

@@ -493,5 +493,114 @@
         "all_non_negative": true
       }
     }
+  },
+  "q24_preimage_correction": {
+    "prior_commit": "e4d167b9ea3502cebbb97f730a5499060bb4ce26",
+    "prior_common_py_sha256": "8f2faaa3feeefad3e86b5309df4adc0ec716ec783e69f80a7495c32eb2eb48ee",
+    "salt": "gpatbench.m4_frozen_diag.v1|",
+    "sources_per_dataset_split": 40,
+    "membership_persisted": false,
+    "per_cell": {
+      "casia_fasd|TRAIN": {
+        "sources_compared": 40,
+        "candidate_sets_changed_vs_prior": 0,
+        "candidate_sets_changed_vs_hex_variant": 40,
+        "pct_changed_vs_prior": 0.0,
+        "pct_changed_vs_hex_variant": 100.0
+      },
+      "casia_fasd|VAL": {
+        "sources_compared": 40,
+        "candidate_sets_changed_vs_prior": 0,
+        "candidate_sets_changed_vs_hex_variant": 40,
+        "pct_changed_vs_prior": 0.0,
+        "pct_changed_vs_hex_variant": 100.0
+      },
+      "msu_mfsd|TRAIN": {
+        "sources_compared": 40,
+        "candidate_sets_changed_vs_prior": 0,
+        "candidate_sets_changed_vs_hex_variant": 40,
+        "pct_changed_vs_prior": 0.0,
+        "pct_changed_vs_hex_variant": 100.0
+      },
+      "msu_mfsd|VAL": {
+        "sources_compared": 40,
+        "candidate_sets_changed_vs_prior": 0,
+        "candidate_sets_changed_vs_hex_variant": 0,
+        "pct_changed_vs_prior": 0.0,
+        "pct_changed_vs_hex_variant": 0.0
+      },
+      "siwmv2|TRAIN": {
+        "sources_compared": 40,
+        "candidate_sets_changed_vs_prior": 0,
+        "candidate_sets_changed_vs_hex_variant": 40,
+        "pct_changed_vs_prior": 0.0,
+        "pct_changed_vs_hex_variant": 100.0
+      },
+      "siwmv2|VAL": {
+        "sources_compared": 40,
+        "candidate_sets_changed_vs_prior": 0,
+        "candidate_sets_changed_vs_hex_variant": 40,
+        "pct_changed_vs_prior": 0.0,
+        "pct_changed_vs_hex_variant": 100.0
+      }
+    },
+    "total": {
+      "sources_compared": 240,
+      "candidate_sets_changed_vs_prior": 0,
+      "pct_changed_vs_prior": 0.0,
+      "candidate_sets_changed_vs_hex_variant": 200,
+      "pct_changed_vs_hex_variant": 83.3333
+    },
+    "interpretation": "changed_vs_prior is the real effect of this correction pass on candidate membership. changed_vs_hex_variant is a counterfactual on a formulation that was never implemented; it is reported to quantify what the ambiguous prose would have cost had it been coded.",
+    "classification": "PRE_EXECUTION_CONTRACT_IMPLEMENTATION_CORRECTION",
+    "owner_contract_changed": false,
+    "implementation_changed": false,
+    "frozen_preimage": {
+      "source_seed_digest": "SHA256(UTF8('gpatbench.pair.source_seed.v1|' + source_sample_id + '|' + str(split_seed))).digest()",
+      "source_digest_representation": "RAW_32_BYTE_SHA256_DIGEST",
+      "candidate_rank_digest": "SHA256(source_seed_digest_bytes || UTF8('|gpatbench.pair.candidate.v1|' + target_sample_id)).digest()",
+      "rank_key": "(int.from_bytes(digest, 'big', signed=False), target_sample_id)",
+      "keep_first": 64
+    },
+    "forbidden_variant": "SHA256(UTF8('gpatbench.pair.candidate.v1|' + source_seed_hex + '|' + target_sample_id))",
+    "config_sha256_before": "16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398",
+    "config_sha256_before_status": "SUPERSEDED_BY_Q24_PREIMAGE_CORRECTION",
+    "config_sha256_after": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
+    "evidence": [
+      "outputs/audit/M4_Q24_PREIMAGE_CORRECTION.md",
+      "tools/m4_q24_preimage_audit.py",
+      "tests/test_m4_pair_preflight.py::TestQ24Preimage"
+    ]
+  },
+  "native_manifest_scope": {
+    "date": "2026-09-20",
+    "questions": {
+      "Q-28": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE",
+      "Q-29": "RESOLVED_FOR_M4_NATIVE_MANIFEST_SCOPE"
+    },
+    "scope": "M4 native manifest dataset membership only; the later M6 adaptation strategy is NOT settled",
+    "dsdg_identity_pairs_v1": {
+      "path": "manifests/dsdg_identity_pairs_v1.parquet",
+      "casia_fasd": "SUPPORTED",
+      "msu_mfsd": "SUPPORTED",
+      "siwmv2": "NOT_INSTANTIABLE_MISSING_SUBJECT_ID",
+      "siw_native_identity_pair_coverage": 0
+    },
+    "difffas_recon_pairs_v1": {
+      "path": "manifests/difffas_recon_pairs_v1.parquet",
+      "casia_fasd": "SUPPORTED",
+      "msu_mfsd": "SUPPORTED",
+      "siwmv2": "NOT_INSTANTIABLE_MISSING_SUBJECT_ID",
+      "siw_native_identity_pair_coverage": 0,
+      "difffas_bin_rescues_siw": false
+    },
+    "forbidden_identity_substitutes": [
+      "invented_or_pseudo_siw_subject_ids",
+      "content_group_id_as_person_identity",
+      "video_id_as_person_identity",
+      "DEV-013_as_a_same_identity_substitute",
+      "pairing_arbitrary_live_and_spoof_rows"
+    ],
+    "manifests_created": false
   }
 }
