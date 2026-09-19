@@ -556,21 +556,16 @@
       "name": "Pair manifests",
       "status": "NOT_STARTED",
       "preflight": {
-        "phase": "PAIR_CONTRACT_ANALYSED_OWNER_DECISION_REQUIRED",
+        "phase": "COMMON_PAIR_CONTRACT_FROZEN_AWAITING_M4_EXECUTION",
         "date": "2026-09-19",
         "base_commit": "b0c59e1e21d1dc45981caf506573b4c096b0ce3c",
         "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
         "proposed_config": "configs/proposed/pairs_v1.proposed.yaml",
         "proposed_config_sha256": "dd0547d3535f1b8539115dfaae7d1f4bfbf1d22be8a8214d4bba803bc642bc76",
-        "frozen_config_created": false,
+        "frozen_config_created": true,
         "pair_manifests_created": false,
         "membership_persisted": false,
-        "blocking_questions": [
-          "Q-24",
-          "Q-25",
-          "Q-26",
-          "Q-27"
-        ],
+        "blocking_questions": [],
         "non_blocking_questions": [
           "Q-28",
           "Q-29"
@@ -621,7 +616,34 @@
           "outputs/audit/M4_PAIR_PREFLIGHT.json",
           "configs/proposed/pairs_v1.proposed.yaml"
         ],
-        "note": "M4 begins only when the authoritative pair manifests are created; analysis and a proposed config do not start it."
+        "note": "M4 begins only when the authoritative pair manifests are created; analysis and a proposed config do not start it.",
+        "owner_decision_pass": {
+          "date": "2026-09-19",
+          "base_commit": "255f70d43bc5973abadee2f196535f0b5fd22ce8",
+          "resolved": {
+            "Q-24": "RESOLVED_BY_OWNER_HASH_RANKING",
+            "Q-25": "RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2",
+            "Q-26": "RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO",
+            "Q-27": "RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF"
+          },
+          "new_deviation": "DEV-018 (CASIA_PAIR_SCALE_UNAVAILABLE_CONTROLLED_ADAPTATION)",
+          "frozen_config": "configs/frozen/pairs_v1.yaml",
+          "frozen_config_sha256": "16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398",
+          "snapshot_sha256": "16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398",
+          "proposal_preserved": "configs/proposed/pairs_v1.proposed.yaml",
+          "unresolved_common_pair_fields": 0,
+          "casia_d_scale_unique_values": [
+            0.0
+          ],
+          "pose_stats_scope": "per dataset, TRAIN rows only, population std ddof=0",
+          "pair_manifests_created": false,
+          "train_stats_artifact_created": false,
+          "evidence": [
+            "outputs/audit/M4_PAIR_OWNER_DECISIONS.md",
+            "configs/frozen/pairs_v1.yaml",
+            "outputs/audit/M4_PAIR_PREFLIGHT.json"
+          ]
+        }
       }
     },
     "M5": {

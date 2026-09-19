@@ -1,5 +1,12 @@
 # M4 — Pair Distance Analysis (diagnostic only)
 
+> **RESOLVED 2026-09-19.** The sensitivities measured below are what the owner decisions were taken
+> against; the frozen answers are per-dataset TRAIN z-score with Euclidean L2 (Q-25), clipped-visible
+> bbox area fraction with a natural-log ratio and CASIA `d_scale = 0` (Q-26, **DEV-018**), and BT.601
+> full-image Y mean with absolute difference (Q-27). See `M4_PAIR_OWNER_DECISIONS.md` and
+> `M4_PAIR_PREFLIGHT.json` → `frozen_diagnostic` for the ranges produced by the frozen contract.
+> The analysis below is preserved unchanged as the evidence behind those choices.
+
 Evaluated on a deterministic hash-selected sample of 400 split rows (salt `gpatbench.m4_preflight.diag.v1|`), purely to measure how much each *unresolved* convention changes the numbers. **No formula was chosen from these distributions**, and TEST was never inspected for a decision.
 
 ## Pose (Q-25)

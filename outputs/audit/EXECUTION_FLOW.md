@@ -377,3 +377,43 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
 8. **Recorded six questions** (Q-24..Q-27 blocking, Q-28/Q-29 native scope) with proposals, put the
    contract in `configs/proposed/pairs_v1.proposed.yaml` rather than `configs/frozen/`, and **created
    no pair manifest**. M4 remains NOT_STARTED.
+
+## M4 — Pre-flight owner decisions: Q-24 … Q-27 resolved and frozen (2026-09-19; base 255f70d4)
+
+1. **Verified the starting state** (HEAD `255f70d4`, one commit ahead of `origin/main`, clean, M4
+   NOT_STARTED, split sha `fb9aeb36…`, 321 tests PASS) and re-read the preflight evidence rather
+   than working from memory.
+2. **Q-24 — candidate selection.** Frozen as a two-stage SHA-256: a per-source seed digest, then a
+   per-candidate digest over the raw seed bytes, ranked as an unsigned big-endian 256-bit integer
+   with lexical `target_sample_id` as a defensive collision tie-break. Eligible targets are put in
+   lexical order *before* any hashing, so the ranking cannot inherit input order. No PRNG.
+   - `pair_id` was frozen with it (`PTR%06d` / `PVA%06d` over dataset then source id) and is assigned
+     **after** membership is final. *Why that ordering matters:* spec §8.1 seeds FAS-Aug from
+     `SHA256(pair_id + global_seed)`, so letting selection see `pair_id` would close a loop.
+3. **Q-25 — pose.** Per-dataset z-score on TRAIN rows only, population std (`ddof=0`), Euclidean L2
+   with no √3 division; a degenerate std is a hard error, VAL reuses TRAIN statistics, TEST never
+   contributes. Pooling was rejected on measured grounds: SiW yaw std 0.283 against CASIA 0.052.
+4. **Q-26 — scale.** The visible (frame-clipped) SCRFD box as a fraction of the original frame area,
+   taken *before* the 1.25× expansion, padding and 256 resize, with `d_scale = |ln f_t − ln f_s|`.
+   Normalising by frame area is what makes MSU (640×480) and SiW (1920×1080) comparable.
+   - **CASIA has no detector box at all**, so the owner fixed `face_area_fraction = 1.0` and hence
+     `d_scale = 0` exactly, recorded as **DEV-018**. SCRFD was not rerun, no bbox invented, no
+     landmark-derived pseudo-box. The weights are deliberately **not** renormalised, and the honest
+     consequence — CASIA pairs ranked by pose and luminance alone — is written into the deviation
+     rather than left implicit.
+5. **Q-27 — luminance.** BT.601 `Y` on the frozen canonical 256×256 RGB face, channels in [0,1],
+   full-image mean including the Q-22 zero-padded pixels, absolute difference. No OpenCV YCrCb path
+   and no BT.709; "normalized" fixes the range and nothing else.
+6. **Made the decisions checkable rather than asserted.** The tests now pin analytically known
+   values: pure-red/green/blue Y means of exactly 0.299/0.587/0.114, a z-score of exactly 1, a
+   `d_pose` of exactly √12, a `d_scale` of exactly `ln 2`, identical area fractions at different
+   resolutions, and the frozen digest construction byte for byte.
+7. **Ran the frozen contract on real data** (deterministic sample, all candidates evaluated): every
+   component finite and non-negative in every dataset × split cell, and CASIA `d_scale` unique values
+   = `[0.0]` exactly, confirming DEV-018 end to end. No formula was changed from these distributions
+   and TEST was never inspected.
+8. **Froze `configs/frozen/pairs_v1.yaml`** with a byte-identical snapshot, preserving
+   `configs/proposed/pairs_v1.proposed.yaml` unchanged as pre-decision history. No common-pair field
+   remains null/TODO/OWNER_DECISION_REQUIRED.
+9. **Created no pair manifest and no train-stats artifact.** M4 remains NOT_STARTED; Q-28/Q-29
+   (native DSDG/DiffFAS scope for SiW) stay open and explicitly non-blocking for common pairs.

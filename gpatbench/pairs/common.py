@@ -1,46 +1,57 @@
-"""Common source->target pair construction (spec §6) — PROPOSED, not frozen.
+"""Common source->target pair construction (spec §6) — FROZEN contract.
 
-What the spec fixes
--------------------
-* pairs are built from one split only; each spoof frame is exactly one source row;
-* the target is a LIVE frame of the **same dataset**, from a different subject;
-* up to 64 eligible live candidates per source, sampled deterministically "using a hash of
-  (source_sample_id, split_seed)"; fewer than 64 eligible -> use all;
-* `d_pair = 0.50*d_pose + 0.30*d_scale + 0.20*d_luma`, minimum wins, lexical sample_id breaks ties;
-* pose distance from FaceXFormer yaw/pitch/roll "after z-normalization inside TRAIN", scale distance
-  from "log face-box area ratio", luminance distance from "normalized Y-channel mean".
+The spec fixes the shape of the rule: pairs are built per split, every spoof frame is one source
+row, the target is a LIVE frame of the same dataset under a dataset-specific different-identity
+constraint, at most 64 candidates are evaluated, and
 
-What the spec does NOT fix
---------------------------
-The three distance formulas are named but not defined to the precision execution needs, and the
-64-candidate sampler is described only as "a hash of (source_sample_id, split_seed)". Those gaps are
-open owner questions (Q-24..Q-27). This module therefore takes them as **required** policy fields
-with no defaults: a caller cannot obtain a pair without stating which convention it used, so no
-silent choice can leak into M4. `PairMetricPolicy.frozen` stays False until the owner decides.
+    d_pair = 0.50*d_pose + 0.30*d_scale + 0.20*d_luma
 
-Determinism
------------
-Candidate ordering, the 64-subset and the final choice depend only on sample ids, the split seed and
-the stored metadata — never on input row order, dict iteration, PYTHONHASHSEED or worker count.
+is minimised with a lexical tie-break. It did **not** fix the candidate sampler or the three
+distance formulas; the owner resolved those as Q-24..Q-27 and they are frozen in
+`configs/frozen/pairs_v1.yaml`. This module implements exactly that contract:
+
+* **Q-24** candidates are ranked by a two-stage SHA-256 (a per-source seed digest, then a per
+  candidate digest), read as an unsigned big-endian integer, with lexical `target_sample_id` as a
+  defensive tie-break. No PRNG, no replacement, no dependence on input order or `PYTHONHASHSEED`.
+  `pair_id` is assigned only after membership is decided, so selection can never depend on it —
+  which matters because spec §8.1 seeds FAS-Aug from `pair_id`.
+* **Q-25** pose is z-scored per dataset on TRAIN rows only (population std, ddof=0, float64) and
+  compared with Euclidean L2. VAL reuses the TRAIN statistics; TEST never contributes. A degenerate
+  standard deviation is a hard error rather than a silent epsilon.
+* **Q-26** scale uses the *visible* (frame-clipped) SCRFD box as a fraction of the original frame
+  area, so raw resolution drops out, and `d_scale = |ln f_t - ln f_s|`. CASIA has no detector box at
+  all under DEV-011, so by owner adaptation DEV-018 its fraction is exactly 1.0 and `d_scale` is
+  exactly 0 for every CASIA pair. The weights are **not** renormalised.
+* **Q-27** luminance is the full-image mean of BT.601 Y over the frozen canonical 256x256 RGB face
+  with channels scaled to [0, 1], and `d_luma` is the absolute difference.
+
+Everything is computed in float64 and no fuzzy tie tolerance is used anywhere.
 """
 from __future__ import annotations
 
 import hashlib
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
+SPLITS_WITH_PAIRS = ("TRAIN", "VAL")   # spec App. A; TEST pairs are not required and are never built
 CANDIDATE_CAP = 64                     # spec §6
 SPLIT_SEED = 20260814                  # spec §3.5
 WEIGHTS = {"pose": 0.50, "scale": 0.30, "luma": 0.20}   # spec §6; never tuned
-CANDIDATE_NAMESPACE = "gpatbench.pairs_v1.candidate.v1"
+SOURCE_SEED_NAMESPACE = "gpatbench.pair.source_seed.v1"
+CANDIDATE_NAMESPACE = "gpatbench.pair.candidate.v1"
+PAIR_ID_PREFIX = {"TRAIN": "PTR", "VAL": "PVA"}
+PAIR_ID_PREFIX_FORMAT = {"TRAIN": "PTR%06d", "VAL": "PVA%06d"}
+MIN_POSE_STD = 1e-12
+BT601 = (0.299, 0.587, 0.114)          # Q-27: R, G, B
+CASIA_FACE_AREA_FRACTION = 1.0         # Q-26 / DEV-018: no detector box exists for CASIA
 
 
 class PairPolicyError(RuntimeError):
-    """A pairing detail that the spec does not fix was left unspecified or is unsupported."""
+    """The frozen pair contract was violated or required metadata is missing."""
 
 
 class PairFeasibilityError(RuntimeError):
-    """A spoof source has no eligible live target; the source may never be silently skipped."""
+    """A spoof source has no eligible live target; a source may never be silently skipped."""
 
 
 @dataclass(frozen=True)
@@ -56,51 +67,14 @@ class Sample:
     attack_macro: str
     attack_raw: str | None
     sha256: str
-    pose: tuple | None = None          # (pitch, yaw, roll) radians, FaceXFormer
-    bbox_area: float | None = None     # face-box area, definition = policy.scale_box
-    frame_area: float | None = None    # original frame area, for the normalised variant
-    luma_mean: float | None = None     # mean Y of the canonical face, definition = policy.luma_standard
-
-
-@dataclass(frozen=True)
-class PairMetricPolicy:
-    """Every contested convention, stated explicitly. No field has a default (Q-24..Q-27)."""
-    candidate_selection: str           # 'per_candidate_hash_rank'
-    pose_stat_scope: str               # 'train_pooled' | 'train_per_dataset'
-    pose_std: str                      # 'population' | 'sample'
-    pose_norm: str                     # 'l2' | 'l1'
-    pose_zero_variance: str            # 'error' | 'treat_as_one'
-    scale_box: str                     # 'scrfd_bbox' | 'requested_square' | 'bbox_frame_fraction'
-    scale_formula: str                 # 'abs_log_ratio'
-    luma_standard: str                 # 'bt601' | 'bt709'
-    luma_range: str                    # 'unit_interval'
-    luma_formula: str                  # 'abs_difference'
-    tie_break: str = "lexical_target_sample_id"
-    frozen: bool = False               # flipped only by an explicit owner decision
-
-    ALLOWED = {
-        "candidate_selection": {"per_candidate_hash_rank"},
-        "pose_stat_scope": {"train_pooled", "train_per_dataset"},
-        "pose_std": {"population", "sample"},
-        "pose_norm": {"l2", "l1"},
-        "pose_zero_variance": {"error", "treat_as_one"},
-        "scale_box": {"scrfd_bbox", "requested_square", "bbox_frame_fraction"},
-        "scale_formula": {"abs_log_ratio"},
-        "luma_standard": {"bt601", "bt709"},
-        "luma_range": {"unit_interval"},
-        "luma_formula": {"abs_difference"},
-    }
-
-    def validate(self) -> None:
-        for k, allowed in self.ALLOWED.items():
-            v = getattr(self, k)
-            if v not in allowed:
-                raise PairPolicyError(f"{k}={v!r} is not one of {sorted(allowed)}")
+    pose: tuple | None = None               # (pitch, yaw, roll) radians, frozen FaceXFormer output
+    face_area_fraction: float | None = None  # Q-26; exactly 1.0 for CASIA (DEV-018)
+    luma_mean: float | None = None           # Q-27; BT.601 Y mean of the canonical face, in [0, 1]
 
 
 # ------------------------------------------------------------------ eligibility
 def eligible_targets(source: Sample, live: list) -> list:
-    """Live candidates allowed for this source. Same dataset, same split, different identity.
+    """Live candidates allowed for this source, in canonical (lexical sample_id) order.
 
     CASIA/MSU use the trustworthy subject id. SiW has no trustworthy subject identity (Q-14), so
     DEV-013 applies: different canonical video AND different exact-content group. That is a
@@ -109,6 +83,8 @@ def eligible_targets(source: Sample, live: list) -> list:
     """
     if source.label_binary != 1:
         raise PairPolicyError(f"source {source.sample_id} is not a spoof row")
+    if source.split not in SPLITS_WITH_PAIRS:
+        raise PairPolicyError(f"pairs are built for {SPLITS_WITH_PAIRS}, not {source.split}")
     out = []
     for t in live:
         if t.label_binary != 0 or t.dataset != source.dataset or t.split != source.split:
@@ -122,146 +98,178 @@ def eligible_targets(source: Sample, live: list) -> list:
             if t.subject_id_global == source.subject_id_global:
                 continue
         out.append(t)
-    return out
+    return sorted(out, key=lambda t: t.sample_id)
 
 
-def candidate_rank(source_sample_id: str, target_sample_id: str, seed: int = SPLIT_SEED) -> str:
-    """Per-candidate deterministic rank key (PROPOSED, Q-24).
-
-    The spec says the 64 candidates are sampled "using a hash of (source_sample_id, split_seed)" but
-    does not say how. This proposal hashes each (source, candidate, seed) triple and keeps the 64
-    smallest digests: it is order-independent, needs no PRNG state, and gives each source its own
-    pseudo-random candidate subset. It is NOT frozen.
-    """
+# ------------------------------------------------------------------ Q-24 candidate selection
+def source_seed_digest(source_sample_id: str, split_seed: int = SPLIT_SEED) -> bytes:
     return hashlib.sha256(
-        f"{CANDIDATE_NAMESPACE}|{source_sample_id}|{target_sample_id}|{seed}".encode("utf-8")
-    ).hexdigest()
+        f"{SOURCE_SEED_NAMESPACE}|{source_sample_id}|{split_seed}".encode("utf-8")).digest()
 
 
-def select_candidates(source: Sample, eligible: list, policy: PairMetricPolicy,
-                      seed: int = SPLIT_SEED, cap: int = CANDIDATE_CAP) -> list:
-    """<= cap eligible -> all of them; otherwise exactly `cap`, chosen deterministically."""
-    policy.validate()
+def candidate_rank_digest(seed_digest: bytes, target_sample_id: str) -> bytes:
+    """SHA-256 over the raw source-seed digest concatenated with the namespaced target id."""
+    return hashlib.sha256(
+        seed_digest + f"|{CANDIDATE_NAMESPACE}|{target_sample_id}".encode("utf-8")).digest()
+
+
+def candidate_rank_key(source_sample_id: str, target_sample_id: str,
+                       split_seed: int = SPLIT_SEED) -> tuple:
+    """(digest as unsigned big-endian 256-bit int, target_sample_id) — the frozen ranking key."""
+    d = candidate_rank_digest(source_seed_digest(source_sample_id, split_seed), target_sample_id)
+    return (int.from_bytes(d, "big", signed=False), target_sample_id)
+
+
+def select_candidates(source: Sample, eligible: list, split_seed: int = SPLIT_SEED,
+                      cap: int = CANDIDATE_CAP) -> list:
+    """<= cap eligible -> evaluate all; otherwise exactly `cap`, by frozen SHA-256 ranking."""
     if not eligible:
         raise PairFeasibilityError(
             f"source {source.sample_id} ({source.dataset}/{source.split}) has no eligible live target")
-    if len(eligible) <= cap:
-        return sorted(eligible, key=lambda t: t.sample_id)
-    ranked = sorted(eligible, key=lambda t: (candidate_rank(source.sample_id, t.sample_id, seed),
-                                             t.sample_id))
+    canonical = sorted(eligible, key=lambda t: t.sample_id)    # canonical order before any hashing
+    if len(canonical) <= cap:
+        return canonical
+    ranked = sorted(canonical, key=lambda t: candidate_rank_key(source.sample_id, t.sample_id, split_seed))
     return sorted(ranked[:cap], key=lambda t: t.sample_id)
 
 
-# ------------------------------------------------------------------ distances
-@dataclass
-class PoseNormalizer:
-    """z-normalization fitted on TRAIN rows only (spec §6: 'inside TRAIN')."""
-    mean: tuple
+# ------------------------------------------------------------------ Q-25 pose
+@dataclass(frozen=True)
+class PoseStats:
+    """Per-dataset pose statistics fitted on TRAIN rows only (population std, ddof=0)."""
+    dataset: str
+    n_train_complete: int
+    mean: tuple       # (pitch, yaw, roll)
     std: tuple
-    scope: str
-    n_rows: int
-    std_convention: str
-    zero_variance_axes: tuple = field(default_factory=tuple)
 
-    @staticmethod
-    def fit(train_samples: list, policy: PairMetricPolicy, dataset: str | None = None) -> "PoseNormalizer":
-        import numpy as np
-        policy.validate()
-        rows = [s for s in train_samples if s.split == "TRAIN" and s.pose is not None]
-        if dataset is not None:
-            rows = [s for s in rows if s.dataset == dataset]
-        if not rows:
-            raise PairPolicyError("no TRAIN rows with pose to fit the normalizer")
-        P = np.asarray([s.pose for s in rows], dtype=np.float64)
-        mean = P.mean(axis=0)
-        std = P.std(axis=0, ddof=1 if policy.pose_std == "sample" else 0)
-        zero = tuple(int(i) for i in range(P.shape[1]) if std[i] == 0.0)
-        if zero:
-            if policy.pose_zero_variance == "error":
-                raise PairPolicyError(f"zero-variance pose axes {zero}; no owner rule to rescale them")
-            std = std.copy()
-            for i in zero:
-                std[i] = 1.0
-        return PoseNormalizer(tuple(mean), tuple(std), policy.pose_stat_scope, len(rows),
-                              policy.pose_std, zero)
-
-    def z(self, pose):
-        return tuple((p - m) / s for p, m, s in zip(pose, self.mean, self.std))
+    def z(self, pose) -> tuple:
+        return tuple((float(p) - m) / s for p, m, s in zip(pose, self.mean, self.std))
 
 
-def d_pose(a: Sample, b: Sample, norm: PoseNormalizer, policy: PairMetricPolicy) -> float:
-    if a.pose is None or b.pose is None:
-        raise PairPolicyError("pose missing; M2 geometry cache must supply it")
-    za, zb = norm.z(a.pose), norm.z(b.pose)
-    diffs = [abs(x - y) for x, y in zip(za, zb)]
-    if policy.pose_norm == "l2":
-        return math.sqrt(sum(d * d for d in diffs))
-    return sum(diffs)
-
-
-def d_scale(a: Sample, b: Sample, policy: PairMetricPolicy) -> float:
-    """|log(area_target / area_source)| — area definition selected by the policy (Q-26).
-
-    CASIA carries no detector box at all (DEV-011 route, SCRFD N/A), so every `scale_box` variant
-    that needs one is undefined there. That is raised rather than silently substituted.
-    """
-    if policy.scale_formula != "abs_log_ratio":
-        raise PairPolicyError(policy.scale_formula)
-    for s in (a, b):
-        if s.bbox_area is None:
+def fit_pose_stats(samples: list, dataset: str) -> PoseStats:
+    """Fit on this dataset's TRAIN rows only. VAL and TEST never contribute a statistic."""
+    import numpy as np
+    rows = [s for s in samples if s.dataset == dataset and s.split == "TRAIN" and s.pose is not None]
+    if not rows:
+        raise PairPolicyError(f"{dataset}: no TRAIN rows with pose to fit the normalizer")
+    P = np.asarray([s.pose for s in rows], dtype=np.float64)
+    mean = P.mean(axis=0)
+    std = P.std(axis=0, ddof=0)                                  # population std, frozen
+    for i, v in enumerate(std):
+        if v <= MIN_POSE_STD:
             raise PairPolicyError(
-                f"{s.dataset}/{s.sample_id}: no face-box area (CASIA has no SCRFD bbox; Q-26 open)")
-        if s.bbox_area <= 0:
-            raise PairPolicyError(f"{s.sample_id}: non-positive face-box area")
-    if policy.scale_box == "bbox_frame_fraction":
-        for s in (a, b):
-            if not s.frame_area:
-                raise PairPolicyError(f"{s.sample_id}: no frame area for the normalised variant")
-        ra, rb = a.bbox_area / a.frame_area, b.bbox_area / b.frame_area
-        return abs(math.log(rb / ra))
-    return abs(math.log(b.bbox_area / a.bbox_area))
+                f"{dataset}: pose component {i} has std {v} <= {MIN_POSE_STD}; the frozen contract "
+                "treats a degenerate pose axis as a hard error (never epsilon or a dropped axis)")
+    return PoseStats(dataset, len(rows), tuple(float(x) for x in mean), tuple(float(x) for x in std))
 
 
-def d_luma(a: Sample, b: Sample, policy: PairMetricPolicy) -> float:
-    if policy.luma_formula != "abs_difference":
-        raise PairPolicyError(policy.luma_formula)
-    for s in (a, b):
+def d_pose(source: Sample, target: Sample, stats: PoseStats) -> float:
+    if source.pose is None or target.pose is None:
+        raise PairPolicyError("pose missing; the frozen M2 geometry cache must supply it")
+    if stats.dataset != source.dataset or source.dataset != target.dataset:
+        raise PairPolicyError("pose statistics must belong to the pair's own dataset")
+    zs, zt = stats.z(source.pose), stats.z(target.pose)
+    return math.sqrt(sum((a - b) ** 2 for a, b in zip(zt, zs)))
+
+
+# ------------------------------------------------------------------ Q-26 scale
+def face_area_fraction(dataset: str, bbox, frame_w: float, frame_h: float) -> float:
+    """Visible (frame-clipped) detector box area as a fraction of the original frame area.
+
+    Uses the ORIGINAL SCRFD box, before the 1.25x expansion, the zero padding and the 256 resize, so
+    the value is dimensionless and independent of raw frame resolution. CASIA never reaches here:
+    it has no detector box and takes the frozen adaptation value instead (DEV-018).
+    """
+    if dataset == "casia_fasd":
+        raise PairPolicyError("CASIA has no detector box; use CASIA_FACE_AREA_FRACTION (DEV-018)")
+    if not (frame_w > 0 and frame_h > 0):
+        raise PairPolicyError(f"invalid frame dimensions {frame_w}x{frame_h}")
+    x1, y1, x2, y2 = (float(v) for v in bbox)
+    cx1, cx2 = max(0.0, min(frame_w, x1)), max(0.0, min(frame_w, x2))
+    cy1, cy2 = max(0.0, min(frame_h, y1)), max(0.0, min(frame_h, y2))
+    w, h = cx2 - cx1, cy2 - cy1
+    if not (w > 0 and h > 0):
+        raise PairPolicyError(f"non-positive visible bbox {w}x{h}; geometry is never repaired silently")
+    frac = (w * h) / (frame_w * frame_h)
+    if not (0.0 < frac <= 1.0):
+        raise PairPolicyError(f"face_area_fraction {frac} outside (0, 1]")
+    return frac
+
+
+def d_scale(source: Sample, target: Sample) -> float:
+    """|ln(f_target) - ln(f_source)| with natural log, no epsilon and no clipping.
+
+    For CASIA both fractions are exactly 1.0, so this is exactly 0.0 for every CASIA pair: the scale
+    term carries no discriminative information there because the dataset does not provide the
+    measurement. The 0.50/0.20 weights are deliberately NOT renormalised (DEV-018).
+    """
+    for s in (source, target):
+        if s.face_area_fraction is None:
+            raise PairPolicyError(f"{s.dataset}/{s.sample_id}: no face_area_fraction")
+        if not (0.0 < s.face_area_fraction <= 1.0):
+            raise PairPolicyError(f"{s.sample_id}: face_area_fraction {s.face_area_fraction} outside (0, 1]")
+    return abs(math.log(target.face_area_fraction) - math.log(source.face_area_fraction))
+
+
+# ------------------------------------------------------------------ Q-27 luminance
+def luma_mean_from_rgb(rgb_uint8) -> float:
+    """Full-image mean of BT.601 Y over a canonical 256x256 RGB uint8 face, channels in [0, 1].
+
+    Every pixel counts, including canonical pixels that came from the Q-22 zero padding: no mask, no
+    parsing region, no z-normalisation and no TRAIN-fitted luminance statistic.
+    """
+    import numpy as np
+    a = np.asarray(rgb_uint8)
+    if a.dtype != np.uint8 or a.ndim != 3 or a.shape[2] != 3:
+        raise PairPolicyError(f"expected an RGB uint8 image, got {a.shape} {a.dtype}")
+    f = a.astype(np.float64) / 255.0
+    y = BT601[0] * f[:, :, 0] + BT601[1] * f[:, :, 1] + BT601[2] * f[:, :, 2]
+    return float(y.mean())
+
+
+def d_luma(source: Sample, target: Sample) -> float:
+    for s in (source, target):
         if s.luma_mean is None:
             raise PairPolicyError(f"{s.sample_id}: no luminance mean")
         if not 0.0 <= s.luma_mean <= 1.0:
-            raise PairPolicyError(f"{s.sample_id}: luma {s.luma_mean} outside the unit interval")
-    return abs(b.luma_mean - a.luma_mean)
+            raise PairPolicyError(f"{s.sample_id}: luma {s.luma_mean} outside [0, 1]")
+    return abs(target.luma_mean - source.luma_mean)
 
 
-def d_pair(source: Sample, target: Sample, norm: PoseNormalizer, policy: PairMetricPolicy) -> dict:
-    dp = d_pose(source, target, norm, policy)
-    ds = d_scale(source, target, policy)
-    dl = d_luma(source, target, policy)
+# ------------------------------------------------------------------ combination
+def d_pair(source: Sample, target: Sample, stats: PoseStats) -> dict:
+    dp = d_pose(source, target, stats)
+    ds = d_scale(source, target)
+    dl = d_luma(source, target)
     return {"d_pose": dp, "d_scale": ds, "d_luma": dl,
             "d_pair": WEIGHTS["pose"] * dp + WEIGHTS["scale"] * ds + WEIGHTS["luma"] * dl}
 
 
-def choose_target(source: Sample, candidates: list, norm: PoseNormalizer,
-                  policy: PairMetricPolicy) -> dict:
-    """Minimum d_pair; exact ties broken by lexical target sample_id (no fuzzy tolerance)."""
+def choose_target(source: Sample, candidates: list, stats: PoseStats) -> dict:
+    """Minimum d_pair; exact ties break on lexical target sample_id. No fuzzy tolerance."""
     best = None
     for t in sorted(candidates, key=lambda x: x.sample_id):
-        d = d_pair(source, t, norm, policy)
+        d = d_pair(source, t, stats)
         key = (d["d_pair"], t.sample_id)
         if best is None or key < best[0]:
             best = (key, t, d)
+    if best is None:
+        raise PairFeasibilityError(f"source {source.sample_id}: no candidate to choose from")
     return {"target": best[1], **best[2]}
 
 
-def pair_id(index: int) -> str:
-    """`P` + 6-digit index over the canonical source order (spec table shows `P000001`).
-
-    Numbering is bookkeeping, but it is **not** inert: spec §8.1 derives FAS-Aug operator parameters
-    from `SHA256(pair_id + global_seed)`, so the assignment must be frozen. PROPOSED (Q-24 scope).
-    """
-    return f"P{index:06d}"
-
-
+# ------------------------------------------------------------------ pair ids
 def canonical_source_order(sources: list) -> list:
-    """Frozen source ordering for pair_id assignment: dataset, then sample_id."""
+    """Frozen ordering used only for pair_id assignment: dataset, then source sample_id."""
     return sorted(sources, key=lambda s: (s.dataset, s.sample_id))
+
+
+def assign_pair_ids(split: str, ordered_sources: list) -> list:
+    """`PTR`/`PVA` + 6-digit index, numbered from 1 per manifest.
+
+    Assigned only after pair membership is final, so candidate selection can never depend on it —
+    which matters because spec §8.1 derives FAS-Aug operator randomness from `pair_id`.
+    """
+    if split not in PAIR_ID_PREFIX:
+        raise PairPolicyError(f"no pair_id prefix for split {split}")
+    return [f"{PAIR_ID_PREFIX[split]}{i:06d}" for i in range(1, len(ordered_sources) + 1)]

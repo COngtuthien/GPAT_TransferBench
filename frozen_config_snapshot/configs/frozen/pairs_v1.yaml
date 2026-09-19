@@ -1,0 +1,241 @@
+# pairs_v1 — FROZEN (2026-09-19). Owner resolution of Q-24, Q-25, Q-26, Q-27.
+#
+# The frozen specification fixes the shape of the common pairing rule (§6) but left the candidate
+# sampler and the three distance formulas under-specified. The owner resolved those four questions;
+# this file is the authoritative contract for M4 execution. It contains no pair membership — the
+# manifests are produced by M4, which has not run.
+#
+# These are BENCHMARK-DESIGN / CONTROLLED-ADAPTATION decisions taken where the spec was silent.
+# They are NOT literature-derived facts and must not be presented as such.
+#
+# Proposal history (pre-owner-decision): configs/proposed/pairs_v1.proposed.yaml — preserved.
+# Owner decision record: outputs/audit/M4_PAIR_OWNER_DECISIONS.md
+version: pairs_v1
+status: FROZEN
+frozen_utc: "2026-09-19"
+supersedes: configs/proposed/pairs_v1.proposed.yaml
+resolves: [Q-24, Q-25, Q-26, Q-27]
+question_status:
+  Q-24: RESOLVED_BY_OWNER_HASH_RANKING
+  Q-25: RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2
+  Q-26: RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO
+  Q-27: RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF
+non_blocking_open: [Q-28, Q-29]        # native-method scope only; they do not block common pairs
+decision_provenance: >-
+  Owner benchmark-design decisions (2026-09-19) filling gaps in spec §6. The spec's own settled
+  elements (splits, one pair per spoof source, the 64 cap, the 0.50/0.30/0.20 weights, minimum
+  d_pair, the lexical tie-break and the seed) are unchanged and were never tuned.
+spec_basis: "§6 common source->target pair manifest; §8.1 FAS-Aug pair_id seed; App. A build_common_pairs"
+references:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  split_config: configs/frozen/split_v1.yaml
+  preprocess_config: configs/frozen/preprocess_v1.yaml
+  dataset_policy: configs/frozen/dataset_protocol_policy_v1.yaml
+  implementation: gpatbench/pairs/common.py
+  owner_decisions: outputs/audit/M4_PAIR_OWNER_DECISIONS.md
+
+# ---------------------------------------------------------------- settled by the spec
+build_from_splits: [TRAIN, VAL]        # App. A: pairs_val = build_common_pairs(split.VAL); §19 needs
+                                       # val_pairs_v1.parquet for generator checkpoint selection
+test_pairs: NOT_REQUIRED               # no spec requirement; none are built
+one_pair_per_spoof_source: true
+n_syn_intended: number_of_TRAIN_spoof_frames
+source_label: SPOOF
+target_label: LIVE
+target_same_dataset_as_source: true
+target_reuse_allowed: true             # no spec constraint forbids it; no one-to-one matching imposed
+usable_rows_only: M2_COMPLETE          # the 25 M2 FAILED rows can never be a source or a target
+split_boundary: >-
+  A TRAIN pair references only TRAIN rows and a VAL pair only VAL rows. No pair crosses splits, and
+  TEST never appears in any pair or in any fitted statistic.
+split_seed: 20260814
+candidate_cap: 64
+weights: {pose: 0.50, scale: 0.30, luma: 0.20}
+selection: minimum_d_pair
+tie_break: lexical_target_sample_id
+tie_tolerance: none                    # exact comparison; no fuzzy epsilon window
+numeric_dtype: float64
+
+eligibility:
+  casia_fasd: {rule: DIFFERENT_SUBJECT, key: subject_id_global}
+  msu_mfsd: {rule: DIFFERENT_SUBJECT, key: subject_id_global}
+  siwmv2:
+    rule: DIFFERENT_VIDEO_AND_DIFFERENT_CONTENT_GROUP     # DEV-013
+    keys: [video_id, content_group_id]
+    claim_wording: "different-video / different-exact-content pairs (NOT proven different-person)"
+    forbidden_claims: ["different subject", "different person", "subject-disjoint pairing"]
+    pseudo_subject_ids_forbidden: true
+  canonical_eligible_order: lexical_target_sample_id_ascending   # applied before any hashing
+
+# ---------------------------------------------------------------- Q-24 candidate selection
+candidate_selection:
+  status: RESOLVED_BY_OWNER_HASH_RANKING
+  rule_if_at_most_cap: "evaluate ALL eligible targets"
+  rule_if_above_cap: "select exactly 64 by deterministic SHA-256 ranking"
+  source_seed_digest:
+    algorithm: sha256
+    namespace: gpatbench.pair.source_seed.v1
+    preimage: "UTF8('gpatbench.pair.source_seed.v1|' + source_sample_id + '|' + str(split_seed))"
+    output: raw_32_byte_digest
+  candidate_rank_digest:
+    algorithm: sha256
+    namespace: gpatbench.pair.candidate.v1
+    preimage: "source_seed_digest_bytes || UTF8('|gpatbench.pair.candidate.v1|' + target_sample_id)"
+    output: raw_32_byte_digest
+  ranking:
+    primary: "candidate_rank_digest as an unsigned big-endian 256-bit integer, ascending"
+    secondary: "lexical target_sample_id ascending (defensive; a digest collision is not expected)"
+    keep_first: 64
+  forbidden: [prng, sampling_with_replacement, python_hash, pythonhashseed_dependence,
+              input_row_order_dependence, filesystem_order_dependence, worker_count_dependence,
+              wall_clock_dependence]
+  membership: "d_pair is computed ONLY over the selected candidate set"
+
+# ---------------------------------------------------------------- Q-24 pair ids
+pair_id:
+  status: RESOLVED_BY_OWNER_HASH_RANKING
+  scientific_role: >-
+    Bookkeeping for the manifest, but load-bearing downstream: spec §8.1 derives FAS-Aug operator
+    randomness from SHA256(pair_id + global_seed). It is therefore frozen explicitly.
+  canonical_source_order: [dataset_ascending, source_spoof_id_ascending]
+  format: {TRAIN: "PTR%06d", VAL: "PVA%06d"}
+  numbering_starts_at: 1
+  numbering_scope: per_manifest                 # TRAIN and VAL number independently and cannot collide
+  assigned_after: final_pair_membership         # prevents any circular dependence
+  used_for_candidate_selection: false
+  permutation_invariant: true
+
+# ---------------------------------------------------------------- Q-25 pose
+pose:
+  status: RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2
+  components: [pitch, yaw, roll]
+  source: "frozen FaceXFormer pose from M2 (radians); FaceXFormer is never rerun"
+  normalization:
+    scope: PER_DATASET                          # CASIA, MSU and SiW are fitted separately, never pooled
+    rows: "M2 COMPLETE rows in TRAIN only"
+    val_rows_used: false
+    test_rows_used: false
+    mean: population_arithmetic_mean
+    std: population_standard_deviation
+    ddof: 0
+    dtype: float64
+    per_component_independently: true
+  transform: "z = (value - mean_dataset_train) / std_dataset_train"
+  zero_variance:
+    threshold: 1.0e-12
+    behaviour: HARD_ERROR
+    note: >-
+      Never set to 1, never dropped, never given a silent epsilon. The real data has non-zero
+      variance on every axis, so this is an integrity guard rather than a live branch.
+  distance:
+    formula: "sqrt((z_pitch_t - z_pitch_s)^2 + (z_yaw_t - z_yaw_s)^2 + (z_roll_t - z_roll_s)^2)"
+    norm: euclidean_l2
+    no_division_by_sqrt3: true
+    dtype: float64
+  val_behaviour: "VAL pairing reuses that dataset's TRAIN-fitted pose statistics"
+
+# ---------------------------------------------------------------- Q-26 scale
+scale:
+  status: RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO
+  representation: dimensionless_visible_face_box_area_fraction
+  msu_siw:
+    bbox_source: "selected SCRFD bbox from the frozen M2 metadata"
+    bbox_stage: "ORIGINAL detector box, BEFORE the 1.25x expansion, zero padding and 256 resize"
+    clipping: "cx1=max(0,min(W,x1)); cy1=max(0,min(H,y1)); cx2=max(0,min(W,x2)); cy2=max(0,min(H,y2))"
+    visible_area: "(cx2 - cx1) * (cy2 - cy1)"
+    face_area_fraction: "visible_area / (W * H)"
+    rationale: "removes raw-frame resolution dependence across datasets and videos"
+    forbidden: ["requested 1.25x crop-square area", "canonical 256 face area"]
+    validity_required: ["W > 0", "H > 0", "visible_width > 0", "visible_height > 0",
+                        "0 < face_area_fraction <= 1"]
+    on_invalid: HARD_ERROR                      # geometry is never repaired silently
+  casia_fasd:
+    deviation: DEV-018
+    classification: CASIA_PAIR_SCALE_UNAVAILABLE_CONTROLLED_ADAPTATION
+    face_area_fraction: 1.0
+    d_scale: 0.0
+    reason: >-
+      CASIA has no SCRFD bbox under the approved DEV-011 pre-cropped route (0 of 4,800 rows). SCRFD
+      is not rerun, no bbox is invented, and no pseudo-box is derived from landmarks.
+    weights_renormalized: false
+    scientific_limitation: >-
+      For CASIA the scale term carries no discriminative information: candidate ranking is governed
+      by pose and luminance only, with the 0.30-weighted scale contribution identically zero. Because
+      pairing is always within a dataset, no d_pair value is compared across datasets as a physical
+      distance.
+  distance:
+    formula: "abs(ln(face_area_fraction_target) - ln(face_area_fraction_source))"
+    logarithm: natural
+    epsilon: none
+    clipping_after_validity: none
+    dtype: float64
+
+# ---------------------------------------------------------------- Q-27 luminance
+luminance:
+  status: RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF
+  input_image: "frozen canonical 256x256 RGB uint8 face from M2"
+  forbidden_inputs: ["raw frame", "SCRFD crop before canonical resize", "FaceXFormer input image",
+                     "AdaFace input image", "generated image"]
+  channel_scaling: "R,G,B = uint8 / 255.0 -> float64 in [0,1]"
+  y_definition:
+    standard: BT.601
+    formula: "Y = 0.299*R + 0.587*G + 0.114*B"
+    offset: none
+    studio_range_conversion: false
+    opencv_integer_ycrcb: false
+    bt709: false
+  normalized_meaning: "Y already in [0,1]; the word 'normalized' fixes the range, nothing else"
+  y_mean: "arithmetic mean of Y over all 256x256 pixels, including canonical zero-padded pixels"
+  forbidden_processing: ["background masking", "parsing-region restriction", "z-normalizing Y_mean",
+                         "fitting luminance statistics from TRAIN"]
+  distance:
+    formula: "abs(Y_mean_target - Y_mean_source)"
+    expected_range: [0.0, 1.0]
+    extra_scaling: none
+    dtype: float64
+
+# ---------------------------------------------------------------- combination
+final_distance:
+  formula: "d_pair = 0.50*d_pose + 0.30*d_scale + 0.20*d_luma"
+  dtype: float64
+  post_hoc_normalization: none
+  weight_tuning: forbidden
+  dataset_specific_weights: forbidden
+  threshold: none
+  winner: minimum_d_pair
+  exact_tie_break: lexical_target_sample_id
+
+# ---------------------------------------------------------------- artifacts M4 will create
+train_statistics_artifact:
+  path: manifests/pair_train_stats_v1.json
+  created_by: M4_execution                      # NOT created in this pre-flight pass
+  must_contain: [schema_version, split_manifest_sha256, pairs_config_sha256, split_seed,
+                 per_dataset_n_train_complete, pose_mean_pitch_yaw_roll,
+                 pose_std_population_pitch_yaw_roll, dtype, ddof]
+  dtype: float64
+  ddof: 0
+  forbidden_content: ["any VAL-derived statistic", "any TEST-derived statistic"]
+
+manifests:
+  train: manifests/pairs_train_v1.parquet
+  val: manifests/val_pairs_v1.parquet
+  created_by: M4_execution                      # NOT created in this pre-flight pass
+  expected_rows: {train: 8838, val: 1905}       # = spoof sources per split, measured in preflight
+  spec_columns: [pair_id, target_live_id, source_spoof_id, dataset, target_subject, source_subject,
+                 attack_macro, d_pose, d_scale, d_luma, seed]
+  audit_columns: [split, d_pair, source_video_id, target_video_id, source_content_group_id,
+                  target_content_group_id, candidate_count_eligible, candidate_count_evaluated,
+                  source_sha256, target_sha256, split_manifest_sha256, pairs_config_sha256,
+                  face_area_fraction_source, face_area_fraction_target]
+  siw_subject_columns: "target_subject and source_subject stay null for SiW; identity is never fabricated"
+  row_order: [dataset, source_spoof_id]         # same order that assigns pair_id
+  parquet_writer: {compression: zstd, compression_level: 9, write_statistics: true, version: "2.6",
+                   use_dictionary: false, row_group_size: 65536, store_schema: true,
+                   write_page_index: false}     # the writer contract proven byte-deterministic in M3
+
+determinism_contract:
+  invariant_to: [input_row_order, filesystem_order, python_hash_randomization, worker_count,
+                 process_count, wall_clock_time]
+  tested: tests/test_m4_pair_preflight.py
+membership_in_this_file: false

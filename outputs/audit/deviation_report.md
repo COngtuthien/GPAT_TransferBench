@@ -27,6 +27,7 @@ changes are appended as dated updates under the entry.
 | DEV-015 | APPROVED | FaceXFormer runs on the frozen canonical face; no MTCNN 50%-margin recrop (closes Q-20) | 2026-09-19 |
 | DEV-016 | APPROVED | Q-22 operational interpretation of "clamp to image": the requested square is preserved with zero padding; clamping applies to the source read region | 2026-09-19 |
 | DEV-017 | APPROVED | APPROVED_OPERATIONAL_STORAGE_RELOCATION — M2 generated artifacts physically stored on /media/cong/Data; no scientific change | 2026-09-19 |
+| DEV-018 | APPROVED | CASIA_PAIR_SCALE_UNAVAILABLE_CONTROLLED_ADAPTATION — CASIA face_area_fraction = 1.0, so d_scale = 0 for every CASIA pair; weights not renormalized | 2026-09-19 |
 
 ---
 
@@ -478,3 +479,42 @@ Proposal (not frozen): `configs/proposed/pairs_v1.proposed.yaml`.
 
 **Nothing here was decided.** `configs/frozen/pairs_v1.yaml` does not exist, no pair manifest was
 written, and M4 remains NOT_STARTED.
+
+---
+
+## M4 owner decisions (2026-09-19) — Q-24 … Q-27 resolved
+
+The OPEN / OWNER_DECISION_REQUIRED entries recorded earlier in this file remain above as history.
+Full record: `M4_PAIR_OWNER_DECISIONS.md`. Frozen contract: `configs/frozen/pairs_v1.yaml`
+(sha256 `16ff68036a9ed3a315df6944697394359cb2ea53e0b5623721d036a3cf170398`). These are owner
+benchmark-design decisions, **not** literature-derived facts.
+
+| ID | Final status | Summary |
+|---|---|---|
+| Q-24 | **RESOLVED_BY_OWNER_HASH_RANKING** | Eligible set ordered lexically before hashing; ≤64 → all evaluated; >64 → exactly 64 by two-stage SHA-256 (`source_seed_digest` then `candidate_rank_digest`) read as an unsigned big-endian 256-bit integer, lexical `target_sample_id` as a defensive collision tie-break. No PRNG. `pair_id` frozen as `PTR%06d` / `PVA%06d` over (dataset, source_spoof_id), assigned **after** membership so selection can never depend on it — necessary because spec §8.1 seeds FAS-Aug from `pair_id`. |
+| Q-25 | **RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2** | Pose z-scored **per dataset** on TRAIN rows only (population mean/std, `ddof=0`, float64); Euclidean L2, no division by √3; `std <= 1e-12` is a hard error; VAL reuses the TRAIN statistics; TEST never contributes. |
+| Q-26 | **RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO** | MSU/SiW use the original SCRFD box clipped to the frame, as a fraction of frame area (removes resolution dependence); `d_scale = |ln f_t − ln f_s|`, natural log, no epsilon; invalid geometry is a hard error. CASIA handled by **DEV-018**. |
+| Q-27 | **RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF** | BT.601 `Y = 0.299R + 0.587G + 0.114B` on the frozen canonical 256×256 RGB face, channels in [0,1], full-image mean including zero-padded pixels, `d_luma = |ΔY_mean|`. No OpenCV YCrCb, no BT.709, no z-scoring. |
+
+Q-28 and Q-29 (native DSDG / DiffFAS scope for SiW) remain **OPEN and explicitly non-blocking** for
+common-pair execution. DEV-013 still applies only to the common pairing contract.
+
+## DEV-018 — CASIA common-pair scale term is unavailable (controlled adaptation)
+
+- **Classification:** `CASIA_PAIR_SCALE_UNAVAILABLE_CONTROLLED_ADAPTATION`.
+- **Spec basis:** §6 requires "scale distance from log face-box area ratio".
+- **Reason:** CASIA-FASD has **no detector face box at all**. The approved DEV-011 route consumes a
+  pre-cropped 112×112 source and runs no SCRFD, so 0 of 4,800 CASIA rows carry a bbox — a missing
+  measurement, not a choice of convention. CASIA supplies 2,520 of the 8,838 TRAIN sources.
+- **Deviation:** for CASIA only, `face_area_fraction = 1.0` for every usable sample, hence
+  `d_scale = 0.0` exactly for every CASIA source–target pair.
+- **What was explicitly refused:** rerunning SCRFD on CASIA, inventing a detector bbox, deriving a
+  pseudo-box from FaceXFormer landmarks, and pretending the 112 crop has an original detector box.
+- **Weights:** the 0.50/0.20 weights are **not** renormalised; the frozen `d_pair` formula is
+  unchanged.
+- **Scientific limitation (must be disclosed):** CASIA common pairs are ranked by pose and luminance
+  only, with the 0.30-weighted scale contribution identically zero. Because pairing is always within
+  a dataset, no `d_pair` value is interpreted as a physical distance comparable across datasets.
+- **Verified:** on the real split, CASIA `d_scale` unique values = `[0.0]`
+  (`M4_PAIR_PREFLIGHT.json` → `frozen_diagnostic`).
+- **Status: APPROVED** (owner, 2026-09-19).

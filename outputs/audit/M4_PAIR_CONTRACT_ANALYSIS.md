@@ -1,9 +1,17 @@
 # M4 — Pair Contract Analysis (pre-flight)
 
-Status: **OWNER_DECISION_REQUIRED**. Four execution-affecting details of the common pairing rule are
-not fixed by the frozen specification and have no approved project decision. The proposal lives in
-`configs/proposed/pairs_v1.proposed.yaml`; `configs/frozen/pairs_v1.yaml` deliberately does **not**
-exist, and no pair manifest was created.
+> **RESOLVED 2026-09-19.** All four questions below were answered by the owner and frozen in
+> `configs/frozen/pairs_v1.yaml`: Q-24 `RESOLVED_BY_OWNER_HASH_RANKING`, Q-25
+> `RESOLVED_BY_OWNER_DATASET_TRAIN_ZSCORE_L2`, Q-26
+> `RESOLVED_BY_OWNER_NORMALIZED_VISIBLE_BBOX_LOGRATIO` (CASIA via **DEV-018**), Q-27
+> `RESOLVED_BY_OWNER_BT601_UNIT_MEAN_ABSDIFF`. The decision record is
+> `M4_PAIR_OWNER_DECISIONS.md`. **The text below is preserved unchanged as the analysis that
+> motivated those decisions**, so the gaps and their measured sensitivity stay on record.
+
+Status at the time of writing: **OWNER_DECISION_REQUIRED**. Four execution-affecting details of the
+common pairing rule were not fixed by the frozen specification and had no approved project decision.
+The proposal lived in `configs/proposed/pairs_v1.proposed.yaml`; `configs/frozen/pairs_v1.yaml` did
+not yet exist, and no pair manifest was created.
 
 ## 1. What the spec settles
 
