@@ -8,6 +8,14 @@ class-weight mismatch all raise `ProbeContractViolation`.
 `run(dry_run=True)` performs the CPU-safe preflight: it validates the contract, builds the model,
 loss, metric and scheduler, and does a single forward pass -- but never calls `optimizer.step()`
 and never writes a checkpoint.
+
+**The training loop is NOT implemented yet.** `run(dry_run=False)` raises before any optimization,
+and it stays that way until the GPU execution preflight is complete. When it is written it must
+follow the frozen validation contract: a VAL pass at the END of **every** epoch --
+`contract.validation_epochs()` returns `(1, 2, ..., 30)`, i.e. 30 evaluations -- with the best
+checkpoint allowed to come from any epoch in that range, replaced only on a strict
+`new_macro_f1 > best_macro_f1` so an exact tie keeps the earlier epoch
+(`contract.select_best_epoch`). TEST never participates.
 """
 from __future__ import annotations
 
@@ -22,7 +30,8 @@ from . import metrics as MET
 from . import model as MODEL
 from .contract import (BATCH_SIZE, CLASSES, EPOCHS, ETA_MIN, K, LR, RESNET18_WEIGHT_SHA256, ROOT,
                        SEED, T_MAX, WEIGHT_DECAY, ProbeContractViolation, load_config,
-                       lr_schedule, verify_class_weights, verify_environment, verify_population)
+                       lr_schedule, validation_epochs, verify_class_weights, verify_environment,
+                       verify_population)
 
 CHECKPOINT_DIR = ROOT / "models/artifact_probe"
 CHECKPOINT_PATH = CHECKPOINT_DIR / "artifact_probe_v1.pt"
@@ -100,8 +109,9 @@ def preflight(config_path: Path | None = None, *, require_cuda: bool) -> dict:
         raise ProbeContractViolation("synthetic samples must never enter probe training")
     if cfg["input"]["post_hp_normalization"]["imagenet_mean_subtraction"]:
         raise ProbeContractViolation("post-high-pass ImageNet normalization is forbidden")
+    epochs = validation_epochs(cfg)          # (1, ..., 30); the single source of the schedule
     return {"config": cfg, "population": pop, "class_weights": weights, "environment": env,
-            "resnet18_weight_sha256": weight_sha}
+            "resnet18_weight_sha256": weight_sha, "validation_epochs": list(epochs)}
 
 
 def run(config_path: Path | None = None, *, dry_run: bool = False,
@@ -123,12 +133,16 @@ def run(config_path: Path | None = None, *, dry_run: bool = False,
            "classes": list(CLASSES), "environment": pre["environment"],
            "resnet18_weight_sha256": pre["resnet18_weight_sha256"],
            "lr_schedule": lr_schedule(), "epochs": EPOCHS, "batch_size": BATCH_SIZE,
+           "validation_epochs": pre["validation_epochs"],
+           "validation_passes": len(pre["validation_epochs"]),
            "checkpoint_written": False}
     if dry_run:
         out["note"] = ("CPU-safe preflight only: no optimizer.step(), no checkpoint, "
                        "no scientific claim.")
         return out
     raise ProbeContractViolation(
-        "authoritative M5 training has not been executed in this pass. The frozen contract and the "
-        "trainer are ready; execution is gated on the GPU preflight "
+        "the authoritative M5 training loop is NOT implemented yet. The frozen contract, the gates "
+        "and the CPU-safe preflight are ready; the loop will validate at the end of every epoch "
+        f"{validation_epochs()[0]}..{validation_epochs()[-1]} "
+        f"({len(validation_epochs())} passes). Execution is gated on the GPU preflight "
         "(outputs/audit/M5_GPU_EXECUTION_PLAN.md).")

@@ -1,5 +1,7 @@
 # M5 — ArtifactProbeNet Class-Weight Analysis (pre-flight)
 
+> **Config SHA updated 2026-09-21.** The ArtifactProbeNet config was corrected to state the validation schedule explicitly (`CONFIG_SEMANTIC_AMBIGUITY_FOUND_BEFORE_EXECUTION`; see `M5_VALIDATION_EPOCH_CONTRACT_CORRECTION.md`). Current sha256 `3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe`; the sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f` quoted below is the pre-correction value, retained as history. No other scientific choice changed and nothing had been trained.
+
 > **RESOLVED 2026-09-20.** Every question raised below was answered by the owner and frozen in `configs/frozen/artifact_probe.yaml` (sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`). The decision record is `M5_ARTIFACT_PROBE_OWNER_DECISIONS.md` and the contract summary is `M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md`. **The text below is preserved unchanged as the analysis that motivated those decisions.** M5 is still NOT_STARTED: nothing has been trained.
 
 **Date:** 2026-09-20 · Read-only. Machine-readable: `M5_ARTIFACT_PROBE_PREFLIGHT.json`

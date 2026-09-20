@@ -10,7 +10,7 @@ describes the remote machine; the remote columns are deliberately empty.
 | expected remote project root | `/home/sparc/workdir/longnm/GPAT_TransferBench` |
 | expected remote runtime root | `/home/sparc/workdir/longnm/GPAT_TransferBench_runtime` |
 | local runtime root | `/media/cong/Data/GPAT_TransferBench_runtime` |
-| frozen config | `configs/frozen/artifact_probe.yaml` sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f` |
+| frozen config | `configs/frozen/artifact_probe.yaml` sha256 `3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe` |
 
 ## 1. Step 1 — repository
 

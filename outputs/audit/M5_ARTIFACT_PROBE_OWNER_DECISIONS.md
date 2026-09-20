@@ -6,7 +6,7 @@ pre-decision analysis is preserved in `configs/proposed/artifact_probe.proposed.
 `M5_ARTIFACT_PROBE_*` pre-flight documents.
 
 Frozen contract: `configs/frozen/artifact_probe.yaml`
-sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`
+sha256 `3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe`
 **M5 remains NOT_STARTED** — no authoritative training has run and no checkpoint exists.
 
 ---
@@ -115,6 +115,12 @@ N = 14,467, K = 7. Full record: `M5_ARTIFACT_PROBE_CLASS_WEIGHTS.csv`.
   `new_macro_f1 > best_macro_f1` (strict `>`, never `>=`), so an exact tie keeps the **earlier**
   epoch. No epsilon tie window, training loss is not a tie-break, TEST is never involved.
 - **Consequence:** selection is a deterministic function of the VAL macro-F1 sequence alone.
+- **Clarified 2026-09-21:** the schedule was written as `evaluate_epochs: [1, 30]`, which could be
+  misread as "epochs 1 and 30 only". It is now `evaluate_every_epoch: true` with
+  `epoch_start: 1` / `epoch_end: 30`, i.e. **30 validation passes**, and
+  `contract.validation_epochs()` is the single source of the sequence. No code had consumed the old
+  field and nothing had been trained, so nothing was invalidated
+  (`M5_VALIDATION_EPOCH_CONTRACT_CORRECTION.md`).
 
 ## D-M5-07 — Cosine schedule · `RESOLVED_BY_OWNER_LITERAL_COSINE_NO_WARMUP`
 

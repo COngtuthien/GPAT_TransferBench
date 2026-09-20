@@ -785,3 +785,39 @@ M5 remains **NOT_STARTED** with pre-flight status `READY_FOR_GPU_EXECUTION_PREFL
 contract, implementing a trainer and running a CPU-safe smoke do not start a milestone. No remote
 GPU fact has been measured; `M5_GPU_EXECUTION_PLAN.md` lists the checks still to perform.
 
+## M5 validation-epoch contract correction (2026-09-21)
+
+**Classification: `CONFIG_SEMANTIC_AMBIGUITY_FOUND_BEFORE_EXECUTION`.** Not an executed scientific
+defect and not a result invalidation — **no model has ever been trained in this project.**
+
+The frozen ArtifactProbeNet config wrote the validation schedule as
+`validation.checkpoint.evaluate_epochs: [1, 30]`. As YAML that is a two-element list, so it could be
+read as "validate at epochs 1 and 30 only" rather than "validate at the end of every epoch from 1 to
+30" — 2 passes versus 30, which would select different checkpoints.
+
+**Why nothing was invalidated:** a repository-wide search found the field in exactly one place (the
+frozen config, plus its byte-identical snapshot) and **no code consumed it** — no hit in
+`gpatbench/`, `tests/` or `tools/`. `gpatbench/probe/train.py::run(dry_run=False)` still raises
+before any optimization, the training loop is not implemented, no checkpoint exists and M5 is
+`NOT_STARTED`.
+
+**Correction:** the field is replaced by an explicit triple —
+`evaluate_every_epoch: true`, `epoch_start: 1`, `epoch_end: 30` (plus `evaluation_count: 30` and
+`range_as_two_element_list: FORBIDDEN`). `gpatbench.probe.contract.validation_epochs()` is the
+**single** source of the sequence `(1, 2, …, 30)` and hard-fails on a wrong start, a wrong end, a
+wrong length or `evaluate_every_epoch != true`. `contract.select_best_epoch()` implements the
+D-M5-06 rule purely so it can be tested without training; on a sequence peaking at epoch 17 it
+selects 17.
+
+Everything else is unchanged: population, class weights, high-pass transform, ResNet contract,
+optimizer, scheduler, DataLoader, macro-F1, tie-break and embedding. The CPU-safe smoke still passes
+22/22.
+
+| config sha256 | status |
+|---|---|
+| `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f` | **SUPERSEDED_BY_VALIDATION_EPOCH_CONTRACT_CORRECTION** (retained above as history) |
+| `3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe` | current; snapshot byte-identical |
+
+Record: `M5_VALIDATION_EPOCH_CONTRACT_CORRECTION.md`. M5 remains **NOT_STARTED** /
+`READY_FOR_GPU_EXECUTION_PREFLIGHT`.
+

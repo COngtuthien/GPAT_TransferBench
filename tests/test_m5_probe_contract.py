@@ -25,7 +25,7 @@ from gpatbench.probe import preprocess as PP     # noqa: E402
 from gpatbench.probe import train as T           # noqa: E402
 
 AUDIT = ROOT / "outputs/audit"
-CONFIG_SHA = "e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f"
+CONFIG_SHA = "3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe"
 EXPECT_TRAIN = {"live": 5629, "makeup": 759, "mask_2d": 96, "mask_3d": 1056,
                 "partial": 1911, "print": 2838, "replay": 2178}
 EXPECT_VAL = {"live": 1216, "makeup": 159, "mask_2d": 24, "mask_3d": 224,
@@ -294,6 +294,71 @@ class TestMetricAndSelection(unittest.TestCase):
         self.assertIs(v["depends_on_sklearn"], False)
         for f in ("weighted_f1", "micro_f1", "dataset_macro_averaging"):
             self.assertIn(f, v["forbidden"])
+
+    def test_validation_runs_at_the_end_of_every_epoch_1_to_30(self):
+        v = C.validation_epochs()
+        self.assertEqual(v, tuple(range(1, 31)))
+        self.assertEqual(len(v), 30)
+        self.assertEqual(v[0], 1)
+        self.assertEqual(v[-1], 30)
+        self.assertIn(2, v)
+        self.assertIn(29, v)
+        self.assertTrue(all(b - a == 1 for a, b in zip(v, v[1:])))
+        self.assertEqual(len(v), C.EPOCHS)
+
+    def test_config_no_longer_encodes_the_range_as_a_two_element_list(self):
+        ck = cfg()["validation"]["checkpoint"]
+        self.assertNotIn("evaluate_epochs", ck)
+        self.assertIs(ck["evaluate_every_epoch"], True)
+        self.assertEqual(ck["epoch_start"], 1)
+        self.assertEqual(ck["epoch_end"], 30)
+        self.assertEqual(ck["evaluation_count"], 30)
+        self.assertIs(ck["best_may_come_from_any_epoch_in_range"], True)
+        self.assertEqual(ck["range_as_two_element_list"], "FORBIDDEN")
+        self.assertEqual(ck["sequence_source"], "gpatbench.probe.contract.validation_epochs")
+
+    def test_validation_epochs_rejects_a_malformed_contract(self):
+        import copy
+        for patch in ({"evaluate_every_epoch": False}, {"epoch_start": 0}, {"epoch_start": 2},
+                      {"epoch_end": 29}, {"epoch_end": 31}):
+            bad = copy.deepcopy(cfg())
+            bad["validation"]["checkpoint"].update(patch)
+            with self.assertRaises(C.ProbeContractViolation, msg=str(patch)):
+                C.validation_epochs(bad)
+
+    def test_the_sequence_has_exactly_one_source(self):
+        """No second hard-coded copy of the 1..30 range may exist in the probe package."""
+        import re
+        for f in sorted((ROOT / "gpatbench/probe").rglob("*.py")):
+            if f.name == "contract.py":
+                continue
+            src = f.read_text()
+            self.assertNotIn("range(1, 31)", src, f.name)
+            self.assertIsNone(re.search(r"\[\s*1\s*,\s*30\s*\]", src), f.name)
+
+    def test_trainer_preflight_reports_thirty_validation_passes(self):
+        out = T.run(dry_run=True)
+        self.assertEqual(out["validation_passes"], 30)
+        self.assertEqual(out["validation_epochs"], list(range(1, 31)))
+
+    def test_an_intermediate_epoch_can_be_selected(self):
+        """A maximum at epoch 17 must win; the old two-element reading could not express that."""
+        scores = [(e, (e / 17.0 if e <= 17 else (34 - e) / 17.0)) for e in C.validation_epochs()]
+        epoch, score = C.select_best_epoch(scores)
+        self.assertEqual(epoch, 17)
+        self.assertEqual(score, 1.0)
+
+    def test_select_best_epoch_keeps_the_earlier_epoch_on_an_exact_tie(self):
+        self.assertEqual(C.select_best_epoch([(1, 0.5), (2, 0.5), (3, 0.5)]), (1, 0.5))
+        self.assertEqual(C.select_best_epoch([(1, 0.5), (2, 0.6), (3, 0.6)]), (2, 0.6))
+        self.assertEqual(C.select_best_epoch([(1, 0.9), (2, 0.1)]), (1, 0.9))
+        # inspect the EXECUTABLE body only: a comment saying "never >=" must not fail the check
+        import ast
+        fn = next(n for n in ast.walk(ast.parse(inspect.getsource(C).lstrip()))
+                  if isinstance(n, ast.FunctionDef) and n.name == "select_best_epoch")
+        body = ast.unparse(ast.Module(body=fn.body[1:], type_ignores=[]))   # drop the docstring
+        self.assertIn("score > best_score", body)
+        self.assertNotIn(">=", body)
 
     def test_checkpoint_rule_is_strictly_greater_so_ties_keep_the_earlier_epoch(self):
         self.assertFalse(MET.is_better(0.5, 0.5))

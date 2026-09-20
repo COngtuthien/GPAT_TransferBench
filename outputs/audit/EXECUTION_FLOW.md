@@ -614,3 +614,26 @@ Artifacts: `pair_train_stats_v1.json` `a7ccabb0…`, `pairs_train_v1.parquet` `a
 10. **Left M5 NOT_STARTED**, pre-flight status `READY_FOR_GPU_EXECUTION_PREFLIGHT`. A frozen
     contract and a refusing trainer do not start a milestone.
 
+## M5 validation-epoch contract correction (2026-09-21) — still NOT_STARTED
+
+1. **Confirmed the finding rather than assuming it.** `evaluate_epochs: [1, 30]` existed in the
+   frozen config and its snapshot and nowhere else; no module, test or tool read it; and
+   `run(dry_run=False)` still raises before any optimization. Classified
+   `CONFIG_SEMANTIC_AMBIGUITY_FOUND_BEFORE_EXECUTION` — no result could have been affected because
+   no model has ever been trained.
+2. **Replaced the ambiguous list** with `evaluate_every_epoch: true`, `epoch_start: 1`,
+   `epoch_end: 30`, and marked a two-element range representation forbidden.
+3. **Gave the sequence one owner**: `contract.validation_epochs()` returns `(1, …, 30)` and
+   hard-fails on a wrong start, end, length or flag. No second copy of the range exists; the
+   trainer's preflight now reports `validation_epochs` and `validation_passes = 30`.
+4. **Added `contract.select_best_epoch()`** as a pure implementation of the strict-`>` rule, so the
+   "an intermediate epoch can win" property is testable without training — verified on a sequence
+   peaking at epoch 17.
+5. **Re-froze the config**: `e263b370…` → `3f6c4fbb…`, snapshot byte-identical, SHA record and every
+   current-state audit document updated while the old value stays on record as superseded.
+6. **Changed nothing else**: population, weights, transform, backbone, optimizer, scheduler,
+   loaders, metric, tie-break and embedding are byte-for-byte the decisions frozen on 2026-09-20,
+   and the CPU-safe smoke still passes 22/22.
+7. **Did not implement or run training.** The loop is still absent, the refusal is still in place,
+   and the docstring now says so explicitly rather than implying a loop exists.
+

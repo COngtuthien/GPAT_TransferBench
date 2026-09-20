@@ -5,6 +5,15 @@
 # IMPLEMENTATION DETAILS — the frozen specification did not uniquely dictate them, and they must
 # not be reported as if it had.
 #
+# 2026-09-21 correction (CONFIG_SEMANTIC_AMBIGUITY_FOUND_BEFORE_EXECUTION): the checkpoint block
+# expressed the validation schedule as `evaluate_epochs: [1, 30]`, which reads as a two-element list
+# rather than a range. No code consumed it and no training had run, so nothing was invalidated; the
+# field is replaced by an explicit `evaluate_every_epoch` / `epoch_start` / `epoch_end` triple.
+# The pre-correction config SHA256
+# e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f is SUPERSEDED_BY_
+# VALIDATION_EPOCH_CONTRACT_CORRECTION and is retained in the audit history.
+# Correction record: outputs/audit/M5_VALIDATION_EPOCH_CONTRACT_CORRECTION.md
+#
 # Pre-decision history (preserved): configs/proposed/artifact_probe.proposed.yaml
 # Decision record: outputs/audit/M5_ARTIFACT_PROBE_OWNER_DECISIONS.md
 # Frozen contract: outputs/audit/M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md
@@ -231,13 +240,19 @@ validation:
     forbidden: [weighted_f1, micro_f1, dataset_macro_averaging]
   checkpoint:
     decision: RESOLVED_BY_OWNER_MAX_VAL_MACRO_F1_EARLIEST_TIE
-    evaluate_epochs: [1, 30]
+    evaluate_every_epoch: true            # a validation pass at the END of every epoch
+    epoch_start: 1
+    epoch_end: 30                         # => 30 validation passes: 1, 2, 3, ..., 30
+    evaluation_count: 30
+    best_may_come_from_any_epoch_in_range: true
     rule: "replace best only when new_macro_f1 > best_macro_f1 (strict >, never >=)"
     tie_break: earlier_epoch
     epsilon_tie_window: NONE
     training_loss_as_tie_break: false
     test_involvement: NONE
     freeze_after_selection: true
+    sequence_source: gpatbench.probe.contract.validation_epochs
+    range_as_two_element_list: FORBIDDEN
 
 # ---------------------------------------------------------------- embedding
 embedding:

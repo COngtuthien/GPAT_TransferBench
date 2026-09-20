@@ -19,7 +19,7 @@ FROZEN_CONFIG = ROOT / "configs/frozen/artifact_probe.yaml"
 FROZEN_SNAPSHOT = ROOT / "frozen_config_snapshot/configs/frozen/artifact_probe.yaml"
 SPLIT_MANIFEST = ROOT / "manifests/split_v1.parquet"
 
-CONFIG_SHA256 = "e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f"
+CONFIG_SHA256 = "3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe"
 SPLIT_MANIFEST_SHA256 = "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
 RESNET18_WEIGHT_SHA256 = "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
 
@@ -70,6 +70,44 @@ def load_config(path: Path = FROZEN_CONFIG, *, verify_hash: bool = True) -> dict
     if list(cfg["classes"]["order"]) != list(CLASSES) or cfg["classes"]["K"] != K:
         raise ProbeContractViolation("class order/K in the config does not match the frozen tuple")
     return cfg
+
+
+def validation_epochs(cfg: dict | None = None) -> tuple:
+    """The authoritative validation schedule: a VAL pass at the END of every epoch, 1..30.
+
+    This is the single source of the sequence -- no other code path may hard-code it. The frozen
+    contract states it as `evaluate_every_epoch` / `epoch_start` / `epoch_end` rather than a
+    two-element list, so `[1, 30]` can never be misread as "epochs 1 and 30 only".
+    """
+    ck = (cfg or load_config())["validation"]["checkpoint"]
+    if ck.get("evaluate_every_epoch") is not True:
+        raise ProbeContractViolation(
+            "the frozen contract requires evaluate_every_epoch: true "
+            f"(got {ck.get('evaluate_every_epoch')!r})")
+    start, end = ck["epoch_start"], ck["epoch_end"]
+    if start != 1:
+        raise ProbeContractViolation(f"epoch_start must be 1, got {start!r}")
+    if end != EPOCHS:
+        raise ProbeContractViolation(f"epoch_end must be {EPOCHS}, got {end!r}")
+    seq = tuple(range(start, end + 1))
+    if len(seq) != EPOCHS:
+        raise ProbeContractViolation(f"validation sequence has {len(seq)} entries, expected {EPOCHS}")
+    return seq
+
+
+def select_best_epoch(macro_f1_by_epoch) -> tuple:
+    """D-M5-06 selection over a per-epoch macro-F1 sequence: strict `>`, exact tie keeps earlier.
+
+    Pure and side-effect free, so the rule can be tested without training anything.
+    `macro_f1_by_epoch` is an iterable of (epoch, macro_f1) in ascending epoch order.
+    """
+    best_epoch, best_score = None, None
+    for epoch, score in macro_f1_by_epoch:
+        if best_score is None or score > best_score:      # strict >, never >=
+            best_epoch, best_score = epoch, score
+    if best_epoch is None:
+        raise ProbeContractViolation("no epoch was evaluated")
+    return best_epoch, best_score
 
 
 def class_counts(split: str, manifest: Path = SPLIT_MANIFEST) -> dict:

@@ -1,7 +1,9 @@
 # M5 — ArtifactProbeNet Frozen Contract (summary)
 
 **Frozen:** 2026-09-20 · `configs/frozen/artifact_probe.yaml`
-sha256 **`e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`**
+sha256 **`3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe`**
+(pre-correction `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f` is SUPERSEDED_BY_VALIDATION_EPOCH_CONTRACT_CORRECTION; see
+`M5_VALIDATION_EPOCH_CONTRACT_CORRECTION.md`)
 Snapshot `frozen_config_snapshot/configs/frozen/artifact_probe.yaml` — byte-identical.
 **Unresolved execution-affecting fields: 0.**
 
@@ -33,7 +35,8 @@ resolutions of under-specified details**, not things the frozen specification un
 | augmentation | **none** | D-M5-08 |
 | loaders | TRAIN shuffle (seeded generator, 42), VAL fixed order, `drop_last=false` | D-M5-08 |
 | metric | fixed 7-class macro-F1, zero-division → 0, unpredicted classes **not** dropped | D-M5-05 |
-| checkpoint | max VAL macro-F1, strict `>`, exact tie keeps the **earlier** epoch | D-M5-06 |
+| validation schedule | a VAL pass at the end of **every** epoch 1…30 (**30 passes**); `contract.validation_epochs()` is the only source | D-M5-06 |
+| checkpoint | max VAL macro-F1, strict `>`, exact tie keeps the **earlier** epoch; any epoch in 1…30 may win | D-M5-06 |
 | embedding | penultimate 512-D after GAP, `F.normalize(p=2, dim=1, eps=1e-12)` | §17 |
 | execution | GPU host `sparc5090`; CPU authoritative training **forbidden** | E-M5-01 |
 | determinism | seed 42 everywhere; cuDNN deterministic; TF32 off; stop on a missing kernel | §20 |
