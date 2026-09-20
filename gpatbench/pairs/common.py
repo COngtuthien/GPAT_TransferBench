@@ -147,9 +147,17 @@ class PoseStats:
 
 
 def fit_pose_stats(samples: list, dataset: str) -> PoseStats:
-    """Fit on this dataset's TRAIN rows only. VAL and TEST never contribute a statistic."""
+    """Fit on this dataset's TRAIN rows only. VAL and TEST never contribute a statistic.
+
+    Rows are stacked in canonical `sample_id` order before the reduction. Floating-point
+    accumulation is not associative, so an unordered stack makes the population std differ in the
+    last ulp between runs, which can flip an exact `d_pair` tie and therefore a pair's target. The
+    frozen contract requires the fit to be a function of the row *set*, never of its arrival order.
+    """
     import numpy as np
-    rows = [s for s in samples if s.dataset == dataset and s.split == "TRAIN" and s.pose is not None]
+    rows = sorted((s for s in samples
+                   if s.dataset == dataset and s.split == "TRAIN" and s.pose is not None),
+                  key=lambda s: s.sample_id)
     if not rows:
         raise PairPolicyError(f"{dataset}: no TRAIN rows with pose to fit the normalizer")
     P = np.asarray([s.pose for s in rows], dtype=np.float64)

@@ -1,0 +1,126 @@
+{
+  "checks": {
+    "structural": true
+  },
+  "expected_rows": {
+    "TRAIN": 8838,
+    "VAL": 1905
+  },
+  "failures": [],
+  "failures_count": 0,
+  "pairs_config_sha256": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
+  "parquet_writer": {
+    "compression": "zstd",
+    "compression_level": 9,
+    "row_group_size": 65536,
+    "store_schema": true,
+    "use_dictionary": false,
+    "version": "2.6",
+    "write_page_index": false,
+    "write_statistics": true
+  },
+  "schema_signature": "13061103a24366ca722c6cc256377ccce7dc7604882dc0b4a3f9202b3da6271b",
+  "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+  "splits": {
+    "TRAIN": {
+      "candidate_count_eligible": {
+        "all_at_least_cap": true,
+        "max": 4389,
+        "min": 384
+      },
+      "candidate_count_evaluated": {
+        "all_equal_cap": true,
+        "max": 64,
+        "min": 64
+      },
+      "casia_d_scale_unique": {
+        "TRAIN": [
+          0.0
+        ]
+      },
+      "exact_distance_ties_at_the_top": 0,
+      "path": "manifests/pairs_train_v1.parquet",
+      "rows": 8838,
+      "schema": [
+        "pair_id:string",
+        "target_live_id:string",
+        "source_spoof_id:string",
+        "dataset:string",
+        "target_subject:string",
+        "source_subject:string",
+        "attack_macro:string",
+        "d_pose:double",
+        "d_scale:double",
+        "d_luma:double",
+        "seed:int64",
+        "split:string",
+        "d_pair:double",
+        "source_video_id:string",
+        "target_video_id:string",
+        "source_content_group_id:string",
+        "target_content_group_id:string",
+        "candidate_count_eligible:int64",
+        "candidate_count_evaluated:int64",
+        "source_sha256:string",
+        "target_sha256:string",
+        "split_manifest_sha256:string",
+        "pairs_config_sha256:string",
+        "face_area_fraction_source:double",
+        "face_area_fraction_target:double"
+      ],
+      "sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "spoof_sources_in_split": 8838
+    },
+    "VAL": {
+      "candidate_count_eligible": {
+        "all_at_least_cap": true,
+        "max": 944,
+        "min": 64
+      },
+      "candidate_count_evaluated": {
+        "all_equal_cap": true,
+        "max": 64,
+        "min": 64
+      },
+      "casia_d_scale_unique": {
+        "VAL": [
+          0.0
+        ]
+      },
+      "exact_distance_ties_at_the_top": 0,
+      "path": "manifests/val_pairs_v1.parquet",
+      "rows": 1905,
+      "schema": [
+        "pair_id:string",
+        "target_live_id:string",
+        "source_spoof_id:string",
+        "dataset:string",
+        "target_subject:string",
+        "source_subject:string",
+        "attack_macro:string",
+        "d_pose:double",
+        "d_scale:double",
+        "d_luma:double",
+        "seed:int64",
+        "split:string",
+        "d_pair:double",
+        "source_video_id:string",
+        "target_video_id:string",
+        "source_content_group_id:string",
+        "target_content_group_id:string",
+        "candidate_count_eligible:int64",
+        "candidate_count_evaluated:int64",
+        "source_sha256:string",
+        "target_sha256:string",
+        "split_manifest_sha256:string",
+        "pairs_config_sha256:string",
+        "face_area_fraction_source:double",
+        "face_area_fraction_target:double"
+      ],
+      "sha256": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872",
+      "spoof_sources_in_split": 1905
+    }
+  },
+  "stats_sha256": "a7ccabb0956f5121eabb5b4f7e85dfe49668469d8d3ee77cd88b24fc54bd3a50",
+  "status": "PASS"
+}

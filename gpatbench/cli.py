@@ -1,4 +1,4 @@
-"""GPAT-TransferBench CLI (spec §24): `inventory` (M1), `split` and `audit-split` (M3)."""
+"""GPAT-TransferBench CLI (spec §24): `inventory` (M1), `split`/`audit-split` (M3), `build-pairs` (M4)."""
 from __future__ import annotations
 
 import argparse
@@ -70,6 +70,31 @@ def cmd_audit_split(args) -> int:
     return 0 if rep["ok"] else 1
 
 
+def cmd_build_pairs(args) -> int:
+    """M4: build the authoritative common pair manifests (spec §6, App. A).
+
+    This is the same code path as calling `gpatbench.pairs.execute.run` directly. There is no
+    alternative builder, and `--audit-only` computes without writing so it cannot change membership.
+    """
+    from gpatbench.pairs import execute as E
+    cfg = Path(args.config)
+    if cfg.resolve() != (PROJECT_ROOT / "configs/frozen/pairs_v1.yaml").resolve():
+        raise SystemExit(f"STOP: M4 runs only against the frozen pair config, got {args.config}")
+    out = E.run(write=not args.audit_only)
+    head, dirty = git_state()
+    record = {"command": f"python -m gpatbench.cli build-pairs --config {args.config}",
+              "git_commit": head, "git_dirty": dirty, "code_tree_sha256": _code_tree_sha256(),
+              "python": sys.version.split()[0], "platform": platform.platform(),
+              "pairs_config_sha256": out["pop"]["pairs_config_sha256"],
+              "split_manifest_sha256": out["pop"]["split_manifest_sha256"],
+              "rows": {k: len(v) for k, v in out["rows"].items()},
+              "row_order": list(E.ROW_ORDER), "schema_signature": E.schema_signature(),
+              "parquet_writer": dict(E.PARQUET_WRITER), "json_policy": dict(E.JSON_POLICY),
+              "written": not args.audit_only, "sha256": out["sha256"]}
+    print(json.dumps(record, indent=1))
+    return 0
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="gpatbench.cli")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -84,6 +109,11 @@ def main(argv=None) -> int:
     au = sub.add_parser("audit-split", help="M3: leakage audit of a split manifest")
     au.add_argument("--manifest", required=True)
     au.set_defaults(func=cmd_audit_split)
+    bp = sub.add_parser("build-pairs", help="M4: authoritative common source->target pair manifests")
+    bp.add_argument("--config", required=True)
+    bp.add_argument("--audit-only", action="store_true",
+                    help="compute and report hashes without writing (membership is unchanged)")
+    bp.set_defaults(func=cmd_build_pairs)
     args = p.parse_args(argv)
     return args.func(args)
 

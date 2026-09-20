@@ -71,3 +71,17 @@ unaffected by DEV-012/013.
 Q-28/Q-29 fix **M4 manifest scope only**; the later M6 DSDG / DiffFAS adaptation strategy for SiW
 remains an open, separate decision. DEV-013 stays confined to the common pairing contract and is
 never a same-identity substitute.
+
+## M4 execution (2026-09-20)
+
+| ID | Topic | Basis | Status | Decision | Effective |
+|---|---|---|---|---|---|
+| Q-25 impl | Pose-statistics row order | frozen determinism contract | FIXED | `fit_pose_stats` stacks TRAIN rows in canonical `sample_id` order, so the population std cannot vary with arrival order | defect fix; Q-25 semantics unchanged |
+| Native construction | DSDG / DiffFAS row enumeration | source-of-truth hierarchy level 1 empty | **BLOCKED** | no native manifest written; nothing invented | `BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP` |
+
+The native blocker is a **source-of-truth gap**, not a dataset-protocol decision: the datasets
+support the row semantics (CASIA 35/35, MSU 25/25 TRAIN identities with both live and spoof), but
+the official repositories are unpinned and unvendored, and pinning them is an M6 first-setup action
+under `third_party/registry.yaml` and spec §8.1. SiW-Mv2 stays `NOT_INSTANTIABLE_MISSING_SUBJECT_ID`
+under Q-14 regardless; identity is never fabricated and DEV-013 is never same-identity evidence.
+

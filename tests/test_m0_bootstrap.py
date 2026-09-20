@@ -187,7 +187,8 @@ class TestNoLaterMilestoneArtifacts(unittest.TestCase):
         parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet")
                    if not ({".git", ".venv"} & set(p.parts))}
         self.assertEqual(stage_guard.forbidden_parquet(parquet), [])
-        self.assertFalse(any("pairs_" in p for p in parquet), "M4 pair manifest before M4")
+        self.assertEqual(stage_guard.forbidden_pair_artifacts(parquet), [],
+                         "a pair manifest exists that the current stage does not account for")
 
 
 if __name__ == "__main__":

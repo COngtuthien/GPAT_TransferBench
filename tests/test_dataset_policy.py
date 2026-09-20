@@ -161,10 +161,10 @@ class TestNoLaterArtifacts(unittest.TestCase):
         parquet = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.parquet")
                    if not ({".git", ".venv"} & set(p.parts))}
         self.assertEqual(stage_guard.forbidden_parquet(parquet), [])
-        names = {p.name for p in ROOT.rglob("*") if not ({".git", ".venv"} & set(p.parts))}
-        for bad in ("pairs_train_v1.parquet", "val_pairs_v1.parquet"):
-            self.assertNotIn(bad, names)
-        self.assertFalse(any(n.startswith("pairs_") and n.endswith(".parquet") for n in names))
+        rel = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*")
+               if p.is_file() and not ({".git", ".venv"} & set(p.parts))}
+        self.assertEqual(stage_guard.forbidden_pair_artifacts(rel), [],
+                         "a pair artifact exists that the current stage does not account for")
 
 
 class TestFrozenPolicy(unittest.TestCase):
@@ -204,7 +204,12 @@ class TestFrozenPolicy(unittest.TestCase):
             self.assertTrue(mp.is_file())
             self.assertEqual(hashlib.sha256(mp.read_bytes()).hexdigest(), rec["sha256"])
         self.assertIn(s["M2"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
-        self.assertEqual(s["M4"]["status"], "NOT_STARTED")
+        # M4 may have started; it may only be COMPLETE once the native manifests are settled too.
+        self.assertIn(s["M4"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        if s["M4"]["status"] == "COMPLETE":
+            native = (s["M4"].get("execution") or {}).get("native") or {}
+            self.assertNotEqual(native.get("status"),
+                                "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP")
         # M2 may only be COMPLETE when the full run really happened and its audit passed. Under DEV-017
         # the artifacts live on the external runtime volume, so the in-repo dirs stay empty and the
         # evidence is the audit itself plus the physical roots named by the execution config.

@@ -446,3 +446,44 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
    shards" and the M4 report's "972 / 162" counted different units and were both arithmetically
    right; `M2_CACHE_COUNT_RECONCILIATION.md` defines every unit. No M2 artifact was modified.
 7. **Created no manifest of any kind.** M4 is still NOT_STARTED.
+
+## M4 execution (2026-09-20) — common pairs COMPLETE, native pairs BLOCKED
+
+1. **Verified the starting state before touching anything**: HEAD `443614b`, local `main` ==
+   `origin/main`, clean tree, M4 NOT_STARTED, 359 tests PASS, and the population recomputed from
+   `split_v1.parquet` rather than trusted from the preflight report (20,615 rows; TRAIN spoof
+   2,520 + 1,200 + 5,118 = 8,838; VAL spoof 576 + 240 + 1,089 = 1,905 — all matching).
+2. **Fitted the TRAIN pair statistics** per dataset on TRAIN rows only, population std `ddof=0`,
+   float64, and froze them as `manifests/pair_train_stats_v1.json` under an explicit canonical-JSON
+   policy (UTF-8, LF, sorted keys, ASCII-escaped, NaN/Inf rejected, shortest round-trip float repr,
+   one trailing newline). VAL reuses them; TEST never contributed and was never read.
+3. **Built the authoritative common manifests** with the frozen Q-24 raw-byte candidate ranking and
+   the Q-25/Q-26/Q-27 distances: `pairs_train_v1.parquet` (8,838 rows) and `val_pairs_v1.parquet`
+   (1,905 rows), one row per spoof source, written atomically with the frozen Parquet writer.
+4. **Audited exhaustively** (`tools/m4_audit.py`, PASS, 0 failures over all 10,743 pairs): structure,
+   split boundaries, TEST absence, M2 FAILED exclusion, CASIA/MSU different-subject, SiW DEV-013
+   different-video AND different-content-group, candidate cap, distance recomputation, and
+   winner-is-the-minimum re-derived independently. CASIA `d_scale` unique values = `[0.0]`.
+5. **Caught a real determinism defect at the rerun gate.** Shuffling the input changed membership
+   because `fit_pose_stats` stacked TRAIN rows in arrival order, so the population std varied in the
+   last ulp and could flip a near-tied target. Fixed by stacking in canonical `sample_id` order; no
+   Q-25 decision changed and nothing was invalidated, because no manifest had been frozen yet. The
+   artifacts were regenerated with the corrected fit.
+6. **Proved determinism**: four fresh processes (canonical and shuffled input × `PYTHONHASHSEED`
+   0/1/424242) reproduced all three files byte-identically, with rows, schema, membership and
+   `pair_id` compared separately.
+7. **Wired `python -m gpatbench.cli build-pairs`** onto exactly the same code path, with an
+   `--audit-only` mode that cannot change membership and a hard refusal of any non-frozen config.
+8. **Stopped before the native manifests.** `third_party/registry.yaml` pins no commit for DSDG or
+   DiffFAS (`pinned_commit: null`, `url_verification: UNVERIFIED`) and `methods/dsdg` /
+   `methods/difffas` hold only `.gitkeep`, so the official pair-construction semantics cannot be
+   inspected. No sampling rule was invented and no native manifest was written, not even an empty
+   one. CASIA (35/35 identities) and MSU (25/25) are supported-but-blocked; SiW-Mv2 stays
+   `NOT_INSTANTIABLE_MISSING_SUBJECT_ID` with coverage 0.
+9. **Left M4 at IN_PROGRESS**, phase `COMMON_PAIRS_COMPLETE_NATIVE_PAIR_SOURCE_BLOCKED`. The
+   milestone is not marked complete merely because the common pairs succeeded. M5 remains
+   NOT_STARTED; nothing was trained and no synthetic image was generated.
+
+Artifacts: `pair_train_stats_v1.json` `a7ccabb0…`, `pairs_train_v1.parquet` `a5e4fdae…`,
+`val_pairs_v1.parquet` `84d12491…`.
+

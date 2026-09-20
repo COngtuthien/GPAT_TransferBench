@@ -568,3 +568,48 @@ training-adaptation strategy for SiW-Mv2 is a separate later decision and is not
 **DEV-013 boundary (reasserted):** DEV-013 governs the COMMON SiW pairing rule (different video AND
 different exact-content group). It is a different-video / different-exact-content guarantee, never a
 same-person or different-person claim, and it does not extend to native same-identity pairing.
+
+## M4 execution (2026-09-20)
+
+### No new deviation
+
+M4 execution introduced **no new deviation**. DEV-018 (CASIA `face_area_fraction = 1.0`, hence
+`d_scale = 0`) held on the authoritative data: CASIA `d_scale` unique values = `[0.0]` across all
+3,096 CASIA pairs in both splits, and the 0.50/0.20 weights were not renormalised. Every other
+frozen decision executed as written.
+
+### Determinism defect found and fixed before the freeze
+
+`fit_pose_stats` stacked TRAIN rows in arrival order. Floating-point accumulation is not
+associative, so the **population standard deviation** differed in the last ulp between input
+orderings, which perturbs the per-axis z-scores and can flip a near-tied `d_pair` to a different
+target. The deterministic rerun gate caught this on the shuffled-input runs.
+
+- **Fix:** stack TRAIN rows in canonical `sample_id` order, so the fit is a function of the row set.
+- **Q-25 unchanged:** per-dataset TRAIN z-score, population std, `ddof = 0` and L2 are untouched.
+- **Blast radius: none.** The defect surfaced before any manifest was frozen; the authoritative
+  artifacts were regenerated with the corrected fit and are the only ones ever recorded.
+- This is a **defect fix in service of the already-frozen determinism contract**, not a new
+  scientific decision. Evidence: `M4_DETERMINISM_REPORT.md`.
+
+### Native pair manifests — BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP
+
+`manifests/dsdg_identity_pairs_v1.parquet` and `manifests/difffas_recon_pairs_v1.parquet` were
+**not created**. Q-28/Q-29 settled *which datasets* may appear; they do not define *how* rows are
+constructed. `third_party/registry.yaml` records `pinned_commit: null` and
+`url_verification: UNVERIFIED` for E06b (DSDG-NATIVE) and E07b (DiffFAS-NATIVE), and
+`methods/dsdg/` and `methods/difffas/` contain only `.gitkeep`, so the official data-loader
+semantics cannot be inspected: whether pairing is materialized or sampled online, how many tuples
+exist, whether frames repeat, what seed applies, and for DiffFAS how the guide is drawn and what
+fallback the official code supports.
+
+Nothing was invented to make M4 pass — no first-lexical pick, no seeded random draw, no Cartesian
+product, no one-to-one or cyclic matching, and the common-pair Q-24 ranking was not repurposed.
+CASIA (35/35 identities) and MSU (25/25) are `SUPPORTED_BUT_BLOCKED_BY_SOURCE_GAP`; SiW-Mv2 remains
+`NOT_INSTANTIABLE_MISSING_SUBJECT_ID` with coverage 0 and is represented in the coverage table,
+never as manifest rows.
+
+**Consequence:** M4 is `IN_PROGRESS`, phase `COMMON_PAIRS_COMPLETE_NATIVE_PAIR_SOURCE_BLOCKED`. It is
+not marked COMPLETE merely because the common pairs succeeded. Evidence:
+`M4_NATIVE_PAIR_SOURCE_AUDIT.md`, `M4_NATIVE_PAIR_COVERAGE.md`.
+

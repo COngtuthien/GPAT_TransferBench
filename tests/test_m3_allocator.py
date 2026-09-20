@@ -423,7 +423,10 @@ class TestNoRealSplitArtifact(unittest.TestCase):
                 self.assertTrue(found, f"{pat} missing although M3 has started")
             else:
                 self.assertEqual(found, [], pat)
-        self.assertEqual(list(ROOT.rglob("pairs_*.parquet")), [], "M4 pair manifest before M4")
+        rel = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*")
+               if p.is_file() and not ({".git", ".venv"} & set(p.parts))}
+        self.assertEqual(stage_guard.forbidden_pair_artifacts(rel), [],
+                         "a pair artifact exists that the current stage does not account for")
 
     def test_preflight_feasibility_report_persists_no_membership(self):
         p = AUDIT / "M3_ALLOCATOR_FEASIBILITY.md"
@@ -441,7 +444,13 @@ class TestNoRealSplitArtifact(unittest.TestCase):
         s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
         self.assertEqual(s["M2"]["status"], "COMPLETE")
         self.assertIn(s["M3"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
-        self.assertEqual(s["M4"]["status"], "NOT_STARTED")
+        # M4 may have started; COMPLETE is only legitimate once the native manifests are settled.
+        self.assertIn(s["M4"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        if s["M4"]["status"] == "COMPLETE":
+            native = (s["M4"].get("execution") or {}).get("native") or {}
+            self.assertNotEqual(native.get("status"),
+                                "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP")
+        self.assertEqual(s["M5"]["status"], "NOT_STARTED")
 
 
 if __name__ == "__main__":

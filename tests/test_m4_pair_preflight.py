@@ -525,9 +525,31 @@ class TestFrozenPairConfig(unittest.TestCase):
         self.assertEqual(self.cfg["supersedes"], PROPOSED.relative_to(ROOT).as_posix())
 
     def test_contains_no_membership(self):
+        """The contract file never carries membership, whether or not M4 has since executed."""
         self.assertIs(self.cfg["membership_in_this_file"], False)
-        for pat in ("pairs_train_v1.parquet", "val_pairs_v1.parquet", "pair_train_stats_v1.json"):
-            self.assertEqual(list(ROOT.rglob(pat)), [], pat)
+        # No concrete pair id or sample id may appear as a value anywhere in the contract.
+        leaks = []
+
+        def walk(node, path):
+            if isinstance(node, dict):
+                for k, v in node.items():
+                    walk(v, f"{path}.{k}")
+            elif isinstance(node, list):
+                for i, v in enumerate(node):
+                    walk(v, f"{path}[{i}]")
+            elif isinstance(node, str):
+                import re
+                if re.search(r"\b(PTR|PVA)\d{6}\b", node) or "#0" in node:
+                    leaks.append(path)
+
+        walk(self.cfg, "")
+        self.assertEqual(leaks, [], f"membership leaked into the contract at {leaks}")
+        import sys
+        sys.path.insert(0, str(ROOT / "tests"))
+        import stage_guard
+        rel = {q.relative_to(ROOT).as_posix() for q in ROOT.rglob("*")
+               if q.is_file() and not ({".git", ".venv"} & set(q.parts))}
+        self.assertEqual(stage_guard.forbidden_pair_artifacts(rel), [])
 
     def test_decision_provenance_is_not_claimed_as_literature(self):
         self.assertIn("Owner benchmark-design decisions", self.cfg["decision_provenance"])
@@ -564,10 +586,16 @@ class TestPreflightEvidence(unittest.TestCase):
         for ds in ("casia_fasd", "msu_mfsd"):
             self.assertEqual(n[ds]["dsdg_native_identity_pairing"], "SUPPORTED")
 
-    def test_m4_is_not_started(self):
+    def test_preflight_record_still_says_it_created_nothing(self):
+        """This file records the PRE-FLIGHT pass; M4 executing later must not rewrite that history."""
         s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
         self.assertEqual(s["M3"]["status"], "COMPLETE")
-        self.assertEqual(s["M4"]["status"], "NOT_STARTED")
+        self.assertIs(self.rep["pair_manifest_created"], False)
+        pre = s["M4"]["preflight"]
+        self.assertIs(pre["pair_manifests_created"], False)
+        self.assertIs(pre["membership_persisted"], False)
+        self.assertIn(s["M4"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        self.assertEqual(s["M5"]["status"], "NOT_STARTED")
 
 
 if __name__ == "__main__":

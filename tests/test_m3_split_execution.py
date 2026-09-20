@@ -331,15 +331,28 @@ class TestCliEquivalence(unittest.TestCase):
 
 class TestStageAndNoLaterMilestone(unittest.TestCase):
     def test_no_pair_or_training_artifact(self):
-        for pat in ("pairs_*.parquet", "*.ckpt", "*.pt", "probe_*.pt"):
+        """Training artifacts stay forbidden; pair artifacts are judged against the stage."""
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import stage_guard
+        for pat in ("*.ckpt", "*.pt", "probe_*.pt"):
             found = [p for p in ROOT.rglob(pat) if ".git" not in p.parts and ".venv" not in p.parts]
             self.assertEqual(found, [], pat)
+        rel = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*")
+               if p.is_file() and not ({".git", ".venv"} & set(p.parts))}
+        self.assertEqual(stage_guard.forbidden_pair_artifacts(rel), [])
 
     def test_stage_state(self):
         s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
         self.assertEqual(s["M2"]["status"], "COMPLETE")
         self.assertIn(s["M3"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
-        self.assertEqual(s["M4"]["status"], "NOT_STARTED")
+        # M4 may have started; COMPLETE is only legitimate once the native manifests are settled.
+        self.assertIn(s["M4"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        if s["M4"]["status"] == "COMPLETE":
+            native = (s["M4"].get("execution") or {}).get("native") or {}
+            self.assertNotEqual(native.get("status"),
+                                "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP")
+        self.assertEqual(s["M5"]["status"], "NOT_STARTED")
         if s["M3"]["status"] == "COMPLETE":
             self.assertTrue(MANIFEST.is_file())
             self.assertEqual(json.loads((AUDIT / "M3_DETERMINISM_COMPARE.json").read_text())["status"], "PASS")

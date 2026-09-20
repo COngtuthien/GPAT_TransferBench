@@ -1,0 +1,84 @@
+{
+  "axes": [
+    "pitch",
+    "yaw",
+    "roll"
+  ],
+  "datasets": {
+    "casia_fasd": {
+      "n_train_complete": 3360,
+      "pose_mean_pitch_yaw_roll": [
+        -0.04441366362402083,
+        0.003671140120076459,
+        -0.015622649867353695
+      ],
+      "pose_std_population_pitch_yaw_roll": [
+        0.0779812240964426,
+        0.05188743111520239,
+        0.056369957301160796
+      ]
+    },
+    "msu_mfsd": {
+      "n_train_complete": 1600,
+      "pose_mean_pitch_yaw_roll": [
+        -0.014760662419139408,
+        0.025940475852694364,
+        -0.015946955525432713
+      ],
+      "pose_std_population_pitch_yaw_roll": [
+        0.1021003335435233,
+        0.05740596968840378,
+        0.043483026598984904
+      ]
+    },
+    "siwmv2": {
+      "n_train_complete": 9507,
+      "pose_mean_pitch_yaw_roll": [
+        -0.016929218714050318,
+        0.0072844805917122194,
+        -0.01614906673406922
+      ],
+      "pose_std_population_pitch_yaw_roll": [
+        0.17504506746756474,
+        0.2830545805008862,
+        0.09573655749283776
+      ]
+    }
+  },
+  "ddof": 0,
+  "dtype": "float64",
+  "fitted_on": "TRAIN",
+  "generator": {
+    "common_module_sha256": "84a5b1e933c3c07d5e99481e2f7da43db02178d87af7a051b70845415c2ea68e",
+    "execute_module_sha256": "28f473c38ed81fd00761793917f2fb861a3d0e49f78aecd7c0c9dfcc0a1ca5c9",
+    "function": "build_train_stats",
+    "module": "gpatbench.pairs.execute",
+    "numpy_version": "2.5.3",
+    "pyarrow_version": "25.0.1"
+  },
+  "json_policy": {
+    "allow_nan": false,
+    "encoding": "utf-8",
+    "ensure_ascii": true,
+    "float_repr": "python_shortest_roundtrip_repr_of_ieee754_double",
+    "indent": 2,
+    "newline": "LF",
+    "separators": [
+      ",",
+      ": "
+    ],
+    "sort_keys": true,
+    "trailing_newline": true
+  },
+  "pairs_config_sha256": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
+  "pose_source": "frozen M2 FaceXFormer geometry cache (pose_pitch_yaw_roll_rad)",
+  "reproduction_note": "This document records the SHA-256 of the two modules that produced it, so byte-exact reproduction requires those identical module bytes. The pose statistics themselves depend only on the TRAIN row set: rows are stacked in canonical sample_id order before the reduction, because floating-point accumulation is not associative.",
+  "schema_version": "pair_train_stats_v1",
+  "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+  "split_seed": 20260814,
+  "std_convention": "population",
+  "test_contribution": "none",
+  "units": "radians",
+  "val_contribution": "none (VAL reuses these TRAIN statistics)",
+  "zero_variance_policy": "std <= 1e-12 is a hard error"
+}
