@@ -613,3 +613,101 @@ never as manifest rows.
 not marked COMPLETE merely because the common pairs succeeded. Evidence:
 `M4_NATIVE_PAIR_SOURCE_AUDIT.md`, `M4_NATIVE_PAIR_COVERAGE.md`.
 
+## Owner Protocol Amendment A1 (2026-09-20) — DEV-019, DEV-020, DEV-021
+
+Amendment: `docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md`
+(sha256 `03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472`).
+The frozen specification is **not edited** and remains historically authoritative. The earlier M4
+blocker history above is preserved: original native requirement → blocker discovered
+(`BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP`) → owner scientific objective clarified →
+Amendment A1 → Track-A identity-free adaptation frozen.
+
+**Timing:** adopted before M5 probe training, M6 baseline training, M7 GPAT training, any synthetic
+generation and any result inspection. Justified by protocol fairness and data availability, never by
+observed performance. No model has been trained and TEST performance has never been observed.
+
+### DEV-019 — MAIN_FAIR_TRACK_IDENTITY_FREE_PROTOCOL_AMENDMENT
+
+- **Classification:** owner scientific protocol amendment (benchmark design), not a literature-derived
+  fact and not a dataset limitation.
+- **Reason:** the primary comparison must use the same pooled population — CASIA-FASD + MSU-MFSD +
+  SiW-Mv2 — for every method. DSDG and DiffFAS natively require subject identity, and SiW-Mv2 has
+  none (Q-14: 0 of 9,507 SiW TRAIN rows carry a `subject_id_global`, against 35/35 CASIA and 25/25
+  MSU identities with both live and spoof). Dropping SiW for two methods would confound method with
+  data; fabricating identity is forbidden; blocking the benchmark on a field the primary question
+  does not need is wasteful.
+- **Deviation:** subject identity becomes **forbidden supervision in Track A** (the primary fair
+  comparison). Identity-dependent native behaviour moves to **Track B**, secondary, which may have
+  partial coverage and never appears in a main table without a track column.
+- **Frozen contract:** `configs/frozen/fair_track_v1.yaml`
+  (sha256 `d9b02214d1e4701fe7d53972e94be0c2e68c6199a3378cacd69f2c1c87826d9d`).
+- **Scientific limitation (must be disclosed):** Track A compares methods under harmonized
+  supervision constraints, so DSDG and DiffFAS appear there in adapted form. Their native,
+  identity-supervised behaviour is a different question and is answered only in Track B, on
+  CASIA + MSU.
+- **Status: APPROVED** (owner, 2026-09-20).
+
+### DEV-020 — DSDG_BIN_IDFREE_COMMON_PAIR_ADAPTATION
+
+- **Classification:** `CONTROLLED_ADAPTATION`. **Not** `FAITHFUL_OFFICIAL`.
+- **Source of truth:** FaceX-Zoo at pinned commit `16b793a7564a4b9308cf94e62bdb2ffacb3a725a`,
+  `addition_module/DSDG`; analysis in `M4_DSDG_IDFREE_SOURCE_ANALYSIS.md`.
+- **Key change 1 — the relation.** The official `GenDataset_s.get_pair` draws the live partner with
+  `random.choice(make_pair_dict[label]['1'])`, where `label = video_name[4:6]` is the OULU-NPU user
+  id: same-subject, online, random. It is replaced by the frozen common fair pair
+  (`manifests/pairs_train_v1.parquet`, `source_spoof_id → target_live_id`), which gives all three
+  datasets the same split, source population and target-selection protocol.
+- **Key change 2 — `lambda_pair = 0`** (official default 0.5).
+  `loss_pair = lambda_pair * MSE(rec_spoof_identity_feature, rec_live_identity_feature)` forces the
+  identity features of the two reconstructions to coincide. Under the common fair pair the two
+  images are deliberately different people (CASIA/MSU) or a different video **and** content group
+  (SiW), so optimising it would assert something false by construction.
+- **Not changed:** `loss_rec`, `loss_kl`, `loss_mmd`, `loss_ip`, `loss_cls`, `loss_ort`, the
+  architecture and the warm-up schedule. Only the term whose correctness mathematically requires
+  shared identity was disabled. In particular `loss_ip` compares each reconstruction with **its own**
+  input, so it carries no cross-pair identity requirement and stays.
+- **Disclosed degeneracy:** `Cls(hdim, attack_type)` is `nn.Linear(hdim, attack_type)`; with the
+  binary collapse `attack_type = 1`, `CrossEntropyLoss` over a single logit is identically 0 with
+  zero gradient, so `loss_cls` contributes nothing. This is stated rather than patched, and
+  `attack_macro`/`attack_raw` are **not** secretly substituted.
+- **Frozen contract:** `configs/frozen/dsdg_bin_idfree_v1.yaml`
+  (sha256 `a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de`).
+- **Verified:** 8,838 rows (CASIA 2,520 · MSU 1,200 · SiW 5,118); the relation is byte-identical when
+  every CASIA/MSU subject id is nulled; no identity field exists in the adapter interface.
+- **Status: APPROVED** (owner, 2026-09-20).
+
+### DEV-021 — DIFFFAS_BIN_IDFREE_UNPAIRED_ADAPTATION
+
+- **Classification:** `CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH`. **Not**
+  `FAITHFUL_NATIVE`.
+- **Source of truth:** murphytju/DiffFAS at pinned commit
+  `23f40519ec25a833ebc06842aa6fbab74fad4d15`; analysis in `M4_DIFFFAS_IDFREE_SOURCE_ANALYSIS.md`.
+- **Key change 1 — `use_pair = false`.** This is an official argument, not a source modification:
+  the model input becomes `x_t` alone, the conditioning is `style_spoof` alone and the target is the
+  epsilon of `GT`. **Proven numerically** against the pinned code
+  (`M4_DIFFFAS_CONTENT_INERTNESS.json`): with everything else held fixed, changing only the content
+  tensor leaves the model input and every loss term bit-identical under `use_pair=false`
+  (`max_abs_loss_diff = 0.0`) and changes both under `use_pair=true`, which shows the probe can
+  detect a dependency. `content_training_role = INERT_API_PLACEHOLDER`.
+- **Key change 2 — deterministic guide.** The official `random.choice(os.listdir(style_folder))` is
+  replaced by a frozen raw-byte SHA-256 ranking over the binary spoof pool of the same dataset,
+  with lexical `guide_spoof_sample_id` as a defensive tie-break. Eligibility excludes subject
+  identity **and** `attack_raw`; `style_id = SPOOF_BINARY` is provenance only and the guide is a real
+  TRAIN spoof image. Self-guides are allowed because the official support includes the GT file; the
+  count (3) is reported and never adjusted after the fact.
+- **Frozen contract:** `configs/frozen/difffas_bin_idfree_v1.yaml`
+  (sha256 `aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb`);
+  manifest `manifests/difffas_bin_idfree_train_v1.parquet`
+  (sha256 `0d4c0ab435a258be51577aec17d9ecea27785354c900d0f7ab863d2bb2924fd6`, 8,838 rows).
+- **Scientific limitation (must be disclosed):** `use_pair=false` removes the content conditioning
+  entirely, so this variant does not reproduce the paired DiffFAS training signal. It may never be
+  described as native DiffFAS.
+- **Status: APPROVED** (owner, 2026-09-20).
+
+### M4 status under the amendment
+
+M4 is **COMPLETE under the amended main-track rule**, not under the originally specified rule. The
+originally specified native pair manifests were **not** created and are deferred to M6 as a
+secondary track. The audit trail preserves that distinction
+(`STAGE_STATE.json → milestones.M4.amendment_a1.original_native_manifests_completed = false`).
+

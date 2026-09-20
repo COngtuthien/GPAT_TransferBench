@@ -563,7 +563,7 @@
     },
     "M4": {
       "name": "Pair manifests",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETE",
       "preflight": {
         "phase": "COMMON_AND_NATIVE_SCOPE_FROZEN_AWAITING_M4_EXECUTION",
         "date": "2026-09-19",
@@ -681,7 +681,7 @@
           ]
         }
       },
-      "phase": "COMMON_PAIRS_COMPLETE_NATIVE_PAIR_SOURCE_BLOCKED",
+      "phase": "FINALIZED_UNDER_AMENDMENT_A1",
       "execution": {
         "date": "2026-09-20",
         "base_commit": "443614b10d5f54e34ff8451b54fde99ca6fcc8a7",
@@ -737,7 +737,9 @@
             "outputs/audit/M4_NATIVE_PAIR_SOURCE_AUDIT.md",
             "outputs/audit/M4_NATIVE_PAIR_COVERAGE.md",
             "outputs/audit/M4_NATIVE_PAIR_COVERAGE.csv"
-          ]
+          ],
+          "reclassified_by_amendment_a1": "TRACK_B_SECONDARY_DEFERRED_TO_M6",
+          "blocks_m5": false
         },
         "determinism_defect_found_and_fixed_before_freeze": {
           "what": "fit_pose_stats stacked TRAIN rows in arrival order, so the population std varied in the last ulp between input orderings and could flip an exact d_pair tie",
@@ -746,6 +748,94 @@
           "evidence": "outputs/audit/M4_DETERMINISM_REPORT.md"
         },
         "m5_started": false
+      },
+      "amendment_a1": {
+        "date": "2026-09-20",
+        "base_commit": "f15cd443fca573f204ea557438ebb1b363e2bbf5",
+        "completion_basis": "AMENDMENT_A1_MAIN_FAIR_IDFREE_TRACK",
+        "original_native_manifests_completed": false,
+        "honesty_note": "M4 is COMPLETE under the AMENDED main-track rule, not under the originally specified rule. The originally specified native pair manifests were NOT created; they are deferred to M6 as a secondary track.",
+        "amendment_path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "amendment_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+        "original_spec_modified": false,
+        "deviations": {
+          "DEV-019": "MAIN_FAIR_TRACK_IDENTITY_FREE_PROTOCOL_AMENDMENT",
+          "DEV-020": "DSDG_BIN_IDFREE_COMMON_PAIR_ADAPTATION",
+          "DEV-021": "DIFFFAS_BIN_IDFREE_UNPAIRED_ADAPTATION"
+        },
+        "track_a": "COMPLETE",
+        "track_b_native_pairing": "DEFERRED_TO_M6_SECONDARY_TRACK",
+        "track_a_details": {
+          "datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ],
+          "identity_supervision": "FORBIDDEN",
+          "attack_type_supervision": "FORBIDDEN",
+          "n_syn_intended": 8838,
+          "methods": [
+            "E01",
+            "E02",
+            "E03",
+            "E04",
+            "E05",
+            "E06c",
+            "E07c",
+            "E08"
+          ],
+          "method_matrix_violations": 0,
+          "dsdg_bin_idfree": {
+            "method_id": "E06c",
+            "deviation": "DEV-020",
+            "classification": "CONTROLLED_ADAPTATION",
+            "training_relation": "manifests/pairs_train_v1.parquet (no separate manifest, by decision)",
+            "relation_sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+            "adapter_relation_sha256": "403469859598fce129f4ac8dcacbfa9bcdad4d58065dbc00177c90dc92c4f142",
+            "rows": 8838,
+            "lambda_pair": 0.0,
+            "siw_included": true,
+            "subject_id_consumed": false
+          },
+          "difffas_bin_idfree": {
+            "method_id": "E07c",
+            "deviation": "DEV-021",
+            "classification": "CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH",
+            "manifest": "manifests/difffas_bin_idfree_train_v1.parquet",
+            "manifest_sha256": "0d4c0ab435a258be51577aec17d9ecea27785354c900d0f7ab863d2bb2924fd6",
+            "rows": 8838,
+            "use_pair": false,
+            "style_id": "SPOOF_BINARY",
+            "siw_included": true,
+            "subject_id_consumed": false,
+            "self_guide_count": 3,
+            "content_training_role": "INERT_API_PLACEHOLDER (proven numerically against the pinned source)"
+          },
+          "audit": "PASS (0 failures)",
+          "determinism": "PASS (4 fresh processes: canonical/shuffled input x 3 PYTHONHASHSEED values, byte-identical)"
+        },
+        "source_pins": {
+          "dsdg": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+          "difffas": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+          "storage": "third_party/source_cache/ (git-ignored)",
+          "provenance": "third_party/source_pins.json",
+          "model_weights_downloaded": false,
+          "starts_m6_training": false
+        },
+        "frozen_configs": {
+          "configs/frozen/fair_track_v1.yaml": "d9b02214d1e4701fe7d53972e94be0c2e68c6199a3378cacd69f2c1c87826d9d",
+          "configs/frozen/dsdg_bin_idfree_v1.yaml": "a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de",
+          "configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb"
+        },
+        "common_artifacts_unchanged": {
+          "pair_train_stats_v1.json": "a7ccabb0956f5121eabb5b4f7e85dfe49668469d8d3ee77cd88b24fc54bd3a50",
+          "pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+          "val_pairs_v1.parquet": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872",
+          "split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+        },
+        "decision_timing": "Adopted before M5/M6/M7 training, before any synthetic generation and before any result inspection. No model has been trained; TEST performance has never been observed.",
+        "m5_started": false,
+        "m6_started": false
       }
     },
     "M5": {

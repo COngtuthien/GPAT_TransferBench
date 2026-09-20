@@ -3,6 +3,12 @@
 # url_verification: UNVERIFIED = copied from spec, remote not contacted in M0.
 # pinned_commit: null until pinned at first setup (M6, spec §8.1 "pin the repository commit on first setup").
 # Status tags (spec §8): FAITHFUL_OFFICIAL | FAITHFUL_PAPER | CONTROLLED_ADAPTATION | BLOCKED_BY_SOURCE_GAP
+#
+# 2026-09-20 (Amendment A1): the owner authorized SOURCE pinning for DSDG and DiffFAS so the
+# Track-A identity-free adaptations could be designed from official code. Source only -- no model
+# weights were downloaded. Checkouts live in third_party/source_cache/ (git-ignored); the exact
+# commits, trees and per-file blob/sha256 hashes are in third_party/source_pins.json. This pin does
+# NOT start M6 training. Track column: A = primary fair identity-free, B = secondary native/full.
 schema_version: m0-initial
 spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
 methods:
@@ -107,64 +113,112 @@ methods:
     role: "Equal-label-budget generative baseline (adapted binary variant)"
     track: "Binary adapted"
     spec_sections: ["2 (R6)", "5.1", "8.6", "17"]
-    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    source_status: OFFICIAL_REPO_PINNED
     official_repo: https://github.com/JDAI-CV/FaceX-Zoo/tree/main/addition_module/DSDG
-    url_verification: UNVERIFIED
-    pinned_commit: null
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_20
+    pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a
+    source_pins: third_party/source_pins.json
     paper: "H. Wu, D. Zen, Y. Hu, H. Shi, T. Mei, Dual Spoof Disentanglement Generation for Face Anti-spoofing with Depth Uncertainty Learning, arXiv:2112.00568 / IEEE TCSVT"
     target_implementation_status: CONTROLLED_ADAPTATION
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/dsdg_binary.yaml (not yet created)
-    notes: "All spoof-type labels collapsed to one class; mark 'adapted binary variant'. Not a pair method: generates N_syn, pairwise metrics N/A. Citation copied verbatim from spec §30 (author list unverified against the paper)."
+    track_a_status: SUPERSEDED_BY_E06c_UNDER_AMENDMENT_A1
+    notes: "All spoof-type labels collapsed to one class; mark 'adapted binary variant'. Not a pair method: generates N_syn, pairwise metrics N/A. Citation copied verbatim from spec §30 (author list unverified against the paper). Amendment A1: this variant collapses only the spoof-type target and still inherits the official same-subject live/spoof pairing, so it cannot enter the identity-free primary track; E06c (DSDG-BIN-IDFREE) is the Track-A method."
 
   - method_id: E06b
     method_name: DSDG-NATIVE
     role: "Original type-supervised setting"
     track: Native
     spec_sections: ["2 (R6)", "5.2", "8.6", "17", "31"]
-    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    source_status: OFFICIAL_REPO_PINNED
     official_repo: https://github.com/JDAI-CV/FaceX-Zoo/tree/main/addition_module/DSDG
-    url_verification: UNVERIFIED
-    pinned_commit: null
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_20
+    pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a
+    source_pins: third_party/source_pins.json
     paper: "same as E06a (arXiv:2112.00568)"
     target_implementation_status: FAITHFUL_OFFICIAL
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/dsdg_native.yaml (not yet created)
-    notes: "Spoof-type target = attack_macro. Identity pairing only from TRAIN identities with both live and spoof."
+    track: B_NATIVE_FULL_SECONDARY
+    track_b_status: DEFERRED_TO_M6_SECONDARY_TRACK
+    notes: "Spoof-type target = attack_macro. Identity pairing only from TRAIN identities with both live and spoof. Amendment A1 moved this to the SECONDARY native track: CASIA + MSU only, SiW NOT_INSTANTIABLE_MISSING_SUBJECT_ID. It no longer gates the main comparison or M5."
 
   - method_id: E07a
     method_name: DiffFAS-BIN
     role: "Equal-label-budget diffusion baseline (adapted binary variant)"
     track: "Binary adapted"
     spec_sections: ["2 (R7)", "5.1", "8.7", "17"]
-    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    source_status: OFFICIAL_REPO_PINNED
     official_repo: https://github.com/murphytju/DiffFAS
-    url_verification: UNVERIFIED
-    pinned_commit: null
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_20
+    pinned_commit: 23f40519ec25a833ebc06842aa6fbab74fad4d15
+    source_pins: third_party/source_pins.json
     paper: "X. Ge, X. Liu, Z. Yu, J. Shi, C. Qi, J. Li, H. Kälviäinen, DiffFAS: Face Anti-Spoofing via Generative Diffusion Models, ECCV 2024. arXiv:2409.08572"
     target_implementation_status: CONTROLLED_ADAPTATION
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/difffas_binary.yaml (not yet created)
-    notes: "All style_id collapsed to one spoof style; same-ID live/spoof reconstruction-pair structure kept; mark 'adapted binary variant'."
+    track_a_status: SUPERSEDED_BY_E07c_UNDER_AMENDMENT_A1
+    notes: "All style_id collapsed to one spoof style; same-ID live/spoof reconstruction-pair structure kept; mark 'adapted binary variant'. Amendment A1: keeping the same-ID reconstruction structure keeps the identity requirement, so it cannot enter the identity-free primary track; E07c (DIFFFAS-BIN-IDFREE) is the Track-A method."
 
   - method_id: E07b
     method_name: DiffFAS-NATIVE
     role: "Precise style + identity-consistent diffusion"
     track: Native
     spec_sections: ["2 (R7)", "5.2", "8.7", "17", "31"]
-    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    source_status: OFFICIAL_REPO_PINNED
     official_repo: https://github.com/murphytju/DiffFAS
-    url_verification: UNVERIFIED
-    pinned_commit: null
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_20
+    pinned_commit: 23f40519ec25a833ebc06842aa6fbab74fad4d15
+    source_pins: third_party/source_pins.json
     paper: "same as E07a (arXiv:2409.08572)"
     target_implementation_status: FAITHFUL_OFFICIAL
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/difffas_native.yaml (not yet created)
-    notes: "style_id = dataset::attack_raw. Guide spoof from same style_id, different subject when possible."
+    track: B_NATIVE_FULL_SECONDARY
+    track_b_status: DEFERRED_TO_M6_SECONDARY_TRACK
+    notes: "style_id = dataset::attack_raw. Guide spoof from same style_id, different subject when possible. Amendment A1 moved this to the SECONDARY native track: CASIA + MSU only, SiW NOT_INSTANTIABLE_MISSING_SUBJECT_ID. It no longer gates the main comparison or M5."
+
+  - method_id: E06c
+    method_name: DSDG-BIN-IDFREE
+    role: "Track-A identity-free generative baseline (equal-label-budget, common-pair relation)"
+    track: A_FAIR_COMMON_IDENTITY_FREE
+    spec_sections: ["2 (R6)", "5.1", "8.6", "17"]
+    amendment: A1
+    source_status: OFFICIAL_REPO_PINNED
+    official_repo: https://github.com/JDAI-CV/FaceX-Zoo/tree/main/addition_module/DSDG
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_20
+    pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a
+    source_pins: third_party/source_pins.json
+    paper: "same as E06a (arXiv:2112.00568)"
+    target_implementation_status: CONTROLLED_ADAPTATION
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/frozen/dsdg_bin_idfree_v1.yaml
+    deviation: DEV-020
+    notes: "Official same-subject online live pick (GenDataset_s.get_pair -> random.choice over the same OULU user id) is replaced by the frozen common pair relation from manifests/pairs_train_v1.parquet; lambda_pair = 0 because the official pair loss forces the identity features of the two reconstructions to match, which is invalid for different people. All other losses retained. All spoof types collapsed to one class. subject_id_global is never consumed. CASIA + MSU + SiW."
+
+  - method_id: E07c
+    method_name: DIFFFAS-BIN-IDFREE
+    role: "Track-A identity-free diffusion baseline (official unpaired code path)"
+    track: A_FAIR_COMMON_IDENTITY_FREE
+    spec_sections: ["2 (R7)", "5.1", "8.7", "17"]
+    amendment: A1
+    source_status: OFFICIAL_REPO_PINNED
+    official_repo: https://github.com/murphytju/DiffFAS
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_20
+    pinned_commit: 23f40519ec25a833ebc06842aa6fbab74fad4d15
+    source_pins: third_party/source_pins.json
+    paper: "same as E07a (arXiv:2409.08572)"
+    target_implementation_status: CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH
+    environment_status: NOT_CREATED
+    implementation_status: NOT_STARTED
+    config_file: configs/frozen/difffas_bin_idfree_v1.yaml
+    deviation: DEV-021
+    notes: "use_pair=false, the official code path in which the content image is not concatenated into the diffusion input and is not passed as the conditioning; conditioning is style_spoof only and the target is the epsilon of GT. Style guide drawn deterministically by raw-byte SHA-256 from the binary TRAIN spoof pool of the same dataset. style_id = SPOOF_BINARY; attack_raw is never a class target. subject_id_global is never consumed. CASIA + MSU + SiW."
 
   - method_id: E08
     method_name: GPAT-B0

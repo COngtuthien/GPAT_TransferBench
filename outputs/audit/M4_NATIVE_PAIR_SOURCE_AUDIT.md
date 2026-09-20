@@ -1,5 +1,17 @@
 # M4 — Native Pair Construction: Source-of-Truth Audit
 
+> **SUPERSEDED IN PART by Owner Protocol Amendment A1 (2026-09-20).** The blocker described below
+> was real and is preserved as history. Two things have since changed: the owner **authorized
+> pinning** both repositories (FaceX-Zoo `16b793a7564a4b9308cf94e62bdb2ffacb3a725a`,
+> murphytju/DiffFAS `23f40519ec25a833ebc06842aa6fbab74fad4d15`; see `third_party/source_pins.json`),
+> so §2 and §6 option (A) are now resolved; and the owner **removed the native manifests from the
+> main-track M4 dependency** altogether. DSDG-NATIVE and DiffFAS-NATIVE are now **Track B
+> (SECONDARY)** and deferred to M6; they no longer block the main comparison or M5. The questions in
+> §3 remain open and will be answered from the now-pinned source during M6. Nothing below was
+> deleted or rewritten.
+>
+> Current status: `M4_FAIR_TRACK_AMENDMENT_REPORT.md`, `M4_NATIVE_PAIR_COVERAGE.md`.
+
 **Date:** 2026-09-20 · **Outcome:** `BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP`
 **Affected manifests:** `manifests/dsdg_identity_pairs_v1.parquet`,
 `manifests/difffas_recon_pairs_v1.parquet` — **neither created**

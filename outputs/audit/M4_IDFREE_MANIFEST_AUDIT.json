@@ -1,0 +1,108 @@
+{
+  "common_artifacts_unchanged": {
+    "pair_train_stats_v1.json": true,
+    "pairs_train_v1.parquet": true,
+    "split_v1.parquet": true,
+    "val_pairs_v1.parquet": true
+  },
+  "difffas": {
+    "attack_raw_in_schema": false,
+    "eligible_guide_counts": [
+      1200,
+      2520,
+      5118
+    ],
+    "guide_reuse_max": 5,
+    "path": "manifests/difffas_bin_idfree_train_v1.parquet",
+    "rows": 8838,
+    "rows_by_dataset": {
+      "casia_fasd": 2520,
+      "msu_mfsd": 1200,
+      "siwmv2": 5118
+    },
+    "schema": [
+      "track_pair_id:string",
+      "dataset:string",
+      "gt_spoof_id:string",
+      "guide_spoof_id:string",
+      "style_id:string",
+      "split:string",
+      "seed:int64",
+      "eligible_guide_count:int64",
+      "selection_policy:string",
+      "use_pair:bool",
+      "self_guide:bool",
+      "content_live_id:string",
+      "content_training_role:string",
+      "gt_sha256:string",
+      "guide_sha256:string",
+      "split_manifest_sha256:string",
+      "common_pair_manifest_sha256:string",
+      "adaptation_config_sha256:string",
+      "official_source_commit:string"
+    ],
+    "schema_signature": "eb43e16359800d116617ffa6677d10c964c1e63de8cc6ba00a625141a265d2f0",
+    "self_guide_count": 3,
+    "sha256": "0d4c0ab435a258be51577aec17d9ecea27785354c900d0f7ab863d2bb2924fd6",
+    "siw_included": true,
+    "style_ids": [
+      "SPOOF_BINARY"
+    ],
+    "subject_in_schema": false,
+    "unique_gt": 8838,
+    "unique_guides": 5580
+  },
+  "dsdg": {
+    "adapter_interface_fields": [
+      "binary_spoof_label",
+      "dataset",
+      "pair_id",
+      "seed",
+      "source_sha256",
+      "source_spoof_id",
+      "split",
+      "target_live_id",
+      "target_sha256"
+    ],
+    "authoritative_relation": "manifests/pairs_train_v1.parquet",
+    "authoritative_relation_sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "lambda_pair": 0.0,
+    "removed_losses": [
+      "loss_pair"
+    ],
+    "retained_losses": [
+      "loss_cls",
+      "loss_ip",
+      "loss_kl",
+      "loss_mmd",
+      "loss_ort",
+      "loss_rec"
+    ],
+    "rows": 8838,
+    "rows_by_dataset": {
+      "casia_fasd": 2520,
+      "msu_mfsd": 1200,
+      "siwmv2": 5118
+    },
+    "separate_manifest_created": false,
+    "siw_included": true,
+    "subject_equality_required": false,
+    "subject_id_consumed": false,
+    "unchanged_when_subject_ids_nulled": true
+  },
+  "expected_by_dataset": {
+    "casia_fasd": 2520,
+    "msu_mfsd": 1200,
+    "siwmv2": 5118
+  },
+  "expected_rows": 8838,
+  "failures": [],
+  "failures_count": 0,
+  "n_syn_intended": 8838,
+  "status": "PASS",
+  "track_a_datasets": [
+    "casia_fasd",
+    "msu_mfsd",
+    "siwmv2"
+  ]
+}

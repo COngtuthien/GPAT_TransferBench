@@ -487,3 +487,51 @@ Not done (by design): frame extraction, face detection, crops, caches, split, pa
 Artifacts: `pair_train_stats_v1.json` `a7ccabb0…`, `pairs_train_v1.parquet` `a5e4fdae…`,
 `val_pairs_v1.parquet` `84d12491…`.
 
+## Owner Protocol Amendment A1 (2026-09-20) — M4 COMPLETE under the amended main-track rule
+
+1. **Verified the starting state**: HEAD `f15cd443`, clean tree, M4 `IN_PROGRESS`
+   (`COMMON_PAIRS_COMPLETE_NATIVE_PAIR_SOURCE_BLOCKED`), M5 NOT_STARTED, and the three frozen common
+   artifacts byte-unchanged (`a7ccabb0…`, `a5e4fdae…`, `84d12491…`).
+2. **Recorded the owner's scientific decision as a versioned, hashed amendment** rather than editing
+   the frozen specification, which stays byte-identical. Amendment A1 sha256
+   `03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472`.
+3. **Pinned the two official sources** the owner authorized — FaceX-Zoo `16b793a7…` (sparse, DSDG
+   only) and murphytju/DiffFAS `23f40519…` — into a git-ignored cache, source only. One stray binary
+   checkpoint that arrived with the sparse checkout was removed; **no model weights were
+   downloaded**. Exact commits, trees and per-file sha256 + blob ids are in
+   `third_party/source_pins.json`. Pinning does not start M6.
+4. **Read the DSDG relation and every loss from the pinned code.** `GenDataset_s` indexes spoof
+   frames and draws the live partner with `random.choice` over the same OULU **user id**
+   (`make_train_list.py: label = video_name[4:6]`) — same-subject, online, random. Of the seven loss
+   terms, exactly one, `loss_pair`, mathematically requires the two images to be the same person;
+   `loss_ip` compares each reconstruction with its own input and does not.
+5. **Froze DSDG-BIN-IDFREE (E06c, DEV-020)**: the common fair pair becomes the training relation and
+   `lambda_pair = 0`; everything else is retained. The binary collapse makes `loss_cls`
+   mathematically degenerate (`CrossEntropyLoss` over one logit), which is disclosed rather than
+   patched, with no substituted supervision. The relation is `pairs_train_v1.parquet` itself — an
+   explicit decision, because a separate manifest would be a redundant projection plus three
+   constants and a second copy could drift.
+6. **Traced the DiffFAS `use_pair` branch and proved it numerically.** Under `use_pair=false` the
+   content image is absent from the model input, is not the conditioning, is not the target, does not
+   affect the noise and does not enter the variational term. Running the official `training_losses`
+   at the pinned commit with everything fixed but the content tensor gives bit-identical model input
+   and losses (`max_abs_loss_diff = 0.0`), while the same probe detects the dependency under
+   `use_pair=true`. `content_training_role = INERT_API_PLACEHOLDER`.
+7. **Froze DIFFFAS-BIN-IDFREE (E07c, DEV-021)** and built its Track-A manifest: 8,838 rows
+   (CASIA 2,520 · MSU 1,200 · SiW 5,118), one deterministic binary style guide per TRAIN spoof GT by
+   raw-byte SHA-256 ranking, `style_id = SPOOF_BINARY`, `use_pair = false`. Self-guides are inside
+   the official support, so the 3 that occur are reported and not adjusted away.
+8. **Proved determinism** for both Track-A relations across four fresh processes (canonical and
+   shuffled input × `PYTHONHASHSEED` 0/1/424242): byte-identical manifest, identical rows, schema,
+   membership and `track_pair_id`, identical DSDG adapter relation.
+9. **Audited exhaustively** (`tools/m4_idfree_audit.py`, PASS, 0 failures) and built the Track-A
+   fairness matrix (8 methods, **0 violations**): every Track-A method trains on CASIA + MSU + SiW,
+   consumes no subject identity and no attack type, and carries `N_syn = 8,838`.
+10. **Kept Track B alive and clearly secondary.** DSDG-NATIVE and DiffFAS-NATIVE are not deleted;
+    they are relabelled `B_NATIVE_FULL_SECONDARY`, coverage CASIA + MSU with SiW
+    `NOT_INSTANTIABLE_MISSING_SUBJECT_ID`, deferred to M6, and barred from any main table without a
+    track column. No native manifest exists.
+11. **Marked M4 COMPLETE under the AMENDED rule**, with the audit trail stating plainly that the
+    originally specified native manifests were not created. M5 and M6 remain NOT_STARTED; nothing was
+    trained, nothing was generated and TEST performance has never been observed.
+

@@ -1,5 +1,13 @@
 # M4 — Authoritative Pair Manifest Execution Report
 
+> **SUPERSEDED IN PART by Owner Protocol Amendment A1 (2026-09-20).** Everything below about the
+> **common** pair artifacts stands unchanged and their hashes are still current. What changed is the
+> milestone outcome: the native manifests are no longer part of the main-track M4 dependency, both
+> official sources were pinned, and two identity-free Track-A adaptations were frozen. **M4 is now
+> COMPLETE under the amended main-track rule** — not under the originally specified rule, and the
+> originally specified native manifests were never created. Current status:
+> `M4_FAIR_TRACK_AMENDMENT_REPORT.md`. Nothing below was deleted or rewritten.
+
 **Date:** 2026-09-20 · **Base commit:** `443614b10d5f54e34ff8451b54fde99ca6fcc8a7`
 **Outcome:** common pair manifests **COMPLETE and frozen**; native pair manifests
 **BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP**.

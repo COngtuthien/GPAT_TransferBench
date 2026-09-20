@@ -1,0 +1,119 @@
+# dsdg_bin_idfree_v1 — FROZEN 2026-09-20 under Amendment A1. Deviation DEV-020.
+#
+# ADAPTATION SEMANTICS ONLY. M6 training execution settings (lr, batch size, epochs, schedules) are
+# deliberately NOT frozen here; the frozen specification does not settle them and this amendment
+# does not start M6.
+#
+# Source analysis: outputs/audit/M4_DSDG_IDFREE_SOURCE_ANALYSIS.md
+version: dsdg_bin_idfree_v1
+status: FROZEN
+frozen_utc: "2026-09-20"
+method_id: E06c
+method_name: DSDG-BIN-IDFREE
+track: A_FAIR_COMMON_IDENTITY_FREE
+classification: CONTROLLED_ADAPTATION
+not_classification: [FAITHFUL_OFFICIAL, FAITHFUL_NATIVE]
+deviation: DEV-020
+amendment: A1
+amendment_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+
+official_source:
+  repository: https://github.com/JDAI-CV/FaceX-Zoo
+  pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a
+  relevant_path: addition_module/DSDG
+  provenance: third_party/source_pins.json
+  weights_downloaded: false
+  cited_files: [addition_module/DSDG/train_generator.py,
+                addition_module/DSDG/data/generation_dataset.py,
+                addition_module/DSDG/data/make_train_list.py,
+                addition_module/DSDG/networks/__init__.py,
+                addition_module/DSDG/networks/generator.py,
+                addition_module/DSDG/misc/util.py]
+
+official_relation:
+  dataset_class: GenDataset_s
+  indexed_by: SPOOF_SAMPLES
+  live_selection: "random.choice(make_pair_dict[label]['1'])"
+  label_meaning: "OULU-NPU user id (make_train_list.py: label = video_name[4:6])"
+  semantics: SAME_SUBJECT_ONLINE_RANDOM
+  materialized_pair_list: false
+
+# ---------------------------------------------------------------- Track-A training relation
+training_relation:
+  decision: USE_COMMON_PAIR_MANIFEST_DIRECTLY
+  authoritative_manifest: manifests/pairs_train_v1.parquet
+  authoritative_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+  rows: 8838
+  rows_by_dataset: {casia_fasd: 2520, msu_mfsd: 1200, siwmv2: 5118}
+  unit: "one row per TRAIN spoof source: source_spoof_id -> target_live_id"
+  columns_consumed: [pair_id, source_spoof_id, target_live_id, dataset, split, seed,
+                     source_sha256, target_sha256]
+  columns_forbidden: [target_subject, source_subject]     # present for audit; never consumed
+  separate_manifest_created: false
+  separate_manifest_decision_rationale: >-
+    EXPLICIT DECISION (task section 15): a dsdg_bin_idfree_train_v1.parquet would be a byte-for-byte
+    redundant projection of pairs_train_v1.parquet plus three constants (binary_spoof_label = 1,
+    lambda_pair = 0, the adaptation config hash), and constants belong in this config, not in
+    8,838 duplicated rows. Duplicating the relation would also create a second source of truth that
+    could drift from the frozen common manifest. pairs_train_v1.parquet IS the authoritative
+    DSDG-BIN-IDFREE Track-A training relation.
+  split: TRAIN
+  val_relation: "none; DSDG does not consume the common VAL pair manifest for training"
+
+# ---------------------------------------------------------------- losses
+losses:
+  lambda_pair: 0.0
+  lambda_pair_official_default: 0.5
+  lambda_pair_reason: >-
+    loss_pair = lambda_pair * MSE(rec_spoof_identity_feature, rec_live_identity_feature) forces the
+    identity representations of the two reconstructions to coincide. That is only meaningful when
+    the two images show the same person. Under the common fair pair they are deliberately different
+    people (CASIA/MSU) or a different video AND content group (SiW), so optimising it would push the
+    generator toward an assertion that is false by construction.
+  retained:
+    loss_rec:  {status: RETAINED, identity_requirement: NONE, relation: "each reconstruction vs its own input"}
+    loss_kl:   {status: RETAINED, identity_requirement: NONE, relation: "each posterior vs its prior"}
+    loss_mmd:  {status: RETAINED, identity_requirement: NONE, relation: "batch-level latent mean alignment, not per-sample identity"}
+    loss_ip:   {status: RETAINED, identity_requirement: NONE, relation: "rec_spoof vs spoof input AND rec_live vs live input, separately"}
+    loss_cls:  {status: RETAINED_BUT_DEGENERATE_UNDER_BINARY_COLLAPSE, identity_requirement: NONE}
+    loss_ort:  {status: RETAINED, identity_requirement: NONE, relation: "two latents of the same sample"}
+  removed: [loss_pair]
+  removal_principle: >-
+    Remove ONLY terms whose correctness mathematically requires the two images to share identity.
+    Nothing was removed for convenience.
+  warmup_schedule: "official: epoch < 2 scales every term except loss_rec by 0.01 (unchanged)"
+  optimizer_scope_note: >-
+    Official behaviour retained: netCls parameters are not in the optimizer, so the classifier head
+    stays at initialisation while loss_cls still backpropagates into the encoder.
+
+# ---------------------------------------------------------------- binary supervision
+binary_supervision:
+  spoof_type_collapse: true
+  attack_type_arg: 1
+  attack_macro_as_target: FORBIDDEN
+  attack_raw_as_target: FORBIDDEN
+  substitute_supervision_invented: false
+  degeneracy_disclosure: >-
+    Cls(hdim, attack_type) is nn.Linear(hdim, attack_type). With attack_type = 1, CrossEntropyLoss
+    over a single logit is identically -log(1) = 0 with zero gradient, so loss_cls contributes
+    nothing under the binary collapse and z_cls is shaped only by loss_rec, loss_kl and loss_ort.
+    This is stated honestly rather than patched: Track A forbids attack-type supervision, so a
+    vanishing attack-type loss is the correct consequence.
+
+# ---------------------------------------------------------------- identity firewall
+identity_firewall:
+  subject_id_global_consumed: false
+  consumed_for_sampling: false
+  consumed_for_loss: false
+  consumed_for_model_input: false
+  consumed_for_class_target: false
+  adapter_interface_fields: [pair_id, dataset, source_spoof_id, target_live_id, split, seed]
+  adapter_must_ignore: [target_subject, source_subject]
+  test: "tests/test_m4_fair_track.py nulls CASIA/MSU subject ids and requires an unchanged relation"
+
+datasets: [casia_fasd, msu_mfsd, siwmv2]
+siw_included: true
+n_syn_intended: 8838
+generation_pair_universe: manifests/pairs_train_v1.parquet
+m6_training_hyperparameters_frozen_here: false
+membership_in_this_file: false

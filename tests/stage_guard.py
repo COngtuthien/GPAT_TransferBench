@@ -20,7 +20,10 @@ M1_MANIFESTS = {"manifests/inventory.parquet", "manifests/inventory_videos.parqu
 M2_MANIFESTS = {"manifests/m2_sample_accounting.parquet"}
 M3_MANIFESTS = {"manifests/split_v1.parquet", "manifests/split_groups_v1.parquet"}
 M4_COMMON_MANIFESTS = {"manifests/pairs_train_v1.parquet", "manifests/val_pairs_v1.parquet",
-                       "manifests/pair_train_stats_v1.json"}
+                       "manifests/pair_train_stats_v1.json",
+                       # Amendment A1 Track-A relation (DEV-021); DSDG-BIN-IDFREE reuses the
+                       # common manifest and deliberately has no file of its own.
+                       "manifests/difffas_bin_idfree_train_v1.parquet"}
 # Materialized only from pinned official semantics; see M4_NATIVE_PAIR_SOURCE_AUDIT.md.
 M4_NATIVE_MANIFESTS = {"manifests/dsdg_identity_pairs_v1.parquet",
                        "manifests/difffas_recon_pairs_v1.parquet"}
@@ -55,7 +58,11 @@ def native_pairs_unblocked() -> bool:
     """True only once the native pair construction is no longer source-blocked."""
     m4 = json.loads(STAGE_STATE.read_text())["milestones"]["M4"]
     native = (m4.get("execution") or {}).get("native") or {}
-    return native.get("status") not in (None, "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP")
+    return native.get("status") not in (
+        None,
+        "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP",
+        "DEFERRED_TO_M6_SECONDARY_TRACK",   # Amendment A1 moved these to the secondary track
+    )
 
 
 def forbidden_parquet(paths) -> list:
@@ -71,7 +78,8 @@ def forbidden_parquet(paths) -> list:
 # provenance, not membership, so they are never matched here.
 PAIR_DATA_SUFFIXES = (".parquet", ".json", ".csv", ".feather", ".arrow")
 PAIR_DATA_NAME_PREFIXES = ("pairs_", "pair_train_stats", "dsdg_identity_pairs",
-                           "difffas_recon_pairs", "val_pairs", "pair_manifest")
+                           "difffas_recon_pairs", "val_pairs", "pair_manifest",
+                           "dsdg_bin_idfree", "difffas_bin_idfree")
 
 
 def forbidden_pair_artifacts(paths) -> list:

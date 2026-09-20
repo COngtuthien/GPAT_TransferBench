@@ -1,0 +1,139 @@
+# fair_track_v1 — FROZEN 2026-09-20 under Owner Protocol Amendment A1.
+#
+# Defines the PRIMARY (Track A) and SECONDARY (Track B) comparison contracts. The original frozen
+# specification is NOT edited and remains historically authoritative; this file and the amendment
+# change the primary comparison contract from this point forward.
+#
+# Amendment: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md
+# Deviations: DEV-019 (this file), DEV-020 (DSDG), DEV-021 (DiffFAS)
+version: fair_track_v1
+status: FROZEN
+frozen_utc: "2026-09-20"
+amendment: A1
+amendment_path: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md
+amendment_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+deviation: DEV-019
+classification: MAIN_FAIR_TRACK_IDENTITY_FREE_PROTOCOL_AMENDMENT
+original_spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+original_spec_modified: false
+decision_timing: >-
+  Adopted before M5 probe training, M6 baseline training, M7 GPAT training, any synthetic
+  generation and any inspection of any result. Justified by protocol fairness and data
+  availability, never by observed performance. No model has been trained in this project.
+
+references:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  common_pairs_train: manifests/pairs_train_v1.parquet
+  common_pairs_train_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+  common_pairs_val: manifests/val_pairs_v1.parquet
+  common_pairs_val_sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872
+  pair_train_stats: manifests/pair_train_stats_v1.json
+  pair_train_stats_sha256: a7ccabb0956f5121eabb5b4f7e85dfe49668469d8d3ee77cd88b24fc54bd3a50
+  pairs_config: configs/frozen/pairs_v1.yaml
+  source_pins: third_party/source_pins.json
+
+# ---------------------------------------------------------------- TRACK A (primary)
+track_a:
+  name: FAIR_COMMON_IDENTITY_FREE
+  role: PRIMARY
+  is_primary_fairness_table: true
+  datasets: [casia_fasd, msu_mfsd, siwmv2]      # every Track-A method, no exceptions
+  dataset_dropping_allowed: false
+  shared_population:
+    inventory: frozen
+    m2_usable_population: M2_COMPLETE
+    split: manifests/split_v1.parquet
+    train_val_boundary: frozen
+    common_source_population: TRAIN_spoof_frames
+    common_pair_population: manifests/pairs_train_v1.parquet
+    downstream_evaluator_protocol: frozen
+  n_syn_intended: 8838                          # = TRAIN spoof frames; identical for every method
+  identity_supervision: FORBIDDEN
+  forbidden_inputs:
+    - subject_id_global
+    - pseudo_subject_id
+    - person_label
+    - identity_class_label_derived_from_dataset_metadata
+  forbidden_inputs_scope: [model_input, loss, class_target, sampling_rule]
+  audit_visibility_note: >-
+    subject_id_global may remain in audit tables for provenance. It must never cross the
+    model-adapter boundary. Tests null CASIA/MSU subject ids at that boundary and require the
+    Track-A construction to be unchanged.
+  attack_type_supervision: FORBIDDEN            # binary/adapted track
+  forbidden_class_targets: [attack_macro, attack_raw, dataset_id_as_semantic_class]
+  methods: [E01, E02, E03, E04, E05, E06c, E07c, E08]
+  claim_supported: >-
+    All compared methods were trained/adapted on the same pooled CASIA-FASD + MSU-MFSD + SiW-Mv2
+    TRAIN population and evaluated under the same frozen protocol.
+  claims_forbidden:
+    - "DSDG-BIN-IDFREE reproduces official DSDG training exactly"
+    - "DIFFFAS-BIN-IDFREE is native DiffFAS"
+    - "any same-person or different-person claim about a SiW pair"
+  required_wording: [controlled benchmark adaptation, identity-free fair-track variant,
+                     source-based architecture/code-path adaptation]
+
+# ---------------------------------------------------------------- TRACK B (secondary)
+track_b:
+  name: NATIVE_FULL
+  role: SECONDARY
+  is_primary_fairness_table: false
+  status: DEFERRED_TO_M6_SECONDARY_TRACK
+  blocks_m5: false
+  blocks_main_comparison: false
+  native_metadata_allowed: true
+  coverage_may_differ: true
+  missing_metadata_outcomes: [N/A, NOT_INSTANTIABLE, controlled_method_specific_adaptation]
+  methods: [E06b, E07b, E09, E10, E11]
+  dataset_coverage:
+    casia_fasd: SUPPORTED
+    msu_mfsd: SUPPORTED
+    siwmv2: NOT_INSTANTIABLE_MISSING_SUBJECT_ID
+  reporting_rule: >-
+    Track-B rows may never appear in a main result table without an explicit track column, and must
+    never be presented as the primary fair comparison.
+
+# ---------------------------------------------------------------- identity policy
+identity_policy:
+  siw_subject_identity: UNAVAILABLE              # Q-14; 0 of 9,507 SiW TRAIN rows carry a subject id
+  fabrication: FORBIDDEN
+  forbidden_identity_substitutes:
+    - video_id_as_person_identity
+    - content_group_id_as_person_identity
+    - pseudo_subject_id
+    - face_embedding_clustering_as_subject_id
+    - filename_derived_identity
+    - manually_guessed_identity
+    - DEV-013_as_a_same_person_guarantee
+  correct_resolution: REMOVE_THE_IDENTITY_DEPENDENT_ASSUMPTION
+  dev013_boundary: >-
+    DEV-013 resolves the COMMON source->target pairing rule for SiW (different video AND different
+    exact-content group). It is never evidence that two frames show the same person or different
+    people, and it never licenses a same-identity native relation.
+
+# ---------------------------------------------------------------- amended M4 acceptance
+m4_acceptance:
+  original_spec_rule: "common pair manifest AND native pair manifests"
+  amended_main_track_rule:
+    - common_train_manifest_frozen
+    - common_val_manifest_frozen
+    - pair_train_stats_frozen
+    - dsdg_bin_idfree_track_a_training_relation_frozen
+    - difffas_bin_idfree_track_a_training_relation_frozen
+    - all_three_datasets_in_both_track_a_adapted_methods
+    - deterministic_reruns_byte_identical
+    - source_pins_and_adaptation_provenance_frozen
+    - no_subject_id_dependency_in_track_a
+    - all_tests_pass
+  native_track_b_manifests: DEFERRED_TO_M6
+  native_track_b_blocks_m5: false
+  honesty_requirement: >-
+    This is a deliberate owner protocol amendment, not the original M4 rule. The audit trail must
+    preserve the progression: original native requirement -> blocker discovered -> owner objective
+    clarified -> Amendment A1 -> Track-A identity-free adaptation frozen.
+
+determinism_contract:
+  invariant_to: [input_row_order, filesystem_order, python_hash_randomization, worker_count,
+                 process_count, wall_clock_time]
+  tested: tests/test_m4_fair_track.py
+membership_in_this_file: false

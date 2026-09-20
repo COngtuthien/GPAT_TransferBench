@@ -85,3 +85,19 @@ the official repositories are unpinned and unvendored, and pinning them is an M6
 under `third_party/registry.yaml` and spec §8.1. SiW-Mv2 stays `NOT_INSTANTIABLE_MISSING_SUBJECT_ID`
 under Q-14 regardless; identity is never fabricated and DEV-013 is never same-identity evidence.
 
+## Owner Protocol Amendment A1 (2026-09-20)
+
+| ID | Topic | Basis | Status | Decision | Effective |
+|---|---|---|---|---|---|
+| DEV-019 | Primary comparison contract | owner scientific amendment; SiW has no trustworthy subject identity (Q-14) | ADOPTED | Track A (primary) = CASIA + MSU + SiW for every method, identity **and** attack-type supervision forbidden, N_syn = 8,838; Track B (secondary) keeps native identity-dependent behaviour | `MAIN_FAIR_TRACK_IDENTITY_FREE_PROTOCOL_AMENDMENT` |
+| DEV-020 | DSDG Track-A relation | FaceX-Zoo @ `16b793a7`, read from source | ADOPTED | common fair pair replaces the official same-subject online draw; `lambda_pair = 0`; all other losses retained | `CONTROLLED_ADAPTATION` |
+| DEV-021 | DiffFAS Track-A relation | murphytju/DiffFAS @ `23f40519`, read from source | ADOPTED | official `use_pair=false` code path (content proven inert); deterministic raw-byte SHA-256 style guide; `style_id = SPOOF_BINARY` | `CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH` |
+
+These are **benchmark-design decisions**, not literature-derived facts. SiW-Mv2 identity remains
+unavailable and is never fabricated; the fix is to remove the identity-dependent assumption from the
+primary track, not to invent metadata. DEV-013 stays confined to the common SiW pairing rule and is
+never a same-person guarantee.
+
+M4 is COMPLETE under the **amended** main-track rule. The originally specified native pair manifests
+were not created and are deferred to M6 as Track B.
+

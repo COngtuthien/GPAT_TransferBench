@@ -206,10 +206,18 @@ class TestFrozenPolicy(unittest.TestCase):
         self.assertIn(s["M2"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
         # M4 may have started; it may only be COMPLETE once the native manifests are settled too.
         self.assertIn(s["M4"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        # Amendment A1: M4 may be COMPLETE while the NATIVE (Track-B) manifests are still missing,
+        # but only if the amendment record says so explicitly and does not claim the original rule
+        # was met.
         if s["M4"]["status"] == "COMPLETE":
             native = (s["M4"].get("execution") or {}).get("native") or {}
-            self.assertNotEqual(native.get("status"),
-                                "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP")
+            amend = s["M4"].get("amendment_a1")
+            if native.get("status") == "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP":
+                self.assertIsNotNone(amend, "M4 COMPLETE with a native blocker needs Amendment A1")
+                self.assertEqual(amend["completion_basis"], "AMENDMENT_A1_MAIN_FAIR_IDFREE_TRACK")
+                self.assertEqual(amend["track_b_native_pairing"],
+                                 "DEFERRED_TO_M6_SECONDARY_TRACK")
+                self.assertIs(amend["original_native_manifests_completed"], False)
         # M2 may only be COMPLETE when the full run really happened and its audit passed. Under DEV-017
         # the artifacts live on the external runtime volume, so the in-repo dirs stay empty and the
         # evidence is the audit itself plus the physical roots named by the execution config.

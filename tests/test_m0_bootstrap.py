@@ -90,12 +90,21 @@ class TestRegistries(unittest.TestCase):
     def test_third_party_registry(self):
         reg = yaml.safe_load((ROOT / "third_party/registry.yaml").read_text(encoding="utf-8"))
         ids = [m["method_id"] for m in reg["methods"]]
-        self.assertEqual(ids, METHOD_IDS)
+        # Amendment A1 (2026-09-20) added the two Track-A identity-free variants. The M0 set must
+        # still be present and unchanged; only these two additions are allowed.
+        self.assertEqual([i for i in ids if i not in ("E06c", "E07c")], METHOD_IDS)
+        self.assertEqual(len(set(ids)), len(ids), "duplicate method_id")
         required = {"method_id", "method_name", "role", "source_status", "official_repo", "pinned_commit",
                     "paper", "environment_status", "implementation_status", "notes"}
         for m in reg["methods"]:
             self.assertTrue(required <= set(m), m["method_id"])
-            self.assertIsNone(m["pinned_commit"], "no commit may be pinned at M0")
+            # A1 authorized pinning the DSDG and DiffFAS sources for adaptation analysis; every
+            # other method must still carry no pin, and a pin must be a full 40-char commit.
+            if m["method_id"] in ("E06a", "E06b", "E06c", "E07a", "E07b", "E07c"):
+                self.assertRegex(m["pinned_commit"], r"^[0-9a-f]{40}$", m["method_id"])
+                self.assertEqual(m["source_pins"], "third_party/source_pins.json")
+            else:
+                self.assertIsNone(m["pinned_commit"], "no commit may be pinned outside A1")
             self.assertEqual(m["implementation_status"], "NOT_STARTED")
 
     def test_no_invented_urls(self):

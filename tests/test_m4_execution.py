@@ -547,20 +547,30 @@ class TestNativeManifests(unittest.TestCase):
         self.assertEqual({r["subject_id_global"] for r in siw}, {None})
 
     def test_source_evidence_guard_is_recorded(self):
-        """A native manifest may not be written while the official construction is unpinned."""
-        reg = {m["method_id"]: m for m in
-               yaml.safe_load((ROOT / "third_party/registry.yaml").read_text())["methods"]}
-        for mid in ("E06b", "E07b"):
-            self.assertIsNone(reg[mid]["pinned_commit"])
+        """The native blocker history stays on record, and no external repo was committed."""
         audit = (AUDIT / "M4_NATIVE_PAIR_SOURCE_AUDIT.md").read_text()
         self.assertIn("BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP", audit)
         for d in ("methods/dsdg", "methods/difffas"):
             self.assertEqual([p.name for p in (ROOT / d).iterdir()], [".gitkeep"])
+        # Amendment A1 later pinned the sources; the pins must be recorded and the checkouts
+        # must stay out of the repository.
+        reg = {m["method_id"]: m for m in
+               yaml.safe_load((ROOT / "third_party/registry.yaml").read_text())["methods"]}
+        for mid in ("E06b", "E07b"):
+            self.assertRegex(reg[mid]["pinned_commit"], r"^[0-9a-f]{40}$")
+        self.assertIn("third_party/source_cache/", (ROOT / ".gitignore").read_text())
 
-    def test_m4_is_not_marked_complete_while_native_is_blocked(self):
+    def test_m4_completion_never_claims_the_original_native_rule_was_met(self):
         st = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]["M4"]
-        self.assertNotEqual(st["status"], "COMPLETE")
-        self.assertEqual(st["status"], "IN_PROGRESS")
+        if st["status"] != "COMPLETE":
+            self.assertEqual(st["status"], "IN_PROGRESS")
+            return
+        amend = st["amendment_a1"]
+        self.assertEqual(amend["completion_basis"], "AMENDMENT_A1_MAIN_FAIR_IDFREE_TRACK")
+        self.assertIs(amend["original_native_manifests_completed"], False)
+        self.assertEqual(amend["track_b_native_pairing"], "DEFERRED_TO_M6_SECONDARY_TRACK")
+        self.assertEqual(st["execution"]["native"]["dsdg_identity_pairs_v1.parquet"], "NOT_CREATED")
+        self.assertEqual(st["execution"]["native"]["difffas_recon_pairs_v1.parquet"], "NOT_CREATED")
 
 
 if __name__ == "__main__":

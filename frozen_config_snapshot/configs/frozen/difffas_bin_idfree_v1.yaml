@@ -1,0 +1,134 @@
+# difffas_bin_idfree_v1 — FROZEN 2026-09-20 under Amendment A1. Deviation DEV-021.
+#
+# ADAPTATION SEMANTICS ONLY. M6 training execution settings (lr, batch size, epochs, guidance
+# probability, sampler steps) are deliberately NOT frozen here; this amendment does not start M6.
+#
+# Source analysis: outputs/audit/M4_DIFFFAS_IDFREE_SOURCE_ANALYSIS.md
+version: difffas_bin_idfree_v1
+status: FROZEN
+frozen_utc: "2026-09-20"
+method_id: E07c
+method_name: DIFFFAS-BIN-IDFREE
+track: A_FAIR_COMMON_IDENTITY_FREE
+classification: CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH
+not_classification: [FAITHFUL_NATIVE, FAITHFUL_OFFICIAL]
+deviation: DEV-021
+amendment: A1
+amendment_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+
+official_source:
+  repository: https://github.com/murphytju/DiffFAS
+  pinned_commit: 23f40519ec25a833ebc06842aa6fbab74fad4d15
+  provenance: third_party/source_pins.json
+  weights_downloaded: false
+  cited_files: [FAS_dataset.py, FAS_train.py, FAS_sample.py, diffusion.py, models/unet_autoenc.py]
+
+# ---------------------------------------------------------------- official code path
+official_code_path:
+  use_pair: false
+  official_flag: true                 # an official argument, not a source modification
+  official_code_modified: false
+  model_in_channels: 3                # use_pair=true would build 3+3
+  training_input: "torch.cat([x_t], 1)   # content is NOT concatenated"
+  conditioning: style_spoof            # passed as x_cond; encoded after the cond_mask dropout
+  target: epsilon_of_GT                # ModelMeanType.EPSILON (predict_xstart=false)
+  variance: LEARNED_RANGE              # learn_sigma default true; the vb term is active
+  vb_term_content_path: NONE           # _vb_terms_bpd calls p_mean_variance without x_cond
+  content_training_role: INERT_API_PLACEHOLDER
+  content_inertness_evidence: >-
+    Under use_pair=false the content tensor is absent from the model input, is not x_cond, is not
+    cond, is not the target, does not affect noise (randn_like(x_start)) and does not enter the
+    variational term. The only statement touching it is the write img[~cond_mask] = 0, which is
+    never read afterwards; cond_mask is a Bernoulli draw independent of the content's values.
+  content_inertness_caveat: >-
+    The tensor is still materialised and moved to the device. That is a cost, not a dependency.
+
+# ---------------------------------------------------------------- Track-A training manifest
+training_manifest:
+  path: manifests/difffas_bin_idfree_train_v1.parquet
+  unit: one row per TRAIN spoof GT
+  rows: 8838
+  rows_by_dataset: {casia_fasd: 2520, msu_mfsd: 1200, siwmv2: 5118}
+  split: TRAIN
+  columns: [track_pair_id, dataset, gt_spoof_id, guide_spoof_id, style_id, split, seed,
+            eligible_guide_count, selection_policy, use_pair, self_guide,
+            content_live_id, content_training_role,
+            gt_sha256, guide_sha256, split_manifest_sha256, common_pair_manifest_sha256,
+            adaptation_config_sha256, official_source_commit]
+  track_pair_id_format: "DFA%06d"
+  track_pair_id_order: [dataset, gt_spoof_id]
+  row_order: [dataset, gt_spoof_id]
+  parquet_writer: {compression: zstd, compression_level: 9, write_statistics: true, version: "2.6",
+                   use_dictionary: false, row_group_size: 65536, store_schema: true,
+                   write_page_index: false}
+  content_live_id_note: >-
+    content_live_id is inherited from the frozen common pair for interface bookkeeping only and is
+    marked training_role = INERT_WHEN_USE_PAIR_FALSE. It does NOT form a same-identity
+    reconstruction pair and must never be described as one.
+
+# ---------------------------------------------------------------- guide selection
+guide_selection:
+  official_behaviour: "random.choice(os.listdir(style_folder_of_GT)) — online, unseeded"
+  benchmark_policy: DETERMINISTIC_RAW_BYTE_SHA256_RANKING
+  eligibility: [m2_complete, split_TRAIN, label_SPOOF, same_dataset]
+  eligibility_excludes: [subject_identity, attack_raw]
+  canonical_candidate_order: lexical_guide_sample_id_ascending
+  source_digest:
+    algorithm: sha256
+    preimage: "UTF8('gpatbench.trackA.difffas.guide.source.v1|' + gt_spoof_sample_id + '|' + str(split_seed))"
+    output: raw_32_byte_digest
+    representation: RAW_32_BYTE_SHA256_DIGEST
+  candidate_digest:
+    algorithm: sha256
+    preimage: "source_digest_bytes || UTF8('|gpatbench.trackA.difffas.guide.candidate.v1|' + guide_spoof_sample_id)"
+    preimage_parts:
+      - {part: 1, content: source_digest_bytes, encoding: RAW_32_BYTE_SHA256_DIGEST, length_bytes: 32}
+      - {part: 2, content: "'|gpatbench.trackA.difffas.guide.candidate.v1|' + guide_spoof_sample_id", encoding: utf_8}
+    output: raw_32_byte_digest
+  ranking:
+    primary: "candidate digest as an unsigned big-endian 256-bit integer, ascending"
+    secondary: "lexical guide_spoof_sample_id ascending (defensive)"
+    keep_first: 1
+  forbidden: [python_random, numpy_random, filesystem_order, pythonhashseed_dependence,
+              input_row_order_dependence, wall_clock_dependence]
+  self_guide:
+    allowed: true
+    reason: >-
+      The official random.choice enumerates the whole style folder, so the GT file itself is inside
+      the official support. The deterministic support therefore includes it too.
+    post_hoc_adjustment: FORBIDDEN
+    reported_diagnostically: true
+  split_seed: 20260814
+
+# ---------------------------------------------------------------- style supervision
+style_supervision:
+  style_id: SPOOF_BINARY
+  style_id_role: benchmark_provenance_only
+  attack_raw_as_class_target: FORBIDDEN
+  attack_macro_as_class_target: FORBIDDEN
+  dataset_id_as_semantic_class: FORBIDDEN
+  guide_image_is_a_real_train_spoof_image: true
+  style_pool: "binary spoof pool = all TRAIN spoof frames of the same dataset"
+
+# ---------------------------------------------------------------- identity firewall
+identity_firewall:
+  subject_id_global_consumed: false
+  consumed_for_eligibility: false
+  consumed_for_selection: false
+  consumed_for_loss: false
+  consumed_for_model_input: false
+  siw_participates_without_identity: true
+
+# ---------------------------------------------------------------- generation (later milestone)
+generation:
+  pair_universe: manifests/pairs_train_v1.parquet
+  target_live_id_source: common_pair
+  source_spoof_id_source: common_pair
+  substitute_target_population: FORBIDDEN
+  executed_in_this_pass: false
+
+datasets: [casia_fasd, msu_mfsd, siwmv2]
+siw_included: true
+n_syn_intended: 8838
+m6_training_hyperparameters_frozen_here: false
+membership_in_this_file: false

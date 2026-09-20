@@ -6,6 +6,10 @@ Measures what the datasets can actually support. Coverage is reported for every 
 cell, including the cells that cannot be instantiated -- those are recorded here, never as manifest
 rows. Identity is never fabricated: `content_group_id` and `video_id` are not identity, and DEV-013
 is not same-identity evidence.
+
+Amendment A1 moved DSDG-NATIVE and DiffFAS-NATIVE to Track B (SECONDARY). Their manifests are
+deferred to M6 and no longer block the main comparison or M5. The Track-A identity-free variants
+(E06c, E07c) cover all three datasets and are audited separately.
 """
 from __future__ import annotations
 
@@ -48,7 +52,8 @@ def main() -> int:
             out.append({
                 "method": method,
                 "dataset": ds,
-                "status": "SUPPORTED_BUT_BLOCKED_BY_SOURCE_GAP" if usable
+                "track": "B_NATIVE_FULL_SECONDARY",
+                "status": "SUPPORTED_DEFERRED_TO_M6_SECONDARY_TRACK" if usable
                           else "NOT_INSTANTIABLE_MISSING_SUBJECT_ID",
                 "train_rows": len(sub),
                 "train_live_rows": sum(1 for r in sub if r["label_binary"] == 0),
@@ -60,13 +65,17 @@ def main() -> int:
                 "identity_coverage": (round(len(both) / len(ids), 6) if ids else 0.0),
                 "style_ids": len(styles),
                 "native_rows_materialized": 0,
-                "reason": ("dataset supports the row semantics, but the official construction is not "
-                           "pinned or vendored, so no faithful manifest can be written"
+                "reason": ("dataset supports the row semantics; the official source is now pinned "
+                           "(Amendment A1), but Track B is the SECONDARY track and its native "
+                           "manifests are deferred to M6 -- they no longer block the main comparison "
+                           "or M5"
                            if usable else
                            "SiW-Mv2 carries no trustworthy subject identity (Q-14); identity is "
                            "never fabricated and DEV-013 is not same-identity evidence"),
                 "official_repo": m["official_repo"],
                 "pinned_commit": m["pinned_commit"] or "NONE",
+                "blocks_main_comparison": False,
+                "blocks_m5": False,
                 "url_verification": m["url_verification"],
                 "source_evidence": "third_party/registry.yaml;outputs/audit/M4_NATIVE_PAIR_SOURCE_AUDIT.md",
             })

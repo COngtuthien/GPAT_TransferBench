@@ -1,0 +1,41 @@
+{
+  "batch": 2,
+  "cases": {
+    "use_pair=False": {
+      "loss_identical": true,
+      "max_abs_loss_diff": 0.0,
+      "model_input_channels": 3,
+      "model_input_identical": true,
+      "mse_identical": true,
+      "vb_identical": true,
+      "x_cond_identical": true,
+      "x_cond_is_style": true
+    },
+    "use_pair=True": {
+      "loss_identical": false,
+      "max_abs_loss_diff": 0.0003695487976074219,
+      "model_input_channels": 6,
+      "model_input_identical": false,
+      "mse_identical": false,
+      "vb_identical": false,
+      "x_cond_identical": true,
+      "x_cond_is_style": true
+    }
+  },
+  "checks": {
+    "conditioning_is_style_not_content": true,
+    "paired_model_input_concatenates_content": true,
+    "test_can_detect_a_dependency": true,
+    "unpaired_content_does_not_change_loss": true,
+    "unpaired_content_does_not_change_model_input": true,
+    "unpaired_model_input_is_x_t_only": true
+  },
+  "content_training_role": "INERT_API_PLACEHOLDER",
+  "device_shim": "Tensor.cuda -> self (device placement only)",
+  "diffusion_py_sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+  "import_shim": "tqdm stubbed (progress bars only; unused in the traced path)",
+  "model": "deterministic stub; no official weights loaded",
+  "pinned_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+  "spatial_size": 256,
+  "status": "PASS"
+}
