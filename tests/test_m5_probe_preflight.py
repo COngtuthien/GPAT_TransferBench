@@ -80,11 +80,21 @@ class TestMilestoneState(unittest.TestCase):
                      and p.suffix in (".pt", ".pth", ".ckpt")]
             self.assertEqual(found, [], pat)
 
-    def test_frozen_probe_config_does_not_exist_while_blockers_remain(self):
+    def test_proposed_config_is_preserved_as_pre_decision_history(self):
+        """The proposal keeps its open decisions on record even after the owner resolved them."""
         self.assertTrue(cfg()["blocking_decisions"])
-        self.assertFalse(FROZEN.exists(),
-                         "artifact_probe.yaml must not be frozen while decisions are open")
         self.assertEqual(cfg()["status"], "PROPOSED_BLOCKED")
+        self.assertTrue(PROPOSED.is_file())
+
+    def test_a_frozen_config_may_only_exist_with_no_open_decisions(self):
+        import yaml as _y
+        if not FROZEN.exists():
+            self.assertTrue(cfg()["blocking_decisions"])
+            return
+        frozen = _y.safe_load(FROZEN.read_text())
+        self.assertEqual(frozen["status"], "FROZEN")
+        self.assertEqual(frozen["blocking_decisions"], [])
+        self.assertEqual(frozen["supersedes"], PROPOSED.relative_to(ROOT).as_posix())
 
 
 # ------------------------------------------------------------------ scientific role / firewall

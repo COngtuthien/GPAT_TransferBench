@@ -1,5 +1,7 @@
 # M5 — ArtifactProbeNet Environment and Backbone Analysis (pre-flight)
 
+> **RESOLVED 2026-09-20.** Every question raised below was answered by the owner and frozen in `configs/frozen/artifact_probe.yaml` (sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`). The decision record is `M5_ARTIFACT_PROBE_OWNER_DECISIONS.md` and the contract summary is `M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md`. **The text below is preserved unchanged as the analysis that motivated those decisions.** M5 is still NOT_STARTED: nothing has been trained.
+
 **Date:** 2026-09-20 · Read-only. No model was trained and no checkpoint was written.
 
 ## 1. Measured environment
@@ -91,3 +93,7 @@ Two levels of reproducibility are distinguished, and the stronger one is **not p
   order are not guaranteed bit-reproducible across machines or driver versions, and nothing has been
   demonstrated here because nothing has been trained. If the owner wants this claim, it must be
   demonstrated on the actual training machine first.
+
+## Resolution (2026-09-20)
+
+**D-M5-04 resolved to FULL FINE-TUNE** (11,180,103 parameters, all trainable, `fc = Linear(512, 7)`). **E-M5-01 resolved to GPU_REQUIRED**: authoritative training runs on `sparc5090` at `/home/sparc/workdir/longnm/GPAT_TransferBench`; CPU fallback and disabling AMP are both forbidden, and the trainer refuses an authoritative run without CUDA (verified). The remote environment must be measured before training — see `M5_GPU_EXECUTION_PLAN.md`; no remote fact is assumed. The ResNet-18 weight hash was re-verified: `f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec`.

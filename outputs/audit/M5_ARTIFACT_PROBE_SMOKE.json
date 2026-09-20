@@ -1,0 +1,202 @@
+{
+  "authoritative_training": false,
+  "checkpoint_written": false,
+  "checks": {
+    "checkpoint_tie_keeps_earlier_epoch": true,
+    "config_frozen_and_hashed": true,
+    "cosine_reaches_eta_min": true,
+    "counts_match_split_manifest": true,
+    "embedding_512": true,
+    "embedding_unit_norm": true,
+    "epoch_1_starts_at_1e_4": true,
+    "frozen_path_equals_explicit_options": true,
+    "fully_trainable_backbone": true,
+    "macro_f1_fixed_seven_classes": true,
+    "no_synthetic_code_path": true,
+    "refuses_cpu_authoritative": true,
+    "refuses_non_frozen_config": true,
+    "refuses_test_dataset": true,
+    "refuses_test_split": true,
+    "seven_logits": true,
+    "transform_deterministic": true,
+    "transform_float32": true,
+    "transform_shape_3x224x224": true,
+    "transform_signed_residual": true,
+    "weighted_ce_in_frozen_class_order": true,
+    "weights_recomputed_from_manifest": true
+  },
+  "class_weights": [
+    0.5,
+    2.722943722943723,
+    3.0,
+    1.957115800865801,
+    1.0814831427076326,
+    0.7282291352058794,
+    0.9489046307228125
+  ],
+  "classes": [
+    "live",
+    "makeup",
+    "mask_2d",
+    "mask_3d",
+    "partial",
+    "print",
+    "replay"
+  ],
+  "config_sha256": "e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f",
+  "failed_checks": [],
+  "forward": {
+    "embedding_l2_norms": [
+      1.0,
+      0.9999999403953552,
+      1.0,
+      1.0
+    ],
+    "embedding_shape": [
+      4,
+      512
+    ],
+    "input_shape": [
+      4,
+      3,
+      224,
+      224
+    ],
+    "logits_finite": true,
+    "logits_shape": [
+      4,
+      7
+    ]
+  },
+  "loss": {
+    "class": "CrossEntropyLoss",
+    "computed_dtype": "float64",
+    "max_abs_float32_cast_error": 5.98626734849006e-08,
+    "reduction": "mean",
+    "value_finite": true,
+    "weight_dtype": "float32",
+    "weight_order_matches_classes": true
+  },
+  "metric": {
+    "empty_class_gives_zero_f1": true,
+    "perfect_macro_f1": 1.0,
+    "strict_improvement_replaces": true,
+    "tie_keeps_earlier_epoch": true,
+    "unpredicted_class_not_dropped": true
+  },
+  "model": {
+    "frozen_parameter_names": [],
+    "fully_trainable": true,
+    "in_features": 512,
+    "out_features": 7,
+    "total_parameters": 11180103,
+    "trainable_parameters": 11180103
+  },
+  "performance_claimed": false,
+  "refusals": {
+    "cpu_authoritative": true,
+    "non_frozen_config": true,
+    "test_dataset": true,
+    "test_split": true
+  },
+  "scheduler": {
+    "T_max": 30,
+    "epoch_1_lr": 0.0001,
+    "epoch_30_lr": 2.7390523158633003e-07,
+    "eta_min": 0.0,
+    "exact_matches": 13,
+    "implementation": "torch.optim.lr_scheduler.CosineAnnealingLR",
+    "lr_after_30_steps": 0.0,
+    "max_relative_difference_vs_analytic": 3.9572476536411106e-16,
+    "step": "once_per_epoch",
+    "warmup": null
+  },
+  "snapshot_byte_identical": true,
+  "status": "PASS",
+  "train_counts": {
+    "live": 5629,
+    "makeup": 759,
+    "mask_2d": 96,
+    "mask_3d": 1056,
+    "partial": 1911,
+    "print": 2838,
+    "replay": 2178
+  },
+  "transform": {
+    "TRAIN": {
+      "dtype": "float32",
+      "label_tokens": [
+        "print",
+        "replay",
+        "partial",
+        "print",
+        "live",
+        "replay",
+        "replay",
+        "replay"
+      ],
+      "labels": [
+        5,
+        6,
+        4,
+        5,
+        0,
+        6,
+        6,
+        6
+      ],
+      "max": 0.2926332354545593,
+      "mean": 1.0671421932784142e-06,
+      "min": -0.29233455657958984,
+      "n": 8,
+      "shape": [
+        3,
+        224,
+        224
+      ],
+      "signed": true
+    },
+    "VAL": {
+      "dtype": "float32",
+      "label_tokens": [
+        "replay",
+        "print",
+        "print",
+        "partial",
+        "live",
+        "print",
+        "print",
+        "partial"
+      ],
+      "labels": [
+        6,
+        5,
+        5,
+        4,
+        0,
+        5,
+        5,
+        4
+      ],
+      "max": 0.3375665545463562,
+      "mean": 1.5453322703251615e-05,
+      "min": -0.27748769521713257,
+      "n": 8,
+      "shape": [
+        3,
+        224,
+        224
+      ],
+      "signed": true
+    }
+  },
+  "val_counts": {
+    "live": 1216,
+    "makeup": 159,
+    "mask_2d": 24,
+    "mask_3d": 224,
+    "partial": 406,
+    "print": 623,
+    "replay": 469
+  }
+}

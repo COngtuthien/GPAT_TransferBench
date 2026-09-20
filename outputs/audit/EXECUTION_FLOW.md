@@ -578,3 +578,39 @@ Artifacts: `pair_train_stats_v1.json` `a7ccabb0…`, `pairs_train_v1.parquet` `a
 11. **Left M5 NOT_STARTED.** No frozen config, no model, no checkpoint, no training log,
     `models/artifact_probe/` absent. Analysis and scaffolding do not start a milestone.
 
+## M5 owner resolution (2026-09-20) — contract frozen, M5 still NOT_STARTED
+
+1. **Verified the starting state**: HEAD `98315be`, clean tree, M4 COMPLETE /
+   `FINALIZED_UNDER_AMENDMENT_A1`, M5 and M6 NOT_STARTED, and the five frozen M2/M3/M4 hashes
+   unchanged.
+2. **Recomputed the population from the manifest rather than trusting the pre-flight report.**
+   TRAIN 14,467 / VAL 3,121 and all fourteen per-class counts were asserted against the expected
+   values; a mismatch would have stopped the pass.
+3. **Froze the seven-class contract** (`live, makeup, mask_2d, mask_3d, partial, print, replay`),
+   excluding `other_spoof` because it has zero observations — no unused output logit is created.
+4. **Recomputed the class weights in float64** as `clip(N/(K·n_c), 0.5, 3.0)`: `live` pins to 0.5,
+   `mask_2d` to 3.0, and the other five carry genuine inverse-frequency weighting. The trainer
+   recomputes them at runtime and refuses on any mismatch.
+5. **Froze the input pipeline**: whole 256×256 canonical face, no crop, `uint8/255`, OpenCV
+   `INTER_AREA` 256→224, per-channel `GaussianBlur(9×9, σ1.5, BORDER_REFLECT_101)`, signed
+   residual, **no post-high-pass normalisation**. `frozen_probe_input` is the single entry point;
+   the candidate API keeps its no-default arguments so the two cannot be confused.
+6. **Froze the backbone as a full fine-tune**: `resnet18(IMAGENET1K_V1)` with `fc → Linear(512, 7)`
+   and all 11,180,103 parameters trainable, with the seed set before the classifier is built. The
+   weight hash `f37072fd47e89c…` was re-verified.
+7. **Implemented the single trainer** (`gpatbench.probe.train.run`) plus contract, data, metrics and
+   model modules, and wired `python -m gpatbench.cli train-probe`. It refuses rather than adapts:
+   non-frozen config, changed hashes, CPU authoritative run, TEST split, synthetic data, count or
+   weight mismatch, wrong weight hash.
+8. **Ran the CPU-safe smoke — PASS, 22/22.** Real faces through the frozen transform (signed,
+   `3×224×224`, float32, deterministic), one forward pass (7 logits, 512-D unit-norm embedding),
+   the weighted loss in frozen class order, the fixed-class macro-F1 with its zero-division and
+   tie rules, the cosine sequence (epoch 1 = 1e-4, LR → 0 after 30 steps), and every refusal.
+   **No `optimizer.step()` on real data, no checkpoint, no performance claim.**
+9. **Resolved E-M5-01 to GPU_REQUIRED** and wrote the GPU execution plan: repository sync, a
+   minimal ≈1.7 GB faces bundle (geometry/identity caches, frames and raw data are *not* needed),
+   a resume-safe rsync, integrity verification against the frozen M2 provenance, and the full list
+   of remote environment checks. **Nothing was transferred and no remote fact was measured.**
+10. **Left M5 NOT_STARTED**, pre-flight status `READY_FOR_GPU_EXECUTION_PREFLIGHT`. A frozen
+    contract and a refusing trainer do not start a milestone.
+

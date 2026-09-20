@@ -100,7 +100,7 @@ marked BLOCKED_BY_SOURCE_GAP.
 | Q-04 | M1/M2 | 3.4 | Definition of a "valid frame" (decode success only, or face-detected) is not stated. |
 | Q-05 | M7 | 5.3, 9.2, 10.3 | Identity adversary uses a GRL (coef 1.0) **and** `L_G` subtracts `λ_idadv·L_identity-adversary`; applying both could double-reverse the gradient. Intended sign convention needs confirmation. |
 | Q-06 | M11 | 14.2 | DINOv3 table does not state warmup, scheduler/min LR, AMP or grad clip; only batch composition, augmentation, checkpoint/threshold are "same as ResNet-18". |
-| Q-07 | M5 | 12.1 | ArtifactProbeNet input is 224×224 from 256×256 faces; resize vs crop method not stated. **Extended 2026-09-20 (M5 pre-flight):** the same pipeline also leaves the resize/high-pass order, the interpolation and the Gaussian border mode open; measured impacts up to 0.084, 0.132 and 0.599 against a typical residual peak of 0.245. Still OPEN. |
+| Q-07 | M5 | 12.1 | ArtifactProbeNet input is 224×224 from 256×256 faces; resize vs crop method not stated. **Extended 2026-09-20 (M5 pre-flight):** the same pipeline also leaves the resize/high-pass order, the interpolation and the Gaussian border mode open; measured impacts up to 0.084, 0.132 and 0.599 against a typical residual peak of 0.245. Still OPEN. **RESOLVED 2026-09-20 by the owner** as `RESOLVED_BY_OWNER_FULL_FACE_RESIZE_THEN_HP`: whole 256 face, no crop, OpenCV INTER_AREA 256→224, then GaussianBlur 9×9 σ1.5 BORDER_REFLECT_101, signed residual. |
 | Q-08 | M6 | 8.5, 30 | PCGAN (R7) has no code link in spec; status depends on code availability at implementation time. |
 | Q-09 | M6 | 8.4, 30 | Physics-Guided STD (R2) has no code link; FAITHFUL_PAPER unless a verified official release is found. |
 | Q-10 | M9 | 13 | LPIPS-Alex and KID (Inception feature extractor) implementations/weights not named. |
@@ -746,4 +746,42 @@ Four of the six spoof `attack_macro` classes (`makeup`, `mask_2d`, `mask_3d`, `p
 partly by recognising the dataset rather than the attack family. The §13 metrics that consume it are
 computed within a dataset, so they remain usable, but no cross-dataset reading of probe classes is
 supported and none may be claimed.
+
+## M5 owner resolution (2026-09-20) — ArtifactProbeNet contract frozen
+
+**No deviation was opened and nothing was trained.** All nine contract decisions and the
+environment blocker raised at the M5 pre-flight are resolved by the owner and frozen in
+`configs/frozen/artifact_probe.yaml` (sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`), with a byte-identical snapshot and **0**
+unresolved execution-affecting fields. The pre-flight analysis is preserved unchanged under
+"RESOLVED" banners; `configs/proposed/artifact_probe.proposed.yaml` is kept as history.
+
+**These are owner resolutions of details spec §12.1 left under-specified. The frozen specification
+did not uniquely dictate them and no report may say otherwise.**
+
+| id | resolution token | effect |
+|---|---|---|
+| D-M5-01 | `RESOLVED_BY_OWNER_LIVE_PLUS_SPOOF_ATTACK_MACRO` | K = 7 (`live` included); TRAIN 14,467 / VAL 3,121; `other_spoof` excluded (0 observations, no unused logit) |
+| D-M5-02 | `RESOLVED_BY_OWNER_BALANCED_INVERSE_FREQUENCY` | `w = clip(N/(K·n_c), 0.5, 3.0)`, float64, TRAIN only, no renormalisation. `live` 0.5 (clipped low), `mask_2d` 3.0 (clipped high), five classes unclipped |
+| Q-07 | `RESOLVED_BY_OWNER_FULL_FACE_RESIZE_THEN_HP` | whole face, no crop, INTER_AREA 256→224, then Gaussian 9×9 σ1.5 `BORDER_REFLECT_101`, signed residual |
+| D-M5-03 | `RESOLVED_BY_OWNER_NO_POST_HP_IMAGENET_NORMALIZATION` | the only scaling is `uint8/255`; pretrained initialization is explicitly **not** a reason to ImageNet-normalise a signed residual |
+| D-M5-04 | `RESOLVED_BY_OWNER_FULL_FINE_TUNE` | `fc → Linear(512, 7)`; all 11,180,103 parameters trainable under one AdamW |
+| D-M5-05 | `RESOLVED_BY_OWNER_FIXED_CLASS_SET_MACRO_F1` | 7×7 int confusion matrix, zero-division → 0, unpredicted classes never dropped, no sklearn |
+| D-M5-06 | `RESOLVED_BY_OWNER_MAX_VAL_MACRO_F1_EARLIEST_TIE` | strict `>` replacement, so an exact tie keeps the earlier epoch |
+| D-M5-07 | `RESOLVED_BY_OWNER_LITERAL_COSINE_NO_WARMUP` | `CosineAnnealingLR(T_max=30, eta_min=0)` stepped once per epoch; epoch 1 at 1e-4; the §14 warmup is not imported |
+| D-M5-08 | `RESOLVED_BY_OWNER_NO_DATA_AUGMENTATION` | deterministic resize + high-pass only; §14.1 stays scoped to the downstream evaluator |
+| E-M5-01 | `RESOLVED_BY_OWNER_GPU_REQUIRED` | authoritative training on `sparc5090`; CPU fallback and disabling AMP are forbidden; the trainer refuses a CPU authoritative run (verified) |
+
+### Preserved limitation (deliberately not corrected)
+
+`makeup`, `mask_2d`, `mask_3d` and `partial` occur **only** in SiW-Mv2 in the current population.
+The owner directed that this must **not** be "fixed" by resampling, dataset balancing, label
+merging or dropping classes. ArtifactProbeNet is a frozen pooled measurement tool and some attack
+classes are dataset-specific in the available corpus; later generator metrics must be interpreted
+accordingly.
+
+### Milestone status
+
+M5 remains **NOT_STARTED** with pre-flight status `READY_FOR_GPU_EXECUTION_PREFLIGHT`. Freezing a
+contract, implementing a trainer and running a CPU-safe smoke do not start a milestone. No remote
+GPU fact has been measured; `M5_GPU_EXECUTION_PLAN.md` lists the checks still to perform.
 

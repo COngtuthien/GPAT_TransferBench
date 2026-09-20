@@ -33,6 +33,16 @@ POST_NORMALIZATIONS = ("none", "imagenet")
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
 
+# ---------------------------------------------------------------- FROZEN 2026-09-20 (owner)
+# Q-07  RESOLVED_BY_OWNER_FULL_FACE_RESIZE_THEN_HP
+# D-M5-03 RESOLVED_BY_OWNER_NO_POST_HP_IMAGENET_NORMALIZATION
+FROZEN = {
+    "resize_order": "resize_then_highpass",
+    "interpolation": "area",              # OpenCV INTER_AREA, full 256 -> 224, no crop
+    "border_mode": "reflect101",          # cv2.BORDER_REFLECT_101
+    "post_normalization": "none",         # a signed residual is NOT ImageNet-normalised
+}
+
 
 class ProbeContractError(RuntimeError):
     """An unresolved ArtifactProbeNet choice was left unspecified or given an unknown value."""
@@ -115,3 +125,13 @@ def probe_input(rgb_uint8, *, resize_order: str, interpolation: str, border_mode
         x = resize(x, size, interpolation=interpolation)
     x = normalize(x, post_normalization=post_normalization)
     return np.ascontiguousarray(np.transpose(x, (2, 0, 1)).astype(np.float32))
+
+
+def frozen_probe_input(rgb_uint8) -> np.ndarray:
+    """The FROZEN ArtifactProbeNet input (owner resolution of Q-07 and D-M5-03).
+
+    canonical 256x256 RGB uint8 -> float32 [0,1] -> INTER_AREA resize to 224 (whole face, no crop)
+    -> per-channel GaussianBlur(9x9, sigma 1.5, BORDER_REFLECT_101) -> signed residual -> CHW float32.
+    No augmentation, no cropping, no post-high-pass normalisation, no clipping of the residual.
+    """
+    return probe_input(rgb_uint8, **FROZEN)

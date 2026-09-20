@@ -1,0 +1,307 @@
+# artifact_probe — FROZEN 2026-09-20. Owner resolution of the M5 pre-flight decisions.
+#
+# Spec §12.1 fixes the shape of ArtifactProbeNet but left ten execution-affecting details open.
+# The owner resolved them on 2026-09-20. These are OWNER RESOLUTIONS OF UNDER-SPECIFIED
+# IMPLEMENTATION DETAILS — the frozen specification did not uniquely dictate them, and they must
+# not be reported as if it had.
+#
+# Pre-decision history (preserved): configs/proposed/artifact_probe.proposed.yaml
+# Decision record: outputs/audit/M5_ARTIFACT_PROBE_OWNER_DECISIONS.md
+# Frozen contract: outputs/audit/M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md
+version: artifact_probe_v1
+status: FROZEN
+frozen_utc: "2026-09-20"
+supersedes: configs/proposed/artifact_probe.proposed.yaml
+milestone: M5
+milestone_status: NOT_STARTED            # no authoritative training has run
+preflight_status: READY_FOR_GPU_EXECUTION_PREFLIGHT
+resolves: [D-M5-01, D-M5-02, Q-07, D-M5-03, D-M5-04, D-M5-05, D-M5-06, D-M5-07, D-M5-08, E-M5-01]
+blocking_decisions: []
+decision_provenance: >-
+  Owner resolutions (2026-09-20) of details spec §12.1 left open. They are benchmark-implementation
+  decisions, not literature-derived facts, and the original specification did not uniquely
+  determine them.
+spec_basis: "§12.1 ArtifactProbeNet; §4 high-pass operator; §13 artifact metrics; §24 CLI"
+
+references:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  fair_track_config: configs/frozen/fair_track_v1.yaml
+  preprocess_config: configs/frozen/preprocess_v1.yaml
+  amendment_a1: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md
+  class_weight_audit: outputs/audit/M5_ARTIFACT_PROBE_CLASS_WEIGHTS.csv
+  implementation: gpatbench/probe/
+
+# ---------------------------------------------------------------- role and firewall
+role:
+  purpose: >-
+    Independent evaluation of whether synthetic samples preserve source attack-family evidence.
+  is_gpat_e_art: false                   # spec §12.1: "it is never the GPAT E_art network"
+  is_downstream_detector: false
+amendment_a1_firewall:
+  status: COMPLIANT
+  basis: >-
+    Track A forbids attack-type supervision for GENERATORS (spec §5.1; Amendment A1).
+    ArtifactProbeNet is an independent measurement tool, and spec §12.1 permits fine-grained labels
+    here explicitly "because the labels are not fed back to the generator or downstream detector".
+  probe_labels_enter_generator_optimization: false
+  probe_predictions_select_or_modify_track_a_training_samples: false
+  probe_predictions_decide_common_pair_membership: false
+  probe_predictions_decide_generator_checkpoint_selection: false
+  probe_gradients_touch_generator_parameters: false
+  attack_macro_exported_as_generator_input: false
+  probe_frozen_before_synthetic_evaluation: true
+
+# ---------------------------------------------------------------- D-M5-01 population
+population:
+  decision: RESOLVED_BY_OWNER_LIVE_PLUS_SPOOF_ATTACK_MACRO
+  label_field: attack_macro
+  train_split: TRAIN
+  val_split: VAL
+  test_split_usage: NEVER
+  synthetic_samples: NONE
+  usable_rows_only: M2_COMPLETE
+  train_rows: 14467
+  val_rows: 3121
+  rationale: >-
+    `live` is an authoritative attack_macro token in the frozen §3.2 enum and is populated on every
+    real row. Including it lets the probe report that a synthetic image lost enough attack evidence
+    to look live, which is exactly what the §13 attack-consistency metric needs.
+
+# ---------------------------------------------------------------- class contract
+classes:
+  decision: FROZEN_LEXICAL_SEVEN_CLASS
+  K: 7
+  order: [live, makeup, mask_2d, mask_3d, partial, print, replay]   # lexical ascending
+  index_map: {live: 0, makeup: 1, mask_2d: 2, mask_3d: 3, partial: 4, print: 5, replay: 6}
+  excluded: [other_spoof]
+  excluded_reason: "zero TRAIN and zero VAL observations; no unused output logit is created"
+  train_counts: {live: 5629, makeup: 759, mask_2d: 96, mask_3d: 1056,
+                 partial: 1911, print: 2838, replay: 2178}
+  val_counts: {live: 1216, makeup: 159, mask_2d: 24, mask_3d: 224,
+               partial: 406, print: 623, replay: 469}
+  counts_must_be_asserted_against_split_manifest: true
+  on_count_mismatch: HARD_ERROR
+
+# ---------------------------------------------------------------- D-M5-02 class weights
+class_weights:
+  decision: RESOLVED_BY_OWNER_BALANCED_INVERSE_FREQUENCY
+  scope: TRAIN_ONLY
+  dtype: float64
+  formula: "w_raw(c) = N / (K * n_c); w(c) = min(3.0, max(0.5, w_raw(c)))"
+  N: 14467
+  K: 7
+  clip: [0.5, 3.0]
+  renormalize_after_clip: false
+  w_raw:
+    live: 0.367154785168642
+    makeup: 2.722943722943723
+    mask_2d: 21.52827380952381
+    mask_3d: 1.957115800865801
+    partial: 1.0814831427076326
+    print: 0.7282291352058794
+    replay: 0.9489046307228125
+  w_clipped:                             # tensor order == classes.order
+    live: 0.5
+    makeup: 2.722943722943723
+    mask_2d: 3.0
+    mask_3d: 1.957115800865801
+    partial: 1.0814831427076326
+    print: 0.7282291352058794
+    replay: 0.9489046307228125
+  clipped_low: [live]
+  clipped_high: [mask_2d]
+  forbidden: [raw_inverse_1_over_n, renormalize_after_clip, per_dataset_weights,
+              weighted_random_sampler, weights_from_val, weights_from_test]
+  recomputation_required_at_runtime: true
+  on_weight_mismatch: HARD_ERROR
+
+# ---------------------------------------------------------------- Q-07 + D-M5-03 input pipeline
+input:
+  decision: RESOLVED_BY_OWNER_FULL_FACE_RESIZE_THEN_HP
+  source_image: "frozen M2 canonical face, 256x256 RGB uint8"
+  crop: NONE                              # no center crop, no RandomResizedCrop
+  steps:
+    - {n: 1, op: load_canonical_face, detail: "256x256 RGB uint8, exact frozen bytes"}
+    - {n: 2, op: to_float, detail: "RGB uint8 -> float32 / 255.0, channel order RGB"}
+    - {n: 3, op: resize, detail: "complete image 256x256 -> 224x224, OpenCV INTER_AREA"}
+    - {n: 4, op: gaussian_blur, detail: "per RGB channel, 9x9, sigma_x=sigma_y=1.5, BORDER_REFLECT_101"}
+    - {n: 5, op: high_pass, detail: "HP = resized_rgb - blurred_rgb, SIGNED"}
+    - {n: 6, op: to_chw, detail: "float32 tensor 3x224x224"}
+  resize: {from: 256, to: 224, interpolation: INTER_AREA, library: opencv,
+           stochastic_geometry: false}
+  gaussian: {kernel: [9, 9], sigma_x: 1.5, sigma_y: 1.5, implementation: cv2.GaussianBlur,
+             border: BORDER_REFLECT_101, auto_derived_kernel: false}
+  pixel_domain: {before_resize_and_hp: "float32 [0,1]", channel_order: RGB}
+  residual: {signed: true, clip_to_unit_interval: false, add_offset: false, to_uint8: false,
+             absolute_value: false, squared: false, grayscale: false}
+  post_hp_normalization:
+    decision: RESOLVED_BY_OWNER_NO_POST_HP_IMAGENET_NORMALIZATION
+    imagenet_mean_subtraction: false
+    imagenet_std_division: false
+    dataset_mean_std: false
+    min_max: false
+    note: >-
+      Pretrained initialization is NOT a requirement to apply natural-RGB ImageNet normalization to
+      a signed residual domain. The only scaling applied anywhere is uint8 -> float32 / 255.0 before
+      resize and high-pass.
+  output_tensor: {dtype: float32, shape: [3, 224, 224]}
+
+# ---------------------------------------------------------------- D-M5-04 backbone
+backbone:
+  decision: RESOLVED_BY_OWNER_FULL_FINE_TUNE
+  model: torchvision.models.resnet18
+  weights_enum: torchvision.models.ResNet18_Weights.IMAGENET1K_V1
+  weight_sha256: f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec
+  weight_substitution: FORBIDDEN
+  classifier: {replaces: model.fc, module: "torch.nn.Linear(512, 7)",
+               initialization: pytorch_default_under_seed_42,
+               custom_initialization: false,
+               note: "classifier is newly initialized; the backbone uses pretrained IMAGENET1K_V1"}
+  seed_set_before_classifier_construction: true
+  trainable: [conv1, bn1, layer1, layer2, layer3, layer4, fc]
+  frozen_parameters: NONE
+  differential_lr: false
+  gradual_unfreeze: false
+  optimizer_covers: all_trainable_parameters
+
+# ---------------------------------------------------------------- D-M5-07 optimization
+optimization:
+  optimizer: AdamW
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  batch_size: 64
+  epochs: 30
+  scheduler:
+    decision: RESOLVED_BY_OWNER_LITERAL_COSINE_NO_WARMUP
+    implementation: torch.optim.lr_scheduler.CosineAnnealingLR
+    T_max: 30
+    eta_min: 0.0
+    step_granularity: once_per_epoch
+    step_position: "after the epoch's optimizer updates AND after that epoch's validation/checkpoint measurement"
+    epoch_1_lr: 1.0e-4
+    warmup: NONE
+    restarts: false
+    per_batch_cosine: false
+    min_lr_1e_6: false
+    lr_sequence_evidence: outputs/audit/M5_ARTIFACT_PROBE_LR_SCHEDULE.csv
+  loss: {name: cross_entropy, weighting: frozen_class_weights, reduction: mean}
+  amp:
+    enabled: true
+    autocast: 'torch.autocast(device_type="cuda", dtype=torch.float16)'
+    grad_scaler: 'torch.amp.GradScaler("cuda")'
+    cpu_fallback: FORBIDDEN
+    bfloat16_fallback: FORBIDDEN
+    float32_fallback: FORBIDDEN
+    on_unsupported: STOP_AND_REPORT
+
+# ---------------------------------------------------------------- D-M5-08 data pipeline
+augmentation:
+  decision: RESOLVED_BY_OWNER_NO_DATA_AUGMENTATION
+  any: false
+  forbidden: [RandomResizedCrop, RandomHorizontalFlip, ColorJitter, RandomErasing, rotation,
+              affine, blur_augmentation, noise_augmentation, MixUp, CutMix]
+  rationale: >-
+    §12.1 specifies no augmentation for this probe, and importing the §14.1 downstream augmentation
+    would be an undocumented protocol change (it would also silently resolve the Q-07 geometry).
+
+dataloader:
+  train: {shuffle: true, batch_size: 64, drop_last: false}
+  val: {shuffle: false, batch_size: 64, drop_last: false,
+        order: canonical_deterministic_by_sample_id}
+  gpu_defaults: {num_workers: 4, pin_memory: true, persistent_workers: true, prefetch_factor: 2}
+  seed: 42
+  train_shuffle_generator: "explicit torch.Generator seeded with 42"
+  worker_seeding: "each worker derives deterministic Python random / NumPy / torch seeds from the frozen seed"
+  membership_depends_on_worker_scheduling: false
+
+# ---------------------------------------------------------------- D-M5-05 / D-M5-06 validation
+validation:
+  metric:
+    decision: RESOLVED_BY_OWNER_FIXED_CLASS_SET_MACRO_F1
+    name: macro_f1
+    class_set: frozen_seven_class_order
+    confusion_matrix: {shape: [7, 7], dtype: int64, population: all_real_VAL_samples}
+    precision: "TP / (TP + FP); 0 if the denominator is 0"
+    recall: "TP / (TP + FN); 0 if the denominator is 0"
+    f1: "2*P*R / (P + R); 0 if the denominator is 0"
+    macro_f1: "arithmetic mean of F1 over all 7 frozen classes"
+    drop_unpredicted_classes: false
+    depends_on_sklearn: false
+    forbidden: [weighted_f1, micro_f1, dataset_macro_averaging]
+  checkpoint:
+    decision: RESOLVED_BY_OWNER_MAX_VAL_MACRO_F1_EARLIEST_TIE
+    evaluate_epochs: [1, 30]
+    rule: "replace best only when new_macro_f1 > best_macro_f1 (strict >, never >=)"
+    tie_break: earlier_epoch
+    epsilon_tie_window: NONE
+    training_loss_as_tie_break: false
+    test_involvement: NONE
+    freeze_after_selection: true
+
+# ---------------------------------------------------------------- embedding
+embedding:
+  layer: resnet18_penultimate_after_global_average_pool_before_fc
+  dim: 512
+  l2_normalize: 'torch.nn.functional.normalize(embedding, p=2, dim=1, eps=1.0e-12)'
+  eps: 1.0e-12
+  use_classifier_logits: false
+  projection_head: NONE
+  later_use: ["spec §13 artifact embedding cosine", "spec §13 attack consistency",
+              "spec §12.2 fingerprint probe"]
+
+# ---------------------------------------------------------------- E-M5-01 execution machine
+execution:
+  decision: RESOLVED_BY_OWNER_GPU_REQUIRED
+  cpu_authoritative_training: FORBIDDEN
+  disable_amp: FORBIDDEN
+  remote_host: sparc5090
+  remote_project_root: /home/sparc/workdir/longnm/GPAT_TransferBench
+  gpu_execution_preflight_required: true
+  gpu_execution_preflight_plan: outputs/audit/M5_GPU_EXECUTION_PLAN.md
+  assume_remote_facts_before_measuring: false
+
+determinism:
+  seed: 42
+  seed_targets: [python_random, numpy, torch_cpu, torch_cuda, torch_cuda_all_devices,
+                 dataloader_generator, worker_rngs]
+  cudnn_benchmark: false
+  cudnn_deterministic: true
+  use_deterministic_algorithms: true
+  tf32_matmul: false
+  tf32_cudnn: false
+  float32_matmul_precision: highest
+  on_missing_deterministic_kernel: STOP
+  disable_deterministic_guard_silently: FORBIDDEN
+  reproducibility_level: scientific
+  byte_identical_checkpoint_across_gpu_architectures: NOT_PROMISED
+
+# ---------------------------------------------------------------- disclosed limitation
+disclosed_limitation:
+  id: class_dataset_confound
+  statement: >-
+    makeup, mask_2d, mask_3d and partial occur only in SiW-Mv2 in the current population; only
+    print and replay span all three datasets. ArtifactProbeNet is a frozen pooled measurement tool
+    and some attack classes are dataset-specific in the available corpus.
+  must_not_be_fixed_by: [resampling, dataset_balancing, label_merging, dropping_classes]
+  consequence: "later generator metrics must be interpreted accordingly"
+
+# ---------------------------------------------------------------- planned outputs
+outputs:
+  created_by: M5_execution                # NOT created in this pass
+  checkpoint: models/artifact_probe/artifact_probe_v1.pt
+  training_log: outputs/audit/M5_PROBE_TRAINING_LOG.jsonl
+  epoch_metrics: outputs/audit/M5_PROBE_EPOCH_METRICS.csv
+  selection_report: outputs/audit/M5_PROBE_SELECTION_REPORT.md
+  class_mapping: manifests/artifact_probe_classes_v1.json
+  environment_lock: environments/m5_probe_gpu.lock.txt
+  checkpoint_sha_record: outputs/audit/artifact_probe_v1.sha256
+  checkpoint_committed_to_git: false      # *.pt is git-ignored; the SHA256 is recorded instead
+
+cli:
+  command: "python -m gpatbench.cli train-probe --config configs/frozen/artifact_probe.yaml"
+  single_code_path: gpatbench.probe.train.run
+  hard_refusals: [non_frozen_config, cpu_authoritative_execution, test_split, synthetic_data,
+                  wrong_resnet_weight_hash, wrong_config_hash, wrong_split_manifest_hash,
+                  count_mismatch, weight_mismatch]
+membership_in_this_file: false

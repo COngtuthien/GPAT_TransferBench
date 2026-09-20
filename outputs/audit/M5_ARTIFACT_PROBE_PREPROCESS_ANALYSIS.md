@@ -1,5 +1,7 @@
 # M5 — ArtifactProbeNet Preprocessing Analysis (pre-flight)
 
+> **RESOLVED 2026-09-20.** Every question raised below was answered by the owner and frozen in `configs/frozen/artifact_probe.yaml` (sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`). The decision record is `M5_ARTIFACT_PROBE_OWNER_DECISIONS.md` and the contract summary is `M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md`. **The text below is preserved unchanged as the analysis that motivated those decisions.** M5 is still NOT_STARTED: nothing has been trained.
+
 **Date:** 2026-09-20 · Read-only measurement on 36 frozen M2 canonical faces (12 per dataset,
 deterministically hash-selected from TRAIN+VAL only — **TEST was never opened**).
 Tool: `tools/m5_probe_preprocess_probe.py` · Data: `M5_HP_VARIANT_MEASUREMENTS.json`
@@ -87,3 +89,7 @@ Tested properties that hold for **every** variant (`tests/test_m5_probe_prefligh
 `3×224×224`, float32, constant image → exactly zero in the interior, signed residual preserved,
 channel order preserved as RGB, repeated calls bit-identical, and a known impulse response matching
 an explicitly constructed Gaussian kernel.
+
+## Resolution (2026-09-20)
+
+**Q-07 and D-M5-03 resolved.** Whole 256×256 canonical face, **no crop**; `uint8 → float32/255`; **OpenCV `INTER_AREA`** resize 256→224; then per-channel `GaussianBlur(9×9, σ=1.5, BORDER_REFLECT_101)`; signed residual; **no post-high-pass normalisation of any kind**. Output float32 `3×224×224`, RGB. The frozen entry point is `gpatbench.probe.preprocess.frozen_probe_input`, and the candidate API above keeps its no-default arguments so the two cannot be confused.

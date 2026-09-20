@@ -1,5 +1,7 @@
 # M5 — ArtifactProbeNet Data Feasibility (pre-flight)
 
+> **RESOLVED 2026-09-20.** Every question raised below was answered by the owner and frozen in `configs/frozen/artifact_probe.yaml` (sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`). The decision record is `M5_ARTIFACT_PROBE_OWNER_DECISIONS.md` and the contract summary is `M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md`. **The text below is preserved unchanged as the analysis that motivated those decisions.** M5 is still NOT_STARTED: nothing has been trained.
+
 **Date:** 2026-09-20 · Read-only. Machine-readable: `M5_ARTIFACT_PROBE_PREFLIGHT.json`
 Tool: `tools/m5_probe_preflight.py` · Source: `manifests/split_v1.parquet` (`fb9aeb36…`, unchanged)
 
@@ -98,3 +100,7 @@ this machine has no GPU. Fabricating one would be worse than omitting it.
 Storage: the probe reads the existing frozen M2 canonical faces in place. **No new image storage is
 required** — the high-pass input is computed on the fly. The only new persistent artifacts would be
 the checkpoint (≈ 45 MiB, git-ignored) and small text/JSON records.
+
+## Resolution (2026-09-20)
+
+**D-M5-01 resolved to candidate B: LIVE + spoof, K = 7.** The frozen population is TRAIN 14,467 / VAL 3,121 with the seven lexical classes; `other_spoof` is excluded because it has zero observations in both splits and no unused logit is created. 227 batches/epoch at batch 64 with `drop_last=false`. The SiW-only confound described above is **preserved, not corrected** — no resampling, balancing, merging or class dropping.

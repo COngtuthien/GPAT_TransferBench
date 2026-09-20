@@ -1,5 +1,7 @@
 # M5 — ArtifactProbeNet Contract Analysis (pre-flight)
 
+> **RESOLVED 2026-09-20.** Every question raised below was answered by the owner and frozen in `configs/frozen/artifact_probe.yaml` (sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`). The decision record is `M5_ARTIFACT_PROBE_OWNER_DECISIONS.md` and the contract summary is `M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md`. **The text below is preserved unchanged as the analysis that motivated those decisions.** M5 is still NOT_STARTED: nothing has been trained.
+
 **Date:** 2026-09-20 · **Milestone state: M5 NOT_STARTED** · Nothing was trained; no checkpoint exists.
 **Verdict: READY_FOR_OWNER_DECISIONS** — 9 execution-affecting items are unresolved, plus one
 environment blocker. Proposed contract: `configs/proposed/artifact_probe.proposed.yaml`.
@@ -102,3 +104,7 @@ refuses to run, and the proposed config.
 
 Not produced: any frozen config, any model, any checkpoint, any training log. `models/artifact_probe/`
 does not exist. M5 stays **NOT_STARTED** — scaffolding and analysis do not start a milestone.
+
+## Resolution (2026-09-20)
+
+All nine contract decisions and the environment blocker are resolved; `configs/frozen/artifact_probe.yaml` is frozen with **0** unresolved execution-affecting fields, and the CPU-safe smoke passes 22/22 checks. M5 remains **NOT_STARTED** with pre-flight status `READY_FOR_GPU_EXECUTION_PREFLIGHT`: analysis, a frozen contract and a refusing trainer do not start a milestone.

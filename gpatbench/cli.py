@@ -1,5 +1,5 @@
 """GPAT-TransferBench CLI (spec §24): `inventory` (M1), `split`/`audit-split` (M3), `build-pairs` (M4),
-`train-probe` (M5 — pre-flight guard only; it refuses to train while the contract is unfrozen)."""
+`train-probe` (M5)."""
 from __future__ import annotations
 
 import argparse
@@ -97,32 +97,36 @@ def cmd_build_pairs(args) -> int:
 
 
 def cmd_train_probe(args) -> int:
-    """M5: ArtifactProbeNet (spec §12.1) — PRE-FLIGHT GUARD, not a trainer.
+    """M5: ArtifactProbeNet (spec §12.1 + the 2026-09-20 owner resolutions).
 
-    The frozen contract does not exist yet: eight execution-affecting decisions are still open
-    (see configs/proposed/artifact_probe.proposed.yaml). This subcommand therefore exists to hold
-    the spec's CLI surface and to refuse, so nothing can train by accident and no second training
-    implementation is created behind it.
+    This is the only ArtifactProbeNet training code path; it delegates to
+    `gpatbench.probe.train.run`. It refuses a non-frozen config, a changed hash, a CPU
+    authoritative run, a TEST split, synthetic data or a wrong ResNet weight hash. `--dry-run`
+    performs the CPU-safe contract preflight and never calls `optimizer.step()`.
     """
-    import yaml
+    from gpatbench.probe import contract as C
+    from gpatbench.probe import train as T
     cfg = Path(args.config)
-    frozen = PROJECT_ROOT / "configs/frozen/artifact_probe.yaml"
-    if not cfg.is_file():
-        raise SystemExit(
-            f"STOP: {args.config} does not exist. M5 is NOT_STARTED and the ArtifactProbeNet "
-            "contract is not frozen; see configs/proposed/artifact_probe.proposed.yaml.")
-    if cfg.resolve() != frozen.resolve():
-        raise SystemExit(f"STOP: M5 runs only against {frozen.relative_to(PROJECT_ROOT)}, "
-                         f"got {args.config}")
-    doc = yaml.safe_load(cfg.read_text())
-    blockers = list(doc.get("blocking_decisions") or [])
-    if doc.get("status") != "FROZEN" or blockers:
-        raise SystemExit(
-            f"STOP: the ArtifactProbeNet contract is not frozen (status={doc.get('status')!r}, "
-            f"open decisions={blockers}). Training is refused.")
-    raise SystemExit(
-        "STOP: the M5 trainer is not implemented in this pre-flight pass. The contract is frozen, "
-        "so implementing it is the next authorized step.")
+    if cfg.resolve() != C.FROZEN_CONFIG.resolve():
+        raise SystemExit(f"STOP: M5 runs only against "
+                         f"{C.FROZEN_CONFIG.relative_to(PROJECT_ROOT)}, got {args.config}")
+    try:
+        out = T.run(cfg, dry_run=args.dry_run)
+    except C.ProbeContractViolation as exc:
+        raise SystemExit(f"STOP: {exc}")
+    head, dirty = git_state()
+    record = {"command": f"python -m gpatbench.cli train-probe --config {args.config}"
+                         + (" --dry-run" if args.dry_run else ""),
+              "git_commit": head, "git_dirty": dirty, "code_tree_sha256": _code_tree_sha256(),
+              "python": sys.version.split()[0], "platform": platform.platform(),
+              "config_sha256": C.sha256_file(C.FROZEN_CONFIG),
+              "dry_run": out["dry_run"], "classes": out["classes"],
+              "class_weights": out["class_weights"], "model": out["model"],
+              "environment": out["environment"],
+              "resnet18_weight_sha256": out["resnet18_weight_sha256"],
+              "checkpoint_written": out["checkpoint_written"], "note": out.get("note")}
+    print(json.dumps(record, indent=1))
+    return 0
 
 
 def main(argv=None) -> int:
@@ -147,6 +151,8 @@ def main(argv=None) -> int:
     tp = sub.add_parser("train-probe",
                         help="M5: ArtifactProbeNet (pre-flight guard; refuses to train)")
     tp.add_argument("--config", required=True)
+    tp.add_argument("--dry-run", action="store_true",
+                    help="CPU-safe contract preflight; never optimizes and never writes a checkpoint")
     tp.set_defaults(func=cmd_train_probe)
     args = p.parse_args(argv)
     return args.func(args)

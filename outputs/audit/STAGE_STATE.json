@@ -844,7 +844,7 @@
       "preflight": {
         "date": "2026-09-20",
         "base_commit": "f0d54b72b465a40cdae65d3f2103a7801f02dbd8",
-        "phase": "CONTRACT_AUDITED_AWAITING_OWNER_DECISIONS",
+        "phase": "READY_FOR_GPU_EXECUTION_PREFLIGHT",
         "trained": false,
         "checkpoint_created": false,
         "frozen_config_created": false,
@@ -852,20 +852,8 @@
         "proposed_config_sha256": "8c20160543ce8844899b72c73ceea7eabb3697e356d5bc0ad94de0482c097f2b",
         "spec_basis": "\u00a712.1 ArtifactProbeNet; \u00a74 high-pass operator; \u00a713 metrics; \u00a724 CLI",
         "amendment_a1_firewall": "COMPLIANT (measurement probe; labels never reach a generator)",
-        "blocking_decisions": [
-          "Q-07",
-          "D-M5-01",
-          "D-M5-02",
-          "D-M5-03",
-          "D-M5-04",
-          "D-M5-05",
-          "D-M5-06",
-          "D-M5-07",
-          "D-M5-08"
-        ],
-        "blocking_environment": [
-          "E-M5-01"
-        ],
+        "blocking_decisions": [],
+        "blocking_environment": [],
         "q07": {
           "exists": true,
           "source": "outputs/audit/deviation_report.md; configs/CONFIG_STATUS.md",
@@ -906,6 +894,68 @@
           "outputs/audit/M5_HP_VARIANT_MEASUREMENTS.json"
         ],
         "note": "M5 begins only when authoritative probe TRAINING runs; analysis, a candidate transform and a refusing CLI do not start it."
+      },
+      "owner_resolution": {
+        "date": "2026-09-20",
+        "base_commit": "98315bee46f0be0822c98f57be838591300bf23e",
+        "frozen_config": "configs/frozen/artifact_probe.yaml",
+        "frozen_config_sha256": "e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f",
+        "snapshot_byte_identical": true,
+        "unresolved_execution_fields": 0,
+        "resolved": [
+          "D-M5-01",
+          "D-M5-02",
+          "Q-07",
+          "D-M5-03",
+          "D-M5-04",
+          "D-M5-05",
+          "D-M5-06",
+          "D-M5-07",
+          "D-M5-08",
+          "E-M5-01"
+        ],
+        "K": 7,
+        "class_order": [
+          "live",
+          "makeup",
+          "mask_2d",
+          "mask_3d",
+          "partial",
+          "print",
+          "replay"
+        ],
+        "train_rows": 14467,
+        "val_rows": 3121,
+        "class_weights": {
+          "live": 0.5,
+          "makeup": 2.722943722943723,
+          "mask_2d": 3.0,
+          "mask_3d": 1.957115800865801,
+          "partial": 1.0814831427076326,
+          "print": 0.7282291352058794,
+          "replay": 0.9489046307228125
+        },
+        "trainer": "gpatbench.probe.train.run (single code path)",
+        "cli": "python -m gpatbench.cli train-probe --config configs/frozen/artifact_probe.yaml",
+        "smoke": "PASS (22/22 CPU-safe checks)",
+        "trained": false,
+        "checkpoint_created": false,
+        "execution_host": "sparc5090",
+        "execution_root": "/home/sparc/workdir/longnm/GPAT_TransferBench",
+        "gpu_execution_preflight_required": true,
+        "gpu_execution_plan": "outputs/audit/M5_GPU_EXECUTION_PLAN.md",
+        "remote_facts_measured": false,
+        "honesty_note": "These are owner resolutions of details spec \u00a712.1 left under-specified; the frozen specification did not uniquely dictate them. M5 is NOT_STARTED and becomes IN_PROGRESS only when authoritative training runs.",
+        "evidence": [
+          "outputs/audit/M5_ARTIFACT_PROBE_OWNER_DECISIONS.md",
+          "outputs/audit/M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md",
+          "outputs/audit/M5_ARTIFACT_PROBE_CLASS_WEIGHTS.csv",
+          "outputs/audit/M5_ARTIFACT_PROBE_LR_SCHEDULE.csv",
+          "outputs/audit/M5_ARTIFACT_PROBE_SMOKE.md",
+          "outputs/audit/M5_ARTIFACT_PROBE_SMOKE.json",
+          "outputs/audit/M5_GPU_EXECUTION_PLAN.md",
+          "outputs/audit/artifact_probe_v1_config.sha256"
+        ]
       }
     },
     "M6": {

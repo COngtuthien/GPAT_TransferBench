@@ -1,5 +1,7 @@
 # M5 — ArtifactProbeNet Class-Weight Analysis (pre-flight)
 
+> **RESOLVED 2026-09-20.** Every question raised below was answered by the owner and frozen in `configs/frozen/artifact_probe.yaml` (sha256 `e263b370797545c5c15ffdf0a1f28077c94fa815d643285be258f13fb4f4226f`). The decision record is `M5_ARTIFACT_PROBE_OWNER_DECISIONS.md` and the contract summary is `M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md`. **The text below is preserved unchanged as the analysis that motivated those decisions.** M5 is still NOT_STARTED: nothing has been trained.
+
 **Date:** 2026-09-20 · Read-only. Machine-readable: `M5_ARTIFACT_PROBE_PREFLIGHT.json`
 **Decision id: D-M5-02 — OWNER_DECISION_REQUIRED**
 
@@ -80,3 +82,7 @@ two is low-impact; the choice against `raw_inverse` is decisive.
   imbalance twice;
 - **no per-dataset weighting** — not specified, and it would interact with the dataset/class
   confound described in the data feasibility report.
+
+## Resolution (2026-09-20)
+
+**D-M5-02 resolved to `N/(K·n_c)` with the frozen clip.** Recomputed from the manifest over the 7-class population: `live` 0.5 (clipped low), `makeup` 2.722943722943723, `mask_2d` 3.0 (clipped high), `mask_3d` 1.957115800865801, `partial` 1.0814831427076326, `print` 0.7282291352058794, `replay` 0.9489046307228125. Computed in float64 over TRAIN only, no renormalisation after clipping. Exactly two classes are pinned by the clip. Full record: `M5_ARTIFACT_PROBE_CLASS_WEIGHTS.csv`.
