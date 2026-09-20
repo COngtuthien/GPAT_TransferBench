@@ -122,8 +122,25 @@ models:
     role: "Backbone for GPAT E_art, frozen F_art, ArtifactProbeNet, primary downstream evaluator"
     spec: "§9.2, §10.2, §12.1, §14"
     source: "torchvision ResNet-18 IMAGENET1K_V1"
-    weight_sha256: null
-    status: NOT_DOWNLOADED
+    weight_enum: torchvision.models.ResNet18_Weights.IMAGENET1K_V1
+    official_artifact: "resnet18-f37072fd.pth (torchvision ResNet18_Weights.IMAGENET1K_V1; the exact download URL is recorded in outputs/audit/M5_ARTIFACT_PROBE_ENVIRONMENT_ANALYSIS.md and M5_ARTIFACT_PROBE_PREFLIGHT.json, because it is not quoted verbatim in the frozen spec)"
+    weight_path: "/media/cong/Data/AI on IOT/Anti_spoofing/model_cache/backbones/torchvision/resnet18-f37072fd.pth"
+    weight_sha256: f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec
+    weight_size_bytes: 46830571
+    torchvision_version: 0.29.0
+    downloaded_utc: "2026-09-20"
+    status: VERIFIED                                                   # M5 pre-flight (history: NOT_DOWNLOADED at M0)
+    m5_preflight_resolution:
+      verification: OFFICIAL_FILENAME_HASH_CONFIRMED
+      basis: >-
+        torchvision names weight files with the first 8 hex characters of the file SHA256. The
+        official filename is resnet18-f37072fd.pth and the measured digest begins f37072fd, so the
+        downloaded bytes are the official IMAGENET1K_V1 artifact.
+      penultimate_feature_dim: 512                                     # verified via model.fc.in_features
+      substitution_forbidden: "no other ResNet-18 weight enum may be used"
+      committed_to_git: false                                          # *.pth is git-ignored
+      evidence: [outputs/audit/M5_ARTIFACT_PROBE_ENVIRONMENT_ANALYSIS.md,
+                 outputs/audit/M5_ARTIFACT_PROBE_PREFLIGHT.json]
   dinov3_vits16:
     role: "Secondary downstream evaluator (FULL profile)"
     spec: "§14.2"

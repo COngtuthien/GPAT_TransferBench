@@ -1,0 +1,308 @@
+# artifact_probe — PROPOSED, NOT FROZEN (M5 pre-flight, 2026-09-20).
+#
+# Deliberately NOT under configs/frozen/: eight execution-affecting details of the ArtifactProbeNet
+# training contract are not fixed by the frozen specification. Each is marked
+# OWNER_DECISION_REQUIRED with the candidates and, where measurable, the measured impact.
+# Freezing them here would be a hidden scientific choice.
+#
+# Analysis:   outputs/audit/M5_ARTIFACT_PROBE_CONTRACT_ANALYSIS.md
+# Data:       outputs/audit/M5_ARTIFACT_PROBE_DATA_FEASIBILITY.md
+# Preprocess: outputs/audit/M5_ARTIFACT_PROBE_PREPROCESS_ANALYSIS.md
+# Weights:    outputs/audit/M5_ARTIFACT_PROBE_WEIGHT_ANALYSIS.md
+# Environment:outputs/audit/M5_ARTIFACT_PROBE_ENVIRONMENT_ANALYSIS.md
+version: artifact_probe_v1
+status: PROPOSED_BLOCKED
+spec_basis: "§12.1 ArtifactProbeNet; §4 high-pass operator; §13 artifact metrics; §24 CLI"
+blocking_decisions: [Q-07, D-M5-01, D-M5-02, D-M5-03, D-M5-04, D-M5-05, D-M5-06, D-M5-07, D-M5-08]
+blocking_environment: [E-M5-01]
+milestone: M5
+milestone_status: NOT_STARTED
+
+references:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  fair_track_config: configs/frozen/fair_track_v1.yaml
+  preprocess_config: configs/frozen/preprocess_v1.yaml
+  amendment_a1: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md
+  implementation: gpatbench/probe/preprocess.py
+
+# ---------------------------------------------------------------- settled by the spec
+settled:
+  purpose: >-
+    Independent evaluation of whether synthetic samples preserve source attack-family evidence.
+  is_gpat_e_art: false                      # spec §12.1: "it is never the GPAT E_art network"
+  backbone: torchvision_resnet18
+  weight_enum: IMAGENET1K_V1
+  input_size: 224
+  input_kind: high_pass_rgb
+  high_pass_formula: "HP(x) = x - GaussianBlur(x, kernel=9, sigma=1.5)"
+  high_pass_kernel: 9
+  high_pass_sigma: 1.5
+  label_field: attack_macro
+  label_population: real_TRAIN_only
+  loss: class_weighted_cross_entropy
+  weight_clip: [0.5, 3.0]
+  optimizer: AdamW
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  batch_size: 64
+  epochs: 30
+  scheduler_family: cosine_decay
+  amp: true
+  seeds: [42]
+  checkpoint_rule: maximum_VAL_macro_f1
+  freeze_after_selection: true
+  embedding: {layer: penultimate, dim: 512, l2_normalized: true}
+  train_split: TRAIN
+  val_split: VAL
+  test_split_usage: NEVER
+  synthetic_data_during_probe_training: NONE
+
+# ---------------------------------------------------------------- Amendment A1 firewall
+amendment_a1_firewall:
+  status: COMPLIANT
+  reasoning: >-
+    Track A forbids attack-type supervision for GENERATORS (Amendment A1; spec §5.1 restricts
+    generator-visible supervision to image + label_binary). ArtifactProbeNet is an INDEPENDENT
+    MEASUREMENT TOOL, not a generator and not a downstream detector, and spec §12.1 states
+    explicitly that fine-grained labels are permitted here "because the labels are not fed back to
+    the generator or downstream detector".
+  conditions_that_must_hold:
+    probe_labels_enter_generator_optimization: false
+    probe_predictions_select_or_modify_track_a_training_samples: false
+    probe_predictions_decide_common_pair_membership: false
+    probe_predictions_decide_generator_checkpoint_selection: false
+    probe_gradients_touch_generator_parameters: false
+    probe_frozen_before_synthetic_evaluation: true
+    attack_macro_exported_as_generator_input: false
+  permitted_later_use:
+    - "artifact embedding cosine: cos(ArtifactProbe(source), ArtifactProbe(synthetic)) (spec §13)"
+    - "attack consistency: synthetic predicted attack_macro equals source attack_macro (spec §13)"
+    - "fingerprint probe features (spec §12.2)"
+
+# ---------------------------------------------------------------- open decisions
+open_decisions:
+
+  D-M5-01:
+    field: classification_population
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "Labels: attack_macro over real TRAIN only."
+    gap: >-
+      attack_macro is a spec §3.2 enum that INCLUDES the token `live`, and the field is populated
+      for every row (unlike attack_raw, which is spoof-only). "real TRAIN only" contrasts real with
+      synthetic; it does not say spoof-only. But the probe's stated purpose is attack-FAMILY
+      evidence, which can be read as spoof families only.
+    candidate_A_spoof_only: {classes: 6, train: 8838, val: 1905,
+                             tokens: [makeup, mask_2d, mask_3d, partial, print, replay]}
+    candidate_B_live_plus_spoof: {classes: 7, train: 14467, val: 3121,
+                                  tokens: [live, makeup, mask_2d, mask_3d, partial, print, replay]}
+    impact: >-
+      Changes K, every class weight, the macro-F1 denominator and therefore checkpoint selection.
+      Under B the `live` class is the largest (5,629 TRAIN) and dominates the macro-F1 average with
+      an easy class; under A macro-F1 is computed only over attack families.
+    recommendation: B_live_plus_spoof
+    recommendation_reason: >-
+      The spec's own enum defines `live` as an attack_macro value and populates it on every real
+      row, and §13's "attack consistency" metric compares a PREDICTED attack_macro against the
+      source attack_macro. A probe that cannot emit `live` cannot report that a synthetic sample
+      lost all spoof evidence, which is precisely the failure the metric exists to catch.
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  D-M5-02:
+    field: class_weight_normalization
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "class-weighted cross-entropy with inverse-frequency weights clipped to [0.5, 3.0]"
+    gap: "'inverse-frequency' names no normalisation, and the clip makes the choice decisive."
+    measured: >-
+      Under the literal raw reading w_c = 1/n_c, EVERY class clips to the lower bound 0.5 in both
+      candidate populations (max n_c is 5,629 and min is 96, so every 1/n_c is far below 0.5). The
+      weighted loss then degenerates to an unweighted cross-entropy scaled by 0.5 and the clip range
+      carries no information. The raw reading is therefore almost certainly not what was intended.
+    candidates:
+      raw_inverse: {formula: "1 / n_c", degenerate: true, note: "all weights clip to 0.5"}
+      normalized_inverse: {formula: "N / (K * n_c)", degenerate: false,
+                           note: "sklearn class_weight='balanced'; 5 of 6 (A) or 5 of 7 (B) weights land inside the clip range"}
+      mean_one_inverse: {formula: "(1/n_c) / mean(1/n_c)", degenerate: false,
+                         note: "only the rarest class escapes the lower bound"}
+      max_one_inverse: {formula: "(1/n_c) / max(1/n_c)", degenerate: false,
+                        note: "collapses to {0.5, 1.0}"}
+      median_frequency: {formula: "median(n_c) / n_c", degenerate: false}
+    recommendation: normalized_inverse
+    recommendation_reason: >-
+      It is the standard meaning of "inverse-frequency class weights", it is the only candidate that
+      is both non-degenerate and scale-free, and it is the only one under which the frozen clip
+      range [0.5, 3.0] actually binds a minority of classes rather than all or almost all of them.
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  Q-07:
+    field: probe_input_geometry
+    status: OWNER_DECISION_REQUIRED
+    existing_record: "outputs/audit/deviation_report.md (Q-07, M5, §12.1); configs/CONFIG_STATUS.md"
+    spec_wording: "Input: 224x224 high-pass RGB"
+    gap: >-
+      The recorded question is resize vs crop from the 256x256 canonical face. The pre-flight
+      measurement shows three further choices in the same pipeline are equally execution-affecting:
+      the order of resize and high-pass, the interpolation, and the Gaussian border mode.
+    sub_decisions:
+      geometry: {candidates: [resize_256_to_224, center_crop_224, random_resized_crop_224],
+                 note: "center crop discards 23% of the face area; the §14.1 RandomResizedCrop is scoped to the downstream evaluator, not to §12.1"}
+      resize_order: {candidates: [resize_then_highpass, highpass_then_resize],
+                     measured_max_abs_difference: 0.0836}
+      interpolation: {candidates: [area, bilinear, bicubic],
+                      measured_max_abs_difference_area_vs_bilinear: 0.0449,
+                      measured_max_abs_difference_area_vs_bicubic: 0.1317}
+      border_mode: {candidates: [reflect101, reflect, replicate, constant0],
+                    measured_max_abs_difference_reflect101_vs_replicate: 0.2604,
+                    measured_max_abs_difference_reflect101_vs_constant0: 0.5990}
+    scale_reference: "typical |HP| peak per face is ~0.245 in the unit interval"
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  D-M5-03:
+    field: post_highpass_normalization_and_value_domain
+    status: OWNER_DECISION_REQUIRED
+    gap: "The spec does not say whether ImageNet mean/std is applied after the high-pass."
+    measured: >-
+      The signed residual spans about [-0.47, +0.59] in the unit interval. Applying ImageNet
+      normalisation to it maps the input to roughly [-4.17, +0.81] -- strongly negative-shifted,
+      because a zero-centred residual minus a mean of ~0.45 divided by a std of ~0.22 sits near -2.
+      Not applying it leaves a near-zero-mean input that does not match what the pretrained weights
+      expect either.
+    settled_sub_items:
+      value_domain_before_hp: "uint8/255 and [0,1] agree to 3.3e-07 (linear); not execution-affecting"
+      gaussian_implementation: "OpenCV, torchvision and explicit separable conv agree to 6.6e-07; not execution-affecting, but one must still be pinned for byte reproducibility"
+      signed_residual: "MUST be retained; clipping to [0,1] or storing uint8 would destroy roughly half of the signal"
+      dtype: float32
+    candidates: [none, imagenet]
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  D-M5-04:
+    field: backbone_finetune_scope
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "Backbone: torchvision ResNet-18 IMAGENET1K_V1"
+    gap: >-
+      The spec names the initialisation, not the optimisation scope. Full fine-tuning,
+      partial freezing and classifier-only training are all consistent with the wording and give
+      different probes. Note §12.1 gives ONE learning rate (1e-4), unlike §14/§23.1 which give
+      separate backbone and head rates -- that is weak evidence for a single uniformly-optimised
+      parameter group, but it is not decisive.
+    candidates: [full_finetune, freeze_backbone_train_classifier_only, partial_freeze]
+    classifier_replacement: "Linear(512, K)  # K fixed by D-M5-01"
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  D-M5-05:
+    field: val_macro_f1_definition
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "Checkpoint: maximum VAL macro-F1"
+    gap: "The class set, the zero_division behaviour and the label argument are not stated."
+    measured: "Every class present in TRAIN is also present in VAL and vice versa, in both candidate populations, so today the three class-set readings coincide. They would diverge if the split or the population changed, so the rule must still be frozen."
+    candidates:
+      class_set: [frozen_train_class_union, classes_present_in_val, sklearn_default_observed_labels]
+      zero_division: [0, 1, "warn"]
+      implementation: [sklearn.metrics.f1_score_average_macro, manual]
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  D-M5-06:
+    field: checkpoint_tie_break
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "maximum VAL macro-F1; freeze thereafter"
+    gap: "No rule is given for two epochs with identical macro-F1."
+    existing_project_precedents:
+      - "spec §10.6 generator selection: tie-break by higher ArtSim, then EARLIER epoch"
+      - "spec §14 downstream: minimum VAL video ACER, tie-break maximum VAL video AUC"
+    candidate_for_owner_review: "higher macro-F1 wins; exact tie -> earlier epoch"
+    note: "Consistent with §10.6, but §10.6 is a different selection rule and does not confer authority here."
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  D-M5-07:
+    field: cosine_scheduler_details
+    status: OWNER_DECISION_REQUIRED
+    spec_wording: "cosine decay"
+    gap: "Implementation, stepping granularity, T_max, eta_min and warmup are unstated."
+    nearby_project_convention: >-
+      §14 / configs/frozen/downstream_resnet18.yaml use cosine with warmup_epochs 3 and
+      min_lr 1e-6. That config is scoped to the DOWNSTREAM evaluator and §12.1 mentions no warmup,
+      so importing it silently would be an invention.
+    candidates:
+      implementation: [CosineAnnealingLR, cosine_with_linear_warmup, custom]
+      stepping: [per_epoch, per_optimizer_step]
+      t_max: [epochs_30, total_steps]
+      eta_min: [0.0, 1.0e-6]
+      warmup: [none, 3_epochs_linear]
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+  D-M5-08:
+    field: augmentation_and_dataloader
+    status: OWNER_DECISION_REQUIRED
+    augmentation_finding: NO_AUGMENTATION_SPECIFIED
+    augmentation_note: >-
+      §12.1 specifies no augmentation. §14.1 "FAS-safe augmentation - frozen" (RandomResizedCrop,
+      horizontal flip, colour jitter) is explicitly scoped to the DOWNSTREAM evaluator. Adding it to
+      the probe would be an invention AND would silently resolve the Q-07 geometry question through
+      RandomResizedCrop, so it must not be assumed either way.
+    candidates: [deterministic_resize_and_highpass_only, apply_section_14_1_fas_safe_augmentation]
+    dataloader:
+      shuffle_train: {candidates: [true, false], note: "if true, the seeding mechanism must be explicit"}
+      shuffle_val: false
+      drop_last: {candidates: [false, true],
+                  note: "TRAIN is 8,838 (A) or 14,467 (B); with batch 64 the last batch holds 6 or 3 samples"}
+      num_workers: OWNER_DECISION_REQUIRED
+      persistent_workers: OWNER_DECISION_REQUIRED
+      pin_memory: OWNER_DECISION_REQUIRED
+      worker_init_fn: "required if num_workers > 0, so worker scheduling cannot alter sample membership"
+      batch_size: 64
+    forbidden:
+      - "WeightedRandomSampler in addition to weighted cross-entropy (double imbalance compensation)"
+      - "per-dataset loss weighting (not specified)"
+    proposal: NONE_WITHOUT_OWNER_DECISION
+
+# ---------------------------------------------------------------- environment
+open_environment:
+  E-M5-01:
+    field: training_device
+    status: BLOCKED_BY_ENVIRONMENT
+    finding: >-
+      The only verified environment on this machine is torch 2.14.0+cpu / torchvision 0.29.0+cpu
+      with CUDA unavailable. Spec §12.1 requires AMP, which is a CUDA feature in this stack.
+      ArtifactProbeNet cannot be trained as specified here.
+    blocks: M5_EXECUTION
+    does_not_block: M5_CONTRACT_FREEZE
+
+# ---------------------------------------------------------------- determinism intent
+determinism:
+  seed: 42
+  seed_sources: [python_random, numpy, torch_cpu, torch_cuda_all, dataloader_generator,
+                 worker_init_fn]
+  settings_to_pin: [cudnn_benchmark, cudnn_deterministic, torch_use_deterministic_algorithms,
+                    tf32_matmul, tf32_cudnn, float32_matmul_precision]
+  reproducibility_levels:
+    scientific: "same data, same contract, same seed -> same selection decision and comparable metrics"
+    byte_identical_checkpoint: NOT_PROMISED
+  byte_identical_note: >-
+    AMP and GPU reduction order are not guaranteed bit-reproducible across machines or driver
+    versions. Byte-identical checkpoint reproduction will not be claimed unless it is demonstrated
+    on the actual training machine.
+
+# ---------------------------------------------------------------- planned outputs (NOT created)
+planned_outputs:
+  created_in_this_pass: false
+  checkpoint_dir: models/artifact_probe/
+  best_checkpoint: models/artifact_probe/artifact_probe_v1.pt
+  training_log: outputs/audit/M5_PROBE_TRAINING_LOG.jsonl
+  epoch_metrics: outputs/audit/M5_PROBE_EPOCH_METRICS.csv
+  selection_report: outputs/audit/M5_PROBE_SELECTION_REPORT.md
+  class_mapping: manifests/artifact_probe_classes_v1.json
+  class_weights: manifests/artifact_probe_class_weights_v1.json
+  environment_lock: environments/m5_probe.lock.txt
+  checkpoint_sha_record: outputs/audit/artifact_probe_v1.sha256
+  config_snapshot: frozen_config_snapshot/configs/frozen/artifact_probe.yaml
+  note: "Checkpoint binaries are git-ignored (*.pt); their SHA256 is recorded instead."
+
+cli:
+  command: "python -m gpatbench.cli train-probe --config configs/frozen/artifact_probe.yaml"
+  implemented: preflight_guard_only
+  guard: >-
+    The subcommand exists but refuses to run: the frozen config does not exist, and the guard also
+    refuses any config whose blocking_decisions list is non-empty. It cannot train by accident, and
+    there is no second training implementation.
+
+membership_in_this_file: false

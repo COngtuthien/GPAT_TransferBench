@@ -1,4 +1,5 @@
-"""GPAT-TransferBench CLI (spec §24): `inventory` (M1), `split`/`audit-split` (M3), `build-pairs` (M4)."""
+"""GPAT-TransferBench CLI (spec §24): `inventory` (M1), `split`/`audit-split` (M3), `build-pairs` (M4),
+`train-probe` (M5 — pre-flight guard only; it refuses to train while the contract is unfrozen)."""
 from __future__ import annotations
 
 import argparse
@@ -95,6 +96,35 @@ def cmd_build_pairs(args) -> int:
     return 0
 
 
+def cmd_train_probe(args) -> int:
+    """M5: ArtifactProbeNet (spec §12.1) — PRE-FLIGHT GUARD, not a trainer.
+
+    The frozen contract does not exist yet: eight execution-affecting decisions are still open
+    (see configs/proposed/artifact_probe.proposed.yaml). This subcommand therefore exists to hold
+    the spec's CLI surface and to refuse, so nothing can train by accident and no second training
+    implementation is created behind it.
+    """
+    import yaml
+    cfg = Path(args.config)
+    frozen = PROJECT_ROOT / "configs/frozen/artifact_probe.yaml"
+    if not cfg.is_file():
+        raise SystemExit(
+            f"STOP: {args.config} does not exist. M5 is NOT_STARTED and the ArtifactProbeNet "
+            "contract is not frozen; see configs/proposed/artifact_probe.proposed.yaml.")
+    if cfg.resolve() != frozen.resolve():
+        raise SystemExit(f"STOP: M5 runs only against {frozen.relative_to(PROJECT_ROOT)}, "
+                         f"got {args.config}")
+    doc = yaml.safe_load(cfg.read_text())
+    blockers = list(doc.get("blocking_decisions") or [])
+    if doc.get("status") != "FROZEN" or blockers:
+        raise SystemExit(
+            f"STOP: the ArtifactProbeNet contract is not frozen (status={doc.get('status')!r}, "
+            f"open decisions={blockers}). Training is refused.")
+    raise SystemExit(
+        "STOP: the M5 trainer is not implemented in this pre-flight pass. The contract is frozen, "
+        "so implementing it is the next authorized step.")
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="gpatbench.cli")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -114,6 +144,10 @@ def main(argv=None) -> int:
     bp.add_argument("--audit-only", action="store_true",
                     help="compute and report hashes without writing (membership is unchanged)")
     bp.set_defaults(func=cmd_build_pairs)
+    tp = sub.add_parser("train-probe",
+                        help="M5: ArtifactProbeNet (pre-flight guard; refuses to train)")
+    tp.add_argument("--config", required=True)
+    tp.set_defaults(func=cmd_train_probe)
     args = p.parse_args(argv)
     return args.func(args)
 

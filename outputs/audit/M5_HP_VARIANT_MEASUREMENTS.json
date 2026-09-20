@@ -1,0 +1,91 @@
+{
+  "imagenet_normalization_note": "The spec does not say whether ImageNet mean/std normalisation is applied AFTER the high-pass. Applying it to a zero-centred residual shifts the input far from the statistics the pretrained weights expect; not applying it leaves a near-zero-mean input. Both are defensible and they are not equivalent, so this is an owner decision, not a detail.",
+  "kernel": 9,
+  "n_faces": 36,
+  "note": "All variants are CANDIDATES. Nothing here is frozen.",
+  "per_dataset": 12,
+  "read_only": true,
+  "residual_statistics_unit_interval": {
+    "hp_absmax": {
+      "max": 0.5888413190841675,
+      "median": 0.24512656033039093,
+      "min": 0.0963556319475174
+    },
+    "hp_after_imagenet_norm_max": {
+      "max": 0.812628084818522,
+      "median": -0.7317558119032119,
+      "min": -1.393235443962945
+    },
+    "hp_after_imagenet_norm_min": {
+      "max": -2.3922588393157223,
+      "median": -3.020692049936436,
+      "min": -4.165948155665501
+    },
+    "hp_max": {
+      "max": 0.5888413190841675,
+      "median": 0.24135494232177734,
+      "min": 0.0925220251083374
+    },
+    "hp_min": {
+      "max": -0.06282727420330048,
+      "median": -0.2204791009426117,
+      "min": -0.4690021276473999
+    },
+    "hp_std": {
+      "max": 0.05505160427067263,
+      "median": 0.02095858945710803,
+      "min": 0.007641304654093667
+    }
+  },
+  "sigma": 1.5,
+  "signed_residual_note": "HP is signed: the measured residual spans roughly [-0.5, +0.5] in the unit-interval domain, so any implementation that clips to [0,1] or stores uint8 would destroy about half of the signal. Whether the residual stays signed is therefore execution-affecting.",
+  "source_image": "frozen M2 canonical 256x256 RGB uint8 face",
+  "trained": false,
+  "variant_differences": {
+    "border_reflect101_vs_constant0": {
+      "identical": false,
+      "max_abs_over_faces": 0.5989564657211304,
+      "mean_abs_over_faces": 0.0040363380123257745
+    },
+    "border_reflect101_vs_replicate": {
+      "identical": false,
+      "max_abs_over_faces": 0.2603750228881836,
+      "mean_abs_over_faces": 0.00015844301230857425
+    },
+    "cv2_vs_conv_reflect": {
+      "identical": false,
+      "max_abs_over_faces": 2.3377125424328682e-07,
+      "mean_abs_over_faces": 2.7476268847607848e-08
+    },
+    "cv2_vs_torchvision": {
+      "identical": false,
+      "max_abs_over_faces": 6.556510925292969e-07,
+      "mean_abs_over_faces": 5.7488719717969325e-08
+    },
+    "domain_uint8_scaled_vs_unit_interval": {
+      "identical": false,
+      "max_abs_over_faces": 3.343448042869568e-07,
+      "mean_abs_over_faces": 2.775824940561284e-08
+    },
+    "interp_area_vs_bicubic_resize_then_hp": {
+      "identical": false,
+      "max_abs_over_faces": 0.13169598579406738,
+      "mean_abs_over_faces": 0.001954574883143891
+    },
+    "interp_area_vs_bilinear_resize_then_hp": {
+      "identical": false,
+      "max_abs_over_faces": 0.04485765099525452,
+      "mean_abs_over_faces": 0.0009900118757936744
+    },
+    "resize_then_hp_vs_hp_then_resize": {
+      "identical": false,
+      "max_abs_over_faces": 0.0835828185081482,
+      "mean_abs_over_faces": 0.0023372855792319694
+    },
+    "torchvision_vs_conv_reflect": {
+      "identical": false,
+      "max_abs_over_faces": 5.800014902801465e-07,
+      "mean_abs_over_faces": 5.1651205033031386e-08
+    }
+  }
+}

@@ -13,7 +13,7 @@ below are intentionally absent until their milestone.
 | `configs/frozen/pairs_v1.yaml` | §6 | NOT CREATED (M4) | — (values fully in spec: 64 candidates; weights 0.50/0.30/0.20; seed 20260814) |
 | `configs/frozen/downstream_resnet18.yaml` | §23.1 | **CREATED — spec verbatim** (extracted programmatically from DOCX) | — |
 | `configs/frozen/downstream_dinov3_vits16.yaml` | §14.2 | NOT CREATED (M11) | Q-06 |
-| `configs/frozen/artifact_probe.yaml` | §12.1 | NOT CREATED (M5) | Q-07 |
+| `configs/frozen/artifact_probe.yaml` | §12.1 | NOT CREATED (M5) — `configs/proposed/artifact_probe.proposed.yaml` created at the M5 pre-flight (2026-09-20) with every unresolved field marked | Q-07 (extended), D-M5-01…D-M5-08; execution also blocked by E-M5-01 (CPU-only environment vs the required AMP) |
 | `configs/methods/fas_aug.yaml` | §8.1 | NOT CREATED (M6) | official repo defaults at pinned commit |
 | `configs/methods/freq_sub.yaml` | §8.2 | NOT CREATED (M6) | — |
 | `configs/methods/stdn.yaml` | §8.3 | NOT CREATED (M6) | official repo at pinned commit |

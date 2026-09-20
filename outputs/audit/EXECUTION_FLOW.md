@@ -535,3 +535,46 @@ Artifacts: `pair_train_stats_v1.json` `a7ccabb0…`, `pairs_train_v1.parquet` `a
     originally specified native manifests were not created. M5 and M6 remain NOT_STARTED; nothing was
     trained, nothing was generated and TEST performance has never been observed.
 
+## M5 pre-flight (2026-09-20) — contract audited, M5 still NOT_STARTED
+
+1. **Verified the starting state**: HEAD `f0d54b7`, local `main` == `origin/main`, clean tree,
+   M4 COMPLETE / `FINALIZED_UNDER_AMENDMENT_A1`, M5 and M6 NOT_STARTED, 464 tests PASS, and the four
+   frozen M2/M3/M4 hashes unchanged.
+2. **Read §12.1 verbatim** and separated what the spec fixes (backbone, weight enum, 224×224
+   high-pass RGB, `k=9`/`σ=1.5`, `attack_macro` over real TRAIN, clipped inverse-frequency weighted
+   CE, AdamW 1e-4/1e-4, batch 64, 30 epochs, cosine, AMP, seed 42, max VAL macro-F1, 512-D
+   L2-normalised embedding) from what it does not.
+3. **Recorded the Amendment A1 firewall.** Track A bans attack-type supervision *for generators*;
+   §12.1 explicitly permits fine-grained labels in this measurement probe "because the labels are
+   not fed back to the generator or downstream detector". The seven conditions that make that true
+   are written into the proposed config and test-guarded.
+4. **Searched for Q-07 instead of assuming.** It **already exists** in `deviation_report.md` and
+   `configs/CONFIG_STATUS.md` (resize vs crop, 256→224). It was extended with three further
+   geometry choices rather than duplicated, and no historical ID was invented.
+5. **Audited the population.** TRAIN 14,467 (5,629 live / 8,838 spoof), VAL 3,121 (1,216 / 1,905).
+   `attack_macro` is a §3.2 enum that **includes `live`** and is populated on every row, so
+   "SPOOF classes only" (K=6) and "LIVE + spoof" (K=7) are both readable — D-M5-01, recommendation
+   B, not chosen here.
+6. **Showed the class-weight degeneracy explicitly.** Under the literal `w_c = 1/n_c`, **every**
+   class clips to exactly 0.5 in both populations, so the weighting disappears. Four non-degenerate
+   alternatives were computed in full; `N/(K·n_c)` is recommended and left to the owner (D-M5-02).
+7. **Measured the high-pass pipeline** on 36 real canonical faces instead of arguing about it:
+   Gaussian implementation (OpenCV / torchvision / explicit conv) and value domain differ by
+   < 7e-07 and are **not** execution-affecting; border mode (0.26), resize order (0.084) and
+   interpolation (0.13) **are**, against a typical residual peak of 0.245. The signed residual spans
+   ≈[−0.47, +0.59], so clipping it would destroy half the signal, and ImageNet normalisation after
+   HP maps the input to ≈[−4.17, +0.81].
+8. **Resolved the backbone weight provenance.** Fetched the official
+   `ResNet18_Weights.IMAGENET1K_V1` file and verified it by torchvision's own filename convention:
+   the digest `f37072fd47e89c…` begins with the `f37072fd` in `resnet18-f37072fd.pth`. Recorded in
+   `models/registry.yaml`; the binary is git-ignored.
+9. **Found a hard environment blocker (E-M5-01).** This machine is torch 2.14.0+cpu with no CUDA and
+   no `nvidia-smi`, while §12.1 requires AMP. M5 **execution** cannot run here; the contract freeze
+   is not blocked.
+10. **Built only refusing scaffolding.** `gpatbench/probe/preprocess.py` exposes the four unresolved
+    choices as required keyword arguments with no defaults, so no contract can be fixed by accident;
+    `python -m gpatbench.cli train-probe` exists and refuses, and a test asserts there is no hidden
+    trainer behind it.
+11. **Left M5 NOT_STARTED.** No frozen config, no model, no checkpoint, no training log,
+    `models/artifact_probe/` absent. Analysis and scaffolding do not start a milestone.
+

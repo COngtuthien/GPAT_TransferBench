@@ -100,7 +100,7 @@ marked BLOCKED_BY_SOURCE_GAP.
 | Q-04 | M1/M2 | 3.4 | Definition of a "valid frame" (decode success only, or face-detected) is not stated. |
 | Q-05 | M7 | 5.3, 9.2, 10.3 | Identity adversary uses a GRL (coef 1.0) **and** `L_G` subtracts `λ_idadv·L_identity-adversary`; applying both could double-reverse the gradient. Intended sign convention needs confirmation. |
 | Q-06 | M11 | 14.2 | DINOv3 table does not state warmup, scheduler/min LR, AMP or grad clip; only batch composition, augmentation, checkpoint/threshold are "same as ResNet-18". |
-| Q-07 | M5 | 12.1 | ArtifactProbeNet input is 224×224 from 256×256 faces; resize vs crop method not stated. |
+| Q-07 | M5 | 12.1 | ArtifactProbeNet input is 224×224 from 256×256 faces; resize vs crop method not stated. **Extended 2026-09-20 (M5 pre-flight):** the same pipeline also leaves the resize/high-pass order, the interpolation and the Gaussian border mode open; measured impacts up to 0.084, 0.132 and 0.599 against a typical residual peak of 0.245. Still OPEN. |
 | Q-08 | M6 | 8.5, 30 | PCGAN (R7) has no code link in spec; status depends on code availability at implementation time. |
 | Q-09 | M6 | 8.4, 30 | Physics-Guided STD (R2) has no code link; FAITHFUL_PAPER unless a verified official release is found. |
 | Q-10 | M9 | 13 | LPIPS-Alex and KID (Inception feature extractor) implementations/weights not named. |
@@ -710,4 +710,40 @@ M4 is **COMPLETE under the amended main-track rule**, not under the originally s
 originally specified native pair manifests were **not** created and are deferred to M6 as a
 secondary track. The audit trail preserves that distinction
 (`STAGE_STATE.json → milestones.M4.amendment_a1.original_native_manifests_completed = false`).
+
+## M5 pre-flight (2026-09-20) — ArtifactProbeNet contract audit
+
+**No deviation was opened and nothing was trained.** M5 remains NOT_STARTED, no checkpoint exists,
+and `configs/frozen/artifact_probe.yaml` was deliberately NOT created. The proposed contract is
+`configs/proposed/artifact_probe.proposed.yaml`; the analyses are the `M5_ARTIFACT_PROBE_*` files.
+
+**Q-07 already existed** in this file and in `configs/CONFIG_STATUS.md`. It was extended above, not
+duplicated, and no historical question ID was invented.
+
+### New M5 decision ids — all OWNER_DECISION_REQUIRED
+
+| ID | Spec § | Question | Measured impact |
+|---|---|---|---|
+| D-M5-01 | 12.1 | Classification population: SPOOF `attack_macro` classes only (K=6) or LIVE + spoof (K=7)? `attack_macro` is a §3.2 enum that includes `live` and is populated on every row; "real TRAIN only" contrasts real with synthetic, not spoof with live. | Changes K, every class weight, the macro-F1 denominator and therefore checkpoint selection. Recommendation: **B (live + spoof)**, because §13's "attack consistency" compares a *predicted* `attack_macro` to the source's, and a probe that cannot emit `live` cannot report that a synthetic lost all spoof evidence. |
+| D-M5-02 | 12.1 | "inverse-frequency weights clipped to [0.5, 3.0]" — which normalisation? | **The literal `w_c = 1/n_c` clips EVERY class to exactly 0.5 in both populations**, so the weighting vanishes. Recommendation: `w_c = N/(K·n_c)`, the only scale-free non-degenerate reading under which the frozen clip binds a minority of classes. |
+| D-M5-03 | 12.1 | Post-high-pass normalisation and value domain. | ImageNet mean/std applied to the signed residual maps the input to ≈[−4.17, +0.81]. Settled by measurement within this item: value domain (3.3e-07) and Gaussian implementation (6.6e-07) are not execution-affecting; the **signed residual must be retained** (range ≈ [−0.47, +0.59]). |
+| D-M5-04 | 12.1 | Backbone fine-tune scope: full / partial / classifier-only. | Different probes. §12.1 gives one LR where §14 gives two, which is weak evidence for full fine-tuning but not decisive. |
+| D-M5-05 | 12.1 | VAL macro-F1 class set, `zero_division`, implementation. | Today every TRAIN class also appears in VAL, so the readings coincide; they would diverge under a different split, and `scikit-learn` is not installed, so the definition must be frozen rather than inherited. |
+| D-M5-06 | 12.1 | Checkpoint tie-break when two epochs share the maximum macro-F1. | Candidate for owner review: higher macro-F1 wins, exact tie → earlier epoch (consistent with §10.6, which is a different rule and confers no authority). |
+| D-M5-07 | 12.1 | "cosine decay": implementation, stepping, `T_max`, `eta_min`, warmup. | §14 / `downstream_resnet18.yaml` use cosine with 3-epoch warmup and `min_lr` 1e-6, but that is scoped to the downstream evaluator; importing it silently would be an invention. |
+| D-M5-08 | 12.1 | Augmentation and DataLoader. | **`NO_AUGMENTATION_SPECIFIED`.** §14.1 "FAS-safe augmentation — frozen" is scoped to the downstream evaluator, and adopting it would also silently resolve Q-07 through `RandomResizedCrop`. Forbidden regardless: `WeightedRandomSampler` on top of weighted CE, and per-dataset loss weighting. |
+
+### Environment blocker
+
+| ID | Item | Finding |
+|---|---|---|
+| E-M5-01 | training device | torch 2.14.0+cpu / torchvision 0.29.0+cpu, `cuda_available = False`, no `nvidia-smi`. Spec §12.1 requires AMP, so **M5 execution cannot run on this machine**. This blocks M5 *execution*, not the contract freeze. |
+
+### Disclosed structural limitation (not a deviation)
+
+Four of the six spoof `attack_macro` classes (`makeup`, `mask_2d`, `mask_3d`, `partial`) occur in
+**SiW-Mv2 only**; only `print` and `replay` span all three datasets. The probe can therefore score
+partly by recognising the dataset rather than the attack family. The §13 metrics that consume it are
+computed within a dataset, so they remain usable, but no cross-dataset reading of probe classes is
+supported and none may be claimed.
 

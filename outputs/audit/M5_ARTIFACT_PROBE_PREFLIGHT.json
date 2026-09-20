@@ -1,0 +1,814 @@
+{
+  "batch_size": 64,
+  "candidate_populations": {
+    "A_spoof_only": {
+      "batches_per_epoch_drop_last_false": 139,
+      "batches_per_epoch_drop_last_true": 138,
+      "class_order": [
+        "makeup",
+        "mask_2d",
+        "mask_3d",
+        "partial",
+        "print",
+        "replay"
+      ],
+      "class_order_rule": "lexical class token ascending",
+      "class_weights": {
+        "class_order": [
+          "makeup",
+          "mask_2d",
+          "mask_3d",
+          "partial",
+          "print",
+          "replay"
+        ],
+        "counts": {
+          "makeup": 759,
+          "mask_2d": 96,
+          "mask_3d": 1056,
+          "partial": 1911,
+          "print": 2838,
+          "replay": 2178
+        },
+        "variants": {
+          "max_one_inverse": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "makeup": 0.5,
+              "mask_2d": 1.0,
+              "mask_3d": 0.5,
+              "partial": 0.5,
+              "print": 0.5,
+              "replay": 0.5
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = (1/n_c) / max_c(1/n_c)",
+            "max_over_min_after_clip": 2.0,
+            "n_hitting_lower_bound": 5,
+            "n_hitting_upper_bound": 0,
+            "n_unclipped": 1,
+            "unclipped": {
+              "makeup": 0.1264822134387352,
+              "mask_2d": 1.0,
+              "mask_3d": 0.09090909090909091,
+              "partial": 0.05023547880690738,
+              "print": 0.03382663847780127,
+              "replay": 0.0440771349862259
+            }
+          },
+          "mean_one_inverse": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "makeup": 0.5640104395246626,
+              "mask_2d": 3.0,
+              "mask_3d": 0.5,
+              "partial": 0.5,
+              "print": 0.5,
+              "replay": 0.5
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = (1/n_c) / mean_c(1/n_c)",
+            "max_over_min_after_clip": 6.0,
+            "n_hitting_lower_bound": 4,
+            "n_hitting_upper_bound": 1,
+            "n_unclipped": 1,
+            "unclipped": {
+              "makeup": 0.5640104395246626,
+              "mask_2d": 4.459207537491863,
+              "mask_3d": 0.4053825034083512,
+              "partial": 0.22401042574527413,
+              "print": 0.1508400012682237,
+              "replay": 0.1965490925616248
+            }
+          },
+          "median_frequency": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "makeup": 1.9545454545454546,
+              "mask_2d": 3.0,
+              "mask_3d": 1.4048295454545454,
+              "partial": 0.7762951334379906,
+              "print": 0.5227272727272727,
+              "replay": 0.681129476584022
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = median_c(n_c) / n_c",
+            "max_over_min_after_clip": 5.739130434782609,
+            "n_hitting_lower_bound": 0,
+            "n_hitting_upper_bound": 1,
+            "n_unclipped": 5,
+            "unclipped": {
+              "makeup": 1.9545454545454546,
+              "mask_2d": 15.453125,
+              "mask_3d": 1.4048295454545454,
+              "partial": 0.7762951334379906,
+              "print": 0.5227272727272727,
+              "replay": 0.681129476584022
+            }
+          },
+          "normalized_inverse_N_over_Kn": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "makeup": 1.9407114624505928,
+              "mask_2d": 3.0,
+              "mask_3d": 1.3948863636363635,
+              "partial": 0.7708006279434851,
+              "print": 0.5190274841437632,
+              "replay": 0.6763085399449036
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = N / (K * n_c)",
+            "max_over_min_after_clip": 5.7800407331975565,
+            "n_hitting_lower_bound": 0,
+            "n_hitting_upper_bound": 1,
+            "n_unclipped": 5,
+            "unclipped": {
+              "makeup": 1.9407114624505928,
+              "mask_2d": 15.34375,
+              "mask_3d": 1.3948863636363635,
+              "partial": 0.7708006279434851,
+              "print": 0.5190274841437632,
+              "replay": 0.6763085399449036
+            }
+          },
+          "raw_inverse": {
+            "all_clipped_to_lower_bound": true,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "makeup": 0.5,
+              "mask_2d": 0.5,
+              "mask_3d": 0.5,
+              "partial": 0.5,
+              "print": 0.5,
+              "replay": 0.5
+            },
+            "clipping_destroys_all_information": true,
+            "formula": "w_c = 1 / n_c",
+            "max_over_min_after_clip": 1.0,
+            "n_hitting_lower_bound": 6,
+            "n_hitting_upper_bound": 0,
+            "n_unclipped": 0,
+            "unclipped": {
+              "makeup": 0.0013175230566534915,
+              "mask_2d": 0.010416666666666666,
+              "mask_3d": 0.000946969696969697,
+              "partial": 0.0005232862375719519,
+              "print": 0.00035236081747709656,
+              "replay": 0.0004591368227731864
+            }
+          }
+        }
+      },
+      "description": "SPOOF attack_macro classes only (live excluded)",
+      "imbalance_ratio_train": 29.5625,
+      "max_train_count": 2838,
+      "min_train_count": 96,
+      "name": "A",
+      "num_classes": 6,
+      "per_class": {
+        "makeup": {
+          "attack_raw_tokens_train": [
+            "Makeup_Cosmetic",
+            "Makeup_Impersonation",
+            "Makeup_Obfuscation"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 759,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 159,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "mask_2d": {
+          "attack_raw_tokens_train": [
+            "Mask_PaperMask"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 96,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 24,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "mask_3d": {
+          "attack_raw_tokens_train": [
+            "Mannequin",
+            "Mask_HalfMask",
+            "Mask_TransparentMask",
+            "Silicone"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 1056,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 224,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "partial": {
+          "attack_raw_tokens_train": [
+            "Partial_Eye",
+            "Partial_FunnyeyeGlasses",
+            "Partial_Mouth",
+            "Partial_PaperGlasses"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 1911,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 406,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "print": {
+          "attack_raw_tokens_train": [
+            "3",
+            "4",
+            "5",
+            "6",
+            "HR_2",
+            "HR_3",
+            "Paper",
+            "printed_photo"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 2838,
+          "train_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ],
+          "val": 623,
+          "val_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ]
+        },
+        "replay": {
+          "attack_raw_tokens_train": [
+            "7",
+            "8",
+            "HR_4",
+            "Replay",
+            "ipad_video",
+            "iphone_video"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 2178,
+          "train_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ],
+          "val": 469,
+          "val_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ]
+        }
+      },
+      "rarest_train_class": "mask_2d",
+      "train_only_classes": [],
+      "train_samples": 8838,
+      "val_only_classes": [],
+      "val_samples": 1905
+    },
+    "B_live_plus_spoof": {
+      "batches_per_epoch_drop_last_false": 227,
+      "batches_per_epoch_drop_last_true": 226,
+      "class_order": [
+        "live",
+        "makeup",
+        "mask_2d",
+        "mask_3d",
+        "partial",
+        "print",
+        "replay"
+      ],
+      "class_order_rule": "lexical class token ascending",
+      "class_weights": {
+        "class_order": [
+          "live",
+          "makeup",
+          "mask_2d",
+          "mask_3d",
+          "partial",
+          "print",
+          "replay"
+        ],
+        "counts": {
+          "live": 5629,
+          "makeup": 759,
+          "mask_2d": 96,
+          "mask_3d": 1056,
+          "partial": 1911,
+          "print": 2838,
+          "replay": 2178
+        },
+        "variants": {
+          "max_one_inverse": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "live": 0.5,
+              "makeup": 0.5,
+              "mask_2d": 1.0,
+              "mask_3d": 0.5,
+              "partial": 0.5,
+              "print": 0.5,
+              "replay": 0.5
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = (1/n_c) / max_c(1/n_c)",
+            "max_over_min_after_clip": 2.0,
+            "n_hitting_lower_bound": 6,
+            "n_hitting_upper_bound": 0,
+            "n_unclipped": 1,
+            "unclipped": {
+              "live": 0.017054538994492805,
+              "makeup": 0.1264822134387352,
+              "mask_2d": 1.0,
+              "mask_3d": 0.09090909090909091,
+              "partial": 0.05023547880690738,
+              "print": 0.03382663847780127,
+              "replay": 0.0440771349862259
+            }
+          },
+          "mean_one_inverse": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "live": 0.5,
+              "makeup": 0.6497762942817665,
+              "mask_2d": 3.0,
+              "mask_3d": 0.5,
+              "partial": 0.5,
+              "print": 0.5,
+              "replay": 0.5
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = (1/n_c) / mean_c(1/n_c)",
+            "max_over_min_after_clip": 6.0,
+            "n_hitting_lower_bound": 5,
+            "n_hitting_upper_bound": 1,
+            "n_unclipped": 1,
+            "unclipped": {
+              "live": 0.0876141778930291,
+              "makeup": 0.6497762942817665,
+              "mask_2d": 5.137293826665216,
+              "mask_3d": 0.4670267115150197,
+              "partial": 0.2580744151542966,
+              "print": 0.17377738102884455,
+              "replay": 0.22643719346182772
+            }
+          },
+          "median_frequency": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "live": 0.5,
+              "makeup": 2.5177865612648223,
+              "mask_2d": 3.0,
+              "mask_3d": 1.8096590909090908,
+              "partial": 1.0,
+              "print": 0.6733615221987315,
+              "replay": 0.8774104683195593
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = median_c(n_c) / n_c",
+            "max_over_min_after_clip": 6.0,
+            "n_hitting_lower_bound": 1,
+            "n_hitting_upper_bound": 1,
+            "n_unclipped": 5,
+            "unclipped": {
+              "live": 0.3394919168591224,
+              "makeup": 2.5177865612648223,
+              "mask_2d": 19.90625,
+              "mask_3d": 1.8096590909090908,
+              "partial": 1.0,
+              "print": 0.6733615221987315,
+              "replay": 0.8774104683195593
+            }
+          },
+          "normalized_inverse_N_over_Kn": {
+            "all_clipped_to_lower_bound": false,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "live": 0.5,
+              "makeup": 2.722943722943723,
+              "mask_2d": 3.0,
+              "mask_3d": 1.957115800865801,
+              "partial": 1.0814831427076326,
+              "print": 0.7282291352058794,
+              "replay": 0.9489046307228125
+            },
+            "clipping_destroys_all_information": false,
+            "formula": "w_c = N / (K * n_c)",
+            "max_over_min_after_clip": 6.0,
+            "n_hitting_lower_bound": 1,
+            "n_hitting_upper_bound": 1,
+            "n_unclipped": 5,
+            "unclipped": {
+              "live": 0.367154785168642,
+              "makeup": 2.722943722943723,
+              "mask_2d": 21.52827380952381,
+              "mask_3d": 1.957115800865801,
+              "partial": 1.0814831427076326,
+              "print": 0.7282291352058794,
+              "replay": 0.9489046307228125
+            }
+          },
+          "raw_inverse": {
+            "all_clipped_to_lower_bound": true,
+            "all_clipped_to_upper_bound": false,
+            "clipped": {
+              "live": 0.5,
+              "makeup": 0.5,
+              "mask_2d": 0.5,
+              "mask_3d": 0.5,
+              "partial": 0.5,
+              "print": 0.5,
+              "replay": 0.5
+            },
+            "clipping_destroys_all_information": true,
+            "formula": "w_c = 1 / n_c",
+            "max_over_min_after_clip": 1.0,
+            "n_hitting_lower_bound": 7,
+            "n_hitting_upper_bound": 0,
+            "n_unclipped": 0,
+            "unclipped": {
+              "live": 0.00017765144785930004,
+              "makeup": 0.0013175230566534915,
+              "mask_2d": 0.010416666666666666,
+              "mask_3d": 0.000946969696969697,
+              "partial": 0.0005232862375719519,
+              "print": 0.00035236081747709656,
+              "replay": 0.0004591368227731864
+            }
+          }
+        }
+      },
+      "description": "all real rows; the spec enum includes a `live` token",
+      "imbalance_ratio_train": 58.635416666666664,
+      "max_train_count": 5629,
+      "min_train_count": 96,
+      "name": "B",
+      "num_classes": 7,
+      "per_class": {
+        "live": {
+          "attack_raw_tokens_train": [],
+          "in_train": true,
+          "in_val": true,
+          "train": 5629,
+          "train_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ],
+          "val": 1216,
+          "val_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ]
+        },
+        "makeup": {
+          "attack_raw_tokens_train": [
+            "Makeup_Cosmetic",
+            "Makeup_Impersonation",
+            "Makeup_Obfuscation"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 759,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 159,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "mask_2d": {
+          "attack_raw_tokens_train": [
+            "Mask_PaperMask"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 96,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 24,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "mask_3d": {
+          "attack_raw_tokens_train": [
+            "Mannequin",
+            "Mask_HalfMask",
+            "Mask_TransparentMask",
+            "Silicone"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 1056,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 224,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "partial": {
+          "attack_raw_tokens_train": [
+            "Partial_Eye",
+            "Partial_FunnyeyeGlasses",
+            "Partial_Mouth",
+            "Partial_PaperGlasses"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 1911,
+          "train_datasets": [
+            "siwmv2"
+          ],
+          "val": 406,
+          "val_datasets": [
+            "siwmv2"
+          ]
+        },
+        "print": {
+          "attack_raw_tokens_train": [
+            "3",
+            "4",
+            "5",
+            "6",
+            "HR_2",
+            "HR_3",
+            "Paper",
+            "printed_photo"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 2838,
+          "train_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ],
+          "val": 623,
+          "val_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ]
+        },
+        "replay": {
+          "attack_raw_tokens_train": [
+            "7",
+            "8",
+            "HR_4",
+            "Replay",
+            "ipad_video",
+            "iphone_video"
+          ],
+          "in_train": true,
+          "in_val": true,
+          "train": 2178,
+          "train_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ],
+          "val": 469,
+          "val_datasets": [
+            "casia_fasd",
+            "msu_mfsd",
+            "siwmv2"
+          ]
+        }
+      },
+      "rarest_train_class": "mask_2d",
+      "train_only_classes": [],
+      "train_samples": 14467,
+      "val_only_classes": [],
+      "val_samples": 3121
+    }
+  },
+  "checkpoint_created": false,
+  "clip": [
+    0.5,
+    3.0
+  ],
+  "enum_coverage": {
+    "data_tokens_absent_from_spec_enum": [],
+    "live_token_only_on_live_rows": true,
+    "live_token_present": true,
+    "present_in_split": [
+      "live",
+      "makeup",
+      "mask_2d",
+      "mask_3d",
+      "partial",
+      "print",
+      "replay"
+    ],
+    "spec_enum": [
+      "live",
+      "print",
+      "replay",
+      "mask_2d",
+      "mask_3d",
+      "makeup",
+      "partial",
+      "other_spoof"
+    ],
+    "spec_tokens_absent_from_data": [
+      "other_spoof"
+    ]
+  },
+  "feasibility": {
+    "checkpoint_estimate_bytes_weights_only": 46758048,
+    "checkpoint_estimate_bytes_with_adamw_states": 140274144,
+    "cuda_available": false,
+    "cuda_version": null,
+    "cudnn_version": null,
+    "input_tensor_bytes_per_batch64_fp32": 38535168,
+    "input_tensor_bytes_per_sample_fp32_3x224x224": 602112,
+    "note": "No training was run, so no wall-clock or GPU-memory figure is reported. Parameter counts are from model construction only.",
+    "param_bytes_fp32": 46758048,
+    "penultimate_feature_dim": 512,
+    "resnet18_params_default_1000_classes": 11689512,
+    "torch": "2.14.0+cpu",
+    "torchvision": "0.29.0+cpu",
+    "weight_url": "https://download.pytorch.org/models/resnet18-f37072fd.pth"
+  },
+  "population": {
+    "TEST": {
+      "attack_macro": {
+        "live": 1191,
+        "makeup": 160,
+        "mask_2d": 16,
+        "mask_3d": 232,
+        "partial": 408,
+        "print": 574,
+        "replay": 446
+      },
+      "attack_macro_live_rows": {
+        "live": 1191
+      },
+      "attack_macro_spoof_rows": {
+        "makeup": 160,
+        "mask_2d": 16,
+        "mask_3d": 232,
+        "partial": 408,
+        "print": 574,
+        "replay": 446
+      },
+      "attack_raw_tokens": 26,
+      "by_dataset": {
+        "casia_fasd": 672,
+        "msu_mfsd": 320,
+        "siwmv2": 2035
+      },
+      "live": 1191,
+      "live_by_dataset": {
+        "casia_fasd": 168,
+        "msu_mfsd": 80,
+        "siwmv2": 943
+      },
+      "null_or_empty_attack_macro": 0,
+      "spoof": 1836,
+      "spoof_by_dataset": {
+        "casia_fasd": 504,
+        "msu_mfsd": 240,
+        "siwmv2": 1092
+      },
+      "total": 3027
+    },
+    "TRAIN": {
+      "attack_macro": {
+        "live": 5629,
+        "makeup": 759,
+        "mask_2d": 96,
+        "mask_3d": 1056,
+        "partial": 1911,
+        "print": 2838,
+        "replay": 2178
+      },
+      "attack_macro_live_rows": {
+        "live": 5629
+      },
+      "attack_macro_spoof_rows": {
+        "makeup": 759,
+        "mask_2d": 96,
+        "mask_3d": 1056,
+        "partial": 1911,
+        "print": 2838,
+        "replay": 2178
+      },
+      "attack_raw_tokens": 26,
+      "by_dataset": {
+        "casia_fasd": 3360,
+        "msu_mfsd": 1600,
+        "siwmv2": 9507
+      },
+      "live": 5629,
+      "live_by_dataset": {
+        "casia_fasd": 840,
+        "msu_mfsd": 400,
+        "siwmv2": 4389
+      },
+      "null_or_empty_attack_macro": 0,
+      "spoof": 8838,
+      "spoof_by_dataset": {
+        "casia_fasd": 2520,
+        "msu_mfsd": 1200,
+        "siwmv2": 5118
+      },
+      "total": 14467
+    },
+    "VAL": {
+      "attack_macro": {
+        "live": 1216,
+        "makeup": 159,
+        "mask_2d": 24,
+        "mask_3d": 224,
+        "partial": 406,
+        "print": 623,
+        "replay": 469
+      },
+      "attack_macro_live_rows": {
+        "live": 1216
+      },
+      "attack_macro_spoof_rows": {
+        "makeup": 159,
+        "mask_2d": 24,
+        "mask_3d": 224,
+        "partial": 406,
+        "print": 623,
+        "replay": 469
+      },
+      "attack_raw_tokens": 26,
+      "by_dataset": {
+        "casia_fasd": 768,
+        "msu_mfsd": 320,
+        "siwmv2": 2033
+      },
+      "live": 1216,
+      "live_by_dataset": {
+        "casia_fasd": 192,
+        "msu_mfsd": 80,
+        "siwmv2": 944
+      },
+      "null_or_empty_attack_macro": 0,
+      "spoof": 1905,
+      "spoof_by_dataset": {
+        "casia_fasd": 576,
+        "msu_mfsd": 240,
+        "siwmv2": 1089
+      },
+      "total": 3121
+    }
+  },
+  "read_only": true,
+  "spec_attack_macro_enum": [
+    "live",
+    "print",
+    "replay",
+    "mask_2d",
+    "mask_3d",
+    "makeup",
+    "partial",
+    "other_spoof"
+  ],
+  "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+  "status": "PREFLIGHT_ONLY",
+  "test_usage": "counted for integrity only; TEST rows are never loaded, never trained on and never used for checkpoint selection",
+  "trained": false
+}
