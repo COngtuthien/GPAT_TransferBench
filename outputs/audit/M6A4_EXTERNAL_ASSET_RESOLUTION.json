@@ -1,0 +1,254 @@
+{
+  "schema_version": "m6a4-external-asset-resolution-v1",
+  "milestone": "M6A4",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "121107168a72785ff9a3f91bcb99c71bc648b2e0",
+  "purpose": "External asset and source resolution for the three blockers left active by M6A3b. Research + owner-authorized E06c acquisition only; no implementation, no training, no method configs.",
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "amendment_a1_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "amendment_a2_sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+  "inputs_read": [
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+    "outputs/audit/M6A3_BLOCKER_STATE.json",
+    "outputs/audit/M6A3_OWNER_DECISIONS.json",
+    "outputs/audit/M6A3_OWNER_DECISIONS.md",
+    "configs/CONFIG_STATUS.md",
+    "third_party/source_pins.json"
+  ],
+  "m6a3_owner_decisions_revisited": false,
+  "counts": {
+    "before": 3,
+    "resolved_in_m6a4": 1,
+    "active_after": 2
+  },
+  "active_after": [
+    "E04-2",
+    "E07c-4"
+  ],
+  "resolved_in_m6a4": [
+    "E06c-2"
+  ],
+  "resolutions": [
+    {
+      "blocker_id": "E06c-2",
+      "method": "E06c",
+      "m6a3_status": "OWNER_AUTHORIZED_ACQUISITION_PENDING",
+      "m6a4_status": "RESOLVED_EXTERNAL_WEIGHT_ACQUIRED_AND_PINNED",
+      "active_blocker": false,
+      "asset": "LightCNN-29 v2 identity-preserving checkpoint",
+      "identity_verified": true,
+      "identity_evidence": "The upstream author's own README (AlfredXiangWu/LightCNN, line 82) and the DSDG README (line 21) link the SAME Google Drive file id 1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS. DSDG therefore points at the original author's release, not a re-host. No mirror was substituted.",
+      "bytes_acquired": true,
+      "byte_size": 123844849,
+      "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+      "official_published_checksum_exists": false,
+      "checksum_pin_basis": "OBSERVED_SHA256_PIN (upstream publishes none; anticipated by M6A2, authorized by A2-08)",
+      "structure_compatible_with_define_IP": true,
+      "matched_keys": 60,
+      "expected_keys": 60,
+      "missing_keys": 0,
+      "shape_mismatches": 0,
+      "unexpected_keys": 1,
+      "unexpected_keys_list": [
+        "module.fc2.weight"
+      ],
+      "unresolved_ambiguity": null,
+      "provenance_artifact": "outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json",
+      "stored_outside_repository": true,
+      "stored_in_source_cache": false,
+      "git_tracked": false,
+      "used_for_inference": false,
+      "e06c_method_state_after": "ASSET_READY_FOR_IMPLEMENTATION (no remaining blocker; method YAML still not created because M6B has not started)"
+    },
+    {
+      "blocker_id": "E04-2",
+      "method": "E04",
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "m6a4_status": "STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true,
+      "owner_direction_preserved": "FAITHFUL_PAPER - no controlled adaptation was created in M6A4",
+      "controlled_adaptation_created": false,
+      "search_date_utc": "2026-09-21",
+      "sources_inspected": [
+        "arXiv:2012.05185 abstract page (v1, submitted 2020-12-09)",
+        "ar5iv full-text rendering of arXiv:2012.05185",
+        "PUBLISHED journal version: Liu & Liu, 'Spoof Trace Disentanglement for Generic Face Anti-Spoofing', IEEE TPAMI, May 2022 - full text of https://cvlab.cse.msu.edu/pdfs/liu_liu_PAMI2022.pdf (17 pages, text extracted and searched)",
+        "Official MSU CVLab project page: on-disentangling-spoof-traces-for-generic-face-anti-spoofing.html (all outbound links enumerated)",
+        "Author GitHub account github.com/yaojieliu (all 7 public repositories enumerated)",
+        "Author academic homepage yaojieliu.github.io (publication list)",
+        "Pinned [60]/[61] Dense Face Alignment repo yaojieliu/ICCVW2017-DenseFaceAlignment@01cfb1aa (README + tree)",
+        "Pinned ECCV20-STDN repo yaojieliu/ECCV20-STDN@c79f1f8c (full tree grep)",
+        "Basel Face Model official pages (faces.dmi.unibas.ch/bfm/)"
+      ],
+      "new_authoritative_findings": [
+        "The PUBLISHED TPAMI 2022 version renumbers the references: 3DMM fitting is [61] (not arXiv's [60]) and face alignment remains [70]. [61] = Liu, Jourabloo, Ren, Liu, 'Dense face alignment', ICCVW 2017; [70] = Bulat & Tzimiropoulos, ICCV 2017. This CONFIRMS M6A2's upstream identification - the same two works - under the published numbering. No new source repository is introduced.",
+        "The published version STILL states 'Source code and pre-trained models will be publicly available upon publication.' No such release exists: the author's GitHub account has 7 public repositories and NONE is PhySTD/STDN+/PAMI-2022, and the official MSU CVLab project page - which lists BOTH the ECCV 2020 and the PAMI 2022 papers - offers exactly one code link for this lineage, https://github.com/yaojieliu/ECCV20-STDN.",
+        "The pinned ECCV20-STDN tree (12 source files) contains ZERO occurrences of '140', 'vertex', 'vertices', '3DMM', 'BFM', 'Basel', or any depth-rendering code. The ECCV20 release therefore does NOT supply the PhySTD geometry route.",
+        "The TPAMI 2022 paper contains NO supplementary-material section (a full-text search for 'supplementar' returns no match).",
+        "The TPAMI 2022 paper never names the Basel Face Model: a full-text search for 'BFM' and 'Basel Face Model' returns NO match. The BFM requirement reaches E04 only transitively, through the [61] Dense Face Alignment README."
+      ],
+      "sub_gaps": {
+        "bfm_asset": {
+          "resolved": false,
+          "status": "LICENSE_GATED_NOT_ACQUIRED",
+          "required_by": "The [61] Dense Face Alignment README ('Setup: 1. Download the Basel Face Model (BFM)'), not by the PhySTD/TPAMI paper itself, which never names it.",
+          "official_acquisition_page_from_defa_readme": "http://faces.cs.unibas.ch/bfm/main.php?nav=1-0&id=basel_face_model",
+          "current_official_pages": [
+            "https://faces.dmi.unibas.ch/bfm/",
+            "https://faces.dmi.unibas.ch/bfm/bfm2017.html"
+          ],
+          "exact_version_identifiable": false,
+          "exact_version_note": "Neither the PhySTD/TPAMI paper nor the DeFA README states WHICH BFM version. DeFA (ICCVW 2017) predates BFM-2017, and its README links the original BFM page, but the paper fixes nothing, so the version is NOT uniquely determined.",
+          "expected_files_documented": false,
+          "expected_files_note": "The DeFA README says only 'unzip the file into the root folder'. The pinned DeFA tree's removed binaries (Model_Para.mat, Model_info.mat, Model_Expression.mat, DeFA.mat) are model files, not the BFM distribution, and do not document the expected BFM filenames.",
+          "why_automated_acquisition_not_permitted": "The Basel Face Model is distributed only under a signed academic end-user licence: access requires a request form, an official academic e-mail address and a verifiable university affiliation. It cannot be fetched programmatically and must not be redistributed. M6A4 therefore did NOT download it, and the licence was NOT bypassed.",
+          "downloaded": false,
+          "redistributed": false
+        },
+        "q140_vertex_set": {
+          "resolved": false,
+          "status": "COUNT_STATED_INDICES_NEVER_PUBLISHED",
+          "published_text_tpami_2022": "We select Q=140 vertices to cover the face region so that they can represent non-rigid deformation, due to pose and expression.",
+          "published_text_section_4_1": "We use the open-source face alignment [70] and 3DMM fitting [61] to crop the face and provide 140 landmarks.",
+          "explicit_index_list_found": false,
+          "searched_for_index_list_in": [
+            "arXiv v1 full text",
+            "TPAMI 2022 published full text incl. all sections and reference list",
+            "ECCV20-STDN repository tree",
+            "Dense Face Alignment repository tree",
+            "author GitHub account",
+            "author homepage",
+            "MSU CVLab project page"
+          ],
+          "conclusion": "Only the COUNT (140) and a qualitative rationale are published. No index list, table, appendix, supplementary file or author-released config/data file enumerating WHICH 140 vertices are selected was located. Reverse-engineering a 140-vertex set, reusing another paper's 140-point set, or substituting the FaceXFormer 68 landmarks are all PROHIBITED and were NOT done."
+        },
+        "depth_rendering_procedure": {
+          "resolved": false,
+          "status": "GROUND_TRUTH_RENDERING_NEVER_DESCRIBED",
+          "published_text": "We apply the dense face alignment [61] to estimate the 3D shape and render the depth ground truth M0.",
+          "what_IS_specified": "Only the NETWORK OUTPUT is specified: 'It outputs a face depth map M in R^{32x32}, where the depth values are normalized within [0,1]' (K=32).",
+          "critical_distinction": "M0 - the depth GROUND TRUTH - is an INPUT to the published training algorithm ('Algorithm 1: STDN+ Training Iteration. Input: ... ground truth depth map M0, preliminary mask P0'). The paper therefore treats M0 as pre-computed and never describes how it is produced.",
+          "unspecified_items": [
+            "camera / projection model",
+            "visible-surface (visibility) handling",
+            "normalization of the ground truth",
+            "rasterization / interpolation scheme",
+            "foreground / background convention",
+            "output scale and range of M0",
+            "resize rule to 32x32"
+          ],
+          "inferred_by_benchmark": false,
+          "conclusion": "The exact procedure for converting fitted 3DMM geometry into the 32x32 depth target M0 is not published in the arXiv version, the published TPAMI version, any supplementary material (there is none), or any released code. No step was inferred."
+        },
+        "executable_geometry_route": {
+          "resolved": false,
+          "status": "NO_EXECUTABLE_OFFICIAL_ROUTE",
+          "phystd_code_released": false,
+          "phystd_code_search_conclusion": "RESOLVED_BY_DOCUMENTED_SEARCH_NO_OFFICIAL_RELEASE_LOCATED_AS_OF_2026_09_21. The author's GitHub account holds 7 public repositories, none for PhySTD/STDN+/PAMI-2022; the official MSU CVLab project page links only ECCV20-STDN for this lineage; the published paper still promises code 'upon publication'.",
+          "defa_release_limitations": "The [61] Dense Face Alignment release is MATLAB/MatConvNet TEST-ONLY code that additionally requires the licence-gated BFM, so even with BFM it does not constitute a reproducible fitting-to-depth pipeline for E04.",
+          "conclusion": "No executable, reproducible official geometry route exists."
+        }
+      },
+      "resolution_rule_applied": "A2-09 / task section 3.4 - E04-2 may only be resolved if the COMPLETE scientific route becomes uniquely reproducible. All four sub-gaps remain unknown, so E04-2 stays ACTIVE. The existence of upstream repositories does NOT make E04 ready.",
+      "e04_method_state_after": "BLOCKED"
+    },
+    {
+      "blocker_id": "E07c-4",
+      "method": "E07c",
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "m6a4_status": "STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true,
+      "dated_conclusion": "NO_OFFICIAL_ENCODER_RELEASE_LOCATED_AS_OF_2026_09_21",
+      "absolute_nonexistence_claimed": false,
+      "owner_direction_preserved": "FAITHFUL official DiffFAS route - no substitute trained, encoder not disabled, not replaced with ImageNet ResNet18, no PADISI training details invented",
+      "substitute_trained": false,
+      "encoder_disabled": false,
+      "replaced_with_imagenet_resnet18": false,
+      "official_asset_or_link_located": false,
+      "downloaded_anything_for_e07c": false,
+      "e06c_authorization_applied_to_e07c": false,
+      "search_date_utc": "2026-09-21",
+      "sources_searched": [
+        "murphytju/DiffFAS repository main branch (pinned source cache, full tree grep)",
+        "GitHub API: repository metadata (size 214 KB, pushed_at 2024-09-23T11:57:47Z, default_branch main)",
+        "GitHub API: releases -> 0",
+        "GitHub API: tags -> 0",
+        "GitHub API: branches -> 1 (main only)",
+        "GitHub API: full commit history -> 5 commits, all enumerated",
+        "GitHub API: issues (all states) -> 1 issue, all 6 comments read",
+        "ECCV 2024 official supplementary material: https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/07068-supp.pdf (5 pages, text extracted and searched)",
+        "arXiv:2409.08572 / ECVA main paper listing",
+        "Web search for an author-controlled mirror of PADISI.pkl"
+      ],
+      "search_terms_used": [
+        "PADISI.pkl",
+        "PADISI",
+        "classifier",
+        "encoder",
+        "pretrained classifier",
+        "pretrained encoder",
+        "custom_rn",
+        "resnet18",
+        "download",
+        "checkpoint",
+        "model_path",
+        "conditioning",
+        "autoencoder"
+      ],
+      "decisive_finding": {
+        "source": "https://github.com/murphytju/DiffFAS/issues/1 ('Pretrained Classifier model ?', opened 2024-09-24)",
+        "maintainer_response": "The repository OWNER (murphytju, author_association=OWNER) replied on 2024-09-24T02:53:15Z: 'I will update the required pretrained models, readme.md and further check the code. Please wait for a moments.'",
+        "delivered": false,
+        "evidence_of_non_delivery": [
+          "The repository's last push is 2024-09-23T11:57:47Z, which PREDATES the maintainer's 2024-09-24 promise - nothing has been uploaded since.",
+          "0 releases and 0 tags exist.",
+          "Four further requests for PADISI.pkl and the README (2024-10-22, 2024-11-08, 2025-03-05, 2025-03-10) received no maintainer reply."
+        ],
+        "significance": "This is authoritative maintainer-level confirmation that the conditioning-encoder weights were never released, rather than an inference from absence."
+      },
+      "new_authoritative_finding_training_recipe": {
+        "summary": "The official repository DOES contain the conditioning encoder's TRAINING SCRIPT, at models/pretrain_classifier.py. The training protocol therefore no longer has to be invented - it is official code. This REFINES the gap; it does NOT close it.",
+        "official_recipe": {
+          "architecture": "custom_rn.resnet18() with fc replaced by nn.Linear(512, 17) -> 17 classes",
+          "architecture_note": "custom_rn.resnet18 is _resnet('resnet18', BasicBlock, [3,4,6,3]) - a ResNet-34 layer configuration despite the name. Recorded for disclosure.",
+          "transform": "Resize((256,256)) -> ToTensor -> Normalize([0.5,0.5,0.5],[0.5,0.5,0.5])",
+          "dataset_root": "/media/26d532/gxx/PADISI_USC/pasidi_attack/ (torchvision ImageFolder; the authors' local absolute path)",
+          "batch_size": 256,
+          "num_workers": 6,
+          "drop_last": true,
+          "shuffle": true,
+          "optimizer": "SGD lr=0.002 momentum=0.9 weight_decay=5e-3",
+          "criterion": "CrossEntropyLoss on the 4th forward output (embg)",
+          "num_epochs": 200,
+          "save": "torch.save(resnet18, './PADISI.pkl') - saves the WHOLE nn.Module, consistent with unet_autoenc.encoder()'s torch.load(path)"
+        },
+        "still_missing_after_this_finding": [
+          "The released PADISI.pkl WEIGHTS - never published (maintainer-acknowledged above).",
+          "The PADISI-USC dataset itself - licence-gated, and NOT one of this benchmark's datasets (CASIA-FASD, MSU-MFSD, SiW-Mv2).",
+          "The 17-class label mapping - torchvision ImageFolder assigns labels by sorted subdirectory name, and the 17 subdirectory names under pasidi_attack/ are not published, so even a faithful re-run of the official script is NOT uniquely reproducible.",
+          "Confirmation that the encoder actually used in the paper was produced by exactly this script."
+        ]
+      },
+      "dependency_is_unconditional": "diffusion.training_losses calls model(...) without cond, so encode(x_cond, encoder) runs on EVERY training step. use_pair=false (DEV-021) does NOT remove the dependency.",
+      "e07c_method_state_after": "BLOCKED"
+    }
+  ],
+  "constraints_observed": {
+    "training": false,
+    "optimizer_steps": false,
+    "synthetic_bank_generation": false,
+    "test_access": false,
+    "baseline_implementation": false,
+    "method_config_created": false,
+    "undocumented_asset_substituted": false,
+    "missing_scientific_details_invented": false,
+    "downloaded_weights_used_for_inference": false,
+    "frozen_spec_a1_a2_changed": false,
+    "committed": false,
+    "pushed": false,
+    "weights_downloaded_for_e04": false,
+    "weights_downloaded_for_e07c": false,
+    "only_e06c_weight_acquired": true
+  }
+}

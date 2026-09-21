@@ -1,0 +1,141 @@
+{
+  "schema_version": "m6a4-blocker-state-v1",
+  "milestone": "M6A4",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "121107168a72785ff9a3f91bcb99c71bc648b2e0",
+  "basis": "M6A3_BLOCKER_STATE.json is the starting state and was NOT mutated. M6A1/M6A2/M6A3 artifacts were not rewritten.",
+  "m6a3_owner_decisions_revisited": false,
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "amendment_a1_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "amendment_a2_sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+  "counts": {
+    "before": 3,
+    "resolved_in_m6a4": 1,
+    "active_after": 2
+  },
+  "resolved_in_m6a4": [
+    "E06c-2"
+  ],
+  "active_after": [
+    "E04-2",
+    "E07c-4"
+  ],
+  "method_state": {
+    "E01": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": []
+    },
+    "E02": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": []
+    },
+    "E03": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": []
+    },
+    "E04": {
+      "state": "BLOCKED",
+      "active_blockers": [
+        "E04-2"
+      ]
+    },
+    "E05": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": [],
+      "fidelity": "CONTROLLED_ADAPTATION"
+    },
+    "E06c": {
+      "state": "ASSET_READY_FOR_IMPLEMENTATION",
+      "active_blockers": [],
+      "note": "E06c-2 resolved in M6A4; the official LightCNN-29 v2 checkpoint is acquired, hash-pinned and verified compatible with define_IP()."
+    },
+    "E07c": {
+      "state": "BLOCKED",
+      "active_blockers": [
+        "E07c-4"
+      ]
+    }
+  },
+  "all_m6_baselines_ready": false,
+  "method_yaml_created": false,
+  "constraints_reaffirmed": {
+    "no_training": true,
+    "no_optimizer_steps": true,
+    "no_synthetic_bank_generation": true,
+    "no_test_access": true,
+    "no_model_inference": true,
+    "no_checkpoint_created_by_training": true,
+    "no_unauthorized_weight_download": true,
+    "no_method_config_created": true,
+    "m6a3_blocker_state_mutated": false
+  },
+  "blockers": [
+    {
+      "blocker_id": "E06c-2",
+      "method": "E06c",
+      "m6a3_status": "OWNER_AUTHORIZED_ACQUISITION_PENDING",
+      "m6a4_status": "RESOLVED_EXTERNAL_WEIGHT_ACQUIRED_AND_PINNED",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_AUTHORIZED_ACQUISITION (A2-08) + OFFICIAL_UPSTREAM_IDENTITY + STATIC_COMPATIBILITY_CHECK (M6A4)",
+      "fidelity_effect": "No fidelity change. The exact official author-released checkpoint was used; no identity model was substituted.",
+      "implementation_allowed": true,
+      "weight_required": true,
+      "weight_fetched": true,
+      "next_required_action": "None for this blocker. E06c has no remaining blocker; its method YAML is still not created because M6B has not started.",
+      "asset_sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+      "asset_byte_size": 123844849,
+      "asset_local_path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+      "asset_git_tracked": false,
+      "asset_in_source_cache": false,
+      "matched_keys": 60,
+      "expected_keys": 60,
+      "missing_keys": 0,
+      "shape_mismatches": 0,
+      "unexpected_keys": 1,
+      "used_for_inference": false,
+      "provenance_artifact": "outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json"
+    },
+    {
+      "blocker_id": "E04-2",
+      "method": "E04",
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "m6a4_status": "STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true,
+      "evidence_basis": "AUTHORITATIVE_SOURCE_SEARCH (M6A4, 2026-09-21): published TPAMI 2022 full text, arXiv v1, official MSU CVLab project page, author GitHub account, author homepage, pinned ECCV20-STDN and Dense Face Alignment trees, BFM official pages.",
+      "fidelity_effect": "FAITHFUL_PAPER intent PRESERVED. No controlled adaptation was created; no substitute geometry, depth renderer, 68->140 conversion, substitute 3DMM or benchmark-created depth target was introduced.",
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "next_required_action": "Four sub-gaps remain, ALL of which must close before E04-2 can be resolved: (1) acquire the Basel Face Model under its signed academic licence (manual, cannot be automated, must not be redistributed) AND determine which version; (2) obtain an authoritative enumeration of the Q=140 vertex indices - only the count is published; (3) obtain the depth-rendering procedure that produces the 32x32 ground truth M0 - the published algorithm takes M0 as a pre-computed INPUT and never describes its generation; (4) obtain a reproducible executable geometry route - no PhySTD/TPAMI code was ever released and the ECCV20-STDN repo contains no geometry code at all. Contacting the authors remains the only identified path for (2) and (3).",
+      "sub_gaps_resolved": 0,
+      "sub_gaps_total": 4,
+      "bfm_downloaded": false,
+      "bfm_licence_bypassed": false,
+      "q140_index_list_located": false,
+      "depth_procedure_located": false,
+      "official_code_release_located": false,
+      "upstream_identification_confirmed": "TPAMI 2022 numbering [61]=Dense Face Alignment (ICCVW 2017), [70]=Bulat & Tzimiropoulos (ICCV 2017) - the SAME works M6A2 pinned under arXiv numbering [60]/[70]. No new source added."
+    },
+    {
+      "blocker_id": "E07c-4",
+      "method": "E07c",
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "m6a4_status": "STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true,
+      "evidence_basis": "EXHAUSTIVE_AUTHORITATIVE_SEARCH (M6A4, 2026-09-21) incl. maintainer statement in murphytju/DiffFAS issue #1; repo releases/tags/branches/commits/issues enumerated via the GitHub API; ECCV 2024 official supplementary PDF searched.",
+      "fidelity_effect": "FAITHFUL official DiffFAS route PRESERVED. No substitute encoder trained, encoder not disabled, not replaced with ImageNet ResNet18, no PADISI training details invented.",
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "next_required_action": "Obtain the official PADISI.pkl conditioning-encoder weights from the authors. The repository OWNER publicly promised them on 2024-09-24 and has not delivered (last push 2024-09-23, 0 releases, 0 tags, four unanswered follow-ups through 2025-03-10). Contacting the authors is the only identified path. NOTE: M6A4 newly established that the official TRAINING SCRIPT exists (models/pretrain_classifier.py), so the training protocol need not be invented - but the weights, the licence-gated PADISI-USC dataset, and the 17-class ImageFolder label mapping all remain unavailable, so a faithful re-run is still not uniquely reproducible. Any decision to train a replica would require a NEW explicit owner authorization and would change E07c's fidelity class.",
+      "official_asset_or_link_located": false,
+      "dated_conclusion": "NO_OFFICIAL_ENCODER_RELEASE_LOCATED_AS_OF_2026_09_21",
+      "absolute_nonexistence_claimed": false,
+      "maintainer_acknowledged_missing": true,
+      "official_training_script_located": true,
+      "official_training_script_path": "models/pretrain_classifier.py",
+      "downloaded_anything": false
+    }
+  ]
+}

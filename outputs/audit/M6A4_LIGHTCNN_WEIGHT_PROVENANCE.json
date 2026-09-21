@@ -1,0 +1,145 @@
+{
+  "schema_version": "m6a4-lightcnn-weight-provenance-v1",
+  "milestone": "M6A4",
+  "date_utc": "2026-09-21",
+  "method": "E06c",
+  "method_name": "DSDG-BIN-IDFREE",
+  "also_referenced_by_method_ids": [
+    "E06a",
+    "E06b"
+  ],
+  "role": "DSDG identity-preservation network (loss_ip); loaded by define_IP(), frozen, eval-only",
+  "authorization": {
+    "authorized_by": "M6A3b owner decision A2-08 (Amendment A2 section 9)",
+    "prior_status": "OWNER_AUTHORIZED_ACQUISITION_PENDING",
+    "scope": "E06c only. This authorization does NOT extend to E04 (BFM) or E07c (PADISI encoder)."
+  },
+  "identity_verification": {
+    "architecture": "LightCNN-29 v2",
+    "upstream_repository": "https://github.com/AlfredXiangWu/LightCNN",
+    "upstream_paper": "Wu, He, Sun, Tan, 'A Light CNN for Deep Face Representation with Noisy Labels', IEEE TIFS 2018 13(11):2884-2896",
+    "official_file_id": "1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS",
+    "upstream_readme_url": "https://drive.google.com/open?id=1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS",
+    "upstream_readme_evidence": "AlfredXiangWu/LightCNN README line 82: 'The model of LightCNN-29 v2 is released on [Google Drive](https://drive.google.com/open?id=1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS).'",
+    "dsdg_readme_url": "https://drive.google.com/file/d/1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS/view",
+    "dsdg_readme_evidence": "third_party/source_cache/facexzoo/addition_module/DSDG/README.md line 21: 'Download the LightCNN-29 model from this [link](...1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS/view) and put it to ./ip_checkpoint.'",
+    "file_ids_identical": true,
+    "conclusion": "DSDG points at the ORIGINAL AUTHOR's released checkpoint, not a re-hosted mirror. No substitute mirror was used.",
+    "mirror_substituted": false,
+    "corroborating_metadata": [
+      "content-disposition filename 'LightCNN_29Layers_V2_checkpoint.pth.tar' matches the path DSDG's train_generator.sh passes verbatim",
+      "checkpoint arch field = 'LightCNN'",
+      "module.fc2.weight has 80013 output classes, matching the upstream README's documented num_classes=80013 for LightCNN-29v2",
+      "checkpoint prec1 = 99.46, consistent with the upstream README's reported LightCNN-29v2 LFW accuracy (99.43% / 99.53%)"
+    ]
+  },
+  "acquisition": {
+    "original_url_author_facing": "https://drive.google.com/file/d/1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS/view",
+    "resolved_download_url": "https://drive.usercontent.google.com/download?id=1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS&export=download&confirm=t",
+    "resolved_file_id": "1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS",
+    "acquisition_start_utc": "2026-09-21T14:09:40Z",
+    "acquisition_end_utc": "2026-09-21T14:09:51Z",
+    "http_status": 200,
+    "content_type": "application/octet-stream",
+    "content_disposition_filename": "LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "html_or_error_content_returned": false,
+    "downloader": "curl -sSL (no third-party downloader required; the confirm=t endpoint served the bytes directly)"
+  },
+  "local_file": {
+    "local_external_runtime_path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "filename": "LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "byte_size": 123844849,
+    "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+    "inside_repository": false,
+    "inside_source_cache": false,
+    "git_tracked": false,
+    "official_published_checksum_exists": false,
+    "checksum_pin_basis": "OBSERVED_SHA256_PIN - upstream publishes no checksum, so the observed hash is the pin (as anticipated by M6A2 and authorized by A2-08)."
+  },
+  "checkpoint_format": {
+    "format": "torch legacy (non-zip) serialization",
+    "pickle_protocol": 2,
+    "torch_magic_number": "0x1950a86a20f9469cfc6c",
+    "torch_protocol_version": 1001,
+    "sys_info": {
+      "little_endian": true,
+      "type_sizes": {
+        "int": 4,
+        "short": 2,
+        "long": 4
+      }
+    }
+  },
+  "safe_inspection": {
+    "method": "restricted NON-EXECUTING unpickler; find_class never imports or resolves a real object and returns an inert stub; nothing from the file was executed",
+    "torch_installed_in_environment": false,
+    "torch_weights_only_used": false,
+    "torch_weights_only_limitation": "torch is not installed in this environment, so torch.load(weights_only=True) was unavailable. The restricted unpickler used instead is STRICTLY SAFER: weights_only=True still executes real rebuild functions, whereas this inspection executes nothing at all. No fallback to real unpickling was performed.",
+    "model_inference_executed": false,
+    "top_level_keys": [
+      "state_dict",
+      "epoch",
+      "arch",
+      "prec1"
+    ],
+    "has_state_dict": true,
+    "num_tensors": 61,
+    "all_tensor_dtypes": [
+      "float32"
+    ],
+    "non_tensor_entries": {
+      "epoch": 50,
+      "arch": "LightCNN",
+      "prec1": 99.46
+    },
+    "globals_requested_by_stream": [
+      "collections.OrderedDict",
+      "torch.FloatStorage",
+      "torch._utils._rebuild_tensor"
+    ],
+    "suspicious_or_executable_objects_present": false,
+    "suspicious_globals": [],
+    "key_name_examples": [
+      "module.conv1.filter.weight",
+      "module.conv1.filter.bias",
+      "module.block1.0.conv1.filter.weight",
+      "module.block1.0.conv1.filter.bias",
+      "module.block1.0.conv2.filter.weight",
+      "...",
+      "module.fc2.weight"
+    ]
+  },
+  "compatibility_verification": {
+    "target": "define_IP() = torch.nn.DataParallel(network_29layers_v2(resblock, [1,2,3,4], is_train=False))",
+    "expected_keys_derived_from": [
+      "third_party/source_cache/facexzoo/addition_module/DSDG/networks/light_cnn.py",
+      "third_party/source_cache/facexzoo/addition_module/DSDG/networks/__init__.py"
+    ],
+    "derivation_method": "STATIC - expected parameter names and shapes derived by mirroring the vendored constructors; no torch, no instantiation, no inference",
+    "expected_parameter_count": 60,
+    "checkpoint_tensor_count": 61,
+    "matched_key_count": 60,
+    "missing_key_count": 0,
+    "unexpected_key_count": 1,
+    "shape_mismatch_count": 0,
+    "missing_keys": [],
+    "unexpected_keys": [
+      "module.fc2.weight"
+    ],
+    "unexpected_key_explanation": "module.fc2.weight [80013, 256] is the upstream 80013-class recognition head. define_IP() passes is_train=False, so fc2_ is never constructed; the DSDG loader's filter (train_generator.py:77, 'if k in model_dict') drops it. This is the documented official behaviour, not a defect.",
+    "dataparallel_prefix_on_all_checkpoint_keys": true,
+    "dataparallel_prefix_expected": true,
+    "official_loader_is_non_strict": true,
+    "official_loader_reference": "train_generator.py:75-81 - checkpoint['state_dict'] -> filtered to keys present in the DataParallel-wrapped net -> model_dict.update() -> load_state_dict()",
+    "matched_subset_is_complete": true,
+    "compatible": true,
+    "verdict": "COMPATIBLE - every one of the 60 define_IP() parameters is supplied by the checkpoint with an exactly matching shape; 0 missing, 0 shape mismatches."
+  },
+  "usage_constraints": {
+    "used_for_inference": false,
+    "used_for_training": false,
+    "optimizer_steps_taken": 0,
+    "git_tracked": false,
+    "substitution_of_another_identity_model": false
+  }
+}
