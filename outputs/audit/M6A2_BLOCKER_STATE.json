@@ -1,0 +1,559 @@
+{
+  "schema_version": "m6a2-blocker-state-v1",
+  "milestone": "M6A2",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "9dc2492750fff98fd2fa8676715eda58df3a9d46",
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "amendment_a1_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "basis": "M6A1 outputs treated as the starting evidence state; M6A1 history not rewritten.",
+  "resolution_precedence": [
+    "FROZEN_SPEC",
+    "M4_OR_A1_FROZEN_ADAPTATION",
+    "OFFICIAL_EXECUTION_ENTRYPOINT",
+    "OFFICIAL_SOURCE_DEFAULTS",
+    "PAPER",
+    "INFERENCE (never used to close a blocker)"
+  ],
+  "counts": {
+    "before": 17,
+    "resolved_in_m6a2": 6,
+    "after": 11
+  },
+  "resolved_ids": [
+    "E01-1",
+    "E01-2",
+    "E02-4",
+    "E03-2r",
+    "E05-1",
+    "E07c-3"
+  ],
+  "still_blocked_ids": [
+    "E01-3",
+    "E02-1",
+    "E02-2",
+    "E02-3",
+    "E04-2",
+    "E04-3",
+    "E05-2",
+    "E05-3",
+    "E06c-2",
+    "E07c-4",
+    "E07c-5"
+  ],
+  "recommendation_policy": "Every 'recommended_for_reproducibility' field is evidence class INFERENCE and is NOT a frozen decision. M6A2 froze no owner choice.",
+  "blockers": [
+    {
+      "blocker_id": "E01-1",
+      "method": "E01",
+      "previous_status": "BLOCKING (spec-vs-official label semantics)",
+      "new_status": "RESOLVED_BY_SPEC",
+      "evidence_class": "SPEC+OFFICIAL_CODE",
+      "evidence": [
+        "OFFICIAL_CODE: data/FAS_Augmentations.py:204-218 -- apply_augment reads changeLabel from augment_dict and returns it ALONGSIDE res; augment_fn(img.copy(), mag) never receives it, so the produced pixels are bit-identical regardless of changeLabel.",
+        "OFFICIAL_CODE: the ONLY consumers are data/transform.py:31,35,38,47-49 (OR-accumulation) and data/zip_dataset.py:46-48 'tar = self.face_label if not changeLabel else 0'. changeLabel is therefore the original authors' TRAINING-LABEL POLICY (answer B), not part of the operator transformation (not A).",
+        "SPEC 8.1: 'Output: one spoof-labeled canonical 256x256 image per intended pair.' The frozen benchmark defines the generated-bank label independently of FAS-Aug's own training-label policy.",
+        "Precedence: FROZEN SPEC > official source defaults."
+      ],
+      "residual_decision": "NONE. Operator set unchanged (all 8 retained); no operator removed or modified.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "disclosure": "3 of 8 operators (Color_Diversity, Hand_Trembling, Low_Resolution) are ones the FAS-Aug authors would label live in THEIR training pipeline. Under SPEC 8.1 every E01 bank image is spoof-labeled. This divergence from the authors' label policy must be disclosed with the E01 row; it is not a contract gap."
+    },
+    {
+      "blocker_id": "E01-2",
+      "method": "E01",
+      "previous_status": "BLOCKING (level=0 yields an unmodified live copy)",
+      "new_status": "RESOLVED_BY_SPEC",
+      "evidence_class": "SPEC+OFFICIAL_CODE",
+      "evidence": [
+        "OFFICIAL_CODE magnitude path traced end to end: config/default.py:78 NUM_MAG=10 -> data/transform.py:70-72 random_parse_policies draws mag=random.choice(range(num_mags)) and emits level=mag/(num_mags-1) -> level grid = {0, 1/9, ..., 1} -> data/FAS_Augmentations.py:203-204 'if level == 0: return img.copy(), False' -> otherwise mag = level*(high-low)+low.",
+        "level 0 is therefore a GENUINELY REACHABLE official parameter (probability 1/10 per draw) on the intended generation path, not an undefined implementation choice.",
+        "SPEC 8.1: operator parameters 'follow the official repository defaults'. Neither the spec nor the source bans a no-op draw, and neither explicitly permits removing level 0.",
+        "Classification: degenerate-but-SOURCE-CORRECT output, not a scientific contract gap."
+      ],
+      "residual_decision": "NONE. level 0 is RETAINED because no source or spec text permits its removal.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "disclosure": "~10% of E01 bank images will be byte-identical copies of the live target, spoof-labeled. This is the official parameter distribution and must be disclosed and measured with the E01 row, not silently removed."
+    },
+    {
+      "blocker_id": "E01-3",
+      "method": "E01",
+      "previous_status": "BLOCKING (unsorted os.listdir)",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "OFFICIAL_CODE+SPEC",
+      "evidence": [
+        "OFFICIAL_CODE: data/fas_aug_helper.py:17-26 builds R_NAME_LIST/BN_NAME_LIST/MP_NAME_LIST with os.listdir at import time (unsorted, filesystem-dependent); line 50 getTexture picks by index with random.choice.",
+        "NO canonical official asset order exists: there is no committed asset list (data/data_list/*.csv are DATASET frame lists for CASIA/MSU/REPLAY/OULU/SiW, not texture lists); no config references data/background, data/noiseTexture or data/MPTexture; .gitattributes contains only LF normalisation.",
+        "A canonical repository order DOES exist -- git sorts tree entries bytewise, verified: git ls-tree of data/background/ is exactly lexicographic (90 entries; noiseTexture 48, MPTexture 190) -- but the official code does NOT use it.",
+        "SPEC: no global ordering or asset-enumeration rule exists (grep of deterministic/reproducib/lexical/canonical order over the frozen spec returns only split_seed, the section 6 candidate hash, the section 6 lexical sample_id tie-break and the section 7.x subsample hash -- all scoped elsewhere).",
+        "The authors' original filesystem order is unrecoverable, so the 'official mapping' from RNG index to asset cannot be reproduced by any means."
+      ],
+      "residual_decision": {
+        "known": [
+          "operator set, magnitude policy and per-pair seed are fixed",
+          "the asset FILES are fixed and hashed by the pinned commit",
+          "git tree order is lexicographic and fully reproducible"
+        ],
+        "unknown": [
+          "the index->asset mapping the FAS-Aug authors' machine produced"
+        ],
+        "admissible_owner_choices": {
+          "A": "Enumerate each asset directory in lexicographic (bytewise) order before seeding -- coincides exactly with the repository's own git tree order.",
+          "B": "Keep os.listdir -- faithful to the letter of the official code but NOT reproducible across hosts, violating the benchmark's rerun-hash requirement.",
+          "C": "Owner supplies an explicit frozen asset order (e.g. a committed manifest with per-file sha256)."
+        },
+        "scientific_consequence": "The choice changes which background/moire/noise texture each pair receives, hence the pixels of every Reflection / BN_Halftone / Moire_Pattern output. It does not change the operator set, ranges or seed.",
+        "recommended_for_reproducibility": "A -- it is the only option that is both deterministic and already canonical in the pinned repository.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false
+    },
+    {
+      "blocker_id": "E02-1",
+      "method": "E02",
+      "previous_status": "BLOCKING (rounding of 'exactly 25%')",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "SPEC+COMPUTED",
+      "evidence": [
+        "AUDIT-ONLY exact computation on the frozen N=256 geometry (fftshifted 256x256, 16x16 non-overlapping blocks, r=sqrt((kx/256)^2+(ky/256)^2) with k=p-128, eligible r in [0.20,0.50], block eligible if >=75% of its 256 pixels are eligible):",
+        "  eligible pixels = 43,186 ; ELIGIBLE BLOCKS = 159 of 256 ; 159 * 0.25 = 39.75 ; 159 mod 4 = 3.",
+        "  Robust to the boundary convention: closed [0.20,0.50], half-open [0.20,0.50) and open (0.20,0.50) all give 159.",
+        "Therefore E02-1 is NOT moot for the actual frozen geometry: floor -> 39 blocks, round/ceil -> 40 blocks."
+      ],
+      "residual_decision": {
+        "known": [
+          "eligible block count is exactly 159 for the frozen geometry, under every boundary convention"
+        ],
+        "unknown": [
+          "whether 'exactly 25%' means floor (39), round (40) or ceil (40)"
+        ],
+        "admissible_owner_choices": {
+          "A": "floor -> 39 blocks",
+          "B": "round-half-up -> 40 blocks",
+          "C": "ceil -> 40 blocks"
+        },
+        "scientific_consequence": "One extra or one fewer substituted block per pair (39 vs 40 of 159), changing the pixels of every E02 output.",
+        "recommended_for_reproducibility": "none -- all three are equally reproducible; this is purely a definitional choice.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false
+    },
+    {
+      "blocker_id": "E02-2",
+      "method": "E02",
+      "previous_status": "BLOCKING (block-selection algorithm/RNG)",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "SPEC",
+      "evidence": [
+        "SPEC 8.2 line 240 is the only text: 'Select exactly 25% of eligible blocks using pair-specific RNG seed.' It fixes neither the RNG family nor the draw procedure.",
+        "No other frozen section defines a generic block/element selection procedure (exhaustive grep over the frozen spec for pair-specific / global_seed / pair seed / rng / deterministic seed returns only lines 148, 232 and 240).",
+        "Repository precedent exists but is NOT authoritative here: configs/frozen/pairs_v1.yaml uses deterministic HASH RANKING (sort by digest) rather than an RNG draw, under namespaces scoped to pair construction."
+      ],
+      "residual_decision": {
+        "known": [
+          "159 eligible blocks; the count to select follows from E02-1"
+        ],
+        "unknown": [
+          "RNG family (e.g. numpy Generator(PCG64) vs python random vs hash-ranking) and draw procedure (permutation prefix vs sampling without replacement)"
+        ],
+        "admissible_owner_choices": {
+          "A": "Deterministic hash ranking of eligible blocks (mirrors the M4 pairs_v1 precedent, no RNG object)",
+          "B": "numpy.random.Generator(PCG64(seed)).choice(n_eligible, k, replace=False)",
+          "C": "python random.Random(seed).sample(range(n_eligible), k)"
+        },
+        "scientific_consequence": "Different block subsets from the same seed, hence different pixels for every E02 output.",
+        "recommended_for_reproducibility": "A -- hash ranking is RNG-implementation-independent and already precedented in this repository.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false
+    },
+    {
+      "blocker_id": "E02-3",
+      "method": "E02",
+      "previous_status": "BLOCKING (pair-seed formula scope)",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "SPEC+M4_FROZEN_ADAPTATION",
+      "evidence": [
+        "SPEC 8.1 line 232 defines seed = SHA256(pair_id + global_seed) mod 2^31 EXPLICITLY AND ONLY for FAS-Aug operator parameters. SPEC 8.2 line 240 says only 'pair-specific RNG seed'.",
+        "No generic frozen pair-RNG rule exists for 8.2 to inherit. The pair manifest's own 'seed' column is the CONSTANT split_seed 20260814 for all 8,838 rows (verified in manifests/pairs_train_v1.parquet), not a per-pair seed.",
+        "M4 frozen adaptation does NOT cover this: configs/frozen/pairs_v1.yaml defines two digests under namespaces 'gpatbench.pair.source_seed.v1' (preimage source_sample_id|split_seed) and 'gpatbench.pair.candidate.v1', both scoped to PAIR CONSTRUCTION, with a different preimage from 8.1's. Their explicit namespacing is evidence AGAINST silent reuse.",
+        "Extending the 8.1 rule to E02 would be analogy, which this task forbids."
+      ],
+      "residual_decision": {
+        "known": [
+          "8.1's formula exists but is scoped to FAS-Aug",
+          "M4 has a namespaced digest convention scoped to pair construction"
+        ],
+        "unknown": [
+          "the seed preimage for E02 block selection"
+        ],
+        "admissible_owner_choices": {
+          "A": "Reuse 8.1's formula verbatim: SHA256(pair_id + global_seed) mod 2^31",
+          "B": "Define a new namespaced digest in the M4 style, e.g. SHA256('gpatbench.freqsub.block.v1|' + pair_id + '|' + str(global_seed))",
+          "C": "Owner specifies another preimage"
+        },
+        "scientific_consequence": "Different seeds select different blocks, changing every E02 output. Note A would make E01 and E02 share the same seed for the same pair, which may or may not be intended.",
+        "recommended_for_reproducibility": "B -- a distinct namespace avoids the E01/E02 seed collision that A creates.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false
+    },
+    {
+      "blocker_id": "E02-4",
+      "method": "E02",
+      "previous_status": "BLOCKING (conjugate-counterpart index convention)",
+      "new_status": "RESOLVED_BY_SPEC",
+      "evidence_class": "SPEC+COMPUTED",
+      "evidence": [
+        "EXACT DERIVATION for even N=256 after fftshift. Shifted index p carries frequency k = p-128, k in [-128,127]. For a real image X[k] = conj(X[-k mod N]). The shifted index of -k is (256-p) mod 256. Hence the pixel map is p <-> 256-p, with exactly two self-conjugate bins: p=0 (k=-128, the NYQUIST bin, since 128 = -128 mod 256) and p=128 (k=0, DC).",
+        "BLOCK-ALIGNMENT PROOF: block b covers p in [16b, 16b+16). Its counterpart set is {241-16b, ..., 256-16b}. Requiring that to be a grid block needs 16m = 241-16b, impossible because 241 is not divisible by 16. Verified for all 16 blocks: aligned=False for every b. The exact counterpart is offset by exactly 1 index per axis. So selecting a 16x16 block DOES require selecting a NON-grid-aligned counterpart.",
+        "The frozen phrase is 'selected blocks AND the conjugate-symmetric counterparts'. 'Conjugate-symmetric counterpart' names an exact mathematical object -- the image of the selected pixel set under k -> -k. It does NOT assert the counterpart is itself a block, and nothing in 8.2 requires the replaced region to be a union of grid blocks. The convention is therefore uniquely determined as PIXEL-WISE mirroring.",
+        "NUMERICAL CORROBORATION (audit-only toy, no dataset): pixel-wise counterpart gives max|imag| = 8.89e-14 (float roundoff, i.e. exactly Hermitian, so 'real part' is a no-op safety net as standard practice). A block-level mirror gives max|imag| = 5.60, i.e. 2.1% of max|real| -- a real signal that 8.2's 'real part' instruction would silently discard. Only pixel-wise mirroring yields a valid real-image spectrum."
+      ],
+      "residual_decision": "NONE. Pixel-wise mirroring p <-> 256-p, with p=0 and p=128 self-conjugate (a selected self-conjugate bin needs no partner).",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "would_overturn": "Owner testimony that 8.2 intended a block-level convention despite the 2.1% imaginary residue."
+    },
+    {
+      "blocker_id": "E03-2r",
+      "method": "E03",
+      "previous_status": "BLOCKING (iBUG-68 ordering unproven)",
+      "new_status": "RESOLVED_BY_PINNED_UPSTREAM",
+      "evidence_class": "OFFICIAL_CODE+PAPER",
+      "evidence": [
+        "M2 pinned FaceXFormer code at Kartik-3004/facexformer commit 10fe8291f8a64e2ca1daf938e3e0007bd860303b (outputs/audit/M2A_MODEL_PROVENANCE.csv; models/registry.yaml code_commit). Re-cloned in M6A2: HEAD matches exactly, tree 67d7da58079000149fabf6c7975c62bbcb4c8527, 38 files, ZERO weight files.",
+        "The pinned repo itself does NOT document the ordering (inference-only code; visualize_landmarks draws every point with no index semantics; no flip permutation, no connectivity list, no dataset code).",
+        "UPSTREAM TRACED TO THE PAPER: FaceXFormer, arXiv:2403.12960v3, Appendix F.2 'Landmarks Detection', verbatim: 'We utilize the 300W dataset [82] for the training and evaluation of FaceXFormer. ... All images are annotated with 68 landmark points.'",
+        "Reference [82] = 'Christos Sagonas, Georgios Tzimiropoulos, Stefanos Zafeiriou, and Maja Pantic. 300 faces in-the-wild challenge: the first facial landmark localization challenge. ICCVW 2013.' -- i.e. the iBUG 300-W benchmark, whose 68-point annotation IS the iBUG-68 scheme. A regression head trained on 300-W emits points in the 300-W index order by construction.",
+        "STDN SIDE VERIFIED INDEPENDENTLY: model/dataset.py:96-100 lm_reverse_list was parsed and compared against the canonical iBUG-68 horizontal-flip permutation (jaw 17..1; brows 27..22, 21..18; nose bridge 28-31; nostrils 36..32; eyes 46,45,44,43,48,47 / 40,39,38,37,42,41; outer mouth 55..49,60..56; inner mouth 65..61,68..66): IDENTICAL = True, valid permutation of 1..68 = True, involution = True.",
+        "Both sides are therefore provably the 300-W / iBUG-68 ordering. Not inferred from the point count."
+      ],
+      "residual_decision": "NONE. Horizontal flip may remain enabled; it was NOT disabled to avoid the issue.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "note": "This was E03's only remaining blocker. E03 now has ZERO source-derivable blockers."
+    },
+    {
+      "blocker_id": "E04-2",
+      "method": "E04",
+      "previous_status": "BLOCKING (depth/3DMM/140 landmarks)",
+      "new_status": "STILL_BLOCKED_SOURCE_GAP",
+      "evidence_class": "PAPER+OFFICIAL_CODE",
+      "evidence": [
+        "REFERENCES RESOLVED EXACTLY. [60] = 'Y. Liu, A. Jourabloo, W. Ren, and X. Liu, Dense Face Alignment, ICCV Workshops 2017' -- same MSU lab as E03/E04. [70] = 'A. Bulat and G. Tzimiropoulos, How far are we from solving the 2D & 3D face alignment problem? (and a dataset of 230,000 3D facial landmarks), ICCV 2017'.",
+        "ROLES (paper, verbatim): section 4.1 'We use the open-source face alignment [70] and 3DMM fitting [60] to crop the face and provide 140 landmarks'; section 3 'we use [60] to fit a 3DMM model and extract the 2D locations of Q facial vertices for each face' (Eq. 13); Eq. 16 'We apply the dense face alignment [60] to estimate the 3D shape and render the depth ground truth M0', K = 32.",
+        "OFFICIAL UPSTREAMS EXIST: [60] = github.com/yaojieliu/ICCVW2017-DenseFaceAlignment @ 01cfb1aa9845c9ce6c0ac5fbbb16454ee771f848 (cloned source-only in M6A2, 297 files); [70] = github.com/1adrianb/face-alignment (maintained PyTorch library, no fixed release pinned by the paper).",
+        "BUT THE SCIENTIFIC ROUTE IS NOT UNIQUELY DETERMINED -- four independent sub-gaps:",
+        "  (a) LICENSE-GATED EXTERNAL ASSET: [60]'s README requires 'Download the Basel Face Model (BFM)' from faces.cs.unibas.ch. BFM is distributed only under an individually-signed academic licence; it is neither bundled nor freely fetchable, and M6A2 forbids acquisition.",
+        "  (b) Q=140 VERTEX SET UNSPECIFIED: the paper says only 'We select Q = 140 vertices to cover the face region so that they can represent non-rigid deformation'. No index list, no selection rule, no released file. Different 140-vertex choices give different warps.",
+        "  (c) DEPTH RENDERING UNSPECIFIED: how the fitted 3D shape becomes the 32x32 ground-truth depth map M0 is not described in the paper, and [60]'s repository performs alignment, not depth rendering.",
+        "  (d) REPRODUCIBILITY TODAY: [60] is MATLAB/MatConvNet testing code (test.m, runDeFA.m) with compiled MEX binaries and no training code; [70] is pinned to no specific commit by the paper."
+      ],
+      "residual_decision": {
+        "known": [
+          "both cited upstreams are identified and one is pinnable",
+          "the loss coefficients alpha_1..alpha_6 and beta are fully specified (M6A1)"
+        ],
+        "unknown": [
+          "the BFM asset",
+          "which 140 vertices",
+          "the depth-map rendering procedure",
+          "the exact [70] commit"
+        ],
+        "admissible_owner_choices": {
+          "A": "Authorise BFM acquisition under licence, pin [60] and [70], and obtain the 140-vertex set and depth rendering from the authors",
+          "B": "Define a controlled adaptation of the geometry route and re-tag E04 as CONTROLLED_ADAPTATION rather than FAITHFUL_PAPER",
+          "C": "Drop E04 from the benchmark"
+        },
+        "scientific_consequence": "L_depth carries alpha_1 = 100, the dominant term in Eq. 23; its target cannot be produced at all without (a)+(c), so E04 cannot be trained faithfully.",
+        "recommended_for_reproducibility": "none -- this is a genuine source gap, not a convention choice.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "note": "FaceXFormer's 68 points were NOT substituted for the 140; the paper does not permit it.",
+      "scientific_source_resolved": false,
+      "execution_blocked_by_weight_acquisition": true
+    },
+    {
+      "blocker_id": "E04-3",
+      "method": "E04",
+      "previous_status": "BLOCKING (checkpoint selection)",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "PAPER",
+      "evidence": [
+        "FINAL PAPER-LEVEL SWEEP performed over the full extracted text for: checkpoint, best model, we select, converge, final model, early stop, validation, released model, model zoo, pre-trained model, snapshot, save the model, last/final iteration, selected model, model selection.",
+        "Only three hits, none of which is a selection rule: (i) section 4.1 'We train in total 150,000 iterations with a batch size of 8' -- a BUDGET; (ii) section 4 'We first train the PhySTD till convergence' -- prose about a downstream trace-classification experiment; (iii) abstract 'Source code and pre-trained models will be publicly available upon publication' -- a promise with no URL (Q-09).",
+        "The frozen spec fixes a generator checkpoint rule only for GPAT (section 10.6 SelectionScore) and for downstream evaluators (section 14); no baseline rule exists.",
+        "'Final' would be inferred from a training budget, which this task forbids."
+      ],
+      "residual_decision": {
+        "known": [
+          "training budget is 150,000 iterations, batch 8, lr 5e-5 with /10 at 45,000"
+        ],
+        "unknown": [
+          "which model state generates the synthetic bank"
+        ],
+        "admissible_owner_choices": {
+          "A": "Final iteration (150,000)",
+          "B": "A VAL-based selection rule defined by the owner (TEST may never be used)",
+          "C": "Defer until E04-2 is resolved, since E04 cannot be trained meanwhile"
+        },
+        "scientific_consequence": "Different states give different banks.",
+        "recommended_for_reproducibility": "none authoritative.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false
+    },
+    {
+      "blocker_id": "E05-1",
+      "method": "E05",
+      "previous_status": "BLOCKING (1024 vs 256 'irreconcilable')",
+      "new_status": "RESOLVED_BY_PINNED_UPSTREAM",
+      "evidence_class": "OFFICIAL_CODE+PAPER",
+      "evidence": [
+        "THE M6A1 FRAMING WAS TOO STRONG AND IS CORRECTED. PCGAN's base architecture [34] is officially resolution-agnostic.",
+        "UPSTREAM PINNED: taesungp/swapping-autoencoder-pytorch @ 6baa180f1184ee79a6b967f9d80ee0e02a979ac7 (73 files, 5.2 MB, ZERO weight files).",
+        "OFFICIAL MULTI-RESOLUTION EVIDENCE: the repo's own launchers run the SAME architecture at 256 (afhq, bedroom, church: crop_size=256), 512 (ffhq512) and 1024 (ffhq1024), varying netE_num_downsampling_sp per resolution. crop_size is a command-line option, not an architectural constant.",
+        "FULLY CONVOLUTIONAL: models/networks/encoder.py loops 'for i in range(self.opt.netE_num_downsampling_sp)' with no absolute spatial constants; the only 1024/512 literal in encoder.py/generator.py is generator.py:143 'min(512, ch)', which caps CHANNELS, not spatial size.",
+        "LATENT GEOMETRY SCALES DETERMINISTICALLY: z_pat spatial extent = input / 2^netE_num_downsampling_sp. At 1024 with sp=1 -> 512x512, matching the paper's z_pat in R^{8x512x512}. At 256 with sp=1 -> 8x128x128.",
+        "LOSSES DO NOT HARD-CODE ABSOLUTE SIZES: the paper defines the blurred-reconstruction loss (Eq. 3) as 'Since only a 1/2 downsampling is applied' -- a RELATIVE factor. '1024 x 1024 to 512 x 512' is that relative rule instantiated at the authors' chosen resolution.",
+        "CLASSIFICATION REQUESTED BY THE TASK: 1024 is an EXPERIMENT SETTING, not an ARCHITECTURAL REQUIREMENT. Instantiating at 256 changes no equation and no architecture; it changes only tensor extents, which are a deterministic function of the input size."
+      ],
+      "residual_decision": {
+        "known": [
+          "at 256 the route is fully determined: sp=1, spatial_code_ch=8 -> z_pat = 8x128x128, blur loss = /2 (256 -> 128)"
+        ],
+        "unknown": [
+          "whether a 256 instantiation should be TAGGED FAITHFUL_PAPER or CONTROLLED_ADAPTATION"
+        ],
+        "admissible_owner_choices": {
+          "A": "Instantiate at the benchmark's canonical 256 (also an officially supported resolution of [34]) and tag FAITHFUL_PAPER",
+          "B": "Instantiate at 256 and tag CONTROLLED_ADAPTATION because the authors reported at 1024",
+          "C": "Upsample 256 -> 1024 (NOT RECOMMENDED: fabricates the high-frequency artifact band the method exploits)"
+        },
+        "scientific_consequence": "A vs B is a STATUS-TAG decision, not a missing scientific value. C would manufacture the very signal PCGAN measures.",
+        "recommended_for_reproducibility": "A or B; never C.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "note": "This closes the resolution BLOCKER. The remaining E05 blockers are E05-2 and E05-3."
+    },
+    {
+      "blocker_id": "E05-2",
+      "method": "E05",
+      "previous_status": "BLOCKING (upstreams [34] and [35] unpinned)",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "OFFICIAL_CODE+PAPER",
+      "evidence": [
+        "[34] CONCLUSIVELY IDENTIFIED AND PINNED, by three exact matches, not name similarity: (i) PCGAN says verbatim 'we follow the architecture of [34] but reduce the parameter netE_num_downsampling_sp from 4 to 1'; the repo declares that exact parameter with that exact default at models/networks/encoder.py:35 '--netE_num_downsampling_sp, default=4'. (ii) PCGAN's z_pat has 8 channels; the repo's default is models/swapping_autoencoder_model.py:12 '--spatial_code_ch, default=8'. (iii) Full citation match: T. Park, J.-Y. Zhu, O. Wang, J. Lu, E. Shechtman, A. Efros, R. Zhang, 'Swapping autoencoder for deep image manipulation', NeurIPS 2020 -- repo description 'Official Implementation of Swapping Autoencoder for Deep Image Manipulation (NeurIPS 2020)'.",
+        "  Pin: taesungp/swapping-autoencoder-pytorch @ 6baa180f1184ee79a6b967f9d80ee0e02a979ac7, tree 25a434f1282a0177d6afdcc68ebfcf40bd805621, ZERO weights.",
+        "[34] ALSO SUPPLIES THE DISCRIMINATORS PCGAN NAMES: models/networks/discriminator.py:2 imports 'Discriminator as OriginalStyleGAN2Discriminator' from stylegan2_layers.py, and models/networks/patch_discriminator.py:97 defines StyleGAN2PatchDiscriminator -- matching PCGAN's 'the discriminator proposed by [35]' plus 'an additional network called patch discriminator'.",
+        "[35] IDENTIFIED: T. Karras, S. Laine, T. Aila, 'A style-based generator architecture for GANs', CVPR 2019 (StyleGAN v1); official repo NVlabs/stylegan @ 1e0d5c781384ef12b50ef20a62fee5d78b38e88f (TensorFlow). NOT pinned, because its role is ambiguous:",
+        "RESIDUAL CONFLICT -- MODULATION MECHANISM: PCGAN states the latents are integrated 'through adaptive instance normalization [35]'. AdaIN is the StyleGAN-v1 mechanism. But its declared base [34] uses StyleGAN2 WEIGHT DEMODULATION, verified at models/networks/stylegan2_layers.py:210,217,257,272 (class ModulatedConv2d, demodulate=True) and generator.py:80,114,150 (SpatialCodeModulation), with generator.py:89 stating the layers 'borrow heavily from StyleGAN2 code'. StyleGAN2 explicitly REPLACED AdaIN with demodulation, so the paper's prose and its stated base disagree on an execution-affecting architectural detail."
+      ],
+      "residual_decision": {
+        "known": [
+          "[34] is pinned with certainty and contains the encoder, generator, discriminator and patch discriminator",
+          "[35] is identified as StyleGAN v1"
+        ],
+        "unknown": [
+          "whether PCGAN's generator uses StyleGAN-v1 AdaIN (as its prose says) or StyleGAN2 demodulation (as its stated base [34] implements); likewise whether the discriminator is v1 or v2"
+        ],
+        "admissible_owner_choices": {
+          "A": "Follow [34] as pinned (StyleGAN2 demodulation + StyleGAN2 discriminator), treating PCGAN's '[35]' as a citation of the originating idea",
+          "B": "Follow PCGAN's prose literally (AdaIN + StyleGAN-v1 discriminator), which requires additionally pinning NVlabs/stylegan and deviating from [34]",
+          "C": "Ask the PCGAN authors"
+        },
+        "scientific_consequence": "AdaIN and weight demodulation are different operators producing different generators; the discriminator version likewise changes training dynamics.",
+        "recommended_for_reproducibility": "A -- PCGAN's explicit parameter-level instruction ties it to [34]'s code, and [34] is the only artifact that can actually be pinned and run.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false,
+      "narrowed_from": "two unpinned upstream architectures -> one pinned upstream plus one modulation-mechanism fork"
+    },
+    {
+      "blocker_id": "E05-3",
+      "method": "E05",
+      "previous_status": "BLOCKING (checkpoint selection)",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "PAPER",
+      "evidence": [
+        "FINAL PAPER-LEVEL SWEEP over the full extracted text for released model / model zoo / pre-trained model / we use the final|trained|resulting / snapshot / save the model / last|final iteration / selected model / model selection returned ZERO hits.",
+        "The only training-state statement is the budget: 'Our experiments are conducted on an Nvidia RTX A6000 GPU with a batch size of 1, using the Adam optimizer for 4000 iterations.'",
+        "The paper's 'average performance over the last 10 epochs' and 'best epoch' (Tabs. 2-3) describe DETECTOR evaluation following [9]; they are not PCGAN generator checkpoint selection and were not confused with it. An average over epochs is not a single checkpoint at all.",
+        "No official code exists (Q-08), so no code-level convention can settle it."
+      ],
+      "residual_decision": {
+        "known": [
+          "training budget is 4,000 iterations, batch 1, Adam lr 1e-6"
+        ],
+        "unknown": [
+          "which generator state synthesises the bank"
+        ],
+        "admissible_owner_choices": {
+          "A": "Final iteration (4,000)",
+          "B": "An owner-defined VAL-based rule (TEST may never be used)",
+          "C": "Defer until E05-2 is resolved"
+        },
+        "scientific_consequence": "Different states give different banks.",
+        "recommended_for_reproducibility": "none authoritative.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false
+    },
+    {
+      "blocker_id": "E06c-2",
+      "method": "E06c",
+      "previous_status": "BLOCKING (LightCNN-29 v2 not fetched)",
+      "new_status": "STILL_BLOCKED_REQUIRED_WEIGHT_NOT_FETCHED",
+      "evidence_class": "OFFICIAL_CODE+PAPER",
+      "evidence": [
+        "SCIENTIFIC IDENTITY IS NOW FULLY RESOLVED -- only the bytes are absent.",
+        "ARCHITECTURE IS VENDORED IN THE PINNED SOURCE, so there is no external code dependency: networks/__init__.py:22-25 'def define_IP(is_train=False): netIP = network_29layers_v2(resblock, [1,2,3,4], is_train); netIP = torch.nn.DataParallel(netIP).cuda()', with the full definition in the pinned repo at addition_module/DSDG/networks/light_cnn.py (mfm / resblock / network_29layers_v2).",
+        "UPSTREAM: Wu, He, Sun, Tan, 'A Light CNN for Deep Face Representation with Noisy Labels', IEEE TIFS 2018, 13(11):2884-2896; official repository github.com/AlfredXiangWu/LightCNN (HEAD 7b38a6f2d20865b8c008c6d24cf977309af88114).",
+        "DECISIVE PROVENANCE MATCH: the DSDG README's link is https://drive.google.com/file/d/1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS/view and the upstream LightCNN README's 'LightCNN-29 v2' link is https://drive.google.com/open?id=1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS -- the SAME Google Drive file id. DSDG therefore points at the ORIGINAL AUTHORS' released checkpoint, not a re-hosted copy.",
+        "EXPECTED FILENAME AND PATH: ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar (exactly as passed by the official entrypoint train_generator.sh).",
+        "EXPECTED FORMAT / COMPATIBILITY: train_generator.py:75-81 does torch.load(ip_model), reads checkpoint['state_dict'], filters to keys present in the DataParallel-wrapped network_29layers_v2 state_dict, and loads NON-STRICTLY; parameters are then frozen (line 83) and the net set to eval (line 108).",
+        "ROLE: computes loss_ip with lambda_ip = 1000 on the official execution path; loss_ip is RETAINED by DEV-020.",
+        "NO OFFICIAL CHECKSUM IS PUBLISHED by either repository -- neither AlfredXiangWu/LightCNN nor the DSDG README publishes an MD5/SHA for this file.",
+        "NOT DOWNLOADED: M6A2 forbids weight acquisition; local sha256 is UNKNOWN."
+      ],
+      "residual_decision": {
+        "known": [
+          "architecture, upstream paper, upstream repository, released-file identity, expected filename, expected path, load format and role are all resolved"
+        ],
+        "unknown": [
+          "the file bytes and therefore its sha256; no upstream checksum exists to verify against"
+        ],
+        "admissible_owner_choices": {
+          "A": "Authorise acquisition from the original author's Drive id, record the observed sha256 as the pin, and verify a strict-subset key match against define_IP()",
+          "B": "Authorise a substitute identity network (CHANGES the identity-preservation objective and forfeits FAITHFUL status)"
+        },
+        "scientific_consequence": "Without it E06c cannot train at all, since netIP is loaded unconditionally.",
+        "recommended_for_reproducibility": "A, noting that because no upstream digest exists the sha256 observed at acquisition becomes the authoritative pin and must be recorded then.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "source_contract_resolved": true,
+      "execution_blocked_pending": "owner-authorized acquisition and hash verification",
+      "official_checksum_published": false
+    },
+    {
+      "blocker_id": "E07c-3",
+      "method": "E07c",
+      "previous_status": "BLOCKING (generation sampler undecided)",
+      "new_status": "RESOLVED_BY_OFFICIAL_EXECUTION_PATH",
+      "evidence_class": "OFFICIAL_CODE",
+      "evidence": [
+        "FAS_sample.py IS the repository's dedicated standalone GENERATION entrypoint: it loads a trained model from --model_path, builds the conditioning encoder, takes --live_face_path and --spoof_face_path, runs the sampler and writes the synthesized image. That is precisely the bank-generation operation.",
+        "Its default is DDIM: FAS_sample.py:116 '--sample_algorithm, type=str, default=ddim, choices=[ddpm, ddim]'.",
+        "FAS_train.py's ddpm default governs ONLY the periodic training-time visualization: the sampler there sits inside the 'if (iters)%args.save_images_every_iters==0' block (FAS_train.py:117-163) which writes a sample grid to {iters}_output.png. It never produces a bank.",
+        "Under the task's precedence 'explicit official execution entrypoint > official source defaults', the sampler for synthetic bank inference is DDIM. This is NOT chosen because DDIM is faster.",
+        "RELATED PARAMETERS FROM THE SAME ENTRYPOINT: DDIM_skip=10, sample_initial_noise=250 (so seq = range(0, 250, 10), i.e. 25 DDIM steps), cond_scale=2.0, means_size=5, var_size=3, use_pair=False.",
+        "CONSISTENCY CHECK: FAS_sample.py's use_pair default False coincides with the frozen DEV-021 use_pair=false, so the generation entrypoint and the frozen adaptation agree.",
+        "SEED: unlike FAS_train.py (hard-coded seed_torch(seed=1)), the generation entrypoint PARAMETERISES it -- FAS_sample.py:33 'seed_torch(args.random_seed)' -- so the benchmark seed from [42,1337,2026] propagates natively at generation with no adapter. The repository default 1029 is superseded by the frozen spec seed contract (M6A1 section K)."
+      ],
+      "residual_decision": "NONE for the sampler. The training-side hard-coded seed still needs the adapter already recorded in M6A1 section K.3.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false
+    },
+    {
+      "blocker_id": "E07c-4",
+      "method": "E07c",
+      "previous_status": "BLOCKING (PADISI conditioning encoder)",
+      "new_status": "STILL_BLOCKED_SOURCE_GAP",
+      "evidence_class": "OFFICIAL_CODE",
+      "evidence": [
+        "ARCHITECTURE AND ROLE RESOLVED: models/unet_autoenc.py:73-77 'def encoder(self, path): model_autoencoder = resnet18(); model_autoencoder = torch.load(path); return model_autoencoder.cuda()' -- it torch.loads a WHOLE PICKLED nn.Module (not a state_dict), nominally a custom_rn.resnet18 returning (x32x32, x16x16, x8x8, embg). Training dataset is implied by the default filename ./PADISI.pkl and --protocol PADISI.",
+        "EXHAUSTIVE RELEASE SEARCH OF AUTHORITATIVE SOURCES FOUND NOTHING:",
+        "  README.md is three lines and says 'The detailed readme.md is coming soon!' -- no download instructions.",
+        "  The repository contains NO shell scripts, examples, notebooks or docs (find for *.sh/*.md/*.txt/*.ipynb returns only README.md).",
+        "  Grep for padisi/download/release/huggingface/drive.google/*.pkl across the repo returns only the argparse default, the PADISIDataset class, and torchvision's standard ImageNet ResNet URLs in custom_rn.py -- none of which is the conditioning encoder.",
+        "  github.com/murphytju/DiffFAS has ZERO releases and ZERO tags.",
+        "No official bytes are published anywhere locatable, and therefore no checksum exists.",
+        "CONTRAST WITH E06c: LightCNN has an official link and a resolved released-file identity; this encoder has NEITHER -- it is unlinked AND not fetched."
+      ],
+      "residual_decision": {
+        "known": [
+          "nominal architecture (custom_rn.resnet18 variant), pickle-module load format, unconditional per-step role"
+        ],
+        "unknown": [
+          "whether an official encoder release exists at all; its exact weights; its exact training protocol on PADISI"
+        ],
+        "admissible_owner_choices": {
+          "A": "Contact the DiffFAS authors for the released encoder",
+          "B": "Authorise training a substitute conditioning encoder on GPAT TRAIN (CHANGES the conditioning features; forfeits FAITHFUL status)",
+          "C": "Drop E07c"
+        },
+        "scientific_consequence": "The encoder is called on EVERY training step regardless of use_pair, so no E07c training is possible without it.",
+        "recommended_for_reproducibility": "none -- no substitute can be proposed in M6A2, per the task.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "official_release_located": false,
+      "substitute_proposed": false
+    },
+    {
+      "blocker_id": "E07c-5",
+      "method": "E07c",
+      "previous_status": "BLOCKING (checkpoint selection)",
+      "new_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "evidence_class": "OFFICIAL_CODE",
+      "evidence": [
+        "FINAL SOURCE / RELEASE SEARCH: FAS_sample.py:112 declares '--model_path, type=str, required=True' with NO default; README.md is three lines with no checkpoint guidance; the repository has no shell scripts, no command examples, no docs; github.com/murphytju/DiffFAS has ZERO releases and ZERO tags.",
+        "Training saves model_{iters:06d}.pt every save_checkpoints_every_iters = 10,000 iterations (FAS_train.py:102-114) with NO best-checkpoint tracking and NO held-out validation metric -- the periodic block only writes a sample grid.",
+        "The source therefore names neither a final, a latest nor a best checkpoint, and 'final' must not be inferred.",
+        "SUB-DETAIL ALREADY RESOLVED (M6A1): which tensor set to load IS fixed -- FAS_sample.py:46 loads torch.load(model_path)['model'], not ['ema'], although both are saved. Only WHICH ITERATION is unspecified."
+      ],
+      "residual_decision": {
+        "known": [
+          "save cadence is every 10,000 iterations; max_epochs=400; the 'model' tensor set is used, not 'ema'"
+        ],
+        "unknown": [
+          "which iteration checkpoint generates the bank"
+        ],
+        "admissible_owner_choices": {
+          "A": "Last saved iteration",
+          "B": "An owner-defined VAL-based rule (TEST may never be used)",
+          "C": "Defer until E07c-4 is resolved, since E07c cannot be trained meanwhile"
+        },
+        "scientific_consequence": "Different iteration checkpoints give different banks.",
+        "recommended_for_reproducibility": "none authoritative.",
+        "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE"
+      },
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false
+    }
+  ]
+}

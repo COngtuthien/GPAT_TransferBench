@@ -1,5 +1,5 @@
 {
-  "fetched_utc": "2026-09-20 (dsdg, difffas); 2026-09-21 (fas_aug, stdn)",
+  "fetched_utc": "2026-09-20 (dsdg, difffas); 2026-09-21 (fas_aug, stdn; M6A2: facexformer, defa_iccvw2017, swapping_autoencoder)",
   "m6a1_weight_dependencies_not_downloaded": [
     {
       "method_ids": [
@@ -22,8 +22,100 @@
       "weight": "PADISI-trained conditioning encoder (--pretrain_classifier, default ./PADISI.pkl)"
     }
   ],
+  "m6a2_identified_not_pinned": [
+    {
+      "head_seen": "1e0d5c781384ef12b50ef20a62fee5d78b38e88f",
+      "reason_not_pinned": "E05-2 modulation-mechanism fork leaves its role undetermined (AdaIN per PCGAN's prose vs StyleGAN2 demodulation as shipped by [34]).",
+      "reference": "E05 paper reference [35] (StyleGAN v1, Karras et al. CVPR 2019)",
+      "repository": "https://github.com/NVlabs/stylegan"
+    }
+  ],
   "purpose": "Track-A adaptation source audit (Amendment A1) and M6A1 baseline source/provenance audit; source only, no weights",
   "sources": {
+    "defa_iccvw2017": {
+      "binary_weight_files_present_now": [],
+      "binary_weights_removed_after_checkout": [
+        {
+          "git_blob": "beb12719b511a54ea20d3d2a1ce4f4d0e20980ba",
+          "path": "data/DeFA.mat",
+          "sha256": "5ac1d36e6637e4995d63f59f725b3b71bf2eca8dbd6fd240242b07e2fe5807a4",
+          "size_bytes": 18122819
+        },
+        {
+          "git_blob": "7696309b51b48f3833c45438e9bfa7b62c4a4963",
+          "path": "data/DeFA_Frontal.mat",
+          "sha256": "788e26e30db78f9476cb40777ca199e6750d46a444d7837bd939571945a92ce7",
+          "size_bytes": 18171275
+        },
+        {
+          "git_blob": "ac23f98326b61f5f1716d7b6bc2ed9601bcf5f91",
+          "path": "data/Model_Expression.mat",
+          "sha256": "4ab0ac3a6f79c701f7376002aacac1bec1a19eef73662aa5f7a25b90587f07e1",
+          "size_bytes": 36762492
+        },
+        {
+          "git_blob": "7d681650974ad99bcbfe0e4cfec1d13cb5a370fe",
+          "path": "data/Model_info.mat",
+          "sha256": "68b3c747b1aaa923672ee21261ad92dc98e9e3f36176b411c810e37ee8299f1a",
+          "size_bytes": 694466
+        },
+        {
+          "git_blob": "778b515c934f8fd76eb93ea10cb583042318db0b",
+          "path": "data/Model_Para.mat",
+          "sha256": "3e9b5f973d927dd6200ca1ba903c32efd916fce9d28e1607ed94e4d0fef2306b",
+          "size_bytes": 2436
+        }
+      ],
+      "checkout_mode": "full tree, depth 1",
+      "cited_files": {
+        "README.md": {
+          "git_blob": "b9075371ff7cf766c8b9e910a6215895e0a59f23",
+          "lines": 33,
+          "sha256": "732c0a7a933b150ec1692d554f5958f4230799fe677334dedb9251eb76c46eb2",
+          "size_bytes": 1299
+        },
+        "matlab/runDeFA.m": {
+          "git_blob": "ea40d34f7a2ca4201747f56ff6f073242575a619",
+          "lines": 49,
+          "sha256": "2b717680d6d1da9b6c36856868f8753334ad4bf94e0b00990aee21c9f162b180",
+          "size_bytes": 1359
+        },
+        "test.m": {
+          "git_blob": "8e2978b60e4c429aacfad1ba20f5973776122c81",
+          "lines": 50,
+          "sha256": "21f41936eeb9bace19a6d4015f8ea7b26822c54c2bcd204fc872b46aa6d52c5a",
+          "size_bytes": 1334
+        }
+      },
+      "commit_date_utc": "2019-07-09T14:23:40-07:00",
+      "commit_subject": "Merge branch 'master' of github.com:yaojieliu/ICCVW2017-DenseFaceAlignment",
+      "commit_tree": "d940d3582fd4f27684564d5a7e180e09e3f26d9a",
+      "commit_verified_from_remote": "https://github.com/yaojieliu/ICCVW2017-DenseFaceAlignment",
+      "line_count_convention": "len(data.split(b\"\\n\")) \u2014 repository convention; a terminal newline contributes one extra element",
+      "m6a2_finding": "Identified as E04 reference [60] but the scientific route is NOT uniquely determined: the README requires the license-gated Basel Face Model (faces.cs.unibas.ch), the paper does not say WHICH 140 vertices are selected, the depth-rendering procedure is undescribed, and the release is MATLAB/MatConvNet test-only code. E04-2 therefore remains STILL_BLOCKED_SOURCE_GAP.",
+      "method_ids": [
+        "E04"
+      ],
+      "model_weights_downloaded": false,
+      "other_binaries_removed_after_checkout": {
+        "compiled_binary_count": 88,
+        "compiled_binary_note": "*.mexa64 / *.mexw64 / *.o / *.obj removed to keep the cache source-only; hashes in outputs/audit/M6A2_BLOCKER_STATE.json context and recomputable from the pinned commit",
+        "dataset_archive": [
+          {
+            "git_blob": "ea68f19c718eb31baba78e568124c63a54dbf3fa",
+            "path": "data/AFLW2000-68-Annotations.zip",
+            "sha256": "e54c4011b2a9e1744a37b9282eddf1ad411b42885cc722c4a82a35a6e9abb198",
+            "size_bytes": 7383358
+          }
+        ]
+      },
+      "paper": "Y. Liu, A. Jourabloo, W. Ren, X. Liu, Dense Face Alignment, ICCV Workshops 2017",
+      "pinned_commit": "01cfb1aa9845c9ce6c0ac5fbbb16454ee771f848",
+      "relevant_path": ".",
+      "repository": "https://github.com/yaojieliu/ICCVW2017-DenseFaceAlignment",
+      "role": "E04 paper reference [60] (dense face alignment / 3DMM fitting / depth ground truth)",
+      "weight_removal_note": "Repository-embedded, fetched as part of the ordinary source checkout, NEVER USED, removed from the source-only working tree. 94 deletions total; zero source files modified."
+    },
     "difffas": {
       "binary_weight_files_present_now": [],
       "binary_weights_removed_after_checkout": [],
@@ -133,6 +225,41 @@
       "pinned_commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
       "relevant_path": "addition_module/DSDG",
       "repository": "https://github.com/JDAI-CV/FaceX-Zoo"
+    },
+    "facexformer": {
+      "binary_weight_files_present_now": [],
+      "binary_weights_removed_after_checkout": [],
+      "checkout_mode": "full tree, depth 1",
+      "cited_files": {
+        "README.md": {
+          "git_blob": "e6a7e838d1cd36a4042ea455383e4cf05beb7d55",
+          "lines": 109,
+          "sha256": "5e16b09d9a7a36d8265d5fdfbf501f48392543f78689c3902630c32db223b45e",
+          "size_bytes": 5629
+        },
+        "inference.py": {
+          "git_blob": "69d78eb45304ab09492b21fa9e0e4cbf1dd17fe9",
+          "lines": 247,
+          "sha256": "1616fde40b7bf94cc8014a3c06910780c73673be803280f2eaa52ab6b063c65c",
+          "size_bytes": 10082
+        }
+      },
+      "commit_date_utc": "2025-09-06T16:57:35-07:00",
+      "commit_subject": "Update README.md",
+      "commit_tree": "67d7da58079000149fabf6c7975c62bbcb4c8527",
+      "commit_verified_from_remote": "https://github.com/Kartik-3004/facexformer",
+      "line_count_convention": "len(data.split(b\"\\n\")) \u2014 repository convention; a terminal newline contributes one extra element",
+      "m6a2_finding": "Commit matches the M2 pin in outputs/audit/M2A_MODEL_PROVENANCE.csv exactly. The repo is inference-only and does NOT document the 68-point ordering; the ordering was traced upstream to the paper (arXiv:2403.12960v3 App. F.2: landmarks trained on 300W [82] = Sagonas et al. ICCVW 2013 = iBUG-68), which matches STDN's lm_reverse_list byte-for-byte.",
+      "method_ids": [
+        "E03"
+      ],
+      "model_weights_downloaded": false,
+      "paper": "K. Narayan et al., FaceXFormer: A Unified Transformer for Facial Analysis, arXiv:2403.12960",
+      "pinned_commit": "10fe8291f8a64e2ca1daf938e3e0007bd860303b",
+      "relevant_path": ".",
+      "repository": "https://github.com/Kartik-3004/facexformer",
+      "role": "E03-2r landmark-ordering evidence (supporting; the geometry cache itself is registered in models/registry.yaml)",
+      "spec_code_link": "https://github.com/Kartik-3004/facexformer"
     },
     "fas_aug": {
       "binary_weight_files_present_now": [],
@@ -288,6 +415,69 @@
       "repository": "https://github.com/yaojieliu/ECCV20-STDN",
       "spec_code_link": "https://github.com/yaojieliu/ECCV20-STDN",
       "weight_removal_note": "Present in the upstream repository, not downloaded separately. Removed from the working tree of the source-only cache; no source file altered (cache git status shows exactly these 4 deletions). Digests recomputed from the local object store for provenance only."
+    },
+    "swapping_autoencoder": {
+      "binary_weight_files_present_now": [],
+      "binary_weights_removed_after_checkout": [],
+      "checkout_mode": "full tree, depth 1",
+      "cited_files": {
+        "experiments/ffhq1024_pretrained_launcher.py": {
+          "git_blob": "d16a0fc52e3a0d7a4901f36a1d620365f6f864f0",
+          "lines": 68,
+          "sha256": "c2e2e3224d707b7adb920c2e89259a351d595b9e09fe876f3d17a115e50886d8",
+          "size_bytes": 2587
+        },
+        "models/networks/discriminator.py": {
+          "git_blob": "74b168ca79125789f5677e4876b619eb9ac58382",
+          "lines": 33,
+          "sha256": "5389055129c709e93102c9275f30a20b1e708c23744343919d0a6da6edbd38e4",
+          "size_bytes": 966
+        },
+        "models/networks/encoder.py": {
+          "git_blob": "7f625afecab209283737b449a294ec5e18a5763d",
+          "lines": 115,
+          "sha256": "5a059500d7964969bc7adefe8ea60e12185f1747d95f0d16dc54d53c84400f58",
+          "size_bytes": 4372
+        },
+        "models/networks/generator.py": {
+          "git_blob": "dff150a2552ae5b4519c2582c8cc36031b3dba8a",
+          "lines": 162,
+          "sha256": "c8d31a71e5956e53d2dd44faadea7fce395d3589ddd5ab23bab95cd59102c705",
+          "size_bytes": 6887
+        },
+        "models/networks/patch_discriminator.py": {
+          "git_blob": "1773bfe309827c0edced4e6e83024ef913ef78b9",
+          "lines": 172,
+          "sha256": "a886122242d5c8d9a4878ee0f1f1684bac51c27c2e588c554c52a4ca92164e7d",
+          "size_bytes": 6803
+        },
+        "models/swapping_autoencoder_model.py": {
+          "git_blob": "8deab9de30b7ce341d322136b3b8d346809f70e8",
+          "lines": 276,
+          "sha256": "71df763244ea5b17c55d93384595c37dccb04386802f00a9d407a72e31b83e7f",
+          "size_bytes": 10396
+        }
+      },
+      "commit_date_utc": "2022-06-14T12:40:28-07:00",
+      "commit_subject": "Update README.md",
+      "commit_tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+      "commit_verified_from_remote": "https://github.com/taesungp/swapping-autoencoder-pytorch",
+      "identity_evidence": [
+        "PCGAN names the exact parameter netE_num_downsampling_sp and its default 4 -> models/networks/encoder.py:35",
+        "PCGAN's z_pat has 8 channels -> models/swapping_autoencoder_model.py:12 spatial_code_ch default 8",
+        "repo description matches the [34] citation verbatim (NeurIPS 2020)"
+      ],
+      "line_count_convention": "len(data.split(b\"\\n\")) \u2014 repository convention; a terminal newline contributes one extra element",
+      "m6a2_finding": "Resolves E05-1 (the repo officially runs the same architecture at 256/512/1024, so 1024 is an experiment setting, not an architectural requirement). E05-2 remains blocked: PCGAN's prose cites AdaIN [35] (StyleGAN v1) while this base implements StyleGAN2 weight demodulation (ModulatedConv2d, demodulate=True).",
+      "method_ids": [
+        "E05"
+      ],
+      "model_weights_downloaded": false,
+      "paper": "T. Park, J.-Y. Zhu, O. Wang, J. Lu, E. Shechtman, A. Efros, R. Zhang, Swapping Autoencoder for Deep Image Manipulation, NeurIPS 2020",
+      "pinned_commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+      "relevant_path": ".",
+      "repository": "https://github.com/taesungp/swapping-autoencoder-pytorch",
+      "role": "E05 paper reference [34] (base architecture: encoder, generator, discriminator, patch discriminator)"
     }
   },
   "status": "PASS",
