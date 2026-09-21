@@ -1,0 +1,347 @@
+{
+  "schema_version": "m6a3b-blocker-state-v1",
+  "milestone": "M6A3b",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "0d94d5f92f531d6ce22f59bebcd5d2444fe7e9fd",
+  "m6a2_starting_commit": "9dc2492750fff98fd2fa8676715eda58df3a9d46",
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "amendment_a1_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "amendment_a2_path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+  "basis": "M6A2_BLOCKER_STATE.json is the starting evidence state and was NOT mutated. Owner decisions from M6A3b are recorded additively.",
+  "authority": "OWNER_APPROVED. All owner_decision values are explicit owner choices, not model recommendations.",
+  "input_evidence": {
+    "outputs/audit/M6A3_OWNER_DECISION_PACKET.md": "fcb453f655a6326deac74312aa2e5a7ac988a0ed5e27b714af23959f3f6cecc5",
+    "outputs/audit/M6A3_OWNER_DECISION_PACKET.json": "d8d139fd2f78a7561d575b2748c9b25c9f92bcd06632796b49a1a31d7d703ef9"
+  },
+  "counts": {
+    "before": 11,
+    "resolved_by_owner_contract": 8,
+    "active_after": 3
+  },
+  "resolved_by_owner_contract": [
+    "E01-3",
+    "E02-1",
+    "E02-2",
+    "E02-3",
+    "E04-3",
+    "E05-2",
+    "E05-3",
+    "E07c-5"
+  ],
+  "active_after": [
+    "E04-2",
+    "E06c-2",
+    "E07c-4"
+  ],
+  "observations_resolved_not_counted_in_blocker_arithmetic": [
+    "OBS-1"
+  ],
+  "method_state": {
+    "E01": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": [],
+      "fidelity": "FAITHFUL_OFFICIAL_WITH_DISCLOSED_LABEL_AND_NOOP_RATE"
+    },
+    "E02": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": [],
+      "fidelity": "CONTROLLED_ADAPTATION_BY_SPEC_8_2"
+    },
+    "E03": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": [],
+      "fidelity": "FAITHFUL_OFFICIAL"
+    },
+    "E04": {
+      "state": "BLOCKED",
+      "active_blockers": [
+        "E04-2"
+      ],
+      "fidelity": "FAITHFUL_PAPER_INTENT_PRESERVED_NOT_EXECUTABLE"
+    },
+    "E05": {
+      "state": "CONTRACT_READY_FOR_IMPLEMENTATION",
+      "active_blockers": [],
+      "fidelity": "CONTROLLED_ADAPTATION"
+    },
+    "E06c": {
+      "state": "BLOCKED",
+      "active_blockers": [
+        "E06c-2"
+      ],
+      "fidelity": "AMENDMENT_A1_ADAPTATION_SEMANTICS_FROZEN"
+    },
+    "E07c": {
+      "state": "BLOCKED",
+      "active_blockers": [
+        "E07c-4"
+      ],
+      "fidelity": "AMENDMENT_A1_ADAPTATION_SEMANTICS_FROZEN"
+    }
+  },
+  "all_m6_baselines_ready": false,
+  "baseline_final_state_v1": {
+    "applies_exactly_to": [
+      "E04-3",
+      "E05-3",
+      "E07c-5"
+    ],
+    "must_not_override": {
+      "E03": "latest/final ckpt-50",
+      "E06c": "generator epoch 200"
+    },
+    "test_used_for_checkpoint_selection": false,
+    "val_selects_checkpoint_for_governed_methods": false
+  },
+  "constraints_reaffirmed": {
+    "no_training_in_m6a3b": true,
+    "no_synthetic_bank_generation_in_m6a3b": true,
+    "no_test_access_in_m6a3b": true,
+    "no_model_execution_in_m6a3b": true,
+    "no_checkpoint_created_in_m6a3b": true,
+    "no_weight_downloaded_in_m6a3b": true,
+    "no_method_configs_created_in_m6a3b": true,
+    "m6a2_blocker_state_mutated": false
+  },
+  "blockers": [
+    {
+      "blocker_id": "E01-1",
+      "method": "E01",
+      "m6a2_status": "RESOLVED_BY_SPEC",
+      "owner_decision": "NONE_REQUIRED_ALREADY_RESOLVED_IN_M6A2",
+      "m6a3_status": "RESOLVED_BY_SPEC",
+      "active_blocker": false,
+      "evidence_basis": "SPEC+OFFICIAL_CODE (M6A2)",
+      "fidelity_effect": "No fidelity change. Label-policy divergence from the FAS-Aug authors must be disclosed with the E01 row.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "None. Carry the disclosure into the E01 method config at M6B."
+    },
+    {
+      "blocker_id": "E01-2",
+      "method": "E01",
+      "m6a2_status": "RESOLVED_BY_SPEC",
+      "owner_decision": "NONE_REQUIRED_ALREADY_RESOLVED_IN_M6A2",
+      "m6a3_status": "RESOLVED_BY_SPEC",
+      "active_blocker": false,
+      "evidence_basis": "SPEC+OFFICIAL_CODE (M6A2)",
+      "fidelity_effect": "No fidelity change. The ~10% level=0 no-op rate must be disclosed and measured with the E01 row.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "None. Carry the disclosure into the E01 method config at M6B."
+    },
+    {
+      "blocker_id": "E01-3",
+      "method": "E01",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "A",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, Amendment A2 section A2-01); prior evidence OFFICIAL_CODE+SPEC (M6A2)",
+      "fidelity_effect": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION. Operator set, magnitude distribution, asset contents and per-pair operator seed are unchanged. The authors' original os.listdir mapping is unrecoverable, so no choice could reproduce it.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "Implement lexicographic (bytewise) enumeration per official asset directory at M6B; assert it agrees with the pinned repository/git-tree order."
+    },
+    {
+      "blocker_id": "E02-1",
+      "method": "E02",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "B",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, A2-02); prior evidence SPEC+COMPUTED (M6A2, n_eligible=159)",
+      "fidelity_effect": "SCIENTIFIC_CLARIFICATION. E02 is already CONTROLLED_ADAPTATION by spec 8.2; no fidelity class change.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "Implement k = (n_eligible + 2) // 4 at M6B; freeze the RULE, not the number 40."
+    },
+    {
+      "blocker_id": "E02-2",
+      "method": "E02",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "B",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, A2-03); prior evidence SPEC (M6A2)",
+      "fidelity_effect": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION. No fidelity class change.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "Implement row-major eligible enumeration + numpy.random.Generator(PCG64(pair_seed)).choice(n_eligible, k, replace=False) at M6B, sorting the selected indices ascending before substitution. The runtime-environment freeze MUST pin the NumPy version (observed during audit: 2.5.3, NOT the authoritative pin)."
+    },
+    {
+      "blocker_id": "E02-3",
+      "method": "E02",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "B",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, A2-04); prior evidence SPEC+M4_FROZEN_ADAPTATION (M6A2)",
+      "fidelity_effect": "SCIENTIFIC_CLARIFICATION. Dedicated namespace 'gpatbench.freqsub.block.v1' keeps E01 and E02 randomness uncorrelated.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "Implement the full 32-byte big-endian digest seed at M6B; no truncation, no modulo."
+    },
+    {
+      "blocker_id": "E02-4",
+      "method": "E02",
+      "m6a2_status": "RESOLVED_BY_SPEC",
+      "owner_decision": "NONE_REQUIRED_ALREADY_RESOLVED_IN_M6A2",
+      "m6a3_status": "RESOLVED_BY_SPEC",
+      "active_blocker": false,
+      "evidence_basis": "SPEC+COMPUTED (M6A2)",
+      "fidelity_effect": "No fidelity change.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "None. Implement pixel-wise p <-> 256-p mirroring at M6B."
+    },
+    {
+      "blocker_id": "E03-2r",
+      "method": "E03",
+      "m6a2_status": "RESOLVED_BY_PINNED_UPSTREAM",
+      "owner_decision": "NONE_REQUIRED_ALREADY_RESOLVED_IN_M6A2",
+      "m6a3_status": "RESOLVED_BY_PINNED_UPSTREAM",
+      "active_blocker": false,
+      "evidence_basis": "OFFICIAL_CODE+PAPER (M6A2)",
+      "fidelity_effect": "No fidelity change. Horizontal flip remains enabled.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "None. E03 has zero remaining blockers; its config is deferred to M6B only because M6A forbids method YAMLs."
+    },
+    {
+      "blocker_id": "E04-2",
+      "method": "E04",
+      "m6a2_status": "STILL_BLOCKED_SOURCE_GAP",
+      "owner_decision": "A",
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true,
+      "evidence_basis": "OWNER_DIRECTION (M6A3b, A2-09); prior evidence PAPER+OFFICIAL_CODE (M6A2). The owner's selection records a DIRECTION; it does NOT close the gap.",
+      "fidelity_effect": "FAITHFUL_PAPER intent PRESERVED. No substitute geometry, depth renderer, 68->140 conversion, substitute 3DMM or benchmark-created depth target may be invented.",
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "next_required_action": "Later dedicated steps: (1) acquire the licensed BFM asset; (2) obtain the published Q=140 vertex set; (3) obtain the depth-rendering procedure; (4) freeze the exact executable legacy geometry route reproducibly. E04 stays BLOCKED until all four are resolved."
+    },
+    {
+      "blocker_id": "E04-3",
+      "method": "E04",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "BASELINE_FINAL_STATE_V1",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION_BASELINE_FINAL_STATE_V1",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, A2-06); prior evidence PAPER (M6A2, 150,000-iteration budget)",
+      "fidelity_effect": "No fidelity change by itself. 'End of budget' is a BENCHMARK CONVENTION, not a paper fact, and must be disclosed as such. No VAL-based and no TEST-based selection.",
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "None for the checkpoint rule; E04 remains unexecutable while E04-2 is active. Terminal state = iteration 150000."
+    },
+    {
+      "blocker_id": "E05-1",
+      "method": "E05",
+      "m6a2_status": "RESOLVED_BY_PINNED_UPSTREAM",
+      "owner_decision": "NONE_REQUIRED_ALREADY_RESOLVED_IN_M6A2",
+      "m6a3_status": "RESOLVED_BY_PINNED_UPSTREAM",
+      "active_blocker": false,
+      "evidence_basis": "OFFICIAL_CODE+PAPER (M6A2)",
+      "fidelity_effect": "Resolution 256 is an officially supported setting of [34]; this blocker's closure introduced no adaptation. The E05 fidelity label is set by E05-2, not by E05-1.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "None. At 256: sp=1, z_pat = 8x128x128, blur loss /2."
+    },
+    {
+      "blocker_id": "E05-2",
+      "method": "E05",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "A",
+      "m6a3_status": "RESOLVED_BY_OWNER_CONTROLLED_ADAPTATION",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, A2-07); prior evidence OFFICIAL_CODE+PAPER (M6A2, [34] pinned at 6baa180f)",
+      "fidelity_effect": "CONTROLLED_ADAPTATION. E05 fidelity = CONTROLLED_ADAPTATION because PCGAN prose cites AdaIN/StyleGAN-v1 [35] while its named executable base [34] uses StyleGAN2 demodulation. Method ID and result row remain E05; the discrepancy MUST be disclosed in the final report and the row must NOT be called 'native PCGAN' or 'faithful PCGAN'.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "Implement against taesungp/swapping-autoencoder-pytorch@6baa180f1184ee79a6b967f9d80ee0e02a979ac7 at M6B; record the fidelity label with the E05 row."
+    },
+    {
+      "blocker_id": "E05-3",
+      "method": "E05",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "BASELINE_FINAL_STATE_V1",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION_BASELINE_FINAL_STATE_V1",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, A2-06); prior evidence PAPER (M6A2, 4,000-iteration budget)",
+      "fidelity_effect": "No fidelity change by itself. 'End of budget' is a BENCHMARK CONVENTION, not a paper fact, and must be disclosed as such. No VAL-based and no TEST-based selection.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "Use the terminal state at iteration 4000 at M6B."
+    },
+    {
+      "blocker_id": "E06c-2",
+      "method": "E06c",
+      "m6a2_status": "STILL_BLOCKED_REQUIRED_WEIGHT_NOT_FETCHED",
+      "owner_decision": "A",
+      "m6a3_status": "OWNER_AUTHORIZED_ACQUISITION_PENDING",
+      "active_blocker": true,
+      "evidence_basis": "OWNER_ACQUISITION_AUTHORIZATION (M6A3b, A2-08); prior evidence OFFICIAL_CODE+PAPER (M6A2). Scientific contract resolved; acquisition approved; bytes NOT fetched; local SHA256 UNKNOWN; execution still blocked.",
+      "fidelity_effect": "No fidelity change. Substituting any other identity model is PROHIBITED.",
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "next_required_action": "Later dedicated acquisition step: download from the exact official location (original LightCNN author release, the same Google Drive file id referenced by both upstream LightCNN and DSDG, expected at ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar), compute SHA256, inventory file size, inspect checkpoint keys safely, verify compatibility with define_IP(), record provenance. No download occurred in M6A3b."
+    },
+    {
+      "blocker_id": "E07c-3",
+      "method": "E07c",
+      "m6a2_status": "RESOLVED_BY_OFFICIAL_EXECUTION_PATH",
+      "owner_decision": "NONE_REQUIRED_ALREADY_RESOLVED_IN_M6A2",
+      "m6a3_status": "RESOLVED_BY_OFFICIAL_EXECUTION_PATH",
+      "active_blocker": false,
+      "evidence_basis": "OFFICIAL_CODE (M6A2)",
+      "fidelity_effect": "No fidelity change. The training-side hard-coded seed still needs the adapter recorded in M6A1 section K.3.",
+      "implementation_allowed": true,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "None for the sampler (DDIM, DDIM_skip=10, sample_initial_noise=250 => 25 steps, cond_scale=2.0)."
+    },
+    {
+      "blocker_id": "E07c-4",
+      "method": "E07c",
+      "m6a2_status": "STILL_BLOCKED_SOURCE_GAP",
+      "owner_decision": "A",
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true,
+      "evidence_basis": "OWNER_DIRECTION (M6A3b, A2-10); prior evidence OFFICIAL_CODE (M6A2). The owner's selection records a DIRECTION; it does NOT close the gap.",
+      "fidelity_effect": "FAITHFUL official DiffFAS route PRESERVED. Training a benchmark-side substitute encoder, disabling the conditioning encoder, replacing it with ImageNet ResNet18, or inventing PADISI training details are all PROHIBITED.",
+      "implementation_allowed": false,
+      "weight_required": true,
+      "weight_fetched": false,
+      "next_required_action": "Later source-resolution step: attempt to obtain the official PADISI conditioning encoder, or exact training/release information, from the original authors / an authoritative source. E07c stays BLOCKED meanwhile."
+    },
+    {
+      "blocker_id": "E07c-5",
+      "method": "E07c",
+      "m6a2_status": "STILL_BLOCKED_OWNER_DECISION_REQUIRED",
+      "owner_decision": "BASELINE_FINAL_STATE_V1",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION_BASELINE_FINAL_STATE_V1",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION (M6A3b, A2-06); prior evidence OFFICIAL_CODE (M6A2, save cadence every 10,000 iterations, max_epochs=400, tensor set ['model'])",
+      "fidelity_effect": "No fidelity change by itself. 'End of budget' is a BENCHMARK CONVENTION, not a source fact, and must be disclosed as such. No VAL-based and no TEST-based selection.",
+      "implementation_allowed": false,
+      "weight_required": false,
+      "weight_fetched": false,
+      "next_required_action": "Terminal model state at the end of the frozen 400-epoch budget. Because upstream periodic saving (every 10,000 iterations) does not in general coincide with that state, create a TERMINAL checkpoint with ZERO additional optimizer steps. E04-2-style source gap E07c-4 keeps E07c unexecutable meanwhile."
+    }
+  ]
+}

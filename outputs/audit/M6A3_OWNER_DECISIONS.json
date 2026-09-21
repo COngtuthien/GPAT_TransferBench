@@ -1,0 +1,381 @@
+{
+  "schema_version": "m6a3b-owner-decisions-v1",
+  "milestone": "M6A3b",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "0d94d5f92f531d6ce22f59bebcd5d2444fe7e9fd",
+  "m6a2_starting_commit": "9dc2492750fff98fd2fa8676715eda58df3a9d46",
+  "purpose": "Record the owner-approved M6 baseline execution decisions faithfully, update blocker state, and create an additive amendment/audit trail. M6A3b freezes owner choices; it does NOT reconsider or replace them.",
+  "authority": "OWNER_APPROVED. Every decision below was explicitly issued by the owner. None is a model recommendation. The M6A3a 'recommended_option' fields are superseded as inputs and were NOT used to decide.",
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "amendment_a1_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "amendment_a2_path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+  "input_evidence": {
+    "outputs/audit/M6A3_OWNER_DECISION_PACKET.md": "fcb453f655a6326deac74312aa2e5a7ac988a0ed5e27b714af23959f3f6cecc5",
+    "outputs/audit/M6A3_OWNER_DECISION_PACKET.json": "d8d139fd2f78a7561d575b2748c9b25c9f92bcd06632796b49a1a31d7d703ef9"
+  },
+  "inputs_read": [
+    "outputs/audit/M6A2_BLOCKER_STATE.json",
+    "outputs/audit/M6A2_SOURCE_DERIVABLE_BLOCKER_RESOLUTION.md",
+    "outputs/audit/M6A3_OWNER_DECISION_PACKET.md",
+    "outputs/audit/M6A3_OWNER_DECISION_PACKET.json",
+    "outputs/audit/M6_BASELINE_EXECUTION_CONTRACT_AUDIT.md",
+    "configs/CONFIG_STATUS.md"
+  ],
+  "change_classes": {
+    "SCIENTIFIC_CLARIFICATION": "Fixes the meaning of an ambiguous spec expression. Changes what is computed only by removing ambiguity.",
+    "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION": "Fixes a spec-open execution detail so results are host-independent. No scientific quantity is altered.",
+    "CONTROLLED_ADAPTATION": "Documented, disclosed divergence from the original method description, adopted because that description is internally inconsistent. Must be disclosed in the final report.",
+    "ACQUISITION_AUTHORIZATION": "Approval to obtain an external official asset in a later dedicated step. Resolves no execution state by itself.",
+    "UNRESOLVED_SOURCE_GAP": "Owner direction recorded, but the required scientific source is still missing. The method remains BLOCKED."
+  },
+  "constraints_reaffirmed": {
+    "test_never_used_for_checkpoint_selection": true,
+    "test_never_accessed_in_m6a3b": true,
+    "gpat_10_6_selectionscore_never_auto_applied_to_baselines": true,
+    "no_training_in_m6a3b": true,
+    "no_synthetic_bank_generation_in_m6a3b": true,
+    "no_model_execution_in_m6a3b": true,
+    "no_checkpoint_created_in_m6a3b": true,
+    "no_weight_downloaded_in_m6a3b": true,
+    "no_method_configs_created_in_m6a3b": true,
+    "frozen_spec_docx_unchanged": true,
+    "amendment_a1_unchanged": true,
+    "m6a1_and_m6a2_artifacts_not_rewritten": true
+  },
+  "scientific_rationale_of_record": [
+    "deterministic reproducibility",
+    "source-faithful execution where recoverable",
+    "no extra validation-based checkpoint tuning when the source does not specify it",
+    "no TEST-based selection",
+    "explicit disclosure when controlled adaptation is unavoidable"
+  ],
+  "prohibited_framings": [
+    "making baselines weaker",
+    "helping GPAT win",
+    "handicapping competitors",
+    "calling the E05 controlled adaptation 'native PCGAN' or 'faithful PCGAN'",
+    "claiming successful E04 or E07c reproduction while required source assets remain unavailable"
+  ],
+  "decisions": [
+    {
+      "decision_id": "A2-01",
+      "blocker_id": "E01-3",
+      "method": "E01",
+      "owner_choice": "A",
+      "owner_choice_label": "Lexicographic (bytewise) enumeration of each official asset directory before seeding",
+      "change_class": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+      "frozen_contract": {
+        "enumeration_order": "ascending lexicographic (bytewise) order by filename, per official asset directory",
+        "must_agree_with": "canonical repository/git-tree ordering for the currently pinned official assets",
+        "runtime_listdir_order_may_affect_results": false,
+        "raw_os_listdir_retained_as_scientific_contract": false
+      },
+      "explicitly_unchanged": [
+        "operator set (all 8 operators retained)",
+        "magnitude distribution (NUM_MAG = 10, level=0 retained)",
+        "asset file contents",
+        "per-pair operator seed"
+      ],
+      "rationale_of_record": "The FAS-Aug authors' original host filesystem order is unrecoverable by any means, so no choice reproduces it. Lexicographic order makes the benchmark reproducible instead of host-dependent.",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false
+    },
+    {
+      "decision_id": "A2-02",
+      "blocker_id": "E02-1",
+      "method": "E02",
+      "owner_choice": "B",
+      "owner_choice_label": "ROUND-HALF-UP",
+      "change_class": "SCIENTIFIC_CLARIFICATION",
+      "frozen_contract": {
+        "general_rule": "k = round_half_up(n_eligible * 0.25)",
+        "integer_implementation": "k = (n_eligible + 2) // 4",
+        "float_free": true,
+        "n_eligible_frozen_geometry": 159,
+        "k_frozen_geometry": 40,
+        "frozen_as_a_rule_not_as_the_number_40": true
+      },
+      "worked_verification": {
+        "156": 39,
+        "157": 39,
+        "158": 40,
+        "159": 40,
+        "160": 40
+      },
+      "worked_verification_note": "round-half-up and ceil coincide at n=159 but diverge at n=157 (39 vs 40), which is why the RULE and not the number 40 is frozen.",
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false
+    },
+    {
+      "decision_id": "A2-03",
+      "blocker_id": "E02-2",
+      "method": "E02",
+      "owner_choice": "B",
+      "owner_choice_label": "numpy.random.Generator(numpy.random.PCG64(pair_seed)).choice(n_eligible, size=k, replace=False)",
+      "change_class": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+      "frozen_contract": {
+        "canonical_eligible_enumeration": [
+          "scan the 16x16 block grid in row-major order",
+          "block_row ascending first",
+          "within each row, block_col ascending",
+          "retain only eligible blocks in that order; their positions are indices 0..n_eligible-1"
+        ],
+        "rng": "numpy.random.Generator(numpy.random.PCG64(pair_seed))",
+        "draw": "rng.choice(n_eligible, size=k, replace=False)",
+        "replacement": false,
+        "scientific_result": "the SELECTED SET; returned order must not drive any later scientific behaviour",
+        "canonical_processing_order_if_needed": "sort the selected block indices ascending before applying substitution",
+        "prohibited": [
+          "numpy.random.default_rng without explicitly naming PCG64",
+          "python random.sample",
+          "hash ranking"
+        ]
+      },
+      "runtime_obligation": "The runtime environment MUST later pin the NumPy version used by the authoritative implementation, because Generator.choice is a NumPy implementation detail.",
+      "numpy_version_observed_during_audit": "2.5.3",
+      "numpy_version_observed_is_authoritative_pin": false,
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false
+    },
+    {
+      "decision_id": "A2-04",
+      "blocker_id": "E02-3",
+      "method": "E02",
+      "owner_choice": "B",
+      "owner_choice_label": "Dedicated E02 namespace",
+      "change_class": "SCIENTIFIC_CLARIFICATION",
+      "frozen_contract": {
+        "global_seed_meaning": "the CURRENT EXPERIMENT SEED, from {42, 1337, 2026}",
+        "preimage": "UTF-8(\"gpatbench.freqsub.block.v1|\" + pair_id + \"|\" + decimal_string(global_seed))",
+        "digest": "SHA256(preimage).digest()",
+        "pair_seed": "unsigned big-endian integer of the FULL 32-byte digest",
+        "passed_directly_to": "numpy.random.PCG64(pair_seed)",
+        "truncation": false,
+        "modulo": false,
+        "hidden_separator": false,
+        "whitespace": false,
+        "newline": false,
+        "namespace_intentionally_distinct_from_e01": true
+      },
+      "worked_example_pair_id": "PTR000001",
+      "worked_example": {
+        "42": {
+          "preimage": "gpatbench.freqsub.block.v1|PTR000001|42",
+          "pair_seed": "19354000309184887456743517179028239418116648094833629759175866349341962868907"
+        },
+        "1337": {
+          "preimage": "gpatbench.freqsub.block.v1|PTR000001|1337",
+          "pair_seed": "100642993489923994340931747082706323367992294802124459081927424298639285382524"
+        },
+        "2026": {
+          "preimage": "gpatbench.freqsub.block.v1|PTR000001|2026",
+          "pair_seed": "70582000648117090776289456477083767468449122475305887305661581023317195795819"
+        }
+      },
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false
+    },
+    {
+      "decision_id": "A2-05",
+      "blocker_id": "OBS-1",
+      "method": "E01",
+      "owner_choice": "APPROVED_BYTE_LAYOUT_CLARIFICATION",
+      "owner_choice_label": "Freeze the byte-level interpretation of the already-frozen SPEC 8.1 expression",
+      "change_class": "SCIENTIFIC_CLARIFICATION",
+      "is_a_change_to_the_frozen_8_1_formula": false,
+      "note": "Recorded as a byte-layout clarification of SHA256(pair_id + global_seed) mod 2^31, NOT as a change to the frozen 8.1 scientific formula. OBS-1 was never counted among the 11 blockers.",
+      "frozen_contract": {
+        "global_seed_meaning": "the CURRENT EXPERIMENT SEED, from {42, 1337, 2026}",
+        "consequence_of_facet_1": "the E01 bank DIFFERS per benchmark seed; it is not identical across the three seeds",
+        "preimage": "UTF-8(pair_id + decimal_string(global_seed))",
+        "separator": "NONE",
+        "whitespace": false,
+        "newline": false,
+        "digest": "SHA256(preimage).digest()",
+        "operator_seed": "unsigned_big_endian_integer(digest) mod 2^31"
+      },
+      "example_structure": {
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "preimage_text": "PTR00000142"
+      },
+      "worked_example_pair_id": "PTR000001",
+      "worked_example": {
+        "42": {
+          "preimage": "PTR00000142",
+          "operator_seed": 795981663
+        },
+        "1337": {
+          "preimage": "PTR0000011337",
+          "operator_seed": 924982993
+        },
+        "2026": {
+          "preimage": "PTR0000012026",
+          "operator_seed": 1531213468
+        }
+      },
+      "m6a3_status": "RESOLVED_BY_OWNER_DECISION",
+      "active_blocker": false,
+      "counted_in_blocker_arithmetic": false
+    },
+    {
+      "decision_id": "A2-06",
+      "policy_id": "BASELINE_FINAL_STATE_V1",
+      "blocker_id": [
+        "E04-3",
+        "E05-3",
+        "E07c-5"
+      ],
+      "method": [
+        "E04",
+        "E05",
+        "E07c"
+      ],
+      "owner_choice": "APPROVED_GLOBAL_CHECKPOINT_POLICY",
+      "owner_choice_label": "BASELINE_FINAL_STATE_V1",
+      "change_class": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+      "purpose": "Resolve baseline checkpoint-selection gaps without adding extra benchmark-side checkpoint tuning.",
+      "frozen_policy": [
+        "1. If an official method/source explicitly defines which checkpoint/state is used for generation, preserve that official rule.",
+        "2. Otherwise, use the model state at the END of the frozen training budget.",
+        "3. If periodic upstream checkpoint saving does not save the exact terminal state, save one additional TERMINAL checkpoint immediately after the final scheduled training step/epoch, with ZERO additional optimizer steps.",
+        "4. VAL may be evaluated for diagnostics.",
+        "5. VAL MUST NOT select the checkpoint for methods governed by BASELINE_FINAL_STATE_V1 unless the original official method explicitly requires validation-based checkpoint selection.",
+        "6. TEST MUST NEVER be used for checkpoint selection."
+      ],
+      "does_not_override_already_resolved_official_rules": {
+        "E03": {
+          "official_rule": "latest/final ckpt-50 (source-resolved)",
+          "overridden_by_baseline_final_state_v1": false,
+          "governing_clause": 1
+        },
+        "E06c": {
+          "official_rule": "generator epoch 200 (source-resolved)",
+          "overridden_by_baseline_final_state_v1": false,
+          "governing_clause": 1
+        }
+      },
+      "applies_exactly_to": {
+        "E04-3": {
+          "method": "E04",
+          "terminal_state": "iteration 150000",
+          "m6a3_status": "RESOLVED_BY_OWNER_DECISION_BASELINE_FINAL_STATE_V1"
+        },
+        "E05-3": {
+          "method": "E05",
+          "terminal_state": "iteration 4000",
+          "m6a3_status": "RESOLVED_BY_OWNER_DECISION_BASELINE_FINAL_STATE_V1"
+        },
+        "E07c-5": {
+          "method": "E07c",
+          "terminal_state": "terminal model state at the end of the frozen 400-epoch training budget",
+          "terminal_checkpoint_creation_required_if_periodic_saving_misses_it": true,
+          "additional_optimization_permitted": false,
+          "upstream_save_cadence": "every 10000 iterations",
+          "m6a3_status": "RESOLVED_BY_OWNER_DECISION_BASELINE_FINAL_STATE_V1"
+        }
+      },
+      "disclosure": "Where a source states only a training budget and no selection rule, 'end of budget' is a BENCHMARK CONVENTION, not a paper fact, and must be disclosed as such.",
+      "active_blocker": false
+    },
+    {
+      "decision_id": "A2-07",
+      "blocker_id": "E05-2",
+      "method": "E05",
+      "owner_choice": "A",
+      "owner_choice_label": "Use the pinned [34] implementation as the executable architecture basis",
+      "change_class": "CONTROLLED_ADAPTATION",
+      "frozen_contract": {
+        "executable_architecture_basis": "taesungp/swapping-autoencoder-pytorch",
+        "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+        "follow": "its ACTUAL executable architecture for the components inherited from [34], including its StyleGAN2-style modulation/demodulation and corresponding discriminator implementation",
+        "port_stylegan_v1_adain_to_follow_prose_citation_35": false
+      },
+      "fidelity_label": "CONTROLLED_ADAPTATION",
+      "fidelity_reason": "PCGAN prose references AdaIN / StyleGAN-v1 [35], while its explicitly named executable architectural base [34] uses StyleGAN2-style demodulation. StyleGAN2 explicitly replaced AdaIN with demodulation, so both cannot be satisfied.",
+      "discrepancy_hidden": false,
+      "method_id_preserved": "E05",
+      "benchmark_result_row_preserved": "E05",
+      "renamed_or_removed": false,
+      "reporting_obligation": "The final report/paper MUST disclose this architecture-resolution choice. The E05 row must NOT be described as 'native PCGAN' or 'faithful PCGAN'.",
+      "m6a3_status": "RESOLVED_BY_OWNER_CONTROLLED_ADAPTATION",
+      "active_blocker": false
+    },
+    {
+      "decision_id": "A2-08",
+      "blocker_id": "E06c-2",
+      "method": "E06c",
+      "owner_choice": "A",
+      "owner_choice_label": "Authorise a later dedicated acquisition of the exact official LightCNN-29 v2 checkpoint",
+      "change_class": "ACQUISITION_AUTHORIZATION",
+      "scientific_identity_resolved": true,
+      "expected_official_source_identity": "original LightCNN author release; same Google Drive file id referenced by both upstream LightCNN and DSDG",
+      "expected_path_from_dsdg": "./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar",
+      "downloaded_in_m6a3b": false,
+      "local_sha256": null,
+      "local_sha256_known": false,
+      "later_acquisition_step_must": [
+        "download from the exact official location",
+        "compute SHA256",
+        "inventory file size",
+        "inspect checkpoint keys safely",
+        "verify compatibility with define_IP()",
+        "record provenance",
+        "never silently substitute another identity model"
+      ],
+      "m6a3_status": "OWNER_AUTHORIZED_ACQUISITION_PENDING",
+      "m6a3_status_meaning": "scientific contract resolved; acquisition approved; bytes not fetched; local SHA256 unknown; execution still blocked",
+      "execution_resolved": false,
+      "active_blocker": true
+    },
+    {
+      "decision_id": "A2-09",
+      "blocker_id": "E04-2",
+      "method": "E04",
+      "owner_choice": "A",
+      "owner_choice_label": "Preserve FAITHFUL_PAPER intent; keep E04 blocked until the required scientific route is actually resolved",
+      "change_class": "UNRESOLVED_SOURCE_GAP",
+      "must_not_invent": [
+        "a substitute 140-vertex set",
+        "a new depth renderer",
+        "FaceXFormer-68 -> 140 conversion",
+        "a substitute 3DMM",
+        "a benchmark-created depth target"
+      ],
+      "permitted_direction": [
+        "official/licensed BFM acquisition may be pursued in a later dedicated asset step",
+        "official authors/upstream sources may be contacted/searched for the missing 140-vertex definition and depth-rendering route"
+      ],
+      "resolved_by_owner_selection": false,
+      "unresolved_scientific_items": [
+        "BFM licensed asset not acquired",
+        "Q=140 vertex set not published/resolved",
+        "depth-rendering procedure not published/resolved",
+        "exact executable legacy geometry route not yet reproducibly frozen"
+      ],
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true
+    },
+    {
+      "decision_id": "A2-10",
+      "blocker_id": "E07c-4",
+      "method": "E07c",
+      "owner_choice": "A",
+      "owner_choice_label": "Preserve the FAITHFUL official DiffFAS route",
+      "change_class": "UNRESOLVED_SOURCE_GAP",
+      "must_not": [
+        "train a benchmark-side substitute encoder",
+        "disable the conditioning encoder",
+        "replace it with ImageNet ResNet18",
+        "invent PADISI training details"
+      ],
+      "permitted_direction": [
+        "attempt to obtain the official PADISI conditioning encoder or exact training/release information from the original authors / an authoritative source in a later source-resolution step"
+      ],
+      "resolved_by_owner_selection": false,
+      "m6a3_status": "OWNER_DIRECTION_RECORDED_STILL_BLOCKED_SOURCE_GAP",
+      "active_blocker": true
+    }
+  ]
+}

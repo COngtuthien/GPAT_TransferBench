@@ -1,0 +1,601 @@
+{
+  "schema_version": "m6a3a-owner-decision-packet-v1",
+  "milestone": "M6A3a",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "0d94d5f92f531d6ce22f59bebcd5d2444fe7e9fd",
+  "purpose": "Convert the 11 remaining M6A2 blockers into a decision-ready packet. NOTHING is resolved here.",
+  "inputs_read": [
+    "outputs/audit/M6A2_BLOCKER_STATE.json",
+    "outputs/audit/M6A2_SOURCE_DERIVABLE_BLOCKER_RESOLUTION.md",
+    "outputs/audit/M6_BASELINE_EXECUTION_CONTRACT_AUDIT.md",
+    "configs/CONFIG_STATUS.md"
+  ],
+  "categories_used": [
+    "OWNER_CONTRACT_CHOICE",
+    "OWNER_ASSET_ACQUISITION_APPROVAL",
+    "OWNER_CONTROLLED_ADAPTATION_REQUIRED",
+    "EXTERNAL_SOURCE_GAP_NOT_SOLVABLE_BY_SIMPLE_CHOICE"
+  ],
+  "category_counts": {
+    "OWNER_CONTRACT_CHOICE": 7,
+    "EXTERNAL_SOURCE_GAP_NOT_SOLVABLE_BY_SIMPLE_CHOICE": 2,
+    "OWNER_CONTROLLED_ADAPTATION_REQUIRED": 1,
+    "OWNER_ASSET_ACQUISITION_APPROVAL": 1
+  },
+  "blocker_count": 11,
+  "recommendation_policy": "Every recommended_option is evidence class INFERENCE, NOT AUTHORITATIVE. No recommendation in this packet is an owner decision, and M6A3a froze nothing.",
+  "constraints_reaffirmed": {
+    "test_never_used_for_checkpoint_selection": true,
+    "gpat_10_6_selectionscore_never_auto_applied_to_baselines": true,
+    "no_weight_downloaded_in_m6a3a": true,
+    "no_method_configs_created": true
+  },
+  "decision_order": [
+    {
+      "tier": 1,
+      "blockers": [
+        "E02-1",
+        "E02-2",
+        "E02-3"
+      ],
+      "rationale": "Three pure convention choices with zero external dependencies. Answering them FULLY unblocks E02 \u2014 the fastest method to reach an implementable contract.",
+      "unblocks_methods": [
+        "E02"
+      ]
+    },
+    {
+      "tier": 2,
+      "blockers": [
+        "E01-3"
+      ],
+      "rationale": "One convention choice, no external dependency. FULLY unblocks E01. Placed after E02 only because E02's three answers are mutually independent while E01-3 interacts with OBS-1.",
+      "unblocks_methods": [
+        "E01"
+      ]
+    },
+    {
+      "tier": 3,
+      "blockers": [
+        "E06c-2"
+      ],
+      "rationale": "One asset-acquisition approval that FULLY unblocks E06c \u2014 a TRACK-A PRIMARY method. Highest value per answer of any remaining blocker, and its scientific identity is already fully resolved.",
+      "unblocks_methods": [
+        "E06c"
+      ]
+    },
+    {
+      "tier": 4,
+      "blockers": [
+        "E07c-4"
+      ],
+      "rationale": "Source gap on the other TRACK-A PRIMARY method. Must be answered before E07c-5, which is moot until then.",
+      "unblocks_methods": []
+    },
+    {
+      "tier": 5,
+      "blockers": [
+        "E05-2"
+      ],
+      "rationale": "Controlled-adaptation decision; must precede E05-3.",
+      "unblocks_methods": []
+    },
+    {
+      "tier": 6,
+      "blockers": [
+        "E04-2"
+      ],
+      "rationale": "Deepest source gap; must precede E04-3.",
+      "unblocks_methods": []
+    },
+    {
+      "tier": 7,
+      "blockers": [
+        "E04-3",
+        "E05-3",
+        "E07c-5"
+      ],
+      "rationale": "All three are the SAME question \u2014 'which checkpoint generates the bank?' \u2014 for three methods, and each is moot until its method's prerequisite above is answered. A SINGLE frozen benchmark-wide baseline checkpoint rule would answer all three at once.",
+      "unblocks_methods": [],
+      "collapse_opportunity": true
+    }
+  ],
+  "observations": [
+    {
+      "id": "OBS-1",
+      "severity": "NEWLY_OBSERVED_IN_M6A3a_NOT_A_REOPENED_BLOCKER",
+      "title": "Spec 8.1's FAS-Aug seed is incompletely specified in two ways, and this affects E01 as well as E02-3 option A",
+      "facts": [
+        "'global_seed' appears EXACTLY ONCE in the entire frozen spec (line 232) and is NEVER DEFINED \u2014 not in the spec, not in any frozen config. The two frozen-config mentions (configs/frozen/pairs_v1.yaml:45,140) merely quote 8.1.",
+        "Candidates differ scientifically: if global_seed = split_seed 20260814 the E01 bank is IDENTICAL across the three benchmark seeds; if global_seed = the per-run seed from [42,1337,2026] the E01 bank DIFFERS per seed. The global pseudocode places bank generation INSIDE the 'for seed in [42,1337,2026]' loop, which bears on this \u2014 but reading intent from loop placement would be INFERENCE, so nothing was concluded.",
+        "Separately, the PREIMAGE BYTE LAYOUT of SHA256(pair_id + global_seed) is not fixed anywhere: no separator, no encoding, and no integer-conversion convention for 'mod 2^31'. By contrast the M4 pairs_v1 digests specify their byte layout exhaustively.",
+        "pair_id FORMAT is frozen (PTR%06d / PVA%06d), so only the seed's own definition and the concatenation are open."
+      ],
+      "why_it_matters": "E02-3 option A proposes reusing this formula, which cannot be implemented until both facets are settled. It also affects E01 directly, whose only listed blocker is E01-3.",
+      "action_requested": "Owner may fold this into the E02-3 answer or issue it as a separate decision. NOT resolved here and NOT counted among the 11 blockers.",
+      "evidence_class": "OBSERVATION"
+    }
+  ],
+  "decisions": [
+    {
+      "blocker_id": "E01-3",
+      "method": "E01",
+      "category": "OWNER_CONTRACT_CHOICE",
+      "exact_question": "In what order must the FAS-Aug texture asset directories be enumerated before the per-pair RNG selects a texture?",
+      "authoritative_known_facts": [
+        "Official code builds the three name lists with os.listdir AT IMPORT TIME (data/fas_aug_helper.py:17-26) and picks by index with random.choice (line 50). os.listdir order is filesystem-dependent.",
+        "NO canonical official order exists: no committed asset list (data/data_list/*.csv are dataset FRAME lists), no config reference, no archive metadata (.gitattributes is LF-normalisation only).",
+        "A canonical REPOSITORY order does exist: git sorts tree entries bytewise. Verified lexicographic: data/background 90 entries, data/noiseTexture 48, data/MPTexture 190.",
+        "The frozen spec contains NO global asset-ordering rule.",
+        "The authors' original filesystem order is unrecoverable, so the official index->asset mapping cannot be reproduced by any means."
+      ],
+      "what_is_unknown": [
+        "Which enumeration order to freeze."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Lexicographic (bytewise) order before seeding \u2014 coincides exactly with the repository's git tree order",
+          "scientific_consequence": "Fixes one specific index->asset mapping. Changes the pixels of every Reflection / BN_Halftone / Moire_Pattern output relative to any other order. Operator set, ranges and seed unchanged.",
+          "deterministic": true,
+          "literal_to_official_code": false
+        },
+        "B": {
+          "label": "Keep raw os.listdir exactly as the official code does",
+          "scientific_consequence": "Closest to the LITERAL official code, but the texture chosen for a given seed differs per host, so the E01 bank is not reproducible and the benchmark's deterministic-rerun requirement cannot be met.",
+          "deterministic": false,
+          "literal_to_official_code": true
+        },
+        "C": {
+          "label": "Owner-supplied explicit frozen asset-order manifest (committed list with per-file sha256)",
+          "scientific_consequence": "Same class of effect as A but with an explicit, independently auditable artifact; allows an order other than lexicographic if the owner has one.",
+          "deterministic": true,
+          "literal_to_official_code": false
+        }
+      },
+      "reproducibility_consequence": "A and C are fully reproducible. B is NOT reproducible across hosts.",
+      "fidelity_consequence": "E01's target tag is FAITHFUL_OFFICIAL. A and C are deterministic ADAPTATIONS of the official enumeration and would require a declared deviation on that tag. B preserves the letter of the code but forfeits reproducibility.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "Under A or C: E01 stays FAITHFUL_OFFICIAL with one declared deviation (asset enumeration order). Under B: tag unchanged but the method cannot satisfy the rerun-hash requirement.",
+      "recommended_option": "A",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "A is the only option that is simultaneously deterministic and already canonical inside the pinned repository, so it needs no new artifact. C is equally defensible if the owner wants the order pinned explicitly rather than implied by git.",
+      "unblocks": "E01 fully (this is E01's only remaining blocker)."
+    },
+    {
+      "blocker_id": "E02-1",
+      "method": "E02",
+      "category": "OWNER_CONTRACT_CHOICE",
+      "exact_question": "How is 'exactly 25% of eligible blocks' rounded when the product is not an integer?",
+      "authoritative_known_facts": [
+        "Exact audit computation on the frozen N=256 geometry: 43,186 eligible pixels, ELIGIBLE BLOCKS = 159 of 256.",
+        "159 x 0.25 = 39.75, so the choice is real, not moot. 159 mod 4 = 3.",
+        "The count 159 is invariant to the boundary convention: closed [0.20,0.50], half-open [0.20,0.50) and open (0.20,0.50) all give 159.",
+        "Spec 8.2 says only 'Select exactly 25% of eligible blocks'."
+      ],
+      "what_is_unknown": [
+        "Which rounding rule the phrase 'exactly 25%' encodes."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "floor",
+          "count_for_159": 39,
+          "general_rule": "floor(n/4)"
+        },
+        "B": {
+          "label": "round-half-up",
+          "count_for_159": 40,
+          "general_rule": "floor(n/4 + 0.5)"
+        },
+        "C": {
+          "label": "ceil",
+          "count_for_159": 40,
+          "general_rule": "ceil(n/4)"
+        }
+      },
+      "reproducibility_consequence": "All three are equally reproducible; this is purely definitional.",
+      "fidelity_consequence": "None. E02 is already CONTROLLED_ADAPTATION by spec 8.2, which exists precisely because the paper does not fix these details.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "No change.",
+      "recommended_option": "B",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "same_count_note": "B and C BOTH give 40 for n=159, but they encode DIFFERENT general rules and diverge on other counts. Worked examples: n=157 -> 39.25 gives floor 39, round-half-up 39, ceil 40 (B != C); n=158 -> 39.50 gives 39 / 40 / 40; n=156 -> 39.00 gives 39 / 39 / 39. The rule must be frozen as a RULE, not as the number 40, because the eligible count could change if any geometry parameter were ever revised.",
+      "recommendation_rationale": "Round-half-up is the least biased of the three across arbitrary counts; floor systematically under-selects and ceil systematically over-selects. Purely a convention argument.",
+      "scientific_consequence_summary": "One extra or one fewer substituted block per pair (39 vs 40 of 159), changing the pixels of every E02 output."
+    },
+    {
+      "blocker_id": "E02-2",
+      "method": "E02",
+      "category": "OWNER_CONTRACT_CHOICE",
+      "exact_question": "By what deterministic procedure are the k blocks chosen from the 159 eligible blocks, GIVEN a seed? (Seed CONSTRUCTION is a separate question, E02-3.)",
+      "authoritative_known_facts": [
+        "Spec 8.2 line 240 fixes neither the RNG family nor the draw procedure.",
+        "No other frozen section defines a generic element-selection procedure.",
+        "Repository precedent exists but is NOT authoritative here: configs/frozen/pairs_v1.yaml selects by deterministic SHA-256 RANKING (sort by digest), not by an RNG object.",
+        "The eligible block set and its canonical order are well defined once the 16x16 grid is fixed (row-major over the 16x16 block grid)."
+      ],
+      "what_is_unknown": [
+        "The selection procedure."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Deterministic hash ranking: rank eligible blocks by SHA256(seed_bytes || UTF8(block_index)) and take the first k",
+          "rng_object_required": false,
+          "property": "RNG-implementation-independent; identical across Python/NumPy versions and platforms; mirrors the frozen M4 pairs_v1 precedent."
+        },
+        "B": {
+          "label": "numpy.random.Generator(PCG64(seed)).choice(n_eligible, k, replace=False)",
+          "rng_object_required": true,
+          "property": "Stable across platforms for a fixed NumPy version, but the .choice algorithm is a NumPy implementation detail that has changed historically; pins the benchmark to a NumPy version."
+        },
+        "C": {
+          "label": "random.Random(seed).sample(range(n_eligible), k)",
+          "rng_object_required": true,
+          "property": "Stable for a fixed CPython version; random.sample's algorithm is not a documented stability guarantee across releases."
+        }
+      },
+      "reproducibility_consequence": "A is the most durable: it depends on nothing but SHA-256. B and C bind the frozen contract to a library version.",
+      "fidelity_consequence": "None. E02 is already CONTROLLED_ADAPTATION.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "No change.",
+      "recommended_option": "A",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "A removes an entire class of future reproducibility risk (library-version drift) and is already precedented in this repository's frozen M4 contract.",
+      "scientific_consequence_summary": "Different procedures select different block subsets from the SAME seed, changing the pixels of every E02 output.",
+      "separation_note": "This question is deliberately separated from E02-3: a seed is an input here, and any of A/B/C works with any seed construction."
+    },
+    {
+      "blocker_id": "E02-3",
+      "method": "E02",
+      "category": "OWNER_CONTRACT_CHOICE",
+      "exact_question": "What exactly is the 'pair-specific RNG seed' for E02 \u2014 i.e. what is its preimage?",
+      "authoritative_known_facts": [
+        "Spec 8.1 line 232 defines seed = SHA256(pair_id + global_seed) mod 2^31 EXPLICITLY AND ONLY for FAS-Aug operator parameters.",
+        "Spec 8.2 line 240 says only 'using pair-specific RNG seed'. global_seed and 'pair-specific' are not further defined for 8.2.",
+        "The pair manifest's own 'seed' column is the CONSTANT split_seed 20260814 for all 8,838 rows \u2014 it is not a per-pair seed.",
+        "M4 frozen adaptation does not cover E02: configs/frozen/pairs_v1.yaml defines digests under namespaces 'gpatbench.pair.source_seed.v1' and 'gpatbench.pair.candidate.v1', both scoped to PAIR CONSTRUCTION with a different preimage. The explicit namespacing is evidence AGAINST silent reuse.",
+        "pair_id format IS frozen: PTR%06d for TRAIN, PVA%06d for VAL (configs/frozen/pairs_v1.yaml)."
+      ],
+      "what_is_unknown": [
+        "The seed preimage for E02 block selection."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Reuse the 8.1 formula verbatim for E02",
+          "proposed_preimage": "SHA256(UTF8(pair_id + str(global_seed))) interpreted as a big-endian integer, mod 2^31",
+          "consequence": "E01 and E02 would derive their seeds from the SAME preimage for the same pair. Not necessarily wrong, but it correlates the two methods' randomness for every pair, which may or may not be intended. ALSO inherits the open items in OBS-1 (see packet)."
+        },
+        "B": {
+          "label": "New namespaced E02 digest in the frozen M4 style",
+          "proposed_preimage": "SHA256(UTF8('gpatbench.freqsub.block.v1|' + pair_id + '|' + str(global_seed))), output = raw 32-byte digest carried forward AS BYTES",
+          "consequence": "Distinct namespace guarantees no correlation with E01's stream; matches the byte-level rigour already frozen in pairs_v1.yaml (raw digest bytes, never re-rendered as text)."
+        },
+        "C": {
+          "label": "Owner specifies another preimage",
+          "proposed_preimage": "(owner to state)",
+          "consequence": "As specified."
+        }
+      },
+      "reproducibility_consequence": "All three are reproducible once the byte layout is fixed. B is the most explicit about byte layout and therefore the least likely to be mis-implemented later.",
+      "fidelity_consequence": "None. E02 is already CONTROLLED_ADAPTATION.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "No change.",
+      "recommended_option": "B",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "A distinct namespace avoids the E01/E02 seed correlation that A creates, and the M4 precedent already demonstrates the exact byte-level discipline needed.",
+      "depends_on_observation": "OBS-1 \u2014 option A cannot be implemented without also settling what global_seed IS and how the preimage bytes are laid out. Option B as written fixes the byte layout but still needs global_seed defined.",
+      "separation_note": "This question is deliberately separated from E02-2: it fixes the seed VALUE, not the selection procedure."
+    },
+    {
+      "blocker_id": "E04-2",
+      "method": "E04",
+      "category": "EXTERNAL_SOURCE_GAP_NOT_SOLVABLE_BY_SIMPLE_CHOICE",
+      "exact_question": "How should E04's geometry supervision route (3DMM fit -> 140 landmarks -> 32x32 depth ground truth for L_depth, alpha_1=100) be obtained, given that no single source determines it?",
+      "authoritative_known_facts": [
+        "References resolved exactly: [60] = Liu, Jourabloo, Ren, Liu, 'Dense Face Alignment', ICCVW 2017 -> github.com/yaojieliu/ICCVW2017-DenseFaceAlignment@01cfb1aa9845c9ce6c0ac5fbbb16454ee771f848 (pinned source-only in M6A2). [70] = Bulat & Tzimiropoulos, ICCV 2017 -> 1adrianb/face-alignment.",
+        "Paper roles verbatim: 4.1 'We use the open-source face alignment [70] and 3DMM fitting [60] to crop the face and provide 140 landmarks'; Eq. 16 'We apply the dense face alignment [60] to estimate the 3D shape and render the depth ground truth M0', K = 32.",
+        "L_depth carries alpha_1 = 100, the DOMINANT term in Eq. 23; its target cannot be produced at all without the geometry route.",
+        "The frozen M2 cache provides 68 landmarks, no 3DMM fit and no depth map."
+      ],
+      "what_is_unknown": [
+        "Which 140 of the 3DMM vertices are selected; how the fitted 3D shape is rendered into the 32x32 depth map M0."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Preserve FAITHFUL_PAPER and keep E04 BLOCKED until the authors supply the missing details",
+          "consequence": "E04 has no executable main row. Fidelity classification is preserved honestly. The benchmark reports E04 as a disclosed source gap."
+        },
+        "B": {
+          "label": "Approve a fully documented CONTROLLED ADAPTATION of the geometry route (owner-defined 140-vertex selection and depth rendering, with an equation-to-code traceability table)",
+          "consequence": "E04 becomes executable, but its tag MUST change from FAITHFUL_PAPER to CONTROLLED_ADAPTATION and the adaptation must be disclosed wherever the E04 row appears. Requires BFM acquisition approval as a prerequisite."
+        },
+        "C": {
+          "label": "Exclude E04 from the main executable generator table and retain the source-gap disclosure",
+          "consequence": "The benchmark loses one baseline row but makes no unsupported fidelity claim. Cleanest scientifically if B's adaptation would be large."
+        }
+      },
+      "reproducibility_consequence": "Not the limiting factor; all four sub-gaps are about availability and specification, not determinism.",
+      "fidelity_consequence": "E04's current tag is FAITHFUL_PAPER. Option B REQUIRES downgrading it to CONTROLLED_ADAPTATION \u2014 this must not happen silently. Options A and C preserve the tag.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "Under B: FAITHFUL_PAPER -> CONTROLLED_ADAPTATION. Under A and C: unchanged.",
+      "recommended_option": "A or C",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "sub_gap_analysis": [
+        {
+          "sub_gap": "Basel Face Model (BFM) is a license-gated external asset ([60]'s README requires downloading it from faces.cs.unibas.ch under an individually signed academic licence)",
+          "solvable_by": "OWNER_ASSET_ACQUISITION_APPROVAL (subject to the licence actually being granted)"
+        },
+        {
+          "sub_gap": "Which Q = 140 vertices are selected. The paper says only 'We select Q = 140 vertices to cover the face region' \u2014 no index list, no rule, no released file.",
+          "solvable_by": "NOT solvable by acquisition. Requires a CONTROLLED ADAPTATION or the authors."
+        },
+        {
+          "sub_gap": "How the fitted 3D shape is rendered into the 32x32 ground-truth depth map M0. Undescribed in the paper; [60]'s repository performs alignment, not depth rendering.",
+          "solvable_by": "NOT solvable by acquisition. Requires a CONTROLLED ADAPTATION or the authors."
+        },
+        {
+          "sub_gap": "[60] is legacy MATLAB/MatConvNet with compiled MEX and no training code; the paper pins no [70] commit.",
+          "solvable_by": "Partly ENGINEERING (container + MATLAB licence). Only INFERENCE is needed from [60], so test-only code is acceptable in principle."
+        }
+      ],
+      "key_finding": "EVEN WITH FULL ASSET-ACQUISITION APPROVAL, sub-gaps 2 and 3 remain. E04-2 therefore CANNOT be closed by an acquisition approval alone, which is why it is not categorised as OWNER_ASSET_ACQUISITION_APPROVAL.",
+      "recommendation_rationale": "A or C keep the fidelity claim honest. B is legitimate only if the owner accepts the tag downgrade and the adaptation is documented in methods/physics_std/source_traceability.md as spec 8.4 requires.",
+      "blocks": "E04 entirely. E04-3 is moot until this is answered."
+    },
+    {
+      "blocker_id": "E04-3",
+      "method": "E04",
+      "category": "OWNER_CONTRACT_CHOICE",
+      "exact_question": "Which E04 model state generates the synthetic bank?",
+      "authoritative_known_facts": [
+        "Final paper-level sweep found NO selection rule. The only training-state statement is the budget: 'We train in total 150,000 iterations with a batch size of 8', lr 5e-5 with /10 every 45,000.",
+        "'We first train the PhySTD till convergence' concerns a downstream trace-classification experiment, not checkpointing.",
+        "Spec 10.6 fixes a generator selection rule for GPAT ONLY; spec 14 fixes one for downstream evaluators ONLY. No baseline rule exists.",
+        "TEST may never be used for checkpoint selection and never replaces VAL."
+      ],
+      "what_is_unknown": [
+        "Which model state is used."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Final iteration (150,000)",
+          "consequence": "Simple and reproducible, but 'final' is NOT stated by the paper \u2014 it would be a benchmark convention, not a paper fact."
+        },
+        "B": {
+          "label": "VAL-based selection under a NEWLY FROZEN benchmark rule applying to baselines",
+          "consequence": "Uses the VAL split the global pseudocode already passes to train_method. Requires the owner to define the rule explicitly; the GPAT 10.6 SelectionScore must NOT be borrowed automatically."
+        },
+        "C": {
+          "label": "Remain blocked",
+          "consequence": "Consistent with E04-2 option A or C, under which E04 is not executed at all."
+        }
+      },
+      "reproducibility_consequence": "All are reproducible once fixed.",
+      "fidelity_consequence": "No fidelity change by itself; if A is chosen it must be disclosed as a benchmark convention, not a paper fact.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "No change.",
+      "recommended_option": "C",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "E04 cannot be trained at all while E04-2 is open, so answering this now would freeze a convention for a method that may never execute. Answer it only after E04-2.",
+      "depends_on": "E04-2",
+      "gpat_selectionscore_borrowed": false
+    },
+    {
+      "blocker_id": "E05-2",
+      "method": "E05",
+      "category": "OWNER_CONTROLLED_ADAPTATION_REQUIRED",
+      "exact_question": "Which concrete modulation and discriminator does PCGAN use \u2014 StyleGAN-v1 AdaIN as its prose cites [35], or the StyleGAN2 weight demodulation that its declared base [34] actually implements?",
+      "authoritative_known_facts": [
+        "[34] IS NOW CONCLUSIVELY RESOLVED AND PINNED: taesungp/swapping-autoencoder-pytorch@6baa180f1184ee79a6b967f9d80ee0e02a979ac7, tree 25a434f1282a0177d6afdcc68ebfcf40bd805621, 73 files, ZERO weights. Identity proven by three exact matches: PCGAN names the parameter netE_num_downsampling_sp and its default 4 (models/networks/encoder.py:35); PCGAN's z_pat has 8 channels and the repo default spatial_code_ch is 8 (models/swapping_autoencoder_model.py:12); the repo description matches the [34] citation verbatim.",
+        "[34]'s pinned repo CONTAINS THE COMPLETE REQUIRED MODULE SET: encoder (encoder.py), generator (generator.py), StyleGAN2 discriminator (discriminator.py:2 imports OriginalStyleGAN2Discriminator) and patch discriminator (patch_discriminator.py:97 StyleGAN2PatchDiscriminator).",
+        "WHAT REMAINS UNRESOLVED IS ONLY THE MECHANISM: PCGAN's prose says the latents are integrated 'through adaptive instance normalization [35]'. AdaIN is the StyleGAN-v1 mechanism. But [34] uses StyleGAN2 WEIGHT DEMODULATION \u2014 stylegan2_layers.py:210,217,257,272 (ModulatedConv2d, demodulate=True), generator.py:80,114,150 (SpatialCodeModulation), and generator.py:89 states the layers 'borrow heavily from StyleGAN2 code'. StyleGAN2 explicitly REPLACED AdaIN with demodulation.",
+        "[35] = Karras, Laine, Aila, CVPR 2019; official repo NVlabs/stylegan@1e0d5c781384ef12b50ef20a62fee5d78b38e88f is TensorFlow. It was identified but deliberately NOT pinned in M6A2."
+      ],
+      "what_is_unknown": [
+        "Whether PCGAN's generator conditioning and discriminator are StyleGAN-v1 (AdaIN) or StyleGAN2 (demodulation)."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Rely entirely on the pinned [34] implementation (StyleGAN2 demodulation + StyleGAN2 discriminator + patch discriminator)",
+          "can_supply_complete_module": true,
+          "consequence": "Executable immediately from one pinned repo with zero weights. BUT it departs from PCGAN's written description of AdaIN, so the PCGAN PAPER CONTRACT IS CHANGED and the row must be tagged CONTROLLED_ADAPTATION, not FAITHFUL_PAPER."
+        },
+        "B": {
+          "label": "Implement PCGAN's prose literally: AdaIN modulation + a StyleGAN-v1 discriminator",
+          "can_supply_complete_module": false,
+          "consequence": "Honours the paper's text but departs from [34], which PCGAN explicitly says it follows. Requires writing an AdaIN generator not present in either pinned repo (NVlabs/stylegan is TensorFlow), so it is a from-scratch reimplementation with its own fidelity risk."
+        },
+        "C": {
+          "label": "Seek clarification from the PCGAN authors before implementing",
+          "can_supply_complete_module": null,
+          "consequence": "Only route that could preserve a genuine FAITHFUL_PAPER claim. Unbounded latency."
+        }
+      },
+      "reproducibility_consequence": "Not the limiting factor. Both A and B are reproducible once fixed.",
+      "fidelity_consequence": "E05's registry tag is already 'FAITHFUL_PAPER or CONTROLLED_ADAPTATION (depends on code availability)'. Q-08 established that no official PCGAN code was located, and this fork means a genuine FAITHFUL_PAPER claim is not currently supportable under A or B. The tag should be settled as part of this answer.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "Under A: settle as CONTROLLED_ADAPTATION (relies on [34]'s StyleGAN2 mechanism, not the paper's AdaIN). Under B: CONTROLLED_ADAPTATION as a from-scratch reimplementation. Under C: potentially FAITHFUL_PAPER.",
+      "recommended_option": "A",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "direct_answer_to_task_question": "A controlled implementation CAN rely on the pinned swapping-autoencoder for the COMPLETE required module set \u2014 encoder, generator, discriminator and patch discriminator are all present. Doing so DOES change the PCGAN paper contract, because [34] implements StyleGAN2 weight demodulation whereas PCGAN's text specifies AdaIN.",
+      "recommendation_rationale": "PCGAN's own parameter-level instruction ('reduce netE_num_downsampling_sp from 4 to 1') ties it concretely to [34]'s code, and [34] is the only artifact that can actually be pinned and run. The AdaIN citation is plausibly loose attribution to the originating idea \u2014 but that reading is INFERENCE, which is exactly why this is an owner decision.",
+      "blocks": "E05. E05-3 is moot until this is answered."
+    },
+    {
+      "blocker_id": "E05-3",
+      "method": "E05",
+      "category": "OWNER_CONTRACT_CHOICE",
+      "exact_question": "Which PCGAN generator state synthesises the bank?",
+      "authoritative_known_facts": [
+        "Final paper sweep for released model / model zoo / pre-trained model / snapshot / final iteration / model selection returned ZERO hits.",
+        "The only training-state statement is the budget: 'Adam optimizer for 4000 iterations', batch 1, lr 1e-6.",
+        "The paper's 'average performance over the last 10 epochs' and 'best epoch' (Tabs. 2-3) describe DETECTOR evaluation following [9] \u2014 NOT generator checkpoint selection. An average over epochs is not a single checkpoint at all.",
+        "No official code exists (Q-08), so no code-level convention can settle it.",
+        "TEST may never be used for checkpoint selection."
+      ],
+      "what_is_unknown": [
+        "Which generator state is used."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Final iteration (4,000)",
+          "consequence": "Reproducible; a benchmark convention, not a paper fact."
+        },
+        "B": {
+          "label": "VAL-based selection under a newly frozen benchmark baseline rule",
+          "consequence": "Owner must define the rule; GPAT's 10.6 SelectionScore must NOT be borrowed automatically."
+        },
+        "C": {
+          "label": "Remain blocked",
+          "consequence": "Consistent with deferring until E05-2 is settled."
+        }
+      },
+      "reproducibility_consequence": "All reproducible once fixed.",
+      "fidelity_consequence": "No fidelity change by itself; if A is chosen it must be disclosed as a benchmark convention.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "No change.",
+      "recommended_option": "C",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "Architecture (E05-2) must be settled first; a checkpoint rule for an unspecified architecture is premature.",
+      "depends_on": "E05-2",
+      "separated_from": "E05-2 (architecture/source) \u2014 this question is checkpoint selection ONLY.",
+      "gpat_selectionscore_borrowed": false
+    },
+    {
+      "blocker_id": "E06c-2",
+      "method": "E06c",
+      "category": "OWNER_ASSET_ACQUISITION_APPROVAL",
+      "exact_question": "May the LightCNN-29 v2 identity-preserving checkpoint be acquired (in a later asset-acquisition step), hashed and verified, so that E06c can execute?",
+      "authoritative_known_facts": [
+        "SCIENTIFIC IDENTITY IS FULLY RESOLVED \u2014 only the bytes are absent.",
+        "Architecture is VENDORED IN THE PINNED SOURCE: define_IP() = network_29layers_v2(resblock,[1,2,3,4]) in DataParallel (networks/__init__.py:22-25), defined at networks/light_cnn.py. No external code dependency.",
+        "Upstream: Wu, He, Sun, Tan, 'A Light CNN for Deep Face Representation with Noisy Labels', IEEE TIFS 2018 13(11):2884-2896; repo AlfredXiangWu/LightCNN (HEAD 7b38a6f2d20865b8c008c6d24cf977309af88114).",
+        "DECISIVE PROVENANCE: the DSDG README links Google Drive id 1Jn6aXtQ84WY-7J3Tpr2_j6sX0ch9yucS, and the UPSTREAM LightCNN README's own 'LightCNN-29 v2' link is the SAME id. DSDG points at the original authors' released checkpoint, not a re-hosted copy.",
+        "Expected path: ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar (as passed by the official entrypoint train_generator.sh).",
+        "Load format: torch.load -> checkpoint['state_dict'] -> filtered to keys present in the DataParallel-wrapped net -> loaded NON-STRICTLY (train_generator.py:75-81), then frozen and set to eval.",
+        "Role: loss_ip with lambda_ip = 1000 on the official execution path; loss_ip is RETAINED by DEV-020.",
+        "NO official checksum is published by either repository.",
+        "NOT DOWNLOADED in M6A2 or M6A3a; local sha256 UNKNOWN."
+      ],
+      "what_is_unknown": [
+        "The file bytes and therefore its sha256. No upstream digest exists to verify against."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Authorize official checkpoint download in a LATER asset-acquisition step, record the observed sha256 as the authoritative pin, verify the key match against define_IP(), then continue",
+          "consequence": "E06c becomes executable with its official identity loss intact. Because no upstream digest exists, the sha256 observed at acquisition BECOMES the pin and must be recorded at that moment.",
+          "note": "The official loader is NON-STRICT. A verification step should additionally assert that the intersecting key set is complete for the network (a strict-subset check), otherwise a silently partial load would go unnoticed."
+        },
+        "B": {
+          "label": "Keep E06c blocked",
+          "consequence": "Track-A primary comparison loses its DSDG row."
+        },
+        "C": {
+          "label": "Substitute another identity encoder, ONLY as a declared controlled adaptation",
+          "consequence": "Changes the feature space in which loss_ip (lambda_ip = 1000) is measured, so it changes the trained generator. Must be declared; forfeits the official-loss claim."
+        }
+      },
+      "reproducibility_consequence": "Under A the acquisition must be hash-recorded at fetch time, since no upstream checksum exists to pre-verify against.",
+      "fidelity_consequence": "E06c is already CONTROLLED_ADAPTATION (DEV-020). Option A keeps loss_ip as the official term. Option C would make loss_ip itself non-official, an ADDITIONAL deviation on top of DEV-020.",
+      "amendment_a1_affected": "Option A: NO. Option C: YES, indirectly \u2014 DEV-020 records that all losses other than loss_pair are RETAINED; swapping the identity network means loss_ip is no longer the official term, so DEV-020 would need an explicit addendum. Note that A1's identity FIREWALL is not breached either way: loss_ip compares each reconstruction to its OWN input (identity_requirement: NONE in the frozen config), so no cross-identity supervision is reintroduced.",
+      "method_classification_changes": "Option A and B: no change (CONTROLLED_ADAPTATION). Option C: still CONTROLLED_ADAPTATION but with an additional declared deviation.",
+      "recommended_option": "A",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "The scientific identity is fully established and the link is the original authors' own release, so acquisition is a provenance-clean step rather than a scientific choice. Labelled INFERENCE because the decision to fetch external bytes is the owner's.",
+      "download_performed_in_m6a3a": false,
+      "unblocks": "E06c fully (this is E06c's only remaining blocker)."
+    },
+    {
+      "blocker_id": "E07c-4",
+      "method": "E07c",
+      "category": "EXTERNAL_SOURCE_GAP_NOT_SOLVABLE_BY_SIMPLE_CHOICE",
+      "exact_question": "How should the DiffFAS conditioning encoder be obtained, given that no official release could be located?",
+      "authoritative_known_facts": [
+        "ARCHITECTURE AND ROLE RESOLVED: models/unet_autoenc.py:73-77 torch.loads a WHOLE PICKLED nn.Module (not a state_dict), nominally a custom_rn.resnet18 returning (x32x32, x16x16, x8x8, embg). Dataset implied by the default ./PADISI.pkl and --protocol PADISI.",
+        "THE DEPENDENCY IS UNCONDITIONAL: diffusion.training_losses calls model(...) without cond, so forward takes the cond-is-None branch and calls encode(x_cond, encoder) on EVERY training step. use_pair=false (DEV-021) does NOT remove it.",
+        "EXHAUSTIVE RELEASE SEARCH FOUND NOTHING: README is three lines ending 'The detailed readme.md is coming soon!'; the repository has NO shell scripts, examples, notebooks or docs; a grep for padisi/download/release/huggingface/drive.google/*.pkl returns only the argparse default, the PADISIDataset class and torchvision's standard ImageNet ResNet URLs; github.com/murphytju/DiffFAS has ZERO releases and ZERO tags.",
+        "CONTRAST WITH E06c: LightCNN has an official link and a resolved released-file identity. This encoder has NEITHER \u2014 it is unlinked AND not fetched. That is why this is a SOURCE GAP, not an acquisition approval."
+      ],
+      "what_is_unknown": [
+        "Whether an official encoder release exists at all; its exact weights; its exact training protocol on PADISI."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Keep the faithful E07c row blocked until the DiffFAS authors supply the encoder",
+          "consequence": "Track-A primary comparison loses its DiffFAS row. No unsupported claim is made.",
+          "equivalent_to_others": false
+        },
+        "B": {
+          "label": "Owner-approved benchmark-trained SUBSTITUTE encoder, declared as a controlled adaptation",
+          "consequence": "E07c becomes executable, but the conditioning FEATURES differ from the authors', so the generator differs. This is NOT equivalent to the official encoder and must never be presented as such. Requires an explicit DEV record and an A1 addendum note.",
+          "equivalent_to_others": false
+        },
+        "C": {
+          "label": "Remove/disable the conditioning path entirely",
+          "consequence": "NOT mathematically justified by anything in the source. The encoder IS the style-conditioning path: with cond=None the model encodes x_cond=style_spoof into the multi-scale conditioning features. Removing it makes the diffusion UNCONDITIONAL and eliminates the style-transfer mechanism that defines DiffFAS. It would also contradict frozen DEV-021, which specifies 'conditioning is style_spoof only and the target is the epsilon of GT'.",
+          "equivalent_to_others": false
+        }
+      },
+      "reproducibility_consequence": "Not the limiting factor.",
+      "fidelity_consequence": "E07c is already CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH. Option B adds a second, larger deviation (non-official conditioning features). Option C would remove a defining mechanism and could no longer be described as using the official code path at all.",
+      "amendment_a1_affected": "Option A: no. Options B and C: YES \u2014 DEV-021 fixes the conditioning as style_spoof via the official encoder path. B needs an explicit addendum recording the substitute; C would CONTRADICT DEV-021 outright and require re-opening Amendment A1.",
+      "method_classification_changes": "Option A: unchanged. Option B: still CONTROLLED_ADAPTATION, with an added declared deviation. Option C: the 'USING_OFFICIAL_UNPAIRED_CODE_PATH' qualifier would no longer be accurate.",
+      "recommended_option": "A",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "B and C are both real scientific departures and neither is equivalent to the official encoder. A preserves the integrity of the Track-A comparison. If the owner needs the row, B is the lesser departure \u2014 but it must be declared, never implied.",
+      "substitute_proposed_in_m6a3a": false,
+      "blocks": "E07c. E07c-5 is moot until this is answered."
+    },
+    {
+      "blocker_id": "E07c-5",
+      "method": "E07c",
+      "category": "OWNER_CONTRACT_CHOICE",
+      "exact_question": "Which DiffFAS training checkpoint iteration generates the bank?",
+      "authoritative_known_facts": [
+        "FAS_sample.py:112 declares --model_path required=True with NO default; the README gives no checkpoint guidance; the repo has no shell scripts, no command examples, no docs; the repository has ZERO releases and ZERO tags.",
+        "Training saves model_{iters:06d}.pt every save_checkpoints_every_iters = 10,000 iterations (FAS_train.py:102-114), with NO best-checkpoint tracking and NO held-out validation metric \u2014 the periodic block only writes a sample grid.",
+        "ALREADY RESOLVED (M6A1): WHICH TENSOR SET to load is fixed by the source \u2014 FAS_sample.py:46 loads torch.load(model_path)['model'], NOT ['ema'], although both are saved. Only WHICH ITERATION is unspecified.",
+        "The source names neither a final, a latest nor a best checkpoint. 'Final' must not be inferred.",
+        "TEST may never be used for checkpoint selection."
+      ],
+      "what_is_unknown": [
+        "Which iteration checkpoint generates the bank."
+      ],
+      "allowed_choices": {
+        "A": {
+          "label": "Final (last saved) training checkpoint",
+          "consequence": "Reproducible; a benchmark convention, not a source fact."
+        },
+        "B": {
+          "label": "VAL-based benchmark selection rule, newly frozen for baselines",
+          "consequence": "Owner must define the rule explicitly; GPAT's 10.6 SelectionScore must NOT be borrowed automatically."
+        },
+        "C": {
+          "label": "Remain blocked",
+          "consequence": "Consistent with E07c-4 option A, under which E07c does not execute."
+        }
+      },
+      "reproducibility_consequence": "All reproducible once fixed.",
+      "fidelity_consequence": "No fidelity change by itself; option A must be disclosed as a benchmark convention.",
+      "amendment_a1_affected": false,
+      "method_classification_changes": "No change.",
+      "recommended_option": "C",
+      "recommendation_evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+      "recommendation_rationale": "E07c cannot be trained at all while E07c-4 is open.",
+      "depends_on": "E07c-4",
+      "gpat_selectionscore_borrowed": false
+    }
+  ],
+  "answer_template": {
+    "E01-3": "",
+    "E02-1": "",
+    "E02-2": "",
+    "E02-3": "",
+    "E04-2": "",
+    "E04-3": "",
+    "E05-2": "",
+    "E05-3": "",
+    "E06c-2": "",
+    "E07c-4": "",
+    "E07c-5": ""
+  }
+}
