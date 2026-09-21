@@ -9,6 +9,17 @@
 # weights were downloaded. Checkouts live in third_party/source_cache/ (git-ignored); the exact
 # commits, trees and per-file blob/sha256 hashes are in third_party/source_pins.json. This pin does
 # NOT start M6 training. Track column: A = primary fair identity-free, B = secondary native/full.
+#
+# 2026-09-21 (M6A1 baseline source audit): E01 (FAS-Aug) and E03 (STDN) SOURCE pinned. Source only --
+# no model weights were downloaded; four pretrained files found inside the STDN checkout were
+# inventoried and removed (third_party/source_pins.json). Q-08 (E05) and Q-09 (E04) are resolved by
+# documented search: no official release was LOCATED as of 2026-09-21; a search cannot prove
+# non-existence. This pin does NOT start M6 implementation. Full audit:
+# outputs/audit/M6_BASELINE_SOURCE_PROVENANCE.md, M6_BASELINE_EXECUTION_CONTRACT_AUDIT.md,
+# M6_BASELINE_SOURCE_GAPS.json, M6A1_THIRD_PARTY_SOURCE_PINS_PROVENANCE.json. Every method is BLOCKED
+# pending owner decisions; no method config created. Seeds: the frozen spec mandates [42,1337,2026]
+# and marks training seeds not changeable, which takes precedence over official hard-coded/missing
+# seeds (E03, E06c, E07c); the propagating adapter is NOT implemented in M6A1.
 schema_version: m0-initial
 spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
 methods:
@@ -33,16 +44,23 @@ methods:
     role: "Handcrafted / physics synthetic baseline"
     track: "Binary = native"
     spec_sections: ["2 (R1)", "8.1", "17"]
-    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
-    official_repo: https://github.com/RizhaoCai/FAS_Aug
-    url_verification: UNVERIFIED
-    pinned_commit: null
+    source_status: OFFICIAL_REPO_PINNED
+    official_repo: https://github.com/RizhaoCai/FAS-Aug
+    spec_code_link: https://github.com/RizhaoCai/FAS_Aug   # M6A1: one-file redirect stub, commit 2ae330a6fe5d63abb2bf65fdcc8252e1353f4d18
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_21
+    pinned_commit: 0da1dd79bad00e225b8cb6977c7f3f06ee8f7517
+    source_pins: third_party/source_pins.json
     paper: "R. Cai et al., Towards Data-Centric Face Anti-Spoofing: Improving Cross-domain Generalization via Physics-based Data Synthesis, IJCV 133, 2025. arXiv:2409.03501"
     target_implementation_status: FAITHFUL_OFFICIAL
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/fas_aug.yaml (not yet created)
-    notes: "Uses target_live_id only; ignores source_spoof_id. Round-robin operator by pair_id; seed = SHA256(pair_id + global_seed) mod 2^31."
+    m6a1_status: BLOCKED
+    m6a1_checkpoint_selection: NOT_APPLICABLE
+    m6a1_gaps: ["E01-1 spec-vs-official label semantics (changeLabel False for 3 of 8 operators)",
+                "E01-2 level=0 returns an unmodified live copy (~10% at official NUM_MAG=10)",
+                "E01-3 unsorted os.listdir makes texture choice host-dependent"]
+    notes: "Uses target_live_id only; ignores source_spoof_id. Round-robin operator by pair_id; seed = SHA256(pair_id + global_seed) mod 2^31. M6A1: the spec's code link is a redirect stub naming two candidates; both were cloned and are byte-identical (same commit 0da1dd79..., same tree 462fb958..., empty diff), so the pin is proven rather than chosen. README cites arXiv:2409.03501 = spec R4 and both accounts are the paper's first two authors."
 
   - method_id: E02
     method_name: Frequency Substitution
@@ -58,30 +76,46 @@ methods:
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/freq_sub.yaml (not yet created)
-    notes: "Fully specified in spec §8.2 (r∈[0.20,0.50], 16×16 blocks, ≥75% eligible, 25% selected, target phase kept)."
+    m6a1_status: BLOCKED
+    m6a1_gaps: ["E02-1 rounding of 'exactly 25%' unspecified",
+                "E02-2 block selection algorithm/RNG unspecified",
+                "E02-3 pair-seed formula is stated in §8.1 for FAS-Aug only",
+                "E02-4 conjugate-counterpart index convention (p <-> 256-p is offset by one from the 16x16 grid)"]
+    m6a1_source_provenance: SPEC_DEFINED
+    m6a1_checkpoint_selection: NOT_APPLICABLE
+    notes: "Spec §8.2 fixes r∈[0.20,0.50], 16×16 blocks, ≥75% eligible, 25% selected, target phase kept. M6A1: the algorithm source is the frozen SPEC, but four execution-affecting spec-silent choices remain unresolved, so the execution contract is NOT complete and execution readiness stays BLOCKED. Each choice changes the produced pixels; none was chosen."
 
   - method_id: E03
     method_name: STDN
     role: "Learned spoof-trace transfer"
     track: "Binary = native"
     spec_sections: ["2 (R3)", "8.3", "17", "31"]
-    source_status: OFFICIAL_REPO_LISTED_IN_SPEC
+    source_status: OFFICIAL_REPO_PINNED
     official_repo: https://github.com/yaojieliu/ECCV20-STDN
-    url_verification: UNVERIFIED
-    pinned_commit: null
+    url_verification: VERIFIED_FETCHED_AT_PINNED_COMMIT_2026_09_21
+    pinned_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90
+    source_pins: third_party/source_pins.json
     paper: "Y. Liu, J. Stehouwer, X. Liu, On Disentangling Spoof Trace for Generic Face Anti-Spoofing, ECCV 2020. arXiv:2007.09273"
     target_implementation_status: FAITHFUL_OFFICIAL
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/stdn.yaml (not yet created)
-    notes: "TensorFlow stack; isolated env/container if needed. PyTorch rewrite not allowed for main faithful row unless numerically validated and tagged separately."
+    m6a1_status: BLOCKED
+    m6a1_gaps: ["E03-2r model/dataset.py lm_reverse_list assumes the iBUG-68 layout; M2 records only '68-point layout'"]
+    m6a1_checkpoint_selection: SOURCE_RESOLVED
+    m6a1_checkpoint_note: "Saves ckpt-1..ckpt-50 every epoch unconditionally (train.py:186, max_to_keep=50). test.py:61-63 restores tf.train.get_checkpoint_state(LOG_DIR).model_checkpoint_path = the LATEST checkpoint; the repository's own released weights were ckpt-50 = MAX_EPOCH. The VAL loop only logs losses and gates nothing. TEST never involved."
+    m6a1_seed_status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED
+    m6a1_seed_note: "Official code has no seed surface and maps tf.py_func with num_parallel_calls=AUTOTUNE, so a global seed alone is insufficient. Frozen SPEC mandates seeds [42,1337,2026] (not changeable) and takes precedence; the adapter must propagate the benchmark seed AND make RNG consumption order deterministic. Not implemented in M6A1."
+    m6a1_resolved: ["E03-1 root config.py BATCH_SIZE=5 vs model/config.py BATCH_SIZE=2 -> train.py:23 and test.py:21 both import model.config, so the effective default is 2 and root config.py is vestigial",
+                    "E03-2 the required 68-point .npy landmarks are supplied by the frozen M2 landmarks_px256 cache; warp.py uses Delaunay triangulation and is ordering-invariant"]
+    notes: "TensorFlow stack (README: tested TF 1.13.0 / Py 3.6); isolated env/container if needed. PyTorch rewrite not allowed for main faithful row unless numerically validated and tagged separately. Four pretrained checkpoint files were present in the checkout and were removed; see source_pins.json."
 
   - method_id: E04
     method_name: Physics-Guided STD
     role: "Frequency-aware trace transfer"
     track: "Binary = native"
     spec_sections: ["2 (R4)", "8.4", "17"]
-    source_status: PAPER_ONLY_NO_CODE_IN_SPEC
+    source_status: NO_OFFICIAL_CODE_RELEASE_LOCATED_AS_OF_2026_09_21
     official_repo: null
     url_verification: NOT_APPLICABLE
     pinned_commit: null
@@ -90,14 +124,26 @@ methods:
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/physics_std.yaml (not yet created)
-    notes: "FAITHFUL_PAPER unless a verified official release is found (Q-09). Needs methods/physics_std/source_traceability.md. Missing scientific details → BLOCKED_BY_SOURCE_GAP."
+    q09_status: RESOLVED_BY_DOCUMENTED_SEARCH_NO_OFFICIAL_RELEASE_LOCATED_AS_OF_2026_09_21
+    m6a1_status: BLOCKED_BY_SOURCE_GAP
+    m6a1_gaps: ["E04-2 L_depth (alpha_1=100) needs a depth map rendered from a 3DMM fit on 140 landmarks; the frozen cache has 68 landmarks, no 3DMM, no depth; refs [60]/[70] are unpinned external tools",
+                "E04-3 CHECKPOINT_SELECTION_UNSPECIFIED: no official code and the paper gives only a 150,000-iteration budget; no source names the generator state used for bank generation. Not chosen in M6A1."]
+    m6a1_checkpoint_selection: CHECKPOINT_SELECTION_UNSPECIFIED
+    m6a1_sourced_values: "TensorFlow; lr 5e-5; 150,000 iterations; lr/10 every 45,000; batch 8; init N[0,0.02]; {a1..a6}={100,5,1,1e-4,10,1}; beta=0.1; trace-reg lambda=1 (all PAPER §4.1/Eqs. 6,23,24)."
+    m6a1_notes: "Q-09: documented search located no official release as of 2026-09-21 -- abstract promises code 'upon publication' with no URL; the first author's GitHub has 5 repos, none this work; GitHub search finds only ECCV20-STDN and a self-declared unofficial port. Operational finding, NOT a claim that no official code can exist."
+    lineage_finding: E03_E04_LINEAGE_OVERLAP
+    lineage_note: "arXiv:2012.05185 states 'A preliminary version of this work was published in ... ECCV 2020 [31]', where [31] is spec R3/E03. E03 and E04 share publication/method lineage: E04 is the extended journal-stage method whose preliminary version was E03, and yaojieliu/ECCV20-STDN is the released code of that preliminary version, not of E04. The frozen specification nevertheless defines E03 and E04 as DISTINCT experimental conditions; they REMAIN distinct method IDs and distinct result rows. The overlap is disclosed, never merged. Spec not altered."
+    alpha_0_status: OWNER_CONFIRMED_OUT_OF_SCOPE_FOR_GENERATOR
+    alpha_0_owner_confirmation_date: "2026-09-21"
+    alpha_0_note: "alpha_0 occurs only in the paper's test-time scoring Eq. 10; GPAT uses E04 only as a synthetic generator and scores with its own frozen downstream evaluators. NON_BLOCKING. Does NOT resolve E04-2."
+    notes: "FAITHFUL_PAPER (Q-09: no official release located as of 2026-09-21). Needs methods/physics_std/source_traceability.md."
 
   - method_id: E05
     method_name: PCGAN (PMN artifact pattern conversion)
     role: "Full-image learned artifact conversion"
     track: "Binary = native"
     spec_sections: ["2 (R5)", "8.5", "17", "31"]
-    source_status: PAPER_ONLY_NO_CODE_IN_SPEC
+    source_status: NO_OFFICIAL_CODE_RELEASE_LOCATED_AS_OF_2026_09_21
     official_repo: null
     url_verification: NOT_APPLICABLE
     pinned_commit: null
@@ -106,7 +152,15 @@ methods:
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
     config_file: configs/methods/pcgan.yaml (not yet created)
-    notes: "Q-08: official code availability unknown. Must output full 256×256 RGB; may not reuse GPAT identity/landmark losses in main row."
+    q08_status: RESOLVED_BY_DOCUMENTED_SEARCH_NO_OFFICIAL_RELEASE_LOCATED_AS_OF_2026_09_21
+    m6a1_status: BLOCKED_BY_SOURCE_GAP
+    m6a1_gaps: ["E05-1 the method is defined end-to-end at 1024x1024 (z_pat 8x512x512, blur loss 1024->512) but the benchmark canonical face and §8.5 output are 256x256",
+                "E05-2 upstream architectures [34] swapping auto-encoder and [35] discriminator/AdaIN are unpinned and unnamed in spec §30",
+                "E05-3 CHECKPOINT_SELECTION_UNSPECIFIED: no official code; the paper gives a 4,000-iteration budget only, and its 'average over the last 10 epochs' protocol describes detector evaluation and is not a single checkpoint. Not chosen in M6A1."]
+    m6a1_checkpoint_selection: CHECKPOINT_SELECTION_UNSPECIFIED
+    m6a1_sourced_values: "Adam betas (0.9,0.999); lr 1e-6; batch 1; 4,000 iterations; MTCNN crop padding 0.6; alpha=0.2, beta=1e-6; L_PCGAN = L_rec + L_recblur + L_advrec + L_advmix + L_pat, all unit-weighted (PAPER Eq. 5)."
+    m6a1_notes: "Q-08: documented search located no official release as of 2026-09-21; operational finding, NOT a claim that no official code can exist. Paper identity verified (arXiv:2604.09018, Pattern Recognition 179 Part B 113640, 2026). No code URL anywhere in the full text (only the publisher DOI); the first author's GitHub has 4 repos, none PCGAN; three GitHub searches return 0 results."
+    notes: "Q-08 resolved in M6A1 by documented search: no official release located as of 2026-09-21. Must output full 256×256 RGB; may not reuse GPAT identity/landmark losses in main row."
 
   - method_id: E06a
     method_name: DSDG-BIN
@@ -199,6 +253,14 @@ methods:
     implementation_status: NOT_STARTED
     config_file: configs/frozen/dsdg_bin_idfree_v1.yaml
     deviation: DEV-020
+    m6a1_status: BLOCKED
+    m6a1_gaps: ["E06c-2 LightCNN-29 v2 identity-preserving weight is REQUIRED_OFFICIAL_EXTERNAL_WEIGHT_NOT_FETCHED: the official README gives a download link and the expected path ./ip_checkpoint, but M6A1 forbids fetching it, so local sha256 is UNKNOWN"]
+    m6a1_checkpoint_selection: SOURCE_RESOLVED
+    m6a1_checkpoint_note: "generated.py:23 defaults --pre_model to ./result/model_oulu_p1/netG_model_epoch_200_iter_0.pth; epoch_200 = all_epochs=200 in train_generator.sh and model_oulu_p1 is that script's checkpoint_path, so the official generation entrypoint names the FINAL-epoch netG. The periodic 'test' block only writes sample images and is NOT validation. TEST never involved."
+    m6a1_batch_classification: "Official EFFECTIVE batch = 240 (train_generator.sh) is a third-party native hyperparameter, NOT implementation-only. Official GPU list 0,1,2,3. DataLoader workers 8 is official but implementation-adaptable (Appendix B). The PHYSICAL batch may be reduced only if memory requires; if so, gradient accumulation MUST preserve effective batch 240 and the implementation-only deviation MUST be logged. No GPU execution decision made in M6A1."
+    m6a1_resolved: ["E06c-1 RESOLVED_BY_OFFICIAL_EXECUTION_PATH: README says 'Run ./train_generator.sh to train the generator', so precedence README -> shell -> argparse is explicit. Effective: lr 2e-4 and print_freq 20 fall through to argparse (the script does not pass them); batch_size 240, all_epochs 200, hdim 128, workers 8, attack_type 4, test_epoch 10, save_epoch 10, pre_epoch 0, lambda_mmd 50, lambda_ip 1000, lambda_pair 5, lambda_type 10, lambda_ort 1 come from the script. DEV-020 then sets lambda_pair 0.0 and attack_type 1."]
+    m6a1_seed_status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED
+    m6a1_seed_note: "Official code performs NO seeding at all and sets cudnn.benchmark=True; DataLoader has no worker_init_fn. Frozen SPEC mandates seeds [42,1337,2026] (not changeable). Adapter must seed python/numpy/torch/CUDA, set cudnn deterministic and add worker_init_fn. Not implemented in M6A1."
     notes: "Official same-subject online live pick (GenDataset_s.get_pair -> random.choice over the same OULU user id) is replaced by the frozen common pair relation from manifests/pairs_train_v1.parquet; lambda_pair = 0 because the official pair loss forces the identity features of the two reconstructions to match, which is invalid for different people. All other losses retained. All spoof types collapsed to one class. subject_id_global is never consumed. CASIA + MSU + SiW."
 
   - method_id: E07c
@@ -218,6 +280,15 @@ methods:
     implementation_status: NOT_STARTED
     config_file: configs/frozen/difffas_bin_idfree_v1.yaml
     deviation: DEV-021
+    m6a1_status: BLOCKED
+    m6a1_gaps: ["E07c-3 generation sampler undecided: FAS_sample.py defaults to ddim while FAS_train.py defaults to ddpm; the two give different images from the same weights",
+                "E07c-4 a PADISI-trained conditioning encoder (--pretrain_classifier) is required on every training step regardless of use_pair, is absent from the repository, and must not be downloaded",
+                "E07c-5 CHECKPOINT_SELECTION_UNSPECIFIED: FAS_sample.py --model_path is required=True with no default and the 3-line README gives no guidance; training saves model_{iters:06d}.pt every 10,000 iterations with no best tracking and no held-out validation metric. Which tensor set to load IS fixed (['model'], not ['ema']); which iteration is not. Not chosen in M6A1."]
+    m6a1_checkpoint_selection: CHECKPOINT_SELECTION_UNSPECIFIED
+    m6a1_seed_status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED
+    m6a1_seed_note: "Official seed_torch seeds python/hash/numpy/torch/CUDA and sets cudnn benchmark=False deterministic=True, so the RNG surface is complete but hard-coded to 1. Frozen SPEC mandates seeds [42,1337,2026] (not changeable), so neither 1 nor 2024 may be recorded as an M6 seed; the adapter must parameterise seed_torch. Not implemented in M6A1."
+    m6a1_resolved: ["E07c-1 --random_seed is never read; main() calls seed_torch(seed=1), so the effective OFFICIAL behaviour is seed 1 -- superseded for M6 by the SPEC seed contract",
+                    "E07c-2 config/diffusion.conf dataloader block is dead: FAS_train.py builds the loader from argparse batch_size=4, default workers, drop_last False"]
     notes: "use_pair=false, the official code path in which the content image is not concatenated into the diffusion input and is not passed as the conditioning; conditioning is style_spoof only and the target is the epsilon of GT. Style guide drawn deterministically by raw-byte SHA-256 from the binary TRAIN spoof pool of the same dataset. style_id = SPOOF_BINARY; attack_raw is never a class target. subject_id_global is never consumed. CASIA + MSU + SiW."
 
   - method_id: E08

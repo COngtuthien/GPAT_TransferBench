@@ -1,6 +1,28 @@
 {
-  "fetched_utc": "2026-09-20",
-  "purpose": "Track-A adaptation source audit (Amendment A1); source only, no weights",
+  "fetched_utc": "2026-09-20 (dsdg, difffas); 2026-09-21 (fas_aug, stdn)",
+  "m6a1_weight_dependencies_not_downloaded": [
+    {
+      "method_ids": [
+        "E06a",
+        "E06b",
+        "E06c"
+      ],
+      "referenced_by": "addition_module/DSDG/train_generator.py:35,72-83",
+      "status": "NOT_DOWNLOADED_BLOCKER",
+      "weight": "LightCNN-29 v2 (ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar)"
+    },
+    {
+      "method_ids": [
+        "E07a",
+        "E07b",
+        "E07c"
+      ],
+      "referenced_by": "FAS_train.py:34,254; models/unet_autoenc.py:73-82",
+      "status": "NOT_DOWNLOADED_BLOCKER",
+      "weight": "PADISI-trained conditioning encoder (--pretrain_classifier, default ./PADISI.pkl)"
+    }
+  ],
+  "purpose": "Track-A adaptation source audit (Amendment A1) and M6A1 baseline source/provenance audit; source only, no weights",
   "sources": {
     "difffas": {
       "binary_weight_files_present_now": [],
@@ -44,8 +66,10 @@
       "commit_verified_from_remote": "https://github.com/murphytju/DiffFAS",
       "method_ids": [
         "E07a",
-        "E07b"
+        "E07b",
+        "E07c"
       ],
+      "method_ids_note": "M6A1: E07c (DIFFFAS-BIN-IDFREE) was added by Amendment A1 and uses this same pinned source, but was omitted from this list when A1 was recorded. Completed here. No commit, tree, cited file, hash or weight record was changed.",
       "model_weights_downloaded": false,
       "pinned_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
       "relevant_path": ".",
@@ -101,12 +125,169 @@
       "commit_verified_from_remote": "https://github.com/JDAI-CV/FaceX-Zoo",
       "method_ids": [
         "E06a",
-        "E06b"
+        "E06b",
+        "E06c"
       ],
+      "method_ids_note": "M6A1: E06c (DSDG-BIN-IDFREE) was added by Amendment A1 and uses this same pinned source, but was omitted from this list when A1 was recorded. Completed here. No commit, tree, cited file, hash or weight record was changed.",
       "model_weights_downloaded": false,
       "pinned_commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
       "relevant_path": "addition_module/DSDG",
       "repository": "https://github.com/JDAI-CV/FaceX-Zoo"
+    },
+    "fas_aug": {
+      "binary_weight_files_present_now": [],
+      "binary_weights_removed_after_checkout": [],
+      "byte_identical_mirror": "https://github.com/CeceliaSoh/FAS-Aug",
+      "checkout_mode": "full tree, depth 1",
+      "cited_files": {
+        "config/default.py": {
+          "git_blob": "923863dcbc8c2cc9769b6322092e0826964cb15b",
+          "lines": 96,
+          "sha256": "8f5aa0dfe5eb956d74573e815cbc606c389c071aa4b06593da859389decf5ac1",
+          "size_bytes": 3263
+        },
+        "data/FAS_Augmentations.py": {
+          "git_blob": "d6bb403bffb69544953179830534efb3a3874557",
+          "lines": 224,
+          "sha256": "93f2de6a58760da89a41aadcf3fb1fa089cadb1a880fc13841f6be74f138ec6c",
+          "size_bytes": 8458
+        },
+        "data/fas_aug_helper.py": {
+          "git_blob": "f5edb61b27c6bc939464e9ae78b1596d18ed2219",
+          "lines": 105,
+          "sha256": "55483b9c583f1ff6b2ecfa31bdc681a5cc983498c92c24b0a3fe31f69bb2b31d",
+          "size_bytes": 3096
+        },
+        "data/transform.py": {
+          "git_blob": "481efd26c78ea84705543f625201ace48f648915",
+          "lines": 76,
+          "sha256": "f9533710b8487f04fd7cbfe6b6d9a62927705155de4f75f4328684cdb18e2b6a",
+          "size_bytes": 2379
+        },
+        "data/zip_dataset.py": {
+          "git_blob": "ce9d62343bfa485d2e029f82cd1e01c522fbe9c9",
+          "lines": 56,
+          "sha256": "7ef0548fc707fa960cb87bb743b3baacf0e43b6cb58fa4c30df2bd1c14887afc",
+          "size_bytes": 2085
+        },
+        "models/base.py": {
+          "git_blob": "c77aa0caa7663353e1defe4f07717e4a5b95b156",
+          "lines": 473,
+          "sha256": "4149dcbd9a3af1ea6066dd3d44365c8440cbbe40fbe8354c4f976286daff7653",
+          "size_bytes": 18466
+        }
+      },
+      "commit_date_utc": "2024-09-18T15:21:41+08:00",
+      "commit_subject": "release updating",
+      "commit_tree": "462fb9582eca0370145db41745367a20cd7448e0",
+      "commit_verified_from_remote": "https://github.com/RizhaoCai/FAS-Aug",
+      "line_count_convention": "len(data.split(b\"\\n\")) \u2014 repository convention; a terminal newline contributes one extra element",
+      "method_ids": [
+        "E01"
+      ],
+      "model_weights_downloaded": false,
+      "paper": "R. Cai, C. Soh, Z. Yu, H. Li, W. Yang, A. C. Kot, Towards Data-Centric Face Anti-Spoofing, IJCV 133, 2025. arXiv:2409.03501",
+      "pinned_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517",
+      "relevant_path": ".",
+      "repository": "https://github.com/RizhaoCai/FAS-Aug",
+      "spec_code_link": "https://github.com/RizhaoCai/FAS_Aug",
+      "spec_code_link_note": "Spec section 30 R4 points at a one-file redirect stub (commit 2ae330a6fe5d63abb2bf65fdcc8252e1353f4d18) whose README names two candidates. Both were cloned; they share commit 0da1dd79... and tree 462fb958... and diff -rq is empty, so the choice cannot change any scientific value. Stub retained at third_party/source_cache/fas_aug_spec_stub/.",
+      "weight_scan_note": "Zero files match any weight extension (.pt .pth .pkl .ckpt .tar .h5 .onnx .npy .pb .bin .safetensors .caffemodel, ckpt*, checkpoint*). The 32 files over 1 MB are method assets: 90 backgrounds, 190 moire textures, 48 noise textures, 19 RGB + 7 CMYK ICC profiles."
+    },
+    "stdn": {
+      "binary_weight_files_present_now": [],
+      "binary_weights_removed_after_checkout": [
+        {
+          "git_blob": "c0e6b040c60a1dee02d464e4ed6fb1953e3ce59c",
+          "path": "data/pretrain/checkpoint",
+          "sha256": "bcd1252e0dc35eccf129bbd648a2969d3804c6dadfaf22160d8ae9f46d5c614d",
+          "size_bytes": 71
+        },
+        {
+          "git_blob": "cfb4000bb7103d094cef25250bf5fad9e415e319",
+          "path": "data/pretrain/ckpt-50.data-00000-of-00001",
+          "sha256": "1504f86e9e9a6c076672ec100aa77eeb8d5c67a361a7c5e1ec64dee04dc4dfa2",
+          "size_bytes": 20749008
+        },
+        {
+          "git_blob": "e5ed9760a90a7de27843f0849a6ffd83cc40bd4e",
+          "path": "data/pretrain/ckpt-50.index",
+          "sha256": "0cc9345808ae0500877d4263dcf881b7ff16a97aa2c250a07dda53356983b55b",
+          "size_bytes": 28161
+        },
+        {
+          "git_blob": "5015d470915e6a47457b9b2d64e1047d84a7e875",
+          "path": "data/pretrain/ckpt-50.meta",
+          "sha256": "2eda16e3a8f7f8c5e652c9170ce87d13ee20e0a5a7ece38f91fd9b6572a536ff",
+          "size_bytes": 4329270
+        }
+      ],
+      "checkout_mode": "full tree, depth 1",
+      "cited_files": {
+        "README.md": {
+          "git_blob": "b938262e8d51ac9097c3c633a4dc0acf2da090f2",
+          "lines": 39,
+          "sha256": "3d77741bd58188c188ec927a6b7e2f9bcfaccb4a456de5d22556ed9e80625849",
+          "size_bytes": 1606
+        },
+        "config.py": {
+          "git_blob": "0803d5d5a5c6703e7e6f6a80d9661b76f8894019",
+          "lines": 74,
+          "sha256": "a2658fca5942a360f244b3b844771e691dd413a03e304fd83635902d3d861bb3",
+          "size_bytes": 2815
+        },
+        "model/config.py": {
+          "git_blob": "15e782190243d3b1f61f59ee9ec7c63e0104b2e5",
+          "lines": 74,
+          "sha256": "31dbee51353a355f4d45143bfc3beb3e9695df60e5d83fd09520a709bcdb6a01",
+          "size_bytes": 2815
+        },
+        "model/dataset.py": {
+          "git_blob": "fde22276e64fbd7a75389aa332e186579c73929a",
+          "lines": 233,
+          "sha256": "11509d80d31a0cd2ea085af0848333d1a22e920d3c066aab47cc0b06c4175b17",
+          "size_bytes": 9946
+        },
+        "model/model.py": {
+          "git_blob": "92493739b3979f31017c4b16472e34a1f3f32e0f",
+          "lines": 129,
+          "sha256": "a422834d59d24db684cc28f470fdd6eb8b1658bfb40ba113393df627d6fc3743",
+          "size_bytes": 5922
+        },
+        "model/warp.py": {
+          "git_blob": "80afd75f8cac65e1583e5ba9d4c0fc09216fe939",
+          "lines": 108,
+          "sha256": "60c29a03fb596bee3b59e41eec57675bbade8d438a85b9abca310b53207ad794",
+          "size_bytes": 4434
+        },
+        "test.py": {
+          "git_blob": "8e677d61feef31d050eaf9c667392632d22e4236",
+          "lines": 94,
+          "sha256": "2fcbc81154f6e375795b1a07032db4f8759a492c34a08b5a67ae2f05f3a4e2b2",
+          "size_bytes": 3738
+        },
+        "train.py": {
+          "git_blob": "0b08bcb3990f9515bfdf7066c476bbf5115e27c0",
+          "lines": 211,
+          "sha256": "87cebbd05551ea542de83d4dba365d30d090656343a099fea2c886b82f293878",
+          "size_bytes": 9605
+        }
+      },
+      "commit_date_utc": "2020-11-28T14:07:17-05:00",
+      "commit_subject": "Update model.py",
+      "commit_tree": "991a4f127990f98a108b8426113396f1c39f558d",
+      "commit_verified_from_remote": "https://github.com/yaojieliu/ECCV20-STDN",
+      "line_count_convention": "len(data.split(b\"\\n\")) \u2014 repository convention; a terminal newline contributes one extra element",
+      "method_ids": [
+        "E03"
+      ],
+      "model_weights_downloaded": false,
+      "paper": "Y. Liu, J. Stehouwer, X. Liu, On Disentangling Spoof Trace for Generic Face Anti-Spoofing, ECCV 2020. arXiv:2007.09273",
+      "pinned_commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+      "relevant_path": ".",
+      "repository": "https://github.com/yaojieliu/ECCV20-STDN",
+      "spec_code_link": "https://github.com/yaojieliu/ECCV20-STDN",
+      "weight_removal_note": "Present in the upstream repository, not downloaded separately. Removed from the working tree of the source-only cache; no source file altered (cache git status shows exactly these 4 deletions). Digests recomputed from the local object store for provenance only."
     }
   },
   "status": "PASS",
