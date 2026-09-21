@@ -1,0 +1,806 @@
+{
+  "schema_version": "m6c1-implementation-v1",
+  "milestone": "M6C1",
+  "date_utc": "2026-09-22",
+  "branch": "m6-baselines",
+  "starting_commit": "9fd2188a885ffbd2807bbf2708c31dc9e69c18a0",
+  "purpose": "Implement the common M6 runtime plus the two non-learned generators E01 (FAS-Aug) and E02 (Frequency Substitution), with synthetic-only tests and a dry run.",
+  "scope": {
+    "trained": false,
+    "full_bank_generated": false,
+    "learned_models_executed": false,
+    "gpu_jobs": false,
+    "checkpoints_created": false,
+    "frozen_configs_modified": false,
+    "dry_run_benchmark_images_opened": 0,
+    "inadvertent_full_regression_command_launched": true,
+    "full_regression_benchmark_data_access": "UNVERIFIED",
+    "test_data_used_for_scientific_decisions": false,
+    "full_regression_result_used_as_benchmark_evidence": false,
+    "full_suite_rerun_in_continuation": false,
+    "official_e01_smoke_benchmark_images_opened": 0,
+    "official_e01_smoke_manifest_opens": 0
+  },
+  "authority": {
+    "m6b_configs_are_authoritative": true,
+    "note": "Frozen values are consumed and verified. E02 also implements spec-defined geometry constants; no scientific config value was retuned."
+  },
+  "files_created": [
+    {
+      "path": "methods/__init__.py",
+      "sha256": "e94adec42170a0582c0a3b215347c187ae800e4eaf049619cfbc8693519e0ac5",
+      "size_bytes": 320
+    },
+    {
+      "path": "methods/common/__init__.py",
+      "sha256": "2be869d41faab4144815d8973d284bef39f8db290712af564e8d884482556c79",
+      "size_bytes": 723
+    },
+    {
+      "path": "methods/common/config.py",
+      "sha256": "786f934716ab05c9e30dc957b4da3a6de4ce4e0370ac5fa2ad75bfa09683b4a3",
+      "size_bytes": 6599
+    },
+    {
+      "path": "methods/common/interface.py",
+      "sha256": "89f2241af61c754f852929042c0c7312378ab2040558b30a2d314d645c9599ce",
+      "size_bytes": 2025
+    },
+    {
+      "path": "methods/common/runlog.py",
+      "sha256": "867bd73d90bbe2b5f1bed274fd33dbbc13fd8a440ed9de07e117f7e21b2dc3f0",
+      "size_bytes": 21374
+    },
+    {
+      "path": "methods/common/seeding.py",
+      "sha256": "facd0092f1df190b09ca5031b7599affa47adaea0c493ae8c6fe692ac363e480",
+      "size_bytes": 1408
+    },
+    {
+      "path": "methods/fas_aug/__init__.py",
+      "sha256": "fc8cc978828bcb2b3eecc680b873adaae81bc704658208a4069ff545f9c3d294",
+      "size_bytes": 633
+    },
+    {
+      "path": "methods/fas_aug/e01.py",
+      "sha256": "c896d5b65dc3c719d1d81cc003b702aa5b77fb3b3a9653a3261aa8787ca00d70",
+      "size_bytes": 13141
+    },
+    {
+      "path": "methods/fas_aug/official.py",
+      "sha256": "909ece16ca2bb2df05e10c10804efd74b193baa39bd881693468d5c715ae5f7a",
+      "size_bytes": 9687
+    },
+    {
+      "path": "methods/freq_sub/__init__.py",
+      "sha256": "5769d437d8c7aa0de6dc04920c6fa9413cff77fc90ba3b3d3782b4c95108de4a",
+      "size_bytes": 482
+    },
+    {
+      "path": "methods/freq_sub/e02.py",
+      "sha256": "7c2a539efa296e83e0e0d8d93cd94b877efe59dc86271b8e009563cbf7c07c78",
+      "size_bytes": 12918
+    },
+    {
+      "path": "tests/test_m6c1_e01.py",
+      "sha256": "3c75af2490ec903500f9ee3871f74ca2f20efd04b17c6e84ac6179b5f756d54c",
+      "size_bytes": 11405
+    },
+    {
+      "path": "tests/test_m6c1_e02.py",
+      "sha256": "e588900332e168cc3034a09105be9e260c6a7006dbab563f3e9d732cd8155fb4",
+      "size_bytes": 9398
+    },
+    {
+      "path": "tests/test_m6c1_runtime.py",
+      "sha256": "c98b392fcab5f43e5a1869f0554a7aeb1dffdd2f2546da3f037f88551aba09b8",
+      "size_bytes": 14034
+    },
+    {
+      "path": "tools/m6c1_dry_run.py",
+      "sha256": "6721446a37bab4674f465d855dbca7795769396a4e62fb3646bab21b71491238",
+      "size_bytes": 9445
+    }
+  ],
+  "interface_design": {
+    "module_layout": {
+      "methods/common": "config loading, seeding, run/logging, generator interface",
+      "methods/fas_aug": "E01 adapter",
+      "methods/freq_sub": "E02 implementation"
+    },
+    "rationale": "methods/<name>/ already existed as tracked .gitkeep placeholders; this is additive, not a second framework. gpatbench/ was left untouched.",
+    "generator_interface": [
+      "prepare()",
+      "generate_one()",
+      "finalize()"
+    ],
+    "result_record": [
+      "method_id",
+      "global_seed",
+      "pair_id",
+      "inputs",
+      "output",
+      "metadata",
+      "success",
+      "failure_reason",
+      "elapsed_seconds"
+    ]
+  },
+  "config_fields_consumed": {
+    "E01": [
+      "generation.input_resolution",
+      "generation.operator_set",
+      "generation.operator_count",
+      "generation.operator_ranges",
+      "generation.num_mag",
+      "asset_enumeration.rule",
+      "asset_enumeration.asset_counts",
+      "pair_seed.worked_example",
+      "seeds.experiment_seeds",
+      "data.splits.*",
+      "checkpoint.rule"
+    ],
+    "E02": [
+      "generation.input_resolution",
+      "generation.block_grid",
+      "generation.n_eligible_frozen_geometry",
+      "block_count_rule.k_frozen_geometry",
+      "block_count_rule.worked_verification",
+      "block_selection.rng",
+      "conjugate_symmetry.rule",
+      "conjugate_symmetry.self_conjugate_bins",
+      "pair_seed.worked_example",
+      "seeds.experiment_seeds",
+      "data.splits.*",
+      "checkpoint.rule"
+    ],
+    "common": [
+      "method_id",
+      "status",
+      "milestone_status",
+      "fidelity_class",
+      "fidelity_provenance",
+      "logging_contract",
+      "run_layout",
+      "data.splits.TEST.*",
+      "data.splits.VAL.may_select_checkpoint"
+    ]
+  },
+  "e01_seed_implementation": {
+    "preimage": "UTF-8(pair_id + decimal_string(global_seed))  # NO separator",
+    "digest": "SHA256(preimage).digest()",
+    "operator_seed": "int.from_bytes(digest,'big') % 2**31",
+    "function": "methods.fas_aug.e01.operator_seed",
+    "test_vectors": {
+      "PTR000001@42": {
+        "preimage": "PTR00000142",
+        "seed": 795981663
+      },
+      "PTR000001@1337": {
+        "preimage": "PTR0000011337",
+        "seed": 924982993
+      },
+      "PTR000001@2026": {
+        "preimage": "PTR0000012026",
+        "seed": 1531213468
+      }
+    },
+    "matches_frozen_config_worked_example": true
+  },
+  "e02_seed_implementation": {
+    "namespace": "gpatbench.freqsub.block.v1",
+    "preimage": "UTF-8('gpatbench.freqsub.block.v1|' + pair_id + '|' + decimal_string(global_seed))",
+    "pair_seed": "int.from_bytes(SHA256(preimage).digest(),'big')  # FULL 32 bytes, no truncation, no modulo",
+    "rng": "numpy.random.Generator(numpy.random.PCG64(pair_seed))",
+    "draw": "rng.choice(n_eligible, size=k, replace=False) then np.sort(...) ascending",
+    "k_rule": "(n_eligible + 2) // 4  -> 40 for n_eligible = 159",
+    "function": "methods.freq_sub.e02.pair_seed / select_block_indices",
+    "test_vectors": {
+      "PTR000001@42": {
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "pair_seed": "19354000309184887456743517179028239418116648094833629759175866349341962868907",
+        "pair_seed_preimage": "gpatbench.freqsub.block.v1|PTR000001|42",
+        "n_eligible": 159,
+        "k": 40,
+        "selected_indices": [
+          2,
+          4,
+          16,
+          22,
+          25,
+          30,
+          33,
+          39,
+          42,
+          44,
+          46,
+          47,
+          53,
+          54,
+          55,
+          61,
+          64,
+          69,
+          76,
+          78,
+          80,
+          90,
+          93,
+          95,
+          96,
+          97,
+          98,
+          115,
+          117,
+          123,
+          125,
+          129,
+          130,
+          131,
+          134,
+          136,
+          138,
+          145,
+          149,
+          152
+        ]
+      },
+      "PTR000001@1337": {
+        "pair_id": "PTR000001",
+        "global_seed": 1337,
+        "pair_seed": "100642993489923994340931747082706323367992294802124459081927424298639285382524",
+        "pair_seed_preimage": "gpatbench.freqsub.block.v1|PTR000001|1337",
+        "n_eligible": 159,
+        "k": 40,
+        "selected_indices": [
+          4,
+          16,
+          20,
+          21,
+          29,
+          44,
+          48,
+          50,
+          51,
+          54,
+          55,
+          65,
+          66,
+          67,
+          68,
+          70,
+          73,
+          78,
+          80,
+          85,
+          86,
+          94,
+          95,
+          99,
+          105,
+          107,
+          108,
+          112,
+          120,
+          124,
+          127,
+          128,
+          130,
+          135,
+          137,
+          142,
+          146,
+          152,
+          153,
+          155
+        ]
+      },
+      "PTR000001@2026": {
+        "pair_id": "PTR000001",
+        "global_seed": 2026,
+        "pair_seed": "70582000648117090776289456477083767468449122475305887305661581023317195795819",
+        "pair_seed_preimage": "gpatbench.freqsub.block.v1|PTR000001|2026",
+        "n_eligible": 159,
+        "k": 40,
+        "selected_indices": [
+          2,
+          8,
+          13,
+          20,
+          22,
+          29,
+          30,
+          33,
+          34,
+          36,
+          39,
+          51,
+          52,
+          54,
+          55,
+          57,
+          63,
+          64,
+          72,
+          77,
+          80,
+          85,
+          88,
+          92,
+          97,
+          99,
+          107,
+          110,
+          111,
+          112,
+          116,
+          119,
+          124,
+          128,
+          130,
+          131,
+          136,
+          149,
+          150,
+          153
+        ]
+      }
+    }
+  },
+  "geometry": {
+    "source": "frozen spec \u00a78.2",
+    "eligible_region": "radial normalised frequency r in [0.20, 0.50]; r = 0 at centre (index 128 after fftshift), r = 0.5 at Nyquist edge",
+    "block_eligibility": ">= 75% of a 16x16 block's pixels inside the region (spec \u00a78.2)",
+    "computed_eligible_pixels": 43186,
+    "computed_eligible_blocks": 159,
+    "matches_m6a2_audit": true,
+    "enumeration": "row-major: block_row ascending, then block_col ascending",
+    "boundary_convention_invariance_verified": true
+  },
+  "hermitian_implementation": {
+    "rule": "pixel-wise p -> (256 - p) mod 256 on the SHIFTED spectrum",
+    "self_conjugate": [
+      0,
+      128
+    ],
+    "block_grid_mirror": "FORBIDDEN and demonstrably wrong: the pixel-wise image of block (0,0) spans rows {0} U [241,255] and is NOT a contiguous block (asserted in tests)",
+    "application": "boolean selected-pixel mask -> conjugate mask -> union = edit mask; magnitude substituted on the union, target phase preserved",
+    "max_abs_imag_white_noise": 1.0999371638972949e-13,
+    "max_abs_imag_smooth_image": 3.2291627502247798e-12,
+    "documented_tolerance": 1e-08,
+    "tolerance_rationale": "Residual is pure float64 round-off because the mixed spectrum stays Hermitian by construction; 1e-8 bounds the observed maxima by >4 orders of magnitude.",
+    "previous_agent_reported_residuals_historical": {
+      "noise": 1.1958356315533588e-13,
+      "smooth": 5.3207507679653786e-12
+    }
+  },
+  "runtime_implementation": {
+    "config_loading": "snapshot byte identity + independent M6B recorded SHA256; exact method/seeds/TEST flags; generator/runtime reject mutated config",
+    "seeding": "python random + numpy legacy global; framework hook explicitly NOT_APPLICABLE for non-learned methods",
+    "run_directory": "<runtime_root>/runs/m6/<method_id>/seed_<seed>/ (external runtime only; never Git)",
+    "run_id": "sha256(method_id|seed|config_sha256|git_commit)[:16] per run_logging_v1",
+    "artifacts": [
+      "resolved_config.yaml",
+      "run_manifest.json",
+      "metrics.jsonl",
+      "generation_log.jsonl",
+      "checkpoints/",
+      "checkpoint_index.json",
+      "run_summary.json",
+      "stdout.log",
+      "stderr.log"
+    ],
+    "append_only": "metrics.jsonl opened in append mode; every record carries record_type",
+    "atomic_writes": "tempfile + fsync + os.replace for every JSON/YAML artifact",
+    "resume_safety": "exclusive writer lock; identity, commit, source, environment and resolved config match required; incomplete/partial JSONL refused; UUID/start retained; append reconciliation records prior manifest/summary; no silent history overwrite",
+    "missing_fields": "explicit nulls with missing_field_reasons; actual UUID4; environment identity fields at manifest top level",
+    "close": "idempotent, preserves explicit first summary",
+    "payloads": "GeneratorResult.to_record excludes output pixels; logger rejects arrays/binary/image payload keys and image-sized nested arrays"
+  },
+  "e01_adapter_boundary": {
+    "official_operator_backend": "IMPLEMENTED",
+    "official_operator_synthetic_smoke": {
+      "status": "PASS",
+      "evidence": "official_e01_smoke_closure",
+      "operators_executed": 8,
+      "deterministic_repeat": true,
+      "level_zero_noop": true
+    },
+    "upstream_vendored": false,
+    "binding": "methods/fas_aug/official.py: AST-selective loading of unchanged pinned class/helper function bodies, excluding unused torch/Compose imports and module-level eager asset loading. No operator body rewriting. Private per-call namespaces avoid global RNG/cwd mutation.",
+    "source_verification": "config pin + source_pins repository/commit/tree; actual HEAD/tree; code cited SHA256 and git blobs; required texture/profile bytes vs pinned git blobs; 90/48/190 directory counts; 11 RGB and 7 CMYK authored choices",
+    "asset_order": "Directory assets sorted ascending bytewise; upstream authored profile/direction/interpolation dictionaries retain their original order.",
+    "rng": "One magnitude draw, then unchanged official operator/helper RNG draws, recorded in order; no extra asset draw; level zero returns copy without operator draws.",
+    "production_default": "OfficialFASAugBackend; ToyOperatorBackend rejected unless synthetic_only=True",
+    "dependencies": "Pillow with ImageCms and OpenCV; no learned model/framework required by operator bodies"
+  },
+  "tests_added": {
+    "tests/test_m6c1_runtime.py": 28,
+    "tests/test_m6c1_e01.py": 26,
+    "tests/test_m6c1_e02.py": 29,
+    "total": 83,
+    "passed": 83,
+    "skipped": 0,
+    "skip_reason": null,
+    "gpu_required": false,
+    "internet_required": false,
+    "benchmark_data_required": false
+  },
+  "dry_run": {
+    "tool": "tools/m6c1_dry_run.py",
+    "synthetic_inputs_only": true,
+    "temp_runtime_dir": true,
+    "temporary_directory_removed": true,
+    "determinism_byte_identical": true,
+    "resume_overwrite_refused": true,
+    "resume_appends_history": true,
+    "open_audit": {
+      "open_events": 454,
+      "benchmark_image_opens": 0,
+      "manifest_opens": 0
+    },
+    "historical_open_audit": {
+      "scope": "previous agent synthetic dry run ONLY",
+      "open_events": 266,
+      "benchmark_image_video_opens": 0,
+      "manifest_opens": 0
+    },
+    "result": "PASS",
+    "scope": "Historical handoff dry run before Pillow installation; later official-only closure is recorded separately",
+    "historical_official_operator_synthetic_smoke": {
+      "status": "NOT_RUN_WITH_REASON",
+      "reason": "Missing execution dependencies: PIL"
+    }
+  },
+  "known_limitations": [
+    "NumPy 2.5.3 is observed, not the authoritative runtime environment pin. Freeze the runtime environment before benchmark execution.",
+    "Round-robin pair ordinal defaults to numeric pair ID; pass canonical ordinal explicitly when consuming the frozen pair manifest.",
+    "No benchmark bank/throughput validation has run; all implementation evidence is synthetic.",
+    "The interrupted full regression command has UNVERIFIED benchmark-data access; no whole-milestone zero-access claim is made."
+  ],
+  "source_firewall": {
+    "source_pins_modified": false,
+    "weights_added_to_git": false,
+    "source_cache_modified": false,
+    "source_operator_definitions_loaded": true,
+    "source_pixels_executed": true,
+    "adapter_boundary": "methods.fas_aug.official.OfficialFASAugBackend",
+    "source_pixels_execution_scope": "Verified upstream operator assets applied only to synthetic in-memory images"
+  },
+  "status": {
+    "implementation": "IMPLEMENTED",
+    "synthetic_validation": "DRY-RUN VERIFIED",
+    "benchmark_execution": "NOT BENCHMARK-EXECUTED"
+  },
+  "e02": {
+    "implementation_verified": true,
+    "synthetic_transform_tested": true,
+    "algorithm_redesigned": false,
+    "input_validation_added": "canonical RGB shape, finite inputs, frozen seed domain and explicit TEST refusal",
+    "numpy_observed": "2.5.3",
+    "numpy_authoritative_environment_pin": "PENDING_ENVIRONMENT_FREEZE"
+  },
+  "verification": {
+    "focused": "83/83 pass, 0 skipped; previously Pillow-dependent test executed",
+    "m6b_validator": "PASS: 0 failures",
+    "m0_bootstrap": "16/17 pass; only test_manifests_are_stage_appropriate fails on manifests/artifact_probe_classes_v1.json; historical failure left unchanged",
+    "resource_warning": "none in focused tests and dry run with ResourceWarning enabled as error",
+    "full_suite": "NOT_RUN_IN_CONTINUATION"
+  },
+  "handoff": {
+    "starting_head": "9fd2188a885ffbd2807bbf2708c31dc9e69c18a0",
+    "branch": "m6-baselines",
+    "initial_status": [
+      " M configs/CONFIG_STATUS.md",
+      " M outputs/audit/ARTIFACT_INDEX.csv",
+      " M outputs/audit/EXECUTION_LEDGER.jsonl",
+      "?? methods/__init__.py",
+      "?? methods/common/",
+      "?? methods/fas_aug/__init__.py",
+      "?? methods/fas_aug/e01.py",
+      "?? methods/freq_sub/__init__.py",
+      "?? methods/freq_sub/e02.py",
+      "?? outputs/audit/M6C1_IMPLEMENTATION.json",
+      "?? outputs/audit/M6C1_IMPLEMENTATION.md",
+      "?? tests/test_m6c1_e01.py",
+      "?? tests/test_m6c1_e02.py",
+      "?? tests/test_m6c1_runtime.py",
+      "?? tools/m6c1_dry_run.py"
+    ],
+    "initial_file_sha256_historical": {
+      "methods/__init__.py": "e94adec42170a0582c0a3b215347c187ae800e4eaf049619cfbc8693519e0ac5",
+      "methods/common/__init__.py": "2be869d41faab4144815d8973d284bef39f8db290712af564e8d884482556c79",
+      "methods/common/config.py": "309bd6f34cf8ecd281fd2f7d38100d1703a8738365e897d7bc8bf1066cd67bc6",
+      "methods/common/interface.py": "89f2241af61c754f852929042c0c7312378ab2040558b30a2d314d645c9599ce",
+      "methods/common/runlog.py": "5884db8b32ff0ddcd45dff8ac173e67b8d2d333bc72454fe40ed095d33463efa",
+      "methods/common/seeding.py": "facd0092f1df190b09ca5031b7599affa47adaea0c493ae8c6fe692ac363e480",
+      "methods/fas_aug/__init__.py": "77804b93d1b83c51d42e60a943862dec25025cbaf1d5c6903872e8f787d249cc",
+      "methods/fas_aug/e01.py": "178b07792e5fd320bcf81b3da3dd996c709dc762cbbb9d06b9d7729f64cf4be1",
+      "methods/freq_sub/__init__.py": "5769d437d8c7aa0de6dc04920c6fa9413cff77fc90ba3b3d3782b4c95108de4a",
+      "methods/freq_sub/e02.py": "c2df88c640a9a127abcd109ad063cfb998423a4db5629e636240937617eb9f0c",
+      "outputs/audit/M6C1_IMPLEMENTATION.json": "a3eef1ce9b942dfd10f3e9629db2da6f92ddc236357a77e3f7689fc146484221",
+      "outputs/audit/M6C1_IMPLEMENTATION.md": "2870ae30156470c29172090da76ce2ed91ba9646a523f497511b6123dd9a95ad",
+      "tests/test_m6c1_e01.py": "0510aca83350d3921206a42b7fdcd3b33f82c564d1cc825eee0265c8224f5356",
+      "tests/test_m6c1_e02.py": "e588900332e168cc3034a09105be9e260c6a7006dbab563f3e9d732cd8155fb4",
+      "tests/test_m6c1_runtime.py": "0aff234a496365d21a6f378c2dfb0cd7db347a354449b7aedb8e3f80be0d9683",
+      "tools/m6c1_dry_run.py": "39bca15b9fc97d8fe84872f8b29ecfb06d62b15cc644fa54cab5e750121ebd93",
+      "configs/CONFIG_STATUS.md": "2001638aef19eb19176751ad963afdea953f9773f17f0dac2dfa7fca8b85a01f",
+      "outputs/audit/ARTIFACT_INDEX.csv": "1db9dc814a491309573dc0d80917ff2de653ef0403c3aaf4515fc89e0b91b0a6",
+      "outputs/audit/EXECUTION_LEDGER.jsonl": "feb1d605a2d70c790fefea5c9bb387bb39bddea6681458412ce5def932771208"
+    },
+    "safety_patch": "/tmp/GPAT_M6C1_HANDOFF_PRE_CODEX.patch",
+    "safety_patch_sha256": "0829f146764006b6ffab865f26cf9216ce3f292208004901a0683f37679205c7",
+    "config_status_audit": "No duplicate current rows found; stale M6B-not-started wording removed from current M6 rows only; historical milestone prose retained.",
+    "artifact_index_audit": "No duplicate paths found in handoff; canonical rebuild required for final current hashes; CRLF retained.",
+    "runlog_leak_audit": "Existing metrics reader already uses with; no duplicated pre-fix line. Additional unclosed dry-run readers fixed.",
+    "e02_test_cleanliness": "test_rule_equals_round_half_up already clean Decimal/ROUND_HALF_UP logic; file retained byte-identical.",
+    "prior_ledger": "Original uncommitted M6C1 record retained byte-for-byte as historical; overbroad zero-access claims superseded by M6C1_HANDOFF_COMPLETION disclosure.",
+    "retained_unchanged": [
+      "methods/__init__.py",
+      "methods/common/__init__.py",
+      "methods/common/interface.py",
+      "methods/common/seeding.py",
+      "methods/freq_sub/__init__.py",
+      "tests/test_m6c1_e02.py"
+    ],
+    "corrected_files": [
+      "methods/common/config.py",
+      "methods/common/runlog.py",
+      "methods/fas_aug/__init__.py",
+      "methods/fas_aug/e01.py",
+      "methods/freq_sub/e02.py",
+      "outputs/audit/M6C1_IMPLEMENTATION.json",
+      "outputs/audit/M6C1_IMPLEMENTATION.md",
+      "tests/test_m6c1_e01.py",
+      "tests/test_m6c1_runtime.py",
+      "tools/m6c1_dry_run.py",
+      "configs/CONFIG_STATUS.md",
+      "outputs/audit/ARTIFACT_INDEX.csv",
+      "outputs/audit/EXECUTION_LEDGER.jsonl"
+    ],
+    "created_by_continuation": [
+      "methods/fas_aug/official.py"
+    ]
+  },
+  "current_metadata_hashes": [
+    {
+      "path": "configs/CONFIG_STATUS.md",
+      "sha256": "5e9b9d32c318d00b1447141d7ce332da268c62d4d8d0ad741acacb89cffbed3e",
+      "size_bytes": 26087
+    },
+    {
+      "path": "outputs/audit/M6C1_IMPLEMENTATION.md",
+      "sha256": "f618e293ba3188e1aaa58f6912d0c4030af41a1aad001e0f9ce7180c05219259",
+      "size_bytes": 10290
+    }
+  ],
+  "hash_semantics": "files_created/current_metadata_hashes are CURRENT; handoff.initial_file_sha256_historical and all prior ledger hashes are HISTORICAL; JSON self/index/ledger hashes excluded to avoid cycles.",
+  "official_e01_smoke_closure": {
+    "status": "PASS",
+    "environment_scope": "M6C1 synthetic smoke environment only; NOT the final frozen execution environment",
+    "python": "3.12.3",
+    "pillow": "12.3.0",
+    "numpy": "2.5.3",
+    "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517",
+    "source_pin_verified": true,
+    "asset_counts": {
+      "background": 90,
+      "noiseTexture": 48,
+      "MPTexture": 190
+    },
+    "synthetic_in_memory_only": true,
+    "production_toy_rejected": true,
+    "operators": [
+      {
+        "operator": "Color_Diversity",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "96d67f98c4456862fd73a2c9f897f80a524b196645c73b4174152bdde430ca69",
+        "sampled_operator_parameters": {
+          "random_draws": [
+            {
+              "draw": "choice",
+              "value": "ProPhoto.icc"
+            },
+            {
+              "draw": "choice",
+              "value": "DonRGB4.icm"
+            }
+          ],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 0
+      },
+      {
+        "operator": "Color_Distortion",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "35c32011a1787e4a8716afa2ffd4575506b335029cba8ee5efcdc4537f225d88",
+        "sampled_operator_parameters": {
+          "random_draws": [
+            {
+              "draw": "choice",
+              "value": "ProPhoto.icc"
+            },
+            {
+              "draw": "choice",
+              "value": "USSheetfedUncoated.icc"
+            }
+          ],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 1
+      },
+      {
+        "operator": "Reflection",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "b234d95208affb556748ae2015f79e45c9352ba55bc69d273e7a4159bf3e94dd",
+        "sampled_operator_parameters": {
+          "random_draws": [
+            {
+              "draw": "choice",
+              "value": "25.png"
+            },
+            {
+              "draw": "randint",
+              "low": 0,
+              "high": 988,
+              "value": 593
+            },
+            {
+              "draw": "randint",
+              "low": 0,
+              "high": 488,
+              "value": 355
+            }
+          ],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 2
+      },
+      {
+        "operator": "BN_Halftone",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "22defe1fe9045677417a559dddb0cd6c02a2771d49943cce17ca47ac900607e2",
+        "sampled_operator_parameters": {
+          "random_draws": [
+            {
+              "draw": "choice",
+              "value": "HDR_RGB_4.png"
+            }
+          ],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 3
+      },
+      {
+        "operator": "Moire_Pattern",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "e0c38a488773b2cd993c398be272ad65404f76926e28ef8fe33e7c95cf140424",
+        "sampled_operator_parameters": {
+          "random_draws": [
+            {
+              "draw": "choice",
+              "value": "RGBWSwB_2.png"
+            },
+            {
+              "draw": "randint",
+              "low": 0,
+              "high": 257,
+              "value": 157
+            },
+            {
+              "draw": "randint",
+              "low": 0,
+              "high": 189,
+              "value": 76
+            }
+          ],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 4
+      },
+      {
+        "operator": "SFC_Halftone",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "5a36999c49f5c7c994a89680b9811877817b96df6f57130e944951ba73a1aaec",
+        "sampled_operator_parameters": {
+          "random_draws": [],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 5
+      },
+      {
+        "operator": "Hand_Trembling",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "2fb230fab1777d741c6f598edb9caa6df4927c0459e9569bcae5577d69dafe65",
+        "sampled_operator_parameters": {
+          "random_draws": [
+            {
+              "draw": "choice",
+              "value": "D"
+            }
+          ],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 6
+      },
+      {
+        "operator": "Low_Resolution",
+        "pair_id": "PTR000001",
+        "global_seed": 42,
+        "level_k": 6,
+        "byte_identical_repeat": true,
+        "level_zero_pair": "PTR000010",
+        "level_zero_byte_identical": true,
+        "nonzero_level_output_differs_from_input": true,
+        "output_array_sha256": "07d0b7582e5a825099482a3e006c46d6c4470dc09fc789e15be71ad8288e987c",
+        "sampled_operator_parameters": {
+          "random_draws": [
+            {
+              "draw": "choice",
+              "value": "Linear"
+            },
+            {
+              "draw": "choice",
+              "value": "Nearest"
+            }
+          ],
+          "source_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+        },
+        "operator_index": 7
+      }
+    ],
+    "open_audit": {
+      "open_events": 920,
+      "official_e01_smoke_benchmark_images_opened": 0,
+      "official_e01_smoke_manifest_opens": 0
+    },
+    "input_recipe": "numpy.random.Generator(numpy.random.PCG64(7)).integers(0,256,(256,256,3),dtype=numpy.uint8)",
+    "operator_dispatch": "Explicit index=0..7 in frozen operator order, used only to exercise every operator; no benchmark output guided selection.",
+    "upstream_requirement": "Pinned requirements.txt contains pillow, with no version constraint.",
+    "dependency_install": "python -m pip install Pillow; current development .venv only; sandbox DNS failure followed by approved network retry",
+    "implementation_changes": []
+  }
+}
