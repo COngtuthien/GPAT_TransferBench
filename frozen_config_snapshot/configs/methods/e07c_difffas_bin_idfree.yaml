@@ -1,0 +1,288 @@
+# E07c — DIFFFAS-BIN-IDFREE (controlled encoder reconstruction) · M6B EXECUTION CONFIG — FROZEN 2026-09-21.
+#
+# Every execution-affecting value is frozen here BEFORE implementation and training. No value may
+# depend on cwd, os.listdir ordering, hostname, shell environment, PYTHONHASHSEED, automatic
+# checkpoint choice, TEST performance or a "best seed". Values already fixed by the frozen
+# specification or by Amendments A1/A2/A3 are copied faithfully; NOTHING was retuned in M6B.
+#
+# Adaptation SEMANTICS live in the Amendment-A1 frozen config referenced below and are NOT
+# duplicated here; this file adds the M6 EXECUTION layer those files deliberately left open.
+version: e07c_m6b_v1
+status: CONFIG_FROZEN
+frozen_utc: "2026-09-21"
+milestone: M6B
+milestone_status: NOT_TRAINED              # no authoritative training has run
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+amendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+amendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d
+amendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+logging_contract: run_logging_v1
+logging_contract_path: configs/run_logging_v1.yaml
+
+method_id: E07c
+display_name: DiffFAS-BIN-IDFREE (controlled encoder reconstruction)
+spec_section: "8.7 + A1 + A3"
+fidelity_class: CONTROLLED_ADAPTATION
+fidelity_provenance: [AMENDMENT_A1_IDFREE_ADAPTATION, AMENDMENT_A3_CONTROLLED_ENCODER_RECONSTRUCTION]
+reporting_label: "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)"
+forbidden_wording: [native, faithful, official reproduction]
+deviation: DEV-021
+learned_method: true
+adaptation_semantics:
+  frozen_in: configs/frozen/difffas_bin_idfree_v1.yaml
+  frozen_config_sha256: aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb
+  duplicated_here: false
+source:
+  repository: https://github.com/murphytju/DiffFAS
+  pinned_commit: 23f40519ec25a833ebc06842aa6fbab74fad4d15
+  provenance: third_party/source_pins.json
+  local_source_path: third_party/source_cache/difffas
+  official_code_modified: false
+  weight_bytes_from_source_cache: NONE
+
+# ---------------------------------------------------------------- data firewall (spec §3.5)
+data:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  canonical_face_root: "<runtime_root>/data/processed/faces_256"
+  canonical_face_size: 256
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+  splits:
+    TRAIN: {used_for: [method_training], allowed: true}
+    VAL:
+      used_for: [diagnostics_only]
+      allowed: true
+      may_select_checkpoint: false
+      note: "VAL never selects a checkpoint; no VAL-based rule exists in this method's source."
+    TEST:
+      used_for: []
+      allowed: false
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_reconstruction_choice: true
+      never_seed_selection: true
+      code_path_present: false
+  training_manifest: manifests/difffas_bin_idfree_train_v1.parquet
+  training_manifest_sha256: 0d4c0ab435a258be51577aec17d9ecea27785354c900d0f7ab863d2bb2924fd6
+
+# ---------------------------------------------------------------- experiment seeds
+seeds:
+  experiment_seeds: [42, 1337, 2026]
+  runs_per_method: 3
+  all_three_are_primary_evidence: true
+  best_seed: FORBIDDEN
+  preferred_seed: FORBIDDEN
+  presentation_seed: FORBIDDEN
+  seed_selection_using_test: FORBIDDEN
+  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS
+  per_seed_values_reported: true
+  max_over_seeds_as_primary: FORBIDDEN
+  dropping_a_poor_seed: FORBIDDEN
+  rerunning_only_a_poor_seed: FORBIDDEN
+  seed_scope: "seeds the main training run; checkpoint selection happens INSIDE each seed"
+
+# ---------------------------------------------------------------- training (OFFICIAL)
+training:
+  input_resolution: 256
+  normalize: "[0.5,0.5,0.5] / [0.5,0.5,0.5]"
+  max_epochs: 400
+  batch_size: 4
+  use_pair: false
+  model_in_channels: 3
+  guidance_prob: 0.2
+  means_size: 5
+  var_size: 3
+  cudnn: {benchmark: false, deterministic: true}
+  workers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT
+diffusion:
+  schedule: linear
+  n_timestep: 1000
+  linear_start: 1.0e-4
+  linear_end: 2.0e-2
+  model_mean_type: EPSILON
+  variance: LEARNED_RANGE
+optimizer:
+  name: AdamW
+  learning_rate: 1.0e-5
+  scheduler: {type: cycle, lr: 1.0e-5, n_iter: 2400000, warmup: 5000, decay: [linear, flat]}
+  ema: {decay: 0.9999, before_warmup: 0.0}
+sampler:
+  algorithm: ddim
+  DDIM_skip: 10
+  sample_initial_noise: 250
+  effective_steps: 25
+  cond_scale: 2.0
+  entrypoint: FAS_sample.py
+  tensor_set_loaded: model            # NOT 'ema'
+supervision: style_id_SPOOF_BINARY
+attack_raw_as_class_target: FORBIDDEN
+attack_macro_as_class_target: FORBIDDEN
+subject_id_global_consumed: false
+seed_adapter:
+  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED
+  official_hardcoded_seed: 1
+  official_hardcoded_seed_note: "FAS_train.py:180 seed_torch(seed=1); --random_seed is never read. The frozen spec seed set takes precedence."
+
+# ---------------------------------------------------------------- A3 §5: controlled encoder reconstruction
+conditioning_encoder:
+  required_every_training_step: true
+  removed: false
+  disabled: false
+  replaced_with_imagenet_or_torchvision_resnet18: false
+  architecture: models/custom_rn.py::resnet18
+  architecture_topology: "_resnet('resnet18', BasicBlock, [3,4,6,3]) — a ResNet-34 layer topology despite the name"
+  architecture_substituted: false
+  feature_interface_at_256:
+    x32x32: {shape: [32, 32, 128], consumed: true}
+    x16x16: {shape: [16, 16, 256], consumed: true}
+    x8x8: {shape: [8, 8, 512], consumed: true}
+    embg: {shape: [B, K], consumed: false, note: "DISCARDED by unet_autoenc; the class count changes ONLY this head"}
+  checkpoint_format: "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())"
+  substitute_objective:
+    original: "17-way attack classification on PADISI-USC (ImageFolder)"
+    unavailable: [released_PADISI_pkl_weights, PADISI_USC_dataset, seventeen_class_directory_mapping]
+    substitute: K7_ATTACK_MACRO_CLASSIFICATION
+    K: 7
+    class_source: manifests/artifact_probe_classes_v1.json
+    class_source_sha256: c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812
+    classes: [live, makeup, mask_2d, mask_3d, partial, print, replay]
+    excluded: [other_spoof]
+    split: TRAIN_ONLY
+    train_counts: {live: 5629, print: 2838, replay: 2178, partial: 1911, mask_3d: 1056, makeup: 759, mask_2d: 96}
+    train_total: 14467
+    disclosed_interaction: >-
+      This taxonomy is also the ArtifactProbeNet label space behind the ArtSim metric. Separate
+      models, no shared weights, no TEST, so not leakage; but it could in principle favour E07c on
+      ArtSim. Disclosed because it advantages the BASELINE, not GPAT.
+  training_contract:
+    head: "fc = nn.Linear(512, 7)"
+    input_resolution: 256
+    preprocessing: "Resize((256,256)) -> ToTensor -> Normalize([0.5]*3, [0.5]*3)"
+    augmentation: NONE
+    class_balancing: NONE
+    class_balancing_note: "official code has none; adding it would be a benchmark invention"
+    loss: CrossEntropyLoss_on_fourth_forward_output
+    optimizer: SGD
+    learning_rate: 0.002
+    momentum: 0.9
+    weight_decay: 5.0e-3
+    scheduler: NONE
+    batch_size: 256
+    drop_last: true
+    shuffle: true
+    workers: 6
+    epochs: 200
+    checkpoint_rule: FINAL_STATE_AFTER_EPOCH_200
+    checkpoint_rule_source: "OFFICIAL — torch.save overwrites in-loop, so the surviving file IS the final epoch's"
+    benchmark_defined_additions: [K7_label_space, TRAIN_data_source, auxiliary_encoder_training_seed,
+                                  auxiliary_encoder_training_runs]
+  # ------------------------------------------------ A3 §5.4b auxiliary seed vs experiment seed
+  auxiliary_encoder_training_seed: 42
+  auxiliary_encoder_training_runs: 1
+  trained_exactly_once: true
+  three_different_encoders_trained: FORBIDDEN
+  same_frozen_encoder_reused_for_main_seeds: [42, 1337, 2026]
+  sha256_recorded_before_difffas_consumes_it: true
+  seed_distinction:
+    auxiliary_encoder_training_seed: "42, fixed; seeds the one-off pretraining of the substitute conditioning encoder"
+    e07c_experiment_seed: "42 / 1337 / 2026; seeds each DiffFAS main training run"
+  rationale: >-
+    Most closely reproduces the role of the unavailable original PADISI.pkl, which would have been
+    ONE fixed external pretrained asset shared across DiffFAS runs.
+  run_layout: "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/"
+  trained_in_m6b: false
+  candidate_encoder_search: FORBIDDEN
+  val_used_for_encoder_selection: false
+  test_used_for_anything: false
+external_assets:
+  - name: controlled_conditioning_encoder
+    status: NOT_YET_TRAINED
+    produced_by: "M6C, exactly once, under conditioning_encoder.training_contract"
+    external_runtime_path: "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl"
+    sha256: RECORDED_AFTER_TRAINING
+    fixed_across_experiment_seeds: true
+    weight_bytes_in_git: false
+checkpoint:
+  cadence: save_checkpoints_every_10000_iters
+  rule: BASELINE_FINAL_STATE_V1
+  terminal_state: end_of_400_epoch_budget
+  terminal_checkpoint_creation_required_if_cadence_misses_it: true
+  additional_optimizer_steps_permitted: false
+  rule_source: AMENDMENT_A2_A2_06
+  selection_scope: WITHIN_SEED
+  selection_uses_val: false
+  selection_uses_test: false
+n_syn_intended: 8838
+
+# ---------------------------------------------------------------- checkpoint retention
+checkpoint_retention:
+  metric_history: RETAIN_COMPLETE
+  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE
+  never_delete: [authoritative_final_checkpoint, selected_checkpoint, officially_required_checkpoint]
+  pruning_in_m6b: false
+  if_pruned_later: metadata_and_sha256_records_must_remain
+
+# ---------------------------------------------------------------- run layout
+run_layout:
+  root_template: "<runtime_root>/runs/m6/E07c/seed_<seed>/"
+  files:
+    resolved_config: resolved_config.yaml
+    run_manifest: run_manifest.json
+    metrics: metrics.jsonl
+    checkpoint_dir: checkpoints/
+    checkpoint_index: checkpoint_index.json
+    run_summary: run_summary.json
+    stdout: stdout.log
+    stderr: stderr.log
+  outputs_in_git: false
+  checkpoint_bytes_in_git: false
+
+# ---------------------------------------------------------------- logging (learned method)
+logging:
+  contract: run_logging_v1
+  full_trajectory_retained: true
+  keep_only_final_epoch: FORBIDDEN
+  metrics_format: metrics.jsonl
+  metrics_append_only: true
+  one_record_per: configured_reporting_interval
+  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE
+  per_record_required:
+    - epoch
+    - global_step
+    - learning_rate
+    - all_available_train_losses
+    - all_available_train_metrics
+    - all_available_val_losses
+    - all_available_val_metrics
+    - wall_clock_seconds
+    - gpu_memory_bytes_where_practical
+  missing_fields_must_be_explicit: true
+  fabricating_unexposed_metrics: FORBIDDEN
+  checkpoint_history_required: true
+  run_summary_required: true
+
+# ---------------------------------------------------------------- synthetic bank accounting
+synthetic_bank_accounting:
+  generated_in_m6b: false
+  per_sample_record_required:
+    - source_pair_or_sample_id
+    - method_id
+    - experiment_seed
+    - generator_checkpoint_sha256
+    - recipe_or_operator_metadata
+    - synthetic_output_path
+    - output_sha256
+    - success_or_failure_reason
+  merged_into_test: FORBIDDEN
+
+field_provenance:
+  SPEC: [supervision, data.splits, seeds.experiment_seeds]
+  AMENDMENT_A1: [training.use_pair, supervision, subject_id_global_consumed, adaptation_semantics]
+  OFFICIAL_CODE: [training, diffusion, optimizer, sampler, conditioning_encoder.architecture,
+                  conditioning_encoder.feature_interface_at_256, conditioning_encoder.training_contract]
+  AMENDMENT_A2: [checkpoint.rule, checkpoint.terminal_state]
+  AMENDMENT_A3: [conditioning_encoder.substitute_objective, conditioning_encoder.auxiliary_encoder_training_seed,
+                 conditioning_encoder.auxiliary_encoder_training_runs]
+  M6B: [run_layout, logging, checkpoint_retention, synthetic_bank_accounting]

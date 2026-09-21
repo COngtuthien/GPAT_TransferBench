@@ -1,0 +1,191 @@
+# E05 — PCGAN (controlled architecture resolution) · M6B EXECUTION CONFIG — FROZEN 2026-09-21.
+#
+# Every execution-affecting value is frozen here BEFORE implementation and training. No value may
+# depend on cwd, os.listdir ordering, hostname, shell environment, PYTHONHASHSEED, automatic
+# checkpoint choice, TEST performance or a "best seed". Values already fixed by the frozen
+# specification or by Amendments A1/A2/A3 are copied faithfully; NOTHING was retuned in M6B.
+#
+# Provenance of every field is tagged in `field_provenance`. M6B created no checkpoint, ran no
+# model and touched no TEST data.
+version: e05_m6b_v1
+status: CONFIG_FROZEN
+frozen_utc: "2026-09-21"
+milestone: M6B
+milestone_status: NOT_TRAINED              # no authoritative training has run
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+amendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+amendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d
+amendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+logging_contract: run_logging_v1
+logging_contract_path: configs/run_logging_v1.yaml
+
+method_id: E05
+display_name: PCGAN (controlled architecture resolution)
+spec_section: "8.5"
+fidelity_class: CONTROLLED_ADAPTATION
+fidelity_provenance: [AMENDMENT_A2_A2_07_ARCHITECTURE_RESOLUTION]
+reporting_label: "PCGAN (controlled architecture resolution)"
+forbidden_wording: [native PCGAN, faithful PCGAN, official reproduction]
+learned_method: true
+source:
+  paper: "arXiv:2604.09018"
+  official_code_release: NONE_LOCATED_AS_OF_2026_09_21
+  executable_architecture_basis:
+    repository: https://github.com/taesungp/swapping-autoencoder-pytorch
+    pinned_commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7
+    provenance: third_party/source_pins.json
+    local_source_path: third_party/source_cache/swapping_autoencoder
+    weight_bytes_from_source_cache: NONE
+  architecture_resolution:
+    follow: "[34]'s ACTUAL executable architecture, including StyleGAN2-style modulation/demodulation and its discriminator"
+    port_stylegan_v1_adain_for_prose_citation_35: false
+    reason: "PCGAN prose cites AdaIN/StyleGAN-v1 [35] while its named executable base [34] uses StyleGAN2 demodulation"
+    disclosure_required_in_report: true
+
+# ---------------------------------------------------------------- data firewall (spec §3.5)
+data:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  canonical_face_root: "<runtime_root>/data/processed/faces_256"
+  canonical_face_size: 256
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+  splits:
+    TRAIN: {used_for: [method_training], allowed: true}
+    VAL:
+      used_for: [diagnostics_only]
+      allowed: true
+      may_select_checkpoint: false
+      note: "VAL never selects a checkpoint; no VAL-based rule exists in this method's source."
+    TEST:
+      used_for: []
+      allowed: false
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_reconstruction_choice: true
+      never_seed_selection: true
+      code_path_present: false
+  pair_manifest: manifests/pairs_train_v1.parquet
+  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+
+# ---------------------------------------------------------------- experiment seeds
+seeds:
+  experiment_seeds: [42, 1337, 2026]
+  runs_per_method: 3
+  all_three_are_primary_evidence: true
+  best_seed: FORBIDDEN
+  preferred_seed: FORBIDDEN
+  presentation_seed: FORBIDDEN
+  seed_selection_using_test: FORBIDDEN
+  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS
+  per_seed_values_reported: true
+  max_over_seeds_as_primary: FORBIDDEN
+  dropping_a_poor_seed: FORBIDDEN
+  rerunning_only_a_poor_seed: FORBIDDEN
+  seed_scope: "seeds the main training run; checkpoint selection happens INSIDE each seed"
+
+# ---------------------------------------------------------------- training (PAPER, unchanged)
+training:
+  input_resolution: 256
+  input_resolution_note: "[34] officially runs at 256/512/1024; 256 is the benchmark canonical size (E05-1, M6A2)"
+  total_iterations: 4000
+  batch_size: 1
+optimizer:
+  name: Adam
+  learning_rate: 1.0e-6
+  betas: [0.9, 0.999]
+architecture_at_256:
+  netE_num_downsampling_sp: 1
+  spatial_code_ch: 8
+  z_pat: "8 x 128 x 128"
+  blur_loss_downsample: "256 -> 128 (relative /2)"
+losses:
+  total: "L_rec + L_recblur + L_advrec + L_advmix + L_pat"
+  weighting: ALL_UNIT_WEIGHTED
+  alpha: 0.2
+  beta: 1.0e-6
+  coefficients_retuned_in_m6b: false
+supervision: pooled_train_live_attack_labels
+attack_type_labels: FORBIDDEN
+gpat_identity_or_landmark_losses_in_main_row: false
+workers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT
+output: full 256x256 RGB synthetic image
+external_assets: []
+checkpoint:
+  cadence: implementation_defined_periodic_plus_terminal
+  rule: BASELINE_FINAL_STATE_V1
+  terminal_state: iteration_4000
+  rule_source: AMENDMENT_A2_A2_06
+  disclosure: "'end of budget' is a BENCHMARK CONVENTION, not a paper fact"
+  selection_scope: WITHIN_SEED
+  selection_uses_val: false
+  selection_uses_test: false
+
+# ---------------------------------------------------------------- checkpoint retention
+checkpoint_retention:
+  metric_history: RETAIN_COMPLETE
+  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE
+  never_delete: [authoritative_final_checkpoint, selected_checkpoint, officially_required_checkpoint]
+  pruning_in_m6b: false
+  if_pruned_later: metadata_and_sha256_records_must_remain
+
+# ---------------------------------------------------------------- run layout
+run_layout:
+  root_template: "<runtime_root>/runs/m6/E05/seed_<seed>/"
+  files:
+    resolved_config: resolved_config.yaml
+    run_manifest: run_manifest.json
+    metrics: metrics.jsonl
+    checkpoint_dir: checkpoints/
+    checkpoint_index: checkpoint_index.json
+    run_summary: run_summary.json
+    stdout: stdout.log
+    stderr: stderr.log
+  outputs_in_git: false
+  checkpoint_bytes_in_git: false
+
+# ---------------------------------------------------------------- logging (learned method)
+logging:
+  contract: run_logging_v1
+  full_trajectory_retained: true
+  keep_only_final_epoch: FORBIDDEN
+  metrics_format: metrics.jsonl
+  metrics_append_only: true
+  one_record_per: configured_reporting_interval
+  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE
+  per_record_required:
+    - epoch
+    - global_step
+    - learning_rate
+    - all_available_train_losses
+    - all_available_train_metrics
+    - all_available_val_losses
+    - all_available_val_metrics
+    - wall_clock_seconds
+    - gpu_memory_bytes_where_practical
+  missing_fields_must_be_explicit: true
+  fabricating_unexposed_metrics: FORBIDDEN
+  checkpoint_history_required: true
+  run_summary_required: true
+
+# ---------------------------------------------------------------- synthetic bank accounting
+synthetic_bank_accounting:
+  generated_in_m6b: false
+  per_sample_record_required:
+    - source_pair_or_sample_id
+    - method_id
+    - experiment_seed
+    - generator_checkpoint_sha256
+    - recipe_or_operator_metadata
+    - synthetic_output_path
+    - output_sha256
+    - success_or_failure_reason
+  merged_into_test: FORBIDDEN
+
+field_provenance:
+  PAPER: [training, optimizer, losses]
+  SPEC: [output, supervision, data.splits, seeds.experiment_seeds]
+  OFFICIAL_CODE: [architecture_at_256, source.executable_architecture_basis]
+  AMENDMENT_A2: [source.architecture_resolution, checkpoint.rule, checkpoint.terminal_state]
+  M6B: [run_layout, logging, checkpoint_retention, synthetic_bank_accounting]

@@ -1,0 +1,208 @@
+# E02 — Frequency Substitution (controlled) · M6B EXECUTION CONFIG — FROZEN 2026-09-21.
+#
+# Every execution-affecting value is frozen here BEFORE implementation and training. No value may
+# depend on cwd, os.listdir ordering, hostname, shell environment, PYTHONHASHSEED, automatic
+# checkpoint choice, TEST performance or a "best seed". Values already fixed by the frozen
+# specification or by Amendments A1/A2/A3 are copied faithfully; NOTHING was retuned in M6B.
+#
+# Provenance of every field is tagged in `field_provenance`. M6B created no checkpoint, ran no
+# model and touched no TEST data.
+version: e02_m6b_v1
+status: CONFIG_FROZEN
+frozen_utc: "2026-09-21"
+milestone: M6B
+milestone_status: NOT_TRAINED              # no authoritative training has run
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+amendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+amendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d
+amendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+logging_contract: run_logging_v1
+logging_contract_path: configs/run_logging_v1.yaml
+
+method_id: E02
+display_name: Frequency Substitution
+spec_section: "8.2"
+fidelity_class: SPEC_DEFINED
+fidelity_provenance: [FROZEN_SPEC_SECTION_8_2, AMENDMENT_A2_A2_02_A2_03_A2_04_EXECUTION_DETAILS]
+fidelity_note: >-
+  Frequency Substitution is defined directly by frozen spec 8.2. It is NOT an adaptation of an
+  external paper/repository method; A2 merely completed spec-silent execution details.
+learned_method: false
+stochastic_execution: true
+source:
+  repository: NONE_SPEC_DEFINED_METHOD
+  pinned_commit: NOT_APPLICABLE
+  algorithm_source: FROZEN_SPEC_SECTION_8_2
+
+# ---------------------------------------------------------------- data firewall (spec §3.5)
+data:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  canonical_face_root: "<runtime_root>/data/processed/faces_256"
+  canonical_face_size: 256
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+  splits:
+    TRAIN:
+      used_for: [method_training_or_generation]
+      allowed: true
+    VAL:
+      used_for: [diagnostics_only]
+      allowed: true
+      may_select_checkpoint: false
+      note: "VAL never selects a checkpoint for this method; no VAL-based rule exists in its source."
+    TEST:
+      used_for: []
+      allowed: false
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_reconstruction_choice: true
+      never_seed_selection: true
+      code_path_present: false
+
+  pair_manifest: manifests/pairs_train_v1.parquet
+  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+
+# ---------------------------------------------------------------- experiment seeds
+seeds:
+  experiment_seeds: [42, 1337, 2026]
+  runs_per_method: 3
+  all_three_are_primary_evidence: true
+  best_seed: FORBIDDEN
+  preferred_seed: FORBIDDEN
+  presentation_seed: FORBIDDEN
+  seed_selection_using_test: FORBIDDEN
+  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS
+  per_seed_values_reported: true
+  max_over_seeds_as_primary: FORBIDDEN
+  dropping_a_poor_seed: FORBIDDEN
+  rerunning_only_a_poor_seed: FORBIDDEN
+
+# ---------------------------------------------------------------- generation contract
+generation:
+  input_resolution: 256
+  n_syn_intended: 8838
+  block_grid: [16, 16]
+  eligible_band: "0.20 <= normalised radius <= 0.50"
+  n_eligible_frozen_geometry: 159
+  fraction: 0.25
+
+# ---------------------------------------------------------------- A2-02 block count
+block_count_rule:
+  rule: ROUND_HALF_UP
+  general_form: "k = round_half_up(n_eligible * 0.25)"
+  integer_implementation: "k = (n_eligible + 2) // 4"
+  float_free: true
+  k_frozen_geometry: 40
+  frozen_as_a_rule_not_as_the_number_40: true
+  worked_verification: {156: 39, 157: 39, 158: 40, 159: 40, 160: 40}
+
+# ---------------------------------------------------------------- A2-03 selection
+block_selection:
+  canonical_eligible_enumeration:
+    - scan the 16x16 block grid in ROW-MAJOR order
+    - block_row ascending first
+    - within each row, block_col ascending
+    - retain only eligible blocks in that order; positions are indices 0..n_eligible-1
+  rng: "numpy.random.Generator(numpy.random.PCG64(pair_seed))"
+  draw: "rng.choice(n_eligible, size=k, replace=False)"
+  replacement: false
+  scientific_result: THE_SELECTED_SET
+  returned_order_carries_meaning: false
+  canonical_processing_order: SORT_SELECTED_INDICES_ASCENDING_BEFORE_SUBSTITUTION
+  forbidden: [numpy_default_rng_without_naming_pcg64, python_random_sample, hash_ranking]
+  numpy_version_pin_required_at_runtime: true
+  numpy_version_observed_during_audit: "2.5.3"
+  numpy_version_observed_is_authoritative_pin: false
+
+# ---------------------------------------------------------------- A2-04 pair seed
+pair_seed:
+  namespace: "gpatbench.freqsub.block.v1"
+  namespace_distinct_from_e01: true
+  global_seed_meaning: CURRENT_EXPERIMENT_SEED
+  global_seed_domain: [42, 1337, 2026]
+  preimage: "UTF-8(\"gpatbench.freqsub.block.v1|\" + pair_id + \"|\" + decimal_string(global_seed))"
+  digest: "SHA256(preimage).digest()"
+  pair_seed: "unsigned big-endian integer of the FULL 32-byte digest"
+  passed_directly_to: "numpy.random.PCG64(pair_seed)"
+  truncation: false
+  modulo: false
+  hidden_separator: false
+  whitespace: false
+  newline: false
+  worked_example:
+    pair_id: PTR000001
+    seed_42_preimage: "gpatbench.freqsub.block.v1|PTR000001|42"
+    seed_42_pair_seed: "19354000309184887456743517179028239418116648094833629759175866349341962868907"
+
+# ---------------------------------------------------------------- A2 (M6A2) conjugate rule
+conjugate_symmetry:
+  rule: PIXELWISE_MIRROR_P_TO_256_MINUS_P
+  self_conjugate_bins: [0, 128]
+  block_level_mirror: FORBIDDEN
+
+training: NOT_APPLICABLE_NON_LEARNED_METHOD
+optimizer: NOT_APPLICABLE
+checkpoint:
+  rule: NOT_APPLICABLE_NO_TRAINED_GENERATOR
+  selection_uses_val: false
+  selection_uses_test: false
+external_assets: []
+
+# ---------------------------------------------------------------- run layout
+run_layout:
+  root_template: "<runtime_root>/runs/m6/E02/seed_<seed>/"
+  files:
+    resolved_config: resolved_config.yaml
+    run_manifest: run_manifest.json
+    metrics: metrics.jsonl
+    checkpoint_dir: checkpoints/
+    checkpoint_index: checkpoint_index.json
+    run_summary: run_summary.json
+    stdout: stdout.log
+    stderr: stderr.log
+  outputs_in_git: false
+  checkpoint_bytes_in_git: false
+  repository_keeps: compact provenance/audit summaries only
+
+# ---------------------------------------------------------------- logging (non-learned)
+logging:
+  contract: run_logging_v1
+  epoch_history: NOT_APPLICABLE
+  epochs_must_not_be_invented: true
+  per_sample_records_required:
+    - method_id
+    - experiment_seed
+    - config_sha256
+    - pair_id
+    - deterministic_pair_seed
+    - n_eligible
+    - k_selected
+    - selected_block_indices_sorted_ascending
+    - generation_status
+    - failure_reason
+    - output_path
+    - output_sha256
+  run_level_required: [wall_time_seconds, numpy_version, output_manifest_path, run_summary]
+
+# ---------------------------------------------------------------- synthetic bank accounting
+synthetic_bank_accounting:
+  generated_in_m6b: false
+  per_sample_record_required:
+    - source_pair_or_sample_id
+    - method_id
+    - experiment_seed
+    - generator_checkpoint_sha256      # null for non-learned methods
+    - recipe_or_operator_metadata
+    - synthetic_output_path
+    - output_sha256
+    - success_or_failure_reason
+  merged_into_test: FORBIDDEN
+  bank_manifest: "<runtime_root>/runs/m6/<method_id>/seed_<seed>/bank_manifest.parquet"
+
+field_provenance:
+  SPEC: [generation.block_grid, generation.eligible_band, generation.fraction, data.splits]
+  COMPUTED: [generation.n_eligible_frozen_geometry, block_count_rule.k_frozen_geometry]
+  AMENDMENT_A2: [block_count_rule, block_selection, pair_seed, conjugate_symmetry]
+  M6B: [run_layout, logging, synthetic_bank_accounting]

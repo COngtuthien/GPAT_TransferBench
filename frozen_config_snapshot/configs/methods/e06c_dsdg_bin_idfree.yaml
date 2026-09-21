@@ -1,0 +1,228 @@
+# E06c — DSDG-BIN-IDFREE · M6B EXECUTION CONFIG — FROZEN 2026-09-21.
+#
+# Every execution-affecting value is frozen here BEFORE implementation and training. No value may
+# depend on cwd, os.listdir ordering, hostname, shell environment, PYTHONHASHSEED, automatic
+# checkpoint choice, TEST performance or a "best seed". Values already fixed by the frozen
+# specification or by Amendments A1/A2/A3 are copied faithfully; NOTHING was retuned in M6B.
+#
+# Adaptation SEMANTICS live in the Amendment-A1 frozen config referenced below and are NOT
+# duplicated here; this file adds the M6 EXECUTION layer those files deliberately left open.
+version: e06c_m6b_v1
+status: CONFIG_FROZEN
+frozen_utc: "2026-09-21"
+milestone: M6B
+milestone_status: NOT_TRAINED              # no authoritative training has run
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+amendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+amendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d
+amendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+logging_contract: run_logging_v1
+logging_contract_path: configs/run_logging_v1.yaml
+
+method_id: E06c
+display_name: DSDG-BIN-IDFREE (Amendment A1 identity-free controlled adaptation)
+spec_section: "8.6 + A1"
+fidelity_class: CONTROLLED_ADAPTATION
+fidelity_provenance: [AMENDMENT_A1_IDFREE_ADAPTATION]
+reporting_label: "DSDG-BIN-IDFREE (Amendment A1 identity-free controlled adaptation)"
+forbidden_wording: [native, faithful, official reproduction]
+deviation: DEV-020
+learned_method: true
+adaptation_semantics:
+  frozen_in: configs/frozen/dsdg_bin_idfree_v1.yaml
+  frozen_config_sha256: a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de
+  duplicated_here: false
+source:
+  repository: https://github.com/JDAI-CV/FaceX-Zoo
+  pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a
+  relevant_path: addition_module/DSDG
+  provenance: third_party/source_pins.json
+  local_source_path: third_party/source_cache/facexzoo
+  execution_entrypoint: "README -> train_generator.sh -> argparse"
+  weight_bytes_from_source_cache: NONE
+
+# ---------------------------------------------------------------- data firewall (spec §3.5)
+data:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  canonical_face_root: "<runtime_root>/data/processed/faces_256"
+  canonical_face_size: 256
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+  splits:
+    TRAIN: {used_for: [method_training], allowed: true}
+    VAL:
+      used_for: [diagnostics_only]
+      allowed: true
+      may_select_checkpoint: false
+      note: "VAL never selects a checkpoint; no VAL-based rule exists in this method's source."
+    TEST:
+      used_for: []
+      allowed: false
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_reconstruction_choice: true
+      never_seed_selection: true
+      code_path_present: false
+  training_relation: manifests/pairs_train_v1.parquet
+  training_relation_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+  val_relation: "none; DSDG does not consume the common VAL pair manifest for training"
+
+# ---------------------------------------------------------------- experiment seeds
+seeds:
+  experiment_seeds: [42, 1337, 2026]
+  runs_per_method: 3
+  all_three_are_primary_evidence: true
+  best_seed: FORBIDDEN
+  preferred_seed: FORBIDDEN
+  presentation_seed: FORBIDDEN
+  seed_selection_using_test: FORBIDDEN
+  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS
+  per_seed_values_reported: true
+  max_over_seeds_as_primary: FORBIDDEN
+  dropping_a_poor_seed: FORBIDDEN
+  rerunning_only_a_poor_seed: FORBIDDEN
+  seed_scope: "seeds the main training run; checkpoint selection happens INSIDE each seed"
+
+# ---------------------------------------------------------------- training (OFFICIAL execution path)
+training:
+  input_resolution: 256
+  effective_batch_size: 240
+  effective_batch_is_native_hyperparameter: true
+  physical_batch_reduction_allowed: true
+  physical_batch_reduction_requires: "gradient accumulation preserving effective batch 240 + logged deviation"
+  all_epochs: 200
+  pre_epoch: 0
+  hdim: 128
+  attack_type: 1
+  attack_type_official: 4
+  attack_type_note: "collapsed to 1 under A1 binary supervision; loss_cls is then degenerate (disclosed)"
+  test_epoch: 10
+  workers: 8
+  workers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT
+optimizer:
+  name: Adam
+  learning_rate: 2.0e-4
+  learning_rate_source: "argparse fall-through; train_generator.sh does not pass --lr"
+  scope: "netE_nir + netE_vis + netG"
+  netCls_in_optimizer: false
+  netCls_note: "official behaviour retained: the classifier head stays at initialisation while loss_cls still backpropagates into the encoder"
+losses:
+  lambda_mmd: 50
+  lambda_ip: 1000
+  lambda_type: 10
+  lambda_ort: 1
+  lambda_pair: 0.0
+  lambda_pair_official_default: 5
+  lambda_pair_removal_reason: "A1/DEV-020: loss_pair forces the two reconstructions' identity features to match, invalid across different people"
+  assembly: "unweighted sum: rec + kl + mmd + ip + pair + cls + ort"
+  warmup: "epochs < 2 scale every term except loss_rec by 0.01"
+  coefficients_retuned_in_m6b: false
+identity_preserving_net:
+  architecture: LightCNN-29 v2
+  frozen: true
+  eval_mode: true
+  input: 128x128_grayscale
+  loaded_via: define_IP()
+  loader_is_non_strict: true
+external_assets:
+  - name: lightcnn_29_v2_checkpoint
+    official_path_in_source: ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar
+    external_runtime_path: "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar"
+    sha256: d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964
+    bytes: 123844849
+    provenance: outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json
+    weight_bytes_from_source_cache: false
+    weight_bytes_in_git: false
+    compatibility: "60/60 define_IP() parameters matched with exact shapes; 0 missing; 0 shape mismatches"
+    fixed_across_experiment_seeds: true
+supervision: binary_spoof_type_collapse
+attack_macro_as_target: FORBIDDEN
+attack_raw_as_target: FORBIDDEN
+subject_id_global_consumed: false
+seed_adapter:
+  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED
+  note: "Source sets no seed; the frozen spec seed set takes precedence. Adapter implemented at M6C."
+checkpoint:
+  cadence: save_epoch_10
+  rule: OFFICIAL_GENERATOR_EPOCH_200
+  rule_source: SOURCE_RESOLVED
+  official_default_file: netG_model_epoch_200_iter_0.pth
+  baseline_final_state_v1_overrides_this: false
+  overridden_note: "A2-06 clause 1 preserves an already-resolved official checkpoint rule."
+  selection_scope: WITHIN_SEED
+  selection_uses_val: false
+  selection_uses_test: false
+  periodic_test_block_note: "the official periodic 'test' block only writes sample images; it is NOT validation"
+n_syn_intended: 8838
+
+# ---------------------------------------------------------------- checkpoint retention
+checkpoint_retention:
+  metric_history: RETAIN_COMPLETE
+  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE
+  never_delete: [authoritative_final_checkpoint, selected_checkpoint, officially_required_checkpoint]
+  pruning_in_m6b: false
+  if_pruned_later: metadata_and_sha256_records_must_remain
+
+# ---------------------------------------------------------------- run layout
+run_layout:
+  root_template: "<runtime_root>/runs/m6/E06c/seed_<seed>/"
+  files:
+    resolved_config: resolved_config.yaml
+    run_manifest: run_manifest.json
+    metrics: metrics.jsonl
+    checkpoint_dir: checkpoints/
+    checkpoint_index: checkpoint_index.json
+    run_summary: run_summary.json
+    stdout: stdout.log
+    stderr: stderr.log
+  outputs_in_git: false
+  checkpoint_bytes_in_git: false
+
+# ---------------------------------------------------------------- logging (learned method)
+logging:
+  contract: run_logging_v1
+  full_trajectory_retained: true
+  keep_only_final_epoch: FORBIDDEN
+  metrics_format: metrics.jsonl
+  metrics_append_only: true
+  one_record_per: configured_reporting_interval
+  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE
+  per_record_required:
+    - epoch
+    - global_step
+    - learning_rate
+    - all_available_train_losses
+    - all_available_train_metrics
+    - all_available_val_losses
+    - all_available_val_metrics
+    - wall_clock_seconds
+    - gpu_memory_bytes_where_practical
+  missing_fields_must_be_explicit: true
+  fabricating_unexposed_metrics: FORBIDDEN
+  checkpoint_history_required: true
+  run_summary_required: true
+
+# ---------------------------------------------------------------- synthetic bank accounting
+synthetic_bank_accounting:
+  generated_in_m6b: false
+  per_sample_record_required:
+    - source_pair_or_sample_id
+    - method_id
+    - experiment_seed
+    - generator_checkpoint_sha256
+    - recipe_or_operator_metadata
+    - synthetic_output_path
+    - output_sha256
+    - success_or_failure_reason
+  merged_into_test: FORBIDDEN
+
+field_provenance:
+  SPEC: [supervision, data.splits, seeds.experiment_seeds]
+  AMENDMENT_A1: [losses.lambda_pair, training.attack_type, subject_id_global_consumed, adaptation_semantics]
+  OFFICIAL_CODE: [training, optimizer, losses.lambda_mmd, losses.lambda_ip, losses.lambda_type,
+                  losses.lambda_ort, checkpoint.cadence, checkpoint.rule, identity_preserving_net]
+  AMENDMENT_A2: [checkpoint.baseline_final_state_v1_overrides_this]
+  M6A4: [external_assets]
+  M6B: [run_layout, logging, checkpoint_retention, synthetic_bank_accounting]

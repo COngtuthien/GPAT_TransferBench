@@ -1,0 +1,246 @@
+# E04 — Physics-Guided STD (controlled reconstruction) · M6B EXECUTION CONFIG — FROZEN 2026-09-21.
+#
+# Every execution-affecting value is frozen here BEFORE implementation and training. No value may
+# depend on cwd, os.listdir ordering, hostname, shell environment, PYTHONHASHSEED, automatic
+# checkpoint choice, TEST performance or a "best seed". Values already fixed by the frozen
+# specification or by Amendments A1/A2/A3 are copied faithfully; NOTHING was retuned in M6B.
+#
+# Provenance of every field is tagged in `field_provenance`. M6B created no checkpoint, ran no
+# model and touched no TEST data.
+version: e04_m6b_v1
+status: CONFIG_FROZEN
+frozen_utc: "2026-09-21"
+milestone: M6B
+milestone_status: NOT_TRAINED              # no authoritative training has run
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+amendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+amendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d
+amendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+logging_contract: run_logging_v1
+logging_contract_path: configs/run_logging_v1.yaml
+
+method_id: E04
+display_name: Physics-STD (controlled geometry/depth reconstruction)
+spec_section: "8.4"
+fidelity_class: CONTROLLED_ADAPTATION
+fidelity_provenance: [AMENDMENT_A3_CONTROLLED_GEOMETRY_DEPTH_RECONSTRUCTION]
+reporting_label: "Physics-STD (controlled geometry/depth reconstruction)"
+forbidden_wording: [native, official reproduction, faithful reproduction]
+learned_method: true
+source:
+  paper: "arXiv:2012.05185 / Liu & Liu, IEEE TPAMI, May 2022"
+  official_code_release: NONE_LOCATED_AS_OF_2026_09_21
+  repository: NONE
+  pinned_commit: NOT_APPLICABLE
+  framework_in_paper: TensorFlow
+
+# ---------------------------------------------------------------- data firewall (spec §3.5)
+data:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  canonical_face_root: "<runtime_root>/data/processed/faces_256"
+  canonical_face_size: 256
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+  splits:
+    TRAIN: {used_for: [method_training], allowed: true}
+    VAL:
+      used_for: [diagnostics_only]
+      allowed: true
+      may_select_checkpoint: false
+      note: "VAL never selects a checkpoint; no VAL-based rule exists in this method's source."
+    TEST:
+      used_for: []
+      allowed: false
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_reconstruction_choice: true
+      never_seed_selection: true
+      code_path_present: false
+  pair_manifest: manifests/pairs_train_v1.parquet
+  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+
+# ---------------------------------------------------------------- experiment seeds
+seeds:
+  experiment_seeds: [42, 1337, 2026]
+  runs_per_method: 3
+  all_three_are_primary_evidence: true
+  best_seed: FORBIDDEN
+  preferred_seed: FORBIDDEN
+  presentation_seed: FORBIDDEN
+  seed_selection_using_test: FORBIDDEN
+  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS
+  per_seed_values_reported: true
+  max_over_seeds_as_primary: FORBIDDEN
+  dropping_a_poor_seed: FORBIDDEN
+  rerunning_only_a_poor_seed: FORBIDDEN
+  seed_scope: "seeds the main training run; checkpoint selection happens INSIDE each seed"
+
+# ---------------------------------------------------------------- training (PAPER, unchanged)
+training:
+  input_resolution: 256
+  total_iterations: 150000
+  batch_size: 8
+  weight_init: "normal [0, 0.02]"
+optimizer:
+  learning_rate: 5.0e-5
+  lr_schedule: {type: step_divide, factor: 10, every_iterations: 45000}
+losses:
+  alpha_1_L_depth: 100
+  alpha_2: 5
+  alpha_3: 1
+  alpha_4: 1.0e-4
+  alpha_5: 10
+  alpha_6: 1
+  beta_inpainting_threshold: 0.1
+  trace_regularisation_lambda: 1
+  composition_eq23: "L = a1*L_depth + a2*L_G + a3*L_P + a4*L_R"
+  composition_eq24: "L = a5*L_S + a6*L_H"
+  L_depth_removed: false
+  coefficients_retuned_in_m6b: false
+  alpha_0: {value: NOT_APPLICABLE, reason: "Eq.10 test-time scoring only; owner-confirmed non-blocking"}
+supervision: binary_weak_live_spoof
+attack_type_labels: FORBIDDEN
+workers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT
+
+# ---------------------------------------------------------------- A3 §4: controlled reconstruction
+controlled_reconstruction:
+  amendment: A3
+  contract_class: BENCHMARK_DEFINED_CONTROLLED_RECONSTRUCTION_UNDER_OWNER_AUTHORIZATION
+  owner_approved_direction: controlled reconstruction for E04
+  owner_specified_each_technical_value: false
+  original_authors_specified_these_details: false
+  depth_target_M0:
+    K: 32
+    spoof_M0: ZEROS_32x32
+    spoof_M0_provenance: PAPER_EQ_21
+    live_M0_provenance: PAPER_EQ_21_FACE_LIKE_SHAPE_IN_0_1
+    reconstruction_scope: LIVE_FACES_ONLY
+    working_frame: canonical_256
+    mesh: "recon_vers(dense_flag=True): R @ (u + w_shp*a_shp + w_exp*a_exp).reshape(3,-1,order='F') + offset"
+    projection: official_similar_transform
+    z_convention: RELATIVE_SURFACE_DEPTH_ORIGIN_AT_NEAREST_VERTEX
+    visible_surface: Z_BUFFER_INIT_NEG_1E8_LARGER_Z_WINS
+    rasterization: official_Sim3DR_rasterize_at_pinned_commit
+    normalization: "per-sample min-max over all mesh vertices -> [0,1]"
+    background: 0
+    face_mask: z_buffer_written_mask_stored_alongside
+    resize_256_to_32: cv2.INTER_AREA
+    clip: [0, 1]
+    dtype: float32
+    benchmark_defined_steps: [working_frame, face_mask, resize_256_to_32, clip]
+  q140_vertex_set:
+    Q: 140
+    frozen_list: outputs/audit/M6A5_E04_Q140_VERTEX_SET.json
+    vertex_indices_sha256: 1b884401377f5aadd3d56857f05fddf70e2c54a52a9eb2160cebc06a74031a1f
+    reproducer: tools/m6a5_e04_q140_derive.py
+    image_independent: true
+    rederived_per_experiment_seed: false
+    anchors: "keypoints.reshape(68,3)[:,0] // 3  (68 iBUG landmark vertices)"
+    candidate_mask: "canonical (x,y) inside-or-on the 2D convex hull of the 68 anchors"
+    extension: "farthest-point sampling to 140, Euclidean 3D on the canonical neutral mesh"
+    tie_break: smallest_vertex_index
+    ordering: "68 anchors in iBUG order, then 72 FPS picks in selection order"
+
+# ---------------------------------------------------------------- A3 §4.2b fixed auxiliary assets
+external_assets:
+  fixed_auxiliary_reconstruction_assets: true
+  retrained_or_rederived_per_experiment_seed: false
+  reused_for_experiment_seeds: [42, 1337, 2026]
+  geometry_engine:
+    repository: https://github.com/cleardusk/3DDFA_V2
+    pinned_commit: 1b6c67601abffc1e9f248b291708aef0e43b55ae
+    local_source_path: third_party/source_cache/tddfa_v2
+    code_license_file: MIT licence file present in the repository
+    model_asset_terms: "bfm/readme.md states academic-use terms; upstream terms apply; no legal interpretation offered"
+    external_runtime_root: "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2"
+    weight_bytes_from_source_cache: NONE
+    weight_bytes_in_git: false
+    provenance: outputs/audit/M6A5_TDDFA_ASSET_PROVENANCE.json
+    inference: {arch: mobilenet_v1, widen_factor: 1.0, input: 120, shape_dim: 40, exp_dim: 10, param_dim: 62}
+    assets:
+      - {path: configs/bfm_noneck_v3.pkl, sha256: 89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca, bytes: 24393598}
+      - {path: configs/tri.pkl, sha256: 0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8, bytes: 913040}
+      - {path: configs/param_mean_std_62d_120x120.pkl, sha256: 090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795, bytes: 713}
+      - {path: weights/mb1_120x120.pth, sha256: a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79, bytes: 13755269}
+    faceboxes_used: false
+    faceboxes_reason: "the benchmark supplies pre-cropped canonical 256 faces"
+checkpoint:
+  cadence: implementation_defined_periodic_plus_terminal
+  rule: BASELINE_FINAL_STATE_V1
+  terminal_state: iteration_150000
+  rule_source: AMENDMENT_A2_A2_06
+  disclosure: "'end of budget' is a BENCHMARK CONVENTION, not a paper fact"
+  selection_scope: WITHIN_SEED
+  selection_uses_val: false
+  selection_uses_test: false
+
+# ---------------------------------------------------------------- checkpoint retention
+checkpoint_retention:
+  metric_history: RETAIN_COMPLETE
+  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE
+  never_delete: [authoritative_final_checkpoint, selected_checkpoint, officially_required_checkpoint]
+  pruning_in_m6b: false
+  if_pruned_later: metadata_and_sha256_records_must_remain
+
+# ---------------------------------------------------------------- run layout
+run_layout:
+  root_template: "<runtime_root>/runs/m6/E04/seed_<seed>/"
+  files:
+    resolved_config: resolved_config.yaml
+    run_manifest: run_manifest.json
+    metrics: metrics.jsonl
+    checkpoint_dir: checkpoints/
+    checkpoint_index: checkpoint_index.json
+    run_summary: run_summary.json
+    stdout: stdout.log
+    stderr: stderr.log
+  outputs_in_git: false
+  checkpoint_bytes_in_git: false
+
+# ---------------------------------------------------------------- logging (learned method)
+logging:
+  contract: run_logging_v1
+  full_trajectory_retained: true
+  keep_only_final_epoch: FORBIDDEN
+  metrics_format: metrics.jsonl
+  metrics_append_only: true
+  one_record_per: configured_reporting_interval
+  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE
+  per_record_required:
+    - epoch
+    - global_step
+    - learning_rate
+    - all_available_train_losses
+    - all_available_train_metrics
+    - all_available_val_losses
+    - all_available_val_metrics
+    - wall_clock_seconds
+    - gpu_memory_bytes_where_practical
+  missing_fields_must_be_explicit: true
+  fabricating_unexposed_metrics: FORBIDDEN
+  checkpoint_history_required: true
+  run_summary_required: true
+
+# ---------------------------------------------------------------- synthetic bank accounting
+synthetic_bank_accounting:
+  generated_in_m6b: false
+  per_sample_record_required:
+    - source_pair_or_sample_id
+    - method_id
+    - experiment_seed
+    - generator_checkpoint_sha256
+    - recipe_or_operator_metadata
+    - synthetic_output_path
+    - output_sha256
+    - success_or_failure_reason
+  merged_into_test: FORBIDDEN
+
+field_provenance:
+  PAPER: [training, optimizer, losses, controlled_reconstruction.depth_target_M0.K,
+          controlled_reconstruction.depth_target_M0.spoof_M0]
+  SPEC: [supervision, data.splits, seeds.experiment_seeds]
+  AMENDMENT_A2: [checkpoint.rule, checkpoint.terminal_state]
+  AMENDMENT_A3: [controlled_reconstruction, external_assets]
+  M6B: [run_layout, logging, checkpoint_retention, synthetic_bank_accounting]

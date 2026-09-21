@@ -1,0 +1,340 @@
+{
+  "schema_version": "m6b-config-freeze-v1",
+  "milestone": "M6B",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "cadbfa01d7fdaeade614073b638fc9393f3b26ef",
+  "purpose": "Freeze the complete executable configuration and run-logging contract for all seven Track-A baselines BEFORE implementation and training.",
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "amendment_a1_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "amendment_a2_sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+  "amendment_a3_sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+  "active_m6_contract_source_blockers": 0,
+  "trained_in_m6b": false,
+  "generated_in_m6b": false,
+  "test_accessed": false,
+  "models_executed": false,
+  "checkpoints_created": false,
+  "gpu_jobs_run": false,
+  "logging_contract": {
+    "version": "run_logging_v1",
+    "path": "configs/run_logging_v1.yaml",
+    "sha256": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "size_bytes": 7500
+  },
+  "experiment_seeds": [
+    42,
+    1337,
+    2026
+  ],
+  "result_selection_rule": {
+    "each_seed_yields": "one authoritative final result per that method's frozen checkpoint rule",
+    "primary_result": "MEAN_AND_STD_OVER_ALL_THREE_SEEDS",
+    "per_seed_values_reported": true,
+    "max_over_seeds_as_primary": "FORBIDDEN",
+    "best_seed_as_primary": "FORBIDDEN",
+    "dropping_a_poor_seed": "FORBIDDEN",
+    "rerunning_only_a_poor_seed": "FORBIDDEN",
+    "seed_selection_using_test": "FORBIDDEN",
+    "best_seed_permitted_use": "ONLY for an explicitly-labelled qualitative visualisation; never replaces the three-seed primary quantitative result",
+    "checkpoint_selection_is_within_seed": true
+  },
+  "run_layout": {
+    "run_root_template": "<runtime_root>/runs/m6/<method_id>/seed_<seed>/",
+    "auxiliary_encoder_root": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/",
+    "files": [
+      "resolved_config.yaml",
+      "run_manifest.json",
+      "metrics.jsonl",
+      "checkpoints/",
+      "checkpoint_index.json",
+      "run_summary.json",
+      "stdout.log",
+      "stderr.log"
+    ],
+    "training_outputs_in_git": false,
+    "checkpoint_bytes_in_git": false
+  },
+  "e07c_auxiliary_encoder": {
+    "auxiliary_encoder_training_seed": 42,
+    "auxiliary_encoder_training_runs": 1,
+    "trained_exactly_once": true,
+    "trained_in_m6b": false,
+    "same_frozen_encoder_reused_for_main_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "three_different_encoders_trained": false,
+    "candidate_encoder_search": "FORBIDDEN",
+    "sha256_recorded_before_difffas_consumes_it": true
+  },
+  "e04_fixed_auxiliary_geometry": {
+    "fixed": true,
+    "retrained_or_rederived_per_experiment_seed": false,
+    "reused_for_experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "fixed_items": [
+      "3DDFA_V2 code commit",
+      "BFM-derived model asset",
+      "3DDFA regressor checkpoint",
+      "Q=140 vertex list",
+      "depth renderer"
+    ]
+  },
+  "validator": {
+    "path": "tools/m6b_validate_configs.py",
+    "sha256": "fc781e22db70989c97bab528c2500a4ec591fa7938c6dbf817feaf5f7629d114",
+    "executes_models": false,
+    "reads_benchmark_data": false,
+    "result": "PASS"
+  },
+  "methods": [
+    {
+      "method_id": "E01",
+      "config_path": "configs/methods/e01_fas_aug.yaml",
+      "config_sha256": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+      "config_size_bytes": 8776,
+      "fidelity_class": "FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION",
+      "fidelity_provenance": [
+        "AMENDMENT_A2_A2_01_DETERMINISTIC_ASSET_ENUMERATION"
+      ],
+      "source_pin": {
+        "repository": "https://github.com/RizhaoCai/FAS-Aug",
+        "pinned_commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+      },
+      "experiment_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "learned_method": false,
+      "checkpoint_rule": {
+        "rule": "NOT_APPLICABLE_NO_TRAINED_GENERATOR",
+        "scope": "NOT_APPLICABLE",
+        "overrides_official": false
+      },
+      "external_assets": [],
+      "ready_for_implementation": true,
+      "trained": false,
+      "logging_contract": "run_logging_v1",
+      "frozen_snapshot": "frozen_config_snapshot/configs/methods/e01_fas_aug.yaml",
+      "config_status": "CONFIG_FROZEN"
+    },
+    {
+      "method_id": "E02",
+      "config_path": "configs/methods/e02_freqsub.yaml",
+      "config_sha256": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+      "config_size_bytes": 8255,
+      "fidelity_class": "SPEC_DEFINED",
+      "fidelity_provenance": [
+        "FROZEN_SPEC_SECTION_8_2",
+        "AMENDMENT_A2_A2_02_A2_03_A2_04_EXECUTION_DETAILS"
+      ],
+      "source_pin": {
+        "repository": "NONE_SPEC_DEFINED_METHOD",
+        "pinned_commit": "NOT_APPLICABLE",
+        "algorithm_source": "FROZEN_SPEC_SECTION_8_2"
+      },
+      "experiment_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "learned_method": false,
+      "checkpoint_rule": {
+        "rule": "NOT_APPLICABLE_NO_TRAINED_GENERATOR",
+        "scope": "NOT_APPLICABLE",
+        "overrides_official": false
+      },
+      "external_assets": [],
+      "ready_for_implementation": true,
+      "trained": false,
+      "logging_contract": "run_logging_v1",
+      "frozen_snapshot": "frozen_config_snapshot/configs/methods/e02_freqsub.yaml",
+      "config_status": "CONFIG_FROZEN"
+    },
+    {
+      "method_id": "E03",
+      "config_path": "configs/methods/e03_stdn.yaml",
+      "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+      "config_size_bytes": 7271,
+      "fidelity_class": "FAITHFUL_OFFICIAL",
+      "fidelity_provenance": [],
+      "source_pin": {
+        "repository": "https://github.com/yaojieliu/ECCV20-STDN",
+        "pinned_commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90"
+      },
+      "experiment_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "learned_method": true,
+      "checkpoint_rule": {
+        "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+        "terminal_state": null,
+        "scope": "WITHIN_SEED",
+        "baseline_final_state_v1_overrides_this": false
+      },
+      "external_assets": [],
+      "ready_for_implementation": true,
+      "trained": false,
+      "logging_contract": "run_logging_v1",
+      "frozen_snapshot": "frozen_config_snapshot/configs/methods/e03_stdn.yaml",
+      "config_status": "CONFIG_FROZEN"
+    },
+    {
+      "method_id": "E04",
+      "config_path": "configs/methods/e04_physics_std.yaml",
+      "config_sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+      "config_size_bytes": 10804,
+      "fidelity_class": "CONTROLLED_ADAPTATION",
+      "fidelity_provenance": [
+        "AMENDMENT_A3_CONTROLLED_GEOMETRY_DEPTH_RECONSTRUCTION"
+      ],
+      "source_pin": {
+        "repository": "NONE_NO_OFFICIAL_RELEASE",
+        "pinned_commit": "NOT_APPLICABLE",
+        "paper": "arXiv:2012.05185 / IEEE TPAMI 2022",
+        "auxiliary_geometry_engine": {
+          "repository": "https://github.com/cleardusk/3DDFA_V2",
+          "pinned_commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae"
+        }
+      },
+      "experiment_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "learned_method": true,
+      "checkpoint_rule": {
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "terminal_state": "iteration_150000",
+        "scope": "WITHIN_SEED"
+      },
+      "external_assets": [
+        "3DDFA_V2 bfm_noneck_v3.pkl",
+        "3DDFA_V2 tri.pkl",
+        "3DDFA_V2 param_mean_std_62d_120x120.pkl",
+        "3DDFA_V2 mb1_120x120.pth",
+        "frozen Q=140 vertex list"
+      ],
+      "ready_for_implementation": true,
+      "trained": false,
+      "logging_contract": "run_logging_v1",
+      "frozen_snapshot": "frozen_config_snapshot/configs/methods/e04_physics_std.yaml",
+      "config_status": "CONFIG_FROZEN"
+    },
+    {
+      "method_id": "E05",
+      "config_path": "configs/methods/e05_pcgan.yaml",
+      "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "config_size_bytes": 7762,
+      "fidelity_class": "CONTROLLED_ADAPTATION",
+      "fidelity_provenance": [
+        "AMENDMENT_A2_A2_07_ARCHITECTURE_RESOLUTION"
+      ],
+      "source_pin": {
+        "repository": "NONE_NO_OFFICIAL_RELEASE",
+        "pinned_commit": "NOT_APPLICABLE",
+        "paper": "arXiv:2604.09018",
+        "executable_architecture_basis": {
+          "repository": "https://github.com/taesungp/swapping-autoencoder-pytorch",
+          "pinned_commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7"
+        }
+      },
+      "experiment_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "learned_method": true,
+      "checkpoint_rule": {
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "terminal_state": "iteration_4000",
+        "scope": "WITHIN_SEED"
+      },
+      "external_assets": [],
+      "ready_for_implementation": true,
+      "trained": false,
+      "logging_contract": "run_logging_v1",
+      "frozen_snapshot": "frozen_config_snapshot/configs/methods/e05_pcgan.yaml",
+      "config_status": "CONFIG_FROZEN"
+    },
+    {
+      "method_id": "E06c",
+      "config_path": "configs/methods/e06c_dsdg_bin_idfree.yaml",
+      "config_sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+      "config_size_bytes": 9772,
+      "fidelity_class": "CONTROLLED_ADAPTATION",
+      "fidelity_provenance": [
+        "AMENDMENT_A1_IDFREE_ADAPTATION"
+      ],
+      "source_pin": {
+        "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+        "pinned_commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+        "relevant_path": "addition_module/DSDG"
+      },
+      "experiment_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "learned_method": true,
+      "checkpoint_rule": {
+        "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+        "terminal_state": null,
+        "scope": "WITHIN_SEED",
+        "baseline_final_state_v1_overrides_this": false
+      },
+      "external_assets": [
+        "LightCNN-29 v2 checkpoint (sha256 d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964)"
+      ],
+      "ready_for_implementation": true,
+      "trained": false,
+      "logging_contract": "run_logging_v1",
+      "frozen_snapshot": "frozen_config_snapshot/configs/methods/e06c_dsdg_bin_idfree.yaml",
+      "config_status": "CONFIG_FROZEN"
+    },
+    {
+      "method_id": "E07c",
+      "config_path": "configs/methods/e07c_difffas_bin_idfree.yaml",
+      "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+      "config_size_bytes": 12463,
+      "fidelity_class": "CONTROLLED_ADAPTATION",
+      "fidelity_provenance": [
+        "AMENDMENT_A1_IDFREE_ADAPTATION",
+        "AMENDMENT_A3_CONTROLLED_ENCODER_RECONSTRUCTION"
+      ],
+      "source_pin": {
+        "repository": "https://github.com/murphytju/DiffFAS",
+        "pinned_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15"
+      },
+      "experiment_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "learned_method": true,
+      "checkpoint_rule": {
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "terminal_state": "end_of_400_epoch_budget",
+        "scope": "WITHIN_SEED",
+        "terminal_checkpoint_creation_required_if_cadence_misses_it": true,
+        "additional_optimizer_steps_permitted": false
+      },
+      "external_assets": [
+        "controlled conditioning encoder (NOT_YET_TRAINED; one instance, aux seed 42)"
+      ],
+      "ready_for_implementation": true,
+      "trained": false,
+      "logging_contract": "run_logging_v1",
+      "frozen_snapshot": "frozen_config_snapshot/configs/methods/e07c_difffas_bin_idfree.yaml",
+      "config_status": "CONFIG_FROZEN"
+    }
+  ]
+}

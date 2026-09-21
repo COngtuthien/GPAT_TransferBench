@@ -1,0 +1,211 @@
+# E01 — FAS-Aug · M6B EXECUTION CONFIG — FROZEN 2026-09-21.
+#
+# Every execution-affecting value is frozen here BEFORE implementation and training. No value may
+# depend on cwd, os.listdir ordering, hostname, shell environment, PYTHONHASHSEED, automatic
+# checkpoint choice, TEST performance or a "best seed". Values already fixed by the frozen
+# specification or by Amendments A1/A2/A3 are copied faithfully; NOTHING was retuned in M6B.
+#
+# Provenance of every field is tagged in `field_provenance`. M6B created no checkpoint, ran no
+# model and touched no TEST data.
+version: e01_m6b_v1
+status: CONFIG_FROZEN
+frozen_utc: "2026-09-21"
+milestone: M6B
+milestone_status: NOT_TRAINED              # no authoritative training has run
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+amendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+amendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d
+amendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+logging_contract: run_logging_v1
+logging_contract_path: configs/run_logging_v1.yaml
+
+method_id: E01
+display_name: FAS-Aug
+spec_section: "8.1"
+fidelity_class: FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION
+fidelity_provenance: [AMENDMENT_A2_A2_01_DETERMINISTIC_ASSET_ENUMERATION]
+fidelity_note: >-
+  Official transformation/operator behaviour is preserved. A2-01 replaces host-dependent
+  os.listdir ordering with lexicographic enumeration SOLELY for reproducibility. This is NOT a
+  controlled scientific adaptation.
+learned_method: false
+stochastic_execution: true                 # the per-pair operator seed depends on global_seed
+
+source:
+  repository: https://github.com/RizhaoCai/FAS-Aug
+  pinned_commit: 0da1dd79bad00e225b8cb6977c7f3f06ee8f7517
+  provenance: third_party/source_pins.json
+  local_source_path: third_party/source_cache/fas_aug
+  weight_bytes_from_source_cache: NONE
+
+# ---------------------------------------------------------------- data firewall (spec §3.5)
+data:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  canonical_face_root: "<runtime_root>/data/processed/faces_256"
+  canonical_face_size: 256
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+  splits:
+    TRAIN:
+      used_for: [method_training_or_generation]
+      allowed: true
+    VAL:
+      used_for: [diagnostics_only]
+      allowed: true
+      may_select_checkpoint: false
+      note: "VAL never selects a checkpoint for this method; no VAL-based rule exists in its source."
+    TEST:
+      used_for: []
+      allowed: false
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_reconstruction_choice: true
+      never_seed_selection: true
+      code_path_present: false
+
+  pair_manifest: manifests/pairs_train_v1.parquet
+  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+  input: target_live_256
+  source_spoof_used: false
+
+# ---------------------------------------------------------------- experiment seeds
+seeds:
+  experiment_seeds: [42, 1337, 2026]
+  runs_per_method: 3
+  all_three_are_primary_evidence: true
+  best_seed: FORBIDDEN
+  preferred_seed: FORBIDDEN
+  presentation_seed: FORBIDDEN
+  seed_selection_using_test: FORBIDDEN
+  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS
+  per_seed_values_reported: true
+  max_over_seeds_as_primary: FORBIDDEN
+  dropping_a_poor_seed: FORBIDDEN
+  rerunning_only_a_poor_seed: FORBIDDEN
+
+# ---------------------------------------------------------------- generation contract
+generation:
+  input_resolution: 256
+  output: one spoof-labeled canonical 256x256 image per intended pair
+  n_syn_intended: 8838
+  operator_set: [Color_Diversity, Color_Distortion, Reflection, BN_Halftone, Moire_Pattern,
+                 SFC_Halftone, Hand_Trembling, Low_Resolution]
+  operator_count: 8
+  operator_ranges:
+    Color_Diversity: [0.1, 10]
+    Color_Distortion: [0.1, 10]
+    Reflection: [0.01, 0.2]
+    BN_Halftone: [0.01, 0.4]
+    Moire_Pattern: [0.01, 0.3]
+    SFC_Halftone: [0.01, 0.2]
+    Hand_Trembling: [1, 16]
+    Low_Resolution: [0.01, 0.9]
+  operator_selection: DETERMINISTIC_ROUND_ROBIN_BY_PAIR_ID     # SPEC 8.1 overrides official random.choices
+  num_mag: 10
+  magnitude_levels: "level = k/(NUM_MAG-1), k in {0..9}"
+  magnitude_map: "mag = level*(high-low) + low"
+  level_zero_retained: true
+  level_zero_disclosure: >-
+    level = 0 yields a byte-identical copy of the live target, spoof-labeled. It is the official
+    parameter grid and is RETAINED; the ~10% no-op rate must be disclosed and measured with the row.
+  changeLabel_disclosure: >-
+    3 of the 8 operators carry changeLabel=False upstream, but changeLabel never reaches augment_fn,
+    so the produced pixels are identical. SPEC 8.1 fixes the bank label; the divergence from the
+    authors' label policy is disclosed with the E01 row.
+  rng_channel: python_stdlib_random_seeded_per_pair
+
+# ---------------------------------------------------------------- A2-01 deterministic asset order
+asset_enumeration:
+  rule: ASCENDING_LEXICOGRAPHIC_BYTEWISE_BY_FILENAME
+  applies_to_each_official_asset_directory: true
+  must_agree_with: canonical_repository_git_tree_order
+  runtime_listdir_order_may_affect_results: false
+  raw_os_listdir_as_scientific_contract: false
+  asset_counts: {background: 90, noiseTexture: 48, MPTexture: 190}
+  icc_profiles: {rgb: 11, cmyk: 7}
+
+# ---------------------------------------------------------------- A2-05 seed byte layout
+pair_seed:
+  formula: "SHA256(pair_id + global_seed) mod 2^31"
+  global_seed_meaning: CURRENT_EXPERIMENT_SEED
+  global_seed_domain: [42, 1337, 2026]
+  preimage: "UTF-8(pair_id + decimal_string(global_seed))"
+  separator: NONE
+  whitespace: false
+  newline: false
+  digest: "SHA256(preimage).digest()"
+  operator_seed: "unsigned_big_endian_integer(digest) mod 2^31"
+  worked_example: {pair_id: PTR000001, global_seed: 42, preimage_text: PTR00000142,
+                   operator_seed: 795981663}
+  bank_differs_per_seed: true
+
+training: NOT_APPLICABLE_NON_LEARNED_METHOD
+optimizer: NOT_APPLICABLE
+checkpoint:
+  rule: NOT_APPLICABLE_NO_TRAINED_GENERATOR
+  selection_uses_val: false
+  selection_uses_test: false
+external_assets:
+  - {name: fas_aug_repository_assets, location: third_party/source_cache/fas_aug/data,
+     kind: source_bundled_image_assets, weight_bytes: false}
+
+# ---------------------------------------------------------------- run layout
+run_layout:
+  root_template: "<runtime_root>/runs/m6/E01/seed_<seed>/"
+  files:
+    resolved_config: resolved_config.yaml
+    run_manifest: run_manifest.json
+    metrics: metrics.jsonl
+    checkpoint_dir: checkpoints/
+    checkpoint_index: checkpoint_index.json
+    run_summary: run_summary.json
+    stdout: stdout.log
+    stderr: stderr.log
+  outputs_in_git: false
+  checkpoint_bytes_in_git: false
+  repository_keeps: compact provenance/audit summaries only
+
+# ---------------------------------------------------------------- logging (non-learned)
+logging:
+  contract: run_logging_v1
+  epoch_history: NOT_APPLICABLE
+  epochs_must_not_be_invented: true
+  per_sample_records_required:
+    - method_id
+    - experiment_seed
+    - config_sha256
+    - pair_id
+    - deterministic_pair_seed
+    - selected_operator_name
+    - operator_magnitude_level
+    - all_sampled_operator_parameters
+    - selected_asset_filename
+    - generation_status
+    - failure_reason
+    - output_path
+    - output_sha256
+  run_level_required: [wall_time_seconds, output_manifest_path, run_summary]
+
+# ---------------------------------------------------------------- synthetic bank accounting
+synthetic_bank_accounting:
+  generated_in_m6b: false
+  per_sample_record_required:
+    - source_pair_or_sample_id
+    - method_id
+    - experiment_seed
+    - generator_checkpoint_sha256      # null for non-learned methods
+    - recipe_or_operator_metadata
+    - synthetic_output_path
+    - output_sha256
+    - success_or_failure_reason
+  merged_into_test: FORBIDDEN
+  bank_manifest: "<runtime_root>/runs/m6/<method_id>/seed_<seed>/bank_manifest.parquet"
+
+field_provenance:
+  SPEC: [operator_selection, pair_seed.formula, generation.output, data.splits, seeds.experiment_seeds]
+  OFFICIAL_CODE: [generation.operator_set, generation.operator_ranges, generation.num_mag,
+                  generation.magnitude_map, generation.rng_channel, asset_enumeration.asset_counts]
+  AMENDMENT_A2: [asset_enumeration.rule, pair_seed.preimage, pair_seed.global_seed_meaning]
+  M6B: [run_layout, logging, synthetic_bank_accounting]
