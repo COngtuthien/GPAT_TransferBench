@@ -8,7 +8,7 @@
     "BLOCKED",
     "COMPLETE"
   ],
-  "updated_utc": "2026-09-19",
+  "updated_utc": "2026-09-21",
   "milestones": {
     "M0": {
       "name": "Bootstrap",
@@ -840,7 +840,7 @@
     },
     "M5": {
       "name": "Probe",
-      "status": "NOT_STARTED",
+      "status": "COMPLETE",
       "preflight": {
         "date": "2026-09-20",
         "base_commit": "f0d54b72b465a40cdae65d3f2103a7801f02dbd8",
@@ -850,7 +850,7 @@
         "frozen_config_created": false,
         "proposed_config": "configs/proposed/artifact_probe.proposed.yaml",
         "proposed_config_sha256": "8c20160543ce8844899b72c73ceea7eabb3697e356d5bc0ad94de0482c097f2b",
-        "spec_basis": "\u00a712.1 ArtifactProbeNet; \u00a74 high-pass operator; \u00a713 metrics; \u00a724 CLI",
+        "spec_basis": "§12.1 ArtifactProbeNet; §4 high-pass operator; §13 metrics; §24 CLI",
         "amendment_a1_firewall": "COMPLIANT (measurement probe; labels never reach a generator)",
         "blocking_decisions": [],
         "blocking_environment": [],
@@ -882,7 +882,7 @@
           "torchvision": "0.29.0+cpu",
           "cuda_available": false,
           "sklearn_installed": false,
-          "note": "spec \u00a712.1 requires AMP; this machine is CPU-only, so M5 EXECUTION is blocked (E-M5-01). The contract freeze is not blocked."
+          "note": "spec §12.1 requires AMP; this machine is CPU-only, so M5 EXECUTION is blocked (E-M5-01). The contract freeze is not blocked."
         },
         "evidence": [
           "outputs/audit/M5_ARTIFACT_PROBE_CONTRACT_ANALYSIS.md",
@@ -945,7 +945,7 @@
         "gpu_execution_preflight_required": true,
         "gpu_execution_plan": "outputs/audit/M5_GPU_EXECUTION_PLAN.md",
         "remote_facts_measured": false,
-        "honesty_note": "These are owner resolutions of details spec \u00a712.1 left under-specified; the frozen specification did not uniquely dictate them. M5 is NOT_STARTED and becomes IN_PROGRESS only when authoritative training runs.",
+        "honesty_note": "These are owner resolutions of details spec §12.1 left under-specified; the frozen specification did not uniquely dictate them. M5 is NOT_STARTED and becomes IN_PROGRESS only when authoritative training runs.",
         "evidence": [
           "outputs/audit/M5_ARTIFACT_PROBE_OWNER_DECISIONS.md",
           "outputs/audit/M5_ARTIFACT_PROBE_FROZEN_CONTRACT.md",
@@ -970,6 +970,20 @@
           "sequence_source": "gpatbench.probe.contract.validation_epochs",
           "record": "outputs/audit/M5_VALIDATION_EPOCH_CONTRACT_CORRECTION.md"
         }
+      },
+      "phase": "FINALIZED",
+      "completion": {
+        "authoritative_training_commit": "ad27df2389041b0f008668b7936d5efffd148c35",
+        "completion_commit": "9b846026747263fa2656bdbb865270a70e5af38b",
+        "published_branch": "m5-gpu-3090",
+        "published_tag": "m5-artifact-probe-v1",
+        "checkpoint_sha256": "b5ace6c263d8473215ff2ab825b98541bdcf332251512216cbd93546f32e54ff",
+        "selected_epoch": 14,
+        "best_val_macro_f1": 0.9693201750054498,
+        "validation_passes": 30,
+        "test_split_used": false,
+        "synthetic_samples_used": false,
+        "completion_report": "outputs/audit/M5_COMPLETION_REPORT.md"
       }
     },
     "M6": {
@@ -1014,6 +1028,6 @@
     "frozen_utc": "2026-09-19",
     "readiness_matrix": "outputs/audit/DATASET_READINESS_MATRIX.csv",
     "decisions": "outputs/audit/DATASET_PROTOCOL_DECISIONS.md",
-    "note": "READY means prerequisites satisfied; it does not mean a milestone has started. M2/M3 remain NOT_STARTED."
+    "note": "READY means prerequisites satisfied. M0-M5 are COMPLETE. M6 preflight/source audit does not itself start baseline training."
   }
 }
