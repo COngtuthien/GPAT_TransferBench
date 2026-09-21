@@ -18,6 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from gpatbench.pairs import execute as E        # noqa: E402
 from gpatbench.probe import preprocess as PP     # noqa: E402
+sys.path.insert(0, str(ROOT / "tests"))
+import m5_test_env as H                            # noqa: E402
 
 AUDIT = ROOT / "outputs/audit"
 PROPOSED = ROOT / "configs/proposed/artifact_probe.proposed.yaml"
@@ -364,19 +366,29 @@ class TestPreflightEvidence(unittest.TestCase):
     def test_cli_train_probe_refuses_to_train(self):
         for c in ("configs/frozen/artifact_probe.yaml",
                   "configs/proposed/artifact_probe.proposed.yaml"):
-            r = subprocess.run([sys.executable, "-m", "gpatbench.cli", "train-probe",
-                                "--config", c], cwd=ROOT, capture_output=True, text=True)
+            with H.hermetic_exec_config() as cfg:
+                r = subprocess.run([sys.executable, "-m", "gpatbench.cli", "train-probe",
+                                    "--config", c], cwd=ROOT, capture_output=True, text=True,
+                                   env=H.subprocess_env(cfg))
             self.assertNotEqual(r.returncode, 0, c)
             self.assertIn("STOP", r.stdout + r.stderr, c)
 
-    def test_there_is_no_hidden_probe_trainer(self):
+    def test_training_primitives_live_only_in_the_single_trainer_module(self):
+        """The authoritative trainer now exists; it must still be the ONLY one.
+
+        Training primitives (backward, optimizer.step, GradScaler, autocast) may appear in
+        `train.py` and nowhere else in the probe package, so no second trainer can hide beside it.
+        """
         import ast
-        banned = ("backward", "step", "train_probe", "fit")
+        banned = ("backward", "step", "train_probe", "fit", "GradScaler", "autocast")
         for f in sorted((ROOT / "gpatbench/probe").rglob("*.py")):
+            if f.name == "train.py":
+                continue
             tree = ast.parse(f.read_text())
             names = {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
             names |= {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
             self.assertEqual(names & set(banned), set(), f"{f.name} looks like a trainer")
+        self.assertTrue((ROOT / "gpatbench/probe/train.py").is_file())
 
 
 if __name__ == "__main__":

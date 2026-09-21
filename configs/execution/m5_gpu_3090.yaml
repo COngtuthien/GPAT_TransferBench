@@ -1,0 +1,55 @@
+# M5 execution configuration — OPERATIONAL / INFRASTRUCTURE ONLY.
+#
+# This file names WHERE the frozen M2 canonical faces physically live for the approved RTX 3090
+# execution host. It carries NO scientific value: sample membership, labels, splits, preprocessing,
+# the model, the loss, the optimizer, the scheduler, the seeds, the validation policy and the
+# checkpoint-selection policy all come from configs/frozen/artifact_probe.yaml, which this file
+# does not touch and may not override.
+#
+# Selected at runtime with:
+#   GPAT_M5_EXEC_CONFIG=configs/execution/m5_gpu_3090.yaml
+# When that variable is unset the historical laptop config is used instead, so laptop behaviour is
+# unchanged. The selected file is always passed through gpatbench.preprocess.m2b.resolve_roots(),
+# so the runtime-root containment firewall still applies. No symlink is used anywhere.
+#
+# Owner resolution: outputs/audit/M5_GPU_EXECUTION_OWNER_RESOLUTION.md
+version: m5_execution_v1
+status: ACTIVE
+created_utc: "2026-09-21"
+kind: EXECUTION_INFRASTRUCTURE          # never a scientific contract
+milestone: M5
+scientific_contract: configs/frozen/artifact_probe.yaml
+scientific_contract_sha256: 3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe
+scientific_contract_modified_by_this_file: false
+execution_host: student20261@100.121.84.44
+execution_gpu: NVIDIA GeForce RTX 3090
+deviation: EXECUTION_HOST_DEVIATION_PENDING_OWNER_RECORD   # recorded in the owner resolution
+
+storage:
+  # The approved GPU runtime root. Only the physical prefix differs from the laptop config; the
+  # logical role name is unchanged, and scientific identity never depends on either string.
+  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime
+  roots:
+    # M5 reads the canonical faces and nothing else. The M2 frames, geometry and identity caches
+    # are deliberately ABSENT here: they were not transferred to the GPU host and M5 does not need
+    # them, so declaring them would assert storage that does not exist.
+    faces_256_root: /home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256
+  runstate_root: /home/student20261/workdir/GPAT_TransferBench_runtime/runstate
+  tmp_root: /home/student20261/workdir/GPAT_TransferBench_runtime/tmp
+  logical_roles:                        # role -> project-relative logical name (audit/reporting)
+    faces_256_root: data/processed/faces_256
+  containment: all physical roots must resolve inside runtime_root
+  symlinks_used: false                  # no project or runtime directory is replaced by a symlink
+  faces_expected_png: 20615             # M2 COMPLETE samples; verified by SHA256 on the GPU host
+  roots_not_declared_because_m5_does_not_read_them:
+    - processed_frames_root
+    - geometry_cache_root
+    - identity_cache_root
+
+reads_only:
+  - data/processed/faces_256            # read-only; M5 never writes into the runtime root
+writes:
+  note: >-
+    M5 writes only inside the repository: the checkpoint under models/artifact_probe/ (git-ignored)
+    and the audit records named by the frozen config's `outputs:` block.
+test_split_paths: NONE                  # TEST is never loaded, so no TEST path exists here

@@ -23,6 +23,8 @@ from gpatbench.probe import metrics as MET       # noqa: E402
 from gpatbench.probe import model as MODEL       # noqa: E402
 from gpatbench.probe import preprocess as PP     # noqa: E402
 from gpatbench.probe import train as T           # noqa: E402
+sys.path.insert(0, str(ROOT / "tests"))
+import m5_test_env as H                            # noqa: E402
 
 AUDIT = ROOT / "outputs/audit"
 CONFIG_SHA = "3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe"
@@ -337,7 +339,8 @@ class TestMetricAndSelection(unittest.TestCase):
             self.assertIsNone(re.search(r"\[\s*1\s*,\s*30\s*\]", src), f.name)
 
     def test_trainer_preflight_reports_thirty_validation_passes(self):
-        out = T.run(dry_run=True)
+        with H.hermetic_exec_config():
+            out = T.run(dry_run=True)
         self.assertEqual(out["validation_passes"], 30)
         self.assertEqual(out["validation_epochs"], list(range(1, 31)))
 
@@ -472,7 +475,9 @@ class TestLoadersAndFirewall(unittest.TestCase):
 
 
 # ------------------------------------------------------------------ trainer refusals
-class TestTrainerRefusals(unittest.TestCase):
+class TestTrainerRefusals(H.HermeticExecConfigMixin, unittest.TestCase):
+    """Hermetic execution config: these assert refusal behaviour, not the author's filesystem."""
+
     def test_cpu_authoritative_training_is_refused(self):
         if torch.cuda.is_available():
             self.skipTest("this guard is only meaningful without CUDA")
@@ -518,7 +523,8 @@ class TestTrainerRefusals(unittest.TestCase):
     def test_cli_refuses_authoritative_training_on_this_machine(self):
         r = subprocess.run([sys.executable, "-m", "gpatbench.cli", "train-probe", "--config",
                             "configs/frozen/artifact_probe.yaml"],
-                           cwd=ROOT, capture_output=True, text=True)
+                           cwd=ROOT, capture_output=True, text=True,
+                           env=H.subprocess_env(self.exec_config))
         if torch.cuda.is_available():
             self.skipTest("CUDA present; the CPU guard cannot be exercised here")
         self.assertNotEqual(r.returncode, 0)

@@ -1,0 +1,209 @@
+.............................................ssF......F.....F........... [ 48%]
+.............F.......F.s.....................................FF........F [ 96%]
+......                                                                   [100%]
+=================================== FAILURES ===================================
+__________ TestTrainerRefusals.test_dry_run_never_writes_a_checkpoint __________
+
+self = <test_m5_probe_contract.TestTrainerRefusals testMethod=test_dry_run_never_writes_a_checkpoint>
+
+    def test_dry_run_never_writes_a_checkpoint(self):
+        out = T.run(dry_run=True)
+        self.assertIs(out["dry_run"], True)
+        self.assertIs(out["checkpoint_written"], False)
+>       self.assertFalse(T.CHECKPOINT_DIR.exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_contract.py:505: AssertionError
+______ TestMilestoneAndEvidence.test_no_checkpoint_or_probe_model_exists _______
+
+self = <test_m5_probe_contract.TestMilestoneAndEvidence testMethod=test_no_checkpoint_or_probe_model_exists>
+
+    def test_no_checkpoint_or_probe_model_exists(self):
+>       self.assertFalse((ROOT / "models/artifact_probe").exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_contract.py:544: AssertionError
+__________ TestMilestoneState.test_no_trained_probe_checkpoint_exists __________
+
+self = <test_m5_probe_preflight.TestMilestoneState testMethod=test_no_trained_probe_checkpoint_exists>
+
+    def test_no_trained_probe_checkpoint_exists(self):
+>       self.assertFalse((ROOT / "models/artifact_probe").exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_preflight.py:74: AssertionError
+_________ TestPreflightEvidence.test_cli_train_probe_refuses_to_train __________
+
+self = <test_m5_probe_preflight.TestPreflightEvidence testMethod=test_cli_train_probe_refuses_to_train>
+
+    def test_cli_train_probe_refuses_to_train(self):
+        for c in ("configs/frozen/artifact_probe.yaml",
+                  "configs/proposed/artifact_probe.proposed.yaml"):
+            r = subprocess.run([sys.executable, "-m", "gpatbench.cli", "train-probe",
+                                "--config", c], cwd=ROOT, capture_output=True, text=True)
+>           self.assertNotEqual(r.returncode, 0, c)
+E           AssertionError: 0 == 0 : configs/frozen/artifact_probe.yaml
+
+tests/test_m5_probe_preflight.py:369: AssertionError
+_____ TestDryRunSafety.test_dry_run_writes_no_checkpoint_and_no_audit_file _____
+
+self = <test_m5_probe_trainer.TestDryRunSafety testMethod=test_dry_run_writes_no_checkpoint_and_no_audit_file>
+
+    def test_dry_run_writes_no_checkpoint_and_no_audit_file(self):
+        before = {p: p.exists() for p in (T.CHECKPOINT_PATH, T.TRAINING_LOG, T.EPOCH_METRICS,
+                                          T.SELECTION_REPORT, T.CLASS_MAPPING,
+                                          T.CHECKPOINT_SHA_RECORD)}
+        out = T.run(dry_run=True)
+        self.assertIs(out["checkpoint_written"], False)
+        for p, existed in before.items():
+            self.assertEqual(p.exists(), existed, f"{p} appeared during a dry run")
+>       self.assertFalse(T.CHECKPOINT_DIR.exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_trainer.py:220: AssertionError
+_ TestExecutionStoragePortability.test_checkpoint_and_sha_record_carry_the_execution_fields _
+
+self = <test_m5_probe_trainer.TestExecutionStoragePortability testMethod=test_checkpoint_and_sha_record_carry_the_execution_fields>
+
+    def test_checkpoint_and_sha_record_carry_the_execution_fields(self):
+        prov = dict(fake_provenance())
+>       prov.update(D.execution_config_provenance())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m5_probe_trainer.py:833: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/probe/data.py:111: in execution_config_provenance
+    s = resolve_storage()
+        ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/student20261/workdir/GPAT_TransferBench/configs/execution/m2b_laptop_external_storage.yaml')
+require_faces = True
+
+    def resolve_storage(path: Path | None = None, *, require_faces: bool = True) -> dict:
+        """Selected config -> contained roots -> the physical faces root, with provenance.
+    
+        Always goes through `m2b.resolve_roots`, so a root outside `storage.runtime_root` is refused
+        there rather than silently used.
+        """
+        from gpatbench.preprocess import m2b
+        path = resolve_exec_config() if path is None else path
+        cfg = load_exec_config(path)
+        try:
+            resolved = m2b.resolve_roots(cfg)                     # containment firewall
+        except KeyError as exc:
+            raise ProbeContractViolation(
+                f"execution config {path} is missing a required storage key: {exc}") from exc
+        roots = resolved["roots"]
+        if "faces_256_root" not in roots:
+            raise ProbeContractViolation(
+                f"execution config {path} declares no faces_256_root")
+        faces = Path(roots["faces_256_root"]).resolve()
+        if require_faces and not faces.is_dir():
+>           raise ProbeContractViolation(
+                f"faces_256_root {faces} (from {path}) does not exist or is not a directory")
+E           gpatbench.probe.contract.ProbeContractViolation: faces_256_root /media/cong/Data/GPAT_TransferBench_runtime/data/processed/faces_256 (from /home/student20261/workdir/GPAT_TransferBench/configs/execution/m2b_laptop_external_storage.yaml) does not exist or is not a directory
+
+gpatbench/probe/data.py:95: ProbeContractViolation
+_ TestExecutionStoragePortability.test_default_selects_the_historical_laptop_config _
+
+self = <test_m5_probe_trainer.TestExecutionStoragePortability testMethod=test_default_selects_the_historical_laptop_config>
+
+    def test_default_selects_the_historical_laptop_config(self):
+        self.assertEqual(D.resolve_exec_config(), D.DEFAULT_EXEC_CONFIG)
+        self.assertEqual(D.DEFAULT_EXEC_CONFIG,
+                         ROOT / "configs/execution/m2b_laptop_external_storage.yaml")
+        self.assertTrue(D.DEFAULT_EXEC_CONFIG.is_file())
+>       self.assertEqual(D.execution_config_provenance()["m5_execution_config_path"],
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         "configs/execution/m2b_laptop_external_storage.yaml")
+
+tests/test_m5_probe_trainer.py:680: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/probe/data.py:111: in execution_config_provenance
+    s = resolve_storage()
+        ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/student20261/workdir/GPAT_TransferBench/configs/execution/m2b_laptop_external_storage.yaml')
+require_faces = True
+
+    def resolve_storage(path: Path | None = None, *, require_faces: bool = True) -> dict:
+        """Selected config -> contained roots -> the physical faces root, with provenance.
+    
+        Always goes through `m2b.resolve_roots`, so a root outside `storage.runtime_root` is refused
+        there rather than silently used.
+        """
+        from gpatbench.preprocess import m2b
+        path = resolve_exec_config() if path is None else path
+        cfg = load_exec_config(path)
+        try:
+            resolved = m2b.resolve_roots(cfg)                     # containment firewall
+        except KeyError as exc:
+            raise ProbeContractViolation(
+                f"execution config {path} is missing a required storage key: {exc}") from exc
+        roots = resolved["roots"]
+        if "faces_256_root" not in roots:
+            raise ProbeContractViolation(
+                f"execution config {path} declares no faces_256_root")
+        faces = Path(roots["faces_256_root"]).resolve()
+        if require_faces and not faces.is_dir():
+>           raise ProbeContractViolation(
+                f"faces_256_root {faces} (from {path}) does not exist or is not a directory")
+E           gpatbench.probe.contract.ProbeContractViolation: faces_256_root /media/cong/Data/GPAT_TransferBench_runtime/data/processed/faces_256 (from /home/student20261/workdir/GPAT_TransferBench/configs/execution/m2b_laptop_external_storage.yaml) does not exist or is not a directory
+
+gpatbench/probe/data.py:95: ProbeContractViolation
+_ TestExecutionStoragePortability.test_provenance_carries_the_three_required_execution_fields _
+
+self = <test_m5_probe_trainer.TestExecutionStoragePortability testMethod=test_provenance_carries_the_three_required_execution_fields>
+
+    def test_provenance_carries_the_three_required_execution_fields(self):
+>       prov = D.execution_config_provenance()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m5_probe_trainer.py:821: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/probe/data.py:111: in execution_config_provenance
+    s = resolve_storage()
+        ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/home/student20261/workdir/GPAT_TransferBench/configs/execution/m2b_laptop_external_storage.yaml')
+require_faces = True
+
+    def resolve_storage(path: Path | None = None, *, require_faces: bool = True) -> dict:
+        """Selected config -> contained roots -> the physical faces root, with provenance.
+    
+        Always goes through `m2b.resolve_roots`, so a root outside `storage.runtime_root` is refused
+        there rather than silently used.
+        """
+        from gpatbench.preprocess import m2b
+        path = resolve_exec_config() if path is None else path
+        cfg = load_exec_config(path)
+        try:
+            resolved = m2b.resolve_roots(cfg)                     # containment firewall
+        except KeyError as exc:
+            raise ProbeContractViolation(
+                f"execution config {path} is missing a required storage key: {exc}") from exc
+        roots = resolved["roots"]
+        if "faces_256_root" not in roots:
+            raise ProbeContractViolation(
+                f"execution config {path} declares no faces_256_root")
+        faces = Path(roots["faces_256_root"]).resolve()
+        if require_faces and not faces.is_dir():
+>           raise ProbeContractViolation(
+                f"faces_256_root {faces} (from {path}) does not exist or is not a directory")
+E           gpatbench.probe.contract.ProbeContractViolation: faces_256_root /media/cong/Data/GPAT_TransferBench_runtime/data/processed/faces_256 (from /home/student20261/workdir/GPAT_TransferBench/configs/execution/m2b_laptop_external_storage.yaml) does not exist or is not a directory
+
+gpatbench/probe/data.py:95: ProbeContractViolation
+=============================== warnings summary ===============================
+tests/test_m5_probe_contract.py::TestOptimization::test_lr_sequence_matches_pytorch_and_starts_at_1e_4
+  /home/student20261/workdir/GPAT_TransferBench/tests/test_m5_probe_contract.py:396: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+    sch.step()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_m5_probe_contract.py:518: CUDA present; the CPU guard cannot be exercised here
+SKIPPED [1] tests/test_m5_probe_contract.py:476: this guard is only meaningful without CUDA
+SKIPPED [1] tests/test_m5_probe_trainer.py:246: this guard is only meaningful without CUDA
+8 failed, 139 passed, 3 skipped, 1 warning in 856.67s (0:14:16)

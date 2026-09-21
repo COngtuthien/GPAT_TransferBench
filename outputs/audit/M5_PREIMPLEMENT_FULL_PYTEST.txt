@@ -1,0 +1,1813 @@
+..................F..................................................... [ 12%]
+..................................ssss...............s.......ssssssssFFF [ 25%]
+F.F.F......................s..FFFFFFFFF..................FFFFFFFFsFFFFFF [ 38%]
+...FFFFFFFFF.FFF.FFFF...........................F.........F............. [ 51%]
+.........................EEEEE.....F.................................... [ 64%]
+........................................................................ [ 77%]
+........................................................................ [ 90%]
+.....ss............................................                      [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of TestRecomputation.test_components_recompute_exactly_on_a_real_subset _
+
+cls = <class 'test_m4_execution.TestRecomputation'>
+
+    @classmethod
+    def setUpClass(cls):
+>       cls.pop = population()
+                  ^^^^^^^^^^^^
+
+tests/test_m4_execution.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m4_execution.py:54: in population
+    _CACHE["pop"] = E.load_population()
+                    ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+splits = ('TRAIN', 'VAL')
+
+    def load_population(splits=P.SPLITS_WITH_PAIRS) -> dict:
+        """Every frozen input a pair needs. Returns samples plus the provenance hashes they carry."""
+        rows = pq.read_table(SPLIT_MANIFEST).to_pylist()
+        acct = {r["sample_id"]: r for r in pq.read_table(ACCOUNTING).to_pylist()}
+        roots = _roots()
+        pose = load_pose(roots)
+    
+        import cv2
+    
+        def luma_of(r):
+            p = roots["faces_256_root"] / r["dataset"] / f"{r['sample_id']}.png"
+            bgr = cv2.imread(str(p), cv2.IMREAD_COLOR)
+            if bgr is None:
+                raise P.PairPolicyError(f"{r['sample_id']}: canonical face missing at {p}")
+            return P.luma_mean_from_rgb(np.ascontiguousarray(bgr[:, :, ::-1]))
+    
+        def fraction(r):
+            a = acct[r["sample_id"]]
+            if r["dataset"] == "casia_fasd":
+                return P.CASIA_FACE_AREA_FRACTION                       # DEV-018
+            h, w = (int(v) for v in a["frame_hw"].split("x"))
+            return P.face_area_fraction(r["dataset"], json.loads(a["bbox"]), float(w), float(h))
+    
+        samples, meta = [], {}
+        for r in rows:
+            if r["split"] not in splits:
+                continue                                                # TEST never enters M4
+            a = acct[r["sample_id"]]
+            if r["m2_status"] != "COMPLETE" or a["final_status"] != "COMPLETE":
+                raise P.PairPolicyError(f"{r['sample_id']}: M2 status is not COMPLETE; "
+                                        "a FAILED sample can never be a source or a target")
+            samples.append(P.Sample(r["sample_id"], r["dataset"], r["split"], int(r["label_binary"]),
+                                    r["video_id"], r["subject_id_global"], r["content_group_id"],
+                                    r["attack_macro"], r["attack_raw"], r["sha256"],
+>                                   pose[r["sample_id"]], fraction(r), luma_of(r)))
+                                    ^^^^^^^^^^^^^^^^^^^^
+E           KeyError: '5a1b87d938b3dee919426272432d8494e261a413fbbe2bb16ed3e49ed5f5c548'
+
+gpatbench/pairs/execute.py:175: KeyError
+_ ERROR at setup of TestRecomputation.test_input_permutation_does_not_change_membership _
+
+cls = <class 'test_m4_execution.TestRecomputation'>
+
+    @classmethod
+    def setUpClass(cls):
+>       cls.pop = population()
+                  ^^^^^^^^^^^^
+
+tests/test_m4_execution.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m4_execution.py:54: in population
+    _CACHE["pop"] = E.load_population()
+                    ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+splits = ('TRAIN', 'VAL')
+
+    def load_population(splits=P.SPLITS_WITH_PAIRS) -> dict:
+        """Every frozen input a pair needs. Returns samples plus the provenance hashes they carry."""
+        rows = pq.read_table(SPLIT_MANIFEST).to_pylist()
+        acct = {r["sample_id"]: r for r in pq.read_table(ACCOUNTING).to_pylist()}
+        roots = _roots()
+        pose = load_pose(roots)
+    
+        import cv2
+    
+        def luma_of(r):
+            p = roots["faces_256_root"] / r["dataset"] / f"{r['sample_id']}.png"
+            bgr = cv2.imread(str(p), cv2.IMREAD_COLOR)
+            if bgr is None:
+                raise P.PairPolicyError(f"{r['sample_id']}: canonical face missing at {p}")
+            return P.luma_mean_from_rgb(np.ascontiguousarray(bgr[:, :, ::-1]))
+    
+        def fraction(r):
+            a = acct[r["sample_id"]]
+            if r["dataset"] == "casia_fasd":
+                return P.CASIA_FACE_AREA_FRACTION                       # DEV-018
+            h, w = (int(v) for v in a["frame_hw"].split("x"))
+            return P.face_area_fraction(r["dataset"], json.loads(a["bbox"]), float(w), float(h))
+    
+        samples, meta = [], {}
+        for r in rows:
+            if r["split"] not in splits:
+                continue                                                # TEST never enters M4
+            a = acct[r["sample_id"]]
+            if r["m2_status"] != "COMPLETE" or a["final_status"] != "COMPLETE":
+                raise P.PairPolicyError(f"{r['sample_id']}: M2 status is not COMPLETE; "
+                                        "a FAILED sample can never be a source or a target")
+            samples.append(P.Sample(r["sample_id"], r["dataset"], r["split"], int(r["label_binary"]),
+                                    r["video_id"], r["subject_id_global"], r["content_group_id"],
+                                    r["attack_macro"], r["attack_raw"], r["sha256"],
+>                                   pose[r["sample_id"]], fraction(r), luma_of(r)))
+                                    ^^^^^^^^^^^^^^^^^^^^
+E           KeyError: '5a1b87d938b3dee919426272432d8494e261a413fbbe2bb16ed3e49ed5f5c548'
+
+gpatbench/pairs/execute.py:175: KeyError
+_ ERROR at setup of TestRecomputation.test_parquet_write_is_byte_deterministic _
+
+cls = <class 'test_m4_execution.TestRecomputation'>
+
+    @classmethod
+    def setUpClass(cls):
+>       cls.pop = population()
+                  ^^^^^^^^^^^^
+
+tests/test_m4_execution.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m4_execution.py:54: in population
+    _CACHE["pop"] = E.load_population()
+                    ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+splits = ('TRAIN', 'VAL')
+
+    def load_population(splits=P.SPLITS_WITH_PAIRS) -> dict:
+        """Every frozen input a pair needs. Returns samples plus the provenance hashes they carry."""
+        rows = pq.read_table(SPLIT_MANIFEST).to_pylist()
+        acct = {r["sample_id"]: r for r in pq.read_table(ACCOUNTING).to_pylist()}
+        roots = _roots()
+        pose = load_pose(roots)
+    
+        import cv2
+    
+        def luma_of(r):
+            p = roots["faces_256_root"] / r["dataset"] / f"{r['sample_id']}.png"
+            bgr = cv2.imread(str(p), cv2.IMREAD_COLOR)
+            if bgr is None:
+                raise P.PairPolicyError(f"{r['sample_id']}: canonical face missing at {p}")
+            return P.luma_mean_from_rgb(np.ascontiguousarray(bgr[:, :, ::-1]))
+    
+        def fraction(r):
+            a = acct[r["sample_id"]]
+            if r["dataset"] == "casia_fasd":
+                return P.CASIA_FACE_AREA_FRACTION                       # DEV-018
+            h, w = (int(v) for v in a["frame_hw"].split("x"))
+            return P.face_area_fraction(r["dataset"], json.loads(a["bbox"]), float(w), float(h))
+    
+        samples, meta = [], {}
+        for r in rows:
+            if r["split"] not in splits:
+                continue                                                # TEST never enters M4
+            a = acct[r["sample_id"]]
+            if r["m2_status"] != "COMPLETE" or a["final_status"] != "COMPLETE":
+                raise P.PairPolicyError(f"{r['sample_id']}: M2 status is not COMPLETE; "
+                                        "a FAILED sample can never be a source or a target")
+            samples.append(P.Sample(r["sample_id"], r["dataset"], r["split"], int(r["label_binary"]),
+                                    r["video_id"], r["subject_id_global"], r["content_group_id"],
+                                    r["attack_macro"], r["attack_raw"], r["sha256"],
+>                                   pose[r["sample_id"]], fraction(r), luma_of(r)))
+                                    ^^^^^^^^^^^^^^^^^^^^
+E           KeyError: '5a1b87d938b3dee919426272432d8494e261a413fbbe2bb16ed3e49ed5f5c548'
+
+gpatbench/pairs/execute.py:175: KeyError
+_ ERROR at setup of TestRecomputation.test_recomputed_stats_equal_the_frozen_file _
+
+cls = <class 'test_m4_execution.TestRecomputation'>
+
+    @classmethod
+    def setUpClass(cls):
+>       cls.pop = population()
+                  ^^^^^^^^^^^^
+
+tests/test_m4_execution.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m4_execution.py:54: in population
+    _CACHE["pop"] = E.load_population()
+                    ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+splits = ('TRAIN', 'VAL')
+
+    def load_population(splits=P.SPLITS_WITH_PAIRS) -> dict:
+        """Every frozen input a pair needs. Returns samples plus the provenance hashes they carry."""
+        rows = pq.read_table(SPLIT_MANIFEST).to_pylist()
+        acct = {r["sample_id"]: r for r in pq.read_table(ACCOUNTING).to_pylist()}
+        roots = _roots()
+        pose = load_pose(roots)
+    
+        import cv2
+    
+        def luma_of(r):
+            p = roots["faces_256_root"] / r["dataset"] / f"{r['sample_id']}.png"
+            bgr = cv2.imread(str(p), cv2.IMREAD_COLOR)
+            if bgr is None:
+                raise P.PairPolicyError(f"{r['sample_id']}: canonical face missing at {p}")
+            return P.luma_mean_from_rgb(np.ascontiguousarray(bgr[:, :, ::-1]))
+    
+        def fraction(r):
+            a = acct[r["sample_id"]]
+            if r["dataset"] == "casia_fasd":
+                return P.CASIA_FACE_AREA_FRACTION                       # DEV-018
+            h, w = (int(v) for v in a["frame_hw"].split("x"))
+            return P.face_area_fraction(r["dataset"], json.loads(a["bbox"]), float(w), float(h))
+    
+        samples, meta = [], {}
+        for r in rows:
+            if r["split"] not in splits:
+                continue                                                # TEST never enters M4
+            a = acct[r["sample_id"]]
+            if r["m2_status"] != "COMPLETE" or a["final_status"] != "COMPLETE":
+                raise P.PairPolicyError(f"{r['sample_id']}: M2 status is not COMPLETE; "
+                                        "a FAILED sample can never be a source or a target")
+            samples.append(P.Sample(r["sample_id"], r["dataset"], r["split"], int(r["label_binary"]),
+                                    r["video_id"], r["subject_id_global"], r["content_group_id"],
+                                    r["attack_macro"], r["attack_raw"], r["sha256"],
+>                                   pose[r["sample_id"]], fraction(r), luma_of(r)))
+                                    ^^^^^^^^^^^^^^^^^^^^
+E           KeyError: '5a1b87d938b3dee919426272432d8494e261a413fbbe2bb16ed3e49ed5f5c548'
+
+gpatbench/pairs/execute.py:175: KeyError
+_ ERROR at setup of TestRecomputation.test_winner_is_the_minimum_of_the_evaluated_set_on_a_real_subset _
+
+cls = <class 'test_m4_execution.TestRecomputation'>
+
+    @classmethod
+    def setUpClass(cls):
+>       cls.pop = population()
+                  ^^^^^^^^^^^^
+
+tests/test_m4_execution.py:364: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m4_execution.py:54: in population
+    _CACHE["pop"] = E.load_population()
+                    ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+splits = ('TRAIN', 'VAL')
+
+    def load_population(splits=P.SPLITS_WITH_PAIRS) -> dict:
+        """Every frozen input a pair needs. Returns samples plus the provenance hashes they carry."""
+        rows = pq.read_table(SPLIT_MANIFEST).to_pylist()
+        acct = {r["sample_id"]: r for r in pq.read_table(ACCOUNTING).to_pylist()}
+        roots = _roots()
+        pose = load_pose(roots)
+    
+        import cv2
+    
+        def luma_of(r):
+            p = roots["faces_256_root"] / r["dataset"] / f"{r['sample_id']}.png"
+            bgr = cv2.imread(str(p), cv2.IMREAD_COLOR)
+            if bgr is None:
+                raise P.PairPolicyError(f"{r['sample_id']}: canonical face missing at {p}")
+            return P.luma_mean_from_rgb(np.ascontiguousarray(bgr[:, :, ::-1]))
+    
+        def fraction(r):
+            a = acct[r["sample_id"]]
+            if r["dataset"] == "casia_fasd":
+                return P.CASIA_FACE_AREA_FRACTION                       # DEV-018
+            h, w = (int(v) for v in a["frame_hw"].split("x"))
+            return P.face_area_fraction(r["dataset"], json.loads(a["bbox"]), float(w), float(h))
+    
+        samples, meta = [], {}
+        for r in rows:
+            if r["split"] not in splits:
+                continue                                                # TEST never enters M4
+            a = acct[r["sample_id"]]
+            if r["m2_status"] != "COMPLETE" or a["final_status"] != "COMPLETE":
+                raise P.PairPolicyError(f"{r['sample_id']}: M2 status is not COMPLETE; "
+                                        "a FAILED sample can never be a source or a target")
+            samples.append(P.Sample(r["sample_id"], r["dataset"], r["split"], int(r["label_binary"]),
+                                    r["video_id"], r["subject_id_global"], r["content_group_id"],
+                                    r["attack_macro"], r["attack_raw"], r["sha256"],
+>                                   pose[r["sample_id"]], fraction(r), luma_of(r)))
+                                    ^^^^^^^^^^^^^^^^^^^^
+E           KeyError: '5a1b87d938b3dee919426272432d8494e261a413fbbe2bb16ed3e49ed5f5c548'
+
+gpatbench/pairs/execute.py:175: KeyError
+=================================== FAILURES ===================================
+________________ TestFrozenPolicy.test_readiness_matches_policy ________________
+
+self = <test_dataset_policy.TestFrozenPolicy testMethod=test_readiness_matches_policy>
+
+    def test_readiness_matches_policy(self):
+        with open(AUDIT / "DATASET_READINESS_MATRIX.csv", newline="") as f:
+            rows = {r["dataset"]: r for r in csv.DictReader(f)}
+        for ds, r in rows.items():
+            self.assertEqual(r["split_grouping"], D[ds]["split_grouping"])
+            self.assertEqual(r["split_fidelity"], D[ds]["split_fidelity"])
+            self.assertEqual(r["preprocessing_fidelity"], D[ds]["preprocessing"]["fidelity"])
+            self.assertEqual(r["pairing_rule"], D[ds]["pairing"]["rule"])
+        import json
+        s = json.loads((AUDIT / "STAGE_STATE.json").read_text())["milestones"]
+        # Stage-aware: M1 COMPLETE and M3 NOT_STARTED at every stage up to and including M2.
+        self.assertEqual(s["M1"]["status"], "COMPLETE")
+        # M3 may be COMPLETE, but only with a manifest whose recorded hash matches the file.
+        if s["M3"]["status"] == "COMPLETE":
+            import hashlib
+            rec = json.loads((AUDIT / "split_v1.sha256").read_text())
+            mp = ROOT / "manifests/split_v1.parquet"
+            self.assertTrue(mp.is_file())
+            self.assertEqual(hashlib.sha256(mp.read_bytes()).hexdigest(), rec["sha256"])
+        self.assertIn(s["M2"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        # M4 may have started; it may only be COMPLETE once the native manifests are settled too.
+        self.assertIn(s["M4"]["status"], {"NOT_STARTED", "IN_PROGRESS", "BLOCKED", "COMPLETE"})
+        # Amendment A1: M4 may be COMPLETE while the NATIVE (Track-B) manifests are still missing,
+        # but only if the amendment record says so explicitly and does not claim the original rule
+        # was met.
+        if s["M4"]["status"] == "COMPLETE":
+            native = (s["M4"].get("execution") or {}).get("native") or {}
+            amend = s["M4"].get("amendment_a1")
+            if native.get("status") == "BLOCKED_BY_NATIVE_PAIR_CONSTRUCTION_SOURCE_GAP":
+                self.assertIsNotNone(amend, "M4 COMPLETE with a native blocker needs Amendment A1")
+                self.assertEqual(amend["completion_basis"], "AMENDMENT_A1_MAIN_FAIR_IDFREE_TRACK")
+                self.assertEqual(amend["track_b_native_pairing"],
+                                 "DEFERRED_TO_M6_SECONDARY_TRACK")
+                self.assertIs(amend["original_native_manifests_completed"], False)
+        # M2 may only be COMPLETE when the full run really happened and its audit passed. Under DEV-017
+        # the artifacts live on the external runtime volume, so the in-repo dirs stay empty and the
+        # evidence is the audit itself plus the physical roots named by the execution config.
+        if s["M2"]["status"] == "COMPLETE":
+            integ = json.loads((AUDIT / "M2_CACHE_INTEGRITY.json").read_text())
+            self.assertTrue(integ["ok"])
+            acc = integ["accounting"]
+            self.assertEqual(acc["missing_state"], 0)
+            self.assertEqual(acc["complete"] + acc["failed"], acc["expected"])
+            self.assertEqual(json.loads((AUDIT / "M2_DETERMINISTIC_VALIDATION.json").read_text())["status"], "PASS")
+            import yaml as _yaml
+            x = _yaml.safe_load((ROOT / "configs/execution/m2b_laptop_external_storage.yaml").read_text())
+            for role, root in x["storage"]["roots"].items():
+>               self.assertTrue(any(Path(root).rglob("*")), f"{role} is empty but M2 is COMPLETE")
+E               AssertionError: False is not true : processed_frames_root is empty but M2 is COMPLETE
+
+tests/test_dataset_policy.py:234: AssertionError
+_____ TestQ23LogitStorage.test_codec_provenance_matches_the_frozen_config ______
+
+self = <test_m2a_preprocess.TestQ23LogitStorage testMethod=test_codec_provenance_matches_the_frozen_config>
+
+    def test_codec_provenance_matches_the_frozen_config(self):
+>       prov = self.LS.codec_provenance()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2a_preprocess.py:554: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def codec_provenance() -> dict:
+        """Everything needed to reproduce the stored bytes (recorded in the frozen config/ledger)."""
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:60: ModuleNotFoundError
+__________ TestQ23LogitStorage.test_compression_is_lossless_and_exact __________
+
+self = <test_m2a_preprocess.TestQ23LogitStorage testMethod=test_compression_is_lossless_and_exact>
+
+    def test_compression_is_lossless_and_exact(self):
+        npy = self.LS.npy_bytes(self.arr)
+>       blob = self.LS.encode_block(self.arr)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2a_preprocess.py:526: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+______________ TestQ23LogitStorage.test_encoding_is_deterministic ______________
+
+self = <test_m2a_preprocess.TestQ23LogitStorage testMethod=test_encoding_is_deterministic>
+
+    def test_encoding_is_deterministic(self):
+>       self.assertEqual(self.LS.encode_block(self.arr), self.LS.encode_block(self.arr))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2a_preprocess.py:538: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_ TestQ23LogitStorage.test_float16_or_mask_only_cannot_silently_replace_the_logits _
+
+self = <test_m2a_preprocess.TestQ23LogitStorage testMethod=test_float16_or_mask_only_cannot_silently_replace_the_logits>
+
+    def test_float16_or_mask_only_cannot_silently_replace_the_logits(self):
+        with self.assertRaises(ValueError):
+            self.LS.npy_bytes(self.arr.astype(np.float16))
+        with self.assertRaises(ValueError):
+>           self.LS.encode_block(self.arr.astype(np.float16))
+
+tests/test_m2a_preprocess.py:511: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_________ TestQ23LogitStorage.test_mask_derives_from_the_stored_logits _________
+
+self = <test_m2a_preprocess.TestQ23LogitStorage testMethod=test_mask_derives_from_the_stored_logits>
+
+    def test_mask_derives_from_the_stored_logits(self):
+>       blob = self.LS.encode_block(self.arr)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2a_preprocess.py:518: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_________ TestQ23LogitStorage.test_shard_round_trip_and_random_access __________
+
+self = <test_m2a_preprocess.TestQ23LogitStorage testMethod=test_shard_round_trip_and_random_access>
+
+    def test_shard_round_trip_and_random_access(self):
+        with tempfile.TemporaryDirectory() as t:
+            w = self.LS.ShardWriter(Path(t), prefix="parsing_logits", rows_per_shard=2)
+            arrs = {f"s{i}": (self.arr + i).astype(np.float32) for i in range(3)}
+>           rows = [w.add(k, v) for k, v in arrs.items()]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2a_preprocess.py:544: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2a_preprocess.py:544: in <listcomp>
+    rows = [w.add(k, v) for k, v in arrs.items()]
+            ^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_________ TestShardFinalization.test_abort_removes_the_in_flight_shard _________
+
+self = <test_m2b_execution.TestShardFinalization testMethod=test_abort_removes_the_in_flight_shard>
+
+    def test_abort_removes_the_in_flight_shard(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+            cs = m2b.ChunkShardSet(self._roots(d), 0)
+            cs.open()
+>           cs.add("parsing_logits", "s0", _logits())
+
+tests/test_m2b_execution.py:243: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+___ TestShardFinalization.test_finalize_publishes_shard_and_index_atomically ___
+
+self = <test_m2b_execution.TestShardFinalization testMethod=test_finalize_publishes_shard_and_index_atomically>
+
+    def test_finalize_publishes_shard_and_index_atomically(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+            cs = m2b.ChunkShardSet(self._roots(d), 3)
+            cs.open()
+            arrs = {}
+            for i in range(3):
+                lg = _logits(i)
+                arrs[f"s{i}"] = lg
+>               cs.add("parsing_logits", f"s{i}", lg)
+
+tests/test_m2b_execution.py:226: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+___ TestShardFinalization.test_finalize_refuses_a_corrupted_in_flight_shard ____
+
+self = <test_m2b_execution.TestShardFinalization testMethod=test_finalize_refuses_a_corrupted_in_flight_shard>
+
+    def test_finalize_refuses_a_corrupted_in_flight_shard(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+            cs = m2b.ChunkShardSet(self._roots(d), 0)
+            cs.open()
+>           cs.add("parsing_logits", "s0", _logits())
+
+tests/test_m2b_execution.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+____ TestShardFinalization.test_is_finalized_requires_both_shard_and_index _____
+
+self = <test_m2b_execution.TestShardFinalization testMethod=test_is_finalized_requires_both_shard_and_index>
+
+    def test_is_finalized_requires_both_shard_and_index(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+            cs = m2b.ChunkShardSet(self._roots(d), 0)
+            cs.open()
+            for f, arr in (("parsing_logits", _logits()), ("parsing_mask", np.zeros((224, 224), np.uint8)),
+                           ("embedding", np.zeros(512, np.float32))):
+>               cs.add(f, "s0", arr)
+
+tests/test_m2b_execution.py:272: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+____________________ TestCacheAudit.test_clean_cache_passes ____________________
+
+self = <test_m2b_execution.TestCacheAudit testMethod=test_clean_cache_passes>
+
+    def test_clean_cache_passes(self):
+        import m2b_audit
+        with tempfile.TemporaryDirectory() as t:
+>           roots = self._build(Path(t))
+                    ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2b_execution.py:295: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_execution.py:287: in _build
+    cs.add("parsing_logits", f"s{i}", _logits(i))
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_______ TestCacheAudit.test_corrupted_block_and_shard_hash_are_detected ________
+
+self = <test_m2b_execution.TestCacheAudit testMethod=test_corrupted_block_and_shard_hash_are_detected>
+
+    def test_corrupted_block_and_shard_hash_are_detected(self):
+        import m2b_audit
+        with tempfile.TemporaryDirectory() as t:
+>           roots = self._build(Path(t))
+                    ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2b_execution.py:324: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_execution.py:287: in _build
+    cs.add("parsing_logits", f"s{i}", _logits(i))
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_______________ TestCacheAudit.test_duplicate_entry_is_detected ________________
+
+self = <test_m2b_execution.TestCacheAudit testMethod=test_duplicate_entry_is_detected>
+
+    def test_duplicate_entry_is_detected(self):
+        import m2b_audit
+        with tempfile.TemporaryDirectory() as t:
+>           roots = self._build(Path(t))
+                    ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2b_execution.py:303: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_execution.py:287: in _build
+    cs.add("parsing_logits", f"s{i}", _logits(i))
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+______________ TestCacheAudit.test_orphan_shard_file_is_detected _______________
+
+self = <test_m2b_execution.TestCacheAudit testMethod=test_orphan_shard_file_is_detected>
+
+    def test_orphan_shard_file_is_detected(self):
+        import m2b_audit
+        with tempfile.TemporaryDirectory() as t:
+>           roots = self._build(Path(t))
+                    ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2b_execution.py:315: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_execution.py:287: in _build
+    cs.add("parsing_logits", f"s{i}", _logits(i))
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_______________ TestCacheAudit.test_truncated_shard_is_detected ________________
+
+self = <test_m2b_execution.TestCacheAudit testMethod=test_truncated_shard_is_detected>
+
+    def test_truncated_shard_is_detected(self):
+        import m2b_audit
+        with tempfile.TemporaryDirectory() as t:
+>           roots = self._build(Path(t))
+                    ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2b_execution.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_execution.py:287: in _build
+    cs.add("parsing_logits", f"s{i}", _logits(i))
+gpatbench/preprocess/m2b.py:123: in add
+    blob = LS.encode_block(arr) if compressed else npy_bytes_any(arr)
+           ^^^^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_____ TestBoundedShardConstruction.test_no_raw_npy_sidecar_is_left_behind ______
+
+self = <test_m2b_preflight.TestBoundedShardConstruction testMethod=test_no_raw_npy_sidecar_is_left_behind>
+
+    def test_no_raw_npy_sidecar_is_left_behind(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+            w = LS.ShardWriter(d, prefix="parsing_logits", rows_per_shard=2)
+            for i in range(2):
+>               w.add(f"s{i}", self.arr)
+
+tests/test_m2b_preflight.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_ TestBoundedShardConstruction.test_shard_grows_by_exactly_one_compressed_block_per_sample _
+
+self = <test_m2b_preflight.TestBoundedShardConstruction testMethod=test_shard_grows_by_exactly_one_compressed_block_per_sample>
+
+    def test_shard_grows_by_exactly_one_compressed_block_per_sample(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+            w = LS.ShardWriter(d, prefix="parsing_logits", rows_per_shard=4)
+            sizes = []
+            for i in range(3):
+>               row = w.add(f"s{i}", (self.arr + i).astype(np.float32))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2b_preflight.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_______ TestShardIndexIntegrityAudit.test_clean_index_passes_every_check _______
+
+self = <test_m2b_preflight.TestShardIndexIntegrityAudit testMethod=test_clean_index_passes_every_check>
+
+    def test_clean_index_passes_every_check(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+>           idx, _ = self._build(d)
+                     ^^^^^^^^^^^^^^
+
+tests/test_m2b_preflight.py:191: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_preflight.py:184: in _build
+    w.add(f"s{i}", a)
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+________ TestShardIndexIntegrityAudit.test_corrupted_block_is_detected _________
+
+self = <test_m2b_preflight.TestShardIndexIntegrityAudit testMethod=test_corrupted_block_is_detected>
+
+    def test_corrupted_block_is_detected(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+>           idx, _ = self._build(d)
+                     ^^^^^^^^^^^^^^
+
+tests/test_m2b_preflight.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_preflight.py:184: in _build
+    w.add(f"s{i}", a)
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_ TestShardIndexIntegrityAudit.test_decoded_blocks_keep_dtype_shape_and_mask_consistency _
+
+self = <test_m2b_preflight.TestShardIndexIntegrityAudit testMethod=test_decoded_blocks_keep_dtype_shape_and_mask_consistency>
+
+    def test_decoded_blocks_keep_dtype_shape_and_mask_consistency(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+>           idx, arrs = self._build(d, n=3)
+                        ^^^^^^^^^^^^^^^^^^^
+
+tests/test_m2b_preflight.py:244: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_preflight.py:184: in _build
+    w.add(f"s{i}", a)
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+______ TestShardIndexIntegrityAudit.test_duplicate_sample_id_is_detected _______
+
+self = <test_m2b_preflight.TestShardIndexIntegrityAudit testMethod=test_duplicate_sample_id_is_detected>
+
+    def test_duplicate_sample_id_is_detected(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+>           idx, _ = self._build(d)
+                     ^^^^^^^^^^^^^^
+
+tests/test_m2b_preflight.py:199: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_preflight.py:184: in _build
+    w.add(f"s{i}", a)
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_ TestShardIndexIntegrityAudit.test_missing_shard_and_orphan_bytes_are_detected _
+
+self = <test_m2b_preflight.TestShardIndexIntegrityAudit testMethod=test_missing_shard_and_orphan_bytes_are_detected>
+
+    def test_missing_shard_and_orphan_bytes_are_detected(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+>           idx, _ = self._build(d)
+                     ^^^^^^^^^^^^^^
+
+tests/test_m2b_preflight.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_preflight.py:184: in _build
+    w.add(f"s{i}", a)
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+_______ TestShardIndexIntegrityAudit.test_orphan_shard_file_is_detected ________
+
+self = <test_m2b_preflight.TestShardIndexIntegrityAudit testMethod=test_orphan_shard_file_is_detected>
+
+    def test_orphan_shard_file_is_detected(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = Path(t)
+>           idx, _ = self._build(d)
+                     ^^^^^^^^^^^^^^
+
+tests/test_m2b_preflight.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_m2b_preflight.py:184: in _build
+    w.add(f"s{i}", a)
+gpatbench/preprocess/logit_store.py:157: in add
+    blob = encode_block(arr)
+           ^^^^^^^^^^^^^^^^^
+gpatbench/preprocess/logit_store.py:108: in encode_block
+    return _compressor().compress(shuffle4(npy_bytes(arr)))
+           ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _compressor():
+>       import zstandard as zstd
+E       ModuleNotFoundError: No module named 'zstandard'
+
+gpatbench/preprocess/logit_store.py:51: ModuleNotFoundError
+________ TestGroupIntegrity.test_01_one_group_goes_to_exactly_one_split ________
+
+self = <test_m3_allocator.TestGroupIntegrity testMethod=test_01_one_group_goes_to_exactly_one_split>
+
+    def test_01_one_group_goes_to_exactly_one_split(self):
+>       r = A.allocate(uniform(20))
+            ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[20], videos_per_group=[1], class_counts={'P2_binary': [{'0': 1}], 'P3_attack_m...1_total': {'__total__': 20}, 'P2_binary': {'0': 20}, 'P3_attack_macro': {'live': 20}, 'P4_attack_raw': {'(none)': 20}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+__________ TestGroupIntegrity.test_02_multi_video_group_stays_intact ___________
+
+self = <test_m3_allocator.TestGroupIntegrity testMethod=test_02_multi_video_group_stays_intact>
+
+    def test_02_multi_video_group_stays_intact(self):
+        groups = uniform(10, videos_per_group=4)
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[10], videos_per_group=[4], class_counts={'P2_binary': [{'0': 4}], 'P3_attack_m...1_total': {'__total__': 40}, 'P2_binary': {'0': 40}, 'P3_attack_macro': {'live': 40}, 'P4_attack_raw': {'(none)': 40}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 0), (0, 1), (0, 2)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____________ TestGroupIntegrity.test_03_subject_disjoint_invariant _____________
+
+self = <test_m3_allocator.TestGroupIntegrity testMethod=test_03_subject_disjoint_invariant>
+
+    def test_03_subject_disjoint_invariant(self):
+        """CASIA/MSU shape: one subject = one group of many videos."""
+        groups = [G(f"casia_fasd::{i}", [V(f"s{i}v{k}", k % 2, "live" if k % 2 == 0 else "print",
+                                           None if k % 2 == 0 else "3") for k in range(12)])
+                  for i in range(50)]
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[50], videos_per_group=[12], class_counts={'P2_binary': [{'0': 6, '1': 6}], 'P3...ry': {'0': 300, '1': 300}, 'P3_attack_macro': {'live': 300, 'print': 300}, 'P4_attack_raw': {'(none)': 300, '3': 300}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____ TestGroupIntegrity.test_04_siw_duplicate_content_group_stays_together _____
+
+self = <test_m3_allocator.TestGroupIntegrity testMethod=test_04_siw_duplicate_content_group_stays_together>
+
+    def test_04_siw_duplicate_content_group_stays_together(self):
+        """Two exact-byte duplicate videos share one content group and may never be separated."""
+        groups = uniform(40)
+        dup = G("siwmv2::sha256:dup", [V("dupA"), V("dupB")])
+        groups.append(dup)
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=2, n_groups_per_class=[1, 40], videos_per_group=[2, 1], class_counts={'P2_binary': [{'0': 2}, {'0': 1...1_total': {'__total__': 42}, 'P2_binary': {'0': 42}, 'P3_attack_macro': {'live': 42}, 'P4_attack_raw': {'(none)': 42}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 1), (1, 2), (1, 1), (0, 2), (1, 0), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____ TestGroupIntegrity.test_19_m2_failed_rows_never_become_usable_samples _____
+
+self = <test_m3_allocator.TestGroupIntegrity testMethod=test_19_m2_failed_rows_never_become_usable_samples>
+
+    def test_19_m2_failed_rows_never_become_usable_samples(self):
+        groups = [G("g0", [V("v0", complete=7, failed=1)]), *uniform(19)]
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[20], videos_per_group=[1], class_counts={'P2_binary': [{'0': 1}], 'P3_attack_m...1_total': {'__total__': 20}, 'P2_binary': {'0': 20}, 'P3_attack_macro': {'live': 20}, 'P4_attack_raw': {'(none)': 20}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+___ TestGroupIntegrity.test_20_frame_counts_do_not_influence_video_balancing ___
+
+self = <test_m3_allocator.TestGroupIntegrity testMethod=test_20_frame_counts_do_not_influence_video_balancing>
+
+    def test_20_frame_counts_do_not_influence_video_balancing(self):
+        """A 7-COMPLETE video and an 8-COMPLETE video both weigh exactly one canonical video."""
+        healthy = uniform(30)
+        degraded = [G(g.group_id, [V(v.video_id, v.label_binary, v.attack_macro, v.attack_raw,
+                                     complete=7, failed=1) for v in g.videos]) for g in healthy]
+>       a, b = A.allocate(healthy), A.allocate(degraded)
+               ^^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[30], videos_per_group=[1], class_counts={'P2_binary': [{'0': 1}], 'P3_attack_m...1_total': {'__total__': 30}, 'P2_binary': {'0': 30}, 'P3_attack_macro': {'live': 30}, 'P4_attack_raw': {'(none)': 30}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____________________ TestRatios.test_05_perfect_ratio_case _____________________
+
+self = <test_m3_allocator.TestRatios testMethod=test_05_perfect_ratio_case>
+
+    def test_05_perfect_ratio_case(self):
+>       r = A.allocate(uniform(100))
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[100], videos_per_group=[1], class_counts={'P2_binary': [{'0': 1}], 'P3_attack_...tal': {'__total__': 100}, 'P2_binary': {'0': 100}, 'P3_attack_macro': {'live': 100}, 'P4_attack_raw': {'(none)': 100}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+________________ TestRatios.test_06_indivisible_group_size_case ________________
+
+self = <test_m3_allocator.TestRatios testMethod=test_06_indivisible_group_size_case>
+
+    def test_06_indivisible_group_size_case(self):
+        """7 groups of 3 videos: 70/15/15 of 21 videos is unreachable; deviation must be minimal."""
+        groups = uniform(7, videos_per_group=3)
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[7], videos_per_group=[3], class_counts={'P2_binary': [{'0': 3}], 'P3_attack_ma...1_total': {'__total__': 21}, 'P2_binary': {'0': 21}, 'P3_attack_macro': {'live': 21}, 'P4_attack_raw': {'(none)': 21}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 1), (0, 2), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+___________ TestRatios.test_p1_matches_brute_force_on_a_single_class ___________
+
+self = <test_m3_allocator.TestRatios testMethod=test_p1_matches_brute_force_on_a_single_class>
+
+    def test_p1_matches_brute_force_on_a_single_class(self):
+        """With one interchangeable class the optimum is enumerable; the solver must match it."""
+        for n_groups, per_group in ((50, 12), (35, 8), (13, 1)):
+            groups = uniform(n_groups, videos_per_group=per_group)
+>           r = A.allocate(groups)
+                ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[50], videos_per_group=[12], class_counts={'P2_binary': [{'0': 12}], 'P3_attack...tal': {'__total__': 600}, 'P2_binary': {'0': 600}, 'P3_attack_macro': {'live': 600}, 'P4_attack_raw': {'(none)': 600}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____________________ TestPriorityOrder.test_07_p1_beats_p2 _____________________
+
+self = <test_m3_allocator.TestPriorityOrder testMethod=test_07_p1_beats_p2>
+
+    def test_07_p1_beats_p2(self):
+        # 6 live-only groups + 1 spoof group: improving the binary balance would require moving
+        # groups away from the P1 optimum; P1 must win.
+        groups = [*uniform(6, binary=0, macro="live"),
+                  G("spoof", [V("sv", 1, "print", "p")])]
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=2, n_groups_per_class=[6, 1], videos_per_group=[1, 1], class_counts={'P2_binary': [{'0': 1}, {'1': 1}...7}, 'P2_binary': {'0': 6, '1': 1}, 'P3_attack_macro': {'live': 6, 'print': 1}, 'P4_attack_raw': {'(none)': 6, 'p': 1}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(1, 0), (0, 2), (0, 1), (1, 2), (0, 0), (1, 1)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____________________ TestPriorityOrder.test_08_p2_beats_p3 _____________________
+
+self = <test_m3_allocator.TestPriorityOrder testMethod=test_08_p2_beats_p3>
+
+    def test_08_p2_beats_p3(self):
+        groups = [G("a", [V("a1", 0, "live", None)]), G("b", [V("b1", 0, "live", None)]),
+                  G("c", [V("c1", 1, "print", "p1")]), G("d", [V("d1", 1, "replay", "r1")]),
+                  G("e", [V("e1", 1, "print", "p2")]), G("f", [V("f1", 1, "replay", "r2")])]
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:176: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=5, n_groups_per_class=[2, 1, 1, 1, 1], videos_per_group=[1, 1, 1, 1, 1], class_counts={'P2_binary': [...tack_macro': {'live': 2, 'print': 2, 'replay': 2}, 'P4_attack_raw': {'(none)': 2, 'p1': 1, 'p2': 1, 'r1': 1, 'r2': 1}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(4, 2), (3, 2), (1, 2), (2, 2), (4, 1), (3, 1), ...]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____________________ TestPriorityOrder.test_09_p3_beats_p4 _____________________
+
+self = <test_m3_allocator.TestPriorityOrder testMethod=test_09_p3_beats_p4>
+
+    def test_09_p3_beats_p4(self):
+        groups = [G(f"g{i}", [V(f"v{i}", 1, "print" if i < 4 else "replay", f"raw{i}")]
+                    ) for i in range(8)]
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=8, n_groups_per_class=[1, 1, 1, 1, 1, 1, 1, 1], videos_per_group=[1, 1, 1, 1, 1, 1, 1, 1], class_coun...eplay': 4}, 'P4_attack_raw': {'raw0': 1, 'raw1': 1, 'raw2': 1, 'raw3': 1, 'raw4': 1, 'raw5': 1, 'raw6': 1, 'raw7': 1}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 0), (0, 2), (6, 2), (2, 1), (3, 1), (3, 0), ...]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+___ TestRareCategories.test_10_11_12_rare_categories_are_handled_not_forced ____
+
+self = <test_m3_allocator.TestRareCategories testMethod=test_10_11_12_rare_categories_are_handled_not_forced>
+
+    def test_10_11_12_rare_categories_are_handled_not_forced(self):
+        groups = [*uniform(20, binary=0, macro="live"),
+                  G("rare_bin", [V("rb", 1, "print", "printed_photo")]),
+                  G("rare_macro", [V("rm", 1, "mask_3d", "Mask_Silicone")]),
+                  G("rare_raw", [V("rr", 1, "print", "unique_raw")])]
+>       r = A.allocate(groups)                     # must not raise
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=4, n_groups_per_class=[20, 1, 1, 1], videos_per_group=[1, 1, 1, 1], class_counts={'P2_binary': [{'0':..., 'mask_3d': 1, 'print': 2}, 'P4_attack_raw': {'(none)': 20, 'Mask_Silicone': 1, 'printed_photo': 1, 'unique_raw': 1}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(1, 2), (1, 1), (2, 0), (2, 1), (0, 2), (0, 1), ...]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+______ TestRareCategories.test_13_category_impossible_in_all_three_splits ______
+
+self = <test_m3_allocator.TestRareCategories testMethod=test_13_category_impossible_in_all_three_splits>
+
+    def test_13_category_impossible_in_all_three_splits(self):
+        """A category carried by a single group can occupy at most one split; that is reported,
+        never fixed by breaking a group."""
+        groups = [*uniform(19, binary=0, macro="live"),
+                  G("only", [V("o1", 1, "mask_2d", "Mask_Paper")])]
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=2, n_groups_per_class=[19, 1], videos_per_group=[1, 1], class_counts={'P2_binary': [{'0': 1}, {'1': 1...': {'0': 19, '1': 1}, 'P3_attack_macro': {'live': 19, 'mask_2d': 1}, 'P4_attack_raw': {'(none)': 19, 'Mask_Paper': 1}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(1, 2), (1, 0), (1, 1), (0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+____________________ TestDeterminism.test_14_exact_tie_case ____________________
+
+self = <test_m3_allocator.TestDeterminism testMethod=test_14_exact_tie_case>
+
+    def test_14_exact_tie_case(self):
+        """Three interchangeable groups: (2,1,0) and (2,0,1) both score 110, an exact tie.
+    
+        70/15/15 of three videos does not put one group in each split — the optimum leaves one
+        split empty — so the point of this case is that the tie is broken by the frozen seed and
+        that the chosen solution really is one of the tied optima.
+        """
+        groups = uniform(3)
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:246: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[3], videos_per_group=[1], class_counts={'P2_binary': [{'0': 1}], 'P3_attack_ma...={'P1_total': {'__total__': 3}, 'P2_binary': {'0': 3}, 'P3_attack_macro': {'live': 3}, 'P4_attack_raw': {'(none)': 3}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+______ TestDeterminism.test_16_permuted_input_gives_identical_assignment _______
+
+self = <test_m3_allocator.TestDeterminism testMethod=test_16_permuted_input_gives_identical_assignment>
+
+    def test_16_permuted_input_gives_identical_assignment(self):
+        base = uniform(37, videos_per_group=2)
+>       r = A.allocate(base)
+            ^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:264: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[37], videos_per_group=[2], class_counts={'P2_binary': [{'0': 2}], 'P3_attack_m...1_total': {'__total__': 74}, 'P2_binary': {'0': 74}, 'P3_attack_macro': {'live': 74}, 'P4_attack_raw': {'(none)': 74}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 1), (0, 2), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+___________ TestDeterminism.test_17_repeated_execution_is_identical ____________
+
+self = <test_m3_allocator.TestDeterminism testMethod=test_17_repeated_execution_is_identical>
+
+    def test_17_repeated_execution_is_identical(self):
+        groups = uniform(23, videos_per_group=3)
+>       first = A.allocate(groups)
+                ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:272: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[23], videos_per_group=[3], class_counts={'P2_binary': [{'0': 3}], 'P3_attack_m...1_total': {'__total__': 69}, 'P2_binary': {'0': 69}, 'P3_attack_macro': {'live': 69}, 'P4_attack_raw': {'(none)': 69}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 1), (0, 2), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+_______ TestDeterminism.test_18_hash_randomisation_cannot_affect_output ________
+
+self = <test_m3_allocator.TestDeterminism testMethod=test_18_hash_randomisation_cannot_affect_output>
+
+    def test_18_hash_randomisation_cannot_affect_output(self):
+        """Run the allocator in fresh interpreters with different PYTHONHASHSEED values."""
+        code = (
+            "import sys; sys.path.insert(0, %r)\n"
+            "from gpatbench.split import allocator as A\n"
+            "gs=[A.Group('ds', 'g%%03d'%%i, tuple([A.Video('g%%03d_v%%d'%%(i,k), k%%2,"
+            "  'live' if k%%2==0 else 'print', None if k%%2==0 else 'r%%d'%%(i%%3), 8)"
+            "  for k in range(3)])) for i in range(17)]\n"
+            "r=A.allocate(gs)\n"
+            "import json; print(json.dumps(sorted(r.assignment.items())))\n" % str(ROOT)
+        )
+        outs = []
+        for hs in ("0", "1", "12345"):
+            env = {"PYTHONHASHSEED": hs, "PATH": "/usr/bin:/bin"}
+>           out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True,
+                                 env=env, check=True).stdout.strip()
+
+tests/test_m3_allocator.py:293: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = True, timeout = None, check = True
+popenargs = (['/home/student20261/miniconda3/envs/gpat-m5/bin/python', '-c', "import sys; sys.path.insert(0, '/home/student20261/w...n range(3)])) for i in range(17)]\nr=A.allocate(gs)\nimport json; print(json.dumps(sorted(r.assignment.items())))\n"],)
+kwargs = {'text': True, 'env': {'PYTHONHASHSEED': '0', 'PATH': '/usr/bin:/bin'}, 'stdout': -1, 'stderr': -1}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout is given, and the process takes too long, a TimeoutExpired
+        exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/home/student20261/miniconda3/envs/gpat-m5/bin/python', '-c', "import sys; sys.path.insert(0, '/home/student20261/workdir/GPAT_TransferBench')\nfrom gpatbench.split import allocator as A\ngs=[A.Group('ds', 'g%03d'%i, tuple([A.Video('g%03d_v%d'%(i,k), k%2,  'live' if k%2==0 else 'print', None if k%2==0 else 'r%d'%(i%3), 8)  for k in range(3)])) for i in range(17)]\nr=A.allocate(gs)\nimport json; print(json.dumps(sorted(r.assignment.items())))\n"]' returned non-zero exit status 1.
+
+../../miniconda3/envs/gpat-m5/lib/python3.11/subprocess.py:571: CalledProcessError
+_ TestObjectiveArithmetic.test_objective_is_integer_and_solver_agrees_with_recomputation _
+
+self = <test_m3_allocator.TestObjectiveArithmetic testMethod=test_objective_is_integer_and_solver_agrees_with_recomputation>
+
+    def test_objective_is_integer_and_solver_agrees_with_recomputation(self):
+        groups = uniform(41, videos_per_group=2, binary=1, macro="print", raw="p")
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:302: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[41], videos_per_group=[2], class_counts={'P2_binary': [{'1': 2}], 'P3_attack_m...={'P1_total': {'__total__': 82}, 'P2_binary': {'1': 82}, 'P3_attack_macro': {'print': 82}, 'P4_attack_raw': {'p': 82}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 1), (0, 2), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+______ TestObjectiveArithmetic.test_solver_reports_proven_global_optimum _______
+
+self = <test_m3_allocator.TestObjectiveArithmetic testMethod=test_solver_reports_proven_global_optimum>
+
+    def test_solver_reports_proven_global_optimum(self):
+>       r = A.allocate(uniform(29, videos_per_group=2))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:320: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[29], videos_per_group=[2], class_counts={'P2_binary': [{'0': 2}], 'P3_attack_m...1_total': {'__total__': 58}, 'P2_binary': {'0': 58}, 'P3_attack_macro': {'live': 58}, 'P4_attack_raw': {'(none)': 58}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 1), (0, 2), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+_________ TestObjectiveArithmetic.test_tampered_objective_is_detected __________
+
+self = <test_m3_allocator.TestObjectiveArithmetic testMethod=test_tampered_objective_is_detected>
+
+    def test_tampered_objective_is_detected(self):
+        groups = uniform(11)
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:341: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[11], videos_per_group=[1], class_counts={'P2_binary': [{'0': 1}], 'P3_attack_m...1_total': {'__total__': 11}, 'P2_binary': {'0': 11}, 'P3_attack_macro': {'live': 11}, 'P4_attack_raw': {'(none)': 11}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+_ TestObjectiveArithmetic.test_verify_assignment_rejects_a_split_crossing_video _
+
+self = <test_m3_allocator.TestObjectiveArithmetic testMethod=test_verify_assignment_rejects_a_split_crossing_video>
+
+    def test_verify_assignment_rejects_a_split_crossing_video(self):
+        groups = uniform(6)
+>       r = A.allocate(groups)
+            ^^^^^^^^^^^^^^^^^^
+
+tests/test_m3_allocator.py:331: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[6], videos_per_group=[1], class_counts={'P2_binary': [{'0': 1}], 'P3_attack_ma...={'P1_total': {'__total__': 6}, 'P2_binary': {'0': 6}, 'P3_attack_macro': {'live': 6}, 'P4_attack_raw': {'(none)': 6}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+_ TestDeterminismAndSerialization.test_rebuild_is_byte_identical_with_shuffled_input _
+
+self = <test_m3_split_execution.TestDeterminismAndSerialization testMethod=test_rebuild_is_byte_identical_with_shuffled_input>
+
+    def test_rebuild_is_byte_identical_with_shuffled_input(self):
+        """Re-run the real allocator with permuted metadata and require the same bytes."""
+        with tempfile.TemporaryDirectory() as t:
+>           out = E.run_split(ROOT, write=True, manifest_path=Path(t) / "s.parquet",
+                              group_manifest_path=Path(t) / "g.parquet", shuffle_seed=4242)
+
+tests/test_m3_split_execution.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gpatbench/split/execute.py:249: in run_split
+    res = A.allocate(groups)
+          ^^^^^^^^^^^^^^^^^^
+gpatbench/split/allocator.py:373: in allocate
+    counts, objectives, evidence = _solve_lexicographic(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = _Model(n_classes=1, n_groups_per_class=[50], videos_per_group=[12], class_counts={'P2_binary': [{'0': 3, '1': 9}], 'P3...ttack_raw': {'(none)': 150, '3': 50, '4': 50, '5': 50, '6': 50, '7': 50, '8': 50, 'HR_2': 50, 'HR_3': 50, 'HR_4': 50}})
+options = {'mip_rel_gap': 0.0, 'presolve': True, 'time_limit': 600}
+column_order = [(0, 2), (0, 1), (0, 0)]
+
+    def _solve_lexicographic(model: _Model, options: dict, column_order=None):
+        """Minimise P1..P4 in order, pinning each optimum, then make the count vector canonical."""
+        import numpy as np
+>       from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+gpatbench/split/allocator.py:274: ModuleNotFoundError
+_ TestCliEquivalence.test_cli_dry_run_reports_the_same_objectives_and_row_count _
+
+self = <test_m3_split_execution.TestCliEquivalence testMethod=test_cli_dry_run_reports_the_same_objectives_and_row_count>
+
+    def test_cli_dry_run_reports_the_same_objectives_and_row_count(self):
+        res = subprocess.run([sys.executable, "-m", "gpatbench.cli", "split",
+                              "--config", "configs/frozen/split_v1.yaml", "--dry-run"],
+                             capture_output=True, text=True, cwd=str(ROOT),
+                             env=dict(os.environ, PYTHONHASHSEED="3"))
+>       self.assertEqual(res.returncode, 0, res.stderr[-800:])
+E       AssertionError: 1 != 0 : 0261/workdir/GPAT_TransferBench/gpatbench/cli.py", line 49, in cmd_split
+E           out = run_split(PROJECT_ROOT, write=not args.dry_run)
+E                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         File "/home/student20261/workdir/GPAT_TransferBench/gpatbench/split/execute.py", line 249, in run_split
+E           res = A.allocate(groups)
+E                 ^^^^^^^^^^^^^^^^^^
+E         File "/home/student20261/workdir/GPAT_TransferBench/gpatbench/split/allocator.py", line 373, in allocate
+E           counts, objectives, evidence = _solve_lexicographic(
+E                                          ^^^^^^^^^^^^^^^^^^^^^
+E         File "/home/student20261/workdir/GPAT_TransferBench/gpatbench/split/allocator.py", line 274, in _solve_lexicographic
+E           from scipy.optimize import Bounds, LinearConstraint, milp
+E       ModuleNotFoundError: No module named 'scipy'
+
+tests/test_m3_split_execution.py:306: AssertionError
+____ TestCli.test_cli_uses_the_library_path_and_reproduces_the_frozen_hash _____
+
+self = <test_m4_execution.TestCli testMethod=test_cli_uses_the_library_path_and_reproduces_the_frozen_hash>
+
+    def test_cli_uses_the_library_path_and_reproduces_the_frozen_hash(self):
+>       r = subprocess.run([sys.executable, "-m", "gpatbench.cli", "build-pairs",
+                            "--config", "configs/frozen/pairs_v1.yaml", "--audit-only"],
+                           cwd=ROOT, capture_output=True, text=True, check=True)
+
+tests/test_m4_execution.py:470: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = True, timeout = None, check = True
+popenargs = (['/home/student20261/miniconda3/envs/gpat-m5/bin/python', '-m', 'gpatbench.cli', 'build-pairs', '--config', 'configs/frozen/pairs_v1.yaml', ...],)
+kwargs = {'cwd': PosixPath('/home/student20261/workdir/GPAT_TransferBench'), 'text': True, 'stdout': -1, 'stderr': -1}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout is given, and the process takes too long, a TimeoutExpired
+        exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/home/student20261/miniconda3/envs/gpat-m5/bin/python', '-m', 'gpatbench.cli', 'build-pairs', '--config', 'configs/frozen/pairs_v1.yaml', '--audit-only']' returned non-zero exit status 1.
+
+../../miniconda3/envs/gpat-m5/lib/python3.11/subprocess.py:571: CalledProcessError
+=============================== warnings summary ===============================
+tests/test_m5_probe_contract.py::TestOptimization::test_lr_sequence_matches_pytorch_and_starts_at_1e_4
+  /home/student20261/workdir/GPAT_TransferBench/tests/test_m5_probe_contract.py:396: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+    sch.step()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_dataset_policy.py::TestFrozenPolicy::test_readiness_matches_policy
+FAILED tests/test_m2a_preprocess.py::TestQ23LogitStorage::test_codec_provenance_matches_the_frozen_config
+FAILED tests/test_m2a_preprocess.py::TestQ23LogitStorage::test_compression_is_lossless_and_exact
+FAILED tests/test_m2a_preprocess.py::TestQ23LogitStorage::test_encoding_is_deterministic
+FAILED tests/test_m2a_preprocess.py::TestQ23LogitStorage::test_float16_or_mask_only_cannot_silently_replace_the_logits
+FAILED tests/test_m2a_preprocess.py::TestQ23LogitStorage::test_mask_derives_from_the_stored_logits
+FAILED tests/test_m2a_preprocess.py::TestQ23LogitStorage::test_shard_round_trip_and_random_access
+FAILED tests/test_m2b_execution.py::TestShardFinalization::test_abort_removes_the_in_flight_shard
+FAILED tests/test_m2b_execution.py::TestShardFinalization::test_finalize_publishes_shard_and_index_atomically
+FAILED tests/test_m2b_execution.py::TestShardFinalization::test_finalize_refuses_a_corrupted_in_flight_shard
+FAILED tests/test_m2b_execution.py::TestShardFinalization::test_is_finalized_requires_both_shard_and_index
+FAILED tests/test_m2b_execution.py::TestCacheAudit::test_clean_cache_passes
+FAILED tests/test_m2b_execution.py::TestCacheAudit::test_corrupted_block_and_shard_hash_are_detected
+FAILED tests/test_m2b_execution.py::TestCacheAudit::test_duplicate_entry_is_detected
+FAILED tests/test_m2b_execution.py::TestCacheAudit::test_orphan_shard_file_is_detected
+FAILED tests/test_m2b_execution.py::TestCacheAudit::test_truncated_shard_is_detected
+FAILED tests/test_m2b_preflight.py::TestBoundedShardConstruction::test_no_raw_npy_sidecar_is_left_behind
+FAILED tests/test_m2b_preflight.py::TestBoundedShardConstruction::test_shard_grows_by_exactly_one_compressed_block_per_sample
+FAILED tests/test_m2b_preflight.py::TestShardIndexIntegrityAudit::test_clean_index_passes_every_check
+FAILED tests/test_m2b_preflight.py::TestShardIndexIntegrityAudit::test_corrupted_block_is_detected
+FAILED tests/test_m2b_preflight.py::TestShardIndexIntegrityAudit::test_decoded_blocks_keep_dtype_shape_and_mask_consistency
+FAILED tests/test_m2b_preflight.py::TestShardIndexIntegrityAudit::test_duplicate_sample_id_is_detected
+FAILED tests/test_m2b_preflight.py::TestShardIndexIntegrityAudit::test_missing_shard_and_orphan_bytes_are_detected
+FAILED tests/test_m2b_preflight.py::TestShardIndexIntegrityAudit::test_orphan_shard_file_is_detected
+FAILED tests/test_m3_allocator.py::TestGroupIntegrity::test_01_one_group_goes_to_exactly_one_split
+FAILED tests/test_m3_allocator.py::TestGroupIntegrity::test_02_multi_video_group_stays_intact
+FAILED tests/test_m3_allocator.py::TestGroupIntegrity::test_03_subject_disjoint_invariant
+FAILED tests/test_m3_allocator.py::TestGroupIntegrity::test_04_siw_duplicate_content_group_stays_together
+FAILED tests/test_m3_allocator.py::TestGroupIntegrity::test_19_m2_failed_rows_never_become_usable_samples
+FAILED tests/test_m3_allocator.py::TestGroupIntegrity::test_20_frame_counts_do_not_influence_video_balancing
+FAILED tests/test_m3_allocator.py::TestRatios::test_05_perfect_ratio_case - M...
+FAILED tests/test_m3_allocator.py::TestRatios::test_06_indivisible_group_size_case
+FAILED tests/test_m3_allocator.py::TestRatios::test_p1_matches_brute_force_on_a_single_class
+FAILED tests/test_m3_allocator.py::TestPriorityOrder::test_07_p1_beats_p2 - M...
+FAILED tests/test_m3_allocator.py::TestPriorityOrder::test_08_p2_beats_p3 - M...
+FAILED tests/test_m3_allocator.py::TestPriorityOrder::test_09_p3_beats_p4 - M...
+FAILED tests/test_m3_allocator.py::TestRareCategories::test_10_11_12_rare_categories_are_handled_not_forced
+FAILED tests/test_m3_allocator.py::TestRareCategories::test_13_category_impossible_in_all_three_splits
+FAILED tests/test_m3_allocator.py::TestDeterminism::test_14_exact_tie_case - ...
+FAILED tests/test_m3_allocator.py::TestDeterminism::test_16_permuted_input_gives_identical_assignment
+FAILED tests/test_m3_allocator.py::TestDeterminism::test_17_repeated_execution_is_identical
+FAILED tests/test_m3_allocator.py::TestDeterminism::test_18_hash_randomisation_cannot_affect_output
+FAILED tests/test_m3_allocator.py::TestObjectiveArithmetic::test_objective_is_integer_and_solver_agrees_with_recomputation
+FAILED tests/test_m3_allocator.py::TestObjectiveArithmetic::test_solver_reports_proven_global_optimum
+FAILED tests/test_m3_allocator.py::TestObjectiveArithmetic::test_tampered_objective_is_detected
+FAILED tests/test_m3_allocator.py::TestObjectiveArithmetic::test_verify_assignment_rejects_a_split_crossing_video
+FAILED tests/test_m3_split_execution.py::TestDeterminismAndSerialization::test_rebuild_is_byte_identical_with_shuffled_input
+FAILED tests/test_m3_split_execution.py::TestCliEquivalence::test_cli_dry_run_reports_the_same_objectives_and_row_count
+FAILED tests/test_m4_execution.py::TestCli::test_cli_uses_the_library_path_and_reproduces_the_frozen_hash
+ERROR tests/test_m4_execution.py::TestRecomputation::test_components_recompute_exactly_on_a_real_subset
+ERROR tests/test_m4_execution.py::TestRecomputation::test_input_permutation_does_not_change_membership
+ERROR tests/test_m4_execution.py::TestRecomputation::test_parquet_write_is_byte_deterministic
+ERROR tests/test_m4_execution.py::TestRecomputation::test_recomputed_stats_equal_the_frozen_file
+ERROR tests/test_m4_execution.py::TestRecomputation::test_winner_is_the_minimum_of_the_evaluated_set_on_a_real_subset
+49 failed, 484 passed, 17 skipped, 1 warning, 5 errors in 22.91s

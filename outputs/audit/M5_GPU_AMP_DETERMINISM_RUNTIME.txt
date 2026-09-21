@@ -1,0 +1,16 @@
+===== AMP CONSTRUCTION =====
+device: cuda
+scaler_enabled: True
+deterministic: True
+cublas_workspace: :4096:8
+tf32_matmul: False
+tf32_cudnn: False
+===== AMP STEP =====
+autocast_output_dtype: torch.float16
+loss_finite: True
+scaler_enabled: True
+AMP_STEP=PASS
+===== DETERMINISTIC REPLAY =====
+forward_exact: True
+grad_exact: True
+DETERMINISM=PASS

@@ -100,9 +100,14 @@ def cmd_train_probe(args) -> int:
     """M5: ArtifactProbeNet (spec §12.1 + the 2026-09-20 owner resolutions).
 
     This is the only ArtifactProbeNet training code path; it delegates to
-    `gpatbench.probe.train.run`. It refuses a non-frozen config, a changed hash, a CPU
-    authoritative run, a TEST split, synthetic data or a wrong ResNet weight hash. `--dry-run`
-    performs the CPU-safe contract preflight and never calls `optimizer.step()`.
+    `gpatbench.probe.train.run`. It refuses a non-frozen config, a changed hash, an authoritative
+    run without CUDA, a TEST split, synthetic data or a wrong ResNet weight hash. `--dry-run`
+    performs the dry-run contract preflight and never calls `optimizer.step()`.
+
+    The printed record copies the execution-storage provenance straight out of the authoritative
+    `T.run()` result -- it is never recomputed here, so the JSON cannot drift from what the run
+    actually resolved. The five fields are indexed directly, so a missing one fails loudly instead
+    of silently emitting null.
     """
     from gpatbench.probe import contract as C
     from gpatbench.probe import train as T
@@ -124,6 +129,12 @@ def cmd_train_probe(args) -> int:
               "class_weights": out["class_weights"], "model": out["model"],
               "environment": out["environment"],
               "resnet18_weight_sha256": out["resnet18_weight_sha256"],
+              # execution-storage provenance, copied verbatim from the authoritative run result
+              "m5_execution_config_path": out["m5_execution_config_path"],
+              "m5_execution_config_sha256": out["m5_execution_config_sha256"],
+              "faces_256_root_resolved": out["faces_256_root_resolved"],
+              "m5_execution_config_selected_via_env": out["m5_execution_config_selected_via_env"],
+              "m5_execution_config_env_var": out["m5_execution_config_env_var"],
               "checkpoint_written": out["checkpoint_written"], "note": out.get("note")}
     print(json.dumps(record, indent=1))
     return 0
@@ -152,7 +163,7 @@ def main(argv=None) -> int:
                         help="M5: ArtifactProbeNet (pre-flight guard; refuses to train)")
     tp.add_argument("--config", required=True)
     tp.add_argument("--dry-run", action="store_true",
-                    help="CPU-safe contract preflight; never optimizes and never writes a checkpoint")
+                    help="contract preflight; never optimizes and never writes a checkpoint")
     tp.set_defaults(func=cmd_train_probe)
     args = p.parse_args(argv)
     return args.func(args)

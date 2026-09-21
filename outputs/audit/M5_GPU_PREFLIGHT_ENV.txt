@@ -1,0 +1,56 @@
+===== DATE =====
+2026-09-21T01:38:45+07:00
+===== GIT =====
+392884157dc85c376b2e987148b7f8cfecfd693e
+?? outputs/audit/M5_GPU_ENV_CONDA_LIST.txt
+?? outputs/audit/M5_GPU_ENV_PIP_FREEZE.txt
+?? outputs/audit/M5_GPU_FACE_INTEGRITY.json
+?? outputs/audit/M5_GPU_PREFLIGHT_ENV.txt
+===== CONFIG =====
+3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe  configs/frozen/artifact_probe.yaml
+===== DATA INTEGRITY =====
+737c3776ff9767ec6373ad9fa6c7a3fdf6f1a563f88497a06214d7e0cda7e887  outputs/audit/M5_GPU_FACE_INTEGRITY.json
+===== NVIDIA =====
+Mon Sep 21 01:38:45 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.84                 Driver Version: 595.84         CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3090        Off |   00000000:01:00.0 Off |                  N/A |
+|  0%   41C    P8             24W /  350W |     251MiB /  24576MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A          516780      G   /usr/lib/xorg/Xorg                       29MiB |
+|    0   N/A  N/A          517295      G   /usr/bin/gnome-shell                     10MiB |
+|    0   N/A  N/A          518050      G   ...exec/xdg-desktop-portal-gnome          6MiB |
+|    0   N/A  N/A          518484      G   ...bin/snapd-desktop-integration         10MiB |
+|    0   N/A  N/A         1261744      G   /usr/lib/xorg/Xorg                       51MiB |
+|    0   N/A  N/A         1262315      G   /usr/bin/gnome-shell                     10MiB |
+|    0   N/A  N/A         1263487      G   ...bin/snapd-desktop-integration         10MiB |
+|    0   N/A  N/A         1264756      G   /usr/bin/gnome-control-center            13MiB |
+|    0   N/A  N/A         2962130      G   /usr/bin/nautilus                        18MiB |
++-----------------------------------------------------------------------------------------+
+===== PYTHON/CUDA =====
+python: 3.11.16
+executable: /home/student20261/miniconda3/envs/gpat-m5/bin/python
+torch: 2.12.1+cu130
+torchvision: 0.27.1+cu130
+opencv: 5.0.0
+numpy: 2.4.6
+pandas: 3.0.6
+pyarrow: 25.0.1
+pyyaml: 6.0.3
+cuda_available: True
+torch_cuda: 13.0
+cudnn: 92000
+gpu: NVIDIA GeForce RTX 3090
+capability: (8, 6)

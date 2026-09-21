@@ -1,0 +1,61 @@
+.............................................ssF......F.....F........... [ 47%]
+.....................F.s................................................ [ 94%]
+........                                                                 [100%]
+=================================== FAILURES ===================================
+__________ TestTrainerRefusals.test_dry_run_never_writes_a_checkpoint __________
+
+self = <test_m5_probe_contract.TestTrainerRefusals testMethod=test_dry_run_never_writes_a_checkpoint>
+
+    def test_dry_run_never_writes_a_checkpoint(self):
+        out = T.run(dry_run=True)
+        self.assertIs(out["dry_run"], True)
+        self.assertIs(out["checkpoint_written"], False)
+>       self.assertFalse(T.CHECKPOINT_DIR.exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_contract.py:510: AssertionError
+______ TestMilestoneAndEvidence.test_no_checkpoint_or_probe_model_exists _______
+
+self = <test_m5_probe_contract.TestMilestoneAndEvidence testMethod=test_no_checkpoint_or_probe_model_exists>
+
+    def test_no_checkpoint_or_probe_model_exists(self):
+>       self.assertFalse((ROOT / "models/artifact_probe").exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_contract.py:550: AssertionError
+__________ TestMilestoneState.test_no_trained_probe_checkpoint_exists __________
+
+self = <test_m5_probe_preflight.TestMilestoneState testMethod=test_no_trained_probe_checkpoint_exists>
+
+    def test_no_trained_probe_checkpoint_exists(self):
+>       self.assertFalse((ROOT / "models/artifact_probe").exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_preflight.py:76: AssertionError
+_____ TestDryRunSafety.test_dry_run_writes_no_checkpoint_and_no_audit_file _____
+
+self = <test_m5_probe_trainer.TestDryRunSafety testMethod=test_dry_run_writes_no_checkpoint_and_no_audit_file>
+
+    def test_dry_run_writes_no_checkpoint_and_no_audit_file(self):
+        before = {p: p.exists() for p in (T.CHECKPOINT_PATH, T.TRAINING_LOG, T.EPOCH_METRICS,
+                                          T.SELECTION_REPORT, T.CLASS_MAPPING,
+                                          T.CHECKPOINT_SHA_RECORD)}
+        out = T.run(dry_run=True)
+        self.assertIs(out["checkpoint_written"], False)
+        for p, existed in before.items():
+            self.assertEqual(p.exists(), existed, f"{p} appeared during a dry run")
+>       self.assertFalse(T.CHECKPOINT_DIR.exists())
+E       AssertionError: True is not false
+
+tests/test_m5_probe_trainer.py:224: AssertionError
+=============================== warnings summary ===============================
+tests/test_m5_probe_contract.py::TestOptimization::test_lr_sequence_matches_pytorch_and_starts_at_1e_4
+  /home/student20261/workdir/GPAT_TransferBench/tests/test_m5_probe_contract.py:399: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+    sch.step()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_m5_probe_contract.py:523: CUDA present; the CPU guard cannot be exercised here
+SKIPPED [1] tests/test_m5_probe_contract.py:481: this guard is only meaningful without CUDA
+SKIPPED [1] tests/test_m5_probe_trainer.py:250: this guard is only meaningful without CUDA
+4 failed, 145 passed, 3 skipped, 1 warning in 49.86s

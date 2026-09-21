@@ -177,5 +177,7 @@ def verify_environment(*, require_cuda: bool) -> dict:
     if require_cuda and not env["cuda_available"]:
         raise ProbeContractViolation(
             "E-M5-01: authoritative M5 training requires CUDA with AMP. CPU execution is "
-            "forbidden and AMP may not be disabled. Run on the GPU host (sparc5090).")
+            "forbidden and AMP may not be disabled. Run on the approved GPU host recorded in "
+            "the frozen config's `execution` block (see also any pending execution-host "
+            "deviation record before an authoritative run).")
     return env
