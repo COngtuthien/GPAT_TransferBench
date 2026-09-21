@@ -1,0 +1,279 @@
+{
+  "schema_version": "m6a5a-unreproducible-baseline-decision-packet-v1",
+  "milestone": "M6A5a",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "6e81f797e767d44f0d02c8910919fbc03133e0cc",
+  "purpose": "Prepare a precise OWNER DECISION PACKET for how the two scientifically unreproducible baseline rows (E04, E07c) are handled in the benchmark. NOTHING is decided or resolved here.",
+  "decides_anything": false,
+  "resolves_blockers": false,
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "amendment_a1_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "amendment_a2_sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+  "inputs_read": [
+    "outputs/audit/M6A4_BLOCKER_STATE.json",
+    "outputs/audit/M6A4_EXTERNAL_ASSET_RESOLUTION.md",
+    "outputs/audit/M6A3_OWNER_DECISIONS.md",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+    "configs/CONFIG_STATUS.md",
+    "docs/spec/spec_extracted_text.txt (section 17 required experiment matrix, section 8 status tags, section 0.1 hard rules, section 19.1 table templates)"
+  ],
+  "active_blockers_at_entry": [
+    "E04-2",
+    "E07c-4"
+  ],
+  "methods_with_no_remaining_blocker": [
+    "E01",
+    "E02",
+    "E03",
+    "E05",
+    "E06c"
+  ],
+  "methods_blocked": [
+    "E04",
+    "E07c"
+  ],
+  "governing_spec_provisions": {
+    "section_8_status_tags": {
+      "FAITHFUL_OFFICIAL": "Official code/config used; only dataset paths/adapters and output wrapper changed",
+      "FAITHFUL_PAPER": "No usable official code; architecture/equations reconstructed from paper without method-changing assumptions",
+      "CONTROLLED_ADAPTATION": "Paper idea reimplemented under an explicitly frozen adaptation defined here",
+      "BLOCKED_BY_SOURCE_GAP": "A required method detail is missing and no override is defined; stop this method rather than guess"
+    },
+    "decisive_point": "BLOCKED_BY_SOURCE_GAP is ALREADY one of the four spec-native status tags. Option A is therefore not a novel invention; it is the disposition the frozen specification itself prescribes for this situation.",
+    "section_8_4_physics_std_verbatim": "Target status: FAITHFUL_PAPER unless a verified official code release is found. ... If a tensor dimension, architecture block, loss coefficient or optimization setting that changes the scientific method is missing, mark BLOCKED_BY_SOURCE_GAP instead of choosing one.",
+    "section_8_7_difffas_verbatim": "Status: FAITHFUL_OFFICIAL whenever the official murphytju/DiffFAS code path can execute.",
+    "section_0_1_rule_3": "Never replace a named model with an 'equivalent' model because installation is easier. If the named dependency cannot be installed, stop that milestone and write BLOCKED_BY_DEPENDENCY.",
+    "section_0_1_rule_4": "Never invent a missing third-party paper/repository detail. ... If the source is genuinely underspecified and no benchmark override is defined here, write BLOCKED_BY_SOURCE_GAP.",
+    "section_0_1_rule_7": "Never fabricate a result, interpolate a missing method, or copy a reported paper result into an 'our reimplementation' table.",
+    "section_0_1_rule_9": "Any deviation from this specification must be written to outputs/audit/deviation_report.md with reason, affected experiments and explicit status APPROVED/UNAPPROVED. Unapproved deviations cannot be used as main paper results.",
+    "existing_na_precedent": "Section 19.1's paper-ready templates already carry N/A and N/A* cells (FAS-Aug ArtSim; DSDG pairwise metrics), and the M9 acceptance check is literally 'N/A used correctly'. Section 9.x also fixes 'VAL class/attack absent | metric shown N/A; no resampling from TEST'. N/A is an established, spec-native reporting value."
+  },
+  "fairness_principle": {
+    "statement_1": "A baseline must not be made artificially weak merely to favor GPAT.",
+    "statement_2": "A baseline must not be silently reconstructed with undocumented components and then called faithful.",
+    "required_distinction": "INABILITY TO EXECUTE is categorically different from POOR BASELINE PERFORMANCE.",
+    "na_is_not_a_result": "N/A due to an external source gap is NOT a loss, NOT a score, and NOT a performance result. It must never be read, plotted or aggregated as one.",
+    "bias_direction_note": "The GPAT-favorable risk in this decision sits with option B, NOT with option A. A hastily substituted depth target (E04) or a benchmark-trained substitute encoder (E07c) would most plausibly UNDERPERFORM the true method, producing an artificially weak baseline that flatters GPAT while carrying the method's original name. Option A carries the opposite risk profile: it removes two comparison points entirely, which is visible and disclosed rather than silent. This asymmetry is a fairness argument and is recorded here so the owner can weigh it directly."
+  },
+  "matrix_integrity_analysis": {
+    "e04_in_frozen_matrix": "YES - section 17 lists 'E04 | Physics-STD | Binary=native | Both | Physics/frequency trace transfer' as a required row.",
+    "e07c_provenance": "E07c is NOT a section-17 row. Section 17 lists E07a (DiffFAS-BIN) and E07b (DiffFAS-NATIVE). E07c (DIFFFAS-BIN-IDFREE, DEV-021) is introduced by Amendment A1 as the Track-A identity-free main-track variant. Its disposition therefore touches A1's Track-A table, not section 17 directly.",
+    "e07c_already_adapted": "E07c is ALREADY classified CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH under A1/DEV-021. Any option-B substitute encoder would be a SECOND, deeper adaptation layer stacked on the first.",
+    "requires_new_additive_amendment": {
+      "answer": "YES - recommended, but for a narrower reason than it first appears.",
+      "the_status_itself_does_not_need_one": "Marking E04/E07c BLOCKED_BY_SOURCE_GAP and reporting N/A is already authorized by the frozen spec: it is a section-8 status tag, section 8.4 explicitly instructs it for exactly E04's situation, and sections 0.1/3, 0.1/4 and 0.1/7 forbid the alternatives (substitution, invention, fabrication).",
+      "why_an_amendment_is_still_required": [
+        "Section 17 is titled 'REQUIRED experiment matrix' and lists E04 with evaluator 'Both'. Shipping that row unexecuted is a deviation from the matrix as written, and section 0.1 rule 9 requires EVERY deviation to be recorded with an explicit APPROVED/UNAPPROVED status - 'Unapproved deviations cannot be used as main paper results.' Owner approval must therefore be recorded somewhere authoritative.",
+        "The spec defines N/A cells but NOWHERE defines how N/A rows are excluded from numeric aggregates, means, CIs, Pareto fronts, the normalized radar (fig09) or the method-ranking parallel-coordinates plot (fig27, sourced from T04/T06/T15). That exclusion rule is currently undefined and must be frozen before any table is produced.",
+        "E07c's disposition modifies the Track-A table defined by Amendment A1, so it needs an additive instrument of equal standing."
+      ],
+      "minimum_sufficient_alternative": "An APPROVED entry in outputs/audit/deviation_report.md (per section 0.1 rule 9) is the MINIMUM that makes option A usable in main paper results. However it would leave the aggregate-exclusion rule unfrozen, so an additive Amendment A3 is the cleaner and more defensible vehicle.",
+      "proposed_instrument": "Additive Amendment A3 (M6 unreproducible-baseline disposition) - additive only; it would NOT edit the frozen DOCX, A1 or A2.",
+      "amendment_would_need_to_cover": [
+        "owner approval of non-execution for the affected rows, with dated provenance",
+        "the exact N/A token and its meaning",
+        "the aggregate/ranking exclusion rule and explicit-n reporting",
+        "the prohibition on deleting the rows or substituting numbers",
+        "the required disclosure wording"
+      ]
+    },
+    "preserves_row_changes_executable_status": "YES. Option A keeps E04 and E07c visible as rows in the matrix and in every result table, and changes only their EXECUTABLE STATUS from 'to be executed' to 'not executed - external source gap'. The scientific claim of the matrix (which methods the benchmark intends to compare) is preserved; only the claim 'we measured this one' is withdrawn, which is the honest position.",
+    "na_versus_zero_or_missing": {
+      "must_use": "N/A with an explicit reason token and dated provenance, e.g. N/A_BLOCKED_BY_SOURCE_GAP (as of 2026-09-21).",
+      "must_not_use": [
+        "0 or 0.0",
+        "blank/empty cell",
+        "a missing row",
+        "an em-dash placeholder",
+        "a paper-reported number copied from the original publication",
+        "an interpolated or imputed value",
+        "a 'worst observed' or 'chance-level' stand-in"
+      ],
+      "why": "Section 0.1 rule 7 forbids fabricating a result, interpolating a missing method, or copying a reported paper result into an 'our reimplementation' table. A zero would additionally be read as a measured performance floor, which is precisely the inability-vs-poor-performance confusion the fairness principle forbids. Note that section 19.1's em-dash '-' already means 'not yet measured', so N/A must be a DISTINCT token meaning 'cannot be measured'."
+    },
+    "affects_aggregate_statistics": {
+      "answer": "YES.",
+      "affected_artifacts": [
+        "T04 generator pair metrics",
+        "T06 primary downstream video metrics (mean +/- std + CI)",
+        "T15 compute",
+        "fig09 normalized generator radar",
+        "fig10 geometry/artifact Pareto",
+        "fig25 compute tradeoff",
+        "fig27 method-ranking parallel coordinates",
+        "any 'best method' or rank-order claim"
+      ],
+      "required_rule": "N/A rows MUST be excluded from every numerical average, standard deviation, confidence interval, normalization range, percentile rank, Pareto front and rank summary.",
+      "explicit_n_requirement": "Every aggregate must state its denominator explicitly, e.g. 'mean over the 5 executed baselines; E04 and E07c excluded (BLOCKED_BY_SOURCE_GAP)'. A silently smaller n is itself a reporting defect.",
+      "normalization_caution": "Normalized plots (radar, parallel coordinates) derive their min/max from the participating set. Excluding two rows changes the normalization range for ALL remaining rows, so the excluded set must be stated in the figure caption, not only in the table."
+    },
+    "silent_removal_forbidden": "Neither method may be silently removed from any table. Removal without disclosure would misrepresent the benchmark's intended comparison set and would be indistinguishable, to a reader, from a benchmark that never intended to include a strong competitor."
+  },
+  "e04_disposition": {
+    "blocker_id": "E04-2",
+    "method": "E04 Physics-Guided STD",
+    "current_status": "STILL_BLOCKED_SOURCE_GAP",
+    "spec_target_status": "FAITHFUL_PAPER unless a verified official code release is found",
+    "prior_owner_direction": "A2-09: preserve FAITHFUL_PAPER intent",
+    "m6a4_finding": "The scientific route remains unrecoverable; 0 of 4 sub-gaps closed.",
+    "unresolved_requirements": [
+      "licence-gated Basel Face Model asset (version not even identifiable)",
+      "exact Q=140 selected vertex indices never published (only the count and a qualitative rationale)",
+      "depth-target rendering procedure never published (M0 is an INPUT to the published Algorithm 1)",
+      "no complete reproducible executable official route (no PhySTD code release; ECCV20-STDN contains no geometry code; DeFA is MATLAB test-only and BFM-gated)"
+    ],
+    "scientific_weight_of_the_gap": "L_depth carries alpha_1 = 100, the DOMINANT coefficient in the paper's total loss (Eq. 23). The missing component is therefore not peripheral: it is the single largest supervision term, and its target cannot be produced at all without the geometry route.",
+    "options": {
+      "A": {
+        "id": "RETAIN_ROW_NOT_EXECUTED_EXTERNAL_SOURCE_GAP",
+        "summary": "Keep E04 in the required matrix and all result tables; do not train or synthesize; report N/A / NOT_EXECUTED with the reason that required official scientific ingredients are unavailable or unspecified. The row serves as a transparency/disclosure row and must NOT be presented as a completed baseline.",
+        "scientific_fidelity": "HIGHEST AVAILABLE. Nothing is claimed that was not done. The FAITHFUL_PAPER intent is preserved intact, and the spec's own BLOCKED_BY_SOURCE_GAP tag exactly describes the state. No method-changing assumption is introduced.",
+        "fairness": "NEUTRAL-POSITIVE. E04 is neither weakened nor flattered; it is simply not measured, and the reason is external to the benchmark and fully documented. Critically, it avoids the option-B risk of shipping a degraded pseudo-Physics-STD that would flatter GPAT under the original method's name.",
+        "reproducibility": "FULLY REPRODUCIBLE AS A STATEMENT. Any third party following the same documented search reaches the same conclusion; M6A4 records the exact sources and date. Nothing unreproducible is published.",
+        "engineering_cost": "LOWEST. No implementation, no assets, no training. Cost is confined to reporting-layer plumbing: an N/A token, aggregate-exclusion logic, and disclosure text.",
+        "review_risk": "LOW-MODERATE. A reviewer may ask why a listed baseline has no numbers. That question is fully answerable with dated, verifiable evidence (published TPAMI text, absent code release, licence-gated asset). The residual risk is a reviewer who wants the comparison regardless - but no honest alternative exists. Risk is far lower than defending an undocumented substitute.",
+        "effect_on_required_experiment_matrix": "Row PRESERVED; executable status changes to NOT_EXECUTED. Because section 17 calls the matrix 'required', this is a deviation that must be recorded APPROVED per section 0.1 rule 9, ideally via additive Amendment A3.",
+        "effect_on_gpat_comparison": "GPAT is compared against 5 executed baselines (E01, E02, E03, E05, E06c) instead of 6 including E04. This REMOVES a comparison point rather than creating a favorable one. It slightly weakens the breadth of the comparison and must be disclosed as such; it does not improve GPAT's standing against any method actually measured."
+      },
+      "B": {
+        "id": "CONTROLLED_ADAPTATION",
+        "summary": "Permit construction of a reproducible substitute geometry/depth pipeline under a NEW explicit technical specification (chosen 3DMM, vertex-selection rule, depth rendering, normalization, projection, rasterization, target construction). The resulting row MUST be labelled CONTROLLED_ADAPTATION, not faithful Physics-STD. NOT designed in M6A5a.",
+        "scientific_fidelity": "SUBSTANTIALLY REDUCED, and reduced precisely where it matters most. The substituted component supplies the target of the alpha_1 = 100 dominant loss term, so the adapted row optimizes a DIFFERENT dominant objective from the published method. It could not honestly be called Physics-STD in the scientifically decisive respect, and - unlike E05's controlled adaptation, which resolves a documented internal contradiction between a paper's prose and its own named executable base - there is no authoritative source against which the substitute could be validated.",
+        "fairness": "THE HIGHEST-RISK OPTION, in the GPAT-favorable direction. A benchmark-designed depth target is very unlikely to match an unpublished author-designed one; the adapted E04 would most plausibly underperform the true method while still carrying its name. That is exactly the 'artificially weak baseline favoring GPAT' the fairness principle forbids, and the weakness would be invisible to a reader who sees only the method name.",
+        "reproducibility": "HIGH INTERNALLY, ZERO EXTERNALLY. The pipeline would be fully reproducible from the new specification, but it would reproduce the BENCHMARK'S invention, not the published method. Reproducibility of the wrong object is not a scientific gain.",
+        "engineering_cost": "HIGHEST BY A LARGE MARGIN. Requires licensed BFM acquisition (manual, legal review), a 3DMM fitting pipeline, a vertex-selection rule, a differentiable/consistent depth renderer, normalization and projection conventions, plus full training of E04 across 3 seeds. Weeks of work with no authoritative acceptance test.",
+        "review_risk": "HIGH. The row invites the question 'how do you know your depth target resembles theirs?', which has no answer. A reviewer may reasonably read an underperforming adapted baseline as a straw man. Risk compounds because the adaptation would be benchmark-authored and unvalidatable.",
+        "effect_on_required_experiment_matrix": "Row executed but its scientific identity changes: it becomes a benchmark-defined method inspired by Physics-STD. Requires a new additive amendment and a mandatory relabelling everywhere the row appears.",
+        "effect_on_gpat_comparison": "Adds a numeric comparison point, but one of uncertain and probably downward-biased quality. Any GPAT win over this row would be weakly defensible and could be attacked as a comparison against the benchmark's own weakened construction."
+      },
+      "C": {
+        "id": "DEFER_M6_UNTIL_FAITHFUL_ASSETS_RESOLVED",
+        "summary": "Keep the benchmark blocked and do not proceed to baseline implementation until E04 can be faithfully reconstructed.",
+        "scientific_fidelity": "MAXIMAL IN PRINCIPLE, UNREALIZABLE IN PRACTICE. It refuses every compromise, but it is conditioned on an event outside the benchmark's control: the release of assets the authors promised 'upon publication' and have still not released years later, plus a licence-gated third-party model.",
+        "fairness": "NEUTRAL. No baseline is weakened or strengthened; nothing is measured at all.",
+        "reproducibility": "NOT APPLICABLE. No results are produced to reproduce.",
+        "engineering_cost": "ZERO NOW, UNBOUNDED SCHEDULE COST. The blocking condition has no known resolution date and may never occur.",
+        "review_risk": "NOT A PUBLICATION RISK BUT A PUBLICATION BLOCKER. There is no paper to review. It also blocks the 5 baselines that ARE ready (E01, E02, E03, E05, E06c) plus all GPAT rows, which is disproportionate to the 1 unresolved row.",
+        "effect_on_required_experiment_matrix": "The entire matrix stays unexecuted, including the 11 rows with no blocker at all.",
+        "effect_on_gpat_comparison": "No comparison exists. GPAT itself cannot be evaluated."
+      }
+    }
+  },
+  "e07c_disposition": {
+    "blocker_id": "E07c-4",
+    "method": "E07c DIFFFAS-BIN-IDFREE",
+    "current_status": "STILL_BLOCKED_SOURCE_GAP",
+    "dated_conclusion": "NO_OFFICIAL_ENCODER_RELEASE_LOCATED_AS_OF_2026_09_21",
+    "existing_classification": "CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH (A1 / DEV-021)",
+    "known_facts": [
+      "The official training path requires the PADISI conditioning encoder on EVERY training step.",
+      "Official weights were publicly promised by the repository OWNER on 2024-09-24 and never released (last push 2024-09-23 predates the promise; 0 releases, 0 tags; four follow-ups through 2025-03-10 unanswered).",
+      "PADISI-USC is not part of the GPAT benchmark data and is itself licence-gated.",
+      "The exact released encoder bytes are unavailable, so faithful reproduction is currently impossible.",
+      "M6A4 newly established that the official TRAINING SCRIPT exists (models/pretrain_classifier.py), so the training protocol need not be invented - but the 17-class ImageFolder label mapping is unpublished, so even a faithful re-run is not uniquely reproducible."
+    ],
+    "options": {
+      "A": {
+        "id": "RETAIN_ROW_NOT_EXECUTED_EXTERNAL_SOURCE_GAP",
+        "summary": "Keep E07c in the Track-A matrix and result tables; do not train it; report N/A / NOT_EXECUTED with dated provenance.",
+        "scientific_fidelity": "HIGHEST AVAILABLE. No undocumented component enters the pipeline. The A1 controlled adaptation is not compounded by a second, deeper one.",
+        "fairness": "NEUTRAL-POSITIVE. DiffFAS is neither weakened nor flattered. The maintainer's own public acknowledgement that the weights were never released makes the cause verifiably external to this benchmark.",
+        "reproducibility": "FULLY REPRODUCIBLE AS A STATEMENT, with unusually strong evidence: a dated, public, maintainer-authored acknowledgement rather than mere absence.",
+        "engineering_cost": "LOWEST. Reporting-layer only.",
+        "review_risk": "LOW. The evidence is a public GitHub issue in which the repository owner states the models are forthcoming and never delivers. This is among the most defensible possible justifications for a non-executed row.",
+        "effect_on_required_experiment_matrix": "E07c row PRESERVED in A1's Track-A table with executable status NOT_EXECUTED. Note E07a/E07b remain section-17 Track-B rows with their own separate (unassessed here) status.",
+        "effect_on_gpat_comparison": "Removes the diffusion-based comparison point from Track A. This is a genuine loss of breadth - diffusion baselines are topical - and must be disclosed plainly, not glossed."
+      },
+      "B": {
+        "id": "CONTROLLED_ADAPTATION",
+        "summary": "Authorize a benchmark-trained substitute conditioning encoder under a NEW explicit specification (training dataset, labels/classes, architecture, initialization, optimization, checkpoint rule, seed policy). Result MUST be labelled CONTROLLED_ADAPTATION, not faithful/native DiffFAS. NOT designed or trained in M6A5a.",
+        "scientific_fidelity": "REDUCED, AND COMPOUNDED. E07c is ALREADY a controlled adaptation (DEV-021, unpaired code path). Adding a benchmark-trained encoder stacks a second adaptation on the first, and the composite row's relationship to published DiffFAS becomes difficult to state precisely. Mitigating factor, recorded honestly: the official training RECIPE is known (M6A4), so the architecture and optimization need not be invented - but the training DATA would differ (PADISI-USC is unavailable) and the 17-class label semantics are unpublished, so the encoder's learned conditioning space would differ in an uncharacterizable way.",
+        "fairness": "MODERATE-TO-HIGH RISK in the GPAT-favorable direction. A substitute encoder trained on different data with a different label space would plausibly produce weaker conditioning than the authors', yielding an underperforming row still carrying the DiffFAS name.",
+        "reproducibility": "HIGH INTERNALLY. Fully reproducible from the new specification and benchmark data; but again it reproduces the benchmark's construction, not the published one.",
+        "engineering_cost": "MODERATE. Lower than E04 option B because the official recipe exists, but it still requires choosing a substitute dataset and a label space, training the encoder, then training DiffFAS itself across 3 seeds - and every one of those choices is benchmark-authored.",
+        "review_risk": "MODERATE-HIGH. The unavoidable question is what the 17 classes became and why that is a fair stand-in for PADISI attack types. There is no authoritative answer.",
+        "effect_on_required_experiment_matrix": "Row executed, with a compounded adaptation label. Requires a new additive amendment and careful wording distinguishing it from both native and A1-adapted DiffFAS.",
+        "effect_on_gpat_comparison": "Restores a diffusion comparison point of uncertain, probably downward-biased quality. A GPAT win over it would be weakly defensible."
+      },
+      "C": {
+        "id": "REMOVE_CONDITIONING_PATH_CONTROLLED_ADAPTATION",
+        "summary": "Disable the conditioning encoder entirely and run the diffusion model without it.",
+        "execution_feasibility_analysis": {
+          "verdict": "NOT VIABLE. Disabling the encoder fundamentally changes BOTH the training objective and the architecture.",
+          "evidence": [
+            "models/unet_autoenc.py forward(): when cond is None the model calls self.encode(x_cond, encoder) and builds cond as an 18-entry list - 9 ZERO tensors (x256, x128, x64, three each) PLUS 9 entries of real encoder features ([x32x32]*3 + [x16x16]*3 + [x8x8]*3).",
+            "That list IS the conditioning signal: enc_cond_emb = cond is injected into EVERY input block (cond=enc_cond_emb[k]), mid_cond_emb = cond[-1] drives the middle block, and dec_cond_emb = cond drives the decoder. The encoder supplies exactly the 9 deepest (32x32, 16x16, 8x8) conditioning entries.",
+            "Removing the encoder forces those 9 entries to zero as well, making cond ENTIRELY zeros. mid_cond_emb becomes 0 and the network degenerates from a CONDITIONAL diffusion model to an UNCONDITIONAL one.",
+            "Classifier-free guidance also collapses. forward_with_cond_scale() builds its conditional and null branches by masking the encoder INPUT (x_cond = cond_mask * x_cond), i.e. the null branch is encoder(0), not 'no encoder'. With the encoder removed both branches become identical, so null + (logits - null) * cond_scale reduces to logits and the frozen cond_scale = 2.0 contract (resolved in M6A2, part of the official sampler route) becomes a no-op.",
+            "An unconditional model cannot perform the benchmark's source-conditioned transfer task at all: there would be no path by which the source spoof style influences the output."
+          ],
+          "conclusion": "This is not a parameter change but a redefinition of the model class. The resulting artifact would not be DiffFAS in any meaningful sense and would not satisfy the benchmark's source->target generation contract."
+        },
+        "scientific_fidelity": "LOWEST OF ALL OPTIONS. NEVER FAITHFUL under any reading. The method's conditioning mechanism - its scientific core - is deleted.",
+        "fairness": "UNACCEPTABLE RISK. This is the archetype of an artificially weak baseline: a deliberately crippled model presented under a strong method's name. It would materially favor GPAT.",
+        "reproducibility": "Reproducible but scientifically meaningless; it reproduces a model the authors never proposed.",
+        "engineering_cost": "LOW to implement, but the output has no scientific standing, so the cost is entirely wasted.",
+        "review_risk": "SEVERE. A reviewer recognizing that the conditioning path was removed could reasonably regard the comparison as invalid, and could question the benchmark's overall good faith.",
+        "effect_on_required_experiment_matrix": "Row executed but scientifically void; it would need such heavy caveating that it conveys less than an honest N/A.",
+        "effect_on_gpat_comparison": "Would likely produce a large, entirely artifactual GPAT advantage. Recorded explicitly as a reason to REJECT, not to adopt."
+      },
+      "D": {
+        "id": "DEFER_M6_UNTIL_OFFICIAL_ENCODER_OBTAINED",
+        "summary": "Do not proceed until the official author asset becomes available.",
+        "scientific_fidelity": "MAXIMAL IN PRINCIPLE, UNREALIZABLE IN PRACTICE. Conditioned on an event the benchmark cannot cause: the maintainer promised the asset in September 2024 and has not delivered in the two years since, with four unanswered requests on record.",
+        "fairness": "NEUTRAL. Nothing is measured.",
+        "reproducibility": "NOT APPLICABLE.",
+        "engineering_cost": "ZERO NOW, UNBOUNDED SCHEDULE COST, with concrete evidence that the blocking condition is unlikely to resolve.",
+        "review_risk": "PUBLICATION BLOCKER, not a review risk. It also blocks the 5 ready baselines and all GPAT rows over 1 unresolved row.",
+        "effect_on_required_experiment_matrix": "Entire matrix stays unexecuted.",
+        "effect_on_gpat_comparison": "No comparison exists."
+      }
+    }
+  },
+  "recommendations": {
+    "evidence_class": "INFERENCE, NOT AUTHORITATIVE",
+    "basis": "Reproducibility and scientific defensibility ONLY. Expected GPAT performance was NOT a factor in either recommendation, and the packet explicitly records that the GPAT-favorable risk lies with the options NOT recommended.",
+    "not_an_owner_decision": true,
+    "E04-2": {
+      "recommended_option": "A",
+      "recommended_id": "RETAIN_ROW_NOT_EXECUTED_EXTERNAL_SOURCE_GAP",
+      "rationale": [
+        "Section 8.4 of the frozen spec gives a direct instruction for exactly this situation: if a component that CHANGES THE SCIENTIFIC METHOD is missing, 'mark BLOCKED_BY_SOURCE_GAP instead of choosing one'. The missing geometry/depth route supplies the target of L_depth, whose coefficient alpha_1 = 100 is the dominant term in the total loss. This is the paradigm case the rule addresses.",
+        "Option B would require the benchmark to author the single most heavily weighted supervision signal of a method it did not invent, with NO authoritative artifact to validate against. Unlike E05's controlled adaptation - which resolves a contradiction between a paper's prose and its OWN named executable base, and is therefore anchored to an official source - an E04 depth target would be anchored to nothing.",
+        "Option C blocks 11 unblocked rows on 1 unresolved row, conditioned on assets promised 'upon publication' that remain unreleased.",
+        "Why N/A beats inventing a substitute: an N/A cell with dated evidence makes the limitation VISIBLE and checkable, and a reader can locate the exact missing ingredients. A substituted baseline hides the same limitation inside a number that looks like a measurement, and every downstream comparison silently inherits an unvalidatable assumption. The honest gap is recoverable later - if the authors release the assets, E04 can be executed and the row filled. A published fake number is not recoverable."
+      ]
+    },
+    "E07c-4": {
+      "recommended_option": "A",
+      "recommended_id": "RETAIN_ROW_NOT_EXECUTED_EXTERNAL_SOURCE_GAP",
+      "rationale": [
+        "The evidence is unusually strong: the repository OWNER publicly acknowledged on 2024-09-24 that the pretrained models were required and forthcoming, and never delivered. The cause is verifiably external to this benchmark and is documented with a dated, public, first-party statement.",
+        "E07c is ALREADY a controlled adaptation (DEV-021). Stacking a benchmark-trained encoder on a different dataset with an unpublished 17-class label space would make the row's relationship to published DiffFAS effectively unstateable, and A1 already requires that this row never be called native or faithful.",
+        "Option C is not merely undesirable but architecturally incoherent: the encoder supplies the 9 deepest conditioning entries injected at every U-Net block, and removing it degenerates the model to unconditional while collapsing classifier-free guidance to a no-op. It cannot perform source-conditioned transfer at all.",
+        "Option D is conditioned on an asset unreleased for two years despite four unanswered public requests; it would block the whole benchmark indefinitely.",
+        "Why N/A beats a substitute encoder: the substitute's conditioning space would differ from the authors' in a way nobody can characterize, so an E07c number would not measure DiffFAS - it would measure a benchmark artifact wearing the DiffFAS name, most plausibly biased downward in GPAT's favor."
+      ]
+    },
+    "cross_cutting_note": "If option A is chosen for either row, the owner should also decide the reporting-layer questions in matrix_integrity_analysis - the N/A token, the aggregate-exclusion rule, explicit-n reporting, and whether to record approval via additive Amendment A3 or an APPROVED deviation_report.md entry. Without that, section 0.1 rule 9 would leave the deviation UNAPPROVED and therefore unusable in main paper results."
+  },
+  "constraints_observed": {
+    "training": false,
+    "synthetic_bank_generation": false,
+    "test_access": false,
+    "asset_download": false,
+    "method_implementation": false,
+    "method_config_created": false,
+    "frozen_spec_or_amendments_modified": false,
+    "blockers_resolved_automatically": false,
+    "historical_artifacts_rewritten": false,
+    "committed": false,
+    "pushed": false,
+    "files_created_outside_the_two_permitted": false
+  },
+  "answer_template": {
+    "E04-2": "",
+    "E07c-4": ""
+  }
+}

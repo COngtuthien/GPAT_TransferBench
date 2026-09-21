@@ -1,0 +1,179 @@
+{
+  "schema_version": "m6a5-tddfa-asset-provenance-v1",
+  "milestone": "M6A5b",
+  "date_utc": "2026-09-21",
+  "method": "E04",
+  "role": "E04 controlled-reconstruction geometry substitute: 3DMM fitting -> dense mesh -> Q=140 vertices -> depth target M0",
+  "status": "CONTROLLED_ADAPTATION",
+  "authorization": "Owner decision M6A5b: E04-2 = OPTION B (CONTROLLED_ADAPTATION). Task section 2.1 authorises model-asset download for the chosen E04 geometry substitute after provenance is established.",
+  "selection": {
+    "chosen": "3DDFA_V2 (cleardusk/3DDFA_V2)",
+    "preference_tier": "B - open/public Basel-compatible 3DMM implementation",
+    "why_not_tier_A": "Tier A (the paper's own [61] Dense Face Alignment with a legally obtained BFM) is not reproducible: the [61] release is MATLAB/MatConvNet TEST-ONLY code and requires the registration-gated Basel Face Model, which cannot be acquired programmatically and must not be redistributed.",
+    "rejected_alternatives": [
+      {
+        "candidate": "[61] DeFA + original BFM (tier A)",
+        "reason": "MATLAB/MatConvNet test-only; BFM registration-gated; not a reproducible executable route."
+      },
+      {
+        "candidate": "MediaPipe Face Mesh (tier C/D)",
+        "reason": "Apache-2.0 and fully public, but it is a LANDMARK REGRESSOR with a fixed 468-vertex topology, NOT a morphable model. It has no shape/expression basis, so it cannot perform the paper's stated 'fit a 3DMM model' role. Rejected on closeness-to-paper grounds, not on convenience."
+      },
+      {
+        "candidate": "FLAME-based pipelines (DECA/EMOCA/MICA)",
+        "reason": "FLAME is registration-gated like BFM, so the reproducibility problem is unchanged; FLAME is also a different model family from the paper's BFM lineage."
+      }
+    ],
+    "why_chosen": [
+      "It performs the paper's exact function: fits a 3DMM (shape basis + expression basis + weak-perspective pose) and produces a DENSE 3D mesh, as recon_vers(dense_flag=True) shows.",
+      "Its model IS a BFM2009 derivative - the SAME model family the paper's [61] requires - so the substitution stays inside the paper's 3DMM lineage.",
+      "It ships its own official depth renderer (utils/depth.py + Sim3DR z-buffer), so the depth semantics are taken from an authoritative implementation rather than invented by this benchmark.",
+      "It carries its own 68 iBUG landmark vertex correspondence (keypoints), giving semantic anchors for the Q=140 rule without any manual selection.",
+      "Deterministic inference: a single feed-forward regressor with fixed parameter mean/std, no sampling, no iterative optimisation.",
+      "Stable vertex indexing: a fixed 38,365-vertex topology with a fixed 76,073-triangle triangulation, identical for every image.",
+      "Licence position is recorded factually under model_asset_license; this benchmark offers no independent legal interpretation."
+    ]
+  },
+  "source": {
+    "repository": "https://github.com/cleardusk/3DDFA_V2",
+    "pinned_commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+    "commit_date_utc": "2022-01-23T18:21:58+08:00",
+    "commit_subject": "[chore] update doc",
+    "commit_tree": "28492fd307da6644c3e2c21d4b9a97a1f646c65f",
+    "checkout_mode": "full tree, depth 1",
+    "local_source_path": "third_party/source_cache/tddfa_v2 (source only; ALL model assets relocated out)",
+    "code_license": "MIT",
+    "paper": "J. Guo, X. Zhu, Y. Yang, F. Yang, Z. Lei, S. Z. Li, 'Towards Fast, Accurate and Stable 3D Dense Face Alignment', ECCV 2020"
+  },
+  "model_asset_license": {
+    "record_type": "FACTUAL_RECORD_NOT_A_LEGAL_INTERPRETATION",
+    "code_license_file": "MIT licence file present in the 3DDFA_V2 repository",
+    "model_asset_terms_statement_source": "third_party/source_cache/tddfa_v2/bfm/readme.md",
+    "model_asset_terms_statement_verbatim": "The modified BFM2009 face model in ../configs/bfm_noneck_v3.pkl is only for academic use. For commercial use, you need to apply for the commercial license.",
+    "model_bytes_committed_to_this_repository": false,
+    "model_bytes_redistributed_through_this_repository": false,
+    "compliance_obligation": "Use of these assets must comply with their applicable upstream licence terms.",
+    "licence_gate_bypassed_during_this_task": false,
+    "citation_requested_by_readme": "Paysan, Knothe, Amberg, Romdhani, Vetter, 'A 3D Face Model for Pose and Illumination Invariant Face Recognition', AVSS 2009",
+    "independent_legal_interpretation_offered": false,
+    "upstream_bfm_refs": [
+      "https://faces.dmi.unibas.ch/bfm/?nav=1-0&id=basel_face_model",
+      "https://faces.dmi.unibas.ch/bfm/bfm2019.html"
+    ]
+  },
+  "storage": {
+    "external_runtime_root": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2",
+    "inside_repository": false,
+    "inside_source_cache": false,
+    "git_tracked": false,
+    "policy": "Model assets were relocated out of source_cache immediately after checkout, following the M6A2 defa_iccvw2017 precedent."
+  },
+  "assets": [
+    {
+      "path": "configs/bfm_noneck_v3.pkl",
+      "description": "the modified BFM2009 3DMM (mean shape u, w_shp 40, w_exp 10, 68 keypoints); ACADEMIC USE ONLY",
+      "byte_size": 24393598,
+      "sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+      "used_by_e04_contract": true
+    },
+    {
+      "path": "configs/tri.pkl",
+      "description": "triangulation rebuilt for bfm_noneck_v3 (76,073 triangles)",
+      "byte_size": 913040,
+      "sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8",
+      "used_by_e04_contract": true
+    },
+    {
+      "path": "configs/BFM_UV.mat",
+      "description": "UV map (NOT used by the E04 contract)",
+      "byte_size": 779401,
+      "sha256": "60be915f601563e274d9737abd54c6b925e8e737fa1c89d3cd64933315629ce1",
+      "used_by_e04_contract": false
+    },
+    {
+      "path": "configs/indices.npy",
+      "description": "auxiliary indices (NOT used by the E04 contract)",
+      "byte_size": 153588,
+      "sha256": "b341debcdf26492332c1f96ced438e727e74164d1524cab9cca0aedf6ccd39c8",
+      "used_by_e04_contract": false
+    },
+    {
+      "path": "configs/ncc_code.npy",
+      "description": "PNCC colour code (NOT used by the E04 contract)",
+      "byte_size": 460508,
+      "sha256": "edab94fb09d2e25660d62eb068316becf8998e793dfe2ae3ac89196ebc0af981",
+      "used_by_e04_contract": false
+    },
+    {
+      "path": "configs/param_mean_std_62d_120x120.pkl",
+      "description": "62-d parameter mean/std for de-normalising the regressor output",
+      "byte_size": 713,
+      "sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795",
+      "used_by_e04_contract": true
+    },
+    {
+      "path": "weights/mb1_120x120.pth",
+      "description": "MobileNet-V1 3DMM parameter regressor (default model)",
+      "byte_size": 13755269,
+      "sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79",
+      "used_by_e04_contract": true
+    },
+    {
+      "path": "weights/mb05_120x120.pth",
+      "description": "MobileNet-V0.5 regressor (NOT used; default is mb1)",
+      "byte_size": 3752462,
+      "sha256": "f93ed7f1c4c0382b16d7c18480a5f67473c1917a47475a9823924f38aeb27280",
+      "used_by_e04_contract": false
+    },
+    {
+      "path": "FaceBoxes_weights/FaceBoxesProd.pth",
+      "description": "FaceBoxes detector (NOT used: the benchmark supplies pre-cropped canonical 256 faces)",
+      "byte_size": 4072492,
+      "sha256": "c0cb2b1e40710c0aa5fc32a8759b1496a0fe0a126c907ca0ffe35b4bd0709d09",
+      "used_by_e04_contract": false
+    }
+  ],
+  "model_geometry": {
+    "num_vertices": 38365,
+    "num_triangles": 76073,
+    "shape_basis_dim": 40,
+    "expression_basis_dim": 10,
+    "param_dim": 62,
+    "landmark_correspondence": "68 iBUG keypoints carried by the model (keypoints array, 204 = 68*3 flat indices)",
+    "known_upstream_quirk": "keypoints row 44 is [37149, 37150, 36263] - its z component indexes a DIFFERENT vertex (36263//3 = 12087) than its x/y (12383). The E04 contract therefore derives anchor vertex ids with the consistent x-component rule keypoints.reshape(68,3)[:,0]//3. Disclosed, not silently ignored."
+  },
+  "capability_verification": {
+    "performed": true,
+    "used_benchmark_data": false,
+    "used_test": false,
+    "method": "synthetic 3DMM parameters (alpha_shp = alpha_exp = 0, synthetic frontal pose); no benchmark image was read",
+    "dense_mesh": "VERIFIED - (38365, 3) from u + w_shp@alpha_shp + w_exp@alpha_exp",
+    "projected_vertices": "VERIFIED - official similar_transform() maps the mesh into the canonical 256 frame",
+    "depth": "VERIFIED - z-buffer rasterisation then INTER_AREA resize produced a 32x32 map in [0,1] with background 0 and a clear face-like central ridge",
+    "note": "Numpy was used to reproduce the official Sim3DR z-buffer semantics because torch and the Sim3DR Cython extension are not installed in this audit environment. The AUTHORITATIVE runtime renderer remains the official Sim3DR at the pinned commit."
+  },
+  "usage_constraints": {
+    "used_for_inference": false,
+    "used_for_training": false,
+    "benchmark_data_processed": false,
+    "test_accessed": false
+  },
+  "fixed_auxiliary_asset_semantics": {
+    "fixed": true,
+    "retrained_or_rederived_per_benchmark_seed": false,
+    "reused_for_experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "fixed_items": [
+      "3DDFA_V2 code commit",
+      "bfm_noneck_v3.pkl",
+      "3DDFA regressor checkpoint mb1_120x120.pth",
+      "Q=140 index list",
+      "depth renderer"
+    ],
+    "analogy": "a fixed preprocessing/geometry dependency",
+    "introduces_new_scientific_choice": false
+  }
+}

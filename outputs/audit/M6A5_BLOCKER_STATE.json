@@ -1,0 +1,172 @@
+{
+  "schema_version": "m6a5b-blocker-state-v1",
+  "milestone": "M6A5b",
+  "date_utc": "2026-09-21",
+  "branch": "m6-baselines",
+  "starting_commit": "6e81f797e767d44f0d02c8910919fbc03133e0cc",
+  "basis": "M6A4_BLOCKER_STATE.json is the starting state and was NOT mutated. M6A1-M6A5a artifacts were not rewritten.",
+  "amendment_a3_sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+  "counts": {
+    "before": 2,
+    "resolved_in_m6a5b": 2,
+    "active_after": 0
+  },
+  "resolved_in_m6a5b": [
+    "E04-2",
+    "E07c-4"
+  ],
+  "active_after": [],
+  "method_state": {
+    "E01": {
+      "state": "READY_FOR_M6B",
+      "fidelity": "FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION",
+      "active_blockers": [],
+      "fidelity_provenance": [
+        "AMENDMENT_A2_A2_01_DETERMINISTIC_ASSET_ENUMERATION"
+      ],
+      "fidelity_rationale": "Official FAS-Aug transformation/operator behaviour is preserved. The M6A3 owner-approved lexicographic asset enumeration replaces host-dependent os.listdir ordering SOLELY for reproducibility. This is NOT a controlled scientific adaptation."
+    },
+    "E02": {
+      "state": "READY_FOR_M6B",
+      "fidelity": "SPEC_DEFINED",
+      "active_blockers": [],
+      "fidelity_provenance": [
+        "FROZEN_SPEC_SECTION_8_2",
+        "AMENDMENT_A2_A2_02_A2_03_A2_04_EXECUTION_DETAILS"
+      ],
+      "fidelity_rationale": "Frequency Substitution is defined directly by frozen spec 8.2. It is NOT an adaptation of an external paper/repository method; M6A3 merely completed spec-silent execution details (rounding, RNG, seed namespace)."
+    },
+    "E03": {
+      "state": "READY_FOR_M6B",
+      "fidelity": "FAITHFUL_OFFICIAL",
+      "active_blockers": [],
+      "fidelity_provenance": [],
+      "fidelity_rationale": "Official STDN code path at the pinned commit; no method-changing adaptation."
+    },
+    "E04": {
+      "state": "READY_FOR_M6B",
+      "fidelity": "CONTROLLED_ADAPTATION",
+      "active_blockers": [],
+      "note": "CONTRACT_READY_CONTROLLED_ADAPTATION per Amendment A3 section 4.",
+      "fixed_auxiliary_assets_reused_across_seeds": true,
+      "fidelity_provenance": [
+        "AMENDMENT_A3_CONTROLLED_GEOMETRY_DEPTH_RECONSTRUCTION"
+      ],
+      "fidelity_rationale": "Geometry/depth reconstruction under owner-authorized controlled reconstruction (A3 section 4)."
+    },
+    "E05": {
+      "state": "READY_FOR_M6B",
+      "fidelity": "CONTROLLED_ADAPTATION",
+      "active_blockers": [],
+      "fidelity_provenance": [
+        "AMENDMENT_A2_A2_07_ARCHITECTURE_RESOLUTION"
+      ],
+      "fidelity_rationale": "PCGAN architecture resolution to the pinned [34] executable base (A2-07); retained unchanged."
+    },
+    "E06c": {
+      "state": "READY_FOR_M6B",
+      "fidelity": "CONTROLLED_ADAPTATION",
+      "active_blockers": [],
+      "fidelity_provenance": [
+        "AMENDMENT_A1_IDFREE_ADAPTATION"
+      ],
+      "fidelity_rationale": "E06c is NOT native or faithful DSDG: Amendment A1 explicitly adapts DSDG to BIN-IDFREE semantics (DEV-020). The prior phrase 'A1 adaptation semantics' is provenance, not a fidelity class."
+    },
+    "E07c": {
+      "state": "READY_FOR_M6B",
+      "fidelity": "CONTROLLED_ADAPTATION",
+      "active_blockers": [],
+      "note": "CONTRACT_READY_CONTROLLED_ADAPTATION per Amendment A3 section 5.",
+      "auxiliary_encoder_training_seed": 42,
+      "auxiliary_encoder_training_runs": 1,
+      "same_frozen_encoder_reused_for_main_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "fidelity_provenance": [
+        "AMENDMENT_A1_IDFREE_ADAPTATION",
+        "AMENDMENT_A3_CONTROLLED_ENCODER_RECONSTRUCTION"
+      ],
+      "fidelity_rationale": "A1 adapts DiffFAS to BIN-IDFREE semantics (DEV-021); A3 adds the controlled conditioning-encoder reconstruction. Both layers are recorded."
+    }
+  },
+  "all_seven_track_a_rows_contract_ready": true,
+  "training_complete": false,
+  "method_yaml_created": false,
+  "constraints_reaffirmed": {
+    "no_baseline_training": true,
+    "no_encoder_training": true,
+    "no_synthetic_bank_generation": true,
+    "no_test_access": true,
+    "no_downstream_model_selection": true,
+    "no_method_config_created": true,
+    "m6a4_blocker_state_mutated": false
+  },
+  "blockers": [
+    {
+      "blocker_id": "E04-2",
+      "method": "E04",
+      "m6a4_status": "STILL_BLOCKED_SOURCE_GAP",
+      "m6a5_status": "RESOLVED_BY_OWNER_CONTROLLED_RECONSTRUCTION",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION M6A5b option B + Amendment A3 section 4; geometry substitute pinned and capability-verified on synthetic parameters",
+      "fidelity_effect": "E04 fidelity = CONTROLLED_ADAPTATION. FAITHFUL_PAPER is NO LONGER claimed. L_depth retained; no published coefficient altered; spoof M0 = zeros is paper-derived.",
+      "implementation_allowed": true,
+      "weight_required": true,
+      "weight_fetched": true,
+      "next_required_action": "M6B: implement the frozen geometry/depth pipeline and train E04 (150,000 iterations, terminal state per BASELINE_FINAL_STATE_V1). Build the official Sim3DR extension in the runtime environment.",
+      "geometry_substitute": "3DDFA_V2 @ 1b6c67601abffc1e9f248b291708aef0e43b55ae",
+      "asset_sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+      "q140_sha256": "1b884401377f5aadd3d56857f05fddf70e2c54a52a9eb2160cebc06a74031a1f",
+      "asset_git_tracked": false,
+      "asset_in_source_cache": false,
+      "benchmark_data_processed": false,
+      "fixed_auxiliary_assets": true,
+      "assets_retrained_per_seed": false,
+      "assets_reused_for_experiment_seeds": [
+        42,
+        1337,
+        2026
+      ]
+    },
+    {
+      "blocker_id": "E07c-4",
+      "method": "E07c",
+      "m6a4_status": "STILL_BLOCKED_SOURCE_GAP",
+      "m6a5_status": "RESOLVED_BY_OWNER_CONTROLLED_RECONSTRUCTION",
+      "active_blocker": false,
+      "evidence_basis": "OWNER_DECISION M6A5b option B + Amendment A3 section 5; official architecture preserved and feature interface statically verified; official training recipe recovered from models/pretrain_classifier.py",
+      "fidelity_effect": "E07c fidelity = CONTROLLED_ADAPTATION (compounding A1/DEV-021). Encoder ARCHITECTURE not substituted; only the pretraining data and label space are.",
+      "implementation_allowed": true,
+      "weight_required": true,
+      "weight_fetched": false,
+      "next_required_action": "M6B: train exactly ONE auxiliary conditioning encoder under the frozen contract (K=7, TRAIN only, auxiliary_encoder_training_seed=42, 200 epochs, final state), record its SHA256, freeze it, then reuse THAT SAME frozen encoder for all three E07c main seeds 42/1337/2026. No candidate search; three different encoders must NOT be trained.",
+      "architecture_substituted": false,
+      "class_count_original": 17,
+      "class_count_substitute": 7,
+      "consumed_feature_interface_changed": false,
+      "encoder_trained_in_m6a5b": false,
+      "encoder_instances_authorized": 1,
+      "train_coverage_all_classes": true,
+      "auxiliary_encoder_training_seed": 42,
+      "auxiliary_encoder_training_runs": 1,
+      "same_frozen_encoder_reused_for_main_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "three_different_encoders_trained": false
+    }
+  ],
+  "technical_contract_class": "BENCHMARK_DEFINED_CONTROLLED_RECONSTRUCTION_UNDER_OWNER_AUTHORIZATION",
+  "authority_vs_derivation": "Owner approved the DIRECTION (controlled reconstruction for E04 and E07c). All concrete technical values were derived by the benchmark audit under that authorization; the owner did not independently specify each value, and the original paper authors specified none of them.",
+  "fidelity_taxonomy_normalized": true,
+  "fidelity_taxonomy_note": "Fidelity CLASS is normalized across all Track-A rows. Provenance strings are recorded separately in fidelity_provenance and never used as a fidelity class.",
+  "controlled_adaptation_rows": [
+    "E04",
+    "E05",
+    "E06c",
+    "E07c"
+  ]
+}
