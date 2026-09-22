@@ -1,0 +1,28 @@
+amendment_id: A6_E07C_FEATURE_INTERFACE_SOURCE_CORRECTION
+status: OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE
+provenance: SOURCE_GROUNDED_CONTRACT_CORRECTION
+base_config_path: configs/methods/e07c_difffas_bin_idfree.yaml
+base_config_sha256: dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c
+amendment_document: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md
+amendment_a3:
+  path: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md
+  sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+source:
+  repository: https://github.com/murphytju/DiffFAS
+  pinned_commit: 23f40519ec25a833ebc06842aa6fbab74fad4d15
+  architecture: models/custom_rn.py::resnet18
+  file: third_party/source_cache/difffas/models/custom_rn.py
+  sha256: fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3
+  consumer_file: third_party/source_cache/difffas/models/unet_autoenc.py
+  consumer_sha256: 127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963
+correction:
+  x32x32: [32, 32, 256]
+  x16x16: [16, 16, 512]
+  x8x8: [8, 8, 512]
+  embg: [B, 7]
+superseded_descriptions:
+  x32x32: [32, 32, 128]
+  x16x16: [16, 16, 256]
+projection_layers_added: false
+official_source_modified: false
+architecture_substituted: false
