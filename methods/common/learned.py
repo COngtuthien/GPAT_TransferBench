@@ -52,6 +52,10 @@ def verify_source(config: dict, required_files: tuple[str, ...], *, source_root=
         source = cfg['external_assets']['geometry_engine']
         provenance = 'third_party/source_pins.json'
         membership = 'supports_method_ids'
+    elif cfg['method_id'] == 'E05':
+        source = cfg['source']['executable_architecture_basis']
+        provenance = source['provenance']
+        membership = 'method_ids'
     else:
         source = cfg['source']
         provenance = source['provenance']
@@ -217,6 +221,20 @@ def checkpoint_plan(config: dict, seed: int, *, selection_split=None) -> dict:
     if selection_split is not None:
         raise PreparationError('official final checkpoint is not selected using any data split')
     policy = cfg['checkpoint']
+    if cfg['method_id'] == 'E05':
+        end = cfg['training']['total_iterations']
+        if (policy['selection_scope'] != 'WITHIN_SEED' or policy['selection_uses_val'] or
+                policy['selection_uses_test'] or policy['rule'] != 'BASELINE_FINAL_STATE_V1' or
+                policy['terminal_state'] != f'iteration_{end}'):
+            raise PreparationError('invalid E05 terminal checkpoint policy')
+        return {'method_id': cfg['method_id'], 'experiment_seed': seed,
+                'rule': policy['rule'], 'cadence': policy['cadence'],
+                'terminal_iteration': end, 'selection_scope': 'WITHIN_SEED',
+                'selection_uses_val': False, 'selection_uses_test': False,
+                'checkpoint_types_supported': ['periodic', 'terminal', 'selected'],
+                'checkpoint_written': False, 'checkpoint_sha256': None,
+                'extra_optimizer_steps': 0,
+                'missing_field_reasons': {'checkpoint_sha256': 'Preparation only; no checkpoint exists'}}
     if (policy['selection_scope'] != 'WITHIN_SEED' or policy['selection_uses_val'] or
             policy['selection_uses_test'] or policy['baseline_final_state_v1_overrides_this']):
         raise PreparationError('invalid official checkpoint policy')
@@ -252,13 +270,20 @@ def checkpoint_metadata(config: dict, seed: int, *, epoch: int, global_step: int
     policy = checkpoint_plan(config, seed)
     if checkpoint_type not in policy['checkpoint_types_supported']:
         raise PreparationError('unknown checkpoint metadata type')
-    if type(epoch) is not int or not 1 <= epoch <= policy['final_epoch']:
+    if policy['method_id'] == 'E05':
+        if (type(epoch) is not int or epoch < 0 or type(global_step) is not int or
+                not 1 <= global_step <= policy['terminal_iteration'] or
+                ((selected_for_final or checkpoint_type in ('selected', 'terminal')) and
+                 global_step != policy['terminal_iteration'])):
+            raise PreparationError('E05 checkpoint must use the frozen terminal iteration')
+    elif type(epoch) is not int or not 1 <= epoch <= policy['final_epoch']:
         raise PreparationError('checkpoint epoch outside frozen budget')
-    if (selected_for_final or checkpoint_type in ('selected', 'terminal')) and epoch != policy['final_epoch']:
+    if (policy['method_id'] != 'E05' and
+            (selected_for_final or checkpoint_type in ('selected', 'terminal')) and epoch != policy['final_epoch']):
         raise PreparationError('only official final epoch may be selected')
-    expected = policy['authoritative_path_basename']
+    expected = policy.get('authoritative_path_basename')
     basename = Path(path).name
-    if selected_for_final and basename != expected and not (
+    if expected is not None and selected_for_final and basename != expected and not (
             config['method_id'] == 'E03' and basename.startswith(expected + '.')):
         raise PreparationError('selected checkpoint filename does not match official final')
     if (type(global_step) is not int or global_step < 0 or type(file_size_bytes) is not int or

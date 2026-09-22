@@ -1,0 +1,800 @@
+{
+  "milestone": "M6C2b2",
+  "classification": "M6C2B2_E05_IMPLEMENTATION",
+  "starting_commit": "2b38b3a6d97afbac8e79c844bdf3e2c1880495bf",
+  "branch": "m6-baselines",
+  "clean_preflight": true,
+  "method_id": "E05",
+  "reporting_label": "PCGAN (controlled architecture resolution)",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "fidelity_provenance": [
+    "AMENDMENT_A2_A2_07_ARCHITECTURE_RESOLUTION"
+  ],
+  "status": "IMPLEMENTED_NOT_EXECUTED",
+  "implementation_scope": "Static source/contract/architecture/optimizer/loss adapters, seed plans, lazy Torch A5 pooling hook and common checkpoint metadata integration. No model construction or training runner execution.",
+  "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+  "contracts": {
+    "A2": {
+      "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+      "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+    },
+    "A5": {
+      "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A5_E05_Blur_Operator_Resolution.md",
+      "sha256": "05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd"
+    },
+    "authority_commit": "2b38b3a6d97afbac8e79c844bdf3e2c1880495bf",
+    "overlay": {
+      "amendment_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A5_E05_Blur_Operator_Resolution.md",
+      "amendment_id": "A5_E05_BLUR_OPERATOR_RESOLUTION",
+      "base_config_path": "configs/methods/e05_pcgan.yaml",
+      "base_config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "blur_operator": {
+        "align_corners": "NOT_APPLICABLE",
+        "antialias_parameter": "NOT_APPLICABLE",
+        "application": "independently_before_existing_reconstruction_distance",
+        "application_branches": [
+          "x_tgt",
+          "G(z_pat_src, z_con_tgt)"
+        ],
+        "authorized_fallbacks": [],
+        "boundary_extension": "NONE",
+        "ceil_mode": false,
+        "count_include_pad": false,
+        "detach_due_to_blur": false,
+        "framework_reference": "torch.nn.functional.avg_pool2d",
+        "input_resolution": 256,
+        "kernel_size": 2,
+        "learnable_parameters": 0,
+        "output_resolution": 128,
+        "padding": 0,
+        "reduction": "arithmetic_mean_over_each_nonoverlapping_2x2_block",
+        "stride": 2
+      },
+      "provenance": "BENCHMARK_DEFINED_CONTROLLED_RECONSTRUCTION",
+      "status": "OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE"
+    },
+    "overlay_path": "configs/amendments/e05_a5_blur_operator_resolution.yaml",
+    "overlay_sha256": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1"
+  },
+  "source": {
+    "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+    "files_sha256": {
+      "experiments/ffhq1024_pretrained_launcher.py": "c2e2e3224d707b7adb920c2e89259a351d595b9e09fe876f3d17a115e50886d8",
+      "models/__init__.py": "b4f02244c30143f6d73df89d35bf4f25e5caba68d478732f570eddbf4467198d",
+      "models/base_model.py": "f7baecfff6d555488aaaf7df5e9c6d80a2170ef895dab4f4873d0111108cf1b7",
+      "models/networks/__init__.py": "bfd9a3b013d0fed1ac310fe22a112dc74bf086dcbae58b652a46b59680714be0",
+      "models/networks/base_network.py": "33c07e02f4aa8d07ced51e6966a425aa0c13857b685470571b5a14241645371f",
+      "models/networks/discriminator.py": "5389055129c709e93102c9275f30a20b1e708c23744343919d0a6da6edbd38e4",
+      "models/networks/encoder.py": "5a059500d7964969bc7adefe8ea60e12185f1747d95f0d16dc54d53c84400f58",
+      "models/networks/generator.py": "c8d31a71e5956e53d2dd44faadea7fce395d3589ddd5ab23bab95cd59102c705",
+      "models/networks/loss.py": "b4ee3ef8eb4aa6935feacf3d70a52d59e359891a58e27a3e3d8492c3d95b9447",
+      "models/networks/patch_discriminator.py": "a886122242d5c8d9a4878ee0f1f1684bac51c27c2e588c554c52a4ca92164e7d",
+      "models/networks/stylegan2_layers.py": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+      "models/networks/stylegan2_op/__init__.py": "d3bdebb6b1ea35ab8e7dd14af32919f11ae630ab9154d4c84f839397b98b2bf6",
+      "models/networks/stylegan2_op/fused_act.py": "bf00baa057078cd5fa4044dc86101ca95bc482d10ccaf544b89c4c0da8a2532a",
+      "models/networks/stylegan2_op/fused_bias_act.cpp": "a69d7233252bceaf18639d9fb9715a71cf0eb5eff11aa6c11c659e0850b155ea",
+      "models/networks/stylegan2_op/fused_bias_act_kernel.cu": "42c217064d68d91756cd0f92e19377c61824b4734b4659095b9282075e9113f4",
+      "models/networks/stylegan2_op/upfirdn2d.cpp": "a913696caa8630ca5030db24dfdc08391473bf2a2543216d883df3ede5cba923",
+      "models/networks/stylegan2_op/upfirdn2d.py": "228c5fb1ef64d08db2380a0e3c5af40dccbd757f634a759a07d33f1b586120ec",
+      "models/networks/stylegan2_op/upfirdn2d_kernel.cu": "bccda85f1ed59a965d982e212ad78b00d630aad5438216a242187a3aa842bf3e",
+      "models/swapping_autoencoder_model.py": "71df763244ea5b17c55d93384595c37dccb04386802f00a9d407a72e31b83e7f",
+      "optimizers/swapping_autoencoder_optimizer.py": "93732bd6dd7e2a9d4b59d006e697158889d5700f54707ef71959870b4733d644",
+      "options/__init__.py": "e1fcdbfafb69110303904ef43af6bbc88b4c83f7ca5bb199511ccde42e44ded9",
+      "util/__init__.py": "fef00d173578ede08f3f447aa3f8321a41c69f7826c7ebcd4cdc61752683e3f4",
+      "util/util.py": "1877a389417a0c6f746006da852d09b3109ecfed2b119d5dc692519aa848b3eb"
+    },
+    "repository": "https://github.com/taesungp/swapping-autoencoder-pytorch",
+    "root": "/home/cong/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+    "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+    "verification": "PASS"
+  },
+  "architecture": {
+    "basis": {
+      "local_source_path": "third_party/source_cache/swapping_autoencoder",
+      "pinned_commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+      "provenance": "third_party/source_pins.json",
+      "repository": "https://github.com/taesungp/swapping-autoencoder-pytorch",
+      "weight_bytes_from_source_cache": "NONE"
+    },
+    "inherited_source_defaults": {
+      "global_code_ch": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/swapping_autoencoder_model.py",
+        "value": 2048
+      },
+      "max_num_tiles": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/patch_discriminator.py",
+        "value": 8
+      },
+      "netD": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "options/__init__.py",
+        "value": "StyleGAN2"
+      },
+      "netD_scale_capacity": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/discriminator.py",
+        "value": 1.0
+      },
+      "netE": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "options/__init__.py",
+        "value": "StyleGAN2Resnet"
+      },
+      "netE_nc_steepness": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/encoder.py",
+        "value": 2.0
+      },
+      "netE_num_downsampling_gl": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/encoder.py",
+        "value": 2
+      },
+      "netE_scale_capacity": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/encoder.py",
+        "value": 1.0
+      },
+      "netG": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "options/__init__.py",
+        "value": "StyleGAN2Resnet"
+      },
+      "netG_num_base_resnet_layers": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/generator.py",
+        "value": 2
+      },
+      "netG_resnet_ch": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/generator.py",
+        "value": 256
+      },
+      "netG_scale_capacity": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/generator.py",
+        "value": 1.0
+      },
+      "netG_use_noise": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/generator.py",
+        "value": true
+      },
+      "netPatchD": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "options/__init__.py",
+        "value": "StyleGAN2"
+      },
+      "netPatchD_max_nc": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/patch_discriminator.py",
+        "value": 384
+      },
+      "netPatchD_scale_capacity": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/patch_discriminator.py",
+        "value": 4.0
+      },
+      "num_classes": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "options/__init__.py",
+        "value": 0
+      },
+      "patch_max_scale": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/swapping_autoencoder_model.py",
+        "value": 0.25
+      },
+      "patch_min_scale": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/swapping_autoencoder_model.py",
+        "value": 0.125
+      },
+      "patch_num_crops": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/swapping_autoencoder_model.py",
+        "value": 8
+      },
+      "patch_random_transformation": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/patch_discriminator.py",
+        "value": false
+      },
+      "patch_size": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/networks/patch_discriminator.py",
+        "value": 128
+      },
+      "patch_use_aggregation": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "models/swapping_autoencoder_model.py",
+        "value": true
+      },
+      "use_antialias": {
+        "provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE",
+        "source_file": "options/__init__.py",
+        "value": true
+      }
+    },
+    "model_constructed": false,
+    "modulation": "StyleGAN2-style modulation/demodulation",
+    "output_contract": "full 256x256 RGB synthetic image",
+    "output_shape_chw": [
+      3,
+      256,
+      256
+    ],
+    "resolution": 256,
+    "settings": [
+      {
+        "config_field": "training.input_resolution",
+        "source_file": "models/networks/encoder.py; generator.py; discriminator.py",
+        "target": "opt.crop_size",
+        "value": 256
+      },
+      {
+        "config_field": "architecture_at_256.netE_num_downsampling_sp",
+        "source_file": "models/networks/encoder.py; generator.py; discriminator.py",
+        "target": "opt.netE_num_downsampling_sp",
+        "value": 1
+      },
+      {
+        "config_field": "architecture_at_256.spatial_code_ch",
+        "source_file": "models/networks/encoder.py; generator.py; discriminator.py",
+        "target": "opt.spatial_code_ch",
+        "value": 8
+      }
+    ],
+    "source_evidence": {
+      "discriminator": {
+        "file": "models/networks/discriminator.py",
+        "line": 11,
+        "sha256": "5389055129c709e93102c9275f30a20b1e708c23744343919d0a6da6edbd38e4",
+        "symbol": "StyleGAN2Discriminator.__init__"
+      },
+      "discriminator_basis": {
+        "file": "models/networks/stylegan2_layers.py",
+        "line": 742,
+        "sha256": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+        "symbol": "Discriminator.forward"
+      },
+      "encoder": {
+        "file": "models/networks/encoder.py",
+        "line": 93,
+        "sha256": "5a059500d7964969bc7adefe8ea60e12185f1747d95f0d16dc54d53c84400f58",
+        "symbol": "StyleGAN2ResnetEncoder.forward"
+      },
+      "generator": {
+        "file": "models/networks/generator.py",
+        "line": 146,
+        "sha256": "c8d31a71e5956e53d2dd44faadea7fce395d3589ddd5ab23bab95cd59102c705",
+        "symbol": "StyleGAN2ResnetGenerator.forward"
+      },
+      "generator_construction": {
+        "file": "models/networks/generator.py",
+        "line": 106,
+        "sha256": "c8d31a71e5956e53d2dd44faadea7fce395d3589ddd5ab23bab95cd59102c705",
+        "symbol": "StyleGAN2ResnetGenerator.__init__"
+      },
+      "modulated_convolution": {
+        "file": "models/networks/stylegan2_layers.py",
+        "line": 211,
+        "sha256": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+        "symbol": "ModulatedConv2d.__init__"
+      },
+      "modulation_demodulation": {
+        "file": "models/networks/stylegan2_layers.py",
+        "line": 266,
+        "sha256": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+        "symbol": "ModulatedConv2d.forward"
+      },
+      "patch_discriminator": {
+        "file": "models/networks/patch_discriminator.py",
+        "line": 103,
+        "sha256": "a886122242d5c8d9a4878ee0f1f1684bac51c27c2e588c554c52a4ca92164e7d",
+        "symbol": "StyleGAN2PatchDiscriminator.__init__"
+      },
+      "rgb_demodulation_exception": {
+        "file": "models/networks/stylegan2_layers.py",
+        "line": 409,
+        "sha256": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+        "symbol": "ToRGB.__init__"
+      },
+      "spatial_code_path": {
+        "file": "models/networks/encoder.py",
+        "line": 40,
+        "sha256": "5a059500d7964969bc7adefe8ea60e12185f1747d95f0d16dc54d53c84400f58",
+        "symbol": "StyleGAN2ResnetEncoder.__init__"
+      },
+      "styled_conv": {
+        "file": "models/networks/stylegan2_layers.py",
+        "line": 368,
+        "sha256": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+        "symbol": "StyledConv.__init__"
+      }
+    },
+    "source_training_loop_note": "Architecture reuse only. Upstream swap requires even image batches and its loss/optimizer loop is not the frozen PCGAN objective.",
+    "source_training_loop_used": false,
+    "stylegan_v1_adain_substitution": false,
+    "to_rgb": "Pinned ToRGB keeps demodulate=False; do not force demodulation on this head",
+    "z_pat_shape": [
+      8,
+      128,
+      128
+    ]
+  },
+  "blur": {
+    "align_corners": "NOT_APPLICABLE",
+    "antialias_parameter": "NOT_APPLICABLE",
+    "application": "independently_before_existing_reconstruction_distance",
+    "application_branches": [
+      "x_tgt",
+      "G(z_pat_src, z_con_tgt)"
+    ],
+    "authorized_fallbacks": [],
+    "boundary_extension": "NONE",
+    "ceil_mode": false,
+    "count_include_pad": false,
+    "detach_due_to_blur": false,
+    "framework_reference": "torch.nn.functional.avg_pool2d",
+    "input_resolution": 256,
+    "kernel_size": 2,
+    "learnable_parameters": 0,
+    "output_resolution": 128,
+    "padding": 0,
+    "reduction": "arithmetic_mean_over_each_nonoverlapping_2x2_block",
+    "stride": 2
+  },
+  "optimizer": {
+    "config_fields": {
+      "betas": "optimizer.betas",
+      "lr": "optimizer.learning_rate"
+    },
+    "kwargs": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "lr": 1e-06
+    },
+    "name": "Adam",
+    "reference": "Frozen E05 optimizer values override upstream training defaults",
+    "source_evidence": {
+      "file": "optimizers/swapping_autoencoder_optimizer.py",
+      "line": 24,
+      "sha256": "93732bd6dd7e2a9d4b59d006e697158889d5700f54707ef71959870b4733d644",
+      "symbol": "SwappingAutoencoderOptimizer.__init__"
+    },
+    "target": "torch.optim.Adam",
+    "upstream_lazy_R1_lr_beta_scaling": false
+  },
+  "losses": {
+    "alpha_beta_scope": "Retained frozen paper parameters. Paper Eq.10 assigns alpha/beta to PMN; they do not reweight the five unit-weighted PCGAN Eq.5 terms.",
+    "frozen": {
+      "alpha": 0.2,
+      "beta": 1e-06,
+      "coefficients_retuned_in_m6b": false,
+      "total": "L_rec + L_recblur + L_advrec + L_advmix + L_pat",
+      "weighting": "ALL_UNIT_WEIGHTED"
+    },
+    "loss_computation_executed": false,
+    "paper": "arXiv:2604.09018",
+    "source_L1_or_R1_substitution": false,
+    "terms": {
+      "L_advmix": {
+        "expression": "E[-log D(G(z_pat_src, z_con_tgt))]",
+        "paper_equation": 4,
+        "weight": 1
+      },
+      "L_advrec": {
+        "expression": "E[-log D(G(E(x_src)))]",
+        "paper_equation": 4,
+        "weight": 1
+      },
+      "L_pat": {
+        "expression": "E[-log D_patch(crop(G(z_pat_src,z_con_tgt)), crop(x_src))]",
+        "paper_equation": 1,
+        "weight": 1
+      },
+      "L_rec": {
+        "distance": "L2 norm; expectation over samples",
+        "inputs": [
+          "x",
+          "G(E(x))"
+        ],
+        "paper_equation": 2,
+        "weight": 1
+      },
+      "L_recblur": {
+        "blur_authority": "A5",
+        "detach_due_to_blur": false,
+        "distance": "L2 norm; expectation over distinct source/target samples",
+        "inputs": [
+          "blur(x_tgt)",
+          "blur(G(z_pat_src, z_con_tgt))"
+        ],
+        "paper_equation": 3,
+        "weight": 1
+      }
+    }
+  },
+  "training_plans": [
+    {
+      "seed": 42,
+      "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "a5_overlay_sha256": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1",
+      "training": {
+        "batch_size": 1,
+        "input_resolution": 256,
+        "input_resolution_note": "[34] officially runs at 256/512/1024; 256 is the benchmark canonical size (E05-1, M6A2)",
+        "total_iterations": 4000
+      },
+      "seed_plan": {
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+        "force_deterministic_algorithms": false,
+        "framework": "torch",
+        "framework_seed": 42,
+        "launch_environment": {
+          "PYTHONHASHSEED": "42"
+        },
+        "numpy_random": 42,
+        "python_random": 42,
+        "seed": 42,
+        "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+      },
+      "checkpoint": {
+        "cadence": "implementation_defined_periodic_plus_terminal",
+        "checkpoint_written": false,
+        "disclosure": "'end of budget' is a BENCHMARK CONVENTION, not a paper fact",
+        "experiment_seed": 42,
+        "extra_optimizer_steps": 0,
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "rule_source": "AMENDMENT_A2_A2_06",
+        "save_terminal_if_cadence_misses": true,
+        "selection_scope": "WITHIN_SEED",
+        "selection_uses_test": false,
+        "selection_uses_val": false,
+        "terminal_iteration": 4000,
+        "terminal_state": "iteration_4000"
+      },
+      "data_firewall": {
+        "TEST": {
+          "allowed": false,
+          "code_path_present": false,
+          "never_checkpoint_selection": true,
+          "never_hyperparameter_selection": true,
+          "never_reconstruction_choice": true,
+          "never_seed_selection": true,
+          "never_training": true,
+          "used_for": []
+        },
+        "TRAIN": {
+          "allowed": true,
+          "used_for": [
+            "method_training"
+          ]
+        },
+        "VAL": {
+          "allowed": true,
+          "may_select_checkpoint": false,
+          "note": "VAL never selects a checkpoint; no VAL-based rule exists in this method's source.",
+          "used_for": [
+            "diagnostics_only"
+          ]
+        }
+      },
+      "mode": "STATIC_PREPARATION_ONLY"
+    },
+    {
+      "seed": 1337,
+      "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "a5_overlay_sha256": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1",
+      "training": {
+        "batch_size": 1,
+        "input_resolution": 256,
+        "input_resolution_note": "[34] officially runs at 256/512/1024; 256 is the benchmark canonical size (E05-1, M6A2)",
+        "total_iterations": 4000
+      },
+      "seed_plan": {
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+        "force_deterministic_algorithms": false,
+        "framework": "torch",
+        "framework_seed": 1337,
+        "launch_environment": {
+          "PYTHONHASHSEED": "1337"
+        },
+        "numpy_random": 1337,
+        "python_random": 1337,
+        "seed": 1337,
+        "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+      },
+      "checkpoint": {
+        "cadence": "implementation_defined_periodic_plus_terminal",
+        "checkpoint_written": false,
+        "disclosure": "'end of budget' is a BENCHMARK CONVENTION, not a paper fact",
+        "experiment_seed": 1337,
+        "extra_optimizer_steps": 0,
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "rule_source": "AMENDMENT_A2_A2_06",
+        "save_terminal_if_cadence_misses": true,
+        "selection_scope": "WITHIN_SEED",
+        "selection_uses_test": false,
+        "selection_uses_val": false,
+        "terminal_iteration": 4000,
+        "terminal_state": "iteration_4000"
+      },
+      "data_firewall": {
+        "TEST": {
+          "allowed": false,
+          "code_path_present": false,
+          "never_checkpoint_selection": true,
+          "never_hyperparameter_selection": true,
+          "never_reconstruction_choice": true,
+          "never_seed_selection": true,
+          "never_training": true,
+          "used_for": []
+        },
+        "TRAIN": {
+          "allowed": true,
+          "used_for": [
+            "method_training"
+          ]
+        },
+        "VAL": {
+          "allowed": true,
+          "may_select_checkpoint": false,
+          "note": "VAL never selects a checkpoint; no VAL-based rule exists in this method's source.",
+          "used_for": [
+            "diagnostics_only"
+          ]
+        }
+      },
+      "mode": "STATIC_PREPARATION_ONLY"
+    },
+    {
+      "seed": 2026,
+      "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "a5_overlay_sha256": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1",
+      "training": {
+        "batch_size": 1,
+        "input_resolution": 256,
+        "input_resolution_note": "[34] officially runs at 256/512/1024; 256 is the benchmark canonical size (E05-1, M6A2)",
+        "total_iterations": 4000
+      },
+      "seed_plan": {
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+        "force_deterministic_algorithms": false,
+        "framework": "torch",
+        "framework_seed": 2026,
+        "launch_environment": {
+          "PYTHONHASHSEED": "2026"
+        },
+        "numpy_random": 2026,
+        "python_random": 2026,
+        "seed": 2026,
+        "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+      },
+      "checkpoint": {
+        "cadence": "implementation_defined_periodic_plus_terminal",
+        "checkpoint_written": false,
+        "disclosure": "'end of budget' is a BENCHMARK CONVENTION, not a paper fact",
+        "experiment_seed": 2026,
+        "extra_optimizer_steps": 0,
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "rule_source": "AMENDMENT_A2_A2_06",
+        "save_terminal_if_cadence_misses": true,
+        "selection_scope": "WITHIN_SEED",
+        "selection_uses_test": false,
+        "selection_uses_val": false,
+        "terminal_iteration": 4000,
+        "terminal_state": "iteration_4000"
+      },
+      "data_firewall": {
+        "TEST": {
+          "allowed": false,
+          "code_path_present": false,
+          "never_checkpoint_selection": true,
+          "never_hyperparameter_selection": true,
+          "never_reconstruction_choice": true,
+          "never_seed_selection": true,
+          "never_training": true,
+          "used_for": []
+        },
+        "TRAIN": {
+          "allowed": true,
+          "used_for": [
+            "method_training"
+          ]
+        },
+        "VAL": {
+          "allowed": true,
+          "may_select_checkpoint": false,
+          "note": "VAL never selects a checkpoint; no VAL-based rule exists in this method's source.",
+          "used_for": [
+            "diagnostics_only"
+          ]
+        }
+      },
+      "mode": "STATIC_PREPARATION_ONLY"
+    }
+  ],
+  "supervision": "pooled_train_live_attack_labels",
+  "attack_type_labels": "FORBIDDEN",
+  "gpat_identity_or_landmark_losses": false,
+  "environment": {
+    "execution_ready": false,
+    "final_execution_environment_frozen": false,
+    "framework": "torch",
+    "gpu_probe_performed": false,
+    "missing_modules": [
+      "torch",
+      "torchvision",
+      "scipy"
+    ],
+    "observed_packages": {
+      "PIL": {
+        "pillow": "12.3.0"
+      },
+      "cv2": {
+        "opencv-python-headless": "5.0.0.93"
+      },
+      "numpy": {
+        "numpy": "2.5.3"
+      },
+      "scipy": null,
+      "torch": null,
+      "torchvision": null
+    },
+    "python": "3.12.3",
+    "reason": "Missing modules: torch, torchvision, scipy"
+  },
+  "execution_dependencies": [
+    "compatible pinned-source PyTorch/torchvision environment",
+    "upstream custom-op/runtime compatibility verification",
+    "future PCGAN runner integration using explicit source/target inputs and frozen losses; do not launch the unmodified even-batch upstream training loop"
+  ],
+  "tests": {
+    "e05": {
+      "tests": 30,
+      "passed": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "skip_reasons": [
+        "PyTorch unavailable: real CPU avg_pool2d/autograd execution requires torch; static dispatch verified separately"
+      ],
+      "file_open_audit": {
+        "opens": 1002,
+        "benchmark_image_opens": 0,
+        "manifest_opens": 0,
+        "rejected_data_opens": 0
+      }
+    },
+    "e04": {
+      "tests": 50,
+      "passed": 49,
+      "skipped": 1,
+      "failures": 0,
+      "errors": 0,
+      "skip_reason": "Pinned Sim3DR_Cython unavailable; synthetic CPU kernel test remains separate"
+    },
+    "m6a6": {
+      "tests": 4,
+      "passed": 4
+    },
+    "m6a7": {
+      "tests": 13,
+      "passed": 13
+    },
+    "m6c2a": {
+      "tests": 72,
+      "passed": 72
+    },
+    "m6c1": {
+      "tests": 83,
+      "passed": 83
+    },
+    "m6b": {
+      "result": "PASS",
+      "failures": 0
+    },
+    "m0": {
+      "tests": 17,
+      "passed": 16,
+      "failures": 1,
+      "errors": 0,
+      "sole_failure": "test_manifests_are_stage_appropriate",
+      "reason": "manifests/artifact_probe_classes_v1.json",
+      "historical_failure_unchanged": true
+    },
+    "full_suite": "NOT_RUN"
+  },
+  "preflight": {
+    "bank_generated": false,
+    "benchmark_image_execution": false,
+    "checkpoint_created": false,
+    "file_open_audit": {
+      "benchmark_image_opens": 0,
+      "manifest_opens": 0,
+      "opens": 567,
+      "rejected_data_opens": 0
+    },
+    "gpu_job": false,
+    "mode": "STATIC_PREPARATION_ONLY",
+    "model_inference": false,
+    "production_runtime_write": false,
+    "result": "PASS",
+    "training_launched": false
+  },
+  "data_access_disclosure": {
+    "e05_focused_tests_benchmark_image_opens": 0,
+    "e05_focused_tests_manifest_opens": 0,
+    "e05_static_preflight_benchmark_image_opens": 0,
+    "e05_static_preflight_manifest_opens": 0,
+    "test_data_for_method_execution": false,
+    "scope": "File-open audit counts cover named E05 processes only. Requested historical M0 inspects registry/manifest metadata; it is not benchmark execution or scientific evidence."
+  },
+  "files_created": [
+    "methods/pcgan/__init__.py",
+    "methods/pcgan/adapter.py",
+    "methods/pcgan/architecture.py",
+    "methods/pcgan/blur.py",
+    "methods/pcgan/contract.py",
+    "methods/pcgan/source.py",
+    "methods/pcgan/source_traceability.md",
+    "tests/test_m6c2b2_pcgan.py",
+    "tests/test_m6c2b2_pcgan_architecture.py",
+    "tools/m6c2b2_preflight.py",
+    "outputs/audit/M6C2B2_IMPLEMENTATION.md",
+    "outputs/audit/M6C2B2_IMPLEMENTATION.json"
+  ],
+  "files_modified": [
+    "methods/common/learned.py",
+    "configs/CONFIG_STATUS.md",
+    "outputs/audit/EXECUTION_LEDGER.jsonl",
+    "outputs/audit/ARTIFACT_INDEX.csv"
+  ],
+  "current_artifact_sha256": {
+    "methods/pcgan/__init__.py": "efe5e8e011798e47a04e72305f80e787409722f392ccb47e8454e243d007552e",
+    "methods/pcgan/adapter.py": "7a4119fb1dac33aaee6d5e454f88dd7212b121808da3500c3c6d044de500fb44",
+    "methods/pcgan/architecture.py": "d0da76078283c82549250b7d0c8f02cc6057f7e091f4095cacc1cc7c02551826",
+    "methods/pcgan/blur.py": "ec16f8620534d7908ba23bb459ffdf5844d9d85a0ed8f6ad8668b094c67cdde9",
+    "methods/pcgan/contract.py": "2578d6e41bd9c86800a553ee57d8c469efa7f401e7f52bb1dcfa41200a9a64fe",
+    "methods/pcgan/source.py": "9c46f8869ce87124a9ecbcf5d03717b9cfc0f872b2ffb2b1c14822f36d9017b3",
+    "methods/pcgan/source_traceability.md": "61645843f65a51e7858787cfbc7cf30f1ff75763c8ded6da41d96410d4c5c1bd",
+    "tests/test_m6c2b2_pcgan.py": "8f34f784069f60f732f30585c3c4de55e27cd1f136cfaedfce21c21838d00316",
+    "tests/test_m6c2b2_pcgan_architecture.py": "c7f2939a8782bb2f50d6f3667b1a3aa16090d8e91f7b5b01c3877d72c6358936",
+    "tools/m6c2b2_preflight.py": "7279754b195c8535bcd5d8a97f805547f678f7cbcfa5aa9e0eacdd9b80d3624f",
+    "methods/common/learned.py": "0634752ab0b1abbf90faccf82f19db974263ce1f6a74f16eee5f787d26a47602",
+    "configs/CONFIG_STATUS.md": "a84cd8afe3e8030e121f403534b0eada98b0763d079db77c104516df6550e25e"
+  },
+  "ledger": {
+    "committed_prefix_rows": 91,
+    "committed_prefix_sha256": "349c2f85124e57cb78bb8d51dc60cb07908be17ced6c8cabf071dbb0198131d7",
+    "final_expected_rows": 92,
+    "append_record": "M6C2B2_E05_IMPLEMENTATION"
+  },
+  "firewall": {
+    "frozen_config_change": false,
+    "e07c_implementation": false,
+    "model_or_checkpoint_bytes_added": false
+  },
+  "execution": {
+    "training": false,
+    "benchmark_image_execution": false,
+    "synthetic_bank_generation": false,
+    "test_data_for_method_execution": false,
+    "gpu_job": false,
+    "scientific_checkpoint": false,
+    "commit": false,
+    "push": false
+  }
+}
