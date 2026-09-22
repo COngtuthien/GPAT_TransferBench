@@ -1,0 +1,944 @@
+{
+  "branch": "m6-baselines",
+  "common_files": [
+    "methods/common/learned.py",
+    "methods/common/learned_runlog.py",
+    "methods/common/upstream.py"
+  ],
+  "current_artifact_sha256": {
+    "configs/CONFIG_STATUS.md": "6793dae3d82950a8bb44453c518f6267cb1068d6c91b29593708a19ea1a8bb7e",
+    "methods/common/learned.py": "8c1f2084a8b8c6c5f1d1327e638cf064083895feb191e1426bec9daa4832a653",
+    "methods/common/learned_runlog.py": "075e268582886998c613e30fdaeee63b5ddf458ae72beb3b6fcbf64ed2d0b111",
+    "methods/common/upstream.py": "0df26ae0147f142df0aca7fff98558ce0477491c85528b825df1caa7269035cc",
+    "methods/dsdg/__init__.py": "6e9136f0934016da997e0c496fc1342bf09c687018cfe2da5075287ca01c4274",
+    "methods/dsdg/adapter.py": "d38fa46ce2fbbf331417c140b738052d572dcaca3eb4187ad2d9b4cff72bef3e",
+    "methods/dsdg/source.py": "32829fa926bb1f107c3a99d3e2903e13529b4ab6ffc95106852404ca04b91b15",
+    "methods/stdn/__init__.py": "d7d100e332884d91a014bb9ad7d060f2490bbfa0b7ff453c726c00238c6f7360",
+    "methods/stdn/adapter.py": "fdfdab92e45012877e8fa10ed3051cd3efc1d1ab221ddf3955e5ab546d78a622",
+    "methods/stdn/landmarks.py": "84af30c11aa8c026b88535583d98fa05e7e770ab75b739a4c17152c82898bc2d",
+    "methods/stdn/source.py": "a705ca9d1ee0e2cb39d77ebba50761797ac0d9d6c1ccb031c224d527f397b923",
+    "outputs/audit/M6C2A_IMPLEMENTATION.md": "9d685d73bf1113724b3e8244bf03ed15edc39fd68087b963101be6b04089d419",
+    "tests/test_m6c2a_common.py": "5864188b6df76505d69b4d952b3df3d3924567cf243bd749df7c58093c057fd0",
+    "tests/test_m6c2a_dsdg.py": "63e163ce9bdc0ec8f9a430d962d84b1694c2f42c966b466c7ba3a1861176c87e",
+    "tests/test_m6c2a_stdn.py": "0326789e7d8fbf2d92326eeca1b7863b91bc80ee5f8f07821bc2296c97179769",
+    "tools/m6c2a_preflight.py": "9007dca53549c6607a026c2e34e491fb181f0d0453791bbdc8186bfcf86396c6"
+  },
+  "data_access_disclosure": {
+    "audited_scope": "M6C2a preflight and focused tests, separately; Python open audit excludes Git internals",
+    "benchmark_image_opens": 0,
+    "canonical_index_and_m0": "May hash tracked manifest artifacts; no benchmark image pixels or split execution",
+    "historical_m6c1_full_regression_access": "UNVERIFIED; prior audit untouched; no historical whole-milestone zero claim",
+    "manifest_opens_in_audited_static_paths": 0
+  },
+  "date_utc": "2026-09-22",
+  "environment_policy": "Observed laptop versions are NOT the final execution environment freeze; no dependencies installed",
+  "files_created": [
+    "methods/common/learned.py",
+    "methods/common/learned_runlog.py",
+    "methods/common/upstream.py",
+    "methods/dsdg/__init__.py",
+    "methods/dsdg/adapter.py",
+    "methods/dsdg/source.py",
+    "methods/stdn/__init__.py",
+    "methods/stdn/adapter.py",
+    "methods/stdn/landmarks.py",
+    "methods/stdn/source.py",
+    "outputs/audit/M6C2A_IMPLEMENTATION.json",
+    "outputs/audit/M6C2A_IMPLEMENTATION.md",
+    "tests/test_m6c2a_common.py",
+    "tests/test_m6c2a_dsdg.py",
+    "tests/test_m6c2a_stdn.py",
+    "tools/m6c2a_preflight.py"
+  ],
+  "files_modified": [
+    "configs/CONFIG_STATUS.md",
+    "outputs/audit/ARTIFACT_INDEX.csv",
+    "outputs/audit/EXECUTION_LEDGER.jsonl"
+  ],
+  "firewall": {
+    "e04_e05_e07c_implementation_changes": false,
+    "protected_paths_unchanged": true
+  },
+  "hash_convention": "Current MD/implementation/test/tool/status hashes here; JSON hash in ledger/index; index and ledger exclude self hashes",
+  "methods": {
+    "E03": {
+      "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+      "environment": {
+        "execution_ready": false,
+        "final_execution_environment_frozen": false,
+        "framework": "tensorflow",
+        "gpu_probe_performed": false,
+        "missing_modules": [
+          "tensorflow",
+          "matplotlib",
+          "scipy"
+        ],
+        "observed_packages": {
+          "PIL": {
+            "pillow": "12.3.0"
+          },
+          "cv2": {
+            "opencv-python-headless": "5.0.0.93"
+          },
+          "matplotlib": null,
+          "numpy": {
+            "numpy": "2.5.3"
+          },
+          "scipy": null,
+          "tensorflow": null
+        },
+        "python": "3.12.3",
+        "reason": "Missing modules: tensorflow, matplotlib, scipy"
+      },
+      "execution_notes": [
+        "Use effective model/config.py, never vestigial root config.py.",
+        "Config.__init__/compile and upstream main are not invoked by preparation.",
+        "G and D optimizers share upstream global_step; do not equate it to dataset steps.",
+        "Runner must bind frozen dataset records and logging; no standalone training launcher in M6C2a.",
+        "TF1 source README range excludes 1.13 while naming 1.13 as tested; no new version pin inferred. Final environment compatibility must be validated."
+      ],
+      "fidelity_class": "FAITHFUL_OFFICIAL",
+      "input_adapter": {
+        "diagnostics_split": "VAL",
+        "horizontal_flip": "enabled",
+        "image": "canonical RGB256 float32 /255; upstream brightness retained",
+        "landmarks": "landmarks_px256 / image width; iBUG68; exact upstream 1-x + permutation",
+        "split_manifest": "manifests/split_v1.parquet",
+        "test_code_path_present": false,
+        "tf_py_func_parallelism": "methods.common.learned.serialized_tf_map: num_parallel_calls=1",
+        "training_split": "TRAIN"
+      },
+      "loss_contract": {
+        "a_loss": "5*esr_a + {0.0 or 0.1}*pixel",
+        "d_loss": "sum/4",
+        "g_loss": "50*esr + gan + (10*reg_live + 1e-4*reg_spoof)",
+        "hard_sample_scaling": "U(0.1, 0.8) per component",
+        "multiscale_discriminators": [
+          256,
+          160,
+          40
+        ]
+      },
+      "optimizer_contract": {
+        "beta1": 0.9,
+        "beta2": 0.999,
+        "epsilon": 1e-08,
+        "learning_rate": 6e-05,
+        "loss_ema_decay": 0.9,
+        "lr_decay": {
+          "every_steps": 20000,
+          "rate": 0.9,
+          "staircase": true,
+          "type": "exponential"
+        },
+        "name": "tf.train.AdamOptimizer",
+        "weight_ema_decay": 0.9999
+      },
+      "seed_plans": [
+        {
+          "checkpoint": {
+            "authoritative_path_basename": "ckpt-50",
+            "cadence": "every_epoch_ckpt_1_to_ckpt_50",
+            "checkpoint_sha256": null,
+            "checkpoint_types_supported": [
+              "official",
+              "periodic",
+              "terminal",
+              "selected"
+            ],
+            "checkpoint_written": false,
+            "experiment_seed": 42,
+            "final_epoch": 50,
+            "method_id": "E03",
+            "missing_field_reasons": {
+              "checkpoint_sha256": "Preparation only; no checkpoint exists"
+            },
+            "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+            "selection_scope": "WITHIN_SEED",
+            "selection_uses_test": false,
+            "selection_uses_val": false
+          },
+          "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+          "seed": 42,
+          "seed_plan": {
+            "cudnn_benchmark": null,
+            "cudnn_deterministic": null,
+            "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+            "force_deterministic_algorithms": false,
+            "framework": "tensorflow",
+            "framework_seed": 42,
+            "launch_environment": {
+              "PYTHONHASHSEED": "42"
+            },
+            "numpy_random": 42,
+            "python_random": 42,
+            "seed": 42,
+            "worker_seeding": "serialized_tf_map: num_parallel_calls=1"
+          }
+        },
+        {
+          "checkpoint": {
+            "authoritative_path_basename": "ckpt-50",
+            "cadence": "every_epoch_ckpt_1_to_ckpt_50",
+            "checkpoint_sha256": null,
+            "checkpoint_types_supported": [
+              "official",
+              "periodic",
+              "terminal",
+              "selected"
+            ],
+            "checkpoint_written": false,
+            "experiment_seed": 1337,
+            "final_epoch": 50,
+            "method_id": "E03",
+            "missing_field_reasons": {
+              "checkpoint_sha256": "Preparation only; no checkpoint exists"
+            },
+            "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+            "selection_scope": "WITHIN_SEED",
+            "selection_uses_test": false,
+            "selection_uses_val": false
+          },
+          "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+          "seed": 1337,
+          "seed_plan": {
+            "cudnn_benchmark": null,
+            "cudnn_deterministic": null,
+            "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+            "force_deterministic_algorithms": false,
+            "framework": "tensorflow",
+            "framework_seed": 1337,
+            "launch_environment": {
+              "PYTHONHASHSEED": "1337"
+            },
+            "numpy_random": 1337,
+            "python_random": 1337,
+            "seed": 1337,
+            "worker_seeding": "serialized_tf_map: num_parallel_calls=1"
+          }
+        },
+        {
+          "checkpoint": {
+            "authoritative_path_basename": "ckpt-50",
+            "cadence": "every_epoch_ckpt_1_to_ckpt_50",
+            "checkpoint_sha256": null,
+            "checkpoint_types_supported": [
+              "official",
+              "periodic",
+              "terminal",
+              "selected"
+            ],
+            "checkpoint_written": false,
+            "experiment_seed": 2026,
+            "final_epoch": 50,
+            "method_id": "E03",
+            "missing_field_reasons": {
+              "checkpoint_sha256": "Preparation only; no checkpoint exists"
+            },
+            "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+            "selection_scope": "WITHIN_SEED",
+            "selection_uses_test": false,
+            "selection_uses_val": false
+          },
+          "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+          "seed": 2026,
+          "seed_plan": {
+            "cudnn_benchmark": null,
+            "cudnn_deterministic": null,
+            "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+            "force_deterministic_algorithms": false,
+            "framework": "tensorflow",
+            "framework_seed": 2026,
+            "launch_environment": {
+              "PYTHONHASHSEED": "2026"
+            },
+            "numpy_random": 2026,
+            "python_random": 2026,
+            "seed": 2026,
+            "worker_seeding": "serialized_tf_map: num_parallel_calls=1"
+          }
+        }
+      ],
+      "settings_mapping": [
+        {
+          "config_field": "training.input_resolution",
+          "source_file": "model/config.py:Config",
+          "target": "IMAGE_SIZE",
+          "value": 256
+        },
+        {
+          "config_field": "training.map_size",
+          "source_file": "model/config.py:Config",
+          "target": "MAP_SIZE",
+          "value": 32
+        },
+        {
+          "config_field": "training.batch_size",
+          "source_file": "model/config.py:Config",
+          "target": "BATCH_SIZE",
+          "value": 2
+        },
+        {
+          "config_field": "training.g_d_ratio",
+          "source_file": "model/config.py:Config",
+          "target": "G_D_RATIO",
+          "value": 2
+        },
+        {
+          "config_field": "training.max_epoch",
+          "source_file": "model/config.py:Config",
+          "target": "MAX_EPOCH",
+          "value": 50
+        },
+        {
+          "config_field": "training.steps_per_epoch",
+          "source_file": "model/config.py:Config",
+          "target": "STEPS_PER_EPOCH",
+          "value": 2000
+        },
+        {
+          "config_field": "training.val_steps",
+          "source_file": "model/config.py:Config",
+          "target": "STEPS_PER_EPOCH_VAL",
+          "value": 500
+        },
+        {
+          "config_field": "optimizer.learning_rate",
+          "source_file": "model/config.py:Config",
+          "target": "LEARNING_RATE",
+          "value": 6e-05
+        },
+        {
+          "config_field": "optimizer.lr_decay.rate",
+          "source_file": "model/config.py:Config",
+          "target": "LEARNING_RATE_DECAY_FACTOR",
+          "value": 0.9
+        },
+        {
+          "config_field": "optimizer.weight_ema_decay",
+          "source_file": "model/config.py:Config",
+          "target": "MOVING_AVERAGE_DECAY",
+          "value": 0.9999
+        },
+        {
+          "config_field": "optimizer.lr_decay.every_steps / training.steps_per_epoch",
+          "source_file": "model/model.py:get_train_op",
+          "target": "NUM_EPOCHS_PER_DECAY",
+          "value": 10.0
+        }
+      ],
+      "snapshot_verified": true,
+      "source": {
+        "commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+        "files_sha256": {
+          "README.md": "3d77741bd58188c188ec927a6b7e2f9bcfaccb4a456de5d22556ed9e80625849",
+          "config.py": "a2658fca5942a360f244b3b844771e691dd413a03e304fd83635902d3d861bb3",
+          "model/config.py": "31dbee51353a355f4d45143bfc3beb3e9695df60e5d83fd09520a709bcdb6a01",
+          "model/dataset.py": "11509d80d31a0cd2ea085af0848333d1a22e920d3c066aab47cc0b06c4175b17",
+          "model/loss.py": "d145d51325e8f8be75ef2c4d7950b472d9f130a6f2bf8ad21303f63b4bd2bcff",
+          "model/model.py": "a422834d59d24db684cc28f470fdd6eb8b1658bfb40ba113393df627d6fc3743",
+          "model/utils.py": "772f749cb6dd71ab6adb786c7d40b48c14f2b2ab4ad4368d190a2cc5a1681770",
+          "model/warp.py": "60c29a03fb596bee3b59e41eec57675bbade8d438a85b9abca310b53207ad794",
+          "test.py": "2fcbc81154f6e375795b1a07032db4f8759a492c34a08b5a67ae2f05f3a4e2b2",
+          "train.py": "87cebbd05551ea542de83d4dba365d30d090656343a099fea2c886b82f293878"
+        },
+        "repository": "https://github.com/yaojieliu/ECCV20-STDN",
+        "root": "/home/cong/GPAT_TransferBench/third_party/source_cache/stdn",
+        "tree": "991a4f127990f98a108b8426113396f1c39f558d",
+        "verification": "PASS"
+      },
+      "status": "IMPLEMENTED_NOT_EXECUTED",
+      "upstream_bindings": {
+        "dataset_reference": "model.dataset.Dataset",
+        "discriminators": "model.model.Disc_s",
+        "generator": "model.model.Gen",
+        "geometry": "model.warp.generate_offset_map",
+        "graph": "train._step",
+        "optimizer": "model.model.get_train_op"
+      }
+    },
+    "E06c": {
+      "adaptation": {
+        "binary_labels": {
+          "live": 0,
+          "spoof": 1
+        },
+        "consumed_columns": [
+          "pair_id",
+          "source_spoof_id",
+          "target_live_id",
+          "dataset",
+          "split",
+          "seed",
+          "source_sha256",
+          "target_sha256"
+        ],
+        "contract": {
+          "duplicated_here": false,
+          "frozen_config_sha256": "a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de",
+          "frozen_in": "configs/frozen/dsdg_bin_idfree_v1.yaml"
+        },
+        "identity_supervision": false,
+        "lambda_pair": 0.0,
+        "loader_rng": "methods.common.learned.torch_loader_options",
+        "loss_cls": "Cls(hdim, attack_type) is nn.Linear(hdim, attack_type). With attack_type = 1, CrossEntropyLoss over a single logit is identically -log(1) = 0 with zero gradient, so loss_cls contributes nothing under the binary collapse and z_cls is shaped only by loss_rec, loss_kl and loss_ort. This is stated honestly rather than patched: Track A forbids attack-type supervision, so a vanishing attack-type loss is the correct consequence.",
+        "sampler": "methods.dsdg.adapter.IDFreePairDataset replaces GenDataset_s same-subject sampling",
+        "spoof_cross_entropy_index": 0,
+        "test_code_path_present": false,
+        "training_relation": "manifests/pairs_train_v1.parquet"
+      },
+      "argument_vector_is_launch_command": false,
+      "config_sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+      "effective_batch": {
+        "batch_dependent_losses": {
+          "loss_mmd": "addition_module/DSDG/train_generator.py::main:141",
+          "loss_ort": "addition_module/DSDG/train_generator.py::main:147"
+        },
+        "effective_batch_size": 240,
+        "execution_policy": "E06C_REQUIRES_PHYSICAL_BATCH_240_FOR_OBJECTIVE_EQUIVALENCE",
+        "gradient_accumulation_steps": 1,
+        "loss_accounting": "Use the official full physical forward batch. No microbatch accumulation fallback; OOM requires an execution-resolution decision.",
+        "naive_accumulation_objective_equivalent": false,
+        "oom_behavior": "STOP_AND_RESOLVE",
+        "oom_deviation_reason": null,
+        "physical_batch_size": 240,
+        "replica_factor": 1,
+        "runtime_accumulation_executed": false,
+        "semantics_preserving_microbatch_implementation_demonstrated": false,
+        "tail_policy": "Retain official non-drop-last tail; do not fabricate/repeat samples."
+      },
+      "environment": {
+        "execution_ready": false,
+        "final_execution_environment_frozen": false,
+        "framework": "torch",
+        "gpu_probe_performed": false,
+        "missing_modules": [
+          "torch",
+          "torchvision"
+        ],
+        "observed_packages": {
+          "PIL": {
+            "pillow": "12.3.0"
+          },
+          "cv2": {
+            "opencv-python-headless": "5.0.0.93"
+          },
+          "numpy": {
+            "numpy": "2.5.3"
+          },
+          "torch": null,
+          "torchvision": null
+        },
+        "python": "3.12.3",
+        "reason": "Missing modules: torch, torchvision"
+      },
+      "execution_notes": [
+        "Do not invoke unadapted upstream main: it uses identity pairs and unseeded workers.",
+        "Future runner binds projected pair records, seeded DataLoader generator/worker hook and learned logs.",
+        "GPU IDs/output directories are runtime resources, not scientific defaults.",
+        "Official periodic test block is training-sample visualization, not validation.",
+        "Upstream CUDA-only reparameterize/define_G requires a compatible GPU environment.",
+        "No standalone training launcher or OOM workaround is executed in M6C2a."
+      ],
+      "fidelity_class": "CONTROLLED_ADAPTATION",
+      "lightcnn": {
+        "compatibility": {
+          "checkpoint_tensor_count": 61,
+          "compatible": true,
+          "dataparallel_prefix_expected": true,
+          "dataparallel_prefix_on_all_checkpoint_keys": true,
+          "derivation_method": "STATIC - expected parameter names and shapes derived by mirroring the vendored constructors; no torch, no instantiation, no inference",
+          "expected_keys_derived_from": [
+            "third_party/source_cache/facexzoo/addition_module/DSDG/networks/light_cnn.py",
+            "third_party/source_cache/facexzoo/addition_module/DSDG/networks/__init__.py"
+          ],
+          "expected_parameter_count": 60,
+          "matched_key_count": 60,
+          "matched_subset_is_complete": true,
+          "missing_key_count": 0,
+          "missing_keys": [],
+          "official_loader_is_non_strict": true,
+          "official_loader_reference": "train_generator.py:75-81 - checkpoint['state_dict'] -> filtered to keys present in the DataParallel-wrapped net -> model_dict.update() -> load_state_dict()",
+          "shape_mismatch_count": 0,
+          "target": "define_IP() = torch.nn.DataParallel(network_29layers_v2(resblock, [1,2,3,4], is_train=False))",
+          "unexpected_key_count": 1,
+          "unexpected_key_explanation": "module.fc2.weight [80013, 256] is the upstream 80013-class recognition head. define_IP() passes is_train=False, so fc2_ is never constructed; the DSDG loader's filter (train_generator.py:77, 'if k in model_dict') drops it. This is the documented official behaviour, not a defect.",
+          "unexpected_keys": [
+            "module.fc2.weight"
+          ],
+          "verdict": "COMPATIBLE - every one of the 60 define_IP() parameters is supplied by the checkpoint with an exactly matching shape; 0 missing, 0 shape mismatches."
+        },
+        "compatibility_basis": "Same bytes as M6A4 restricted inspection; not re-deserialized",
+        "deserialized": false,
+        "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+        "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+        "size_bytes": 123844849,
+        "verification": "PASS"
+      },
+      "loss_contract": {
+        "assembly": "unweighted sum: rec + kl + mmd + ip + pair + cls + ort",
+        "coefficients_retuned_in_m6b": false,
+        "lambda_ip": 1000,
+        "lambda_mmd": 50,
+        "lambda_ort": 1,
+        "lambda_pair": 0.0,
+        "lambda_pair_official_default": 5,
+        "lambda_pair_removal_reason": "A1/DEV-020: loss_pair forces the two reconstructions' identity features to match, invalid across different people",
+        "lambda_type": 10,
+        "warmup": "epochs < 2 scale every term except loss_rec by 0.01"
+      },
+      "official_argument_vector": [
+        "--workers",
+        "8",
+        "--all_epochs",
+        "200",
+        "--pre_epoch",
+        "0",
+        "--hdim",
+        "128",
+        "--attack_type",
+        "1",
+        "--test_epoch",
+        "10",
+        "--lr",
+        "0.0002",
+        "--lambda_mmd",
+        "50",
+        "--lambda_ip",
+        "1000",
+        "--lambda_pair",
+        "0.0",
+        "--lambda_type",
+        "10",
+        "--lambda_ort",
+        "1",
+        "--save_epoch",
+        "10",
+        "--ip_model",
+        "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+        "--batch_size",
+        "240"
+      ],
+      "optimizer_contract": {
+        "learning_rate": 0.0002,
+        "learning_rate_source": "argparse fall-through; train_generator.sh does not pass --lr",
+        "name": "Adam",
+        "netCls_in_optimizer": false,
+        "netCls_note": "official behaviour retained: the classifier head stays at initialisation while loss_cls still backpropagates into the encoder",
+        "scope": "netE_nir + netE_vis + netG"
+      },
+      "seed_plans": [
+        {
+          "checkpoint": {
+            "authoritative_path_basename": "netG_model_epoch_200_iter_0.pth",
+            "cadence": "save_epoch_10",
+            "checkpoint_sha256": null,
+            "checkpoint_types_supported": [
+              "official",
+              "periodic",
+              "terminal",
+              "selected"
+            ],
+            "checkpoint_written": false,
+            "experiment_seed": 42,
+            "final_epoch": 200,
+            "method_id": "E06c",
+            "missing_field_reasons": {
+              "checkpoint_sha256": "Preparation only; no checkpoint exists"
+            },
+            "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+            "selection_scope": "WITHIN_SEED",
+            "selection_uses_test": false,
+            "selection_uses_val": false
+          },
+          "config_sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+          "seed": 42,
+          "seed_plan": {
+            "cudnn_benchmark": false,
+            "cudnn_deterministic": true,
+            "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+            "force_deterministic_algorithms": false,
+            "framework": "torch",
+            "framework_seed": 42,
+            "launch_environment": {
+              "PYTHONHASHSEED": "42"
+            },
+            "numpy_random": 42,
+            "python_random": 42,
+            "seed": 42,
+            "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+          }
+        },
+        {
+          "checkpoint": {
+            "authoritative_path_basename": "netG_model_epoch_200_iter_0.pth",
+            "cadence": "save_epoch_10",
+            "checkpoint_sha256": null,
+            "checkpoint_types_supported": [
+              "official",
+              "periodic",
+              "terminal",
+              "selected"
+            ],
+            "checkpoint_written": false,
+            "experiment_seed": 1337,
+            "final_epoch": 200,
+            "method_id": "E06c",
+            "missing_field_reasons": {
+              "checkpoint_sha256": "Preparation only; no checkpoint exists"
+            },
+            "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+            "selection_scope": "WITHIN_SEED",
+            "selection_uses_test": false,
+            "selection_uses_val": false
+          },
+          "config_sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+          "seed": 1337,
+          "seed_plan": {
+            "cudnn_benchmark": false,
+            "cudnn_deterministic": true,
+            "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+            "force_deterministic_algorithms": false,
+            "framework": "torch",
+            "framework_seed": 1337,
+            "launch_environment": {
+              "PYTHONHASHSEED": "1337"
+            },
+            "numpy_random": 1337,
+            "python_random": 1337,
+            "seed": 1337,
+            "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+          }
+        },
+        {
+          "checkpoint": {
+            "authoritative_path_basename": "netG_model_epoch_200_iter_0.pth",
+            "cadence": "save_epoch_10",
+            "checkpoint_sha256": null,
+            "checkpoint_types_supported": [
+              "official",
+              "periodic",
+              "terminal",
+              "selected"
+            ],
+            "checkpoint_written": false,
+            "experiment_seed": 2026,
+            "final_epoch": 200,
+            "method_id": "E06c",
+            "missing_field_reasons": {
+              "checkpoint_sha256": "Preparation only; no checkpoint exists"
+            },
+            "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+            "selection_scope": "WITHIN_SEED",
+            "selection_uses_test": false,
+            "selection_uses_val": false
+          },
+          "config_sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+          "seed": 2026,
+          "seed_plan": {
+            "cudnn_benchmark": false,
+            "cudnn_deterministic": true,
+            "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+            "force_deterministic_algorithms": false,
+            "framework": "torch",
+            "framework_seed": 2026,
+            "launch_environment": {
+              "PYTHONHASHSEED": "2026"
+            },
+            "numpy_random": 2026,
+            "python_random": 2026,
+            "seed": 2026,
+            "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+          }
+        }
+      ],
+      "settings_mapping": [
+        {
+          "config_field": "training.workers",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--workers",
+          "value": 8
+        },
+        {
+          "config_field": "training.all_epochs",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--all_epochs",
+          "value": 200
+        },
+        {
+          "config_field": "training.pre_epoch",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--pre_epoch",
+          "value": 0
+        },
+        {
+          "config_field": "training.hdim",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--hdim",
+          "value": 128
+        },
+        {
+          "config_field": "training.attack_type",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--attack_type",
+          "value": 1
+        },
+        {
+          "config_field": "training.test_epoch",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--test_epoch",
+          "value": 10
+        },
+        {
+          "config_field": "optimizer.learning_rate",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--lr",
+          "value": 0.0002
+        },
+        {
+          "config_field": "losses.lambda_mmd",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--lambda_mmd",
+          "value": 50
+        },
+        {
+          "config_field": "losses.lambda_ip",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--lambda_ip",
+          "value": 1000
+        },
+        {
+          "config_field": "losses.lambda_pair",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--lambda_pair",
+          "value": 0.0
+        },
+        {
+          "config_field": "losses.lambda_type",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--lambda_type",
+          "value": 10
+        },
+        {
+          "config_field": "losses.lambda_ort",
+          "source_file": "addition_module/DSDG/train_generator.py:parser",
+          "target": "--lambda_ort",
+          "value": 1
+        },
+        {
+          "config_field": "checkpoint.cadence",
+          "source_file": "addition_module/DSDG/train_generator.sh",
+          "target": "--save_epoch",
+          "value": 10
+        },
+        {
+          "config_field": "external_assets[0].external_runtime_path",
+          "source_file": "addition_module/DSDG/train_generator.py:define_IP loading",
+          "target": "--ip_model",
+          "value": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar"
+        },
+        {
+          "config_field": "training.effective_batch_size; E06c requires the full physical batch",
+          "source_file": "addition_module/DSDG/train_generator.py:DataLoader",
+          "target": "--batch_size",
+          "value": 240
+        }
+      ],
+      "snapshot_verified": true,
+      "source": {
+        "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+        "files_sha256": {
+          "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+          "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+          "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+          "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+          "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+          "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+          "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+          "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+          "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+          "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+          "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+          "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+          "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+        },
+        "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+        "root": "/home/cong/GPAT_TransferBench/third_party/source_cache/facexzoo",
+        "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+        "verification": "PASS"
+      },
+      "status": "IMPLEMENTED_NOT_EXECUTED",
+      "upstream_bindings": {
+        "checkpoint_writer": "misc.util.save_checkpoint",
+        "identity_net": "networks.define_IP",
+        "loss_loop": "train_generator.main (pinned body)",
+        "models": "networks.define_G",
+        "optimizer": "torch.optim.Adam(netE_nir+netE_vis+netG)"
+      }
+    }
+  },
+  "milestone": "M6C2a",
+  "precommit_batch_semantics_correction": {
+    "batch_dependent_statistical_losses_found": true,
+    "counterexample": "Equal microbatches with mean statistics +1/-1: full-batch abs(mean)=0; average microbatch abs(mean)=1. Applies to both retained terms.",
+    "default": {
+      "effective_batch_size": 240,
+      "gradient_accumulation_steps": 1,
+      "physical_batch_size": 240,
+      "replica_factor": 1
+    },
+    "files_changed_in_correction": [
+      "methods/dsdg/adapter.py",
+      "tests/test_m6c2a_dsdg.py",
+      "outputs/audit/M6C2A_IMPLEMENTATION.md",
+      "outputs/audit/M6C2A_IMPLEMENTATION.json",
+      "outputs/audit/EXECUTION_LEDGER.jsonl",
+      "outputs/audit/ARTIFACT_INDEX.csv"
+    ],
+    "frozen_yaml_changed": false,
+    "generic_arithmetic_helper_changed": false,
+    "interpretation": "Frozen OOM allowance is necessary but not sufficient; method-specific guard requires a demonstrated objective-preserving implementation and execution-resolution decision before reduced-batch execution.",
+    "loss_mmd_expression": "args.lambda_mmd * torch.abs(z_nir.mean(dim=0) - z_vis.mean(dim=0)).mean()",
+    "loss_mmd_line": 141,
+    "loss_ort_expression": "args.lambda_ort * torch.abs((z_cls * z_nir).sum(dim=1).mean())",
+    "loss_ort_line": 147,
+    "naive_gradient_accumulation_objective_equivalent": false,
+    "official_tail_policy_changed": false,
+    "oom_behavior": "STOP_AND_RESOLVE",
+    "oom_reason_bypasses_invariant": false,
+    "policy": "E06C_REQUIRES_PHYSICAL_BATCH_240_FOR_OBJECTIVE_EQUIVALENCE",
+    "semantics_preserving_microbatch_implementation_demonstrated": false,
+    "source_commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "source_file": "third_party/source_cache/facexzoo/addition_module/DSDG/train_generator.py",
+    "source_function": "main",
+    "starting_commit": "425f0aebe28011cae11041d210166572269d0f6c",
+    "starting_working_tree": "Existing uncommitted M6C2a preserved",
+    "tests_added": [
+      "test_explicit_full_physical_batch_accepted",
+      "test_e06c_rejects_120_times_2_even_with_oom_reason",
+      "test_e06c_rejects_60_times_4_even_with_oom_reason",
+      "test_e06c_rejects_microbatches_without_oom_reason",
+      "test_e06c_rejects_wrong_effective_batch",
+      "test_batch_loss_counterexample_on_synthetic_latents"
+    ],
+    "tests_updated": [
+      "test_native_effective_batch_no_preemptive_oom: asserts execution/oom policy",
+      "test_valid_oom_accounting renamed test_generic_arithmetic_accounting_is_not_e06c_permission; generic arithmetic assertions retained"
+    ],
+    "unresolved_metadata_issue": {
+      "classification": "M6C2A_LEARNED_BASELINE_IMPLEMENTATION",
+      "committed_prefix_unchanged": true,
+      "existed_in_committed_head": false,
+      "ledger_line": 87,
+      "missing_required_field": "input_artifacts",
+      "resolution": "CORRECTED_IN_PLACE_BEFORE_COMMIT"
+    }
+  },
+  "preflight": {
+    "checkpoint_created": false,
+    "environment_freeze_pending": true,
+    "file_open_audit": {
+      "benchmark_image_opens": 0,
+      "manifest_opens": 0,
+      "opens": 620,
+      "rejected_data_opens": 0
+    },
+    "gpu_job": false,
+    "logging_contract": "run_logging_v1",
+    "mode": "STATIC_PREPARATION_ONLY",
+    "production_runtime_write": false,
+    "result": "PASS",
+    "training_launched": false
+  },
+  "preserved": "Existing common runtime/config/seeding, M6C1 implementations/tests and all M6A1-M6C1 audit artifacts unchanged",
+  "prohibitions": {
+    "benchmark_image_execution": false,
+    "commit": false,
+    "frozen_config_change": false,
+    "gpu_job": false,
+    "push": false,
+    "scientific_checkpoint_created": false,
+    "synthetic_bank_generation": false,
+    "test_split_execution": false,
+    "training": false
+  },
+  "remaining_execution_dependencies": [
+    "Compatible isolated STDN TF1 tf.contrib/legacy Python runtime and runner integration; modern preparation package is not proof of legacy runtime compatibility",
+    "DSDG compatible PyTorch/torchvision/CUDA environment; pinned constructors/reparameterize require CUDA",
+    "Wire verified split/pair records, logging, framework seeds and official components in the actual runner before training",
+    "E06c requires physical batch 240 first. On OOM STOP_AND_RESOLVE; no microbatch fallback unless objective-preserving forward/loss/backward behavior for MMD AND angular orthogonality is demonstrated and an execution-resolution decision made",
+    "Reproducibility and framework/kernel compatibility require validation in the later frozen execution environment"
+  ],
+  "schema_version": "m6c2a-implementation-v1",
+  "scope": "Additive learned support and static/synthetic E03/E06c adapters; no standalone training launch",
+  "starting_commit": "425f0aebe28011cae11041d210166572269d0f6c",
+  "starting_working_tree": "CLEAN",
+  "status": "IMPLEMENTED_NOT_EXECUTED",
+  "tests": {
+    "full_repository_suite": "NOT_RUN",
+    "historical_m0": {
+      "errors": 0,
+      "failures": 1,
+      "historical_failure_changed": false,
+      "ledger_schema_correction": {
+        "classification": "M6C2A_LEARNED_BASELINE_IMPLEMENTATION",
+        "committed_head_record_count": 86,
+        "committed_prefix_byte_identical": true,
+        "corrected_in_place_before_commit": true,
+        "current_record_count": 88,
+        "draft_record": 87,
+        "existed_in_committed_head": false,
+        "historical_record_rewritten": false,
+        "input_artifacts_added": [
+          "configs/methods/e03_stdn.yaml",
+          "configs/methods/e06c_dsdg_bin_idfree.yaml",
+          "configs/run_logging_v1.yaml",
+          "frozen_config_snapshot/configs/methods/e03_stdn.yaml",
+          "frozen_config_snapshot/configs/methods/e06c_dsdg_bin_idfree.yaml",
+          "frozen_config_snapshot/configs/run_logging_v1.yaml",
+          "outputs/audit/M6B_CONFIG_FREEZE.json",
+          "outputs/audit/M6B_LOGGING_CONTRACT.md",
+          "outputs/audit/M6C1_IMPLEMENTATION.md",
+          "outputs/audit/M6C1_IMPLEMENTATION.json",
+          "outputs/audit/M6_BASELINE_EXECUTION_CONTRACT_AUDIT.md",
+          "outputs/audit/M6_BASELINE_SOURCE_PROVENANCE.md",
+          "outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json",
+          "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx",
+          "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+          "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+          "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+          "third_party/source_pins.json",
+          "third_party/source_cache/stdn",
+          "third_party/source_cache/facexzoo/addition_module/DSDG"
+        ],
+        "missing_field_corrected": "input_artifacts"
+      },
+      "passed": 16,
+      "reason": "manifests/artifact_probe_classes_v1.json",
+      "sole_failure": "test_manifests_are_stage_appropriate",
+      "tests": 17
+    },
+    "m6b_validator": {
+      "failures": 0,
+      "result": "PASS"
+    },
+    "m6c1": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 83
+    },
+    "m6c2a": {
+      "errors": 0,
+      "failures": 0,
+      "file_open_audit": {
+        "benchmark_image_opens": 0,
+        "manifest_opens": 0,
+        "opens": 925,
+        "rejected_data_opens": 0
+      },
+      "skipped": 0,
+      "tests": 72
+    }
+  }
+}
