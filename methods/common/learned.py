@@ -43,11 +43,21 @@ def git_read(root: Path, *args: str) -> str:
         raise PreparationError(f'source git verification failed: {args}') from exc
 
 
-def verify_source(config: dict, required_files: tuple[str, ...], *, source_root=None) -> dict:
+def verify_source(config: dict, required_files: tuple[str, ...], *, source_root=None,
+                  auxiliary_geometry=False) -> dict:
     cfg = authoritative(config)
-    source = cfg['source']
-    pins = json.loads((ROOT / source['provenance']).read_text())['sources']
-    matches = [p for p in pins.values() if cfg['method_id'] in p['method_ids']
+    if auxiliary_geometry:
+        if cfg['method_id'] != 'E04':
+            raise PreparationError('auxiliary geometry source is defined only for E04')
+        source = cfg['external_assets']['geometry_engine']
+        provenance = 'third_party/source_pins.json'
+        membership = 'supports_method_ids'
+    else:
+        source = cfg['source']
+        provenance = source['provenance']
+        membership = 'method_ids'
+    pins = json.loads((ROOT / provenance).read_text())['sources']
+    matches = [p for p in pins.values() if cfg['method_id'] in p.get(membership, [])
                and p['repository'] == source['repository']]
     if len(matches) != 1:
         raise PreparationError('source pin must identify exactly one repository')
