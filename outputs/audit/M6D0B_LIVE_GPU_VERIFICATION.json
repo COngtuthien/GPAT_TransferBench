@@ -1,0 +1,802 @@
+{
+  "milestone": "M6D0b",
+  "classification": "READ_ONLY_INFRASTRUCTURE_ENVIRONMENT_AUDIT",
+  "status": "COMPLETED_WITH_BLOCKERS",
+  "starting_commit": "a6f78e9ba403148cb92e7f46ad4c72037dfc0499",
+  "recorded_utc": "2026-09-22T17:17:31.044142+00:00",
+  "live_inventory_utc": "2026-09-22T17:09:24.929042+00:00",
+  "last_remote_check_utc": "2026-09-22T17:11:10Z",
+  "local_preflight": {
+    "head": "a6f78e9ba403148cb92e7f46ad4c72037dfc0499",
+    "origin_m6_baselines": "a6f78e9ba403148cb92e7f46ad4c72037dfc0499",
+    "branch": "m6-baselines",
+    "divergence": [
+      0,
+      0
+    ],
+    "worktree_clean_at_start": true,
+    "final_worktree_clean": false,
+    "final_changes": "four authorized additions plus ledger/index"
+  },
+  "ssh_authentication": "PUBLIC_KEY_WORKING",
+  "ssh_endpoint": "student20261@100.121.84.44",
+  "ssh_options": [
+    "BatchMode=yes",
+    "PreferredAuthentications=publickey",
+    "PasswordAuthentication=no"
+  ],
+  "ssh_note": "Initial sandbox socket denial was retried with approved network escalation; actual public-key authentication succeeded. No private-key bytes inspected.",
+  "gpu_repository": {
+    "path": "/home/student20261/workdir/GPAT_TransferBench",
+    "head": "89ea43e3d32d87d0641ec57bb62e6c72694dbe8a",
+    "branch": "m6-baselines",
+    "clean_at_start": true,
+    "clean_at_end": true,
+    "status_porcelain_start": "",
+    "status_porcelain_end": "",
+    "remote_branch_head": "a6f78e9ba403148cb92e7f46ad4c72037dfc0499",
+    "remote": "git@github.com:COngtuthien/GPAT_TransferBench.git",
+    "commits_behind": 15,
+    "relationship": "ANCESTOR_OF_REMOTE_HEAD",
+    "relationship_derivation": "Laptop git merge-base --is-ancestor returned 0; git rev-list --left-right --count GPU_HEAD...REMOTE_HEAD returned 0 15 using existing laptop objects. GPU git ls-remote queried current GitHub ref without fetch.",
+    "source_cache_exists": false,
+    "log5": [
+      "89ea43e M6: reconcile milestone state before baseline preflight",
+      "9b84602 M5: record authoritative ArtifactProbeNet training result",
+      "ad27df2 M5: finalize ArtifactProbeNet GPU training pipeline",
+      "3928841 M5-preflight: clarify per-epoch probe validation contract",
+      "1a4997b M5-preflight: resolve and freeze ArtifactProbeNet contract"
+    ]
+  },
+  "platform": {
+    "hostname": "nd-System-Product-Name",
+    "user": "student20261",
+    "os": "Ubuntu 24.04.4 LTS (Noble Numbat)",
+    "kernel": "7.0.0-29-generic",
+    "uname_a": "Linux nd-System-Product-Name 7.0.0-29-generic #29~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Wed Aug 12 17:25:56 UTC 2 x86_64 x86_64 x86_64 GNU/Linux",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "vram_mib": 24576,
+    "compute_capability": "8.6",
+    "driver": "595.84",
+    "nvidia_smi_cuda_compatibility": "13.2",
+    "system_nvcc": {
+      "path": "/usr/bin/nvcc",
+      "release": "12.0",
+      "version": "V12.0.140"
+    },
+    "gcc": {
+      "path": "/usr/bin/gcc",
+      "version": "13.3.0",
+      "full": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "gxx": {
+      "path": "/usr/bin/g++",
+      "version": "13.3.0",
+      "full": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "cmake": {
+      "status": "MISSING_FROM_SHELL_PATH",
+      "path": null
+    },
+    "ninja": {
+      "status": "MISSING_FROM_SHELL_PATH",
+      "path": null
+    },
+    "ram": {
+      "total": "31Gi",
+      "used": "4.3Gi",
+      "free": "3.0Gi",
+      "available": "26Gi",
+      "swap_total": "8.0Gi",
+      "swap_used": "527Mi"
+    },
+    "disk": {
+      "device": "/dev/nvme0n1p3",
+      "mount": "/",
+      "size_human": "916G",
+      "used_human": "410G",
+      "available_human": "461G",
+      "use_percent": "48%",
+      "size_bytes": 983366017024,
+      "used_bytes": 439225942016,
+      "available_bytes": 494140010496,
+      "paths": [
+        "/home/student20261",
+        "/home/student20261/workdir",
+        "/home/student20261/workdir/GPAT_TransferBench_runtime"
+      ]
+    },
+    "cuda_layers_are_distinct": true,
+    "raw_platform_capture": "nd-System-Product-Name\nstudent20261\nLinux nd-System-Product-Name 7.0.0-29-generic #29~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Wed Aug 12 17:25:56 UTC 2 x86_64 x86_64 x86_64 GNU/Linux\nPRETTY_NAME=\"Ubuntu 24.04.4 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.4 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\nTue Sep 22 21:51:46 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 595.84                 Driver Version: 595.84         CUDA Version: 13.2     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 3090        Off |   00000000:01:00.0 Off |                  N/A |\n|  0%   40C    P8             24W /  350W |     255MiB /  24576MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A          516780      G   /usr/lib/xorg/Xorg                       29MiB |\n|    0   N/A  N/A          517295      G   /usr/bin/gnome-shell                     10MiB |\n|    0   N/A  N/A          518050      G   ...exec/xdg-desktop-portal-gnome          6MiB |\n|    0   N/A  N/A          518484      G   ...bin/snapd-desktop-integration         10MiB |\n|    0   N/A  N/A         1261744      G   /usr/lib/xorg/Xorg                       51MiB |\n|    0   N/A  N/A         1262315      G   /usr/bin/gnome-shell                     10MiB |\n|    0   N/A  N/A         1263487      G   ...bin/snapd-desktop-integration         10MiB |\n|    0   N/A  N/A         1264756      G   /usr/bin/gnome-control-center            17MiB |\n|    0   N/A  N/A         2962130      G   /usr/bin/nautilus                        18MiB |\n+-----------------------------------------------------------------------------------------+\nNVIDIA GeForce RTX 3090, 595.84, 24576 MiB, 8.6\n/usr/bin/nvcc\nnvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2023 NVIDIA Corporation\nBuilt on Fri_Jan__6_16:45:21_PST_2023\nCuda compilation tools, release 12.0, V12.0.140\nBuild cuda_12.0.r12.0/compiler.32267302_0\n/usr/bin/gcc\ngcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\n/usr/bin/g++\ng++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\n               total        used        free      shared  buff/cache   available\nMem:            31Gi       4.3Gi       3.0Gi        19Mi        23Gi        26Gi\nSwap:          8.0Gi       527Mi       7.5Gi\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/nvme0n1p3  916G  410G  461G  48% /\n/dev/nvme0n1p3  916G  410G  461G  48% /\n/dev/nvme0n1p3  916G  410G  461G  48% /\n"
+  },
+  "conda": {
+    "executable": "/home/student20261/miniconda3/bin/conda",
+    "base": "/home/student20261/miniconda3",
+    "version": "26.7.2",
+    "shell_initialization_note": "bash -lc did not expose conda or CONDA_EXE. ~/.conda/environments.txt and existing miniconda3 root established the executable; used directly thereafter.",
+    "environments": [
+      {
+        "name": "base",
+        "path": "/home/student20261/miniconda3",
+        "python_version_output": "Python 3.14.6",
+        "framework_metadata": {
+          "torch": "2.14.0"
+        },
+        "heavyweight_imports_performed": false
+      },
+      {
+        "name": "gpat-m5",
+        "path": "/home/student20261/miniconda3/envs/gpat-m5",
+        "python_version_output": "Python 3.11.16",
+        "framework_metadata": {
+          "torch": "2.12.1+cu130",
+          "torchvision": "0.27.1+cu130"
+        },
+        "heavyweight_imports_performed": false
+      },
+      {
+        "name": "grbkd",
+        "path": "/home/student20261/miniconda3/envs/grbkd",
+        "python_version_output": "Python 3.12.13",
+        "framework_metadata": {
+          "torch": "2.13.0",
+          "torchvision": "0.28.0"
+        },
+        "heavyweight_imports_performed": false
+      },
+      {
+        "name": "llm-movielens",
+        "path": "/home/student20261/miniconda3/envs/llm-movielens",
+        "python_version_output": "Python 3.13.15",
+        "framework_metadata": {
+          "torch": "2.14.0"
+        },
+        "heavyweight_imports_performed": false
+      },
+      {
+        "name": "stdn",
+        "path": "/home/student20261/miniconda3/envs/stdn",
+        "python_version_output": "Python 3.10.21",
+        "framework_metadata": {
+          "tensorflow": "2.21.0",
+          "torch": "2.5.1+cu121",
+          "torchvision": "0.20.1+cu121"
+        },
+        "heavyweight_imports_performed": false
+      }
+    ],
+    "inventory_scope": "Python --version plus installed dist-info framework versions for every env, no heavyweight imports outside gpat-m5. Empty framework metadata means not found in the inspected dist-info paths."
+  },
+  "gpat_m5": {
+    "python": "3.11.16",
+    "executable": "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
+    "packages": {
+      "torch": {
+        "status": "AVAILABLE",
+        "version": "2.12.1+cu130",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/torch/__init__.py"
+      },
+      "torchvision": {
+        "status": "AVAILABLE",
+        "version": "0.27.1+cu130",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/torchvision/__init__.py"
+      },
+      "tensorflow": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'tensorflow'"
+      },
+      "cv2": {
+        "status": "AVAILABLE",
+        "version": "5.0.0",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/cv2/__init__.py"
+      },
+      "numpy": {
+        "status": "AVAILABLE",
+        "version": "2.4.6",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/numpy/__init__.py"
+      },
+      "scipy": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'scipy'"
+      },
+      "sklearn": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'sklearn'"
+      },
+      "pandas": {
+        "status": "AVAILABLE",
+        "version": "3.0.6",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/pandas/__init__.py"
+      },
+      "pyarrow": {
+        "status": "AVAILABLE",
+        "version": "25.0.1",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/pyarrow/__init__.py"
+      },
+      "PIL": {
+        "status": "AVAILABLE",
+        "version": "12.3.0",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/PIL/__init__.py"
+      },
+      "yaml": {
+        "status": "AVAILABLE",
+        "version": "6.0.3",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/yaml/__init__.py"
+      },
+      "tensorfn": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'tensorfn'"
+      },
+      "Cython": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'Cython'"
+      },
+      "onnxruntime": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'onnxruntime'"
+      },
+      "lpips": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'lpips'"
+      },
+      "PIL.ImageCms": {
+        "status": "AVAILABLE",
+        "version": "12.3.0",
+        "module_file": "/home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/PIL/ImageCms.py"
+      },
+      "Sim3DR_Cython": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'Sim3DR_Cython'"
+      },
+      "ninja": {
+        "status": "MISSING",
+        "error": "ModuleNotFoundError: No module named 'ninja'"
+      }
+    },
+    "torch": {
+      "version": "2.12.1+cu130",
+      "cuda_runtime": "13.0",
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3090",
+      "compute_capability": [
+        8,
+        6
+      ],
+      "cudnn": 92000,
+      "matmul_allow_tf32": false,
+      "cudnn_allow_tf32": true,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": false
+    },
+    "python_headers": {
+      "include": "/home/student20261/miniconda3/envs/gpat-m5/include/python3.11",
+      "Python_h_exists": true
+    },
+    "blocked_write_attempts": [],
+    "temporary_import_operations": [
+      [
+        "os.mkdir",
+        "('/tmp/torchinductor_student20261', 511, -1)"
+      ]
+    ],
+    "path": "/home/student20261/miniconda3/envs/gpat-m5",
+    "pip_version": "26.2.1",
+    "pip_version_output": "pip 26.2.1 from /home/student20261/miniconda3/envs/gpat-m5/lib/python3.11/site-packages/pip (python 3.11)"
+  },
+  "historical_m5_comparison": {
+    "python": {
+      "historical": "3.11.16",
+      "live": "3.11.16",
+      "status": "MATCHES_HISTORICAL_M5"
+    },
+    "torch": {
+      "historical": "2.12.1+cu130",
+      "live": "2.12.1+cu130",
+      "status": "MATCHES_HISTORICAL_M5"
+    },
+    "torchvision": {
+      "historical": "0.27.1+cu130",
+      "live": "0.27.1+cu130",
+      "status": "MATCHES_HISTORICAL_M5"
+    },
+    "torch_cuda_runtime": {
+      "historical": "13.0",
+      "live": "13.0",
+      "status": "MATCHES_HISTORICAL_M5"
+    },
+    "cudnn": {
+      "historical": 92000,
+      "live": 92000,
+      "status": "MATCHES_HISTORICAL_M5"
+    }
+  },
+  "determinism_note": "Fresh import defaults observed without assignment: matmul TF32 false, cuDNN TF32 true, benchmark false, deterministic false. These are not M5 run-configured flags. Historical M5 configured cuDNN TF32 false and deterministic true. This audit did not execute a scientific run or change the flags.",
+  "runtime": {
+    "path": "/home/student20261/workdir/GPAT_TransferBench_runtime",
+    "realpath": "/home/student20261/workdir/GPAT_TransferBench_runtime",
+    "exists": true,
+    "owner": "student20261",
+    "group": "student20261",
+    "permissions": "775",
+    "symbolic_permissions": "drwxrwxr-x",
+    "faces_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256",
+    "faces_realpath": "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256",
+    "faces_exists": true,
+    "faces_owner": "student20261",
+    "faces_group": "student20261",
+    "faces_permissions": "775",
+    "faces_png_metadata_count": 20615,
+    "expected_png_count": 20615,
+    "count_command": "find /home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256 -type f -name '*.png' -printf '.' | wc -c",
+    "children": [
+      "data"
+    ],
+    "image_pixels_opened": false,
+    "free_bytes": 494140010496
+  },
+  "external_assets": {
+    "authority": "Current laptop frozen method configs and M6D0/M6A4/M6A5 provenance at starting_commit; no stale GPU scientific interpretation.",
+    "search_scope": "Exact known laptop paths, runtime-relative third_party_weights conventions mapped under the established GPU runtime root, and pinned source-relative asset paths under the GPU repository. No broad filesystem search; absence is scoped to these conventions, not the entire GPU disk.",
+    "observations": [
+      {
+        "method": "E04",
+        "asset": "configs/bfm_noneck_v3.pkl",
+        "expected_size": 24393598,
+        "expected_sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+        "candidates": [
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/bfm_noneck_v3.pkl",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/tddfa_v2/configs/bfm_noneck_v3.pkl",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/bfm_noneck_v3.pkl",
+            "exists": false,
+            "symlink": false
+          }
+        ],
+        "status": "MISSING_IN_INSPECTED_CONVENTIONS"
+      },
+      {
+        "method": "E04",
+        "asset": "configs/tri.pkl",
+        "expected_size": 913040,
+        "expected_sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8",
+        "candidates": [
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/tri.pkl",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/tddfa_v2/configs/tri.pkl",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/tri.pkl",
+            "exists": false,
+            "symlink": false
+          }
+        ],
+        "status": "MISSING_IN_INSPECTED_CONVENTIONS"
+      },
+      {
+        "method": "E04",
+        "asset": "configs/param_mean_std_62d_120x120.pkl",
+        "expected_size": 713,
+        "expected_sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795",
+        "candidates": [
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/param_mean_std_62d_120x120.pkl",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/tddfa_v2/configs/param_mean_std_62d_120x120.pkl",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/param_mean_std_62d_120x120.pkl",
+            "exists": false,
+            "symlink": false
+          }
+        ],
+        "status": "MISSING_IN_INSPECTED_CONVENTIONS"
+      },
+      {
+        "method": "E04",
+        "asset": "weights/mb1_120x120.pth",
+        "expected_size": 13755269,
+        "expected_sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79",
+        "candidates": [
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/weights/mb1_120x120.pth",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/tddfa_v2/weights/mb1_120x120.pth",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/weights/mb1_120x120.pth",
+            "exists": false,
+            "symlink": false
+          }
+        ],
+        "status": "MISSING_IN_INSPECTED_CONVENTIONS"
+      },
+      {
+        "method": "E06c",
+        "asset": "LightCNN_29Layers_V2_checkpoint.pth.tar",
+        "expected_size": 123844849,
+        "expected_sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+        "candidates": [
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/facexzoo/addition_module/DSDG/ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar",
+            "exists": false,
+            "symlink": false
+          },
+          {
+            "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+            "exists": false,
+            "symlink": false
+          }
+        ],
+        "status": "MISSING_IN_INSPECTED_CONVENTIONS"
+      }
+    ],
+    "E07c": {
+      "status": "NOT_YET_TRAINED",
+      "sha256": "RECORDED_AFTER_TRAINING",
+      "created": false
+    },
+    "asset_files_found": 0,
+    "streaming_hashes_performed_on_gpu": 0,
+    "deserialization": false
+  },
+  "compiler_extension_readiness": {
+    "E04": {
+      "gcc": "13.3.0",
+      "gxx": "13.3.0",
+      "Cython": "MISSING_IN_GPAT_M5",
+      "Python_h": {
+        "include": "/home/student20261/miniconda3/envs/gpat-m5/include/python3.11",
+        "Python_h_exists": true
+      },
+      "Sim3DR_Cython": "MISSING_IN_GPAT_M5",
+      "gpu_source_cache": "ABSENT",
+      "build_performed": false
+    },
+    "E05": {
+      "gcc": "13.3.0",
+      "gxx": "13.3.0",
+      "nvcc": "12.0 / V12.0.140",
+      "torch": "2.12.1+cu130",
+      "torch_cuda": "13.0",
+      "ninja": "MISSING_IN_GPAT_M5_AND_SHELL_PATH",
+      "compatibility": "REQUIRES_COMPATIBILITY_PROBE",
+      "extension_compiled": false
+    }
+  },
+  "method_matrix": {
+    "E01": {
+      "config": "configs/methods/e01_fas_aug.yaml",
+      "source_requirements": "NumPy, Pillow/ImageCms and OpenCV for the selected official pixel path; versions unspecified.",
+      "statuses": [
+        "EXISTING_ENV_CANDIDATE",
+        "REQUIRES_COMPATIBILITY_PROBE",
+        "BLOCKED_BY_GPU_REPO_NOT_SYNCED"
+      ],
+      "candidate": "gpat-m5",
+      "remaining_gates": [
+        "Official operator compatibility probe remains pending; only imports checked. GPU source_cache is absent."
+      ]
+    },
+    "E02": {
+      "config": "configs/methods/e02_freqsub.yaml",
+      "source_requirements": "NumPy with explicit PCG64 semantics and FFT; final NumPy pin requires deterministic compatibility evidence.",
+      "statuses": [
+        "EXISTING_ENV_CANDIDATE",
+        "REQUIRES_COMPATIBILITY_PROBE",
+        "BLOCKED_BY_GPU_REPO_NOT_SYNCED"
+      ],
+      "candidate": "gpat-m5",
+      "remaining_gates": [
+        "PCG64 selection and FFT deterministic compatibility probe remains pending; no numerical operator executed."
+      ]
+    },
+    "E03": {
+      "config": "configs/methods/e03_stdn.yaml",
+      "source_requirements": "Isolated Python 3.6-era TensorFlow 1 graph stack with tf.contrib. README tested TF 1.13.0 but also requires >1.8 and <1.13; unresolved contradiction.",
+      "statuses": [
+        "NEW_ENV_REQUIRED",
+        "BLOCKED_BY_VERSION_AMBIGUITY",
+        "REQUIRES_COMPATIBILITY_PROBE",
+        "BLOCKED_BY_GPU_REPO_NOT_SYNCED"
+      ],
+      "candidate": null,
+      "remaining_gates": [
+        "Existing stdn is Python 3.10.21 / TensorFlow 2.21.0, not the required TF1/contrib stack.",
+        "Resolve TF 1.13 versus <1.13 and legacy CUDA/cuDNN support on RTX 3090."
+      ]
+    },
+    "E04": {
+      "config": "configs/methods/e04_physics_std.yaml",
+      "source_requirements": "Training framework boundary remains unresolved (paper TensorFlow, no released implementation/version). 3DDFA geometry requires PyTorch plus Cython/C++11 Sim3DR. Training and geometry may need separate environments.",
+      "statuses": [
+        "BLOCKED_BY_VERSION_AMBIGUITY",
+        "BLOCKED_BY_MISSING_ASSET",
+        "REQUIRES_COMPATIBILITY_PROBE",
+        "BLOCKED_BY_GPU_REPO_NOT_SYNCED"
+      ],
+      "candidate": null,
+      "remaining_gates": [
+        "All four frozen GPU assets missing in inspected conventions.",
+        "gpat-m5 lacks TensorFlow, Cython, SciPy and Sim3DR_Cython; GPU source_cache is absent.",
+        "Resolve training framework/version boundary and possible geometry/training split; production Sim3DR compatibility remains pending."
+      ]
+    },
+    "E05": {
+      "config": "configs/methods/e05_pcgan.yaml",
+      "source_requirements": "Source reference Python 3.6 / PyTorch 1.7.1, CUDA >=10.1; StyleGAN2 JIT C++/CUDA fused_bias_act and upfirdn2d extensions.",
+      "statuses": [
+        "NEW_ENV_REQUIRED",
+        "REQUIRES_COMPATIBILITY_PROBE",
+        "BLOCKED_BY_GPU_REPO_NOT_SYNCED"
+      ],
+      "candidate": null,
+      "remaining_gates": [
+        "Modern gpat-m5 differs from source reference; no environment approved.",
+        "System nvcc 12.0 versus framework CUDA 13.0 requires a compatible future compiler/toolkit/framework combination.",
+        "gcc/g++ 13.3.0 observed; ninja and cmake absent from shell PATH and ninja module missing. JIT build/runtime compatibility not probed."
+      ]
+    },
+    "E06c": {
+      "config": "configs/methods/e06c_dsdg_bin_idfree.yaml",
+      "source_requirements": "Source specifies Python 3.8, PyTorch 1.6.0 and torchvision 0.7.0. Full physical/effective batch 240, accumulation 1, replica factor 1; no naive accumulation fallback.",
+      "statuses": [
+        "NEW_ENV_REQUIRED",
+        "BLOCKED_BY_MISSING_ASSET",
+        "REQUIRES_COMPATIBILITY_PROBE",
+        "BLOCKED_BY_GPU_REPO_NOT_SYNCED"
+      ],
+      "candidate": null,
+      "remaining_gates": [
+        "LightCNN missing in inspected GPU conventions.",
+        "Existing environments do not match the Python 3.8 / torch 1.6.0 / torchvision 0.7.0 source stack.",
+        "RTX 3090 compatibility and physical-batch-240 VRAM feasibility unproven; no model or allocation feasibility probe performed."
+      ]
+    },
+    "E07c": {
+      "config": "configs/methods/e07c_difffas_bin_idfree.yaml",
+      "source_requirements": "Source environment pins Python 3.6.13, PyTorch 1.10.2 CUDA 11.3, torchvision 0.11.3, NumPy 1.19.2 and tensorfn 0.1.28; also declares CUDA 11.7. No version resolution selected.",
+      "statuses": [
+        "NEW_ENV_REQUIRED",
+        "BLOCKED_BY_VERSION_AMBIGUITY",
+        "BLOCKED_BY_MISSING_ASSET",
+        "REQUIRES_COMPATIBILITY_PROBE",
+        "BLOCKED_BY_GPU_REPO_NOT_SYNCED"
+      ],
+      "candidate": null,
+      "remaining_gates": [
+        "No existing environment matches the source stack; tensorfn is missing from gpat-m5.",
+        "Mixed CUDA 11.3/11.7 declarations remain unresolved.",
+        "Auxiliary conditioning encoder remains NOT_YET_TRAINED; required future asset unavailable."
+      ]
+    }
+  },
+  "environment_isolation_matrix": {
+    "env-m6-core": {
+      "methods": [
+        "E01",
+        "E02"
+      ],
+      "status": "REUSE_EXISTING_CANDIDATE",
+      "existing_candidate": "gpat-m5",
+      "reason": "All selected-path imports available. Official operator/PCG64/FFT compatibility evidence remains required."
+    },
+    "env-m6-stdn": {
+      "methods": [
+        "E03"
+      ],
+      "status": "CREATE_NEW_CANDIDATE",
+      "existing_candidate": null,
+      "reason": "Existing stdn is TensorFlow 2.21.0 / Python 3.10.21. Legacy TF1/contrib stack must remain isolated; version ambiguity unresolved."
+    },
+    "env-m6-physics-std": {
+      "methods": [
+        "E04"
+      ],
+      "status": "STILL_UNRESOLVED",
+      "existing_candidate": null,
+      "reason": "Training framework boundary unresolved. Geometry/training split may be necessary, but SPLIT_REQUIRED is not established by import inventory alone."
+    },
+    "env-m6-pcgan": {
+      "methods": [
+        "E05"
+      ],
+      "status": "CREATE_NEW_CANDIDATE",
+      "existing_candidate": null,
+      "reason": "Isolate source-era stack and future StyleGAN2 JIT compiler/toolkit/framework compatibility work."
+    },
+    "env-m6-dsdg": {
+      "methods": [
+        "E06c"
+      ],
+      "status": "CREATE_NEW_CANDIDATE",
+      "existing_candidate": null,
+      "reason": "Isolate source stack and assess RTX 3090 physical batch 240 without changing the objective."
+    },
+    "env-m6-difffas": {
+      "methods": [
+        "E07c"
+      ],
+      "status": "CREATE_NEW_CANDIDATE",
+      "existing_candidate": null,
+      "reason": "Isolate pinned source ecosystem; resolve mixed CUDA declarations before selecting versions."
+    }
+  },
+  "unresolved_blockers": [
+    "All seven methods blocked by GPU checkout 15 commits behind current authority; GPU source_cache absent.",
+    "E01: Official operator compatibility probe remains pending; only imports checked. GPU source_cache is absent.",
+    "E02: PCG64 selection and FFT deterministic compatibility probe remains pending; no numerical operator executed.",
+    "E03: Existing stdn is Python 3.10.21 / TensorFlow 2.21.0, not the required TF1/contrib stack.",
+    "E03: Resolve TF 1.13 versus <1.13 and legacy CUDA/cuDNN support on RTX 3090.",
+    "E04: All four frozen GPU assets missing in inspected conventions.",
+    "E04: gpat-m5 lacks TensorFlow, Cython, SciPy and Sim3DR_Cython; GPU source_cache is absent.",
+    "E04: Resolve training framework/version boundary and possible geometry/training split; production Sim3DR compatibility remains pending.",
+    "E05: Modern gpat-m5 differs from source reference; no environment approved.",
+    "E05: System nvcc 12.0 versus framework CUDA 13.0 requires a compatible future compiler/toolkit/framework combination.",
+    "E05: gcc/g++ 13.3.0 observed; ninja and cmake absent from shell PATH and ninja module missing. JIT build/runtime compatibility not probed.",
+    "E06c: LightCNN missing in inspected GPU conventions.",
+    "E06c: Existing environments do not match the Python 3.8 / torch 1.6.0 / torchvision 0.7.0 source stack.",
+    "E06c: RTX 3090 compatibility and physical-batch-240 VRAM feasibility unproven; no model or allocation feasibility probe performed.",
+    "E07c: No existing environment matches the source stack; tensorfn is missing from gpat-m5.",
+    "E07c: Mixed CUDA 11.3/11.7 declarations remain unresolved.",
+    "E07c: Auxiliary conditioning encoder remains NOT_YET_TRAINED; required future asset unavailable.",
+    "No method-specific compatibility, compiler build, or model/runtime feasibility probe performed; no final execution lock."
+  ],
+  "execution_readiness": "NO_METHOD_EXECUTION_READY",
+  "operational_unknowns_resolved": [
+    "SSH authentication",
+    "GPU Git state and remote lag",
+    "OS/kernel/GPU/driver",
+    "separate system and framework CUDA versions",
+    "compilers and tool PATH availability",
+    "Conda installation and environments",
+    "gpat-m5 package imports and CUDA device facts",
+    "runtime directories and PNG metadata count",
+    "external asset absence in inspected conventions"
+  ],
+  "input_sha256": {
+    "outputs/audit/M6D0_GPU_ENVIRONMENT_AUDIT.md": "cb7a7edf46b5c0ddb686459bfef3f771d6a5d0adf0b11a967ce799d389ecdf78",
+    "outputs/audit/M6D0_GPU_ENVIRONMENT_AUDIT.json": "d2e93a5d3f5797656c4fe2b2175e271f5159485451baf204672cf416b332ec03",
+    "environments/m6_environment_plan.md": "2c9ffa2dcc27a2d198d5e4b3cc7587ed28a9ad1281625bf8feabbcc0d3a52ef5",
+    "tools/m6d0_gpu_environment_preflight.py": "ceed43d2d17dabf7cb2b3734ecfa0f98d4681b5b550792a5de298b2e0979dbee",
+    "environments/PLANNED_ENVIRONMENT_REQUIREMENTS.md": "5608f5a63a4e00026fae09ee60c094e8f8ffe907646362f073458f0e6da2345a",
+    "environments/m5_probe_gpu.lock.txt": "8f1e3d162f28e96810886cdf6b00eb48e57cfcc10f96a0caefac42303bb8e1bc",
+    "configs/execution/m5_gpu_3090.yaml": "c9d22abf1b5e284593bfed21500e8113df7f14ff564b7434e3eda43cb7e7eb70",
+    "configs/CONFIG_STATUS.md": "0bfe711ad973124d068066895c34c7a62653da7401f98de6f0fc0ec431874f04",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "third_party/source_pins.json": "484558032f53b536cb7832803980c5273264c262ab74a6eb2c67f27641d72cec",
+    "outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json": "f75989a098466db6f96cf85d0154897d41febe156ee25475ac544a58373cb0ee",
+    "outputs/audit/M6A5_TDDFA_ASSET_PROVENANCE.json": "56d68437c268bc7ef8404775dda2e2306ed09aa700aaff9f31ad22669a9b3577",
+    "outputs/audit/M6C2A_IMPLEMENTATION.md": "9d685d73bf1113724b3e8244bf03ed15edc39fd68087b963101be6b04089d419",
+    "methods/dsdg/adapter.py": "d38fa46ce2fbbf331417c140b738052d572dcaca3eb4187ad2d9b4cff72bef3e",
+    "third_party/source_cache/stdn/README.md": "3d77741bd58188c188ec927a6b7e2f9bcfaccb4a456de5d22556ed9e80625849",
+    "third_party/source_cache/stdn/model/model.py": "a422834d59d24db684cc28f470fdd6eb8b1658bfb40ba113393df627d6fc3743",
+    "third_party/source_cache/fas_aug/requirements.txt": "99b0332804e413d5d2295bb61be6c8e51e55c969f83c9ee383aea5725dbe1007",
+    "third_party/source_cache/tddfa_v2/requirements.txt": "e7ca402acaee8164a7f40980e48ebb342e8e953c75a07f885f91d6b73b3131fa",
+    "third_party/source_cache/tddfa_v2/Sim3DR/setup.py": "9b97be149286eda4b9190e03ac024bef2252d46f3aa98ef3fcd76cb6f9a251df",
+    "third_party/source_cache/tddfa_v2/Sim3DR/Sim3DR.py": "7ceb5c52950f88d8f485c3381c9441fd65cb2399a7fdd45619f1f384cd1aec0f",
+    "third_party/source_cache/swapping_autoencoder/README.md": "4180aacd06c60e2d966170015b714d1269f3baafa825e01a10ecdad023d308f2",
+    "third_party/source_cache/facexzoo/addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+    "third_party/source_cache/difffas/environment.yml": "8c85015717f7809128079bd5097701db0637d432a23a6ff73fd16f3c7fda9475",
+    "configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+    "configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+    "configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "configs/methods/e06c_dsdg_bin_idfree.yaml": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c"
+  },
+  "probe_provenance": {
+    "scripts": {
+      "gpat_m5": "import sys, os, json, importlib, importlib.metadata as md, platform, sysconfig\nfrom pathlib import Path\nimport tempfile\ntempfile.tempdir=\"/tmp\"\nblocked=[]\ntemporary_writes=[]\ndef audit(event,args):\n    if event == \"open\":\n        p,mode,flags=args\n        if (isinstance(mode,str) and any(c in mode for c in \"wax+\")) or (isinstance(flags,int) and flags & (os.O_WRONLY|os.O_RDWR|os.O_CREAT|os.O_TRUNC|os.O_APPEND)):\n            if str(p)==\"/dev/null\": return\n            if str(p).startswith(\"/tmp/\"):\n                temporary_writes.append([event,str(p)])\n                return\n            blocked.append([event,str(p)])\n            raise PermissionError(\"read-only audit: persistent file write prohibited\")\n        if isinstance(p,(str,bytes)) and (\"/faces_256/\" in str(p) or \"/manifests/\" in str(p)):\n            raise PermissionError(\"read-only audit: benchmark input prohibited\")\n    if event in (\"os.mkdir\",\"os.remove\",\"os.rename\",\"os.rmdir\",\"os.chmod\",\"os.chown\",\"os.symlink\",\"os.link\"):\n        if str(args[0]).startswith(\"/tmp/\") or (event in (\"os.remove\",\"os.rmdir\") and isinstance(args[-1],int) and args[-1]>=0):\n            temporary_writes.append([event,str(args)])\n            return\n        blocked.append([event,str(args)])\n        raise PermissionError(\"read-only audit: persistent mutation prohibited\")\nsys.addaudithook(audit)\nout={\"python\":platform.python_version(),\"executable\":sys.executable,\"packages\":{}}\nnames={\"torch\":\"torch\",\"torchvision\":\"torchvision\",\"tensorflow\":\"tensorflow\",\"cv2\":\"opencv-python-headless\",\"numpy\":\"numpy\",\"scipy\":\"scipy\",\"sklearn\":\"scikit-learn\",\"pandas\":\"pandas\",\"pyarrow\":\"pyarrow\",\"PIL\":\"Pillow\",\"yaml\":\"PyYAML\",\"tensorfn\":\"tensorfn\",\"Cython\":\"Cython\",\"onnxruntime\":\"onnxruntime\",\"lpips\":\"lpips\",\"PIL.ImageCms\":\"Pillow\",\"Sim3DR_Cython\":\"Sim3DR_Cython\",\"ninja\":\"ninja\"}\nfor name,dist in names.items():\n    try:\n        m=importlib.import_module(name)\n        v=getattr(m,\"__version__\",None)\n        if v is None:\n            try: v=md.version(dist)\n            except md.PackageNotFoundError: v=\"NO_VERSION_EXPOSED\"\n        out[\"packages\"][name]={\"status\":\"AVAILABLE\",\"version\":str(v),\"module_file\":getattr(m,\"__file__\",None)}\n    except Exception as e:\n        out[\"packages\"][name]={\"status\":\"MISSING\",\"error\":type(e).__name__+\": \"+str(e)}\nif out[\"packages\"][\"torch\"][\"status\"]==\"AVAILABLE\":\n    import torch\n    out[\"torch\"]={\"version\":torch.__version__,\"cuda_runtime\":torch.version.cuda,\"cuda_available\":torch.cuda.is_available(),\"gpu_name\":torch.cuda.get_device_name(0),\"compute_capability\":list(torch.cuda.get_device_capability(0)),\"cudnn\":torch.backends.cudnn.version(),\"matmul_allow_tf32\":torch.backends.cuda.matmul.allow_tf32,\"cudnn_allow_tf32\":torch.backends.cudnn.allow_tf32,\"cudnn_benchmark\":torch.backends.cudnn.benchmark,\"cudnn_deterministic\":torch.backends.cudnn.deterministic}\nout[\"python_headers\"]={\"include\":sysconfig.get_path(\"include\"),\"Python_h_exists\":Path(sysconfig.get_path(\"include\"),\"Python.h\").is_file()}\nout[\"blocked_write_attempts\"]=blocked\nout[\"temporary_import_operations\"]=temporary_writes\nprint(json.dumps(out,indent=2))\n",
+      "inventory_and_assets": "import json, subprocess, pathlib, email, datetime, hashlib, os, pwd, grp\nbase=pathlib.Path(\"/home/student20261/miniconda3\")\nroots=json.loads(subprocess.check_output([str(base/\"bin/conda\"),\"info\",\"--envs\",\"--json\"],env=dict(os.environ,PYTHONDONTWRITEBYTECODE=\"1\"),text=True))[\"envs\"]\nout={\"observed_utc\":datetime.datetime.now(datetime.timezone.utc).isoformat(),\"environments\":[]}\nfor root in roots:\n    p=pathlib.Path(root)\n    row={\"name\":\"base\" if p==base else p.name,\"path\":root}\n    row[\"python_version_output\"]=subprocess.check_output([str(p/\"bin/python\"),\"-B\",\"--version\"],text=True).strip()\n    row[\"framework_metadata\"]={}\n    for f in sorted(p.glob(\"lib/python*/site-packages/*.dist-info/METADATA\")):\n        msg=email.message_from_string(f.read_text(errors=\"replace\"))\n        name=msg.get(\"Name\",\"\").lower().replace(\"_\",\"-\")\n        if name in (\"torch\",\"torchvision\",\"tensorflow\",\"tensorflow-gpu\",\"tensorflow-cpu\"):\n            row[\"framework_metadata\"][name]=msg.get(\"Version\")\n    row[\"heavyweight_imports_performed\"]=False\n    out[\"environments\"].append(row)\nruntime=pathlib.Path(\"/home/student20261/workdir/GPAT_TransferBench_runtime\")\nrepo=pathlib.Path(\"/home/student20261/workdir/GPAT_TransferBench\")\nassets=[\n(\"E04\",\"configs/bfm_noneck_v3.pkl\",24393598,\"89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca\"),\n(\"E04\",\"configs/tri.pkl\",913040,\"0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8\"),\n(\"E04\",\"configs/param_mean_std_62d_120x120.pkl\",713,\"090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795\"),\n(\"E04\",\"weights/mb1_120x120.pth\",13755269,\"a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79\"),\n(\"E06c\",\"LightCNN_29Layers_V2_checkpoint.pth.tar\",123844849,\"d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964\")]\nout[\"assets\"]=[]\nfor method,rel,size,sha in assets:\n    if method==\"E04\":\n        candidates=[runtime/\"third_party_weights/tddfa_v2\"/rel,repo/\"third_party/source_cache/tddfa_v2\"/rel,pathlib.Path(\"/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2\")/rel]\n    else:\n        candidates=[runtime/\"third_party_weights/lightcnn\"/rel,repo/\"third_party/source_cache/facexzoo/addition_module/DSDG/ip_checkpoint\"/rel,pathlib.Path(\"/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn\")/rel]\n    row={\"method\":method,\"asset\":rel,\"expected_size\":size,\"expected_sha256\":sha,\"candidates\":[]}\n    for p in candidates:\n        item={\"path\":str(p),\"exists\":p.exists(),\"symlink\":p.is_symlink()}\n        if p.is_file():\n            st=p.stat()\n            h=hashlib.sha256()\n            with p.open(\"rb\") as f:\n                for block in iter(lambda:f.read(1024*1024),b\"\"): h.update(block)\n            item.update(realpath=str(p.resolve()),size=st.st_size,owner=pwd.getpwuid(st.st_uid).pw_name,group=grp.getgrgid(st.st_gid).gr_name,permissions=oct(st.st_mode&0o777),sha256=h.hexdigest(),match=st.st_size==size and h.hexdigest()==sha)\n            if not item[\"match\"]:\n                print(json.dumps({\"STOP_AND_REPORT\":\"ASSET_MISMATCH\",\"asset\":item}))\n                raise SystemExit(42)\n        row[\"candidates\"].append(item)\n    row[\"status\"]=\"VERIFIED\" if any(c.get(\"match\") for c in row[\"candidates\"]) else \"MISSING_IN_INSPECTED_CONVENTIONS\"\n    out[\"assets\"].append(row)\nout[\"source_cache_exists\"]=(repo/\"third_party/source_cache\").is_dir()\nout[\"runtime_children\"]=[p.name for p in runtime.iterdir()]\nout[\"git_status_final\"]=subprocess.check_output([\"git\",\"-C\",str(repo),\"status\",\"--porcelain\"],env=dict(os.environ,GIT_OPTIONAL_LOCKS=\"0\"),text=True)\nprint(json.dumps(out,indent=2))\n",
+      "conda_and_runtime": "ssh -o BatchMode=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no student20261@100.121.84.44 'bash -lc '\\''echo \"CONDA_EXE=${CONDA_EXE:-}\"; type conda 2>/dev/null || true; conda --version 2>/dev/null || true; conda info --base 2>/dev/null || true; conda info --envs 2>/dev/null || true'\\''\ncat ~/.conda/environments.txt 2>/dev/null || true\nls -ld ~/miniconda3 ~/anaconda3 ~/miniforge3 ~/mambaforge /opt/conda 2>/dev/null || true\ntest -d /home/student20261/workdir/GPAT_TransferBench_runtime || exit 40\nrealpath /home/student20261/workdir/GPAT_TransferBench_runtime /home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256\nstat -c '\\''%n|%U|%G|%a|%A'\\'' /home/student20261/workdir/GPAT_TransferBench_runtime /home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256\ndf -h /home/student20261/workdir/GPAT_TransferBench_runtime\nfind /home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256 -type f -name '\\''*.png'\\'' -printf '\\''.'\\'' | wc -c\nfind /home/student20261/workdir/GPAT_TransferBench_runtime -maxdepth 2 -type d -not -path '\\''*/data/*'\\'' -not -path '\\''*/runs/*'\\''\n'"
+    },
+    "initial_import_attempt": "An initial stricter guard denied /dev/null and temporary filesystem probes. Torch/torchvision import failed with No usable temporary directory. This was an audit-harness restriction, not missing packages. Successful fresh-process rerun allowed /dev/null and /tmp while blocking persistent mutations; final package matrix uses that rerun.",
+    "bytecode_disabled": true,
+    "successful_probe_blocked_persistent_writes": [],
+    "temporary_import_operations": [
+      [
+        "os.mkdir",
+        "('/tmp/torchinductor_student20261', 511, -1)"
+      ]
+    ],
+    "temporary_operation_note": "Python audit hook observed an os.mkdir attempt for /tmp/torchinductor_student20261 during import. It did not target the repository, runtime, or environment. No extension was compiled. Hook is Python-level, not a syscall trace."
+  },
+  "data_access": {
+    "benchmark_image_opens": 0,
+    "benchmark_manifest_parses": 0,
+    "manifest_referenced_image_reads": 0,
+    "weight_loads": 0,
+    "model_constructions": 0,
+    "framework_imports": "gpat-m5 only",
+    "index_manifest_byte_hashing": "Canonical builder and --final index verification hash tracked files opaquely, including manifest files; no manifest content interpreted or referenced image opened."
+  },
+  "safety": {
+    "gpu_repo_sync": false,
+    "gpu_checkout_modification": false,
+    "gpu_runtime_write": false,
+    "package_install": false,
+    "environment_creation": false,
+    "shell_config_modification": false,
+    "model_construction": false,
+    "weight_loading": false,
+    "benchmark_image_decoding": false,
+    "training": false,
+    "optimizer": false,
+    "backward": false,
+    "diffusion_sampling": false,
+    "synthetic_bank": false,
+    "scientific_checkpoint": false,
+    "scientific_config_change": false,
+    "source_change": false,
+    "test_execution": false,
+    "final_environment_lock_creation": false,
+    "commit": false,
+    "push": false
+  },
+  "preflight": {
+    "command": "python tools/m6d0b_live_gpu_preflight.py --final",
+    "result": "LIVE_AUDIT_VALIDATION_PASS",
+    "meaning": "Recorded evidence, source/config integrity, ledger and final index validation only; no scientific execution or method readiness approval."
+  },
+  "ledger": {
+    "committed_prefix_rows": 95,
+    "final_rows": 96,
+    "committed_prefix_bytes": 236873,
+    "committed_prefix_sha256": "8855f49e9474f23aa7059a9b461db21e940f3a205ecb3dc219d98eda94169979",
+    "prefix_byte_identical": true,
+    "records_appended": 1,
+    "classification": "M6D0B_LIVE_GPU_VERIFICATION"
+  },
+  "artifact_index": {
+    "builder": "python tools/build_artifact_index.py",
+    "finalization_only": true,
+    "expected_indexed_paths": 465,
+    "line_endings": "CRLF",
+    "index_excludes_itself_and_ledger": true,
+    "verification": "python tools/m6d0b_live_gpu_preflight.py --final"
+  },
+  "firewall": {
+    "allowed_additions": [
+      "outputs/audit/M6D0B_LIVE_GPU_VERIFICATION.md",
+      "outputs/audit/M6D0B_LIVE_GPU_VERIFICATION.json",
+      "environments/m6_environment_live_addendum.md",
+      "tools/m6d0b_live_gpu_preflight.py"
+    ],
+    "allowed_updates": [
+      "outputs/audit/EXECUTION_LEDGER.jsonl",
+      "outputs/audit/ARTIFACT_INDEX.csv"
+    ],
+    "historical_M6D0_unchanged": true,
+    "scientific_changes": 0
+  }
+}
