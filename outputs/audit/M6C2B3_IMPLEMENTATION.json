@@ -1,0 +1,1773 @@
+{
+  "milestone": "M6C2b3",
+  "status": "IMPLEMENTED_NOT_EXECUTED",
+  "starting_commit": "8535b6458a12bb4f87d86320c728ef9f13c8755d",
+  "method_id": "E07c",
+  "reporting_label": "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "fidelity_provenance": [
+    "AMENDMENT_A1_IDFREE_ADAPTATION",
+    "AMENDMENT_A3_CONTROLLED_ENCODER_RECONSTRUCTION"
+  ],
+  "deviation": "DEV-021",
+  "scope": "Static plans, metadata adapters, source/contract validation and explicit future construction/seeding hooks; no executed training runner or model construction",
+  "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+  "contracts": {
+    "adaptation": {
+      "amendment": "A1",
+      "amendment_sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+      "classification": "CONTROLLED_ADAPTATION_USING_OFFICIAL_UNPAIRED_CODE_PATH",
+      "datasets": [
+        "casia_fasd",
+        "msu_mfsd",
+        "siwmv2"
+      ],
+      "deviation": "DEV-021",
+      "frozen_utc": "2026-09-20",
+      "generation": {
+        "executed_in_this_pass": false,
+        "pair_universe": "manifests/pairs_train_v1.parquet",
+        "source_spoof_id_source": "common_pair",
+        "substitute_target_population": "FORBIDDEN",
+        "target_live_id_source": "common_pair"
+      },
+      "guide_selection": {
+        "benchmark_policy": "DETERMINISTIC_RAW_BYTE_SHA256_RANKING",
+        "candidate_digest": {
+          "algorithm": "sha256",
+          "output": "raw_32_byte_digest",
+          "preimage": "source_digest_bytes || UTF8('|gpatbench.trackA.difffas.guide.candidate.v1|' + guide_spoof_sample_id)",
+          "preimage_parts": [
+            {
+              "content": "source_digest_bytes",
+              "encoding": "RAW_32_BYTE_SHA256_DIGEST",
+              "length_bytes": 32,
+              "part": 1
+            },
+            {
+              "content": "'|gpatbench.trackA.difffas.guide.candidate.v1|' + guide_spoof_sample_id",
+              "encoding": "utf_8",
+              "part": 2
+            }
+          ]
+        },
+        "canonical_candidate_order": "lexical_guide_sample_id_ascending",
+        "eligibility": [
+          "m2_complete",
+          "split_TRAIN",
+          "label_SPOOF",
+          "same_dataset"
+        ],
+        "eligibility_excludes": [
+          "subject_identity",
+          "attack_raw"
+        ],
+        "forbidden": [
+          "python_random",
+          "numpy_random",
+          "filesystem_order",
+          "pythonhashseed_dependence",
+          "input_row_order_dependence",
+          "wall_clock_dependence"
+        ],
+        "official_behaviour": "random.choice(os.listdir(style_folder_of_GT)) \u2014 online, unseeded",
+        "ranking": {
+          "keep_first": 1,
+          "primary": "candidate digest as an unsigned big-endian 256-bit integer, ascending",
+          "secondary": "lexical guide_spoof_sample_id ascending (defensive)"
+        },
+        "self_guide": {
+          "allowed": true,
+          "post_hoc_adjustment": "FORBIDDEN",
+          "reason": "The official random.choice enumerates the whole style folder, so the GT file itself is inside the official support. The deterministic support therefore includes it too.",
+          "reported_diagnostically": true
+        },
+        "source_digest": {
+          "algorithm": "sha256",
+          "output": "raw_32_byte_digest",
+          "preimage": "UTF8('gpatbench.trackA.difffas.guide.source.v1|' + gt_spoof_sample_id + '|' + str(split_seed))",
+          "representation": "RAW_32_BYTE_SHA256_DIGEST"
+        },
+        "split_seed": 20260814
+      },
+      "identity_firewall": {
+        "consumed_for_eligibility": false,
+        "consumed_for_loss": false,
+        "consumed_for_model_input": false,
+        "consumed_for_selection": false,
+        "siw_participates_without_identity": true,
+        "subject_id_global_consumed": false
+      },
+      "m6_training_hyperparameters_frozen_here": false,
+      "membership_in_this_file": false,
+      "method_id": "E07c",
+      "method_name": "DIFFFAS-BIN-IDFREE",
+      "n_syn_intended": 8838,
+      "not_classification": [
+        "FAITHFUL_NATIVE",
+        "FAITHFUL_OFFICIAL"
+      ],
+      "official_code_path": {
+        "conditioning": "style_spoof",
+        "content_inertness_caveat": "The tensor is still materialised and moved to the device. That is a cost, not a dependency.",
+        "content_inertness_evidence": "Under use_pair=false the content tensor is absent from the model input, is not x_cond, is not cond, is not the target, does not affect noise (randn_like(x_start)) and does not enter the variational term. The only statement touching it is the write img[~cond_mask] = 0, which is never read afterwards; cond_mask is a Bernoulli draw independent of the content's values.",
+        "content_training_role": "INERT_API_PLACEHOLDER",
+        "model_in_channels": 3,
+        "official_code_modified": false,
+        "official_flag": true,
+        "target": "epsilon_of_GT",
+        "training_input": "torch.cat([x_t], 1)   # content is NOT concatenated",
+        "use_pair": false,
+        "variance": "LEARNED_RANGE",
+        "vb_term_content_path": "NONE"
+      },
+      "official_source": {
+        "cited_files": [
+          "FAS_dataset.py",
+          "FAS_train.py",
+          "FAS_sample.py",
+          "diffusion.py",
+          "models/unet_autoenc.py"
+        ],
+        "pinned_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+        "provenance": "third_party/source_pins.json",
+        "repository": "https://github.com/murphytju/DiffFAS",
+        "weights_downloaded": false
+      },
+      "siw_included": true,
+      "status": "FROZEN",
+      "style_supervision": {
+        "attack_macro_as_class_target": "FORBIDDEN",
+        "attack_raw_as_class_target": "FORBIDDEN",
+        "dataset_id_as_semantic_class": "FORBIDDEN",
+        "guide_image_is_a_real_train_spoof_image": true,
+        "style_id": "SPOOF_BINARY",
+        "style_id_role": "benchmark_provenance_only",
+        "style_pool": "binary spoof pool = all TRAIN spoof frames of the same dataset"
+      },
+      "track": "A_FAIR_COMMON_IDENTITY_FREE",
+      "training_manifest": {
+        "columns": [
+          "track_pair_id",
+          "dataset",
+          "gt_spoof_id",
+          "guide_spoof_id",
+          "style_id",
+          "split",
+          "seed",
+          "eligible_guide_count",
+          "selection_policy",
+          "use_pair",
+          "self_guide",
+          "content_live_id",
+          "content_training_role",
+          "gt_sha256",
+          "guide_sha256",
+          "split_manifest_sha256",
+          "common_pair_manifest_sha256",
+          "adaptation_config_sha256",
+          "official_source_commit"
+        ],
+        "content_live_id_note": "content_live_id is inherited from the frozen common pair for interface bookkeeping only and is marked training_role = INERT_WHEN_USE_PAIR_FALSE. It does NOT form a same-identity reconstruction pair and must never be described as one.",
+        "parquet_writer": {
+          "compression": "zstd",
+          "compression_level": 9,
+          "row_group_size": 65536,
+          "store_schema": true,
+          "use_dictionary": false,
+          "version": "2.6",
+          "write_page_index": false,
+          "write_statistics": true
+        },
+        "path": "manifests/difffas_bin_idfree_train_v1.parquet",
+        "row_order": [
+          "dataset",
+          "gt_spoof_id"
+        ],
+        "rows": 8838,
+        "rows_by_dataset": {
+          "casia_fasd": 2520,
+          "msu_mfsd": 1200,
+          "siwmv2": 5118
+        },
+        "split": "TRAIN",
+        "track_pair_id_format": "DFA%06d",
+        "track_pair_id_order": [
+          "dataset",
+          "gt_spoof_id"
+        ],
+        "unit": "one row per TRAIN spoof GT"
+      },
+      "version": "difffas_bin_idfree_v1"
+    },
+    "adaptation_path": "configs/frozen/difffas_bin_idfree_v1.yaml",
+    "adaptation_sha256": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "authority_commit": "8535b6458a12bb4f87d86320c728ef9f13c8755d",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "effective_encoder": {
+      "architecture": "models/custom_rn.py::resnet18",
+      "architecture_substituted": false,
+      "architecture_topology": "_resnet('resnet18', BasicBlock, [3,4,6,3]) \u2014 a ResNet-34 layer topology despite the name",
+      "auxiliary_encoder_training_runs": 1,
+      "auxiliary_encoder_training_seed": 42,
+      "candidate_encoder_search": "FORBIDDEN",
+      "checkpoint_format": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+      "disabled": false,
+      "feature_interface_at_256": {
+        "embg": {
+          "consumed": false,
+          "note": "DISCARDED by unet_autoenc; the class count changes ONLY this head",
+          "shape": [
+            "B",
+            7
+          ]
+        },
+        "x16x16": {
+          "consumed": true,
+          "shape": [
+            16,
+            16,
+            512
+          ]
+        },
+        "x32x32": {
+          "consumed": true,
+          "shape": [
+            32,
+            32,
+            256
+          ]
+        },
+        "x8x8": {
+          "consumed": true,
+          "shape": [
+            8,
+            8,
+            512
+          ]
+        }
+      },
+      "rationale": "Most closely reproduces the role of the unavailable original PADISI.pkl, which would have been ONE fixed external pretrained asset shared across DiffFAS runs.",
+      "removed": false,
+      "replaced_with_imagenet_or_torchvision_resnet18": false,
+      "required_every_training_step": true,
+      "run_layout": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/",
+      "same_frozen_encoder_reused_for_main_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "seed_distinction": {
+        "auxiliary_encoder_training_seed": "42, fixed; seeds the one-off pretraining of the substitute conditioning encoder",
+        "e07c_experiment_seed": "42 / 1337 / 2026; seeds each DiffFAS main training run"
+      },
+      "sha256_recorded_before_difffas_consumes_it": true,
+      "substitute_objective": {
+        "K": 7,
+        "class_source": "manifests/artifact_probe_classes_v1.json",
+        "class_source_sha256": "c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812",
+        "classes": [
+          "live",
+          "makeup",
+          "mask_2d",
+          "mask_3d",
+          "partial",
+          "print",
+          "replay"
+        ],
+        "disclosed_interaction": "This taxonomy is also the ArtifactProbeNet label space behind the ArtSim metric. Separate models, no shared weights, no TEST, so not leakage; but it could in principle favour E07c on ArtSim. Disclosed because it advantages the BASELINE, not GPAT.",
+        "excluded": [
+          "other_spoof"
+        ],
+        "original": "17-way attack classification on PADISI-USC (ImageFolder)",
+        "split": "TRAIN_ONLY",
+        "substitute": "K7_ATTACK_MACRO_CLASSIFICATION",
+        "train_counts": {
+          "live": 5629,
+          "makeup": 759,
+          "mask_2d": 96,
+          "mask_3d": 1056,
+          "partial": 1911,
+          "print": 2838,
+          "replay": 2178
+        },
+        "train_total": 14467,
+        "unavailable": [
+          "released_PADISI_pkl_weights",
+          "PADISI_USC_dataset",
+          "seventeen_class_directory_mapping"
+        ]
+      },
+      "test_used_for_anything": false,
+      "three_different_encoders_trained": "FORBIDDEN",
+      "trained_exactly_once": true,
+      "trained_in_m6b": false,
+      "training_contract": {
+        "augmentation": "NONE",
+        "batch_size": 256,
+        "benchmark_defined_additions": [
+          "K7_label_space",
+          "TRAIN_data_source",
+          "auxiliary_encoder_training_seed",
+          "auxiliary_encoder_training_runs"
+        ],
+        "checkpoint_rule": "FINAL_STATE_AFTER_EPOCH_200",
+        "checkpoint_rule_source": "OFFICIAL \u2014 torch.save overwrites in-loop, so the surviving file IS the final epoch's",
+        "class_balancing": "NONE",
+        "class_balancing_note": "official code has none; adding it would be a benchmark invention",
+        "drop_last": true,
+        "epochs": 200,
+        "head": "fc = nn.Linear(512, 7)",
+        "input_resolution": 256,
+        "learning_rate": 0.002,
+        "loss": "CrossEntropyLoss_on_fourth_forward_output",
+        "momentum": 0.9,
+        "optimizer": "SGD",
+        "preprocessing": "Resize((256,256)) -> ToTensor -> Normalize([0.5]*3, [0.5]*3)",
+        "scheduler": "NONE",
+        "shuffle": true,
+        "weight_decay": 0.005,
+        "workers": 6
+      },
+      "val_used_for_encoder_selection": false
+    },
+    "overlay": {
+      "amendment_a3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "amendment_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+      "amendment_id": "A6_E07C_FEATURE_INTERFACE_SOURCE_CORRECTION",
+      "architecture_substituted": false,
+      "base_config_path": "configs/methods/e07c_difffas_bin_idfree.yaml",
+      "base_config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+      "correction": {
+        "embg": [
+          "B",
+          7
+        ],
+        "x16x16": [
+          16,
+          16,
+          512
+        ],
+        "x32x32": [
+          32,
+          32,
+          256
+        ],
+        "x8x8": [
+          8,
+          8,
+          512
+        ]
+      },
+      "official_source_modified": false,
+      "projection_layers_added": false,
+      "provenance": "SOURCE_GROUNDED_CONTRACT_CORRECTION",
+      "source": {
+        "architecture": "models/custom_rn.py::resnet18",
+        "consumer_file": "third_party/source_cache/difffas/models/unet_autoenc.py",
+        "consumer_sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "file": "third_party/source_cache/difffas/models/custom_rn.py",
+        "pinned_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+        "repository": "https://github.com/murphytju/DiffFAS",
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3"
+      },
+      "status": "OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE",
+      "superseded_descriptions": {
+        "x16x16": [
+          16,
+          16,
+          256
+        ],
+        "x32x32": [
+          32,
+          32,
+          128
+        ]
+      }
+    },
+    "overlay_path": "configs/amendments/e07c_a6_feature_interface_source_correction.yaml",
+    "overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b"
+  },
+  "source": {
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/cong/GPAT_TransferBench/third_party/source_cache/difffas",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS"
+  },
+  "source_evidence": {
+    "block": "BasicBlock",
+    "fourth_output_discarded": true,
+    "sampler_tensor_set": "model",
+    "symbols": [
+      {
+        "file": "FAS_train.py",
+        "line": 167,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "seed_torch"
+      },
+      {
+        "file": "FAS_train.py",
+        "line": 28,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "train"
+      },
+      {
+        "file": "FAS_sample.py",
+        "line": 32,
+        "sha256": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+        "symbol": "main"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 797,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "GaussianDiffusion.training_losses"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 977,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "create_gaussian_diffusion"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 47,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "ddim_steps"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 367,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "resnet18"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 329,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "ResNet._forward_impl"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 138,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.forward"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 73,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.encoder"
+      }
+    ],
+    "topology": [
+      3,
+      4,
+      6,
+      3
+    ],
+    "training_content_inert": true
+  },
+  "guide": {
+    "future_manifest_byte_verification_required": true,
+    "identity_firewall": {
+      "consumed_for_eligibility": false,
+      "consumed_for_loss": false,
+      "consumed_for_model_input": false,
+      "consumed_for_selection": false,
+      "siw_participates_without_identity": true,
+      "subject_id_global_consumed": false
+    },
+    "manifest": {
+      "columns": [
+        "track_pair_id",
+        "dataset",
+        "gt_spoof_id",
+        "guide_spoof_id",
+        "style_id",
+        "split",
+        "seed",
+        "eligible_guide_count",
+        "selection_policy",
+        "use_pair",
+        "self_guide",
+        "content_live_id",
+        "content_training_role",
+        "gt_sha256",
+        "guide_sha256",
+        "split_manifest_sha256",
+        "common_pair_manifest_sha256",
+        "adaptation_config_sha256",
+        "official_source_commit"
+      ],
+      "content_live_id_note": "content_live_id is inherited from the frozen common pair for interface bookkeeping only and is marked training_role = INERT_WHEN_USE_PAIR_FALSE. It does NOT form a same-identity reconstruction pair and must never be described as one.",
+      "parquet_writer": {
+        "compression": "zstd",
+        "compression_level": 9,
+        "row_group_size": 65536,
+        "store_schema": true,
+        "use_dictionary": false,
+        "version": "2.6",
+        "write_page_index": false,
+        "write_statistics": true
+      },
+      "path": "manifests/difffas_bin_idfree_train_v1.parquet",
+      "row_order": [
+        "dataset",
+        "gt_spoof_id"
+      ],
+      "rows": 8838,
+      "rows_by_dataset": {
+        "casia_fasd": 2520,
+        "msu_mfsd": 1200,
+        "siwmv2": 5118
+      },
+      "sha256": "0d4c0ab435a258be51577aec17d9ecea27785354c900d0f7ab863d2bb2924fd6",
+      "split": "TRAIN",
+      "track_pair_id_format": "DFA%06d",
+      "track_pair_id_order": [
+        "dataset",
+        "gt_spoof_id"
+      ],
+      "unit": "one row per TRAIN spoof GT"
+    },
+    "manifest_opened": false,
+    "policy": {
+      "benchmark_policy": "DETERMINISTIC_RAW_BYTE_SHA256_RANKING",
+      "candidate_digest": {
+        "algorithm": "sha256",
+        "output": "raw_32_byte_digest",
+        "preimage": "source_digest_bytes || UTF8('|gpatbench.trackA.difffas.guide.candidate.v1|' + guide_spoof_sample_id)",
+        "preimage_parts": [
+          {
+            "content": "source_digest_bytes",
+            "encoding": "RAW_32_BYTE_SHA256_DIGEST",
+            "length_bytes": 32,
+            "part": 1
+          },
+          {
+            "content": "'|gpatbench.trackA.difffas.guide.candidate.v1|' + guide_spoof_sample_id",
+            "encoding": "utf_8",
+            "part": 2
+          }
+        ]
+      },
+      "canonical_candidate_order": "lexical_guide_sample_id_ascending",
+      "eligibility": [
+        "m2_complete",
+        "split_TRAIN",
+        "label_SPOOF",
+        "same_dataset"
+      ],
+      "eligibility_excludes": [
+        "subject_identity",
+        "attack_raw"
+      ],
+      "forbidden": [
+        "python_random",
+        "numpy_random",
+        "filesystem_order",
+        "pythonhashseed_dependence",
+        "input_row_order_dependence",
+        "wall_clock_dependence"
+      ],
+      "official_behaviour": "random.choice(os.listdir(style_folder_of_GT)) \u2014 online, unseeded",
+      "ranking": {
+        "keep_first": 1,
+        "primary": "candidate digest as an unsigned big-endian 256-bit integer, ascending",
+        "secondary": "lexical guide_spoof_sample_id ascending (defensive)"
+      },
+      "self_guide": {
+        "allowed": true,
+        "post_hoc_adjustment": "FORBIDDEN",
+        "reason": "The official random.choice enumerates the whole style folder, so the GT file itself is inside the official support. The deterministic support therefore includes it too.",
+        "reported_diagnostically": true
+      },
+      "source_digest": {
+        "algorithm": "sha256",
+        "output": "raw_32_byte_digest",
+        "preimage": "UTF8('gpatbench.trackA.difffas.guide.source.v1|' + gt_spoof_sample_id + '|' + str(split_seed))",
+        "representation": "RAW_32_BYTE_SHA256_DIGEST"
+      },
+      "split_seed": 20260814
+    },
+    "rows_decoded": false,
+    "selection_mode": "CONSUME_FROZEN_MANIFEST_NO_RESAMPLING",
+    "style_supervision": {
+      "attack_macro_as_class_target": "FORBIDDEN",
+      "attack_raw_as_class_target": "FORBIDDEN",
+      "dataset_id_as_semantic_class": "FORBIDDEN",
+      "guide_image_is_a_real_train_spoof_image": true,
+      "style_id": "SPOOF_BINARY",
+      "style_id_role": "benchmark_provenance_only",
+      "style_pool": "binary spoof pool = all TRAIN spoof frames of the same dataset"
+    }
+  },
+  "auxiliary_plan": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "architecture": "models/custom_rn.py::resnet18",
+    "candidate_encoder_search": "FORBIDDEN",
+    "checkpoint": {
+      "exists_verified": false,
+      "external_runtime_path": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+      "fixed_across_experiment_seeds": true,
+      "missing_field_reason": "One auxiliary encoder has not been trained; no checkpoint/hash exists",
+      "name": "controlled_conditioning_encoder",
+      "produced_by": "M6C, exactly once, under conditioning_encoder.training_contract",
+      "same_identity_for_all_main_seeds": true,
+      "serialization": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+      "sha256": "RECORDED_AFTER_TRAINING",
+      "sha256_status": "RECORDED_AFTER_TRAINING",
+      "status": "NOT_YET_TRAINED",
+      "weight_bytes_in_git": false
+    },
+    "class_metadata_future_hash_check_required": true,
+    "class_metadata_opened": false,
+    "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "feature_interface_at_256": {
+      "embg": {
+        "consumed": false,
+        "note": "DISCARDED by unet_autoenc; the class count changes ONLY this head",
+        "shape": [
+          "B",
+          7
+        ]
+      },
+      "x16x16": {
+        "consumed": true,
+        "shape": [
+          16,
+          16,
+          512
+        ]
+      },
+      "x32x32": {
+        "consumed": true,
+        "shape": [
+          32,
+          32,
+          256
+        ]
+      },
+      "x8x8": {
+        "consumed": true,
+        "shape": [
+          8,
+          8,
+          512
+        ]
+      }
+    },
+    "mode": "STATIC_PREPARATION_ONLY",
+    "objective": {
+      "K": 7,
+      "class_source": "manifests/artifact_probe_classes_v1.json",
+      "class_source_sha256": "c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812",
+      "classes": [
+        "live",
+        "makeup",
+        "mask_2d",
+        "mask_3d",
+        "partial",
+        "print",
+        "replay"
+      ],
+      "disclosed_interaction": "This taxonomy is also the ArtifactProbeNet label space behind the ArtSim metric. Separate models, no shared weights, no TEST, so not leakage; but it could in principle favour E07c on ArtSim. Disclosed because it advantages the BASELINE, not GPAT.",
+      "excluded": [
+        "other_spoof"
+      ],
+      "original": "17-way attack classification on PADISI-USC (ImageFolder)",
+      "split": "TRAIN_ONLY",
+      "substitute": "K7_ATTACK_MACRO_CLASSIFICATION",
+      "train_counts": {
+        "live": 5629,
+        "makeup": 759,
+        "mask_2d": 96,
+        "mask_3d": 1056,
+        "partial": 1911,
+        "print": 2838,
+        "replay": 2178
+      },
+      "train_total": 14467,
+      "unavailable": [
+        "released_PADISI_pkl_weights",
+        "PADISI_USC_dataset",
+        "seventeen_class_directory_mapping"
+      ]
+    },
+    "projection_layers_added": false,
+    "role": "aux_encoder",
+    "run_layout": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/",
+    "runs": 1,
+    "seed": 42,
+    "seed_plan": {
+      "cuda_seed_calls": [
+        "torch.cuda.manual_seed",
+        "torch.cuda.manual_seed_all"
+      ],
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+      "force_deterministic_algorithms": false,
+      "framework": "torch",
+      "framework_seed": 42,
+      "launch_environment": {
+        "PYTHONHASHSEED": "42"
+      },
+      "numpy_random": 42,
+      "python_random": 42,
+      "reuse_for_main_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "runs": 1,
+      "scope": "ONE_OFF_AUXILIARY_ENCODER",
+      "seed": 42,
+      "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+    },
+    "test_access": false,
+    "three_different_encoders_trained": "FORBIDDEN",
+    "topology": "_resnet('resnet18', BasicBlock, [3,4,6,3]) \u2014 a ResNet-34 layer topology despite the name",
+    "trained": false,
+    "training": {
+      "augmentation": "NONE",
+      "batch_size": 256,
+      "benchmark_defined_additions": [
+        "K7_label_space",
+        "TRAIN_data_source",
+        "auxiliary_encoder_training_seed",
+        "auxiliary_encoder_training_runs"
+      ],
+      "checkpoint_rule": "FINAL_STATE_AFTER_EPOCH_200",
+      "checkpoint_rule_source": "OFFICIAL \u2014 torch.save overwrites in-loop, so the surviving file IS the final epoch's",
+      "class_balancing": "NONE",
+      "class_balancing_note": "official code has none; adding it would be a benchmark invention",
+      "drop_last": true,
+      "epochs": 200,
+      "head": "fc = nn.Linear(512, 7)",
+      "input_resolution": 256,
+      "learning_rate": 0.002,
+      "loss": "CrossEntropyLoss_on_fourth_forward_output",
+      "momentum": 0.9,
+      "optimizer": "SGD",
+      "preprocessing": "Resize((256,256)) -> ToTensor -> Normalize([0.5]*3, [0.5]*3)",
+      "scheduler": "NONE",
+      "shuffle": true,
+      "weight_decay": 0.005,
+      "workers": 6
+    },
+    "val_selection": false
+  },
+  "main_plans": [
+    {
+      "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+      "adaptation_config_sha256": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+      "auxiliary_checkpoint": {
+        "exists_verified": false,
+        "external_runtime_path": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+        "fixed_across_experiment_seeds": true,
+        "missing_field_reason": "One auxiliary encoder has not been trained; no checkpoint/hash exists",
+        "name": "controlled_conditioning_encoder",
+        "produced_by": "M6C, exactly once, under conditioning_encoder.training_contract",
+        "same_identity_for_all_main_seeds": true,
+        "serialization": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+        "sha256": "RECORDED_AFTER_TRAINING",
+        "sha256_status": "RECORDED_AFTER_TRAINING",
+        "status": "NOT_YET_TRAINED",
+        "weight_bytes_in_git": false
+      },
+      "checkpoint": {
+        "cadence": "save_checkpoints_every_10000_iters",
+        "checkpoint_sha256": null,
+        "checkpoint_types_supported": [
+          "periodic",
+          "terminal",
+          "selected"
+        ],
+        "checkpoint_written": false,
+        "epoch_semantics": "COMPLETED_EPOCHS",
+        "experiment_seed": 42,
+        "extra_optimizer_steps": 0,
+        "final_epoch": 400,
+        "method_id": "E07c",
+        "missing_field_reasons": {
+          "checkpoint_sha256": "Preparation only; no checkpoint exists"
+        },
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "save_terminal_if_cadence_misses": true,
+        "selection_scope": "WITHIN_SEED",
+        "selection_uses_test": false,
+        "selection_uses_val": false,
+        "tensor_set_for_generation": "model"
+      },
+      "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+      "data_firewall": {
+        "TEST": {
+          "allowed": false,
+          "code_path_present": false,
+          "never_checkpoint_selection": true,
+          "never_hyperparameter_selection": true,
+          "never_reconstruction_choice": true,
+          "never_seed_selection": true,
+          "never_training": true,
+          "used_for": []
+        },
+        "TRAIN": {
+          "allowed": true,
+          "used_for": [
+            "method_training"
+          ]
+        },
+        "VAL": {
+          "allowed": true,
+          "may_select_checkpoint": false,
+          "note": "VAL never selects a checkpoint; no VAL-based rule exists in this method's source.",
+          "used_for": [
+            "diagnostics_only"
+          ]
+        }
+      },
+      "diffusion": {
+        "linear_end": 0.02,
+        "linear_start": 0.0001,
+        "model_mean_type": "EPSILON",
+        "n_timestep": 1000,
+        "schedule": "linear",
+        "variance": "LEARNED_RANGE"
+      },
+      "main_path": {
+        "conditioning": "style_spoof",
+        "content_inertness_caveat": "The tensor is still materialised and moved to the device. That is a cost, not a dependency.",
+        "content_inertness_evidence": "Under use_pair=false the content tensor is absent from the model input, is not x_cond, is not cond, is not the target, does not affect noise (randn_like(x_start)) and does not enter the variational term. The only statement touching it is the write img[~cond_mask] = 0, which is never read afterwards; cond_mask is a Bernoulli draw independent of the content's values.",
+        "content_training_role": "INERT_API_PLACEHOLDER",
+        "model_in_channels": 3,
+        "official_code_modified": false,
+        "official_flag": true,
+        "target": "epsilon_of_GT",
+        "training_input": "torch.cat([x_t], 1)   # content is NOT concatenated",
+        "use_pair": false,
+        "variance": "LEARNED_RANGE",
+        "vb_term_content_path": "NONE"
+      },
+      "method_id": "E07c",
+      "optimizer": {
+        "ema": {
+          "before_warmup": 0.0,
+          "decay": 0.9999
+        },
+        "learning_rate": 1e-05,
+        "name": "AdamW",
+        "scheduler": {
+          "decay": [
+            "linear",
+            "flat"
+          ],
+          "lr": 1e-05,
+          "n_iter": 2400000,
+          "type": "cycle",
+          "warmup": 5000
+        }
+      },
+      "sampler": {
+        "DDIM_skip": 10,
+        "algorithm": "ddim",
+        "checkpoint_loaded": false,
+        "cond_scale": 2.0,
+        "effective_steps": 25,
+        "entrypoint": "FAS_sample.py",
+        "execution_order": "reverse, as diffusion.ddim_steps",
+        "initial_state": "Official q_sample of generation target live image; not a training content dependency",
+        "sample_initial_noise": 250,
+        "sampling_executed": false,
+        "tensor_set_loaded": "model",
+        "tensor_set_substitution_allowed": false,
+        "timesteps_ascending": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120,
+          130,
+          140,
+          150,
+          160,
+          170,
+          180,
+          190,
+          200,
+          210,
+          220,
+          230,
+          240
+        ],
+        "use_pair": false
+      },
+      "seed": 42,
+      "seed_adapter": {
+        "cuda_seed_calls": [
+          "torch.cuda.manual_seed",
+          "torch.cuda.manual_seed_all"
+        ],
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+        "force_deterministic_algorithms": false,
+        "framework": "torch",
+        "framework_seed": 42,
+        "launch_environment": {
+          "PYTHONHASHSEED": "42"
+        },
+        "numpy_random": 42,
+        "python_random": 42,
+        "replaces_hardcoded_seed": 1,
+        "scope": "MAIN_DIFFFAS",
+        "seed": 42,
+        "source": "FAS_train.py:seed_torch",
+        "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+      },
+      "settings_mapping": [
+        {
+          "config_field": "training.max_epochs",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.max_epochs",
+          "value": 400
+        },
+        {
+          "config_field": "training.batch_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.batch_size",
+          "value": 4
+        },
+        {
+          "config_field": "training.use_pair",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.use_pair",
+          "value": false
+        },
+        {
+          "config_field": "training.model_in_channels",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "conf.in_channels",
+          "value": 3
+        },
+        {
+          "config_field": "training.guidance_prob",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.guidance_prob",
+          "value": 0.2
+        },
+        {
+          "config_field": "training.means_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.means_size",
+          "value": 5
+        },
+        {
+          "config_field": "training.var_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.var_size",
+          "value": 3
+        },
+        {
+          "config_field": "optimizer.learning_rate",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "DiffConf.training.optimizer.lr",
+          "value": 1e-05
+        },
+        {
+          "config_field": "optimizer.scheduler",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "DiffConf.training.scheduler",
+          "value": {
+            "decay": [
+              "linear",
+              "flat"
+            ],
+            "lr": 1e-05,
+            "n_iter": 2400000,
+            "type": "cycle",
+            "warmup": 5000
+          }
+        }
+      ],
+      "training": {
+        "batch_size": 4,
+        "cudnn": {
+          "benchmark": false,
+          "deterministic": true
+        },
+        "guidance_prob": 0.2,
+        "input_resolution": 256,
+        "max_epochs": 400,
+        "means_size": 5,
+        "model_in_channels": 3,
+        "normalize": "[0.5,0.5,0.5] / [0.5,0.5,0.5]",
+        "use_pair": false,
+        "var_size": 3,
+        "workers_policy": "IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT"
+      }
+    },
+    {
+      "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+      "adaptation_config_sha256": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+      "auxiliary_checkpoint": {
+        "exists_verified": false,
+        "external_runtime_path": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+        "fixed_across_experiment_seeds": true,
+        "missing_field_reason": "One auxiliary encoder has not been trained; no checkpoint/hash exists",
+        "name": "controlled_conditioning_encoder",
+        "produced_by": "M6C, exactly once, under conditioning_encoder.training_contract",
+        "same_identity_for_all_main_seeds": true,
+        "serialization": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+        "sha256": "RECORDED_AFTER_TRAINING",
+        "sha256_status": "RECORDED_AFTER_TRAINING",
+        "status": "NOT_YET_TRAINED",
+        "weight_bytes_in_git": false
+      },
+      "checkpoint": {
+        "cadence": "save_checkpoints_every_10000_iters",
+        "checkpoint_sha256": null,
+        "checkpoint_types_supported": [
+          "periodic",
+          "terminal",
+          "selected"
+        ],
+        "checkpoint_written": false,
+        "epoch_semantics": "COMPLETED_EPOCHS",
+        "experiment_seed": 1337,
+        "extra_optimizer_steps": 0,
+        "final_epoch": 400,
+        "method_id": "E07c",
+        "missing_field_reasons": {
+          "checkpoint_sha256": "Preparation only; no checkpoint exists"
+        },
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "save_terminal_if_cadence_misses": true,
+        "selection_scope": "WITHIN_SEED",
+        "selection_uses_test": false,
+        "selection_uses_val": false,
+        "tensor_set_for_generation": "model"
+      },
+      "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+      "data_firewall": {
+        "TEST": {
+          "allowed": false,
+          "code_path_present": false,
+          "never_checkpoint_selection": true,
+          "never_hyperparameter_selection": true,
+          "never_reconstruction_choice": true,
+          "never_seed_selection": true,
+          "never_training": true,
+          "used_for": []
+        },
+        "TRAIN": {
+          "allowed": true,
+          "used_for": [
+            "method_training"
+          ]
+        },
+        "VAL": {
+          "allowed": true,
+          "may_select_checkpoint": false,
+          "note": "VAL never selects a checkpoint; no VAL-based rule exists in this method's source.",
+          "used_for": [
+            "diagnostics_only"
+          ]
+        }
+      },
+      "diffusion": {
+        "linear_end": 0.02,
+        "linear_start": 0.0001,
+        "model_mean_type": "EPSILON",
+        "n_timestep": 1000,
+        "schedule": "linear",
+        "variance": "LEARNED_RANGE"
+      },
+      "main_path": {
+        "conditioning": "style_spoof",
+        "content_inertness_caveat": "The tensor is still materialised and moved to the device. That is a cost, not a dependency.",
+        "content_inertness_evidence": "Under use_pair=false the content tensor is absent from the model input, is not x_cond, is not cond, is not the target, does not affect noise (randn_like(x_start)) and does not enter the variational term. The only statement touching it is the write img[~cond_mask] = 0, which is never read afterwards; cond_mask is a Bernoulli draw independent of the content's values.",
+        "content_training_role": "INERT_API_PLACEHOLDER",
+        "model_in_channels": 3,
+        "official_code_modified": false,
+        "official_flag": true,
+        "target": "epsilon_of_GT",
+        "training_input": "torch.cat([x_t], 1)   # content is NOT concatenated",
+        "use_pair": false,
+        "variance": "LEARNED_RANGE",
+        "vb_term_content_path": "NONE"
+      },
+      "method_id": "E07c",
+      "optimizer": {
+        "ema": {
+          "before_warmup": 0.0,
+          "decay": 0.9999
+        },
+        "learning_rate": 1e-05,
+        "name": "AdamW",
+        "scheduler": {
+          "decay": [
+            "linear",
+            "flat"
+          ],
+          "lr": 1e-05,
+          "n_iter": 2400000,
+          "type": "cycle",
+          "warmup": 5000
+        }
+      },
+      "sampler": {
+        "DDIM_skip": 10,
+        "algorithm": "ddim",
+        "checkpoint_loaded": false,
+        "cond_scale": 2.0,
+        "effective_steps": 25,
+        "entrypoint": "FAS_sample.py",
+        "execution_order": "reverse, as diffusion.ddim_steps",
+        "initial_state": "Official q_sample of generation target live image; not a training content dependency",
+        "sample_initial_noise": 250,
+        "sampling_executed": false,
+        "tensor_set_loaded": "model",
+        "tensor_set_substitution_allowed": false,
+        "timesteps_ascending": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120,
+          130,
+          140,
+          150,
+          160,
+          170,
+          180,
+          190,
+          200,
+          210,
+          220,
+          230,
+          240
+        ],
+        "use_pair": false
+      },
+      "seed": 1337,
+      "seed_adapter": {
+        "cuda_seed_calls": [
+          "torch.cuda.manual_seed",
+          "torch.cuda.manual_seed_all"
+        ],
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+        "force_deterministic_algorithms": false,
+        "framework": "torch",
+        "framework_seed": 1337,
+        "launch_environment": {
+          "PYTHONHASHSEED": "1337"
+        },
+        "numpy_random": 1337,
+        "python_random": 1337,
+        "replaces_hardcoded_seed": 1,
+        "scope": "MAIN_DIFFFAS",
+        "seed": 1337,
+        "source": "FAS_train.py:seed_torch",
+        "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+      },
+      "settings_mapping": [
+        {
+          "config_field": "training.max_epochs",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.max_epochs",
+          "value": 400
+        },
+        {
+          "config_field": "training.batch_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.batch_size",
+          "value": 4
+        },
+        {
+          "config_field": "training.use_pair",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.use_pair",
+          "value": false
+        },
+        {
+          "config_field": "training.model_in_channels",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "conf.in_channels",
+          "value": 3
+        },
+        {
+          "config_field": "training.guidance_prob",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.guidance_prob",
+          "value": 0.2
+        },
+        {
+          "config_field": "training.means_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.means_size",
+          "value": 5
+        },
+        {
+          "config_field": "training.var_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.var_size",
+          "value": 3
+        },
+        {
+          "config_field": "optimizer.learning_rate",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "DiffConf.training.optimizer.lr",
+          "value": 1e-05
+        },
+        {
+          "config_field": "optimizer.scheduler",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "DiffConf.training.scheduler",
+          "value": {
+            "decay": [
+              "linear",
+              "flat"
+            ],
+            "lr": 1e-05,
+            "n_iter": 2400000,
+            "type": "cycle",
+            "warmup": 5000
+          }
+        }
+      ],
+      "training": {
+        "batch_size": 4,
+        "cudnn": {
+          "benchmark": false,
+          "deterministic": true
+        },
+        "guidance_prob": 0.2,
+        "input_resolution": 256,
+        "max_epochs": 400,
+        "means_size": 5,
+        "model_in_channels": 3,
+        "normalize": "[0.5,0.5,0.5] / [0.5,0.5,0.5]",
+        "use_pair": false,
+        "var_size": 3,
+        "workers_policy": "IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT"
+      }
+    },
+    {
+      "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+      "adaptation_config_sha256": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+      "auxiliary_checkpoint": {
+        "exists_verified": false,
+        "external_runtime_path": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+        "fixed_across_experiment_seeds": true,
+        "missing_field_reason": "One auxiliary encoder has not been trained; no checkpoint/hash exists",
+        "name": "controlled_conditioning_encoder",
+        "produced_by": "M6C, exactly once, under conditioning_encoder.training_contract",
+        "same_identity_for_all_main_seeds": true,
+        "serialization": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+        "sha256": "RECORDED_AFTER_TRAINING",
+        "sha256_status": "RECORDED_AFTER_TRAINING",
+        "status": "NOT_YET_TRAINED",
+        "weight_bytes_in_git": false
+      },
+      "checkpoint": {
+        "cadence": "save_checkpoints_every_10000_iters",
+        "checkpoint_sha256": null,
+        "checkpoint_types_supported": [
+          "periodic",
+          "terminal",
+          "selected"
+        ],
+        "checkpoint_written": false,
+        "epoch_semantics": "COMPLETED_EPOCHS",
+        "experiment_seed": 2026,
+        "extra_optimizer_steps": 0,
+        "final_epoch": 400,
+        "method_id": "E07c",
+        "missing_field_reasons": {
+          "checkpoint_sha256": "Preparation only; no checkpoint exists"
+        },
+        "rule": "BASELINE_FINAL_STATE_V1",
+        "save_terminal_if_cadence_misses": true,
+        "selection_scope": "WITHIN_SEED",
+        "selection_uses_test": false,
+        "selection_uses_val": false,
+        "tensor_set_for_generation": "model"
+      },
+      "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+      "data_firewall": {
+        "TEST": {
+          "allowed": false,
+          "code_path_present": false,
+          "never_checkpoint_selection": true,
+          "never_hyperparameter_selection": true,
+          "never_reconstruction_choice": true,
+          "never_seed_selection": true,
+          "never_training": true,
+          "used_for": []
+        },
+        "TRAIN": {
+          "allowed": true,
+          "used_for": [
+            "method_training"
+          ]
+        },
+        "VAL": {
+          "allowed": true,
+          "may_select_checkpoint": false,
+          "note": "VAL never selects a checkpoint; no VAL-based rule exists in this method's source.",
+          "used_for": [
+            "diagnostics_only"
+          ]
+        }
+      },
+      "diffusion": {
+        "linear_end": 0.02,
+        "linear_start": 0.0001,
+        "model_mean_type": "EPSILON",
+        "n_timestep": 1000,
+        "schedule": "linear",
+        "variance": "LEARNED_RANGE"
+      },
+      "main_path": {
+        "conditioning": "style_spoof",
+        "content_inertness_caveat": "The tensor is still materialised and moved to the device. That is a cost, not a dependency.",
+        "content_inertness_evidence": "Under use_pair=false the content tensor is absent from the model input, is not x_cond, is not cond, is not the target, does not affect noise (randn_like(x_start)) and does not enter the variational term. The only statement touching it is the write img[~cond_mask] = 0, which is never read afterwards; cond_mask is a Bernoulli draw independent of the content's values.",
+        "content_training_role": "INERT_API_PLACEHOLDER",
+        "model_in_channels": 3,
+        "official_code_modified": false,
+        "official_flag": true,
+        "target": "epsilon_of_GT",
+        "training_input": "torch.cat([x_t], 1)   # content is NOT concatenated",
+        "use_pair": false,
+        "variance": "LEARNED_RANGE",
+        "vb_term_content_path": "NONE"
+      },
+      "method_id": "E07c",
+      "optimizer": {
+        "ema": {
+          "before_warmup": 0.0,
+          "decay": 0.9999
+        },
+        "learning_rate": 1e-05,
+        "name": "AdamW",
+        "scheduler": {
+          "decay": [
+            "linear",
+            "flat"
+          ],
+          "lr": 1e-05,
+          "n_iter": 2400000,
+          "type": "cycle",
+          "warmup": 5000
+        }
+      },
+      "sampler": {
+        "DDIM_skip": 10,
+        "algorithm": "ddim",
+        "checkpoint_loaded": false,
+        "cond_scale": 2.0,
+        "effective_steps": 25,
+        "entrypoint": "FAS_sample.py",
+        "execution_order": "reverse, as diffusion.ddim_steps",
+        "initial_state": "Official q_sample of generation target live image; not a training content dependency",
+        "sample_initial_noise": 250,
+        "sampling_executed": false,
+        "tensor_set_loaded": "model",
+        "tensor_set_substitution_allowed": false,
+        "timesteps_ascending": [
+          0,
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120,
+          130,
+          140,
+          150,
+          160,
+          170,
+          180,
+          190,
+          200,
+          210,
+          220,
+          230,
+          240
+        ],
+        "use_pair": false
+      },
+      "seed": 2026,
+      "seed_adapter": {
+        "cuda_seed_calls": [
+          "torch.cuda.manual_seed",
+          "torch.cuda.manual_seed_all"
+        ],
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "determinism_limit": "RNG seeding is not proof of cross-device/kernel bitwise determinism; TF1 concurrent py_func RNG calls must be serialized by the future runner.",
+        "force_deterministic_algorithms": false,
+        "framework": "torch",
+        "framework_seed": 2026,
+        "launch_environment": {
+          "PYTHONHASHSEED": "2026"
+        },
+        "numpy_random": 2026,
+        "python_random": 2026,
+        "replaces_hardcoded_seed": 1,
+        "scope": "MAIN_DIFFFAS",
+        "seed": 2026,
+        "source": "FAS_train.py:seed_torch",
+        "worker_seeding": "torch.initial_seed() modulo 2**32 -> Python/NumPy; seeded loader generator"
+      },
+      "settings_mapping": [
+        {
+          "config_field": "training.max_epochs",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.max_epochs",
+          "value": 400
+        },
+        {
+          "config_field": "training.batch_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.batch_size",
+          "value": 4
+        },
+        {
+          "config_field": "training.use_pair",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.use_pair",
+          "value": false
+        },
+        {
+          "config_field": "training.model_in_channels",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "conf.in_channels",
+          "value": 3
+        },
+        {
+          "config_field": "training.guidance_prob",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.guidance_prob",
+          "value": 0.2
+        },
+        {
+          "config_field": "training.means_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.means_size",
+          "value": 5
+        },
+        {
+          "config_field": "training.var_size",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "args.var_size",
+          "value": 3
+        },
+        {
+          "config_field": "optimizer.learning_rate",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "DiffConf.training.optimizer.lr",
+          "value": 1e-05
+        },
+        {
+          "config_field": "optimizer.scheduler",
+          "source_file": "FAS_train.py; config/diffconfig.py; config/diffusion.conf",
+          "target": "DiffConf.training.scheduler",
+          "value": {
+            "decay": [
+              "linear",
+              "flat"
+            ],
+            "lr": 1e-05,
+            "n_iter": 2400000,
+            "type": "cycle",
+            "warmup": 5000
+          }
+        }
+      ],
+      "training": {
+        "batch_size": 4,
+        "cudnn": {
+          "benchmark": false,
+          "deterministic": true
+        },
+        "guidance_prob": 0.2,
+        "input_resolution": 256,
+        "max_epochs": 400,
+        "means_size": 5,
+        "model_in_channels": 3,
+        "normalize": "[0.5,0.5,0.5] / [0.5,0.5,0.5]",
+        "use_pair": false,
+        "var_size": 3,
+        "workers_policy": "IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT"
+      }
+    }
+  ],
+  "environment": {
+    "execution_ready": false,
+    "final_execution_environment_frozen": false,
+    "framework": "torch",
+    "gpu_probe_performed": false,
+    "missing_modules": [
+      "torch",
+      "torchvision",
+      "scipy",
+      "tensorfn"
+    ],
+    "observed_packages": {
+      "PIL": {
+        "pillow": "12.3.0"
+      },
+      "cv2": {
+        "opencv-python-headless": "5.0.0.93"
+      },
+      "numpy": {
+        "numpy": "2.5.3"
+      },
+      "scipy": null,
+      "tensorfn": null,
+      "torch": null,
+      "torchvision": null
+    },
+    "python": "3.12.3",
+    "reason": "Missing modules: torch, torchvision, scipy, tensorfn"
+  },
+  "execution_dependencies": [
+    "one auxiliary checkpoint trained/hashed/frozen in a later authorized run",
+    "compatible pinned-source torch/torchvision/scipy/tensorfn runtime",
+    "future runner integration using frozen manifest rows instead of upstream random guide selection"
+  ],
+  "tests": {
+    "e07c": {
+      "tests": 46,
+      "passed": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "skip_reasons": [
+        "PyTorch/torchvision unavailable: pinned custom_rn CPU construction requires both; AST/interface verified separately"
+      ],
+      "file_open_audit": {
+        "opens": 1053,
+        "benchmark_image_opens": 0,
+        "manifest_opens": 0,
+        "rejected_data_opens": 0,
+        "manifest_image_opens": 0
+      }
+    },
+    "m6b": {
+      "result": "PASS",
+      "failures": 0
+    },
+    "m6a8": {
+      "tests": 13,
+      "passed": 13
+    },
+    "m6c2b2": {
+      "tests": 30,
+      "passed": 29,
+      "skipped": 1,
+      "skip_reason": "PyTorch unavailable; actual avg_pool2d/autograd requires torch"
+    },
+    "m6a7": {
+      "tests": 13,
+      "passed": 13
+    },
+    "m6c2b1": {
+      "tests": 50,
+      "passed": 49,
+      "skipped": 1,
+      "skip_reason": "Pinned Sim3DR_Cython unavailable"
+    },
+    "m6a6": {
+      "tests": 4,
+      "passed": 4
+    },
+    "m6c2a": {
+      "tests": 72,
+      "passed": 72
+    },
+    "m6c1": {
+      "tests": 83,
+      "passed": 83
+    },
+    "m0": {
+      "tests": 17,
+      "passed": 16,
+      "failures": 1,
+      "errors": 0,
+      "sole_failure": "test_manifests_are_stage_appropriate",
+      "reason": "manifests/artifact_probe_classes_v1.json",
+      "historical_failure_unchanged": true
+    },
+    "full_suite": "NOT_RUN"
+  },
+  "preflight": {
+    "auxiliary_runs": 1,
+    "checkpoint_created": false,
+    "diffusion_sampling": false,
+    "file_open_audit": {
+      "benchmark_image_opens": 0,
+      "manifest_image_opens": 0,
+      "manifest_opens": 0,
+      "opens": 639,
+      "rejected_data_opens": 0
+    },
+    "gpu_job": false,
+    "mode": "STATIC_PREPARATION_ONLY",
+    "model_constructed": false,
+    "production_runtime_write": false,
+    "result": "PASS",
+    "same_auxiliary_checkpoint_for_all_main_seeds": true,
+    "training_launched": false
+  },
+  "data_access_disclosure": {
+    "e07c_audited_tests": {
+      "opens": 1053,
+      "benchmark_image_opens": 0,
+      "manifest_opens": 0,
+      "rejected_data_opens": 0,
+      "manifest_image_opens": 0
+    },
+    "e07c_static_preflight": {
+      "benchmark_image_opens": 0,
+      "manifest_image_opens": 0,
+      "manifest_opens": 0,
+      "opens": 639,
+      "rejected_data_opens": 0
+    },
+    "manifest_identity_bound_without_opening": true,
+    "manifest_membership_independently_recounted": false,
+    "scope": "Counts cover named E07c processes only. Canonical indexing and requested M0 inspect metadata; these are not method execution or benchmark evidence. No benchmark image pixels opened."
+  },
+  "files_created": [
+    "methods/difffas/__init__.py",
+    "methods/difffas/adapter.py",
+    "methods/difffas/contract.py",
+    "methods/difffas/encoder.py",
+    "methods/difffas/sampler.py",
+    "methods/difffas/seed_adapter.py",
+    "methods/difffas/source.py",
+    "methods/difffas/source_traceability.md",
+    "tests/test_m6c2b3_contract.py",
+    "tests/test_m6c2b3_encoder.py",
+    "tests/test_m6c2b3_runtime.py",
+    "tools/m6c2b3_preflight.py",
+    "outputs/audit/M6C2B3_IMPLEMENTATION.md",
+    "outputs/audit/M6C2B3_IMPLEMENTATION.json"
+  ],
+  "files_modified": [
+    "methods/common/learned.py",
+    "configs/CONFIG_STATUS.md",
+    "outputs/audit/EXECUTION_LEDGER.jsonl",
+    "outputs/audit/ARTIFACT_INDEX.csv"
+  ],
+  "current_artifact_sha256": {
+    "methods/difffas/__init__.py": "796bc58fdd40e9501937a1e57be4ba7beb409edb0e90c97adb0e51da421e7cb2",
+    "methods/difffas/adapter.py": "d2bc7cbd1f88333ed35ac9ef444db3ec88c3d99c4ddb1e07edcd531f45e9c323",
+    "methods/difffas/contract.py": "4db1bc9af5f8455ab8b8f80e18808bbf3424b3bc1756697de627fa6eff3e7011",
+    "methods/difffas/encoder.py": "83a5146f3c07a45208e0a4b6f93d974279a313f8b1ef11d552416a86570c069f",
+    "methods/difffas/sampler.py": "992354b939d3bda91bebbc061b8010b9121f6cb1076a43e30a69ec67c8929762",
+    "methods/difffas/seed_adapter.py": "9bd12dea10636f7dcfad500d5737a50a7e3e360d7bd44eaa1dee094e3622b65c",
+    "methods/difffas/source.py": "19ca1ae9c535bf4a45985644c76974527f64137dfe7bb9a74ac4808c9df0ef2d",
+    "methods/difffas/source_traceability.md": "8dd298794e316e6429c0e748d2e6e1d4b690830d85f540a572306881fe2b10b6",
+    "tests/test_m6c2b3_contract.py": "a710a15cfde92c048624206e7bb4c25f5c7f4ce8942c747746a157dc59345cfa",
+    "tests/test_m6c2b3_encoder.py": "8231500a320404a92ebf176158f6e32e2964b0cdf72539085c48d61b51141a57",
+    "tests/test_m6c2b3_runtime.py": "b942d1eed50689bdab2c53136f56f8379e804eb5cbda7955ec379b9fd5f2e8d5",
+    "tools/m6c2b3_preflight.py": "2185339fbad10adbe2f92bd871d1e946aeca86ae003b5526cbfd47d1ec47a39a",
+    "methods/common/learned.py": "20252494a7a8e02ddf9a448de011d91cf7e391ca739ac5a5532267d79b4f0525",
+    "configs/CONFIG_STATUS.md": "0bfe711ad973124d068066895c34c7a62653da7401f98de6f0fc0ec431874f04"
+  },
+  "ledger": {
+    "committed_prefix_rows": 93,
+    "committed_prefix_sha256": "e6dea60dc459d986db687ff8fa7f7dde457cbabb2830d3cfa78d25ac37bac54b",
+    "final_expected_rows": 94,
+    "append_record": "M6C2B3_E07C_IMPLEMENTATION"
+  },
+  "firewall": {
+    "frozen_config_change": false,
+    "source_modification": false,
+    "other_baseline_implementation": false,
+    "model_or_checkpoint_bytes_added": false
+  },
+  "execution": {
+    "training": false,
+    "auxiliary_encoder_training": false,
+    "main_difffas_training": false,
+    "model_construction": false,
+    "benchmark_image_execution": false,
+    "diffusion_sampling": false,
+    "synthetic_bank_generation": false,
+    "test_data_for_method_execution": false,
+    "gpu_job": false,
+    "scientific_checkpoint": false,
+    "commit": false,
+    "push": false
+  }
+}

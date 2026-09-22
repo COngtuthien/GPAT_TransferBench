@@ -221,6 +221,22 @@ def checkpoint_plan(config: dict, seed: int, *, selection_split=None) -> dict:
     if selection_split is not None:
         raise PreparationError('official final checkpoint is not selected using any data split')
     policy = cfg['checkpoint']
+    if cfg['method_id'] == 'E07c':
+        end = cfg['training']['max_epochs']
+        if (policy['selection_scope'] != 'WITHIN_SEED' or policy['selection_uses_val'] or
+                policy['selection_uses_test'] or policy['rule'] != 'BASELINE_FINAL_STATE_V1' or
+                policy['terminal_state'] != f'end_of_{end}_epoch_budget' or
+                policy['additional_optimizer_steps_permitted']):
+            raise PreparationError('invalid E07c terminal checkpoint policy')
+        return {'method_id': cfg['method_id'], 'experiment_seed': seed,
+                'rule': policy['rule'], 'cadence': policy['cadence'], 'final_epoch': end,
+                'epoch_semantics': 'COMPLETED_EPOCHS', 'selection_scope': 'WITHIN_SEED',
+                'selection_uses_val': False, 'selection_uses_test': False,
+                'save_terminal_if_cadence_misses': policy['terminal_checkpoint_creation_required_if_cadence_misses_it'],
+                'checkpoint_types_supported': ['periodic', 'terminal', 'selected'],
+                'tensor_set_for_generation': cfg['sampler']['tensor_set_loaded'],
+                'checkpoint_written': False, 'checkpoint_sha256': None, 'extra_optimizer_steps': 0,
+                'missing_field_reasons': {'checkpoint_sha256': 'Preparation only; no checkpoint exists'}}
     if cfg['method_id'] == 'E05':
         end = cfg['training']['total_iterations']
         if (policy['selection_scope'] != 'WITHIN_SEED' or policy['selection_uses_val'] or
