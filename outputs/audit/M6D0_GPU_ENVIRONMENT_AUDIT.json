@@ -1,0 +1,299 @@
+{
+  "milestone": "M6D0",
+  "audit_classification": "AUDIT_PLANNING_ONLY",
+  "status": "COMPLETED_WITH_BLOCKERS",
+  "starting_commit": "f2a625b1b2ee832e3517561e8f64a8cde3ae9d0c",
+  "branch": "m6-baselines",
+  "local_preflight": {
+    "head_match": true,
+    "branch_match": true,
+    "worktree_clean_at_start": true
+  },
+  "execution_readiness": "BLOCKED_PENDING_READ_ONLY_GPU_AUDIT_AND_COMPATIBILITY_PROBES",
+  "gpu_host": {
+    "recorded_endpoint": "student20261@100.121.84.44",
+    "expected_repository": "/home/student20261/workdir/GPAT_TransferBench",
+    "expected_runtime_root": "/home/student20261/workdir/GPAT_TransferBench_runtime",
+    "live_audit_status": "BLOCKED_AUTHENTICATION",
+    "current_facts_verified": false,
+    "attempt_mode": "ssh BatchMode read-only command bundle",
+    "failure": "Permission denied (publickey,password)",
+    "repository_head": null,
+    "repository_branch": null,
+    "repository_dirty": null,
+    "repository_remotes": null,
+    "runtime_root_exists": null,
+    "hostname": null,
+    "whoami": null,
+    "pwd": null,
+    "kernel": null,
+    "os": null,
+    "gpu": null,
+    "driver": null,
+    "nvidia_reported_max_cuda": null,
+    "system_nvcc": null,
+    "gcc": null,
+    "gxx": null,
+    "cmake": null,
+    "ram": null,
+    "disk": null,
+    "conda_environments": null,
+    "reason_null": "SSH authentication failed before any remote command executed"
+  },
+  "historical_m5_evidence_not_reverified": {
+    "evidence_date": "2026-09-21",
+    "sources": [
+      "outputs/audit/M5_GPU_PREFLIGHT_ENV.txt",
+      "environments/m5_probe_gpu.lock.txt"
+    ],
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "vram_mib": 24576,
+    "compute_capability": "8.6",
+    "driver": "595.84",
+    "nvidia_reported_max_cuda": "13.2",
+    "m5_environment_executable": "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
+    "python": "3.11.16",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130",
+    "torch_cuda_runtime": "13.0",
+    "cudnn": 92000,
+    "numpy": "2.4.6",
+    "opencv": "5.0.0",
+    "kernel_from_lock": "Linux-7.0.0-29-generic-x86_64-with-glibc2.39",
+    "current_fact": false,
+    "system_cuda_equated_to_torch_cuda": false
+  },
+  "host_path_authority": {
+    "authoritative_operational_config": "configs/execution/m5_gpu_3090.yaml",
+    "endpoint": "student20261@100.121.84.44",
+    "repository_expected": "/home/student20261/workdir/GPAT_TransferBench",
+    "runtime_root_expected": "/home/student20261/workdir/GPAT_TransferBench_runtime",
+    "readme_stale_text": "/home/sparc/workdir/longnm/GPAT_TransferBench",
+    "readme_is_scientific_authority": false,
+    "readme_modified": false,
+    "actual_filesystem_match": "UNVERIFIED_DUE_TO_SSH_AUTHENTICATION"
+  },
+  "source_checkouts": {
+    "fas_aug": {
+      "path": "third_party/source_cache/fas_aug",
+      "commit": "0da1dd79bad00e225b8cb6977c7f3f06ee8f7517"
+    },
+    "stdn": {
+      "path": "third_party/source_cache/stdn",
+      "commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90"
+    },
+    "tddfa_v2": {
+      "path": "third_party/source_cache/tddfa_v2",
+      "commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae"
+    },
+    "swapping_autoencoder": {
+      "path": "third_party/source_cache/swapping_autoencoder",
+      "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7"
+    },
+    "facexzoo": {
+      "path": "third_party/source_cache/facexzoo",
+      "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a"
+    },
+    "difffas": {
+      "path": "third_party/source_cache/difffas",
+      "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15"
+    }
+  },
+  "method_matrix": {
+    "E01": {
+      "name": "FAS-Aug",
+      "config_sha256": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+      "environment": "env-m6-core",
+      "python": "VERSION_UNSPECIFIED",
+      "framework": "Selected official pixel adapter does not require Torch; full upstream requirements name Torch/torchvision/torchaudio without versions",
+      "cuda": "NOT_REQUIRED_FOR_PIXEL_OPERATOR_PATH",
+      "packages": ["numpy", "Pillow with ImageCms", "opencv-python", "PyYAML for benchmark config tooling"],
+      "compiled_extensions": [],
+      "external_assets": "Pinned FAS-Aug textures and ICC profiles inside source checkout; no weights",
+      "deprecated_or_risky_apis": ["upstream requirements include unversioned and malformed/non-package entries"],
+      "requirement_status": ["VERSION_UNSPECIFIED", "COMPATIBILITY_REQUIRES_PROBE"],
+      "existing_m5_reuse": "UNVERIFIED"
+    },
+    "E02": {
+      "name": "Frequency Substitution",
+      "config_sha256": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+      "environment": "env-m6-core",
+      "python": "VERSION_UNSPECIFIED",
+      "framework": "NumPy PCG64 and FFT",
+      "cuda": "NOT_REQUIRED",
+      "packages": ["numpy", "PyYAML for benchmark config tooling"],
+      "compiled_extensions": [],
+      "external_assets": "NONE",
+      "deprecated_or_risky_apis": [],
+      "requirement_status": ["VERSION_UNSPECIFIED", "COMPATIBILITY_REQUIRES_PROBE"],
+      "existing_m5_reuse": "UNVERIFIED"
+    },
+    "E03": {
+      "name": "STDN",
+      "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+      "environment": "env-m6-stdn",
+      "python": "Python 3.6 source-tested",
+      "framework": "TensorFlow 1 graph stack using tf.contrib; README says tested 1.13.0 but also states >1.8 and <1.13",
+      "cuda": "TensorFlow-1-compatible CUDA/cuDNN combination not specified; RTX 3090 compatibility unresolved",
+      "packages": ["tensorflow 1.x with contrib", "numpy", "Pillow", "opencv-python", "matplotlib"],
+      "compiled_extensions": ["TensorFlow binary GPU runtime"],
+      "external_assets": "No external initialization weights required by the E03 training contract",
+      "deprecated_or_risky_apis": ["tf.contrib", "tf.Session", "tf.ConfigProto", "tf.py_func", "tf.image.resize_images"],
+      "requirement_status": ["SOURCE_RANGE_ONLY", "COMPATIBILITY_REQUIRES_PROBE"],
+      "existing_m5_reuse": "NO"
+    },
+    "E04": {
+      "name": "Physics-STD controlled geometry/depth reconstruction",
+      "config_sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+      "environment": "env-m6-physics-std",
+      "python": "VERSION_UNSPECIFIED",
+      "framework": "Training paper says TensorFlow but has no released implementation/version; fixed 3DDFA geometry is PyTorch",
+      "cuda": "Geometry can use PyTorch CUDA; exact training CUDA/cuDNN unresolved",
+      "packages": ["tensorflow version unresolved for training", "torch", "torchvision", "numpy", "opencv-python", "scipy", "scikit-image", "PyYAML", "Cython"],
+      "compiled_extensions": ["Sim3DR_Cython C++11/Cython", "optional repository NMS/render extensions outside selected face-detector path"],
+      "external_assets": "Four frozen 3DDFA assets; verified on laptop, GPU mapping unverified",
+      "deprecated_or_risky_apis": ["3DDFA uses removed NumPy np.long alias", "unversioned upstream requirements"],
+      "requirement_status": ["VERSION_UNSPECIFIED", "COMPATIBILITY_REQUIRES_PROBE"],
+      "existing_m5_reuse": "UNVERIFIED_AND_NOT_APPROVED"
+    },
+    "E05": {
+      "name": "PCGAN controlled architecture resolution",
+      "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "environment": "env-m6-pcgan",
+      "python": "Python 3.6 used by source authors",
+      "framework": "PyTorch 1.7.1 used by source authors",
+      "cuda": "CUDA >=10.1 per README; exact candidate must compile on RTX 3090",
+      "packages": ["torch", "torchvision", "dominate", "torchgeometry", "func-timeout", "tqdm", "matplotlib", "opencv-python", "lmdb", "numpy", "GPUtil", "Pillow", "scikit-learn", "visdom", "ninja"],
+      "compiled_extensions": ["JIT fused_bias_act C++/CUDA", "JIT upfirdn2d C++/CUDA"],
+      "external_assets": "No pretrained weights used by the E05 controlled training plan",
+      "deprecated_or_risky_apis": ["old torch.utils.cpp_extension kernels", "compiler/nvcc/PyTorch ABI coupling", "modern PyTorch compatibility unproven"],
+      "requirement_status": ["SOURCE_PINNED", "COMPATIBILITY_REQUIRES_PROBE"],
+      "existing_m5_reuse": "NO_UNTIL_PROBED"
+    },
+    "E06c": {
+      "name": "DSDG-BIN-IDFREE",
+      "config_sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+      "environment": "env-m6-dsdg",
+      "python": "Python 3.8",
+      "framework": "PyTorch 1.6.0; torchvision 0.7.0",
+      "cuda": "Required by source-specific CUDA tensors/DataParallel; exact toolkit/cuDNN not declared",
+      "packages": ["torch", "torchvision", "numpy", "opencv-python", "Pillow"],
+      "compiled_extensions": [],
+      "external_assets": "LightCNN-29 v2; verified on laptop, GPU mapping unverified",
+      "deprecated_or_risky_apis": ["torch.cuda.FloatTensor allocation", "whole-module torch serialization", "legacy DataParallel", "physical batch 240 mandatory for batch-statistical objective"],
+      "requirement_status": ["SOURCE_PINNED", "COMPATIBILITY_REQUIRES_PROBE"],
+      "existing_m5_reuse": "NO_UNTIL_PROBED"
+    },
+    "E07c": {
+      "name": "DiffFAS-BIN-IDFREE controlled encoder reconstruction",
+      "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+      "environment": "env-m6-difffas",
+      "python": "Python 3.6.13",
+      "framework": "PyTorch 1.10.2 CUDA 11.3; torchvision 0.11.3",
+      "cuda": "Environment also lists CUDA 11.7 runtime/meta packages; internal mismatch requires solving/probing",
+      "packages": ["numpy 1.19.2", "tensorfn 0.1.28", "pydantic 1.9.2", "pyhocon 0.3.60", "opencv-python 4.5.4.58", "Pillow 8.3.2", "scipy 1.5.4", "scikit-learn 0.24.2", "full pinned environment.yml ecosystem"],
+      "compiled_extensions": [],
+      "external_assets": "Auxiliary conditioning encoder NOT_YET_TRAINED",
+      "deprecated_or_risky_apis": ["CUDA-only allocations", "legacy whole-module torch.load", "old tensorfn/pydantic ecosystem", "mixed CUDA 11.3/11.7 declarations"],
+      "requirement_status": ["SOURCE_PINNED", "COMPATIBILITY_REQUIRES_PROBE"],
+      "existing_m5_reuse": "NO"
+    }
+  },
+  "external_assets": {
+    "E04": {
+      "scope": "LAPTOP_PATH_ONLY_GPU_UNVERIFIED",
+      "root": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2",
+      "assets": [
+        {"path": "configs/bfm_noneck_v3.pkl", "size": 24393598, "sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca", "match": true},
+        {"path": "configs/tri.pkl", "size": 913040, "sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8", "match": true},
+        {"path": "configs/param_mean_std_62d_120x120.pkl", "size": 713, "sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795", "match": true},
+        {"path": "weights/mb1_120x120.pth", "size": 13755269, "sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79", "match": true}
+      ],
+      "deserialized": false
+    },
+    "E06c": {
+      "scope": "LAPTOP_PATH_ONLY_GPU_UNVERIFIED",
+      "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+      "size": 123844849,
+      "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+      "match": true,
+      "deserialized": false
+    },
+    "E07c": {
+      "status": "NOT_YET_TRAINED",
+      "path": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+      "sha256": "RECORDED_AFTER_TRAINING",
+      "exists_expected_now": false
+    }
+  },
+  "environment_plan": {
+    "path": "environments/m6_environment_plan.md",
+    "authoritative_lock": false,
+    "final_lock_files_created": [],
+    "groups": ["env-m6-core", "env-m6-stdn", "env-m6-physics-std", "env-m6-pcgan", "env-m6-dsdg", "env-m6-difffas"],
+    "existing_gpu_environments_reusable_now": [],
+    "reason": "Live environment inventory and compatibility probes unavailable; historical M5 environment is evidence only"
+  },
+  "unresolved": [
+    "Read-only SSH credentials for the recorded GPU host",
+    "Current GPU repository HEAD/branch/status/remotes and runtime-root existence",
+    "Current OS/kernel/GPU/driver/system CUDA/compiler/RAM/disk facts",
+    "Current conda environments and package/import/CUDA facts",
+    "GPU-side locations and hashes for E04 and E06c assets",
+    "E03 README TensorFlow 1.13-tested versus >1.8,<1.13 contradiction and RTX 3090 runtime compatibility",
+    "E04 controlled TensorFlow training implementation/version and whether geometry must use a separate environment",
+    "E04 Sim3DR_Cython compilation against actual GPU compiler/Python/NumPy",
+    "E05 custom CUDA extension compatibility with the actual compiler/toolkit/PyTorch candidate",
+    "E06c PyTorch 1.6/CUDA compatibility on RTX 3090 and physical-batch-240 VRAM feasibility",
+    "E07c mixed CUDA 11.3/11.7 environment declaration solvability on the actual host",
+    "Any reuse of the historical gpat-m5 environment"
+  ],
+  "preflight": {
+    "command": "python tools/m6d0_gpu_environment_preflight.py",
+    "result": "PLAN_VALIDATION_PASS",
+    "method_configs_verified": 7,
+    "source_checkouts_verified": 6,
+    "packages_installed": 0,
+    "environments_created": 0,
+    "final_locks_created": 0,
+    "meaning": "Validates static plan only; cannot clear live GPU blockers"
+  },
+  "data_access": {
+    "benchmark_image_opens": 0,
+    "manifest_opens": 0,
+    "model_weight_loads": 0,
+    "asset_operations": "stat and streaming SHA256 only",
+    "remote_commands_executed": 0
+  },
+  "safety": {
+    "package_install": false,
+    "environment_creation": false,
+    "training": false,
+    "model_construction": false,
+    "weight_loading": false,
+    "benchmark_image_execution": false,
+    "diffusion_sampling": false,
+    "synthetic_bank_generation": false,
+    "gpu_training_job": false,
+    "scientific_checkpoint": false,
+    "scientific_config_change": false,
+    "source_cache_change": false,
+    "commit": false,
+    "push": false
+  },
+  "ledger": {
+    "committed_prefix_records": 94,
+    "final_records": 95,
+    "classification": "M6D0_GPU_ENVIRONMENT_AUDIT",
+    "committed_prefix_sha256": "b9bb74471d362af6b162505b8ebbe6bf1799ed5ed40d470cd70a37d6f9b0d561",
+    "committed_prefix_byte_identical": true,
+    "records_appended": 1
+  },
+  "artifact_index": {
+    "builder": "tools/build_artifact_index.py",
+    "indexed_paths": 461,
+    "unique_paths": true,
+    "current_sizes_and_sha256": true,
+    "line_endings": "CRLF"
+  }
+}
