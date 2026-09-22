@@ -1,0 +1,24 @@
+amendment_id: A5_E05_BLUR_OPERATOR_RESOLUTION
+status: OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE
+base_config_path: configs/methods/e05_pcgan.yaml
+base_config_sha256: 478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de
+amendment_document: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A5_E05_Blur_Operator_Resolution.md
+provenance: BENCHMARK_DEFINED_CONTROLLED_RECONSTRUCTION
+blur_operator:
+  framework_reference: torch.nn.functional.avg_pool2d
+  kernel_size: 2
+  stride: 2
+  padding: 0
+  ceil_mode: false
+  count_include_pad: false
+  input_resolution: 256
+  output_resolution: 128
+  reduction: arithmetic_mean_over_each_nonoverlapping_2x2_block
+  learnable_parameters: 0
+  antialias_parameter: NOT_APPLICABLE
+  align_corners: NOT_APPLICABLE
+  boundary_extension: NONE
+  application_branches: [x_tgt, "G(z_pat_src, z_con_tgt)"]
+  application: independently_before_existing_reconstruction_distance
+  detach_due_to_blur: false
+  authorized_fallbacks: []

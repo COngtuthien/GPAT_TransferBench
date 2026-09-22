@@ -1,0 +1,158 @@
+{
+  "milestone": "M6A7",
+  "classification": "M6A7_E05_BLUR_OPERATOR_RESOLUTION",
+  "status": "OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE",
+  "starting_commit": "05111690087b8e4b723148ed96886478ba765333",
+  "why_m6c2b2_stopped": "L_recblur fixes half-resolution geometry but no authoritative downsampling filter or complete operator; implementation stopped before inventing a scientific choice.",
+  "paper_evidence": {
+    "url": "https://arxiv.org/html/2604.09018v1#S3.SS1.SSS2",
+    "section": "3.1.2",
+    "equation": 3,
+    "geometry": [
+      1024,
+      512
+    ],
+    "description": "Blur target and mixed generated image before reconstruction distance; downsampling suppresses high-frequency artifacts while retaining facial structure. No concrete filter is specified.",
+    "distance_scope": "Eq. 3 typesets a subscript-2 norm; A5 changes neither the existing distance nor its reduction and does not introduce a squared-distance rule."
+  },
+  "missing_details": [
+    "interpolation_family",
+    "convolution_kernel",
+    "antialias_flag",
+    "padding",
+    "coordinate_convention",
+    "boundary_mode"
+  ],
+  "a2_scope": "A2-07 resolves inherited architecture only, not the PCGAN-specific added blur loss.",
+  "source": {
+    "repository": "https://github.com/taesungp/swapping-autoencoder-pytorch",
+    "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+    "evidence": [
+      {
+        "path": "third_party/source_cache/swapping_autoencoder/util/util.py",
+        "symbol": "resize2d_tensor (bilinear utility; visualization use)",
+        "sha256": "1877a389417a0c6f746006da852d09b3109ecfed2b119d5dc692519aa848b3eb",
+        "pinned_bytes_match": true,
+        "authoritative_for_pcgan_blur": false
+      },
+      {
+        "path": "third_party/source_cache/swapping_autoencoder/models/networks/loss.py",
+        "symbol": "VGG16Loss.__init__/vgg_forward ([1,2,1] VGG pooling replacement)",
+        "sha256": "b4ee3ef8eb4aa6935feacf3d70a52d59e359891a58e27a3e3d8492c3d95b9447",
+        "pinned_bytes_match": true,
+        "authoritative_for_pcgan_blur": false
+      },
+      {
+        "path": "third_party/source_cache/swapping_autoencoder/models/networks/stylegan2_layers.py",
+        "symbol": "Downsample.__init__/forward (caller-supplied filter)",
+        "sha256": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+        "pinned_bytes_match": true,
+        "authoritative_for_pcgan_blur": false
+      },
+      {
+        "path": "third_party/source_cache/swapping_autoencoder/models/swapping_autoencoder_model.py",
+        "symbol": "compute_generator_losses (no PCGAN L_recblur)",
+        "sha256": "71df763244ea5b17c55d93384595c37dccb04386802f00a9d407a72e31b83e7f",
+        "pinned_bytes_match": true,
+        "authoritative_for_pcgan_blur": false
+      }
+    ]
+  },
+  "resolution": {
+    "amendment_id": "A5_E05_BLUR_OPERATOR_RESOLUTION",
+    "status": "OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE",
+    "base_config_path": "configs/methods/e05_pcgan.yaml",
+    "base_config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "amendment_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A5_E05_Blur_Operator_Resolution.md",
+    "provenance": "BENCHMARK_DEFINED_CONTROLLED_RECONSTRUCTION",
+    "blur_operator": {
+      "framework_reference": "torch.nn.functional.avg_pool2d",
+      "kernel_size": 2,
+      "stride": 2,
+      "padding": 0,
+      "ceil_mode": false,
+      "count_include_pad": false,
+      "input_resolution": 256,
+      "output_resolution": 128,
+      "reduction": "arithmetic_mean_over_each_nonoverlapping_2x2_block",
+      "learnable_parameters": 0,
+      "antialias_parameter": "NOT_APPLICABLE",
+      "align_corners": "NOT_APPLICABLE",
+      "boundary_extension": "NONE",
+      "application_branches": [
+        "x_tgt",
+        "G(z_pat_src, z_con_tgt)"
+      ],
+      "application": "independently_before_existing_reconstruction_distance",
+      "detach_due_to_blur": false,
+      "authorized_fallbacks": []
+    }
+  },
+  "rationale": "Owner-selected minimal parameter-free half-resolution low-pass operator: arithmetic mean of disjoint 2x2 blocks; no tunable sigma, coordinate/align_corners choice, antialias toggle, learned parameters or boundary extension. Not an inference about private author code.",
+  "provenance": "BENCHMARK_DEFINED_CONTROLLED_RECONSTRUCTION",
+  "not_claimed": [
+    "PAPER",
+    "OFFICIAL_PCGAN",
+    "AUTHOR_SPECIFIED",
+    "OFFICIAL_SWAPPING_AUTOENCODER"
+  ],
+  "artifact_hashes": {
+    "configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "frozen_config_snapshot/configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A5_E05_Blur_Operator_Resolution.md": "05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd",
+    "configs/amendments/e05_a5_blur_operator_resolution.yaml": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1",
+    "tests/test_m6a7_e05_blur_contract.py": "e004cda10df32f14cca26a85c8a771d87978f00be16c2ba7ba835283d59a195e"
+  },
+  "validation": {
+    "focused_contract": {
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "file_open_audit": {
+        "opens": 176,
+        "benchmark_image_opens": 0,
+        "manifest_opens": 0,
+        "rejected_data_opens": 0
+      }
+    },
+    "m6b": {
+      "result": "PASS",
+      "failures": 0
+    },
+    "full_suite": "NOT_RUN"
+  },
+  "environment": {
+    "python": "3.12.3",
+    "numpy": "2.5.3",
+    "pyyaml": "6.0.3",
+    "torch_module_available": false,
+    "torch_execution": "NOT_RUN",
+    "purpose": "Synthetic NumPy contract validation only; not final benchmark environment pins",
+    "dependencies_installed": false
+  },
+  "benchmark_data_access": {
+    "benchmark_image_opens": 0,
+    "manifest_opens": 0,
+    "evidence_scope": "Focused contract test process audited with existing StaticAccessAudit; other work inspected source/config/audit metadata only. No benchmark pixel execution."
+  },
+  "ledger": {
+    "committed_prefix_rows": 90,
+    "committed_prefix_sha256": "027158272934e6b4c0ac9504033afb67d97e7c5e3034caa47584bdb9097a0450",
+    "required_final_rows": 91,
+    "append_classification": "M6A7_E05_BLUR_OPERATOR_RESOLUTION"
+  },
+  "e05_status": "CONTRACT_RESOLVED_NOT_IMPLEMENTED",
+  "implementation": {
+    "pcgan": false,
+    "e07c": false,
+    "training": false,
+    "model_inference": false,
+    "gpu_job": false,
+    "checkpoint": false,
+    "bank_generation": false,
+    "frozen_config_change": false,
+    "commit": false,
+    "push": false
+  }
+}
