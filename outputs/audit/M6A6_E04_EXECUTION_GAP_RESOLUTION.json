@@ -1,0 +1,54 @@
+{
+  "milestone": "M6A6",
+  "status": "OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE",
+  "starting_commit": "79e6dbaa15fe6acd175078511f4701aed7b7f5ab",
+  "why_m6c2b1_stopped": [
+    "Official uint8 renderer to float conversion order was execution-affecting and unspecified.",
+    "Published PhySTD details omitted the optimizer algorithm and no official PhySTD implementation was located."
+  ],
+  "amendment": {
+    "id": "A4_E04_EXECUTION_GAP_RESOLUTION",
+    "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A4_E04_Execution_Gap_Resolution.md",
+    "sha256": "991e85f54a929de7c55c7b01c3a3b45290f01a2c6a6db5c0ad7e218ed01d5339",
+    "provenance": "OWNER-APPROVED ADDITIVE NON-DESTRUCTIVE"
+  },
+  "base_e04_config": {
+    "path": "configs/methods/e04_physics_std.yaml",
+    "sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "snapshot_unchanged": true
+  },
+  "overlay": {
+    "path": "configs/amendments/e04_a4_execution_resolution.yaml",
+    "sha256": "7579b7177e8b48513bb7a9057e6f700cf9b1f576b5c577887c07bbda9cf35355",
+    "depth": {
+      "raster_output_dtype": "uint8",
+      "resize_dtype": "uint8",
+      "resize_interpolation": "cv2.INTER_AREA",
+      "post_resize_cast": "float32",
+      "post_resize_scale": "1/255",
+      "final_clip": [0, 1],
+      "output_shape": [32, 32],
+      "spoof_m0": "zeros((32,32), float32)",
+      "ordering": ["reconstruct_project", "normalize_vertex_z", "official_sim3dr_uint8_render", "uint8_inter_area_resize", "cast_float32", "divide_255", "clip_0_1"]
+    },
+    "optimizer": {
+      "type": "Adam",
+      "semantic_reference": "tf.train.AdamOptimizer(lr)",
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-8,
+      "weight_decay": 0,
+      "provenance": "BENCHMARK_DEFINED_NEAREST_OFFICIAL_PREDECESSOR_BEHAVIOR"
+    }
+  },
+  "source_evidence": {
+    "repository": "https://github.com/yaojieliu/ECCV20-STDN",
+    "commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+    "file": "third_party/source_cache/stdn/model/model.py",
+    "line": 115,
+    "expression": "tf.train.AdamOptimizer(lr)",
+    "file_sha256": "a422834d59d24db684cc28f470fdd6eb8b1658bfb40ba113393df627d6fc3743"
+  },
+  "benchmark_data_access": {"benchmark_image_opens": 0, "manifest_opens": 0},
+  "implementation": "E04 implementation not started; no training or model execution"
+}

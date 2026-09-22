@@ -195,3 +195,10 @@ Static/synthetic validation only; no training launcher was invoked, no framework
 no benchmark images, no checkpoint, no bank. E04/E05/E07c remain CONFIG_FROZEN.
 The final execution environment and actual training remain pending. Full audit:
 `outputs/audit/M6C2A_IMPLEMENTATION.md` / `.json`.
+
+**M6A6 (2026-09-22) — E04 contract resolved, implementation not started.**
+Amendment A4 resolves the two M6C2b1 execution gaps additively: official
+uint8-preserving depth resize/conversion order and Adam semantics inherited from
+the pinned STDN predecessor. The frozen E04 YAML and snapshot remain unchanged;
+E04 is **CONTRACT_RESOLVED_NOT_IMPLEMENTED** and must not be reported as
+implemented or trained. Details: `outputs/audit/M6A6_E04_EXECUTION_GAP_RESOLUTION.md` / `.json`.

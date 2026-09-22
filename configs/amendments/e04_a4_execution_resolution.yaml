@@ -1,0 +1,28 @@
+amendment_id: A4_E04_EXECUTION_GAP_RESOLUTION
+status: OWNER_APPROVED_ADDITIVE_NON_DESTRUCTIVE
+base_config_path: configs/methods/e04_physics_std.yaml
+base_config_sha256: 418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a
+amendment_document: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A4_E04_Execution_Gap_Resolution.md
+provenance:
+  depth_resolution: BENCHMARK_DEFINED_A3_CLARIFICATION
+  optimizer_resolution: BENCHMARK_DEFINED_NEAREST_OFFICIAL_PREDECESSOR_BEHAVIOR
+  predecessor_repository: https://github.com/yaojieliu/ECCV20-STDN
+  predecessor_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90
+  predecessor_source_file: third_party/source_cache/stdn/model/model.py
+  predecessor_symbol: tf.train.AdamOptimizer(lr)
+depth:
+  raster_output_dtype: uint8
+  resize_dtype: uint8
+  resize_interpolation: cv2.INTER_AREA
+  post_resize_cast: float32
+  post_resize_scale: 1/255
+  final_clip: [0, 1]
+  output_shape: [32, 32]
+  spoof_m0: zeros((32,32), float32)
+optimizer:
+  type: Adam
+  semantic_reference: tf.train.AdamOptimizer
+  beta1: 0.9
+  beta2: 0.999
+  epsilon: 1.0e-8
+  weight_decay: 0
