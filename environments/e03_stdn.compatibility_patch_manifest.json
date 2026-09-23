@@ -1,0 +1,43 @@
+{
+  "contrib_replacement": false,
+  "diagnostic_instrumentation": [
+    {
+      "compatibility_replacement": "Temporary observer functions call the original objects with identical args/kwargs and return identical results; restored after _step construction.",
+      "original_line_api": "train.Gen, train.Disc_s, train.get_train_op",
+      "reason": "Capture model output shapes and optimizer objective names.",
+      "scientific_effect": "NONE",
+      "validation": "Stage C complete name/shape oracle; repeat graph topology."
+    },
+    {
+      "compatibility_replacement": "Config.__new__ reads unchanged class constants; feed in-memory paired tensors to original train._step; do not invoke filesystem-writing constructors/main.",
+      "original_line_api": "Config.__init__, Dataset.__init__, train.main",
+      "reason": "Synthetic qualification without benchmark data, outputs or checkpoints.",
+      "scientific_effect": "NONE",
+      "validation": "Frozen constant tests, constructor flags and Python open audit firewall."
+    }
+  ],
+  "fidelity_disclosure": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+  "historical_versions_mandatory": false,
+  "milestone": "M6D2b",
+  "not_a_production_training_runner": true,
+  "original_source_cache_modified": false,
+  "qualification_controller": [
+    {
+      "compatibility_replacement": "Execute runtime_qualification.py as a standalone Python 3.8 worker; import original upstream train/model/warp directly. No existing benchmark controller is edited.",
+      "original_line_api": "methods/stdn/__init__.py imports the benchmark controller package",
+      "reason": "Isolate legacy runtime from newer-Python benchmark orchestration; restrict execution to synthetic qualification.",
+      "scientific_effect": "NONE",
+      "validation": "Stages B-F, independent complete variable/shape oracle, original-source hashes."
+    },
+    {
+      "compatibility_replacement": "Worker-local resolved Path.relative_to with ValueError handling; no monkeypatch.",
+      "original_line_api": "Path.is_relative_to unavailable on Python 3.8",
+      "reason": "Containment firewall under Python 3.8.",
+      "scientific_effect": "NONE",
+      "validation": "Containment, sibling, symlink escape and firewall tests."
+    }
+  ],
+  "source_patches": [],
+  "source_pin": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+  "tensorflow_api_shims": []
+}
