@@ -10,6 +10,7 @@ from methods.common.config import load_method_config
 from methods.common.learned import authoritative, PreparationError
 from .contract import validate_overlay
 from .source import validate_source, bind_function
+from .runtime import extension_root
 
 
 def validate_mesh(vertices, triangles):
@@ -60,12 +61,14 @@ class DepthRenderer:
             raise PreparationError('injected rasterizer is restricted to synthetic-only tests')
         self.is_official = not synthetic_only
         if kernel is None:
-            root = Path(self.source['root']) / 'Sim3DR'
+            root, expected_extension = extension_root(self.config, self.source)
             spec = importlib.machinery.PathFinder.find_spec('Sim3DR_Cython', [str(root)])
             if spec is None or not isinstance(spec.loader, importlib.machinery.ExtensionFileLoader):
                 raise PreparationError('official Sim3DR_Cython unavailable; build pinned extension in execution environment')
             if not Path(spec.origin).resolve().is_relative_to(root):
                 raise PreparationError('official rasterizer extension escaped source root')
+            if expected_extension is not None and Path(spec.origin).resolve() != expected_extension:
+                raise PreparationError('official rasterizer extension differs from verified build')
             kernel = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(kernel)
         self._capture = _CaptureBuffer(kernel)

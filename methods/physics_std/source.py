@@ -10,6 +10,7 @@ REQUIRED_FILES = (
     'bfm/bfm.py', 'Sim3DR/Sim3DR.py', 'Sim3DR/__init__.py',
     'Sim3DR/_init_paths.py', 'Sim3DR/lighting.py', 'Sim3DR/lib/rasterize.pyx',
     'Sim3DR/lib/rasterize.h', 'Sim3DR/lib/rasterize_kernel.cpp',
+    'Sim3DR/setup.py', 'models/mobilenet_v1.py',
 )
 
 

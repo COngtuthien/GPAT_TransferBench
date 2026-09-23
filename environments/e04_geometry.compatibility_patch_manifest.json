@@ -1,0 +1,68 @@
+{
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "geometry_math_projection_rasterization_topology_changes": false,
+  "historical_package_versions_mandatory": false,
+  "milestone": "M6D3a",
+  "numpy_alias_patches": [],
+  "original_source_cache_modified": false,
+  "patches": [
+    {
+      "original_source_API": "Frozen external_runtime_root points to the laptop /media path",
+      "reason": "GPU filesystem relocation without changing frozen YAML",
+      "replacement": "GPAT_E04_GEOMETRY_RUNTIME selects an external asset_root; every path, size and SHA256 remains constrained to the four frozen assets",
+      "semantic_effect": "NONE; identical asset bytes",
+      "validation_evidence": "Four post-copy size/SHA256 checks; focused asset tests; wrong hash/extra asset runtime-manifest tests"
+    },
+    {
+      "original_source_API": "DepthRenderer searches pinned source_cache/tddfa_v2/Sim3DR for Sim3DR_Cython",
+      "reason": "Build actual extension without modifying pinned source cache",
+      "replacement": "Manifest-selected external generated build directory; verify setup.py/pyx/header/kernel against pinned source plus extension SHA256; require ExtensionFileLoader",
+      "semantic_effect": "NONE; unchanged Cython/C++ and rasterization functions",
+      "validation_evidence": "Actual import; ELF compiler evidence; production DepthRenderer and former skip pass; tampered-extension rejection; larger-z/order/quantization/A4 probes"
+    },
+    {
+      "original_source_API": "TDDFA module-level imports and BFM constructor use source-relative auxiliary locations",
+      "reason": "Bind the pinned inference surface to verified external assets without unrelated detector/display imports or source-cache writes",
+      "replacement": "Benchmark FixedGeometryRegressor executes the full unchanged MobileNet module, exact upstream load_model and exact ToTensorGjz/NormalizeGjz class ASTs; GeometryAdapter continues using unchanged recon_vers/_parse_param/similar_transform",
+      "semantic_effect": "NONE; widen_factor=1, 62 outputs, 40/10 geometry bases, identical normalization and parameter de-normalization",
+      "validation_evidence": "164 inference-state tensors equal checkpoint exactly; missing_keys=[]; unchanged upstream loader ignores fc_lm.bias/fc_lm.weight; CPU/CUDA finite inference and deterministic repeats"
+    },
+    {
+      "original_source_API": "Upstream load_model silently retains model defaults and ignores extra checkpoint keys",
+      "reason": "Prove architecture compatibility and expose exact key coverage",
+      "replacement": "Read-only diagnostics before unchanged loader: reject missing inference tensors, shape mismatches and unknown extra keys; report the frozen unused fc_lm tensors explicitly",
+      "semantic_effect": "NONE for this frozen checkpoint; no topology or state-loading change",
+      "validation_evidence": "166 mapped checkpoint keys, 164 inference keys; all inference tensors exact; fc_lm.bias=[136], fc_lm.weight=[136,1024] ignored by unchanged upstream code"
+    },
+    {
+      "original_source_API": "verify_source required executable closure omitted Sim3DR/setup.py",
+      "reason": "Bind build and regressor inputs to source pin",
+      "replacement": "Also verify setup.py and explicitly list models/mobilenet_v1.py against pinned Git blobs",
+      "semantic_effect": "NONE; verification only",
+      "validation_evidence": "All 113 source-release files match pinned blobs before and after; required SHA256 table in probes"
+    }
+  ],
+  "qualification_conditions": {
+    "benchmark_crop_ROI_integration_qualified": false,
+    "fixed_auxiliary_only": true,
+    "precision": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "cudnn_benchmark": false,
+      "deterministic_algorithms": true,
+      "dtype": "float32",
+      "tf32": false,
+      "torch_threads": 1
+    },
+    "synthetic_prepared_input": "uint8 BGR [120,120,3], arange modulo 256",
+    "synthetic_roi": [
+      0,
+      0,
+      256,
+      256
+    ]
+  },
+  "qualification_scope": "E04_FIXED_GEOMETRY_DEPTH_ONLY",
+  "schema_version": "e04-geometry-compatibility-v1",
+  "source_patches": [],
+  "source_pin": "1b6c67601abffc1e9f248b291708aef0e43b55ae"
+}

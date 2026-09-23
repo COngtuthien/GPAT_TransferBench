@@ -23,7 +23,10 @@ compile the unchanged pinned C++ `_rasterize` into a temporary library using
 a small C linkage shim, then invoke the exact Python depth/rasterize bodies.
 This synthetic-only injected kernel is never accepted by the production
 `depth_target` path. No alternative NumPy rasterizer is used as a fallback.
-The final execution environment must build and verify the Cython extension.
+M6D3a builds and verifies the actual Cython extension in an external working
+copy; the original source cache is unchanged. `runtime.py` resolves only paths,
+checks the four frozen asset identities, verifies unchanged build inputs and
+the compiled extension SHA256, and retains the `ExtensionFileLoader` gate.
 
 Constant-z meshes, zero-area projected triangles, nonfinite vertices and invalid
 triangle indices are rejected explicitly. No epsilon, replacement target, or
@@ -37,5 +40,10 @@ No historical artifact is rewritten or scientific resolution reinterpreted.
 
 Plans use the common frozen-config/source/asset/seeding helpers and existing
 `run_logging_v1` contract. No parallel logger or production run directory is
-created. Compatible framework environments, the image-to-parameter regressor,
-and main PhySTD graph/runner integration must be validated before a future run.
+created. M6D3a qualifies the fixed geometry/depth environment and the pinned
+MobileNet v1 regressor on prepared synthetic 120x120 inputs. `regressor.py`
+executes the unchanged model and upstream loader/transforms; the frozen
+checkpoint's unused `fc_lm.bias` and `fc_lm.weight` remain ignored exactly as
+in that loader. All 164 inference-state tensors match the checkpoint exactly.
+The benchmark crop/ROI integration and main PhySTD training graph/runner are
+not qualified. E04 remains IMPLEMENTED_NOT_EXECUTED and CONTROLLED_ADAPTATION.

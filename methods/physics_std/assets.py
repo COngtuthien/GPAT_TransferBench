@@ -8,13 +8,14 @@ import numpy as np
 
 from methods.common.learned import authoritative, verify_asset, PreparationError
 from .contract import committed_input
+from .runtime import asset_root
 
 
 def validate_assets(config):
     cfg = authoritative(config)
     engine = cfg['external_assets']['geometry_engine']
     committed_input(engine['provenance'])
-    root = Path(engine['external_runtime_root'])
+    root = asset_root(cfg)
     return {a['path']: verify_asset({**a, 'external_runtime_path': str(root / a['path'])})
             for a in engine['assets']}
 

@@ -1,0 +1,988 @@
+{
+  "artifact_index": {
+    "command": "python tools/build_artifact_index.py",
+    "line_endings": "CRLF",
+    "policy": "LAST repository content generation, after ledger; read-only verification afterward"
+  },
+  "artifact_sha256": {
+    "environments/e04_geometry.compatibility_patch_manifest.json": "cc4c3b264b9bdcf38caa54edeca04b5938b18e50a545ea25665d71d257d66636",
+    "environments/e04_geometry.conda-explicit.txt": "c468847cd57302caa7cbb7b5214eabf5fa914d5db0a9d92bca05b99eee94902a",
+    "environments/e04_geometry.lock.json": "9426be37044ae7121fb22a757e5483850e02bf68461b1eabb5421fae164fbc3d",
+    "environments/e04_geometry.pip-freeze.txt": "bb9c9c63a55039a61c48476f88982870bcea00d50e17039532bf75999422984e",
+    "environments/e04_geometry.runtime.json": "5dde3e12b4a3e02e1446060ce252297c0beda689516b7cf43ed43772cae4424b",
+    "methods/physics_std/assets.py": "583e7ada974a089f28a898282ec632af1525bf29d4b4f3dcaef711755de05bfc",
+    "methods/physics_std/regressor.py": "34f8ff49bb04aa691ec25f3734bc5e297e4249b7c2a54d3f147dd929ee41b651",
+    "methods/physics_std/renderer.py": "f0997fd8318abd4512fb135cb44eb63398a52ae796b0686fde3148f7092099d4",
+    "methods/physics_std/runtime.py": "77ee1ac7a63dd56990a2ab584437731db6421493e67831a34babe19a2b36a4dc",
+    "methods/physics_std/source.py": "5ffa8f483ea1f234fdbfa572554a41577e979de064434c40dfbcd1acac6c2f10",
+    "methods/physics_std/source_traceability.md": "75cb6285fbdfd447de8c3020bce16b61f314807b089c821ed5c562df8060de6e",
+    "tests/test_m6d3a_e04_geometry_runtime.py": "ab03a9bb3255880af3b81ea8d8df040704650b4f625534166e2650761e8195b0",
+    "tools/m6d3a_e04_geometry_preflight.py": "ceca31f2b8001284eecc2f05e278044a9ef35b0de25d9b58341deded9dfc2a71"
+  },
+  "assets": {
+    "configs/bfm_noneck_v3.pkl": {
+      "deserialized": true,
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/bfm_noneck_v3.pkl",
+      "sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+      "size_bytes": 24393598,
+      "verification": "PASS"
+    },
+    "configs/param_mean_std_62d_120x120.pkl": {
+      "deserialized": true,
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/param_mean_std_62d_120x120.pkl",
+      "sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795",
+      "size_bytes": 713,
+      "verification": "PASS"
+    },
+    "configs/tri.pkl": {
+      "deserialized": true,
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/tri.pkl",
+      "sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8",
+      "size_bytes": 913040,
+      "verification": "PASS"
+    },
+    "weights/mb1_120x120.pth": {
+      "deserialized": true,
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/weights/mb1_120x120.pth",
+      "sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79",
+      "size_bytes": 13755269,
+      "verification": "PASS"
+    }
+  },
+  "clean_process_cuda_repeat_byte_identical": true,
+  "compatibility_manifest": "environments/e04_geometry.compatibility_patch_manifest.json",
+  "cpu_cuda_final_depth_byte_identical": true,
+  "cross_device_numeric_note": "CPU and CUDA fitted parameters and dense meshes are not claimed bitwise identical; within-device repeats and fresh-process CUDA repeats are exact. Final uint8-derived 32x32 depth is byte-identical for this synthetic input.",
+  "data_access_disclosure": "Probes and focused tests run under a Python open audit denying image files and scientific data/manifest paths. Native model/renderer operations receive generated arrays only. Source integrity checks hash upstream example bytes without decoding. Required artifact-index generation hashes tracked project/manifest bytes; no scientific records or benchmark images are decoded or executed.",
+  "decision": "E04_GEOMETRY_RUNTIME_QUALIFIED",
+  "environment": {
+    "cuda": "13.0",
+    "cudnn": 92400,
+    "gpu": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "name": "gpat-m6-e04-geometry",
+    "packages": {
+      "Cython": "3.3.0",
+      "PyYAML": "6.0.3",
+      "numpy": "2.5.3",
+      "opencv-python-headless": "5.0.0.93",
+      "pytest": "9.1.1",
+      "scikit-image": "0.26.0",
+      "scipy": "1.18.1",
+      "setuptools": "83.0.0",
+      "torch": "2.14.0",
+      "torchvision": "0.29.0"
+    },
+    "path": "/home/student20261/miniconda3/envs/gpat-m6-e04-geometry",
+    "python": "3.12.14"
+  },
+  "environment_lock_sha256": "9426be37044ae7121fb22a757e5483850e02bf68461b1eabb5421fae164fbc3d",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "focused_tests": {
+    "errors": 0,
+    "failures": 0,
+    "file_access_audit": {
+      "TEST_scientific_data_access": false,
+      "benchmark_images_decoded": 0,
+      "denied": [],
+      "python_opens": 1463,
+      "scope": "Python open audit; native inference receives generated arrays only"
+    },
+    "log": "test_a4_adam_and_provenance (tests.test_m6c2b1_physics_std.TestE04Authority.test_a4_adam_and_provenance) ... ok\ntest_a4_depth_semantics (tests.test_m6c2b1_physics_std.TestE04Authority.test_a4_depth_semantics) ... ok\ntest_anchor_permutation_rejected (tests.test_m6c2b1_physics_std.TestE04Authority.test_anchor_permutation_rejected) ... ok\ntest_base_snapshot_and_a4_binding (tests.test_m6c2b1_physics_std.TestE04Authority.test_base_snapshot_and_a4_binding) ... ok\ntest_changed_config_refused (tests.test_m6c2b1_physics_std.TestE04Authority.test_changed_config_refused) ... ok\ntest_overlay_override_refused (tests.test_m6c2b1_physics_std.TestE04Authority.test_overlay_override_refused) ... ok\ntest_q140_length_unique_hash_anchor_order (tests.test_m6c2b1_physics_std.TestE04Authority.test_q140_length_unique_hash_anchor_order) ... ok\ntest_invalid_parameters_refused (tests.test_m6c2b1_physics_std.TestE04Geometry.test_invalid_parameters_refused) ... ok\ntest_invalid_roi_refused (tests.test_m6c2b1_physics_std.TestE04Geometry.test_invalid_roi_refused) ... ok\ntest_native_anchor_order_verified (tests.test_m6c2b1_physics_std.TestE04Geometry.test_native_anchor_order_verified) ... ok\ntest_official_reconstruction_on_synthetic_parameters (tests.test_m6c2b1_physics_std.TestE04Geometry.test_official_reconstruction_on_synthetic_parameters) ... ok\ntest_checkpoint_end_and_zero_extra_steps (tests.test_m6c2b1_physics_std.TestE04Plans.test_checkpoint_end_and_zero_extra_steps) ... ok\ntest_early_checkpoint_cannot_be_selected (tests.test_m6c2b1_physics_std.TestE04Plans.test_early_checkpoint_cannot_be_selected) ... ok\ntest_extra_step_checkpoint_rejected (tests.test_m6c2b1_physics_std.TestE04Plans.test_extra_step_checkpoint_rejected) ... ok\ntest_optimizer_hook_mapping_without_framework_execution (tests.test_m6c2b1_physics_std.TestE04Plans.test_optimizer_hook_mapping_without_framework_execution) ... ok\ntest_plan_contains_all_authority_hashes (tests.test_m6c2b1_physics_std.TestE04Plans.test_plan_contains_all_authority_hashes) ... ok\ntest_scientific_training_values (tests.test_m6c2b1_physics_std.TestE04Plans.test_scientific_training_values) ... ok\ntest_test_and_val_cannot_select (tests.test_m6c2b1_physics_std.TestE04Plans.test_test_and_val_cannot_select) ... ok\ntest_test_firewall (tests.test_m6c2b1_physics_std.TestE04Plans.test_test_firewall) ... ok\ntest_three_seeds_identical_fixed_geometry (tests.test_m6c2b1_physics_std.TestE04Plans.test_three_seeds_identical_fixed_geometry) ... ok\ntest_unfrozen_seed_rejected (tests.test_m6c2b1_physics_std.TestE04Plans.test_unfrozen_seed_rejected) ... ok\ntest_actual_assets_verified_without_deserialization (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_actual_assets_verified_without_deserialization) ... ok\ntest_missing_asset_rejected (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_missing_asset_rejected) ... ok\ntest_missing_source_rejected (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_missing_source_rejected) ... ok\ntest_restricted_pickle_rejects_arbitrary_globals (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_restricted_pickle_rejects_arbitrary_globals) ... ok\ntest_source_valid (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_source_valid) ... ok\ntest_wrong_sha_rejected (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_wrong_sha_rejected) ... ok\ntest_wrong_size_rejected (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_wrong_size_rejected) ... ok\ntest_wrong_source_commit_rejected (tests.test_m6c2b1_physics_std.TestE04SourcesAssets.test_wrong_source_commit_rejected) ... ok\ntest_exact_uint8_resize_before_float (tests.test_m6c2b1_renderer.TestDepthConversion.test_exact_uint8_resize_before_float) ... ok\ntest_float_input_rejected (tests.test_m6c2b1_renderer.TestDepthConversion.test_float_input_rejected) ... ok\ntest_full_range_and_channel_collapse (tests.test_m6c2b1_renderer.TestDepthConversion.test_full_range_and_channel_collapse) ... ok\ntest_live_rejects_synthetic_renderer (tests.test_m6c2b1_renderer.TestDepthConversion.test_live_rejects_synthetic_renderer) ... ok\ntest_non_depth_rgb_rejected (tests.test_m6c2b1_renderer.TestDepthConversion.test_non_depth_rgb_rejected) ... ok\ntest_production_rejects_injected_kernel (tests.test_m6c2b1_renderer.TestDepthConversion.test_production_rejects_injected_kernel) ... ok\ntest_spoof_never_calls_geometry (tests.test_m6c2b1_renderer.TestDepthConversion.test_spoof_never_calls_geometry) ... ok\ntest_spoof_shape_dtype_exact_zeros (tests.test_m6c2b1_renderer.TestDepthConversion.test_spoof_shape_dtype_exact_zeros) ... ok\ntest_unknown_label_rejected (tests.test_m6c2b1_renderer.TestDepthConversion.test_unknown_label_rejected) ... ok\ntest_wrong_dimensions_rejected (tests.test_m6c2b1_renderer.TestDepthConversion.test_wrong_dimensions_rejected) ... ok\ntest_background_exact_zero (tests.test_m6c2b1_renderer.TestOfficialKernel.test_background_exact_zero) ... ok\ntest_degenerate_triangle_rejected (tests.test_m6c2b1_renderer.TestOfficialKernel.test_degenerate_triangle_rejected) ... ok\ntest_deterministic_repeat (tests.test_m6c2b1_renderer.TestOfficialKernel.test_deterministic_repeat) ... ok\ntest_interpolated_depth_uint8_quantization (tests.test_m6c2b1_renderer.TestOfficialKernel.test_interpolated_depth_uint8_quantization) ... ok\ntest_nonfinite_geometry_rejected (tests.test_m6c2b1_renderer.TestOfficialKernel.test_nonfinite_geometry_rejected) ... ok\ntest_order_invariance (tests.test_m6c2b1_renderer.TestOfficialKernel.test_order_invariance) ... ok\ntest_out_of_bounds_indices_rejected (tests.test_m6c2b1_renderer.TestOfficialKernel.test_out_of_bounds_indices_rejected) ... ok\ntest_triangle_projects_and_larger_z_wins (tests.test_m6c2b1_renderer.TestOfficialKernel.test_triangle_projects_and_larger_z_wins) ... ok\ntest_uint8_intermediate_shape_range_dtype (tests.test_m6c2b1_renderer.TestOfficialKernel.test_uint8_intermediate_shape_range_dtype) ... ok\ntest_zero_z_range_rejected (tests.test_m6c2b1_renderer.TestOfficialKernel.test_zero_z_range_rejected) ... ok\ntest_official_extension_smoke_when_available (tests.test_m6c2b1_renderer.TestOfficialPythonBinding.test_official_extension_smoke_when_available) ... ok\ntest_document_and_overlay_paths (tests.test_m6a6_e04_contract.TestM6A6E04Contract.test_document_and_overlay_paths) ... ok\ntest_frozen_config_and_snapshot_unchanged_and_hash_bound (tests.test_m6a6_e04_contract.TestM6A6E04Contract.test_frozen_config_and_snapshot_unchanged_and_hash_bound) ... ok\ntest_overlay_contains_only_a4_resolution_fields (tests.test_m6a6_e04_contract.TestM6A6E04Contract.test_overlay_contains_only_a4_resolution_fields) ... ok\ntest_predecessor_is_pinned_and_constructs_adam (tests.test_m6a6_e04_contract.TestM6A6E04Contract.test_predecessor_is_pinned_and_constructs_adam) ... ok\ntest_real_extension_larger_z_and_exact_conversion (tests.test_m6d3a_e04_geometry_runtime.TestProductionExtension.test_real_extension_larger_z_and_exact_conversion) ... ok\ntest_spoof_bypasses_all_geometry (tests.test_m6d3a_e04_geometry_runtime.TestProductionExtension.test_spoof_bypasses_all_geometry) ... ok\ntest_tampered_extension_hash_rejected (tests.test_m6d3a_e04_geometry_runtime.TestProductionExtension.test_tampered_extension_hash_rejected) ... ok\ntest_extra_asset_rejected (tests.test_m6d3a_e04_geometry_runtime.TestRuntimeIdentity.test_extra_asset_rejected) ... ok\ntest_training_scope_rejected (tests.test_m6d3a_e04_geometry_runtime.TestRuntimeIdentity.test_training_scope_rejected) ... ok\ntest_wrong_asset_hash_rejected (tests.test_m6d3a_e04_geometry_runtime.TestRuntimeIdentity.test_wrong_asset_hash_rejected) ... ok\ntest_wrong_pin_rejected (tests.test_m6d3a_e04_geometry_runtime.TestRuntimeIdentity.test_wrong_pin_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 61 tests in 2.940s\n\nOK\n",
+    "skipped": 0,
+    "tests_run": 61
+  },
+  "frozen_input_sha256": {
+    "configs/amendments/e04_a4_execution_resolution.yaml": "7579b7177e8b48513bb7a9057e6f700cf9b1f576b5c577887c07bbda9cf35355",
+    "configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A4_E04_Execution_Gap_Resolution.md": "98070d31417fda555d24ac80b7a4a2008e786550482757863be328a251a9e733",
+    "frozen_config_snapshot/configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "outputs/audit/M6A5_E04_Q140_VERTEX_SET.json": "067fc5f2c5a8a4b60ddc14207bc95609668e65f5c29ecbba466ff42a46fbd83c",
+    "outputs/audit/M6A5_TDDFA_ASSET_PROVENANCE.json": "56d68437c268bc7ef8404775dda2e2306ed09aa700aaff9f31ad22669a9b3577",
+    "third_party/source_pins.json": "484558032f53b536cb7832803980c5273264c262ab74a6eb2c67f27641d72cec"
+  },
+  "geometry_runtime": "QUALIFIED",
+  "historical_package_versions_mandatory": false,
+  "initial_diagnostic_attempt": {
+    "inference_executed": false,
+    "missing_keys": [],
+    "resolution": "Guard aligned with unchanged pinned load_model, which already ignores these frozen unused keys. No source/model architecture change.",
+    "result": "DIAGNOSTIC_GUARD_REJECTED_UNUSED_UPSTREAM_CHECKPOINT_KEYS",
+    "shape_mismatches": [],
+    "unexpected_keys": [
+      "fc_lm.bias",
+      "fc_lm.weight"
+    ]
+  },
+  "ledger": {
+    "committed_prefix_rows": 100,
+    "final_rows": 101,
+    "prefix_byte_identical": true,
+    "prefix_bytes": 256699,
+    "prefix_sha256": "d975323203172b6f21e4075286cf5a577a0c5fc8f86de6610fded028fd441b21",
+    "records_appended": 1
+  },
+  "method_id": "E04",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D3a",
+  "probes": [
+    {
+      "assets": {
+        "configs/bfm_noneck_v3.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/bfm_noneck_v3.pkl",
+          "sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+          "size_bytes": 24393598,
+          "verification": "PASS"
+        },
+        "configs/param_mean_std_62d_120x120.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/param_mean_std_62d_120x120.pkl",
+          "sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795",
+          "size_bytes": 713,
+          "verification": "PASS"
+        },
+        "configs/tri.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/tri.pkl",
+          "sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8",
+          "size_bytes": 913040,
+          "verification": "PASS"
+        },
+        "weights/mb1_120x120.pth": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/weights/mb1_120x120.pth",
+          "sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79",
+          "size_bytes": 13755269,
+          "verification": "PASS"
+        }
+      },
+      "benchmark_images_decoded": 0,
+      "device": "cpu",
+      "end_to_end": {
+        "depth_dtype": "float32",
+        "depth_range": [
+          0.0,
+          0.9882352948188782
+        ],
+        "depth_sha256": "bf442bca634087075cd27082eef172d39576006efcfc54a2595b3ad613099531",
+        "depth_shape": [
+          32,
+          32
+        ],
+        "face_mask_pixels": 18983,
+        "finite": true,
+        "mesh_sha256": "c784798a0b864c331b66a802f33e224efbd4e103f369c96a90c0a3e6b8170599",
+        "repeat_byte_identical": true
+      },
+      "file_access_audit": {
+        "TEST_scientific_data_access": false,
+        "benchmark_images_decoded": 0,
+        "denied": [],
+        "python_opens": 2408,
+        "scope": "Python open audit; native inference receives generated arrays only"
+      },
+      "geometry": {
+        "dense_shape": [
+          38365,
+          3
+        ],
+        "first_68_frozen_ibug_order_verified": true,
+        "q140_rederived": false,
+        "q140_sha256": "1b884401377f5aadd3d56857f05fddf70e2c54a52a9eb2160cebc06a74031a1f",
+        "q140_unique": 140,
+        "source_functions_unchanged": [
+          "recon_vers",
+          "_parse_param",
+          "similar_transform"
+        ],
+        "triangles_shape": [
+          76073,
+          3
+        ]
+      },
+      "optimizer_steps": 0,
+      "regressor": {
+        "arch": "mobilenet_v1",
+        "checkpoint": {
+          "all_inference_tensors_exact": true,
+          "checkpoint_key_count": 166,
+          "ignored_by_unchanged_upstream_loader": [
+            "fc_lm.bias",
+            "fc_lm.weight"
+          ],
+          "missing_keys": [],
+          "model_key_count": 164,
+          "shape_mismatches": [],
+          "unexpected_key_shapes": {
+            "fc_lm.bias": [
+              136
+            ],
+            "fc_lm.weight": [
+              136,
+              1024
+            ]
+          },
+          "unexpected_keys": [
+            "fc_lm.bias",
+            "fc_lm.weight"
+          ]
+        },
+        "constructed": true,
+        "finite": true,
+        "fitted_sha256": "03ea223d68ac9c981e8a520e497de940c23be959342d862c2cf600ecb204f08c",
+        "fitted_shape": [
+          62
+        ],
+        "input_shape": [
+          120,
+          120,
+          3
+        ],
+        "normalized_sha256": "01301163011e84ee0c1a0cc62d16dd7c9a6cee79afc5fca3b325648ccb8fe8f8",
+        "output_shape": [
+          1,
+          62
+        ],
+        "repeat_byte_identical": true,
+        "widen_factor": 1.0
+      },
+      "renderer": {
+        "background_zero": true,
+        "extension_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e04_geometry/tddfa_v2/Sim3DR/Sim3DR_Cython.cpython-312-x86_64-linux-gnu.so",
+        "extension_sha256": "7fb03434a0e1ce4f86e248f87d462d775c24c40aad843724880bb21341c27aa4",
+        "face_mask_captured": true,
+        "intermediate_dtype": "uint8",
+        "intermediate_shape": [
+          256,
+          256
+        ],
+        "kernel_injected": false,
+        "larger_z_wins": true,
+        "loader": "ExtensionFileLoader",
+        "order": "uint8 resize -> float32 -> /255 -> clip [0,1]",
+        "resize": "cv2.INTER_AREA",
+        "triangle_order_invariant": true
+      },
+      "result": "PASS",
+      "scientific_checkpoints_created": 0,
+      "scope": "E04_FIXED_GEOMETRY_DEPTH_ONLY",
+      "source": {
+        "commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+        "files_sha256": {
+          "Sim3DR/Sim3DR.py": "7ceb5c52950f88d8f485c3381c9441fd65cb2399a7fdd45619f1f384cd1aec0f",
+          "Sim3DR/__init__.py": "2d98a54e1288ed1628992eb254b5ad333f1bb1215e46742b3bd0ab68d7180ffa",
+          "Sim3DR/_init_paths.py": "4a76d97e1c2ae8f4aa8cf955eac38ccf915f6c70f6479a7a1b21395f0a9c4dca",
+          "Sim3DR/lib/rasterize.h": "f900d3e1a924c861a4f3ee4359b68b6c5ee0026a176d1ba506b2fa30fff54e8e",
+          "Sim3DR/lib/rasterize.pyx": "3ce8d9caa59d5d0d28669f215f7fb22ea63fe1d7967230ff0f0bbfc01e4e2cb9",
+          "Sim3DR/lib/rasterize_kernel.cpp": "f7caaf46206c224fadb536a436ca06000d397599289eb6af4f0420b796b86d75",
+          "Sim3DR/lighting.py": "0500f028742c49b1d8a3e85f474355166e7b0d7565968f1da8247dfdcc94b049",
+          "Sim3DR/setup.py": "9b97be149286eda4b9190e03ac024bef2252d46f3aa98ef3fcd76cb6f9a251df",
+          "TDDFA.py": "812ef8437b33ef9a19c74631fe3aa2c5c6540c1b32b7c8d3d630383af8b163dc",
+          "bfm/bfm.py": "31d496e37041af052036dbc0a96700c85330c4238604e39b1cd98b6ae065c4f8",
+          "bfm/readme.md": "bede476b19b5006f3f4f7c806f85546b3aa3ee39bf98bba0bf55269a42f67d68",
+          "configs/mb1_120x120.yml": "97aa41cf8782750152123adf07c13ee016c2dbae6af3fead3aa431aa0e60f65b",
+          "models/mobilenet_v1.py": "b05dcb4349b2be5b0e9cb479a6c8baf7e8626f4f8aca3386aafbeeef40354cbb",
+          "utils/depth.py": "89f5da50024df3fefdac858496726d671b5e3ffa475f4fbd59d9492a46c8dfe1",
+          "utils/io.py": "e5d5274bb0fa2be16e195b3a9459a3a9121a64b52068c44e4eee2b821ce99d37",
+          "utils/tddfa_util.py": "21a2031a612d1ab6e0a4863f68bf83acff7ee28bc3e653df429c9c9009eed880"
+        },
+        "repository": "https://github.com/cleardusk/3DDFA_V2",
+        "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/tddfa_v2",
+        "tree": "28492fd307da6644c3e2c21d4b9a97a1f646c65f",
+        "verification": "PASS"
+      },
+      "spoof": {
+        "exact_float32_zeros_32x32": true,
+        "regressor_reconstruction_renderer_calls": 0
+      }
+    },
+    {
+      "assets": {
+        "configs/bfm_noneck_v3.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/bfm_noneck_v3.pkl",
+          "sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+          "size_bytes": 24393598,
+          "verification": "PASS"
+        },
+        "configs/param_mean_std_62d_120x120.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/param_mean_std_62d_120x120.pkl",
+          "sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795",
+          "size_bytes": 713,
+          "verification": "PASS"
+        },
+        "configs/tri.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/tri.pkl",
+          "sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8",
+          "size_bytes": 913040,
+          "verification": "PASS"
+        },
+        "weights/mb1_120x120.pth": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/weights/mb1_120x120.pth",
+          "sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79",
+          "size_bytes": 13755269,
+          "verification": "PASS"
+        }
+      },
+      "benchmark_images_decoded": 0,
+      "device": "cuda",
+      "end_to_end": {
+        "depth_dtype": "float32",
+        "depth_range": [
+          0.0,
+          0.9882352948188782
+        ],
+        "depth_sha256": "bf442bca634087075cd27082eef172d39576006efcfc54a2595b3ad613099531",
+        "depth_shape": [
+          32,
+          32
+        ],
+        "face_mask_pixels": 18983,
+        "finite": true,
+        "mesh_sha256": "f71c078310eeb8ffd8ebed66d249682f2cf9d686964f62f36a778014781d0961",
+        "repeat_byte_identical": true
+      },
+      "file_access_audit": {
+        "TEST_scientific_data_access": false,
+        "benchmark_images_decoded": 0,
+        "denied": [],
+        "python_opens": 2408,
+        "scope": "Python open audit; native inference receives generated arrays only"
+      },
+      "geometry": {
+        "dense_shape": [
+          38365,
+          3
+        ],
+        "first_68_frozen_ibug_order_verified": true,
+        "q140_rederived": false,
+        "q140_sha256": "1b884401377f5aadd3d56857f05fddf70e2c54a52a9eb2160cebc06a74031a1f",
+        "q140_unique": 140,
+        "source_functions_unchanged": [
+          "recon_vers",
+          "_parse_param",
+          "similar_transform"
+        ],
+        "triangles_shape": [
+          76073,
+          3
+        ]
+      },
+      "optimizer_steps": 0,
+      "regressor": {
+        "arch": "mobilenet_v1",
+        "checkpoint": {
+          "all_inference_tensors_exact": true,
+          "checkpoint_key_count": 166,
+          "ignored_by_unchanged_upstream_loader": [
+            "fc_lm.bias",
+            "fc_lm.weight"
+          ],
+          "missing_keys": [],
+          "model_key_count": 164,
+          "shape_mismatches": [],
+          "unexpected_key_shapes": {
+            "fc_lm.bias": [
+              136
+            ],
+            "fc_lm.weight": [
+              136,
+              1024
+            ]
+          },
+          "unexpected_keys": [
+            "fc_lm.bias",
+            "fc_lm.weight"
+          ]
+        },
+        "constructed": true,
+        "finite": true,
+        "fitted_sha256": "e7240a2da6e1c70a0a2c124bd7205435bb186d641e8bf2996d1efc60f90447de",
+        "fitted_shape": [
+          62
+        ],
+        "input_shape": [
+          120,
+          120,
+          3
+        ],
+        "normalized_sha256": "73a022e91103bd23f30635d32515db609ee6b2036977d8401448c70da593a69c",
+        "output_shape": [
+          1,
+          62
+        ],
+        "repeat_byte_identical": true,
+        "widen_factor": 1.0
+      },
+      "renderer": {
+        "background_zero": true,
+        "extension_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e04_geometry/tddfa_v2/Sim3DR/Sim3DR_Cython.cpython-312-x86_64-linux-gnu.so",
+        "extension_sha256": "7fb03434a0e1ce4f86e248f87d462d775c24c40aad843724880bb21341c27aa4",
+        "face_mask_captured": true,
+        "intermediate_dtype": "uint8",
+        "intermediate_shape": [
+          256,
+          256
+        ],
+        "kernel_injected": false,
+        "larger_z_wins": true,
+        "loader": "ExtensionFileLoader",
+        "order": "uint8 resize -> float32 -> /255 -> clip [0,1]",
+        "resize": "cv2.INTER_AREA",
+        "triangle_order_invariant": true
+      },
+      "result": "PASS",
+      "scientific_checkpoints_created": 0,
+      "scope": "E04_FIXED_GEOMETRY_DEPTH_ONLY",
+      "source": {
+        "commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+        "files_sha256": {
+          "Sim3DR/Sim3DR.py": "7ceb5c52950f88d8f485c3381c9441fd65cb2399a7fdd45619f1f384cd1aec0f",
+          "Sim3DR/__init__.py": "2d98a54e1288ed1628992eb254b5ad333f1bb1215e46742b3bd0ab68d7180ffa",
+          "Sim3DR/_init_paths.py": "4a76d97e1c2ae8f4aa8cf955eac38ccf915f6c70f6479a7a1b21395f0a9c4dca",
+          "Sim3DR/lib/rasterize.h": "f900d3e1a924c861a4f3ee4359b68b6c5ee0026a176d1ba506b2fa30fff54e8e",
+          "Sim3DR/lib/rasterize.pyx": "3ce8d9caa59d5d0d28669f215f7fb22ea63fe1d7967230ff0f0bbfc01e4e2cb9",
+          "Sim3DR/lib/rasterize_kernel.cpp": "f7caaf46206c224fadb536a436ca06000d397599289eb6af4f0420b796b86d75",
+          "Sim3DR/lighting.py": "0500f028742c49b1d8a3e85f474355166e7b0d7565968f1da8247dfdcc94b049",
+          "Sim3DR/setup.py": "9b97be149286eda4b9190e03ac024bef2252d46f3aa98ef3fcd76cb6f9a251df",
+          "TDDFA.py": "812ef8437b33ef9a19c74631fe3aa2c5c6540c1b32b7c8d3d630383af8b163dc",
+          "bfm/bfm.py": "31d496e37041af052036dbc0a96700c85330c4238604e39b1cd98b6ae065c4f8",
+          "bfm/readme.md": "bede476b19b5006f3f4f7c806f85546b3aa3ee39bf98bba0bf55269a42f67d68",
+          "configs/mb1_120x120.yml": "97aa41cf8782750152123adf07c13ee016c2dbae6af3fead3aa431aa0e60f65b",
+          "models/mobilenet_v1.py": "b05dcb4349b2be5b0e9cb479a6c8baf7e8626f4f8aca3386aafbeeef40354cbb",
+          "utils/depth.py": "89f5da50024df3fefdac858496726d671b5e3ffa475f4fbd59d9492a46c8dfe1",
+          "utils/io.py": "e5d5274bb0fa2be16e195b3a9459a3a9121a64b52068c44e4eee2b821ce99d37",
+          "utils/tddfa_util.py": "21a2031a612d1ab6e0a4863f68bf83acff7ee28bc3e653df429c9c9009eed880"
+        },
+        "repository": "https://github.com/cleardusk/3DDFA_V2",
+        "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/tddfa_v2",
+        "tree": "28492fd307da6644c3e2c21d4b9a97a1f646c65f",
+        "verification": "PASS"
+      },
+      "spoof": {
+        "exact_float32_zeros_32x32": true,
+        "regressor_reconstruction_renderer_calls": 0
+      }
+    },
+    {
+      "assets": {
+        "configs/bfm_noneck_v3.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/bfm_noneck_v3.pkl",
+          "sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+          "size_bytes": 24393598,
+          "verification": "PASS"
+        },
+        "configs/param_mean_std_62d_120x120.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/param_mean_std_62d_120x120.pkl",
+          "sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795",
+          "size_bytes": 713,
+          "verification": "PASS"
+        },
+        "configs/tri.pkl": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/configs/tri.pkl",
+          "sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8",
+          "size_bytes": 913040,
+          "verification": "PASS"
+        },
+        "weights/mb1_120x120.pth": {
+          "deserialized": true,
+          "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/tddfa_v2/weights/mb1_120x120.pth",
+          "sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79",
+          "size_bytes": 13755269,
+          "verification": "PASS"
+        }
+      },
+      "benchmark_images_decoded": 0,
+      "device": "cuda",
+      "end_to_end": {
+        "depth_dtype": "float32",
+        "depth_range": [
+          0.0,
+          0.9882352948188782
+        ],
+        "depth_sha256": "bf442bca634087075cd27082eef172d39576006efcfc54a2595b3ad613099531",
+        "depth_shape": [
+          32,
+          32
+        ],
+        "face_mask_pixels": 18983,
+        "finite": true,
+        "mesh_sha256": "f71c078310eeb8ffd8ebed66d249682f2cf9d686964f62f36a778014781d0961",
+        "repeat_byte_identical": true
+      },
+      "file_access_audit": {
+        "TEST_scientific_data_access": false,
+        "benchmark_images_decoded": 0,
+        "denied": [],
+        "python_opens": 2408,
+        "scope": "Python open audit; native inference receives generated arrays only"
+      },
+      "geometry": {
+        "dense_shape": [
+          38365,
+          3
+        ],
+        "first_68_frozen_ibug_order_verified": true,
+        "q140_rederived": false,
+        "q140_sha256": "1b884401377f5aadd3d56857f05fddf70e2c54a52a9eb2160cebc06a74031a1f",
+        "q140_unique": 140,
+        "source_functions_unchanged": [
+          "recon_vers",
+          "_parse_param",
+          "similar_transform"
+        ],
+        "triangles_shape": [
+          76073,
+          3
+        ]
+      },
+      "optimizer_steps": 0,
+      "regressor": {
+        "arch": "mobilenet_v1",
+        "checkpoint": {
+          "all_inference_tensors_exact": true,
+          "checkpoint_key_count": 166,
+          "ignored_by_unchanged_upstream_loader": [
+            "fc_lm.bias",
+            "fc_lm.weight"
+          ],
+          "missing_keys": [],
+          "model_key_count": 164,
+          "shape_mismatches": [],
+          "unexpected_key_shapes": {
+            "fc_lm.bias": [
+              136
+            ],
+            "fc_lm.weight": [
+              136,
+              1024
+            ]
+          },
+          "unexpected_keys": [
+            "fc_lm.bias",
+            "fc_lm.weight"
+          ]
+        },
+        "constructed": true,
+        "finite": true,
+        "fitted_sha256": "e7240a2da6e1c70a0a2c124bd7205435bb186d641e8bf2996d1efc60f90447de",
+        "fitted_shape": [
+          62
+        ],
+        "input_shape": [
+          120,
+          120,
+          3
+        ],
+        "normalized_sha256": "73a022e91103bd23f30635d32515db609ee6b2036977d8401448c70da593a69c",
+        "output_shape": [
+          1,
+          62
+        ],
+        "repeat_byte_identical": true,
+        "widen_factor": 1.0
+      },
+      "renderer": {
+        "background_zero": true,
+        "extension_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e04_geometry/tddfa_v2/Sim3DR/Sim3DR_Cython.cpython-312-x86_64-linux-gnu.so",
+        "extension_sha256": "7fb03434a0e1ce4f86e248f87d462d775c24c40aad843724880bb21341c27aa4",
+        "face_mask_captured": true,
+        "intermediate_dtype": "uint8",
+        "intermediate_shape": [
+          256,
+          256
+        ],
+        "kernel_injected": false,
+        "larger_z_wins": true,
+        "loader": "ExtensionFileLoader",
+        "order": "uint8 resize -> float32 -> /255 -> clip [0,1]",
+        "resize": "cv2.INTER_AREA",
+        "triangle_order_invariant": true
+      },
+      "result": "PASS",
+      "scientific_checkpoints_created": 0,
+      "scope": "E04_FIXED_GEOMETRY_DEPTH_ONLY",
+      "source": {
+        "commit": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+        "files_sha256": {
+          "Sim3DR/Sim3DR.py": "7ceb5c52950f88d8f485c3381c9441fd65cb2399a7fdd45619f1f384cd1aec0f",
+          "Sim3DR/__init__.py": "2d98a54e1288ed1628992eb254b5ad333f1bb1215e46742b3bd0ab68d7180ffa",
+          "Sim3DR/_init_paths.py": "4a76d97e1c2ae8f4aa8cf955eac38ccf915f6c70f6479a7a1b21395f0a9c4dca",
+          "Sim3DR/lib/rasterize.h": "f900d3e1a924c861a4f3ee4359b68b6c5ee0026a176d1ba506b2fa30fff54e8e",
+          "Sim3DR/lib/rasterize.pyx": "3ce8d9caa59d5d0d28669f215f7fb22ea63fe1d7967230ff0f0bbfc01e4e2cb9",
+          "Sim3DR/lib/rasterize_kernel.cpp": "f7caaf46206c224fadb536a436ca06000d397599289eb6af4f0420b796b86d75",
+          "Sim3DR/lighting.py": "0500f028742c49b1d8a3e85f474355166e7b0d7565968f1da8247dfdcc94b049",
+          "Sim3DR/setup.py": "9b97be149286eda4b9190e03ac024bef2252d46f3aa98ef3fcd76cb6f9a251df",
+          "TDDFA.py": "812ef8437b33ef9a19c74631fe3aa2c5c6540c1b32b7c8d3d630383af8b163dc",
+          "bfm/bfm.py": "31d496e37041af052036dbc0a96700c85330c4238604e39b1cd98b6ae065c4f8",
+          "bfm/readme.md": "bede476b19b5006f3f4f7c806f85546b3aa3ee39bf98bba0bf55269a42f67d68",
+          "configs/mb1_120x120.yml": "97aa41cf8782750152123adf07c13ee016c2dbae6af3fead3aa431aa0e60f65b",
+          "models/mobilenet_v1.py": "b05dcb4349b2be5b0e9cb479a6c8baf7e8626f4f8aca3386aafbeeef40354cbb",
+          "utils/depth.py": "89f5da50024df3fefdac858496726d671b5e3ffa475f4fbd59d9492a46c8dfe1",
+          "utils/io.py": "e5d5274bb0fa2be16e195b3a9459a3a9121a64b52068c44e4eee2b821ce99d37",
+          "utils/tddfa_util.py": "21a2031a612d1ab6e0a4863f68bf83acff7ee28bc3e653df429c9c9009eed880"
+        },
+        "repository": "https://github.com/cleardusk/3DDFA_V2",
+        "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/tddfa_v2",
+        "tree": "28492fd307da6644c3e2c21d4b9a97a1f646c65f",
+        "verification": "PASS"
+      },
+      "spoof": {
+        "exact_float32_zeros_32x32": true,
+        "regressor_reconstruction_renderer_calls": 0
+      }
+    }
+  ],
+  "prohibited_actions": {
+    "E04_optimizer_step": false,
+    "PhySTD_training": false,
+    "Q140_rederivation": false,
+    "TEST_scientific_data_access": false,
+    "TRAIN_scientific_execution": false,
+    "VAL_scientific_execution": false,
+    "benchmark_image_decode": false,
+    "benchmark_synthetic_bank": false,
+    "commit": false,
+    "frozen_config_modification": false,
+    "pinned_source_cache_bytes_modified": false,
+    "protected_environment_installation": false,
+    "push": false,
+    "scientific_E04_checkpoint": false
+  },
+  "qualification_scope": "E04_FIXED_GEOMETRY_DEPTH_ONLY",
+  "reporting_label": "Physics-STD (controlled geometry/depth reconstruction)",
+  "repository_sync": {
+    "branch": "m6-baselines",
+    "commands": [
+      "git fetch --no-tags origin refs/heads/m6-baselines:refs/remotes/origin/m6-baselines",
+      "git merge --ff-only origin/m6-baselines"
+    ],
+    "fast_forward_distance": 1,
+    "final_heads_unchanged": true,
+    "final_worktrees": "Uncommitted M6D3a code, environment and audit artifacts; no commit/push",
+    "gpu_post_head": "17c46f833a31e0a8a038cd013d12bbd888f2e18f",
+    "gpu_post_sync_clean": true,
+    "gpu_post_sync_divergence": [
+      0,
+      0
+    ],
+    "gpu_pre_head": "6aebf148bceb5e4d3692326dbabc6b3e2390fb9d",
+    "laptop_divergence": [
+      0,
+      0
+    ],
+    "laptop_head": "17c46f833a31e0a8a038cd013d12bbd888f2e18f",
+    "laptop_initial_clean": true,
+    "laptop_origin_head": "17c46f833a31e0a8a038cd013d12bbd888f2e18f",
+    "old_is_ancestor": true
+  },
+  "schema_version": "m6d3a-e04-geometry-qualification-v1",
+  "sim3dr": {
+    "build_command": "/home/student20261/miniconda3/envs/gpat-m6-e04-geometry/bin/python setup.py build_ext -i",
+    "build_directory": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e04_geometry/tddfa_v2/Sim3DR",
+    "build_log": "Compiling lib/rasterize.pyx because it changed.\n[1/1] Cythonizing lib/rasterize.pyx\n",
+    "build_returncode": 0,
+    "elf_compiler_comment": "String dump of section '.comment':\n  [     0]  GCC: (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "extension_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e04_geometry/tddfa_v2/Sim3DR/Sim3DR_Cython.cpython-312-x86_64-linux-gnu.so",
+    "sha256": "7fb03434a0e1ce4f86e248f87d462d775c24c40aad843724880bb21341c27aa4",
+    "source_files_sha256": {
+      "lib/rasterize.h": "f900d3e1a924c861a4f3ee4359b68b6c5ee0026a176d1ba506b2fa30fff54e8e",
+      "lib/rasterize.pyx": "3ce8d9caa59d5d0d28669f215f7fb22ea63fe1d7967230ff0f0bbfc01e4e2cb9",
+      "lib/rasterize_kernel.cpp": "f7caaf46206c224fadb536a436ca06000d397599289eb6af4f0420b796b86d75",
+      "setup.py": "9b97be149286eda4b9190e03ac024bef2252d46f3aa98ef3fcd76cb6f9a251df"
+    }
+  },
+  "source_deployment": "Controlled source-only archive, original pinned commit/tree/source blobs; all nine upstream external assets absent, even asset Git blobs excluded. No new commit was created.",
+  "source_integrity": {
+    "git_asset_blobs_transferred": false,
+    "intentionally_absent_assets": [
+      "FaceBoxes/weights/FaceBoxesProd.pth",
+      "configs/BFM_UV.mat",
+      "configs/bfm_noneck_v3.pkl",
+      "configs/indices.npy",
+      "configs/ncc_code.npy",
+      "configs/param_mean_std_62d_120x120.pkl",
+      "configs/tri.pkl",
+      "weights/mb05_120x120.pth",
+      "weights/mb1_120x120.pth"
+    ],
+    "source_files_sha256": {
+      ".github/ISSUE_TEMPLATE/bug_report.md": "dbc768476396a28993d8c03523ada68f50eae8021023902f42740780bf56710c",
+      ".github/ISSUE_TEMPLATE/discussion.md": "762688a3767497be1bb763957ca32423b68ec2dcbef5590a049e00ef35c69214",
+      ".github/ISSUE_TEMPLATE/feature_request.md": "6891d0df4bcb5ebc7774a2de7c580ed87985cc4187963456576271946aa780ad",
+      ".github/ISSUE_TEMPLATE/help.md": "14093b43014371ff41dafc17cc1e2d9425e06d2564a31139d6ddd05b027b3f0f",
+      ".gitignore": "4289f4014dccc66546a0192efb77fce9faa158c9bc507d56768e4cbea4eac20c",
+      "FaceBoxes/.gitignore": "86e69ec5131f378ea139d7e05ddd4d36087068806c3247706420d70917daf8ff",
+      "FaceBoxes/FaceBoxes.py": "c7b5df2d328a84fba909380de16b294d6c0267e6083e2b45e283874f7062378b",
+      "FaceBoxes/FaceBoxes_ONNX.py": "f5dc5808355a056fdb805c17ee6f07d74dc8e4b312b2e29a84f96bc91230a5da",
+      "FaceBoxes/__init__.py": "f1f3c1ee25edf445cd049ddc9417d1ca1e8329b0d4ff80fc5b4eb2d4bdf5ce7c",
+      "FaceBoxes/build_cpu_nms.sh": "a931ac041f138db5d7117ca2297dc5f35d7aee03cbcf178f20ad493f5ebeb479",
+      "FaceBoxes/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "FaceBoxes/models/faceboxes.py": "844f5a8afe395e1e74277de332adf2321c8167cf9c3dbdaccdb4b8dbb44e315c",
+      "FaceBoxes/onnx.py": "e4d959448c79c7fe753d7bf5b438b8e452a8733e85da5de9d93c50816f23f859",
+      "FaceBoxes/readme.md": "0b7ff65c4d10286a3aa60c640367c69b41ff4046446d544fb7407765372a7f12",
+      "FaceBoxes/utils/.gitignore": "19ab18e9995218b006477c4d61af26c7751bfa993acc402732d6b776388fa17d",
+      "FaceBoxes/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "FaceBoxes/utils/box_utils.py": "dc0824e717730d48432bf8a0c0d2801dbef097636ab541237f1ceb53b94893db",
+      "FaceBoxes/utils/build.py": "3915631ca2897f53be1da4b7a14478f51bcce6caeee944247d5498a15795b83a",
+      "FaceBoxes/utils/config.py": "9a98f5fd78b29d127cd9b89846e2256ddf5e1d13b00407b56d736a746c1feba6",
+      "FaceBoxes/utils/functions.py": "1bcc2995d73709f70e3f83f59c202653d611be43341e65e18b3cde77838ad4f1",
+      "FaceBoxes/utils/nms/.gitignore": "fdb2735f783078acf908ae9df6814b44ee8e40402f03765fed9a6d5f10c92c3f",
+      "FaceBoxes/utils/nms/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "FaceBoxes/utils/nms/cpu_nms.pyx": "2228da9a9f759ecd954b697d76c26fe41aefec5723c476d7bf957bb3e98e3d18",
+      "FaceBoxes/utils/nms/py_cpu_nms.py": "d9f6e53641524e2a77d44af4c880dca4f82006967a5b46063375639a47535336",
+      "FaceBoxes/utils/nms_wrapper.py": "cee252072a4d94de85b5ab2699a67ea56d20324d4988363237168ef8ff4365ac",
+      "FaceBoxes/utils/prior_box.py": "e2f287acbb6be4c744eddc9b588e1fe86e572549781600ad3d8486ab9217bf90",
+      "FaceBoxes/utils/timer.py": "fee1e71a1d6fc7ac2996d79b062e74788a014379d7b50b9d3a80b571c3ed29a7",
+      "FaceBoxes/weights/.gitignore": "72bbd1251b1eadfa797fec320e844ad2e8dedf96e26a29f60565e8f85607c239",
+      "FaceBoxes/weights/readme.md": "91de56d6bfee55c3cce0fb9722e0b41de1bc18b12215b510d9f5a54cbda6b79a",
+      "LICENSE": "4e8e329d78d0dbd3be980d979f773d0c554b5deed5276c12d0de442cfecc2c24",
+      "Sim3DR/.gitignore": "18a700865dd03a19171efa83e997c1721887c4cf940b0397e93385d600e76ef1",
+      "Sim3DR/Sim3DR.py": "7ceb5c52950f88d8f485c3381c9441fd65cb2399a7fdd45619f1f384cd1aec0f",
+      "Sim3DR/__init__.py": "2d98a54e1288ed1628992eb254b5ad333f1bb1215e46742b3bd0ab68d7180ffa",
+      "Sim3DR/_init_paths.py": "4a76d97e1c2ae8f4aa8cf955eac38ccf915f6c70f6479a7a1b21395f0a9c4dca",
+      "Sim3DR/build_sim3dr.sh": "bd59c07c7286153efd94afa06e6513e65a3a0e8fa35221872f61854928c0d50e",
+      "Sim3DR/lib/rasterize.h": "f900d3e1a924c861a4f3ee4359b68b6c5ee0026a176d1ba506b2fa30fff54e8e",
+      "Sim3DR/lib/rasterize.pyx": "3ce8d9caa59d5d0d28669f215f7fb22ea63fe1d7967230ff0f0bbfc01e4e2cb9",
+      "Sim3DR/lib/rasterize_kernel.cpp": "f7caaf46206c224fadb536a436ca06000d397599289eb6af4f0420b796b86d75",
+      "Sim3DR/lighting.py": "0500f028742c49b1d8a3e85f474355166e7b0d7565968f1da8247dfdcc94b049",
+      "Sim3DR/readme.md": "fa25121f13875857081b3792070b7fea783b17ca573a3e28702359734eefb385",
+      "Sim3DR/setup.py": "9b97be149286eda4b9190e03ac024bef2252d46f3aa98ef3fcd76cb6f9a251df",
+      "Sim3DR/tests/.gitignore": "181314065df2f2fdaf920b1a8b5311daa216a2d6489a06ada5b49cc514d89417",
+      "Sim3DR/tests/CMakeLists.txt": "0e9da181937e39da5271a4ff0922a5dbd7e34b8eff695348895a5ff31c3285bd",
+      "Sim3DR/tests/io.cpp": "e5e3650e080773aa75011748f10f70f0d1c651a58df77d58322884597983be63",
+      "Sim3DR/tests/io.h": "b382c95ddd4dd750cea800b8e807a9d402528d7805e0c57d19525a455bc1bc3c",
+      "Sim3DR/tests/test.cpp": "7304605979146ca7bc677e3e95756f1c16df7f4c953b220f79e1f6c8bf879d2f",
+      "TDDFA.py": "812ef8437b33ef9a19c74631fe3aa2c5c6540c1b32b7c8d3d630383af8b163dc",
+      "TDDFA_ONNX.py": "d6dd000db9e64f7e6e80387cd983b4c334460f157f83077833b6f84777e70de4",
+      "bfm/.gitignore": "f849d6a7f3c55343255c38b2dbca62bae82b9e879b81c4d822f6af030eb59038",
+      "bfm/__init__.py": "b186e357907c4090bc426d3458fdc4cc7d4dcbd99822127ca0d821cdfeea1f36",
+      "bfm/bfm.py": "31d496e37041af052036dbc0a96700c85330c4238604e39b1cd98b6ae065c4f8",
+      "bfm/bfm_onnx.py": "363521b395c94d02507c0512229e4c160fe2323c03dbbbdd278126e8c1cb9e0e",
+      "bfm/readme.md": "bede476b19b5006f3f4f7c806f85546b3aa3ee39bf98bba0bf55269a42f67d68",
+      "build.sh": "c7ef617f0575ec00579e1e7e8e7dc8f63df23a4095e6e8e98f48d46856c41930",
+      "configs/.gitignore": "194d401408fc59ea1103cb5a1e164f2765180be20826b5dbfb4acd2ee544f0c2",
+      "configs/mb05_120x120.yml": "ff688d1e8336fccbd314714cd8638a9b8def425e4dbf46ecc5854b2e33f56a41",
+      "configs/mb1_120x120.yml": "97aa41cf8782750152123adf07c13ee016c2dbae6af3fead3aa431aa0e60f65b",
+      "configs/readme.md": "a0999e638376ad003f73c11a30b2151af80a7a1bd60537f6da8bbfb2d8264260",
+      "configs/resnet_120x120.yml": "e6bc5e2364251aebed7ed6ea85495dd4bebc911a7b7e90dbe6cbd1947f0a9c19",
+      "demo.ipynb": "d499a176985311105a8ccbde9b243c347eb03e600d0bd818340fa8c6d6cd02ce",
+      "demo.py": "dc00ba3aea979cbad365503993dbeb658bd795781b55f4ae9e46b6d3930de560",
+      "demo_video.py": "99ca74ee590b150b9d43e7a2be9a49d86f9c380c81dd3d7d6c7da5b1b956e60d",
+      "demo_video_smooth.py": "4bb15ea90897ddce76e27d66da3832a5fef9ac3e67435c54555ba9e825989422",
+      "demo_webcam_smooth.py": "faaf4e1b9a8fba088115e60347c7acf2b2cc2618d66ccca7130912b187ac2ffc",
+      "docs/images/emma_3d.jpg": "8d0dcde829aaf46f914e3d1d97a0c13c23b986c64f346e5f8c12ca01ed26bc8d",
+      "docs/images/latency.gif": "d57db3548bfa7efd08832718fc60511b08fca115de11ac2739a167868a9d0df8",
+      "docs/images/obj.jpg": "f41694ce99e3e2b1c633476ff984524c5811b60fde89fcf45cd2a0f09d6f864d",
+      "docs/images/out.gif": "1a99b988e49a339e21806e36876e5abe940fdc54de694ebe24e65eab6c3fa1a3",
+      "docs/images/ply.jpg": "a613ca0bbcf1265cfaa190dc07d74c1652529de427f9721ea8dc129e5ea8bd81",
+      "docs/images/trump_biden_3d.jpg": "1fbbe45da078e23c4921040c3b3ee37002ea8d7f2172c6544e9517dafa5385b4",
+      "docs/images/trump_hillary_2d_dense.jpg": "d67ecd0481c187f3faec37e7da5e577f942bcb7fbd986624731a2ff9b3f71c02",
+      "docs/images/trump_hillary_2d_sparse.jpg": "3d06198f05a5c6f56e8ce8a438e173fde7e3ac84b913ce2bb906c66786c0eea2",
+      "docs/images/trump_hillary_3d.jpg": "5f1dc826b962ce006fc9b02d2e8d7bd387d26f9ee93aa21498767d150b94fd4f",
+      "docs/images/trump_hillary_depth.jpg": "1c917823617e6d3cc034fc8820d327f8d8fb3f7a393b5c2f0b5e7e669a38b516",
+      "docs/images/trump_hillary_pncc.jpg": "039af0b033f0953eb6d72aee59797c36be05abf9cde70f6796821df9c9b0d1e5",
+      "docs/images/trump_hillary_pose.jpg": "3da69b3b3a7932aba39bb5917418d901974e045bc64978cc709a42ece3fcafd0",
+      "docs/images/trump_hillary_uv_tex.jpg": "4f0f04f89028402545b549360fe0d7b17d39a8ae72254963fe1b101883b7b74f",
+      "docs/images/webcam.gif": "df04eaa41059fb724c32d4ee595e6fe18bf3d06f141ebfd53fcba90e134b0ddb",
+      "examples/.gitignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "examples/inputs/.gitignore": "429656f9e7c4ff7ba7298cfcf87fa191bdc2d8547ee469d916a39b7721606b6a",
+      "examples/inputs/JianzhuGuo.jpg": "258f2adac53c34bd2a2fa0399fbe6cf1ae93b84508fed4f7c84a646ef691df20",
+      "examples/inputs/emma.jpg": "c85bf90c207c3ae5645dd6d47a7e7b35af9f43f2db16038e97e28b9b5cc42119",
+      "examples/inputs/trump_hillary.jpg": "5da6e8a9c246f3a82987f3a9f3ee0a034d798ae4215c7453337b6a82fc25a296",
+      "examples/inputs/videos/.gitignore": "f420c1304a7c3191419a734c22bda2cf0ffd2b7f66001cc20f6edf7966ca3e95",
+      "examples/inputs/videos/214.avi": "2de4358d7db0f56e7a8b6fc44023c1e1b1b151b68ced8be5cdb4ae47b35f5b5f",
+      "examples/results/.gitignore": "1b7c9613f01a308efdb950da464fabf7c8e48921eb38ccffceaf4499a676383e",
+      "examples/results/videos/.gitignore": "8c1bca93fc2c4df30c0dff61b4a78a560716b7d5e61eb15b747f441c32182d0c",
+      "gradiodemo.py": "79fd2b22e03b4774d85ffc51e135c3cd3c4413f68b1dda777dd59828db8529c8",
+      "latency.py": "929a27e44b4654e2499ed806544ede492f541fbb9d2be363b43ccd44aee47a99",
+      "models/__init__.py": "0332c9a6196914b36775b406840669a6ffd09059f45c7224efaf6aba08f286cb",
+      "models/mobilenet_v1.py": "b05dcb4349b2be5b0e9cb479a6c8baf7e8626f4f8aca3386aafbeeef40354cbb",
+      "models/mobilenet_v3.py": "0ba681b9c74416c274eb5a14aee1c10fa00e2f626d0473940b793c03fda839be",
+      "models/resnet.py": "3d3de829e9571a0a34497a186c66b9972e4b860f56ba81f7f78e1e6dc4186fd3",
+      "readme.md": "82dde221541e6f9376062c5f231f837419e677107183b6f3c435464fe6801f43",
+      "requirements.txt": "e7ca402acaee8164a7f40980e48ebb342e8e953c75a07f885f91d6b73b3131fa",
+      "speed_cpu.py": "5a0458503810ae99520fd216be69538a8d68c3a1800e2e7f4e9dba8cbddfe9d0",
+      "utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "utils/asset/.gitignore": "5c9aff029b0659718ea8f6aa03e67b46c9d9311d3bb06d216d33eeac9546140c",
+      "utils/asset/build_render_ctypes.sh": "42c61ecd8b5f9fee35f1a422e05a483e69029d5eb0e0055cc58c420762d5be5e",
+      "utils/asset/render.c": "ad41e72fef2e120a8107cc1e1326699a873fb3e4630d934507e1cc8f834b552f",
+      "utils/depth.py": "89f5da50024df3fefdac858496726d671b5e3ffa475f4fbd59d9492a46c8dfe1",
+      "utils/functions.py": "4245b8c58d77e1952de5f9c1a10be381c7a9c34e1f1bcc5317c591f86c524790",
+      "utils/io.py": "e5d5274bb0fa2be16e195b3a9459a3a9121a64b52068c44e4eee2b821ce99d37",
+      "utils/onnx.py": "50ba62ad8360c4a19fbbab14ef4b392cc7dab3516776552fe382b17adb9b58f0",
+      "utils/pncc.py": "64d45df9366a19559a22fe0f0ff36b6f29fd496dff19afd9c25d2c5c92805e26",
+      "utils/pose.py": "de06e37481647149db70c6c23b35906d8cb0a14d7d0283bbfaef83bbe6890731",
+      "utils/render.py": "e95d6fb275134b369670f34d56ea29383f3a118715b7de562a044af4b7ed829f",
+      "utils/render_ctypes.py": "1b789c3ca7a058bcde64eff2e6a6a3a9cf85050298b64c6ebb2f8caf236c3368",
+      "utils/serialization.py": "85cad9701b658cc6257d474c98db83b5a553b6de3c8ec2b4359b1e796ef088d1",
+      "utils/tddfa_util.py": "21a2031a612d1ab6e0a4863f68bf83acff7ee28bc3e653df429c9c9009eed880",
+      "utils/uv.py": "dc613c869e986802673a5223a56965fd7f28424bddb9df432208ed65fa1f3688",
+      "weights/.gitignore": "f5b189551d1697df1e7d582395c3bf87ed9b2d61a86af9a8bc026abd0f471895",
+      "weights/readme.md": "f5d73d7a72e639e80ce7369d58ef2d90d408208318c9272d1c50272e0fb36092"
+    }
+  },
+  "source_integrity_post": {
+    "files_sha256": {
+      ".github/ISSUE_TEMPLATE/bug_report.md": "dbc768476396a28993d8c03523ada68f50eae8021023902f42740780bf56710c",
+      ".github/ISSUE_TEMPLATE/discussion.md": "762688a3767497be1bb763957ca32423b68ec2dcbef5590a049e00ef35c69214",
+      ".github/ISSUE_TEMPLATE/feature_request.md": "6891d0df4bcb5ebc7774a2de7c580ed87985cc4187963456576271946aa780ad",
+      ".github/ISSUE_TEMPLATE/help.md": "14093b43014371ff41dafc17cc1e2d9425e06d2564a31139d6ddd05b027b3f0f",
+      ".gitignore": "4289f4014dccc66546a0192efb77fce9faa158c9bc507d56768e4cbea4eac20c",
+      "FaceBoxes/.gitignore": "86e69ec5131f378ea139d7e05ddd4d36087068806c3247706420d70917daf8ff",
+      "FaceBoxes/FaceBoxes.py": "c7b5df2d328a84fba909380de16b294d6c0267e6083e2b45e283874f7062378b",
+      "FaceBoxes/FaceBoxes_ONNX.py": "f5dc5808355a056fdb805c17ee6f07d74dc8e4b312b2e29a84f96bc91230a5da",
+      "FaceBoxes/__init__.py": "f1f3c1ee25edf445cd049ddc9417d1ca1e8329b0d4ff80fc5b4eb2d4bdf5ce7c",
+      "FaceBoxes/build_cpu_nms.sh": "a931ac041f138db5d7117ca2297dc5f35d7aee03cbcf178f20ad493f5ebeb479",
+      "FaceBoxes/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "FaceBoxes/models/faceboxes.py": "844f5a8afe395e1e74277de332adf2321c8167cf9c3dbdaccdb4b8dbb44e315c",
+      "FaceBoxes/onnx.py": "e4d959448c79c7fe753d7bf5b438b8e452a8733e85da5de9d93c50816f23f859",
+      "FaceBoxes/readme.md": "0b7ff65c4d10286a3aa60c640367c69b41ff4046446d544fb7407765372a7f12",
+      "FaceBoxes/utils/.gitignore": "19ab18e9995218b006477c4d61af26c7751bfa993acc402732d6b776388fa17d",
+      "FaceBoxes/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "FaceBoxes/utils/box_utils.py": "dc0824e717730d48432bf8a0c0d2801dbef097636ab541237f1ceb53b94893db",
+      "FaceBoxes/utils/build.py": "3915631ca2897f53be1da4b7a14478f51bcce6caeee944247d5498a15795b83a",
+      "FaceBoxes/utils/config.py": "9a98f5fd78b29d127cd9b89846e2256ddf5e1d13b00407b56d736a746c1feba6",
+      "FaceBoxes/utils/functions.py": "1bcc2995d73709f70e3f83f59c202653d611be43341e65e18b3cde77838ad4f1",
+      "FaceBoxes/utils/nms/.gitignore": "fdb2735f783078acf908ae9df6814b44ee8e40402f03765fed9a6d5f10c92c3f",
+      "FaceBoxes/utils/nms/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "FaceBoxes/utils/nms/cpu_nms.pyx": "2228da9a9f759ecd954b697d76c26fe41aefec5723c476d7bf957bb3e98e3d18",
+      "FaceBoxes/utils/nms/py_cpu_nms.py": "d9f6e53641524e2a77d44af4c880dca4f82006967a5b46063375639a47535336",
+      "FaceBoxes/utils/nms_wrapper.py": "cee252072a4d94de85b5ab2699a67ea56d20324d4988363237168ef8ff4365ac",
+      "FaceBoxes/utils/prior_box.py": "e2f287acbb6be4c744eddc9b588e1fe86e572549781600ad3d8486ab9217bf90",
+      "FaceBoxes/utils/timer.py": "fee1e71a1d6fc7ac2996d79b062e74788a014379d7b50b9d3a80b571c3ed29a7",
+      "FaceBoxes/weights/.gitignore": "72bbd1251b1eadfa797fec320e844ad2e8dedf96e26a29f60565e8f85607c239",
+      "FaceBoxes/weights/readme.md": "91de56d6bfee55c3cce0fb9722e0b41de1bc18b12215b510d9f5a54cbda6b79a",
+      "LICENSE": "4e8e329d78d0dbd3be980d979f773d0c554b5deed5276c12d0de442cfecc2c24",
+      "Sim3DR/.gitignore": "18a700865dd03a19171efa83e997c1721887c4cf940b0397e93385d600e76ef1",
+      "Sim3DR/Sim3DR.py": "7ceb5c52950f88d8f485c3381c9441fd65cb2399a7fdd45619f1f384cd1aec0f",
+      "Sim3DR/__init__.py": "2d98a54e1288ed1628992eb254b5ad333f1bb1215e46742b3bd0ab68d7180ffa",
+      "Sim3DR/_init_paths.py": "4a76d97e1c2ae8f4aa8cf955eac38ccf915f6c70f6479a7a1b21395f0a9c4dca",
+      "Sim3DR/build_sim3dr.sh": "bd59c07c7286153efd94afa06e6513e65a3a0e8fa35221872f61854928c0d50e",
+      "Sim3DR/lib/rasterize.h": "f900d3e1a924c861a4f3ee4359b68b6c5ee0026a176d1ba506b2fa30fff54e8e",
+      "Sim3DR/lib/rasterize.pyx": "3ce8d9caa59d5d0d28669f215f7fb22ea63fe1d7967230ff0f0bbfc01e4e2cb9",
+      "Sim3DR/lib/rasterize_kernel.cpp": "f7caaf46206c224fadb536a436ca06000d397599289eb6af4f0420b796b86d75",
+      "Sim3DR/lighting.py": "0500f028742c49b1d8a3e85f474355166e7b0d7565968f1da8247dfdcc94b049",
+      "Sim3DR/readme.md": "fa25121f13875857081b3792070b7fea783b17ca573a3e28702359734eefb385",
+      "Sim3DR/setup.py": "9b97be149286eda4b9190e03ac024bef2252d46f3aa98ef3fcd76cb6f9a251df",
+      "Sim3DR/tests/.gitignore": "181314065df2f2fdaf920b1a8b5311daa216a2d6489a06ada5b49cc514d89417",
+      "Sim3DR/tests/CMakeLists.txt": "0e9da181937e39da5271a4ff0922a5dbd7e34b8eff695348895a5ff31c3285bd",
+      "Sim3DR/tests/io.cpp": "e5e3650e080773aa75011748f10f70f0d1c651a58df77d58322884597983be63",
+      "Sim3DR/tests/io.h": "b382c95ddd4dd750cea800b8e807a9d402528d7805e0c57d19525a455bc1bc3c",
+      "Sim3DR/tests/test.cpp": "7304605979146ca7bc677e3e95756f1c16df7f4c953b220f79e1f6c8bf879d2f",
+      "TDDFA.py": "812ef8437b33ef9a19c74631fe3aa2c5c6540c1b32b7c8d3d630383af8b163dc",
+      "TDDFA_ONNX.py": "d6dd000db9e64f7e6e80387cd983b4c334460f157f83077833b6f84777e70de4",
+      "bfm/.gitignore": "f849d6a7f3c55343255c38b2dbca62bae82b9e879b81c4d822f6af030eb59038",
+      "bfm/__init__.py": "b186e357907c4090bc426d3458fdc4cc7d4dcbd99822127ca0d821cdfeea1f36",
+      "bfm/bfm.py": "31d496e37041af052036dbc0a96700c85330c4238604e39b1cd98b6ae065c4f8",
+      "bfm/bfm_onnx.py": "363521b395c94d02507c0512229e4c160fe2323c03dbbbdd278126e8c1cb9e0e",
+      "bfm/readme.md": "bede476b19b5006f3f4f7c806f85546b3aa3ee39bf98bba0bf55269a42f67d68",
+      "build.sh": "c7ef617f0575ec00579e1e7e8e7dc8f63df23a4095e6e8e98f48d46856c41930",
+      "configs/.gitignore": "194d401408fc59ea1103cb5a1e164f2765180be20826b5dbfb4acd2ee544f0c2",
+      "configs/mb05_120x120.yml": "ff688d1e8336fccbd314714cd8638a9b8def425e4dbf46ecc5854b2e33f56a41",
+      "configs/mb1_120x120.yml": "97aa41cf8782750152123adf07c13ee016c2dbae6af3fead3aa431aa0e60f65b",
+      "configs/readme.md": "a0999e638376ad003f73c11a30b2151af80a7a1bd60537f6da8bbfb2d8264260",
+      "configs/resnet_120x120.yml": "e6bc5e2364251aebed7ed6ea85495dd4bebc911a7b7e90dbe6cbd1947f0a9c19",
+      "demo.ipynb": "d499a176985311105a8ccbde9b243c347eb03e600d0bd818340fa8c6d6cd02ce",
+      "demo.py": "dc00ba3aea979cbad365503993dbeb658bd795781b55f4ae9e46b6d3930de560",
+      "demo_video.py": "99ca74ee590b150b9d43e7a2be9a49d86f9c380c81dd3d7d6c7da5b1b956e60d",
+      "demo_video_smooth.py": "4bb15ea90897ddce76e27d66da3832a5fef9ac3e67435c54555ba9e825989422",
+      "demo_webcam_smooth.py": "faaf4e1b9a8fba088115e60347c7acf2b2cc2618d66ccca7130912b187ac2ffc",
+      "docs/images/emma_3d.jpg": "8d0dcde829aaf46f914e3d1d97a0c13c23b986c64f346e5f8c12ca01ed26bc8d",
+      "docs/images/latency.gif": "d57db3548bfa7efd08832718fc60511b08fca115de11ac2739a167868a9d0df8",
+      "docs/images/obj.jpg": "f41694ce99e3e2b1c633476ff984524c5811b60fde89fcf45cd2a0f09d6f864d",
+      "docs/images/out.gif": "1a99b988e49a339e21806e36876e5abe940fdc54de694ebe24e65eab6c3fa1a3",
+      "docs/images/ply.jpg": "a613ca0bbcf1265cfaa190dc07d74c1652529de427f9721ea8dc129e5ea8bd81",
+      "docs/images/trump_biden_3d.jpg": "1fbbe45da078e23c4921040c3b3ee37002ea8d7f2172c6544e9517dafa5385b4",
+      "docs/images/trump_hillary_2d_dense.jpg": "d67ecd0481c187f3faec37e7da5e577f942bcb7fbd986624731a2ff9b3f71c02",
+      "docs/images/trump_hillary_2d_sparse.jpg": "3d06198f05a5c6f56e8ce8a438e173fde7e3ac84b913ce2bb906c66786c0eea2",
+      "docs/images/trump_hillary_3d.jpg": "5f1dc826b962ce006fc9b02d2e8d7bd387d26f9ee93aa21498767d150b94fd4f",
+      "docs/images/trump_hillary_depth.jpg": "1c917823617e6d3cc034fc8820d327f8d8fb3f7a393b5c2f0b5e7e669a38b516",
+      "docs/images/trump_hillary_pncc.jpg": "039af0b033f0953eb6d72aee59797c36be05abf9cde70f6796821df9c9b0d1e5",
+      "docs/images/trump_hillary_pose.jpg": "3da69b3b3a7932aba39bb5917418d901974e045bc64978cc709a42ece3fcafd0",
+      "docs/images/trump_hillary_uv_tex.jpg": "4f0f04f89028402545b549360fe0d7b17d39a8ae72254963fe1b101883b7b74f",
+      "docs/images/webcam.gif": "df04eaa41059fb724c32d4ee595e6fe18bf3d06f141ebfd53fcba90e134b0ddb",
+      "examples/.gitignore": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "examples/inputs/.gitignore": "429656f9e7c4ff7ba7298cfcf87fa191bdc2d8547ee469d916a39b7721606b6a",
+      "examples/inputs/JianzhuGuo.jpg": "258f2adac53c34bd2a2fa0399fbe6cf1ae93b84508fed4f7c84a646ef691df20",
+      "examples/inputs/emma.jpg": "c85bf90c207c3ae5645dd6d47a7e7b35af9f43f2db16038e97e28b9b5cc42119",
+      "examples/inputs/trump_hillary.jpg": "5da6e8a9c246f3a82987f3a9f3ee0a034d798ae4215c7453337b6a82fc25a296",
+      "examples/inputs/videos/.gitignore": "f420c1304a7c3191419a734c22bda2cf0ffd2b7f66001cc20f6edf7966ca3e95",
+      "examples/inputs/videos/214.avi": "2de4358d7db0f56e7a8b6fc44023c1e1b1b151b68ced8be5cdb4ae47b35f5b5f",
+      "examples/results/.gitignore": "1b7c9613f01a308efdb950da464fabf7c8e48921eb38ccffceaf4499a676383e",
+      "examples/results/videos/.gitignore": "8c1bca93fc2c4df30c0dff61b4a78a560716b7d5e61eb15b747f441c32182d0c",
+      "gradiodemo.py": "79fd2b22e03b4774d85ffc51e135c3cd3c4413f68b1dda777dd59828db8529c8",
+      "latency.py": "929a27e44b4654e2499ed806544ede492f541fbb9d2be363b43ccd44aee47a99",
+      "models/__init__.py": "0332c9a6196914b36775b406840669a6ffd09059f45c7224efaf6aba08f286cb",
+      "models/mobilenet_v1.py": "b05dcb4349b2be5b0e9cb479a6c8baf7e8626f4f8aca3386aafbeeef40354cbb",
+      "models/mobilenet_v3.py": "0ba681b9c74416c274eb5a14aee1c10fa00e2f626d0473940b793c03fda839be",
+      "models/resnet.py": "3d3de829e9571a0a34497a186c66b9972e4b860f56ba81f7f78e1e6dc4186fd3",
+      "readme.md": "82dde221541e6f9376062c5f231f837419e677107183b6f3c435464fe6801f43",
+      "requirements.txt": "e7ca402acaee8164a7f40980e48ebb342e8e953c75a07f885f91d6b73b3131fa",
+      "speed_cpu.py": "5a0458503810ae99520fd216be69538a8d68c3a1800e2e7f4e9dba8cbddfe9d0",
+      "utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "utils/asset/.gitignore": "5c9aff029b0659718ea8f6aa03e67b46c9d9311d3bb06d216d33eeac9546140c",
+      "utils/asset/build_render_ctypes.sh": "42c61ecd8b5f9fee35f1a422e05a483e69029d5eb0e0055cc58c420762d5be5e",
+      "utils/asset/render.c": "ad41e72fef2e120a8107cc1e1326699a873fb3e4630d934507e1cc8f834b552f",
+      "utils/depth.py": "89f5da50024df3fefdac858496726d671b5e3ffa475f4fbd59d9492a46c8dfe1",
+      "utils/functions.py": "4245b8c58d77e1952de5f9c1a10be381c7a9c34e1f1bcc5317c591f86c524790",
+      "utils/io.py": "e5d5274bb0fa2be16e195b3a9459a3a9121a64b52068c44e4eee2b821ce99d37",
+      "utils/onnx.py": "50ba62ad8360c4a19fbbab14ef4b392cc7dab3516776552fe382b17adb9b58f0",
+      "utils/pncc.py": "64d45df9366a19559a22fe0f0ff36b6f29fd496dff19afd9c25d2c5c92805e26",
+      "utils/pose.py": "de06e37481647149db70c6c23b35906d8cb0a14d7d0283bbfaef83bbe6890731",
+      "utils/render.py": "e95d6fb275134b369670f34d56ea29383f3a118715b7de562a044af4b7ed829f",
+      "utils/render_ctypes.py": "1b789c3ca7a058bcde64eff2e6a6a3a9cf85050298b64c6ebb2f8caf236c3368",
+      "utils/serialization.py": "85cad9701b658cc6257d474c98db83b5a553b6de3c8ec2b4359b1e796ef088d1",
+      "utils/tddfa_util.py": "21a2031a612d1ab6e0a4863f68bf83acff7ee28bc3e653df429c9c9009eed880",
+      "utils/uv.py": "dc613c869e986802673a5223a56965fd7f28424bddb9df432208ed65fa1f3688",
+      "weights/.gitignore": "f5b189551d1697df1e7d582395c3bf87ed9b2d61a86af9a8bc026abd0f471895",
+      "weights/readme.md": "f5d73d7a72e639e80ce7369d58ef2d90d408208318c9272d1c50272e0fb36092"
+    },
+    "head": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+    "intentionally_absent_assets": [
+      "FaceBoxes/weights/FaceBoxesProd.pth",
+      "configs/BFM_UV.mat",
+      "configs/bfm_noneck_v3.pkl",
+      "configs/indices.npy",
+      "configs/ncc_code.npy",
+      "configs/param_mean_std_62d_120x120.pkl",
+      "configs/tri.pkl",
+      "weights/mb05_120x120.pth",
+      "weights/mb1_120x120.pth"
+    ]
+  },
+  "supplementary_laptop_tests": {
+    "failures": 0,
+    "scope": "runtime identity rejection tests",
+    "tests_run": 4
+  },
+  "timestamp_utc": "2026-09-23T13:20:38.164756+00:00",
+  "training_graph": "NOT_YET_EXECUTED",
+  "training_runtime": "NOT_YET_QUALIFIED",
+  "training_runtime_assessment": {
+    "basis": [
+      "Frozen A4 semantic reference tf.train.AdamOptimizer",
+      "PhysicsSTDAdapter.build_optimizer dispatches exponential_decay and Adam with frozen beta1/beta2/epsilon",
+      "Qualified E03 TF1 runtime provides the same API; post-task package versions match the committed E03 lock"
+    ],
+    "decision": "E03_RUNTIME_IS_CANDIDATE_FOR_E04_TRAINING",
+    "distribution": "NVIDIA TensorFlow 1.15.5+nv22.12",
+    "environment": "gpat-m6-e03",
+    "limitations": [
+      "No actual E04 main training graph exists in this adapter",
+      "No E04 graph execution or optimizer step performed",
+      "Geometry Python 3.12/PyTorch and E03 Python 3.8/TF1 require explicit process/runtime integration before training qualification"
+    ],
+    "reference_sha256": {
+      "environments/e03_stdn.lock.json": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62",
+      "methods/physics_std/adapter.py": "f2d1d9ac0618f8b6fdd6c82c1d926896df0a6c1d2d79d4718c96e9a1f8547ca0"
+    }
+  }
+}
