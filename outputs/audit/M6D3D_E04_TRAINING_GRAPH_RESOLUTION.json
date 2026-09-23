@@ -1,0 +1,684 @@
+{
+  "access_evidence": "Git-tracked discovery and exact named code/config/audit/spec reads only; no broad filesystem search. Command audit, not OS-wide syscall tracing.",
+  "artifact_index": {
+    "command": "python3 -B tools/m6d3d_e04_training_resolution_preflight.py --self-test --rebuild-index",
+    "final_rows": 513,
+    "line_endings": "CRLF",
+    "new_explicit_artifacts": 5,
+    "ordering": "LAST repository write; read-only verification follows",
+    "scope": "Committed metadata reused for unchanged entries; only five explicitly named new files hashed; no manifest target access or filesystem discovery.",
+    "unchanged_rows_carried_without_target_access": 508
+  },
+  "decision": "OWNER_RESOLUTION_RECORDED",
+  "environment_lock_created": false,
+  "execution": {
+    "benchmark_data_access": false,
+    "environment_created": false,
+    "graph_execution": false,
+    "graph_implementation": false,
+    "optimizer_applications": 0,
+    "tensorflow_imported_or_run": false
+  },
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "final_status": [
+    "E04_GEOMETRY_RUNTIME_QUALIFIED",
+    "E04_TRAINING_GRAPH_CONTRACT_RESOLVED",
+    "E04_TRAINING_GRAPH_NOT_YET_QUALIFIED",
+    "E04_TRAINING_RUNTIME_NOT_YET_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "geometry_runtime": "E04_GEOMETRY_RUNTIME_QUALIFIED",
+  "historical_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Resolution_Addendum.md",
+  "historical_document_modified": false,
+  "ledger": {
+    "committed_prefix_rows": 103,
+    "final_rows": 104,
+    "prefix_byte_identical": true,
+    "prefix_bytes": 265194,
+    "prefix_sha256": "354d907ecfbfebb757682d075e8184b4289b4858d308445d678040a7ab57dbea",
+    "records_appended": 1
+  },
+  "machine_readable_overlay": "configs/amendments/e04_training_graph_resolution.yaml",
+  "method_id": "E04",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D3d",
+  "new_public_source_retrieval": false,
+  "owner_decisions": {
+    "binary_only_p0": {
+      "applies_to": "every_spoof_sample",
+      "attack_type_labels_used": false,
+      "dataset_specific_spatial_prior": false,
+      "definition": "zeros_like(P)",
+      "inpainting_branch_active": true,
+      "negative_prior": {
+        "contribution": 0.0,
+        "denominator_epsilon": null,
+        "evaluation": "constant_zero_without_evaluating_normalized_quotient"
+      },
+      "original_author_behavior": false,
+      "original_prior": "spoof-type-conditioned spatial prior; unavailable under binary-only supervision",
+      "positive_term": "||P - (T_A > beta)||^2",
+      "positive_term_active": true,
+      "provenance": "CONTROLLED_RECONSTRUCTION_BINARY_ONLY_P0",
+      "provenance_class": "CONTROLLED_RECONSTRUCTION"
+    },
+    "encoder": {
+      "convblocks": [
+        "k3c64s2",
+        "k3c96s2",
+        "k3c128s2"
+      ],
+      "features_hwc": {
+        "F1": [
+          128,
+          128,
+          64
+        ],
+        "F2": [
+          64,
+          64,
+          96
+        ],
+        "F3": [
+          32,
+          32,
+          128
+        ]
+      },
+      "paper_reference": "PhySTD Fig.4 and encoder description",
+      "provenance_class": "PAPER",
+      "resolution": "Published widths; not an owner-invented architecture or STDN width transplant.",
+      "status": "RESOLVED"
+    },
+    "optimization": {
+      "adam": {
+        "algorithm": "Adam",
+        "beta1": 0.9,
+        "beta2": 0.999,
+        "epsilon": 1e-08,
+        "semantic_reference": "tf.train.AdamOptimizer",
+        "weight_decay": 0.0
+      },
+      "all_steps_every_minibatch": true,
+      "discriminator_learning_rate_multiplier": 0.5,
+      "generator_learning_rate_multiplier": 1.0,
+      "global_iteration": {
+        "increment_after": "step3_generator_eq24",
+        "increment_on_each_apply": false,
+        "increments_per_minibatch": 1,
+        "initial_value": 0,
+        "same_schedule_index_for_all_three_steps": true,
+        "schedule_index": "global_iteration",
+        "unit": "complete_Phystd_minibatch_iteration"
+      },
+      "optimizer_state": {
+        "discriminator_instances": 1,
+        "discriminator_state_separate": true,
+        "generator_beta_power_accumulators_shared": true,
+        "generator_instances": 1,
+        "generator_shared_between_steps": [
+          1,
+          3
+        ],
+        "generator_slots_shared": true,
+        "reset_generator_state_between_steps": false
+      },
+      "provenance": {
+        "adam_semantics": "FROZEN_BENCHMARK_CONTRACT_A4",
+        "execution_resolution_authority": "M6D3d_OWNER_APPROVED",
+        "shared_generator_state_and_iteration_ownership": "CONTROLLED_RECONSTRUCTION",
+        "three_steps_and_half_discriminator_lr": "PAPER"
+      },
+      "schedule_expression": "5e-5 * 10**(-floor(global_iteration / 45000))",
+      "separate_sequential_apply_operations": true,
+      "step_order": [
+        "step1_generator_eq23",
+        "step2_discriminator_L_D",
+        "step3_generator_eq24"
+      ]
+    },
+    "stdn_reference_policy": {
+      "inherit_G_D_RATIO": false,
+      "role": "OFFICIAL_PREDECESSOR_REFERENCE_ONLY",
+      "skip_any_phystd_step": false,
+      "use_only_where_phystd_silent": true
+    },
+    "step3_targets": {
+      "L_S": {
+        "provenance_class": "PAPER",
+        "synthetic_input_stop_gradient": true,
+        "target": "warped/synthesized ground-truth trace",
+        "target_stop_gradient": true
+      },
+      "depth_M0": {
+        "dtype": "float32",
+        "exact_zero": true,
+        "shape_per_sample": [
+          32,
+          32
+        ],
+        "value": 0.0
+      },
+      "original_live_depth_rule": "unchanged_A3_A4_not_zeroed",
+      "provenance_class": "PAPER",
+      "sample_class": "spoof"
+    }
+  },
+  "owner_resolution_source": "Explicit M6D3d owner message in this session",
+  "owner_resolutions_complete": true,
+  "preserved_contract": {
+    "K": 32,
+    "TEST": "FORBIDDEN",
+    "alphas": [
+      100,
+      5,
+      1,
+      0.0001,
+      10,
+      1
+    ],
+    "attack_type_labels": "FORBIDDEN",
+    "batch_size": 8,
+    "beta": 0.1,
+    "eq23": "100*L_depth + 5*L_G + L_P + 1e-4*L_R",
+    "eq24": "10*L_S + L_H",
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "input_resolution": 256,
+    "lambda": 1,
+    "learning_rate": 5e-05,
+    "lr_schedule": {
+      "every_iterations": 45000,
+      "factor": 10,
+      "type": "step_divide"
+    },
+    "supervision": "binary_weak_live_spoof",
+    "terminal_global_iteration": 150000,
+    "total_iterations": 150000,
+    "weight_init": {
+      "distribution": "Normal",
+      "mean": 0.0,
+      "stddev": 0.02
+    }
+  },
+  "preserved_inputs_sha256": {
+    "configs/amendments/e04_a4_execution_resolution.yaml": "7579b7177e8b48513bb7a9057e6f700cf9b1f576b5c577887c07bbda9cf35355",
+    "configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A4_E04_Execution_Gap_Resolution.md": "98070d31417fda555d24ac80b7a4a2008e786550482757863be328a251a9e733",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Resolution_Addendum.md": "6069fea97716155493bcf8a7fffb0d0c84a37f3e289dec7f89a5eb73445d7f09",
+    "environments/e03_stdn.lock.json": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62",
+    "environments/e04_geometry.lock.json": "9426be37044ae7121fb22a757e5483850e02bf68461b1eabb5421fae164fbc3d",
+    "frozen_config_snapshot/configs/frozen/artifact_probe.yaml": "3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe",
+    "frozen_config_snapshot/configs/frozen/attack_map_v1.yaml": "3755a479de9c57a4d92db6a5370bff2b902511ac88395d84ce5ae94212419c0d",
+    "frozen_config_snapshot/configs/frozen/data_v1.yaml": "7227c1bd589a29750495971899f0caf685976585d8610dbcbdeb77a730902885",
+    "frozen_config_snapshot/configs/frozen/dataset_protocol_policy_v1.yaml": "e928eded918395f56d98f7a325fcc2650535fda895d4d3305ba0212253159eca",
+    "frozen_config_snapshot/configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "frozen_config_snapshot/configs/frozen/downstream_resnet18.yaml": "f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b",
+    "frozen_config_snapshot/configs/frozen/dsdg_bin_idfree_v1.yaml": "a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de",
+    "frozen_config_snapshot/configs/frozen/fair_track_v1.yaml": "d9b02214d1e4701fe7d53972e94be0c2e68c6199a3378cacd69f2c1c87826d9d",
+    "frozen_config_snapshot/configs/frozen/pairs_v1.yaml": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
+    "frozen_config_snapshot/configs/frozen/preprocess_v1.yaml": "265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e",
+    "frozen_config_snapshot/configs/frozen/split_v1.yaml": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+    "frozen_config_snapshot/configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "frozen_config_snapshot/configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+    "frozen_config_snapshot/configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+    "frozen_config_snapshot/configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "frozen_config_snapshot/configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "frozen_config_snapshot/configs/methods/e06c_dsdg_bin_idfree.yaml": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+    "frozen_config_snapshot/configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "frozen_config_snapshot/configs/methods/gpat_b0.yaml": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "frozen_config_snapshot/configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "frozen_config_snapshot/history/attack_map_v1.rev1_ce12a58.yaml": "ca8791ac3f9111568fc66302fefd1a38cbdf74f79925409ebb64dae65bb5f3b1",
+    "frozen_config_snapshot/history/data_v1.rev1_ce12a58.yaml": "a22eeeecf73f595731f9ed06368089ec5795c17c103f26ef93f8887d363cb9d8",
+    "methods/physics_std/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "methods/physics_std/__init__.py": "4065485259375968fc6da0646e4727fbaeeb0aef6e8958e7e858b2e4cf964a49",
+    "methods/physics_std/adapter.py": "f2d1d9ac0618f8b6fdd6c82c1d926896df0a6c1d2d79d4718c96e9a1f8547ca0",
+    "methods/physics_std/assets.py": "583e7ada974a089f28a898282ec632af1525bf29d4b4f3dcaef711755de05bfc",
+    "methods/physics_std/contract.py": "8f978defca751356a9196b685878f48b24e923312d234bb0526b16e5029ae69e",
+    "methods/physics_std/geometry.py": "3ace4d32f00fc979aa079edadcc2830d1b9090e3524e9b7dc8c31d3935b642c7",
+    "methods/physics_std/regressor.py": "34f8ff49bb04aa691ec25f3734bc5e297e4249b7c2a54d3f147dd929ee41b651",
+    "methods/physics_std/renderer.py": "f0997fd8318abd4512fb135cb44eb63398a52ae796b0686fde3148f7092099d4",
+    "methods/physics_std/runtime.py": "77ee1ac7a63dd56990a2ab584437731db6421493e67831a34babe19a2b36a4dc",
+    "methods/physics_std/source.py": "5ffa8f483ea1f234fdbfa572554a41577e979de064434c40dfbcd1acac6c2f10",
+    "methods/physics_std/source_traceability.md": "75cb6285fbdfd447de8c3020bce16b61f314807b089c821ed5c562df8060de6e",
+    "outputs/audit/M6A5_E04_Q140_VERTEX_SET.json": "067fc5f2c5a8a4b60ddc14207bc95609668e65f5c29ecbba466ff42a46fbd83c",
+    "outputs/audit/M6D3A_E04_GEOMETRY_RUNTIME_QUALIFICATION.json": "54bbd7363e0c5261f4fc6ca1b334fac3cade4a841e3ee2b0ad080179fb980ccd",
+    "outputs/audit/M6D3B_E04_TRAINING_GRAPH_QUALIFICATION.json": "490215895b00904cce9b88b43b252f158161033d368af7326c18b2e7a879f556",
+    "outputs/audit/M6D3B_E04_TRAINING_GRAPH_QUALIFICATION.md": "6d6c873f2bda88f86371a715af80009648cb3e0a5a7ebe4d0fc5b4f9d0c6a448",
+    "outputs/audit/M6D3C_E04_TRAINING_GRAPH_QUALIFICATION.json": "659e711e50b7fbe035dd3bfe1765e77dbbc1470f75e3f04d559de5f28fb28d63",
+    "outputs/audit/M6D3C_E04_TRAINING_GRAPH_QUALIFICATION.md": "ae61f8ed5d5f9ccaa5f390326e981d0ef73bab53a347a02df8a08d99b5a2d9a6",
+    "tests/test_m6c2b1_physics_std.py": "8c9597b51e3bc5fa158ba835b7bffd904231090b552f04545f49a2d959954b87",
+    "tests/test_m6c2b1_renderer.py": "f7a2d3d0ee4a2792f5aaddfaf67379f5fbdc2bb614557e2bdfc6be29bde452ce",
+    "tests/test_m6d3a_e04_geometry_runtime.py": "ab03a9bb3255880af3b81ea8d8df040704650b4f625534166e2650761e8195b0",
+    "tools/m6d3b_e04_training_preflight.py": "5773dead841ca903a8a232d9e9f74a64a1b35e0cbe8f5657f3b20a0e185529ab",
+    "tools/m6d3c_e04_training_preflight.py": "afa0ff07b70b131a7e6aa312406f541febb286416ee8381cbe831f3cf5b4e957"
+  },
+  "prior_stop_disposition": {
+    "GRAPH_01": "CLOSED: encoder widths are PAPER-derived per owner correction",
+    "GRAPH_02": "CLOSED: owner-approved binary-only zero P0 / zero negative prior; positive term retained",
+    "GRAPH_03": "CLOSED: PAPER hard targets, owner-approved G/D/G apply order and shared G state / outer iteration ownership"
+  },
+  "provenance_notes": {
+    "adam": "FROZEN_BENCHMARK_CONTRACT_A4",
+    "encoder": "PAPER, not CONTROLLED_RECONSTRUCTION",
+    "hard_targets": "PAPER, not benchmark inventions",
+    "p0": "CONTROLLED_RECONSTRUCTION_BINARY_ONLY_P0; not original-author behavior",
+    "shared_G_state_and_iteration": "CONTROLLED_RECONSTRUCTION under M6D3d owner approval",
+    "three_steps_and_half_D_lr": "PAPER"
+  },
+  "public_evidence_reused_from_M6D3c": [
+    {
+      "id": "arxiv_v1",
+      "note": "Primary paper requested by owner; v1, 9 December 2020.",
+      "sha256": "48153237994c0f1b58dee9183a11f7877ca92809bfb044eda5b0dc973ae10e31",
+      "size_bytes": 4701178,
+      "temporary_path": "/tmp/m6d3c_phystd_2012.05185.pdf",
+      "url": "https://arxiv.org/pdf/2012.05185"
+    },
+    {
+      "id": "author_pami_pdf",
+      "note": "Exact URL recorded in M6D3b, examined only to reconcile frozen TPAMI references. HTTPS certificate validation failed; HTTP succeeded without disabling TLS verification. Not interchangeable with arXiv v1.",
+      "sha256": "5fb9edc59d647efc4e4ff5a988b4892ac7543bbcece524f8eb203482cdb03b70",
+      "size_bytes": 5138232,
+      "temporary_path": "/tmp/m6d3c_phystd_pami2022.pdf",
+      "url": "http://cvlab.cse.msu.edu/pdfs/liu_liu_PAMI2022.pdf"
+    },
+    {
+      "id": "stdn_model",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "a422834d59d24db684cc28f470fdd6eb8b1658bfb40ba113393df627d6fc3743",
+      "size_bytes": 5922,
+      "temporary_path": "/tmp/m6d3c_stdn_model.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/model/model.py"
+    },
+    {
+      "id": "stdn_utils",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "772f749cb6dd71ab6adb786c7d40b48c14f2b2ab4ad4368d190a2cc5a1681770",
+      "size_bytes": 7701,
+      "temporary_path": "/tmp/m6d3c_stdn_utils.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/model/utils.py"
+    },
+    {
+      "id": "stdn_train",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "87cebbd05551ea542de83d4dba365d30d090656343a099fea2c886b82f293878",
+      "size_bytes": 9605,
+      "temporary_path": "/tmp/m6d3c_stdn_train.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/train.py"
+    },
+    {
+      "id": "stdn_loss",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "d145d51325e8f8be75ef2c4d7950b472d9f130a6f2bf8ad21303f63b4bd2bcff",
+      "size_bytes": 1504,
+      "temporary_path": "/tmp/m6d3c_stdn_loss.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/model/loss.py"
+    }
+  ],
+  "qualification": {
+    "graph_gates": "NOT_RUN",
+    "performed": false,
+    "preflight_command": "python3 -B tools/m6d3d_e04_training_resolution_preflight.py --self-test",
+    "runtime_gates": "NOT_RUN",
+    "static_checks": "Contract semantics, immutable bytes, ledger prefix, artifact hashes and 14 rejected in-memory invalid contracts"
+  },
+  "reporting_label": "Physics-STD (controlled geometry/depth reconstruction)",
+  "resolution_artifacts_sha256": {
+    "configs/amendments/e04_training_graph_resolution.yaml": "f62f28c8fe8e090f47436544287243c308fb73b32fb26b1b0e55e6bb6b98e3cb",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Owner_Resolution_Addendum_M6D3d.md": "1d8ae0a4d5033c973539e13a50e601c34a61f90b10d7dee27e52f5e753ecc35e",
+    "tools/m6d3d_e04_training_resolution_preflight.py": "255f3efb53ee8c0ea7cf427dbfd74a4bc7007ad2684809fdef1c65b742a9dbcc"
+  },
+  "resolution_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Owner_Resolution_Addendum_M6D3d.md",
+  "resolved_decision_table": [
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "frequency-decomposed inputs",
+      "paper_or_existing_reference": "arXiv v1 Eq.9, section 3.2, Fig.4; author PDF Eq.10-11",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Retain paper frequency decomposition IB=low32(I), IC=low128(I)-low32(I), IT=I-low128(I), with input gains 1,15,25; follow the PhySTD graph, not predecessor RGB/YUV input.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "generator encoder",
+      "paper_or_existing_reference": "arXiv v1 section 3.2 and Fig.4",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "RESOLVED PAPER widths: F1=128x128x64, F2=64x64x96, F3=32x32x128; Fig.4 ConvBlocks k3c64s2,k3c96s2,k3c128s2. No controlled width choice and no alternative STDN encoder.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "trace decoder",
+      "paper_or_existing_reference": "arXiv v1 Fig.4 and section 3.2",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Retain paper Fig.4 decoder: convT k3c64s1, U1/U2/U3 convT k3c32s2, encoder shortcuts, final conv k3c13s1; shared decoder predicts B,C,T,P,IP.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "three additive trace components",
+      "paper_or_existing_reference": "arXiv v1 Eq.5 and Fig.4; author PDF Eq.11",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Keep B,C,T and the paper additive trace composition; do not introduce predecessor multiplicative s or replace B with predecessor global bias.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "one inpainting component",
+      "paper_or_existing_reference": "arXiv v1 Eq.3-8, Fig.4",
+      "provenance": [
+        "PAPER",
+        "CONTROLLED_RECONSTRUCTION_BINARY_ONLY_P0"
+      ],
+      "resolution": "Keep P and IP active. P0 is a separate supervision prior, not P itself: setting P0 to zero does not set the predicted P to zero.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "pseudo-depth / auxiliary FAS head",
+      "paper_or_existing_reference": "arXiv v1 section 3.2 and Fig.4",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Retain paper depth head from F1,F2,F3,U3 with spatial attention, 32x32 output and [0,1] depth semantics. Retain live A3/A4 supervision and exact-zero spoof supervision.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "spoof reconstruction / generation model",
+      "paper_or_existing_reference": "arXiv v1 Eq.3",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Preserve additive plus inpainting physical model (1-P)*(Ilive+TA)+P*TP; do not add an unrequested cycle loss.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "live reconstruction",
+      "paper_or_existing_reference": "arXiv v1 Eq.5 and Eq.11",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Preserve the three paper hierarchical live reconstructions using B; B,C; B,C,T respectively, together with the inpainting term. Do not replace them by resizing one reconstruction.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "spoof synthesis / trace transfer",
+      "paper_or_existing_reference": "arXiv v1 Eq.8, Eq.13-15, section 3.3.1",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Preserve paper geometric trace transfer and source inpainting appearance, with A3 fixed geometry/Q140. No geometry or image pipeline is executed or changed here.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "harder sample synthesis",
+      "paper_or_existing_reference": "arXiv v1 section 3.3, Algorithm 1",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Retain paper trace perturbations and harder-spoof synthesis. I_hard is spoof; M0 is exactly zero and L_S uses the matching warped/synthesized ground-truth trace with paper stop-gradient. Original live samples remain available for the balanced hard-pass batch.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "discriminators",
+      "paper_or_existing_reference": "arXiv v1 section 3.4, Fig.4",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Keep four paper PatchGAN discriminators with independent weights and one real/synthetic map each; no predecessor three-scale dual-head substitution.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "multi-scale discriminator structure",
+      "paper_or_existing_reference": "arXiv v1 section 3.4, Fig.4",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Keep D1/D2/D3 live pairs at 32/96/256 and D4 spoof pairs at 256; retain Fig.4 convolution labels k3c32s2,k3c64s2,k3c96s2,k3c128s1.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "L_depth",
+      "paper_or_existing_reference": "arXiv v1 Eq.16; author PDF Eq.21",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Keep frozen L1 depth loss and K=32. Real live targets follow A3/A4; every spoof target is exact zero. Step-3 synthetic spoof uses that same paper spoof rule.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "L_G",
+      "paper_or_existing_reference": "arXiv v1 Eq.17; author PDF Eq.19",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Retain the paper four-discriminator least-squares generator objective and frozen alpha2=5 in Step 1.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "L_P",
+      "paper_or_existing_reference": "arXiv v1 Eq.19 and Fig.7; author PDF Eq.18",
+      "provenance": [
+        "PAPER",
+        "CONTROLLED_RECONSTRUCTION_BINARY_ONLY_P0",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "P0=zeros_like(P) for every spoof. The unavailable type-conditioned negative prior is constant zero, with no normalized 0/0 evaluation. Keep ||P-(TA>beta)||^2 active, beta=.1 and alpha3=1; keep P/IP trainable under their intended losses.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "L_R",
+      "paper_or_existing_reference": "arXiv v1 Eq.20; author PDF Eq.17",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Preserve requested arXiv trace regularizer, lambda=1 and frozen alpha4=1e-4. M6D3d does not authorize substituting a different paper-version regularizer or STDN live/spoof coefficients.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "L_S",
+      "paper_or_existing_reference": "arXiv v1 Eq.21; author PDF Eq.22",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Target is the warped/synthesized ground-truth trace corresponding to the synthesized input. Stop gradients through the supervision target and synthetic input exactly as in the paper. Provenance PAPER, not a benchmark-created target.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "L_H",
+      "paper_or_existing_reference": "arXiv v1 Eq.22; author PDF Eq.23",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Apply the paper hard-sample depth loss to synthesized spoof with an exact zero float32 32x32 target; preserve K=32 and alpha6=1. Do not zero targets of original live examples included for batch balance.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "L_D",
+      "paper_or_existing_reference": "arXiv v1 Eq.18; author PDF Eq.20",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT_A4",
+        "CONTROLLED_RECONSTRUCTION"
+      ],
+      "resolution": "Apply paper discriminator objective in Step 2 of every minibatch; D uses separate Adam state and half the scheduled G LR.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "Eq.23 / Eq.24 weighted objectives",
+      "paper_or_existing_reference": "arXiv v1 Eq.23-24; author PDF Eq.24-25",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT",
+        "CONTROLLED_RECONSTRUCTION"
+      ],
+      "resolution": "Step 1 is 100*L_depth+5*L_G+L_P+1e-4*L_R; Step 3 is 10*L_S+L_H. They are separate sequential G applications sharing one Adam state, not a single combined application.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "variable sharing",
+      "paper_or_existing_reference": "arXiv v1 section 3.2,3.4, Algorithm 1",
+      "provenance": [
+        "PAPER",
+        "CONTROLLED_RECONSTRUCTION"
+      ],
+      "resolution": "One generator parameter set is reused for original and hard samples; D1-D4 remain independent. G steps share Adam slots and beta-power accumulators; D optimizer state is separate.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "variable groups",
+      "paper_or_existing_reference": "arXiv v1 section 3.5 and Algorithm 1",
+      "provenance": [
+        "PAPER",
+        "CONTROLLED_RECONSTRUCTION"
+      ],
+      "resolution": "Step 1 and Step 3 update the generator/depth/trace group; Step 2 updates the discriminator group. Actual variable names, gradient paths and nontrainable transitions are later qualification evidence, not results from this milestone.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "update ordering",
+      "paper_or_existing_reference": "arXiv v1 section 3.5 and Algorithm 1",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT_A4",
+        "CONTROLLED_RECONSTRUCTION"
+      ],
+      "resolution": "Every minibatch executes Step 1 G Eq.23, then Step 2 D L_D, then Step 3 G Eq.24. G Adam state persists across both G applications. Increment global_iteration once after Step 3; index all three step LRs by the same outer iteration.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "normalization / activation",
+      "paper_or_existing_reference": "arXiv v1 Fig.4 caption and section 3.5",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Retain paper Fig.4 batch normalization and leaky ReLU behavior except output layers; retain balanced original-live/hard batches. STDN is reference only where PhySTD is silent, not authority to replace paper activation behavior.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "initialization",
+      "paper_or_existing_reference": "arXiv v1 section 4.1",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Preserve Normal(0,.02) weight initialization. The eventual trainable/nontrainable initializer inventory remains a qualification deliverable; no state is allocated here.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "stop-gradient rules",
+      "paper_or_existing_reference": "arXiv v1 Eq.21; Algorithm 1",
+      "provenance": [
+        "PAPER"
+      ],
+      "resolution": "Use paper stop_gradient for both synthesized Step-3 input and its warped/synthesized ground-truth trace target; the target is supervision, not another trainable prediction.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "spatial resolutions / channel widths",
+      "paper_or_existing_reference": "arXiv v1 Fig.4, sections 3.2-3.4",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT"
+      ],
+      "resolution": "Published F1/F2/F3 widths and ConvBlock labels are resolved PAPER facts. Retain input256, decoder13 channels, depth32 and paper D scales. Actual graph output/variable shapes will be measured during qualification.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "optimizer / learning rate / iteration / seeds",
+      "paper_or_existing_reference": "arXiv v1 section 4.1; A4-2; A2 final-state convention",
+      "provenance": [
+        "PAPER",
+        "FROZEN_BENCHMARK_CONTRACT_A4",
+        "CONTROLLED_RECONSTRUCTION"
+      ],
+      "resolution": "Adam A4 (.9,.999,epsilon1e-8,no weight decay); scheduled G LR5e-5 /10 each45000 complete iterations; D LR=G/2; G and D states separate, G state shared across its two steps. Stop at global_iteration150000; seeds42,1337,2026 unchanged. No STDN G_D_RATIO scheduling.",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "authority": "M6D3d owner resolution plus unchanged paper/base/A3/A4 requirements",
+      "component": "qualification precision / runtime",
+      "paper_or_existing_reference": "M6D3c owner instruction; prior E03 lock",
+      "provenance": [
+        "FROZEN_BENCHMARK_CONTRACT",
+        "ENGINEERING_COMPATIBILITY"
+      ],
+      "resolution": "Contract status is resolved; graph/runtime remain not yet qualified. Future authorized qualification must honor FP32, disabled TF32/AMP/XLA auto-jit and precision rewrites. This milestone does not create/probe an environment or import TensorFlow.",
+      "status": "CONTRACT_RESOLVED"
+    }
+  ],
+  "safety": {
+    "M6D3b_mutation": false,
+    "M6D3c_mutation": false,
+    "TEST_scientific_execution": false,
+    "TRAIN_scientific_execution": false,
+    "VAL_scientific_execution": false,
+    "benchmark_image_bytes_opened": false,
+    "benchmark_image_filenames_enumerated": false,
+    "benchmark_images_decoded": false,
+    "benchmark_training": false,
+    "commit": false,
+    "frozen_config_mutation": false,
+    "manifest_payloads_opened": false,
+    "manifest_sample_records_opened": false,
+    "package_installation": false,
+    "push": false,
+    "real_depth_targets_accessed": false,
+    "runtime_data_directories_enumerated": false,
+    "runtime_data_files_statted_or_counted": false,
+    "scientific_checkpoint": false,
+    "synthetic_bank": false
+  },
+  "schema_version": "m6d3d-e04-training-graph-owner-resolution-v1",
+  "starting_authority": {
+    "branch": "m6-baselines",
+    "commit": "80dd758475f985377170308351ed2cf99a809d7d",
+    "tracked_worktree_initially_clean": true
+  },
+  "timestamp_utc": "2026-09-23T23:37:45.877798+00:00",
+  "training_graph": "E04_TRAINING_GRAPH_NOT_YET_QUALIFIED",
+  "training_graph_contract": "E04_TRAINING_GRAPH_CONTRACT_RESOLVED",
+  "training_runtime": "E04_TRAINING_RUNTIME_NOT_YET_QUALIFIED"
+}

@@ -1,0 +1,186 @@
+{
+  "schema_version": "e04_training_graph_owner_resolution_m6d3d_v1",
+  "amendment_id": "E04_TRAINING_GRAPH_OWNER_RESOLUTION_M6D3D",
+  "status": "E04_TRAINING_GRAPH_CONTRACT_RESOLVED",
+  "authority_commit": "80dd758475f985377170308351ed2cf99a809d7d",
+  "authority": "M6D3d explicit owner instruction; additive to base/A3/A4",
+  "amendment_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Owner_Resolution_Addendum_M6D3d.md",
+  "historical_evidence_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Resolution_Addendum.md",
+  "immutable_inputs_sha256": {
+    "configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "configs/amendments/e04_a4_execution_resolution.yaml": "7579b7177e8b48513bb7a9057e6f700cf9b1f576b5c577887c07bbda9cf35355",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A4_E04_Execution_Gap_Resolution.md": "98070d31417fda555d24ac80b7a4a2008e786550482757863be328a251a9e733",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Resolution_Addendum.md": "6069fea97716155493bcf8a7fffb0d0c84a37f3e289dec7f89a5eb73445d7f09",
+    "outputs/audit/M6D3C_E04_TRAINING_GRAPH_QUALIFICATION.json": "659e711e50b7fbe035dd3bfe1765e77dbbc1470f75e3f04d559de5f28fb28d63"
+  },
+  "method_id": "E04",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "reporting_label": "Physics-STD (controlled geometry/depth reconstruction)",
+  "encoder": {
+    "status": "RESOLVED",
+    "provenance_class": "PAPER",
+    "paper_reference": "PhySTD Fig.4 and encoder description",
+    "features_hwc": {
+      "F1": [
+        128,
+        128,
+        64
+      ],
+      "F2": [
+        64,
+        64,
+        96
+      ],
+      "F3": [
+        32,
+        32,
+        128
+      ]
+    },
+    "convblocks": [
+      "k3c64s2",
+      "k3c96s2",
+      "k3c128s2"
+    ],
+    "resolution": "Published widths; not an owner-invented architecture or STDN width transplant."
+  },
+  "binary_only_p0": {
+    "definition": "zeros_like(P)",
+    "applies_to": "every_spoof_sample",
+    "provenance_class": "CONTROLLED_RECONSTRUCTION",
+    "provenance": "CONTROLLED_RECONSTRUCTION_BINARY_ONLY_P0",
+    "original_author_behavior": false,
+    "original_prior": "spoof-type-conditioned spatial prior; unavailable under binary-only supervision",
+    "negative_prior": {
+      "contribution": 0.0,
+      "evaluation": "constant_zero_without_evaluating_normalized_quotient",
+      "denominator_epsilon": null
+    },
+    "positive_term": "||P - (T_A > beta)||^2",
+    "positive_term_active": true,
+    "inpainting_branch_active": true,
+    "attack_type_labels_used": false,
+    "dataset_specific_spatial_prior": false
+  },
+  "step3_targets": {
+    "sample_class": "spoof",
+    "provenance_class": "PAPER",
+    "depth_M0": {
+      "value": 0.0,
+      "dtype": "float32",
+      "shape_per_sample": [
+        32,
+        32
+      ],
+      "exact_zero": true
+    },
+    "L_S": {
+      "target": "warped/synthesized ground-truth trace",
+      "target_stop_gradient": true,
+      "synthetic_input_stop_gradient": true,
+      "provenance_class": "PAPER"
+    },
+    "original_live_depth_rule": "unchanged_A3_A4_not_zeroed"
+  },
+  "optimization": {
+    "step_order": [
+      "step1_generator_eq23",
+      "step2_discriminator_L_D",
+      "step3_generator_eq24"
+    ],
+    "all_steps_every_minibatch": true,
+    "separate_sequential_apply_operations": true,
+    "optimizer_state": {
+      "generator_instances": 1,
+      "generator_shared_between_steps": [
+        1,
+        3
+      ],
+      "generator_slots_shared": true,
+      "generator_beta_power_accumulators_shared": true,
+      "discriminator_instances": 1,
+      "discriminator_state_separate": true,
+      "reset_generator_state_between_steps": false
+    },
+    "adam": {
+      "algorithm": "Adam",
+      "semantic_reference": "tf.train.AdamOptimizer",
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-08,
+      "weight_decay": 0.0
+    },
+    "generator_learning_rate_multiplier": 1.0,
+    "discriminator_learning_rate_multiplier": 0.5,
+    "schedule_expression": "5e-5 * 10**(-floor(global_iteration / 45000))",
+    "global_iteration": {
+      "unit": "complete_Phystd_minibatch_iteration",
+      "initial_value": 0,
+      "increments_per_minibatch": 1,
+      "increment_after": "step3_generator_eq24",
+      "increment_on_each_apply": false,
+      "schedule_index": "global_iteration",
+      "same_schedule_index_for_all_three_steps": true
+    },
+    "provenance": {
+      "three_steps_and_half_discriminator_lr": "PAPER",
+      "adam_semantics": "FROZEN_BENCHMARK_CONTRACT_A4",
+      "shared_generator_state_and_iteration_ownership": "CONTROLLED_RECONSTRUCTION",
+      "execution_resolution_authority": "M6D3d_OWNER_APPROVED"
+    }
+  },
+  "stdn_reference_policy": {
+    "role": "OFFICIAL_PREDECESSOR_REFERENCE_ONLY",
+    "use_only_where_phystd_silent": true,
+    "inherit_G_D_RATIO": false,
+    "skip_any_phystd_step": false
+  },
+  "preserved_contract": {
+    "input_resolution": 256,
+    "batch_size": 8,
+    "total_iterations": 150000,
+    "weight_init": {
+      "distribution": "Normal",
+      "mean": 0.0,
+      "stddev": 0.02
+    },
+    "learning_rate": 5e-05,
+    "lr_schedule": {
+      "type": "step_divide",
+      "factor": 10,
+      "every_iterations": 45000
+    },
+    "alphas": [
+      100,
+      5,
+      1,
+      0.0001,
+      10,
+      1
+    ],
+    "beta": 0.1,
+    "lambda": 1,
+    "K": 32,
+    "eq23": "100*L_depth + 5*L_G + L_P + 1e-4*L_R",
+    "eq24": "10*L_S + L_H",
+    "terminal_global_iteration": 150000,
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "supervision": "binary_weak_live_spoof",
+    "attack_type_labels": "FORBIDDEN",
+    "TEST": "FORBIDDEN"
+  },
+  "execution_authorized_by_this_milestone": false,
+  "final_status": [
+    "E04_GEOMETRY_RUNTIME_QUALIFIED",
+    "E04_TRAINING_GRAPH_CONTRACT_RESOLVED",
+    "E04_TRAINING_GRAPH_NOT_YET_QUALIFIED",
+    "E04_TRAINING_RUNTIME_NOT_YET_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ]
+}
