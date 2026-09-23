@@ -1,0 +1,643 @@
+{
+  "access_evidence": {
+    "discovery": "Git-tracked paths only; exact named repository evidence files and exact public source URLs.",
+    "historical_incident": "M6D3b remains unchanged and retains its own metadata-enumeration disclosure.",
+    "observability_limit": "Command/evidence audit, not an OS-wide syscall trace. No claim of kernel-enforced isolation.",
+    "paper_images": "Only public-paper page renderings; not benchmark image files.",
+    "temporary_public_evidence": "/tmp/m6d3c_* explicitly named downloads/text/page renders; no directory scan."
+  },
+  "addendum_path": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Resolution_Addendum.md",
+  "addendum_sha256": "6069fea97716155493bcf8a7fffb0d0c84a37f3e289dec7f89a5eb73445d7f09",
+  "artifact_index": {
+    "command": "python3 -B tools/m6d3c_e04_training_preflight.py --rebuild-index",
+    "line_endings": "CRLF",
+    "ordering": "LAST repository write; read-only verification follows",
+    "rationale": "Standard builder uses untracked discovery and opens manifest payloads; it is not invoked. No manifest is rehashed or decoded in M6D3c.",
+    "strategy": "Rebuild sorted CSV from committed rows plus four explicitly named new artifacts. Carry previous metadata for every unchanged artifact without accessing target bytes."
+  },
+  "benchmark_execution": "NOT_STARTED",
+  "decision": "STOP_AND_REPORT",
+  "environment_lock_sha256": null,
+  "expected_lr_not_measured": {
+    "0": 5e-05,
+    "135000": 5e-08,
+    "44999": 5e-05,
+    "45000": 5e-06,
+    "89999": 5e-06,
+    "90000": 5e-07
+  },
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "geometry_runtime": "E04_GEOMETRY_RUNTIME_QUALIFIED",
+  "graph_optimizer_execution": {
+    "clean_process_repetitions": 0,
+    "component_parameter_counts": null,
+    "gates": {
+      "finite_losses": "NOT_RUN_PHASE_A_STOP",
+      "fp32_precision_controls": "NOT_RUN_PHASE_A_STOP",
+      "global_iteration": "NOT_RUN_PHASE_A_STOP",
+      "gradient_connectivity": "NOT_RUN_PHASE_A_STOP",
+      "gradient_finiteness": "NOT_RUN_PHASE_A_STOP",
+      "initialization_behavior": "NOT_RUN_PHASE_A_STOP",
+      "intended_variable_changes": "NOT_RUN_PHASE_A_STOP",
+      "lr_boundaries": "NOT_RUN_PHASE_A_STOP",
+      "native_state_changes": "NOT_RUN_PHASE_A_STOP",
+      "nontrainable_state": "NOT_RUN_PHASE_A_STOP",
+      "optimizer_path_coverage": "NOT_RUN_PHASE_A_STOP",
+      "output_shapes": "NOT_RUN_PHASE_A_STOP",
+      "parameter_counts_per_component": "NOT_RUN_PHASE_A_STOP",
+      "tensorflow_operation_count": "NOT_RUN_PHASE_A_STOP",
+      "trainable_names_shapes": "NOT_RUN_PHASE_A_STOP",
+      "two_clean_process_repeatability": "NOT_RUN_PHASE_A_STOP",
+      "unrelated_group_invariance": "NOT_RUN_PHASE_A_STOP",
+      "weighted_compositions_outside_graph": "NOT_RUN_PHASE_A_STOP"
+    },
+    "graph_constructed": false,
+    "individual_losses": {
+      "L_D": null,
+      "L_G": null,
+      "L_H": null,
+      "L_P": null,
+      "L_R": null,
+      "L_S": null,
+      "L_depth": null
+    },
+    "nontrainable_state": null,
+    "optimizer_paths_executed": [],
+    "optimizer_steps": 0,
+    "tensorflow_operation_count": null,
+    "topology": null,
+    "trainable_variables": null
+  },
+  "ledger": {
+    "committed_prefix_rows": 102,
+    "final_rows": 103,
+    "prefix_byte_identical": true,
+    "prefix_bytes": 262935,
+    "prefix_sha256": "86614988e10545656dc6aeff36817fe239dd9b0e4685823119cc7e8455d4101b",
+    "records_appended": 1,
+    "row_describes": "Stopped evidence-resolution attempt; not successful qualification"
+  },
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D3c",
+  "preflight_tool_sha256": "afa0ff07b70b131a7e6aa312406f541febb286416ee8381cbe831f3cf5b4e957",
+  "preserved_inputs_sha256": {
+    "configs/amendments/e04_a4_execution_resolution.yaml": "7579b7177e8b48513bb7a9057e6f700cf9b1f576b5c577887c07bbda9cf35355",
+    "configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A4_E04_Execution_Gap_Resolution.md": "98070d31417fda555d24ac80b7a4a2008e786550482757863be328a251a9e733",
+    "environments/e03_stdn.lock.json": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62",
+    "environments/e04_geometry.lock.json": "9426be37044ae7121fb22a757e5483850e02bf68461b1eabb5421fae164fbc3d",
+    "frozen_config_snapshot/configs/frozen/artifact_probe.yaml": "3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe",
+    "frozen_config_snapshot/configs/frozen/attack_map_v1.yaml": "3755a479de9c57a4d92db6a5370bff2b902511ac88395d84ce5ae94212419c0d",
+    "frozen_config_snapshot/configs/frozen/data_v1.yaml": "7227c1bd589a29750495971899f0caf685976585d8610dbcbdeb77a730902885",
+    "frozen_config_snapshot/configs/frozen/dataset_protocol_policy_v1.yaml": "e928eded918395f56d98f7a325fcc2650535fda895d4d3305ba0212253159eca",
+    "frozen_config_snapshot/configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "frozen_config_snapshot/configs/frozen/downstream_resnet18.yaml": "f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b",
+    "frozen_config_snapshot/configs/frozen/dsdg_bin_idfree_v1.yaml": "a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de",
+    "frozen_config_snapshot/configs/frozen/fair_track_v1.yaml": "d9b02214d1e4701fe7d53972e94be0c2e68c6199a3378cacd69f2c1c87826d9d",
+    "frozen_config_snapshot/configs/frozen/pairs_v1.yaml": "f243fdfaab2904b41aea3a09bbb3aa4bf5ddb55221db0cfaae328cab6b918985",
+    "frozen_config_snapshot/configs/frozen/preprocess_v1.yaml": "265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e",
+    "frozen_config_snapshot/configs/frozen/split_v1.yaml": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+    "frozen_config_snapshot/configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "frozen_config_snapshot/configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+    "frozen_config_snapshot/configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+    "frozen_config_snapshot/configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "frozen_config_snapshot/configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "frozen_config_snapshot/configs/methods/e06c_dsdg_bin_idfree.yaml": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+    "frozen_config_snapshot/configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "frozen_config_snapshot/configs/methods/gpat_b0.yaml": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "frozen_config_snapshot/configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "frozen_config_snapshot/history/attack_map_v1.rev1_ce12a58.yaml": "ca8791ac3f9111568fc66302fefd1a38cbdf74f79925409ebb64dae65bb5f3b1",
+    "frozen_config_snapshot/history/data_v1.rev1_ce12a58.yaml": "a22eeeecf73f595731f9ed06368089ec5795c17c103f26ef93f8887d363cb9d8",
+    "methods/physics_std/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "methods/physics_std/__init__.py": "4065485259375968fc6da0646e4727fbaeeb0aef6e8958e7e858b2e4cf964a49",
+    "methods/physics_std/adapter.py": "f2d1d9ac0618f8b6fdd6c82c1d926896df0a6c1d2d79d4718c96e9a1f8547ca0",
+    "methods/physics_std/assets.py": "583e7ada974a089f28a898282ec632af1525bf29d4b4f3dcaef711755de05bfc",
+    "methods/physics_std/contract.py": "8f978defca751356a9196b685878f48b24e923312d234bb0526b16e5029ae69e",
+    "methods/physics_std/geometry.py": "3ace4d32f00fc979aa079edadcc2830d1b9090e3524e9b7dc8c31d3935b642c7",
+    "methods/physics_std/regressor.py": "34f8ff49bb04aa691ec25f3734bc5e297e4249b7c2a54d3f147dd929ee41b651",
+    "methods/physics_std/renderer.py": "f0997fd8318abd4512fb135cb44eb63398a52ae796b0686fde3148f7092099d4",
+    "methods/physics_std/runtime.py": "77ee1ac7a63dd56990a2ab584437731db6421493e67831a34babe19a2b36a4dc",
+    "methods/physics_std/source.py": "5ffa8f483ea1f234fdbfa572554a41577e979de064434c40dfbcd1acac6c2f10",
+    "methods/physics_std/source_traceability.md": "75cb6285fbdfd447de8c3020bce16b61f314807b089c821ed5c562df8060de6e",
+    "outputs/audit/M6A5_E04_Q140_VERTEX_SET.json": "067fc5f2c5a8a4b60ddc14207bc95609668e65f5c29ecbba466ff42a46fbd83c",
+    "outputs/audit/M6D3A_E04_GEOMETRY_RUNTIME_QUALIFICATION.json": "54bbd7363e0c5261f4fc6ca1b334fac3cade4a841e3ee2b0ad080179fb980ccd",
+    "outputs/audit/M6D3B_E04_TRAINING_GRAPH_QUALIFICATION.json": "490215895b00904cce9b88b43b252f158161033d368af7326c18b2e7a879f556",
+    "outputs/audit/M6D3B_E04_TRAINING_GRAPH_QUALIFICATION.md": "6d6c873f2bda88f86371a715af80009648cb3e0a5a7ebe4d0fc5b4f9d0c6a448",
+    "tests/test_m6c2b1_physics_std.py": "8c9597b51e3bc5fa158ba835b7bffd904231090b552f04545f49a2d959954b87",
+    "tests/test_m6c2b1_renderer.py": "f7a2d3d0ee4a2792f5aaddfaf67379f5fbdc2bb614557e2bdfc6be29bde452ce",
+    "tests/test_m6d3a_e04_geometry_runtime.py": "ab03a9bb3255880af3b81ea8d8df040704650b4f625534166e2650761e8195b0",
+    "tools/m6d3b_e04_training_preflight.py": "5773dead841ca903a8a232d9e9f74a64a1b35e0cbe8f5657f3b20a0e185529ab"
+  },
+  "public_evidence": [
+    {
+      "id": "arxiv_v1",
+      "note": "Primary paper requested by owner; v1, 9 December 2020.",
+      "sha256": "48153237994c0f1b58dee9183a11f7877ca92809bfb044eda5b0dc973ae10e31",
+      "size_bytes": 4701178,
+      "temporary_path": "/tmp/m6d3c_phystd_2012.05185.pdf",
+      "url": "https://arxiv.org/pdf/2012.05185"
+    },
+    {
+      "id": "author_pami_pdf",
+      "note": "Exact URL recorded in M6D3b, examined only to reconcile frozen TPAMI references. HTTPS certificate validation failed; HTTP succeeded without disabling TLS verification. Not interchangeable with arXiv v1.",
+      "sha256": "5fb9edc59d647efc4e4ff5a988b4892ac7543bbcece524f8eb203482cdb03b70",
+      "size_bytes": 5138232,
+      "temporary_path": "/tmp/m6d3c_phystd_pami2022.pdf",
+      "url": "http://cvlab.cse.msu.edu/pdfs/liu_liu_PAMI2022.pdf"
+    },
+    {
+      "id": "stdn_model",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "a422834d59d24db684cc28f470fdd6eb8b1658bfb40ba113393df627d6fc3743",
+      "size_bytes": 5922,
+      "temporary_path": "/tmp/m6d3c_stdn_model.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/model/model.py"
+    },
+    {
+      "id": "stdn_utils",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "772f749cb6dd71ab6adb786c7d40b48c14f2b2ab4ad4368d190a2cc5a1681770",
+      "size_bytes": 7701,
+      "temporary_path": "/tmp/m6d3c_stdn_utils.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/model/utils.py"
+    },
+    {
+      "id": "stdn_train",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "87cebbd05551ea542de83d4dba365d30d090656343a099fea2c886b82f293878",
+      "size_bytes": 9605,
+      "temporary_path": "/tmp/m6d3c_stdn_train.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/train.py"
+    },
+    {
+      "id": "stdn_loss",
+      "note": "Read as source text only; never imported/executed.",
+      "sha256": "d145d51325e8f8be75ef2c4d7950b472d9f130a6f2bf8ad21303f63b4bd2bcff",
+      "size_bytes": 1504,
+      "temporary_path": "/tmp/m6d3c_stdn_loss.py",
+      "url": "https://raw.githubusercontent.com/yaojieliu/ECCV20-STDN/c79f1f8c615d2b8471b3df29da881bb18dd54c90/model/loss.py"
+    }
+  ],
+  "qualification_tests": {
+    "audit_integrity_command": "python3 -B tools/m6d3c_e04_training_preflight.py",
+    "scientific_tests_run": 0,
+    "scope": "Bookkeeping validation only; no graph/runtime qualification"
+  },
+  "reporting_label": "Physics-STD (controlled geometry/depth reconstruction)",
+  "runtime_assessment": {
+    "E03_environment_modified": false,
+    "attempted_command": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B --version",
+    "candidate": "/home/student20261/miniconda3/envs/gpat-m6-e03",
+    "exit_code": 127,
+    "new_environment_created": false,
+    "note": "Absence here does not establish absence on the GPU host. Phase A failure made remote/runtime setup unnecessary.",
+    "packages_installed": false,
+    "remote_probe_performed": false,
+    "result": "ENOENT_ON_CURRENT_HOST"
+  },
+  "safety": {
+    "M6D3b_mutation": false,
+    "TEST_scientific_execution": false,
+    "TRAIN_scientific_execution": false,
+    "VAL_scientific_execution": false,
+    "benchmark_image_bytes_opened": false,
+    "benchmark_image_filenames_enumerated": false,
+    "benchmark_images_decoded": false,
+    "benchmark_training": false,
+    "commit": false,
+    "frozen_config_mutation": false,
+    "manifest_payload_bytes_opened": false,
+    "manifest_sample_records_opened": false,
+    "push": false,
+    "real_depth_targets_accessed": false,
+    "runtime_data_directories_enumerated": false,
+    "runtime_data_files_statted": false,
+    "scientific_checkpoint": false,
+    "synthetic_bank": false
+  },
+  "schema_version": "m6d3c-e04-training-qualification-v1",
+  "starting_commit": "28f17846a67279d9b196ef0e0792a998104327f1",
+  "stop_reason": "UNRESOLVED_SCIENTIFIC_GRAPH_CHOICES",
+  "timestamp_utc": "2026-09-23T18:08:19.110285+00:00",
+  "training_graph": "NOT_YET_IMPLEMENTED",
+  "training_graph_evidence_resolution": {
+    "complete_authoritative_topology_resolved": false,
+    "component_inventory_complete": true,
+    "executable_graph_contract_frozen": false,
+    "new_scientific_choices_selected": [],
+    "phase": "A",
+    "source_resolution_table": [
+      {
+        "component": "frequency-decomposed inputs",
+        "current_frozen_e04_contract": "RGB input 256; batch 8. Frequency operator and interpolation coordinates not frozen.",
+        "exact_published_behavior": "v1: IB=low32(I), IC=low128(I)-low32(I), IT=I-low128(I); concatenate IB,15*IC,25*IT. Low-pass downsamples then upsamples. Author PDF explicitly says bilinear, but prints n1=128,n2=64.",
+        "implementation_resolution": "Record arXiv v1 as requested primary evidence; do not silently import the differing author-PDF scales. No operator instantiated.",
+        "paper_equation_figure_section": "arXiv v1 Eq.9, section 3.2, Fig.4; author PDF Eq.10-11",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:23 concatenates RGB and YUV (6 channels); not the PhySTD frequency input."
+      },
+      {
+        "component": "generator encoder",
+        "current_frozen_e04_contract": "No ordered encoder layer/channel table in base/A3/A4.",
+        "exact_published_behavior": "Initial k3c32s1; three ConvBlocks labelled k3c64s2,k3c96s2,k3c128s2; endpoints F1=128x128x64,F2=64x64x96,F3=32x32x128. Inset depicts three conv-like slabs with final /2, without per-layer channel labels.",
+        "implementation_resolution": "UNRESOLVED_ARCHITECTURE: block endpoint labels do not determine internal widths. Do not invent a layer list or claim the predecessor is the published E04 encoder.",
+        "paper_equation_figure_section": "arXiv v1 section 3.2 and Fig.4",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:24-36 uses initial c64 and three explicit (c64,c96,c64) blocks, last conv stride 2. All predecessor endpoints have c64."
+      },
+      {
+        "component": "trace decoder",
+        "current_frozen_e04_contract": "Additive/inpainting decomposition retained; no exact shortcut operator or output activation frozen.",
+        "exact_published_behavior": "F3 feeds convT k3c64s1, then three convT k3c32s2 stages U1/U2/U3 with encoder shortcuts, then conv k3c13s1 at 256.",
+        "implementation_resolution": "Partial topology evidence only. Shared final 13 channels are documented; shortcut placement/channel ordering and activation policy must be explicit in a future executable contract.",
+        "paper_equation_figure_section": "arXiv v1 Fig.4 and section 3.2",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:38-43 uses three c64 transpose convolutions with concatenation shortcuts and separate multi-resolution trace heads."
+      },
+      {
+        "component": "three additive trace components",
+        "current_frozen_e04_contract": "Three additive components retained; no new numerical range frozen.",
+        "exact_published_behavior": "B,C,T are RGB components; TA=low32(B)+low128(C)+T in v1. Decoder emits them at input resolution before band limitation.",
+        "implementation_resolution": "Retain component identities; predecessor multiplicative s and its global b must not be copied into E04. No graph built.",
+        "paper_equation_figure_section": "arXiv v1 Eq.5 and Fig.4; author PDF Eq.11",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:41-48 instead emits s,b,C,T with global s/b, pooled C, full-resolution T and tanh trace heads."
+      },
+      {
+        "component": "one inpainting component",
+        "current_frozen_e04_contract": "Inpainting retained; beta=0.1; binary weak supervision only.",
+        "exact_published_behavior": "One inpainting process comprises P in R^(256x256x1) and RGB live content IP. P gates replacement; together they use 4 of the 13 output channels.",
+        "implementation_resolution": "P/IP are required. Activation/range enforcement and preliminary mask P0 remain unselected; no predecessor equivalent fills them.",
+        "paper_equation_figure_section": "arXiv v1 Eq.3-8, Fig.4",
+        "provenance_class": [
+          "PAPER",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "No P/IP in predecessor Gen."
+      },
+      {
+        "component": "pseudo-depth / auxiliary FAS head",
+        "current_frozen_e04_contract": "K=32; L_depth required; live target A3/A4, spoof target exact float32 zeros.",
+        "exact_published_behavior": "Uses F1,F2,F3 and U3, spatial attention with displayed kernels 7,5,3,7 respectively, resizing/concatenation to 32; k3c32s1 then k3c1s1; M is 32x32 in [0,1].",
+        "implementation_resolution": "Do not transplant predecessor ESR head. Attention activation and final range mapping require an explicit future resolution.",
+        "paper_equation_figure_section": "arXiv v1 section 3.2 and Fig.4",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:50-57 concatenates resized F1/F2/F3 without attention or U3; c64,c64,c1 head and dropout in two layers; unbounded output."
+      },
+      {
+        "component": "spoof reconstruction / generation model",
+        "current_frozen_e04_contract": "Additive/inpainting model preserved.",
+        "exact_published_behavior": "Ispoof=(1-P)*(Ilive+TA)+P*TP; TP is spoof appearance in replaced regions.",
+        "implementation_resolution": "Equation recorded; no additional cycle-reconstruction loss invented.",
+        "paper_equation_figure_section": "arXiv v1 Eq.3",
+        "provenance_class": [
+          "PAPER",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Predecessor uses multiplicative s and additive b,C,T; no replacement process."
+      },
+      {
+        "component": "live reconstruction",
+        "current_frozen_e04_contract": "Paper hierarchical live reconstruction retained.",
+        "exact_published_behavior": "Ihi=(1-P)*(I-low32(B)-low128(C)-T)+P*IP; Imid=(1-P)*(low128(I)-low32(B)-low128(C))+P*IP; Ilow=(1-P)*(low32(I)-low32(B))+P*IP.",
+        "implementation_resolution": "Separate hierarchical reconstructions are required; resizing a single high-resolution reconstruction is not equivalent. Not executed.",
+        "paper_equation_figure_section": "arXiv v1 Eq.5 and Eq.11",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py:47 uses (1-s)*I-b-resize(C)-T; later resizes one reconstruction for all scales."
+      },
+      {
+        "component": "spoof synthesis / trace transfer",
+        "current_frozen_e04_contract": "A3 fixes geometry engine and Q140. This task permits generated tensors only and requires no image/geometry pipeline.",
+        "exact_published_behavior": "Transfer source TA,P and source image to live target: (1-P)*(Ilive+TA)+P*Isource after geometric correction. Q=140 landmark offsets are interpolated using Delaunay; sampling uses bilinear interpolation.",
+        "implementation_resolution": "Future synthetic qualification can supply explicit generated offsets, but cannot silently replace the scientific transfer path with raw TA addition. No warp executed.",
+        "paper_equation_figure_section": "arXiv v1 Eq.8, Eq.13-15, section 3.3.1",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py:49-50 warps one effective residual then adds it to a live image; no separate P/source-image transfer."
+      },
+      {
+        "component": "harder sample synthesis",
+        "current_frozen_e04_contract": "No perturbation granularity/PRNG mapping frozen; qualification uses a separate fixed seed.",
+        "exact_published_behavior": "Three random weights in [0,1] multiply B,C,T; P is removed with probability 0.5. Original live samples accompany hard samples to balance batch normalization.",
+        "implementation_resolution": "Do not reuse predecessor random recipe. Per-sample versus per-batch draws and trace-target handling are unresolved details.",
+        "paper_equation_figure_section": "arXiv v1 section 3.3, Algorithm 1",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py:66-84 samples predecessor factors in [0.1,0.8], chooses component changes and a mixture of alternate sample paths."
+      },
+      {
+        "component": "discriminators",
+        "current_frozen_e04_contract": "Multi-scale discriminators required; no exact head activation frozen.",
+        "exact_published_behavior": "Four separate PatchGAN discriminators, same architecture without shared weights; each returns a one-channel real/synthetic map described as in [0,1].",
+        "implementation_resolution": "Four one-head models required; predecessor three two-head models are not an equivalent replacement. Output range mapping remains unresolved.",
+        "paper_equation_figure_section": "arXiv v1 section 3.4, Fig.4",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:61-79 Disc_s has two independent linear output heads for live/spoof per scale."
+      },
+      {
+        "component": "multi-scale discriminator structure",
+        "current_frozen_e04_contract": "No padding/head kernel or patch output dimensions fixed.",
+        "exact_published_behavior": "D1,D2,D3 consume real live versus Ilow,Imid,Ihi at 32,96,256; D4 consumes real/synthesized spoof at 256. Figure lists conv x4: k3c32s2,k3c64s2,k3c96s2,k3c128s1 before output.",
+        "implementation_resolution": "Known hidden widths/scales recorded. Exact patch map dimensions cannot be certified before padding and final projection are resolved.",
+        "paper_equation_figure_section": "arXiv v1 section 3.4, Fig.4",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py:33-34,51-63 uses 256,160,40; Disc_s hidden widths end at 96."
+      },
+      {
+        "component": "L_depth",
+        "current_frozen_e04_contract": "A3 explicitly preserves L1; K=32; exact zero spoof M0. Synthetic live supervision only in this milestone.",
+        "exact_published_behavior": "Text specifies L1 depth error, divided by K squared, averaged over live/spoof; displayed norm uses F notation despite L1 prose.",
+        "implementation_resolution": "L1 and target semantics already resolved by frozen contract; do not replace with Frobenius L2 or predecessor ESR. No value/gradient evaluated.",
+        "paper_equation_figure_section": "arXiv v1 Eq.16; author PDF Eq.21",
+        "provenance_class": [
+          "PAPER",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Predecessor esr_loss uses scalar -1/+1 class targets, not face-shaped live depth."
+      },
+      {
+        "component": "L_G",
+        "current_frozen_e04_contract": "alpha2=5 for L_G in the frozen Eq.23 composition.",
+        "exact_published_behavior": "Sum of four least-squares fake-to-real errors: D1(Ilow),D2(Imid),D3(Ihi),D4(synthesized spoof) versus 1, expectation over live/spoof.",
+        "implementation_resolution": "Four terms required. Spatial sum versus mean must be explicitly resolved; predecessor reduce_mean is not a paper proof.",
+        "paper_equation_figure_section": "arXiv v1 Eq.17; author PDF Eq.19",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py gan_loss sums six mean-square terms from three dual-head discriminators."
+      },
+      {
+        "component": "L_P",
+        "current_frozen_e04_contract": "beta=0.1; alpha3=1; attack-type labels FORBIDDEN; no binary-only P0 or RGB-to-scalar threshold rule frozen.",
+        "exact_published_behavior": "Spoof-only expectation of squared P-versus-(TA>beta) error plus squared P*P0 norm divided by squared P0 norm. Text calls for trace magnitude; P0 marks regions not to inpaint and depends on attack knowledge.",
+        "implementation_resolution": "UNRESOLVED_SCIENTIFIC_SUPERVISION: do not invent P0, remove this term, add denominator epsilon, or choose a magnitude/channel reduction without a recorded resolution.",
+        "paper_equation_figure_section": "arXiv v1 Eq.19 and Fig.7; author PDF Eq.18",
+        "provenance_class": [
+          "PAPER",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Absent from predecessor."
+      },
+      {
+        "component": "L_R",
+        "current_frozen_e04_contract": "lambda=1; alpha4=1e-4; no predecessor live/spoof weight split authorized.",
+        "exact_published_behavior": "v1 sums squared norms of B,C,T,P over live/spoof. Author PDF instead regularizes the combined TA and P; cross terms make these non-equivalent.",
+        "implementation_resolution": "Record v1 component regularizer as requested evidence, distinguish author-PDF difference. No silent substitution or loss execution.",
+        "paper_equation_figure_section": "arXiv v1 Eq.20; author PDF Eq.17",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Predecessor sums means of squared s,b,C,T; separate live/spoof weights 10 and 1e-4."
+      },
+      {
+        "component": "L_S",
+        "current_frozen_e04_contract": "alpha5=10; exact effective target for inpainting and hard perturbations not frozen.",
+        "exact_published_behavior": "Pixelwise L1 synthetic supervision stops gradients through synthesized input and warped supervision target. G is also used as reconstruction notation; prose describes recovery of overall trace effect.",
+        "implementation_resolution": "Preserve both explicit stops. UNRESOLVED_TARGET: do not equate the target to TA alone or confuse reconstructed RGB with trace residual.",
+        "paper_equation_figure_section": "arXiv v1 Eq.21; author PDF Eq.22",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py:80-84 detaches synthetic inputs; pixel_loss detaches trace_warp. The effective predecessor trace includes its multiplicative term."
+      },
+      {
+        "component": "L_H",
+        "current_frozen_e04_contract": "alpha6=1, K=32; spoof M0=0; no removal of depth loss.",
+        "exact_published_behavior": "Depth supervision on harder synthesized spoof samples, with 1/K squared scaling; hard pass contains original live samples for BN balance.",
+        "implementation_resolution": "Synthetic spoof zero targets retained; inclusion of balancing live examples in the loss versus BN-only must be explicit. Not evaluated.",
+        "paper_equation_figure_section": "arXiv v1 Eq.22; author PDF Eq.23",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Predecessor esr_loss_a uses -1/+1 labels on both halves."
+      },
+      {
+        "component": "L_D",
+        "current_frozen_e04_contract": "No separately frozen discriminator coefficient; all optimizer paths must be qualified.",
+        "exact_published_behavior": "Four real-to-1 and four synthetic-to-0 least-squares terms over independent discriminators.",
+        "implementation_resolution": "Required optimizer objective even though six named generator/depth losses are the requested finite gates. Do not inherit the predecessor /4 factor.",
+        "paper_equation_figure_section": "arXiv v1 Eq.18; author PDF Eq.20",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Predecessor has twelve terms divided by 4."
+      },
+      {
+        "component": "Eq.23 / Eq.24 weighted objectives",
+        "current_frozen_e04_contract": "Explicitly fixed: 100*L_depth+5*L_G+L_P+1e-4*L_R; 10*L_S+L_H.",
+        "exact_published_behavior": "v1: a1*L_depth+a2*L_G+a3*L_P+a4*L_R and a5*L_S+a6*L_H. Author PDF Eq.24 orders a1*L_R+a2*L_P+a3*L_G+a4*L_depth instead.",
+        "implementation_resolution": "Frozen/user compositions prevail. Author-PDF coefficient placement cannot override them. External numerical verification remains NOT_RUN.",
+        "paper_equation_figure_section": "arXiv v1 Eq.23-24; author PDF Eq.24-25",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Predecessor train.py combines g_loss+a_loss in one generator optimizer."
+      },
+      {
+        "component": "variable sharing",
+        "current_frozen_e04_contract": "No frozen variable names or BN update policy.",
+        "exact_published_behavior": "One generator is reused for original/hard inputs; encoder supports depth and trace tasks. D1-D4 do not share weights.",
+        "implementation_resolution": "Share generator trainables across calls; separate discriminator parameter sets. Exact reuse and native nontrainable updates require a later graph freeze.",
+        "paper_equation_figure_section": "arXiv v1 section 3.2,3.4, Algorithm 1",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR"
+        ],
+        "stdn_predecessor_evidence": "utils.py uses tf.AUTO_REUSE; train.py reuses scope STDN for both passes."
+      },
+      {
+        "component": "variable groups",
+        "current_frozen_e04_contract": "Gates require intended changes and unrelated-group invariance.",
+        "exact_published_behavior": "Generator/depth and discriminator objectives apply to their corresponding network parts.",
+        "implementation_resolution": "Expected groups: shared generator (encoder/trace/depth) and D1-D4. No actual names, shapes, gradient matrix or parameter counts exist yet.",
+        "paper_equation_figure_section": "arXiv v1 section 3.5 and Algorithm 1",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:116 selects trainables by scope; train.py uses STDN and Disc."
+      },
+      {
+        "component": "update ordering",
+        "current_frozen_e04_contract": "150000 outer iterations and terminal iteration 150000; minimum synthetic steps only.",
+        "exact_published_behavior": "Three training stages every minibatch; discriminator learning rate is half. Algorithm computes all losses before its final back-propagation/update line; prose describes three stages.",
+        "implementation_resolution": "UNRESOLVED_OPTIMIZER_SEMANTICS: combined G update versus separate Eq.23/Eq.24 Adam applications changes slots and update count. Do not let each path increment the scientific iteration independently.",
+        "paper_equation_figure_section": "arXiv v1 section 3.5 and Algorithm 1",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py constructs one G optimizer on g_loss+a_loss and one D optimizer; get_train_op increments the supplied global step for each."
+      },
+      {
+        "component": "normalization / activation",
+        "current_frozen_e04_contract": "FP32 and native state recording required; no BN/slope defaults frozen.",
+        "exact_published_behavior": "Batch normalization and leaky ReLU after conv/convT except final layers; balanced original-live/hard batch. Numerical BN settings, leaky slope and bounded-output implementation are not specified.",
+        "implementation_resolution": "Predecessor BN values are candidate provenance only; its PReLU cannot be presented as the published activation. No settings selected.",
+        "paper_equation_figure_section": "arXiv v1 Fig.4 caption and section 3.5",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "utils.py:107 onward uses BN decay .99, epsilon 1e-5, scale=True, immediate updates; learned PReLU, not fixed leaky ReLU."
+      },
+      {
+        "component": "initialization",
+        "current_frozen_e04_contract": "Normal(0,0.02) preserved; all state initialization must be recorded.",
+        "exact_published_behavior": "Weights initialized from Normal(0,0.02).",
+        "implementation_resolution": "Weight distribution retained. Bias, BN affine/running-state and output-head initialization must be explicitly enumerated before execution; no empirical initializer gate run.",
+        "paper_equation_figure_section": "arXiv v1 section 4.1",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "utils.py convolution weights random_normal stddev=.02, biases zero; BN/PReLU have their own initializers."
+      },
+      {
+        "component": "stop-gradient rules",
+        "current_frozen_e04_contract": "Every intended loss-to-variable gradient and unrelated-group invariance must be verified.",
+        "exact_published_behavior": "Synthetic input and warped supervision target in L_S are explicitly detached to avoid collapse.",
+        "implementation_resolution": "Record required L_S detach edges; D optimizer variable exclusion is distinct from stopping all gradients through D during G loss. No gradient graph exists.",
+        "paper_equation_figure_section": "arXiv v1 Eq.21; Algorithm 1",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "train.py uses stop_gradient on synthetic input alternatives and trace_warp target."
+      },
+      {
+        "component": "spatial resolutions / channel widths",
+        "current_frozen_e04_contract": "Input [8,256,256,3], K32; output inventory, trainable/state inventory and op count are gates.",
+        "exact_published_behavior": "Input frequency concat 256x256x9; initial conv c32; F1/F2/F3 endpoints 128x128x64,64x64x96,32x32x128; decoder output 256x256x13; depth 32x32x1; D inputs 32,96,256,256 RGB.",
+        "implementation_resolution": "Endpoint facts are not a complete layer table. Exact internal widths, padding and patch outputs remain uncertified; do not fabricate counts.",
+        "paper_equation_figure_section": "arXiv v1 Fig.4, sections 3.2-3.4",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Predecessor differs in RGB+YUV input, encoder widths, decoder widths, trace output scales and discriminator scales."
+      },
+      {
+        "component": "optimizer / learning rate / iteration / seeds",
+        "current_frozen_e04_contract": "Adam beta1=.9,beta2=.999,epsilon=1e-8,weight_decay=0; seeds42,1337,2026; terminal150000. Required base LR checkpoints fixed by user.",
+        "exact_published_behavior": "TensorFlow; batch8; 150000 iterations; lr5e-5 divided by10 every45000; discriminator lr half per section3.5.",
+        "implementation_resolution": "All frozen values preserved. LR expected values recorded but no TensorFlow boundary test or optimizer path executed.",
+        "paper_equation_figure_section": "arXiv v1 section 4.1; A4-2; A2 final-state convention",
+        "provenance_class": [
+          "PAPER",
+          "OFFICIAL_PREDECESSOR",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "model/model.py:100-128 uses staircase exponential decay and tf.train.AdamOptimizer(lr), scoped gradients and moving averages."
+      },
+      {
+        "component": "qualification precision / runtime",
+        "current_frozen_e04_contract": "FP32; disable TF32,AMP,XLA auto-jit/precision rewrites; two clean processes; generated tensors only.",
+        "exact_published_behavior": "Historical package versions do not determine scientific layer choices.",
+        "implementation_resolution": "Exact requested Python path returned ENOENT on this host. No environment mutation or creation; no remote probe because Phase A failed. Precision and repeatability gates NOT_RUN.",
+        "paper_equation_figure_section": "M6D3c owner instruction; prior E03 lock",
+        "provenance_class": [
+          "ENGINEERING_COMPATIBILITY",
+          "FROZEN_BENCHMARK_CONTRACT"
+        ],
+        "stdn_predecessor_evidence": "Previously qualified TF1 NVIDIA environment is recorded in the E03 lock."
+      }
+    ]
+  },
+  "training_runtime": "NOT_YET_QUALIFIED",
+  "unresolved_scientific_choices": [
+    {
+      "alternatives": [
+        "Three convolutions per block with constant widths (64,64,64), (96,96,96), (128,128,128), stride2 at the end.",
+        "Three convolutions per block retaining predecessor internal 64,96 widths, changing only endpoints: (64,96,64), (64,96,96), (64,96,128), stride2 at the end."
+      ],
+      "ambiguity": "The schematic supports three downsampling blocks and shows a three-slab inset but does not assign each internal convolution a channel width. The predecessor endpoint widths differ.",
+      "component": "encoder internal widths",
+      "consequence": "Both attain published endpoints; learned capacity, parameter count and feature transformations differ. No source establishes a unique E04 mapping; neither alternative is selected.",
+      "evidence": "arXiv v1 Fig.4 and section3.2; pinned STDN model.py:24-36",
+      "id": "GRAPH-01",
+      "required_resolution": "Exact ordered layer/channel/stride/padding table from the owner or author, or explicit owner selection of a controlled reconstruction."
+    },
+    {
+      "alternatives": [
+        "A fixed attack-independent nonzero P0 prior.",
+        "A geometry-derived attack-independent P0 prior."
+      ],
+      "ambiguity": "Paper P0 uses attack-specific prior regions; base/A3/A4 provide no binary-only rule. RGB TA magnitude-to-one-channel threshold also lacks an executable reduction definition.",
+      "component": "binary-only inpainting supervision",
+      "consequence": "Different gradients to P and different supported inpainting regions. All-zero P0 makes the displayed denominator zero; omitting the term changes the loss. No choice selected.",
+      "evidence": "arXiv v1 Eq.19/Fig.7 versus configs/methods/e04_physics_std.yaml attack_type_labels=FORBIDDEN",
+      "id": "GRAPH-02",
+      "required_resolution": "Freeze an attack-label-free P0 rule, its exact values/geometry dependency and denominator behavior, plus TA magnitude/channel reduction."
+    },
+    {
+      "alternatives": [
+        "One Adam G application to the combined objectives and one D application.",
+        "Separate Adam applications for Eq.23 and Eq.24 with a D application and explicit ordering."
+      ],
+      "ambiguity": "Paper prose has three stages while Algorithm1 ends with one collective update; predecessor sums G objectives into one Adam application. Hard-sample effective inpainting target is not an executable recipe.",
+      "component": "optimizer path and hard-sample target semantics",
+      "consequence": "Different slot evolution and minimum path coverage; variable and BN state transitions differ. Not resolved by the shared learning-rate coefficient alone.",
+      "evidence": "arXiv v1 Eq.21, Eq.23-24, Algorithm1; pinned STDN train.py",
+      "id": "GRAPH-03",
+      "required_resolution": "Freeze optimizer instances/slot sharing, path ordering, one outer-iteration increment, detach boundaries and effective hard-sample trace target."
+    }
+  ]
+}
