@@ -1,0 +1,436 @@
+M6D4e clean synthetic requalification — session authority and sync observations
+{
+  "authority": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72",
+  "laptop_start": {
+    "head": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72",
+    "origin": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72",
+    "divergence": [
+      0,
+      0
+    ],
+    "clean": true
+  },
+  "gpu_start": {
+    "head": "c27a110258f58f9bc035875aa40caf1ae681f9cb",
+    "origin": "c27a110258f58f9bc035875aa40caf1ae681f9cb",
+    "divergence": [
+      0,
+      0
+    ],
+    "clean": true
+  },
+  "gpu_sync": {
+    "ancestor_distance": 1,
+    "ancestry_proved_locally_and_after_fetch": true,
+    "clean_after_sync": true,
+    "final_head": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72",
+    "final_origin": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72",
+    "divergence": [
+      0,
+      0
+    ],
+    "commands": [
+      "git fetch --no-tags origin refs/heads/m6-baselines:refs/remotes/origin/m6-baselines",
+      "git merge --ff-only origin/m6-baselines"
+    ]
+  },
+  "implementation_sha256": {
+    "methods/pcgan/training_losses.py": "08f159622d41becb8df2502be297e3d4ffe05e5e4f3ff3bc6a074c1fbaa67202",
+    "methods/pcgan/training_runner.py": "d249722dd7653e981ab7cd8dcf734ab8345bc89074ece5ba01e04489cefd92e5",
+    "methods/pcgan/training_diagnostics.py": "68bed70699a7a6457ea480a9fd718ed5badf78c7078be61b3b76659fcb1619f4",
+    "methods/pcgan/training_qualification.py": "617ac13b2373620028438ef0b2c370eb39895f46cf1a3b1a456863dfcda8a8b7"
+  },
+  "launch_environment": "env PATH=/home/student20261/miniconda3/envs/gpat-m6-e05/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin CUDA_HOME=/home/student20261/miniconda3/envs/gpat-m6-e05 TORCH_EXTENSIONS_DIR=/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions TORCH_CUDA_ARCH_LIST=8.6 MAX_JOBS=2 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60401",
+  "ssh_sandbox_connection_failures_before_execution": 2
+}
+08f159622d41becb8df2502be297e3d4ffe05e5e4f3ff3bc6a074c1fbaa67202  methods/pcgan/training_losses.py
+d249722dd7653e981ab7cd8dcf734ab8345bc89074ece5ba01e04489cefd92e5  methods/pcgan/training_runner.py
+68bed70699a7a6457ea480a9fd718ed5badf78c7078be61b3b76659fcb1619f4  methods/pcgan/training_diagnostics.py
+617ac13b2373620028438ef0b2c370eb39895f46cf1a3b1a456863dfcda8a8b7  methods/pcgan/training_qualification.py
+8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828  configs/amendments/e05_training_runner_resolution.yaml
+849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50  environments/e05.lock.json
+b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac  environments/e05.compatibility_patch_manifest.json
+5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so
+40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so
+GPU pre-execution identity PASS; new evidence directory /tmp/gpat_m6d4e_clean_requalification
+Loading custom kernel...
+G connectivity: direct complete five-loss graph
+Probe L_rec
+Probe L_recblur
+Probe L_advrec
+Probe L_advmix
+Probe L_pat
+D connectivity: direct complete detached objective
+Probe L_D_real
+Probe L_D_rec
+Probe L_D_mix
+Probe L_D_patch_real
+Probe L_D_patch_fake
+before_D
+D_forward
+D_backward
+after_D
+before_G
+G_forward
+G_backward
+after_G
+{"status": "PASS", "output": "/tmp/gpat_m6d4e_clean_requalification/process_1.json"}
+test_binding_and_identity (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_binding_and_identity) ... ok
+test_canonical_geometry (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_canonical_geometry) ... ok
+test_constant_preserved (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_constant_preserved) ... ok
+test_deterministic_and_channel_independent (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_deterministic_and_channel_independent) ... ok
+test_disjoint_windows_and_no_padding (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_disjoint_windows_and_no_padding) ... ok
+test_exact_pooling_parameters (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_exact_pooling_parameters) ... ok
+test_explicit_numeric_mean_without_rounding (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_explicit_numeric_mean_without_rounding) ... ok
+test_no_fallback_or_extra_parameters (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_no_fallback_or_extra_parameters) ... ok
+test_only_blur_resolution_and_identity (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_only_blur_resolution_and_identity) ... ok
+test_original_snapshot_unchanged (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_original_snapshot_unchanged) ... ok
+test_original_yaml_unchanged (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_original_yaml_unchanged) ... ok
+test_other_loss_values_preserved (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_other_loss_values_preserved) ... ok
+test_symmetric_loss_branch_contract (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_symmetric_loss_branch_contract) ... ok
+test_a5_bound_to_exact_base_and_document (tests.test_m6c2b2_pcgan.TestPCGAN.test_a5_bound_to_exact_base_and_document) ... ok
+test_all_scientific_overrides_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_all_scientific_overrides_rejected) ... ok
+test_bad_seed_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_bad_seed_rejected) ... ok
+test_changed_overlay_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_changed_overlay_rejected) ... ok
+test_common_learned_checkpoint_metadata_support (tests.test_m6c2b2_pcgan.TestPCGAN.test_common_learned_checkpoint_metadata_support) ... ok
+test_config_hash_and_snapshot (tests.test_m6c2b2_pcgan.TestPCGAN.test_config_hash_and_snapshot) ... ok
+test_exact_loss_terms_and_unit_weights (tests.test_m6c2b2_pcgan.TestPCGAN.test_exact_loss_terms_and_unit_weights) ... ok
+test_missing_overlay_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_missing_overlay_rejected) ... ok
+test_no_execution_in_plan (tests.test_m6c2b2_pcgan.TestPCGAN.test_no_execution_in_plan) ... ok
+test_no_split_selection (tests.test_m6c2b2_pcgan.TestPCGAN.test_no_split_selection) ... ok
+test_reporting_fidelity (tests.test_m6c2b2_pcgan.TestPCGAN.test_reporting_fidelity) ... ok
+test_required_source_missing_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_required_source_missing_rejected) ... ok
+test_source_byte_change_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_byte_change_rejected) ... ok
+test_source_checkout_missing_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_checkout_missing_rejected) ... ok
+test_source_pin_and_repository (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_pin_and_repository) ... ok
+test_terminal_event_and_rejections (tests.test_m6c2b2_pcgan.TestPCGAN.test_terminal_event_and_rejections) ... ok
+test_terminal_policy (tests.test_m6c2b2_pcgan.TestPCGAN.test_terminal_policy) ... ok
+test_three_seed_plans (tests.test_m6c2b2_pcgan.TestPCGAN.test_three_seed_plans) ... ok
+test_training_budget_and_optimizer (tests.test_m6c2b2_pcgan.TestPCGAN.test_training_budget_and_optimizer) ... ok
+test_training_supervision_firewall (tests.test_m6c2b2_pcgan.TestPCGAN.test_training_supervision_firewall) ... ok
+test_wrong_method_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_method_rejected) ... ok
+test_wrong_repository_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_repository_rejected) ... ok
+test_wrong_source_commit_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_source_commit_rejected) ... ok
+test_a5_blur_exact_mapping (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_a5_blur_exact_mapping) ... ok
+test_canonical_spatial_and_output_shape (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_canonical_spatial_and_output_shape) ... ok
+test_invalid_blur_shape_rejected_before_pooling (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_invalid_blur_shape_rejected_before_pooling) ... ok
+test_pinned_defaults_have_provenance (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_pinned_defaults_have_provenance) ... ok
+test_real_torch_pooling_and_gradients (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_real_torch_pooling_and_gradients) ... skipped 'PyTorch unavailable: real CPU avg_pool2d/autograd execution requires torch; static dispatch verified separately'
+test_stylegan2_evidence_and_no_adain_substitution (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_stylegan2_evidence_and_no_adain_substitution) ... ok
+test_two_branch_dispatch_without_detach_or_fallback (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_two_branch_dispatch_without_detach_or_fallback) ... ok
+test_a5_real_torch (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_a5_real_torch) ... ok
+test_all_forward_and_backward_finite (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_all_forward_and_backward_finite) ... ok
+test_blur_gradient_continuity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_blur_gradient_continuity) ... ok
+test_compatibility_patch_closure (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_compatibility_patch_closure) ... ok
+test_custom_ops_real_cuda (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_custom_ops_real_cuda) ... ok
+test_discriminator_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_discriminator_shapes) ... ok
+test_encoder_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_encoder_construction) ... ok
+test_environment_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_environment_identity) ... ok
+test_firewall_rejects_data_and_weights_before_io (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_firewall_rejects_data_and_weights_before_io) ... ok
+test_fp32_controls (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_fp32_controls) ... ok
+test_generator_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_generator_construction) ... ok
+test_image_D_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_image_D_construction) ... ok
+test_measured_encoder_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_measured_encoder_shapes) ... ok
+test_no_benchmark_access (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_benchmark_access) ... ok
+test_no_optimizer_or_parameter_update (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_optimizer_or_parameter_update) ... ok
+test_no_pretrained_checkpoint_or_bank (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_pretrained_checkpoint_or_bank) ... ok
+test_patch_D_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_patch_D_construction) ... ok
+test_pinned_patch_extraction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_pinned_patch_extraction) ... ok
+test_repeatability_structural_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_repeatability_structural_identity) ... ok
+test_rgb_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_rgb_shapes) ... ok
+test_scope_and_status (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_scope_and_status) ... ok
+test_source_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_source_identity) ... ok
+test_archive_hash_corruption_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_archive_hash_corruption_rejected) ... ok
+test_complete_stop_evidence (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_complete_stop_evidence) ... ok
+test_data_paths_rejected_before_open (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_data_paths_rejected_before_open) ... ok
+test_fabricated_loss_measurement_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_fabricated_loss_measurement_rejected) ... ok
+test_fabricated_optimizer_execution_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_fabricated_optimizer_execution_rejected) ... ok
+test_false_qualification_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_false_qualification_rejected) ... ok
+test_incomplete_phase_a_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_incomplete_phase_a_rejected) ... ok
+test_index_only_opens_explicit_new_artifacts (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_index_only_opens_explicit_new_artifacts) ... ok
+test_missing_scientific_blocker_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_missing_scientific_blocker_rejected) ... ok
+test_process_records_explicitly_not_run (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_process_records_explicitly_not_run) ... ok
+test_committed_overlay_binding (tests.test_m6d4d_e05_training.TestBinding.test_committed_overlay_binding) ... ok
+test_implementation_has_no_data_checkpoint_or_swap_api (tests.test_m6d4d_e05_training.TestBinding.test_implementation_has_no_data_checkpoint_or_swap_api) ... ok
+test_no_extra_regularizers (tests.test_m6d4d_e05_training.TestBinding.test_no_extra_regularizers) ... ok
+test_overlay_mutation_rejected (tests.test_m6d4d_e05_training.TestBinding.test_overlay_mutation_rejected) ... ok
+test_terminal_policy_and_test_forbidden (tests.test_m6d4d_e05_training.TestBinding.test_terminal_policy_and_test_forbidden) ... ok
+test_D_patch_positive_and_fake_formula (tests.test_m6d4d_e05_training.TestLosses.test_D_patch_positive_and_fake_formula) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_D_patch_three_draws_and_fake_detach (tests.test_m6d4d_e05_training.TestLosses.test_D_patch_three_draws_and_fake_detach) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_cycle_order_recomputation_isolation_and_counter_with_step_spies (tests.test_m6d4d_e05_training.TestLosses.test_cycle_order_recomputation_isolation_and_counter_with_step_spies) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_duplicate_and_overlap_rejection (tests.test_m6d4d_e05_training.TestLosses.test_duplicate_and_overlap_rejection) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_exact_Adam_configuration_without_step (tests.test_m6d4d_e05_training.TestLosses.test_exact_Adam_configuration_without_step) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_exact_a5_blur_and_connectivity (tests.test_m6d4d_e05_training.TestLosses.test_exact_a5_blur_and_connectivity) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_explicit_batch_one_and_distinct_pair_rejections (tests.test_m6d4d_e05_training.TestLosses.test_explicit_batch_one_and_distinct_pair_rejections) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_failed_G_does_not_increment_and_cannot_retry_partial_cycle (tests.test_m6d4d_e05_training.TestLosses.test_failed_G_does_not_increment_and_cannot_retry_partial_cycle) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_image_D_averaging_weights_and_external_total (tests.test_m6d4d_e05_training.TestLosses.test_image_D_averaging_weights_and_external_total) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_patch_active_interface_and_independent_calls (tests.test_m6d4d_e05_training.TestLosses.test_patch_active_interface_and_independent_calls) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_raw_logit_softplus (tests.test_m6d4d_e05_training.TestLosses.test_raw_logit_softplus) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_source_only_reconstruction (tests.test_m6d4d_e05_training.TestLosses.test_source_only_reconstruction) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_terminal_counter_prevents_extra_application (tests.test_m6d4d_e05_training.TestLosses.test_terminal_counter_prevents_extra_application) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_unit_weights_and_external_G_total (tests.test_m6d4d_e05_training.TestLosses.test_unit_weights_and_external_G_total) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_unsquared_per_sample_norm_no_normalization (tests.test_m6d4d_e05_training.TestLosses.test_unsquared_per_sample_norm_no_normalization) ... skipped 'Torch numerical tests run in unchanged GPU environment'
+test_D_fake_gradient_leak_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_D_fake_gradient_leak_rejected) ... ok
+test_adam_step_drift_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_adam_step_drift_rejected) ... ok
+test_checkpoint_write_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_checkpoint_write_rejected) ... ok
+test_data_paths_rejected_before_open (tests.test_m6d4d_e05_training.TestPreflightRejections.test_data_paths_rejected_before_open) ... ok
+test_disconnected_G_adversarial_path_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_disconnected_G_adversarial_path_rejected) ... ok
+test_environment_mutation_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_environment_mutation_rejected) ... ok
+test_extra_optimizer_application_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_extra_optimizer_application_rejected) ... ok
+test_group_alias_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_group_alias_rejected) ... ok
+test_loss_weight_drift_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_loss_weight_drift_rejected) ... ok
+test_premature_counter_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_premature_counter_rejected) ... ok
+test_D_G_order_counter_and_exact_applications (tests.test_m6d4d_e05_training.TestRetainedQualification.test_D_G_order_counter_and_exact_applications) ... ok
+test_both_processes_pass (tests.test_m6d4d_e05_training.TestRetainedQualification.test_both_processes_pass) ... ok
+test_connectivity (tests.test_m6d4d_e05_training.TestRetainedQualification.test_connectivity) ... ok
+test_environment_build_and_data_firewall (tests.test_m6d4d_e05_training.TestRetainedQualification.test_environment_build_and_data_firewall) ... ok
+test_finite_owned_adam_states_and_gradients (tests.test_m6d4d_e05_training.TestRetainedQualification.test_finite_owned_adam_states_and_gradients) ... ok
+test_isolation_and_recomputation (tests.test_m6d4d_e05_training.TestRetainedQualification.test_isolation_and_recomputation) ... ok
+
+----------------------------------------------------------------------
+Ran 111 tests in 2.576s
+
+OK (skipped=16)
+M6D4E_FOCUSED_TEST_RESULT {"host": "laptop", "total": 111, "passed": 95, "skipped": 16, "failed": 0, "firewall": {"denied": [], "events": {"open": 1287, "os.listdir": 53, "os.scandir": 0}}, "real_optimizer_applications": 0}
+Loading custom kernel...
+G connectivity: direct complete five-loss graph
+Probe L_rec
+Probe L_recblur
+Probe L_advrec
+Probe L_advmix
+Probe L_pat
+D connectivity: direct complete detached objective
+Probe L_D_real
+Probe L_D_rec
+Probe L_D_mix
+Probe L_D_patch_real
+Probe L_D_patch_fake
+before_D
+D_forward
+D_backward
+after_D
+before_G
+G_forward
+G_backward
+after_G
+{"status": "PASS", "output": "/tmp/gpat_m6d4e_clean_requalification/process_2.json"}
+test_binding_and_identity (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_binding_and_identity) ... ok
+test_canonical_geometry (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_canonical_geometry) ... ok
+test_constant_preserved (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_constant_preserved) ... ok
+test_deterministic_and_channel_independent (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_deterministic_and_channel_independent) ... ok
+test_disjoint_windows_and_no_padding (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_disjoint_windows_and_no_padding) ... ok
+test_exact_pooling_parameters (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_exact_pooling_parameters) ... ok
+test_explicit_numeric_mean_without_rounding (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_explicit_numeric_mean_without_rounding) ... ok
+test_no_fallback_or_extra_parameters (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_no_fallback_or_extra_parameters) ... ok
+test_only_blur_resolution_and_identity (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_only_blur_resolution_and_identity) ... ok
+test_original_snapshot_unchanged (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_original_snapshot_unchanged) ... ok
+test_original_yaml_unchanged (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_original_yaml_unchanged) ... ok
+test_other_loss_values_preserved (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_other_loss_values_preserved) ... ok
+test_symmetric_loss_branch_contract (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_symmetric_loss_branch_contract) ... ok
+test_a5_bound_to_exact_base_and_document (tests.test_m6c2b2_pcgan.TestPCGAN.test_a5_bound_to_exact_base_and_document) ... ok
+test_all_scientific_overrides_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_all_scientific_overrides_rejected) ... ok
+test_bad_seed_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_bad_seed_rejected) ... ok
+test_changed_overlay_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_changed_overlay_rejected) ... ok
+test_common_learned_checkpoint_metadata_support (tests.test_m6c2b2_pcgan.TestPCGAN.test_common_learned_checkpoint_metadata_support) ... ok
+test_config_hash_and_snapshot (tests.test_m6c2b2_pcgan.TestPCGAN.test_config_hash_and_snapshot) ... ok
+test_exact_loss_terms_and_unit_weights (tests.test_m6c2b2_pcgan.TestPCGAN.test_exact_loss_terms_and_unit_weights) ... ok
+test_missing_overlay_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_missing_overlay_rejected) ... ok
+test_no_execution_in_plan (tests.test_m6c2b2_pcgan.TestPCGAN.test_no_execution_in_plan) ... ok
+test_no_split_selection (tests.test_m6c2b2_pcgan.TestPCGAN.test_no_split_selection) ... ok
+test_reporting_fidelity (tests.test_m6c2b2_pcgan.TestPCGAN.test_reporting_fidelity) ... ok
+test_required_source_missing_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_required_source_missing_rejected) ... ok
+test_source_byte_change_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_byte_change_rejected) ... ok
+test_source_checkout_missing_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_checkout_missing_rejected) ... ok
+test_source_pin_and_repository (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_pin_and_repository) ... ok
+test_terminal_event_and_rejections (tests.test_m6c2b2_pcgan.TestPCGAN.test_terminal_event_and_rejections) ... ok
+test_terminal_policy (tests.test_m6c2b2_pcgan.TestPCGAN.test_terminal_policy) ... ok
+test_three_seed_plans (tests.test_m6c2b2_pcgan.TestPCGAN.test_three_seed_plans) ... ok
+test_training_budget_and_optimizer (tests.test_m6c2b2_pcgan.TestPCGAN.test_training_budget_and_optimizer) ... ok
+test_training_supervision_firewall (tests.test_m6c2b2_pcgan.TestPCGAN.test_training_supervision_firewall) ... ok
+test_wrong_method_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_method_rejected) ... ok
+test_wrong_repository_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_repository_rejected) ... ok
+test_wrong_source_commit_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_source_commit_rejected) ... ok
+test_a5_blur_exact_mapping (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_a5_blur_exact_mapping) ... ok
+test_canonical_spatial_and_output_shape (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_canonical_spatial_and_output_shape) ... ok
+test_invalid_blur_shape_rejected_before_pooling (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_invalid_blur_shape_rejected_before_pooling) ... ok
+test_pinned_defaults_have_provenance (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_pinned_defaults_have_provenance) ... ok
+test_real_torch_pooling_and_gradients (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_real_torch_pooling_and_gradients) ... ok
+test_stylegan2_evidence_and_no_adain_substitution (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_stylegan2_evidence_and_no_adain_substitution) ... ok
+test_two_branch_dispatch_without_detach_or_fallback (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_two_branch_dispatch_without_detach_or_fallback) ... ok
+test_a5_real_torch (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_a5_real_torch) ... ok
+test_all_forward_and_backward_finite (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_all_forward_and_backward_finite) ... ok
+test_blur_gradient_continuity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_blur_gradient_continuity) ... ok
+test_compatibility_patch_closure (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_compatibility_patch_closure) ... ok
+test_custom_ops_real_cuda (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_custom_ops_real_cuda) ... ok
+test_discriminator_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_discriminator_shapes) ... ok
+test_encoder_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_encoder_construction) ... ok
+test_environment_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_environment_identity) ... ok
+test_firewall_rejects_data_and_weights_before_io (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_firewall_rejects_data_and_weights_before_io) ... ok
+test_fp32_controls (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_fp32_controls) ... ok
+test_generator_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_generator_construction) ... ok
+test_image_D_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_image_D_construction) ... ok
+test_measured_encoder_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_measured_encoder_shapes) ... ok
+test_no_benchmark_access (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_benchmark_access) ... ok
+test_no_optimizer_or_parameter_update (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_optimizer_or_parameter_update) ... ok
+test_no_pretrained_checkpoint_or_bank (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_pretrained_checkpoint_or_bank) ... ok
+test_patch_D_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_patch_D_construction) ... ok
+test_pinned_patch_extraction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_pinned_patch_extraction) ... ok
+test_repeatability_structural_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_repeatability_structural_identity) ... ok
+test_rgb_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_rgb_shapes) ... ok
+test_scope_and_status (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_scope_and_status) ... ok
+test_source_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_source_identity) ... ok
+test_archive_hash_corruption_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_archive_hash_corruption_rejected) ... ok
+test_complete_stop_evidence (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_complete_stop_evidence) ... ok
+test_data_paths_rejected_before_open (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_data_paths_rejected_before_open) ... ok
+test_fabricated_loss_measurement_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_fabricated_loss_measurement_rejected) ... ok
+test_fabricated_optimizer_execution_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_fabricated_optimizer_execution_rejected) ... ok
+test_false_qualification_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_false_qualification_rejected) ... ok
+test_incomplete_phase_a_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_incomplete_phase_a_rejected) ... ok
+test_index_only_opens_explicit_new_artifacts (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_index_only_opens_explicit_new_artifacts) ... ok
+test_missing_scientific_blocker_rejected (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_missing_scientific_blocker_rejected) ... ok
+test_process_records_explicitly_not_run (tests.test_m6d4b_e05_stop.TestM6D4bStop.test_process_records_explicitly_not_run) ... ok
+test_committed_overlay_binding (tests.test_m6d4d_e05_training.TestBinding.test_committed_overlay_binding) ... ok
+test_implementation_has_no_data_checkpoint_or_swap_api (tests.test_m6d4d_e05_training.TestBinding.test_implementation_has_no_data_checkpoint_or_swap_api) ... ok
+test_no_extra_regularizers (tests.test_m6d4d_e05_training.TestBinding.test_no_extra_regularizers) ... ok
+test_overlay_mutation_rejected (tests.test_m6d4d_e05_training.TestBinding.test_overlay_mutation_rejected) ... ok
+test_terminal_policy_and_test_forbidden (tests.test_m6d4d_e05_training.TestBinding.test_terminal_policy_and_test_forbidden) ... ok
+test_D_patch_positive_and_fake_formula (tests.test_m6d4d_e05_training.TestLosses.test_D_patch_positive_and_fake_formula) ... ok
+test_D_patch_three_draws_and_fake_detach (tests.test_m6d4d_e05_training.TestLosses.test_D_patch_three_draws_and_fake_detach) ... ok
+test_cycle_order_recomputation_isolation_and_counter_with_step_spies (tests.test_m6d4d_e05_training.TestLosses.test_cycle_order_recomputation_isolation_and_counter_with_step_spies) ... ok
+test_duplicate_and_overlap_rejection (tests.test_m6d4d_e05_training.TestLosses.test_duplicate_and_overlap_rejection) ... ok
+test_exact_Adam_configuration_without_step (tests.test_m6d4d_e05_training.TestLosses.test_exact_Adam_configuration_without_step) ... ok
+test_exact_a5_blur_and_connectivity (tests.test_m6d4d_e05_training.TestLosses.test_exact_a5_blur_and_connectivity) ... ok
+test_explicit_batch_one_and_distinct_pair_rejections (tests.test_m6d4d_e05_training.TestLosses.test_explicit_batch_one_and_distinct_pair_rejections) ... ok
+test_failed_G_does_not_increment_and_cannot_retry_partial_cycle (tests.test_m6d4d_e05_training.TestLosses.test_failed_G_does_not_increment_and_cannot_retry_partial_cycle) ... ok
+test_image_D_averaging_weights_and_external_total (tests.test_m6d4d_e05_training.TestLosses.test_image_D_averaging_weights_and_external_total) ... ok
+test_patch_active_interface_and_independent_calls (tests.test_m6d4d_e05_training.TestLosses.test_patch_active_interface_and_independent_calls) ... ok
+test_raw_logit_softplus (tests.test_m6d4d_e05_training.TestLosses.test_raw_logit_softplus) ... ok
+test_source_only_reconstruction (tests.test_m6d4d_e05_training.TestLosses.test_source_only_reconstruction) ... ok
+test_terminal_counter_prevents_extra_application (tests.test_m6d4d_e05_training.TestLosses.test_terminal_counter_prevents_extra_application) ... ok
+test_unit_weights_and_external_G_total (tests.test_m6d4d_e05_training.TestLosses.test_unit_weights_and_external_G_total) ... ok
+test_unsquared_per_sample_norm_no_normalization (tests.test_m6d4d_e05_training.TestLosses.test_unsquared_per_sample_norm_no_normalization) ... ok
+test_D_fake_gradient_leak_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_D_fake_gradient_leak_rejected) ... ok
+test_adam_step_drift_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_adam_step_drift_rejected) ... ok
+test_checkpoint_write_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_checkpoint_write_rejected) ... ok
+test_data_paths_rejected_before_open (tests.test_m6d4d_e05_training.TestPreflightRejections.test_data_paths_rejected_before_open) ... ok
+test_disconnected_G_adversarial_path_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_disconnected_G_adversarial_path_rejected) ... ok
+test_environment_mutation_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_environment_mutation_rejected) ... ok
+test_extra_optimizer_application_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_extra_optimizer_application_rejected) ... ok
+test_group_alias_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_group_alias_rejected) ... ok
+test_loss_weight_drift_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_loss_weight_drift_rejected) ... ok
+test_premature_counter_rejected (tests.test_m6d4d_e05_training.TestPreflightRejections.test_premature_counter_rejected) ... ok
+test_D_G_order_counter_and_exact_applications (tests.test_m6d4d_e05_training.TestRetainedQualification.test_D_G_order_counter_and_exact_applications) ... ok
+test_both_processes_pass (tests.test_m6d4d_e05_training.TestRetainedQualification.test_both_processes_pass) ... ok
+test_connectivity (tests.test_m6d4d_e05_training.TestRetainedQualification.test_connectivity) ... ok
+test_environment_build_and_data_firewall (tests.test_m6d4d_e05_training.TestRetainedQualification.test_environment_build_and_data_firewall) ... ok
+test_finite_owned_adam_states_and_gradients (tests.test_m6d4d_e05_training.TestRetainedQualification.test_finite_owned_adam_states_and_gradients) ... ok
+test_isolation_and_recomputation (tests.test_m6d4d_e05_training.TestRetainedQualification.test_isolation_and_recomputation) ... ok
+
+----------------------------------------------------------------------
+Ran 111 tests in 2.755s
+
+M6D4E_FOCUSED_TEST_RESULT {"host": "gpu", "total": 111, "passed": 111, "skipped": 0, "failed": 0, "firewall": {"denied": [], "events": {"open": 3668, "os.listdir": 320, "os.scandir": 306}}, "real_optimizer_applications": 0}
+OK
+M6D4E_GPU_FINAL {"head": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72", "origin": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72", "divergence": [0, 0], "clean": true}
+M6D4E_GPU_PROCESS_SHA {"process": 1, "sha256": "957dea53cc0e8287698798f730cc3cc49061ed6433c7799f018de570884c9baa", "size_bytes": 936703}
+M6D4E_GPU_PROCESS_SHA {"process": 2, "sha256": "782d6828921ba2808b85854a54d7f80a3fa7024df5402707a2344c0e0071957b", "size_bytes": 936701}
+
+M6D4E_EXACT_QUALIFICATION_COMMANDS
+[
+  "env PATH=/home/student20261/miniconda3/envs/gpat-m6-e05/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin CUDA_HOME=/home/student20261/miniconda3/envs/gpat-m6-e05 TORCH_EXTENSIONS_DIR=/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions TORCH_CUDA_ARCH_LIST=8.6 MAX_JOBS=2 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60401 python -u -B -m methods.pcgan.training_qualification --build-root /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan --output /tmp/gpat_m6d4e_clean_requalification/process_1.json --process-number 1",
+  "env PATH=/home/student20261/miniconda3/envs/gpat-m6-e05/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin CUDA_HOME=/home/student20261/miniconda3/envs/gpat-m6-e05 TORCH_EXTENSIONS_DIR=/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions TORCH_CUDA_ARCH_LIST=8.6 MAX_JOBS=2 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60401 python -u -B -m methods.pcgan.training_qualification --build-root /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan --output /tmp/gpat_m6d4e_clean_requalification/process_2.json --process-number 2"
+]
+M6D4E_RETAINED_ANALYSIS
+{
+  "process_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "optimizer_applications": {
+    "D": 2,
+    "G": 2,
+    "total": 4
+  },
+  "all_losses_exact_to_M6D4d": true,
+  "tensor_hash_differences": 445,
+  "tensor_records": 1662,
+  "maximum_summary_absolute_differences": {
+    "min": 9.5367431640625e-07,
+    "max": 9.5367431640625e-07,
+    "mean": 4.76837158203125e-07,
+    "l2": 9.815629660181457e-07
+  },
+  "process_firewalls": {
+    "1": {
+      "observed": {
+        "denied": [],
+        "events": {
+          "open": 3760,
+          "os.listdir": 412,
+          "os.scandir": 306
+        }
+      },
+      "benchmark_access_counts": {
+        "benchmark_data": 0,
+        "TRAIN_samples": 0,
+        "VAL_samples": 0,
+        "TEST_samples": 0,
+        "pair_manifest_samples": 0,
+        "denied_actual_benchmark_operations": 0
+      },
+      "counter_basis": "Observed process PASS and unchanged committed synthetic-only harness under ReadOnlyRuntimeFirewall; benchmark counts are derived gate outcomes, not separate native-I/O instrumentation."
+    },
+    "2": {
+      "observed": {
+        "denied": [],
+        "events": {
+          "open": 3760,
+          "os.listdir": 412,
+          "os.scandir": 306
+        }
+      },
+      "benchmark_access_counts": {
+        "benchmark_data": 0,
+        "TRAIN_samples": 0,
+        "VAL_samples": 0,
+        "TEST_samples": 0,
+        "pair_manifest_samples": 0,
+        "denied_actual_benchmark_operations": 0
+      },
+      "counter_basis": "Observed process PASS and unchanged committed synthetic-only harness under ReadOnlyRuntimeFirewall; benchmark counts are derived gate outcomes, not separate native-I/O instrumentation."
+    }
+  },
+  "scope_operation_audit": {
+    "recursive_filesystem_search_performed": false,
+    "recursive_home_search": false,
+    "recursive_media_search": false,
+    "recursive_runtime_search": false,
+    "generic_agents_discovery": false,
+    "benchmark_filename_enumeration": false,
+    "benchmark_data_access": false,
+    "recursive_search_count": 0,
+    "operation_classes": [
+      "repository Git metadata operations",
+      "explicit known-path reads",
+      "explicit environment/build identity reads",
+      "explicit GPU repo commands",
+      "synthetic model execution"
+    ],
+    "instruction_file_check": {
+      "path": "/home/cong/GPAT_TransferBench/AGENTS.md",
+      "exists": false,
+      "parent_search": false
+    },
+    "operations_detail": [
+      "Exact test -f on repository AGENTS.md; absent, no other instruction discovery.",
+      "Repository Git status/rev-parse/rev-list/show/diff and merge-base; explicit source-repository Git metadata inside third_party/source_cache/swapping_autoencoder.",
+      "Exact-path cat/read_bytes/read_text/SHA256 and rg -n over explicitly named code/test files; no repository-wide content search.",
+      "GPU prescribed fetch and fast-forward merge after clean status and one-commit ancestry proof; no cleanup.",
+      "Existing environment executable/package identities, compiler/nvcc/driver queries, and known source/build-manifest paths; no package install, rebuild or source writes.",
+      "Python imports and installed-distribution metadata inspection use directory reads counted by the firewall; no shell filesystem traversal or benchmark data discovery.",
+      "Two fresh committed synthetic qualification invocations; named 111-test modules, no test discovery; tests use temporary synthetic fixture files.",
+      "Exact temporary evidence mkdir, writes and SSH cat transfers; local /tmp orchestration JSON/script; six new repository artifacts and ledger/index metadata writes."
+    ],
+    "evidence_limit": "Session-scope assertions derive from observed commands and reviewed launchers, separately from retained Python audit-hook counters. Hooks are not an OS-wide/native/subprocess file-I/O trace. Directory-event counts alone do not establish recursive searches. No stronger universal I/O claim is made."
+  }
+}
