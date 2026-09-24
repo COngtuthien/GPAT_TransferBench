@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "milestone": "M6D4c",
+  "status": "OWNER_APPROVED_ADDITIVE_CONTROLLED_RECONSTRUCTION",
+  "authority_commit": "5adb76285b9b9c4dc25bb4a33f3be7d8575a8abc",
+  "method_id": "E05",
+  "reporting_label": "PCGAN (controlled architecture resolution)",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "scope": "CONTRACT_ONLY_NO_RUNNER_IMPLEMENTATION_OR_EXECUTION",
+  "immutable_inputs_sha256": {
+    "configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "configs/amendments/e05_a5_blur_operator_resolution.yaml": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1",
+    "outputs/audit/M6D4B_E05_TRAINING_RUNNER_QUALIFICATION.json": "d35247075e38b3a4d1cc2156faa030bb04058bd1d8b906a242d4e7a88b25519f",
+    "outputs/audit/M6D4B_E05_TRAINING_RUNNER_QUALIFICATION.md": "37589973b502e71743b665828c88804b43fcd325ca6a8e82e3f04dcf87b81bf6",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A5_E05_Blur_Operator_Resolution.md": "05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd",
+    "outputs/audit/M6D4A_E05_RUNTIME_ARCHITECTURE_QUALIFICATION.md": "f57d4e99c42a633b02ff41d4af0b017c0970260242743bc8752798731411bbc6",
+    "methods/pcgan/source_traceability.md": "61645843f65a51e7858787cfbc7cf30f1ff75763c8ded6da41d96410d4c5c1bd"
+  },
+  "historical_stop_preserved": true,
+  "forbidden_decision_attribution": [
+    "PAPER",
+    "OFFICIAL_PCGAN",
+    "AUTHOR_SPECIFIED",
+    "native PCGAN",
+    "faithful PCGAN",
+    "official reproduction"
+  ],
+  "predecessor": {
+    "repository": "taesungp/swapping-autoencoder-pytorch",
+    "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+    "role": "nearest_executable_predecessor_not_official_PCGAN",
+    "derived_decision_provenance": "CONTROLLED_RECONSTRUCTION_PREDECESSOR_DERIVED"
+  },
+  "pair": {
+    "batch_size": 1,
+    "distinct_source_target": true,
+    "input_dtype": "FP32",
+    "input_shape_each": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "encode_source": "(z_pat_src,z_con_src)=E(x_src)",
+    "encode_target": "(z_pat_tgt,z_con_tgt)=E(x_tgt)",
+    "r_src": "G(z_pat_src,z_con_src)",
+    "m": "G(z_pat_src,z_con_tgt)",
+    "spatial_shape": [
+      1,
+      8,
+      128,
+      128
+    ],
+    "global_shape": [
+      1,
+      2048
+    ],
+    "even_minibatch_swap": false,
+    "same_pair_within_iteration": true
+  },
+  "distance": {
+    "formula": "sqrt(sum_C,H,W((a[n]-b[n])**2))",
+    "name": "unsquared_Euclidean_L2",
+    "outer_reduction": "arithmetic_mean_over_n",
+    "pixel_count_normalization": false,
+    "squared": false,
+    "provenance": "PAPER_EXISTING_FROZEN_EVIDENCE",
+    "forbidden_substitutions": [
+      "MSE",
+      "RMS",
+      "L1",
+      "whole_batch_norm"
+    ]
+  },
+  "generator": {
+    "L_rec": {
+      "formula": "mean_n(norm2(x_src[n]-r_src[n]))",
+      "samples": [
+        "x_src"
+      ],
+      "target_reconstruction_included": false,
+      "batch_one": "one_unsquared_Euclidean_norm_over_source_image",
+      "estimator_provenance": "CONTROLLED_RECONSTRUCTION_OWNER_RESOLUTION",
+      "rationale": "Eq.2 is generic; Eq.4 and L_advrec identify source reconstruction. Source-only is the minimal explicit-pair estimator without an invented target contribution."
+    },
+    "L_recblur": {
+      "formula": "mean_n(norm2(B(x_tgt[n])-B(m[n])))",
+      "detach": false,
+      "provenance": "M6D4B_RESOLVED_SEMANTICS_PRESERVED",
+      "blur": {
+        "operator": "avg_pool2d",
+        "kernel_size": 2,
+        "stride": 2,
+        "padding": 0,
+        "ceil_mode": false,
+        "count_include_pad": false,
+        "application": "independently_to_target_and_mixed",
+        "input_resolution": 256,
+        "output_resolution": 128,
+        "learnable_parameters": 0,
+        "fallbacks": [],
+        "provenance": "BENCHMARK_DEFINED_CONTROLLED_RECONSTRUCTION_A5"
+      }
+    },
+    "L_advrec": {
+      "formula": "mean(softplus(-D(r_src)))",
+      "provenance": "M6D4B_RESOLVED_SEMANTICS_PRESERVED"
+    },
+    "L_advmix": {
+      "formula": "mean(softplus(-D(m)))",
+      "provenance": "M6D4B_RESOLVED_SEMANTICS_PRESERVED"
+    },
+    "L_pat": {
+      "reference_crops": "independent_random_crops(x_src)",
+      "candidate_crops": "independent_random_crops(m)",
+      "reference_features": "extract_features(crops_ref,aggregate=True)",
+      "candidate_features": "extract_features(crops_mixed,aggregate=False)",
+      "logits": "discriminate_features(reference_features,mixed_features)",
+      "formula": "mean(softplus(-PatchD(reference_features,mixed_features)))",
+      "detach": false,
+      "provenance": "M6D4B_RESOLVED_SEMANTICS_PRESERVED"
+    },
+    "logits": "raw",
+    "mean_axes": "batch_and_all_scalar_scores",
+    "image_logit_shape": [
+      1,
+      1
+    ],
+    "patch_logit_shape": [
+      8,
+      1
+    ],
+    "weights": {
+      "L_rec": 1,
+      "L_recblur": 1,
+      "L_advrec": 1,
+      "L_advmix": 1,
+      "L_pat": 1
+    },
+    "total": "L_rec + L_recblur + L_advrec + L_advmix + L_pat",
+    "alpha": 0.2,
+    "beta": 1e-06,
+    "alpha_beta_scope": "PMN_only_not_five_term_weights"
+  },
+  "discriminator": {
+    "logits": "raw",
+    "mean_axes": "batch_and_all_scalar_scores",
+    "image": {
+      "d_src": "D(x_src)",
+      "d_tgt": "D(x_tgt)",
+      "d_rec": "D(r_src.detach())",
+      "d_mix": "D(m.detach())",
+      "real_samples": [
+        "x_src",
+        "x_tgt"
+      ],
+      "real_sample_weights": [
+        0.5,
+        0.5
+      ],
+      "L_D_real": "0.5*(mean(softplus(-d_src))+mean(softplus(-d_tgt)))",
+      "L_D_rec": "mean(softplus(d_rec))",
+      "L_D_mix": "mean(softplus(d_mix))",
+      "weights": {
+        "L_D_real": 1.0,
+        "L_D_rec": 0.5,
+        "L_D_mix": 0.5
+      },
+      "L_D_image": "1.0*L_D_real + 0.5*L_D_rec + 0.5*L_D_mix",
+      "logistic_provenance": "CONTROLLED_RECONSTRUCTION_PREDECESSOR_DERIVED",
+      "weights_provenance": "CONTROLLED_RECONSTRUCTION_PREDECESSOR_DERIVED",
+      "symmetric_real_samples_provenance": "CONTROLLED_RECONSTRUCTION_OWNER_RESOLUTION",
+      "symmetric_real_samples_disclosure": "Both explicit real images contribute equally; this is an owner decision, not a PCGAN paper fact."
+    },
+    "patch": {
+      "crops_ref": "independent_random_crops(x_src)",
+      "crops_pos": "another_independent_random_crops(x_src)",
+      "crops_fake": "independent_random_crops(m.detach())",
+      "all_three_crop_draws_independent": true,
+      "ref_feat": "extract_features(crops_ref,aggregate=True)",
+      "pos_feat": "extract_features(crops_pos,aggregate=False)",
+      "fake_feat": "extract_features(crops_fake,aggregate=False)",
+      "p_real": "discriminate_features(ref_feat,pos_feat)",
+      "p_fake": "discriminate_features(ref_feat,fake_feat)",
+      "L_D_patch_real": "mean(softplus(-p_real))",
+      "L_D_patch_fake": "mean(softplus(p_fake))",
+      "weights": {
+        "L_D_patch_real": 1.0,
+        "L_D_patch_fake": 1.0
+      },
+      "L_D_patch": "1.0*L_D_patch_real + 1.0*L_D_patch_fake",
+      "interface_provenance": "A2_PINNED_EXECUTABLE_ARCHITECTURE_M6D4A_QUALIFIED",
+      "construction_and_weights_provenance": "CONTROLLED_RECONSTRUCTION_PREDECESSOR_DERIVED"
+    },
+    "L_D_total": "L_D_image + L_D_patch",
+    "combination_weights": {
+      "L_D_image": 1,
+      "L_D_patch": 1
+    },
+    "combination_provenance": "CONTROLLED_RECONSTRUCTION_OWNER_RESOLUTION",
+    "R1": false,
+    "patch_R1": false,
+    "lazy_R1_scaling": false,
+    "gradient_penalty": false,
+    "additional_patch_regularizer": false
+  },
+  "excluded_extra_losses": [
+    "VGG",
+    "perceptual",
+    "GPAT_identity",
+    "GPAT_landmark"
+  ],
+  "optimizers": {
+    "G": {
+      "parameters": [
+        "Encoder",
+        "Generator"
+      ],
+      "name": "Adam",
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "weight_decay": "NOT_INTRODUCED"
+    },
+    "D": {
+      "parameters": [
+        "ImageD",
+        "PatchD"
+      ],
+      "name": "Adam",
+      "lr": 1e-06,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "weight_decay": "NOT_INTRODUCED"
+    },
+    "overlap": false,
+    "lazy_R1_scaling": false,
+    "grouping_provenance": "M6D4B_SUPPORTED_GROUPING_PRESERVED"
+  },
+  "iteration": {
+    "unit": "complete_D_then_G_cycle",
+    "order": [
+      "D",
+      "G"
+    ],
+    "applications_per_iteration": {
+      "D": 1,
+      "G": 1,
+      "total": 2
+    },
+    "order_provenance": "CONTROLLED_RECONSTRUCTION_PREDECESSOR_DERIVED",
+    "grouping_provenance": "CONTROLLED_RECONSTRUCTION_OWNER_RESOLUTION",
+    "D_step": {
+      "fake_generation": "current_E_G_parameters_from_explicit_pair",
+      "r_src_D": "G(z_pat_src,z_con_src)",
+      "m_D": "G(z_pat_src,z_con_tgt)",
+      "detach_reconstruction": true,
+      "detach_mixed": true,
+      "objective": "L_D_total",
+      "optimizer_applications": 1,
+      "parameters_updated": [
+        "ImageD",
+        "PatchD"
+      ],
+      "E_G_update": false
+    },
+    "G_step": {
+      "after_D_step": true,
+      "recompute_encoder_and_generator_paths": true,
+      "r_src_G": "G(z_pat_src,z_con_src)",
+      "m_G": "G(z_pat_src,z_con_tgt)",
+      "reuse_pre_D_fake_tensors": false,
+      "same_explicit_pair": true,
+      "discriminators": "now_updated_parameters_frozen_for_parameter_updates",
+      "gradients_through_discriminators_to_images_and_E_G": true,
+      "objective": "L_rec + L_recblur + L_advrec + L_advmix + L_pat",
+      "optimizer_applications": 1,
+      "parameters_updated": [
+        "Encoder",
+        "Generator"
+      ],
+      "D_PatchD_update": false
+    },
+    "counter": {
+      "name": "benchmark_iteration",
+      "initial": 0,
+      "both_steps_share_current_t": true,
+      "increments_per_complete_cycle": 1,
+      "increment_when": "after_G_step_successfully_completes",
+      "increment_per_Adam_application": false,
+      "transition": "t -> t+1",
+      "terminal": 4000
+    },
+    "uninterrupted_scientific_run": {
+      "complete_cycles": 4000,
+      "D_applications": 4000,
+      "G_applications": 4000,
+      "count_provenance": "CONTROLLED_RECONSTRUCTION_OWNER_RESOLUTION"
+    },
+    "optimizer_state_convention_is_paper_fact": false
+  },
+  "stochasticity": {
+    "generator_noise_enabled": true,
+    "noise_draws": "fresh_standard_normal_per_pinned_architecture",
+    "noise_shape": "[B,1,H,W]",
+    "initial_trainable_noise_strength": 0,
+    "fix_noise": false,
+    "crop_operator": "pinned_util.apply_random_crop",
+    "crops_per_image": 8,
+    "crop_size": 128,
+    "scale": "independent_x_y_uniform_[1/8,1/4)",
+    "horizontal_sign": "random",
+    "offset": "(2*U-1)*(1-scale)",
+    "grid_sample_align_corners": false,
+    "grid_sample_mode": "bilinear",
+    "grid_sample_padding_mode": "zeros",
+    "reference_aggregation": "mean_over_eight_crops_then_expand_to_eight",
+    "candidate_aggregation": false,
+    "center_crop_substitution": false,
+    "independent_draws_where_specified": true,
+    "executed_in_M6D4c": false
+  },
+  "precision": {
+    "dtype": "FP32",
+    "TF32": false,
+    "AMP": false,
+    "autocast": false,
+    "cudnn_benchmark": false
+  },
+  "checkpoint": {
+    "rule": "BASELINE_FINAL_STATE_V1",
+    "terminal_benchmark_iteration": 4000,
+    "terminal_save_when": "after_4000_complete_cycles_if_required_later",
+    "extra_optimizer_applications": 0,
+    "selection_uses_VAL": false,
+    "selection_uses_TEST": false,
+    "best_seed": false,
+    "produced_in_M6D4c": false
+  },
+  "data_policy": {
+    "TEST_allowed": false,
+    "benchmark_data_access_in_M6D4c": false,
+    "experiment_seeds_unchanged": [
+      42,
+      1337,
+      2026
+    ]
+  },
+  "dispositions": [
+    {
+      "item": "A",
+      "topic": "L_rec",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "B",
+      "topic": "L_recblur",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "C",
+      "topic": "L_advrec",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "D",
+      "topic": "L_advmix",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "E",
+      "topic": "L_pat",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "F",
+      "topic": "discriminator",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "G",
+      "topic": "parameter ownership",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "H",
+      "topic": "update schedule",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "I",
+      "topic": "StyleGAN noise",
+      "status": "CONTRACT_RESOLVED"
+    },
+    {
+      "item": "J",
+      "topic": "batch-one explicit pair",
+      "status": "CONTRACT_RESOLVED"
+    }
+  ],
+  "disposition_scope": "NORMATIVE_CONTRACT_NOT_NUMERICAL_OR_RUNTIME_QUALIFICATION",
+  "final_status": [
+    "E05_ARCHITECTURE_RUNTIME_QUALIFIED",
+    "E05_TRAINING_RUNNER_CONTRACT_RESOLVED",
+    "E05_TRAINING_RUNNER_NOT_YET_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "milestone_execution": {
+    "runner_implemented": false,
+    "runtime_qualification": false,
+    "numerical_qualification": false,
+    "optimizer_instantiated": false,
+    "model_constructed": false,
+    "model_execution": false,
+    "torch_import": false,
+    "tensorflow_import": false,
+    "cuda_execution": false,
+    "environment_mutation": false,
+    "benchmark_training": false,
+    "benchmark_data_access": false,
+    "benchmark_image_filename_enumeration": false,
+    "benchmark_image_decode": false,
+    "manifest_sample_access": false,
+    "TRAIN_sample_access": false,
+    "VAL_sample_access": false,
+    "TEST_sample_access": false,
+    "scientific_checkpoint": false,
+    "synthetic_bank": false,
+    "commit": false,
+    "push": false,
+    "optimizer_applications": 0
+  }
+}
