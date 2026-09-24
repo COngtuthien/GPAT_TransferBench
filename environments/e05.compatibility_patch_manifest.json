@@ -1,0 +1,386 @@
+{
+  "source": {
+    "repository": "https://github.com/taesungp/swapping-autoencoder-pytorch",
+    "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+    "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+    "files_sha256": {
+      "experiments/ffhq1024_pretrained_launcher.py": "c2e2e3224d707b7adb920c2e89259a351d595b9e09fe876f3d17a115e50886d8",
+      "models/__init__.py": "b4f02244c30143f6d73df89d35bf4f25e5caba68d478732f570eddbf4467198d",
+      "models/base_model.py": "f7baecfff6d555488aaaf7df5e9c6d80a2170ef895dab4f4873d0111108cf1b7",
+      "models/networks/__init__.py": "bfd9a3b013d0fed1ac310fe22a112dc74bf086dcbae58b652a46b59680714be0",
+      "models/networks/base_network.py": "33c07e02f4aa8d07ced51e6966a425aa0c13857b685470571b5a14241645371f",
+      "models/networks/discriminator.py": "5389055129c709e93102c9275f30a20b1e708c23744343919d0a6da6edbd38e4",
+      "models/networks/encoder.py": "5a059500d7964969bc7adefe8ea60e12185f1747d95f0d16dc54d53c84400f58",
+      "models/networks/generator.py": "c8d31a71e5956e53d2dd44faadea7fce395d3589ddd5ab23bab95cd59102c705",
+      "models/networks/loss.py": "b4ee3ef8eb4aa6935feacf3d70a52d59e359891a58e27a3e3d8492c3d95b9447",
+      "models/networks/patch_discriminator.py": "a886122242d5c8d9a4878ee0f1f1684bac51c27c2e588c554c52a4ca92164e7d",
+      "models/networks/stylegan2_layers.py": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+      "models/networks/stylegan2_op/__init__.py": "d3bdebb6b1ea35ab8e7dd14af32919f11ae630ab9154d4c84f839397b98b2bf6",
+      "models/networks/stylegan2_op/fused_act.py": "bf00baa057078cd5fa4044dc86101ca95bc482d10ccaf544b89c4c0da8a2532a",
+      "models/networks/stylegan2_op/fused_bias_act.cpp": "a69d7233252bceaf18639d9fb9715a71cf0eb5eff11aa6c11c659e0850b155ea",
+      "models/networks/stylegan2_op/fused_bias_act_kernel.cu": "42c217064d68d91756cd0f92e19377c61824b4734b4659095b9282075e9113f4",
+      "models/networks/stylegan2_op/upfirdn2d.cpp": "a913696caa8630ca5030db24dfdc08391473bf2a2543216d883df3ede5cba923",
+      "models/networks/stylegan2_op/upfirdn2d.py": "228c5fb1ef64d08db2380a0e3c5af40dccbd757f634a759a07d33f1b586120ec",
+      "models/networks/stylegan2_op/upfirdn2d_kernel.cu": "bccda85f1ed59a965d982e212ad78b00d630aad5438216a242187a3aa842bf3e",
+      "models/swapping_autoencoder_model.py": "71df763244ea5b17c55d93384595c37dccb04386802f00a9d407a72e31b83e7f",
+      "optimizers/swapping_autoencoder_optimizer.py": "93732bd6dd7e2a9d4b59d006e697158889d5700f54707ef71959870b4733d644",
+      "options/__init__.py": "e1fcdbfafb69110303904ef43af6bbc88b4c83f7ca5bb199511ccde42e44ded9",
+      "util/__init__.py": "fef00d173578ede08f3f447aa3f8321a41c69f7826c7ebcd4cdc61752683e3f4",
+      "util/util.py": "1877a389417a0c6f746006da852d09b3109ecfed2b119d5dc692519aa848b3eb"
+    },
+    "verification": "PASS",
+    "code_files": {
+      "data/__init__.py": {
+        "sha256": "7d9f5b1d38a3d041eb00e7a97d6c080eeafa7d6db159b1c5a651096febb98571",
+        "git_blob": "8821c00ab81bc7093de0a86550a739a8b81f772f"
+      },
+      "data/base_dataset.py": {
+        "sha256": "16e795df4a6c1ee2799198aa8acf589b3fd59906c4a54acbb98bb63a27400b3d",
+        "git_blob": "93441f5c2cd9dbc6fb2a2074d0ef895ef70c0d06"
+      },
+      "data/cifar100_dataset.py": {
+        "sha256": "021d1289794cf186e87682b367584c1ab13ca84b117971f98ba78119eb4acd21",
+        "git_blob": "4554746b2f7aed7c3ec7162f13614346ec7da8a9"
+      },
+      "data/dataset_tools.py": {
+        "sha256": "d9bb114ddf426b8dcdc518fd9f0244e9ca0233eced1a5b9d563091d7202788f3",
+        "git_blob": "ee4060706825845397708bc8c36199225bf27f11"
+      },
+      "data/image_folder.py": {
+        "sha256": "43492e62da79caf54b8ac9795b1c6955637c09ed2b6214cda79442396026aed3",
+        "git_blob": "c76a08f871fefef6452fcd1ee72e507cf1f0990c"
+      },
+      "data/imagefolder_dataset.py": {
+        "sha256": "73f69115d878bc39f17682e2615a738837cac7c406c85faf33da924750ca230e",
+        "git_blob": "fb1f35da47b75aed364206e17807394d36cc00ea"
+      },
+      "data/lmdb_dataset.py": {
+        "sha256": "78a6ae10f22996ddf464a66d11fe4d86ae2c1debbcb324cc77d629fef8a922e6",
+        "git_blob": "53483f8056381cb86ae6857b2b21a171508c11c1"
+      },
+      "data/unaligned_dataset.py": {
+        "sha256": "0a54ea4c68dc5670c95b11d748e328c7d7deb800af4a9fc59ae131dae1c17130",
+        "git_blob": "d2cd31b5709f40281250932337724a21653f09fc"
+      },
+      "data/unaligned_lmdb_dataset.py": {
+        "sha256": "38e9bf51ac89a2059286ad3ecbd32c0e4d133245c88c6880ac10e84bce262905",
+        "git_blob": "0f101a01a215c9c6ba64c50e6a45aed162c930da"
+      },
+      "evaluation/__init__.py": {
+        "sha256": "83e991601c3f0e160ae2ad3c656ff8bba200c75c60435fb24ce690afb8b5611d",
+        "git_blob": "864fdcb878debb3efbf517685b5ffbb2ff80c911"
+      },
+      "evaluation/base_evaluator.py": {
+        "sha256": "2b4ca9437b64d18bb398fcbfde0f7dd13133a58c3c45b1173a14f8334e12c6e7",
+        "git_blob": "dd95ebfc0a37bee8158f91e0f273713b523130fa"
+      },
+      "evaluation/group_evaluator.py": {
+        "sha256": "0becda1b4e5c0564b68e3609d42c890244d38d4b4a5994a5e53b199f636c31aa",
+        "git_blob": "ef279cc8fb435b8c8ebe8f34c055d8804090ab3c"
+      },
+      "evaluation/none_evaluator.py": {
+        "sha256": "5f444c4d97903050f6842770bebeb01e307cbcda17f8309ee696ca899284e4d8",
+        "git_blob": "ed6e8851eb40452bb2d1a97649716939cbc3a5b2"
+      },
+      "evaluation/simple_swapping_evaluator.py": {
+        "sha256": "57ec006a7ac95537994a854bf7c2f2ac2edf0b710846c79100949ff8a7212fba",
+        "git_blob": "2a853f9b5a3afb15164d7268ce626d3f6da1ae6e"
+      },
+      "evaluation/structure_style_grid_generation_evaluator.py": {
+        "sha256": "8b921fc9f595c3da85f0dab009a1fada772fca6a3666de8ff7fe83cf6e6562dd",
+        "git_blob": "9a0cc522f86be73b8206de9176f4f4a8237807ce"
+      },
+      "evaluation/swap_generation_from_arranged_result_evaluator.py": {
+        "sha256": "7587270d831123027e049d7d72528f800d45402b097ad929cbe6f6534f33d42c",
+        "git_blob": "0453341f736d5e065aef4f7d9b427442cde32662"
+      },
+      "evaluation/swap_visualization_evaluator.py": {
+        "sha256": "f376cf29a1dbfba39161efd8a39a0a154793ef42a206edca185141ec66fbaa5d",
+        "git_blob": "e5fd0d6e590802dba7fc82e13f57ed043ba3a29f"
+      },
+      "experiments/__init__.py": {
+        "sha256": "907712b6e2204328ef03d1718f709204e775924e86fca0baed7e3984630f9698",
+        "git_blob": "cb7414b60a3af1bea8888bb3523dc729d727cae0"
+      },
+      "experiments/__main__.py": {
+        "sha256": "165633458eb94e702f2519b6ab2218f08c568abd0cc31f6e5a1d5914c35f1a2a",
+        "git_blob": "456ed2a9577ff61f9adadfda5f468b2f354b96c3"
+      },
+      "experiments/afhq_pretrained_launcher.py": {
+        "sha256": "ba8c7792fb3318bb64bc5b95bd1c297af01f9da0a1de0c88c5effbb54283010e",
+        "git_blob": "765214c66f800e555e7eb921fe9f30f00dbea142"
+      },
+      "experiments/bedroom_launcher.py": {
+        "sha256": "cd1ebc318bfb7fdf57335e3e2f895fb6c8919b571cb44644396762b7dfb36913",
+        "git_blob": "7a061fa47192aee0d27c2580b8a9c9fb691a8ccb"
+      },
+      "experiments/bedroom_pretrained_launcher.py": {
+        "sha256": "2076f9646680d67ea867d931bf0575e346c8fc75854a7d604c31b6b5563d99f7",
+        "git_blob": "f84c2ca98ae17493dce6801a228be9cefe0a19bd"
+      },
+      "experiments/church_launcher.py": {
+        "sha256": "1f0926c5e90c09f397ccf5e2f90466ec5a9b7de9d33bb1d31caba358f1d856f1",
+        "git_blob": "f6706b9087ed24559012dcb53cae180b5dafdba1"
+      },
+      "experiments/church_pretrained_launcher.py": {
+        "sha256": "df9b37fb7149d73e3e668c2fb1b3d51429070fbf15edbeb421c0057d81c8749c",
+        "git_blob": "7312952f74b3c5719ae236012f54a2f77c6587f5"
+      },
+      "experiments/ffhq1024_pretrained_launcher.py": {
+        "sha256": "c2e2e3224d707b7adb920c2e89259a351d595b9e09fe876f3d17a115e50886d8",
+        "git_blob": "d16a0fc52e3a0d7a4901f36a1d620365f6f864f0"
+      },
+      "experiments/ffhq512_pretrained_launcher.py": {
+        "sha256": "67b1cd1169475a9cd675cdfe416e525c05ea2286493c0c9d9da59f48255ad002",
+        "git_blob": "8ca35194a288a8255fd94157a71a394f5b9f9bd6"
+      },
+      "experiments/ffhq_launcher.py": {
+        "sha256": "543ac61b7d2c23e08a9c9db1b23a279efae3d851258e879406e788251d6ac492",
+        "git_blob": "53ad7d755d83d940fc0a6005ada12b2a7132e131"
+      },
+      "experiments/mountain_launcher.py": {
+        "sha256": "ac37e8217a51d88e823219348032f8a4ad52f2654323cc89014bebb0ea07a7c3",
+        "git_blob": "dba3652b1efc30458750947a248df81bd4b26d8b"
+      },
+      "experiments/mountain_pretrained_launcher.py": {
+        "sha256": "79000fa7e132ea6ca95d9344991627172fb9a16a9477b83628c73db20d20264e",
+        "git_blob": "dd8819600c75db4d3127c87b87ef243567c8ec1d"
+      },
+      "experiments/tmux_launcher.py": {
+        "sha256": "fb308f3fec3c048c2d33da7591b6dea7b59a0fd01c6cca0c20b9606d11bee6dc",
+        "git_blob": "f689821dc5ebcd4cd894df10cc9255818e074390"
+      },
+      "models/__init__.py": {
+        "sha256": "b4f02244c30143f6d73df89d35bf4f25e5caba68d478732f570eddbf4467198d",
+        "git_blob": "f162e7c2ea22d5a38fed65865a6cc9d5d0833632"
+      },
+      "models/base_model.py": {
+        "sha256": "f7baecfff6d555488aaaf7df5e9c6d80a2170ef895dab4f4873d0111108cf1b7",
+        "git_blob": "7b2a8d14caeb6ce5403c46bb4cf79126a353dc81"
+      },
+      "models/networks/__init__.py": {
+        "sha256": "bfd9a3b013d0fed1ac310fe22a112dc74bf086dcbae58b652a46b59680714be0",
+        "git_blob": "c41c493e4e0368279a8b6115bbd0c3905502a212"
+      },
+      "models/networks/base_network.py": {
+        "sha256": "33c07e02f4aa8d07ced51e6966a425aa0c13857b685470571b5a14241645371f",
+        "git_blob": "02d33f713880be1c28b543865334de5ef9ee8586"
+      },
+      "models/networks/classifier.py": {
+        "sha256": "a664b8287e9736a4b566de86f714a26e4ee8a93d2fd0922f71fcbb1ad2f91d2d",
+        "git_blob": "6f79ddad70ede2f397a26f601918f1057e0ac082"
+      },
+      "models/networks/discriminator.py": {
+        "sha256": "5389055129c709e93102c9275f30a20b1e708c23744343919d0a6da6edbd38e4",
+        "git_blob": "74b168ca79125789f5677e4876b619eb9ac58382"
+      },
+      "models/networks/encoder.py": {
+        "sha256": "5a059500d7964969bc7adefe8ea60e12185f1747d95f0d16dc54d53c84400f58",
+        "git_blob": "7f625afecab209283737b449a294ec5e18a5763d"
+      },
+      "models/networks/generator.py": {
+        "sha256": "c8d31a71e5956e53d2dd44faadea7fce395d3589ddd5ab23bab95cd59102c705",
+        "git_blob": "dff150a2552ae5b4519c2582c8cc36031b3dba8a"
+      },
+      "models/networks/inception.py": {
+        "sha256": "d0be513e1c961cfe309f466f057b9b775f4bef3df4782801d7cc6b57ce9e2c1c",
+        "git_blob": "8cdbbf2d18b45ff7f1737e298eb6be7fa720801c"
+      },
+      "models/networks/loss.py": {
+        "sha256": "b4ee3ef8eb4aa6935feacf3d70a52d59e359891a58e27a3e3d8492c3d95b9447",
+        "git_blob": "23227fc1219f9234277a5eb68c52e9bbe04dc916"
+      },
+      "models/networks/patch_discriminator.py": {
+        "sha256": "a886122242d5c8d9a4878ee0f1f1684bac51c27c2e588c554c52a4ca92164e7d",
+        "git_blob": "1773bfe309827c0edced4e6e83024ef913ef78b9"
+      },
+      "models/networks/pyramidnet.py": {
+        "sha256": "c65e719f79fda8e2963d3549a5437364bf7bd656598d5e181b41fd7e6408bf18",
+        "git_blob": "277a9ccea936baed3a81a6e9bc59c297162ced9f"
+      },
+      "models/networks/stylegan2_layers.py": {
+        "sha256": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+        "git_blob": "30d870afd29d43a0c2fc2ccfef1434ee3d807d80"
+      },
+      "models/networks/stylegan2_op/__init__.py": {
+        "sha256": "d3bdebb6b1ea35ab8e7dd14af32919f11ae630ab9154d4c84f839397b98b2bf6",
+        "git_blob": "d0918d92285955855be89f00096b888ee5597ce3"
+      },
+      "models/networks/stylegan2_op/fused_act.py": {
+        "sha256": "bf00baa057078cd5fa4044dc86101ca95bc482d10ccaf544b89c4c0da8a2532a",
+        "git_blob": "07db163ae3273f69056854bf7d8fdee1030e2450"
+      },
+      "models/networks/stylegan2_op/fused_bias_act.cpp": {
+        "sha256": "a69d7233252bceaf18639d9fb9715a71cf0eb5eff11aa6c11c659e0850b155ea",
+        "git_blob": "a054318781a20596d8f516ef86745e5572aad0f7"
+      },
+      "models/networks/stylegan2_op/fused_bias_act_kernel.cu": {
+        "sha256": "42c217064d68d91756cd0f92e19377c61824b4734b4659095b9282075e9113f4",
+        "git_blob": "8d2f03c73605faee6723d002ba5de88cb465a80e"
+      },
+      "models/networks/stylegan2_op/upfirdn2d.cpp": {
+        "sha256": "a913696caa8630ca5030db24dfdc08391473bf2a2543216d883df3ede5cba923",
+        "git_blob": "86472927281a5e057e430bdb32f39d623c29a8bb"
+      },
+      "models/networks/stylegan2_op/upfirdn2d.py": {
+        "sha256": "228c5fb1ef64d08db2380a0e3c5af40dccbd757f634a759a07d33f1b586120ec",
+        "git_blob": "beb3247f6eae4e89b596be37675a689359536c0b"
+      },
+      "models/networks/stylegan2_op/upfirdn2d_kernel.cu": {
+        "sha256": "bccda85f1ed59a965d982e212ad78b00d630aad5438216a242187a3aa842bf3e",
+        "git_blob": "871d4fe2fafb6c7863ea41656f8770f8a4a61b3a"
+      },
+      "models/swapping_autoencoder_model.py": {
+        "sha256": "71df763244ea5b17c55d93384595c37dccb04386802f00a9d407a72e31b83e7f",
+        "git_blob": "8deab9de30b7ce341d322136b3b8d346809f70e8"
+      },
+      "optimizers/__init__.py": {
+        "sha256": "7d3b4883855260c6bf19296ff6984fff9bed1acddec3c250a751d4060916881c",
+        "git_blob": "c9d316d64e3d9229314295e98bb7135135618ca0"
+      },
+      "optimizers/base_optimizer.py": {
+        "sha256": "5e43e4972167ab7f1d8a0d4a7659166eb74ae2fefb2dd44c97e4cf6c4220e7dd",
+        "git_blob": "d9af423f33e4313dfe58849f89b5a739873627ea"
+      },
+      "optimizers/classifier_optimizer.py": {
+        "sha256": "c79f5bc780105ccb97cdde40c579dba85ade37ad004892d544f36fcd85074a9b",
+        "git_blob": "a66957af8e0bccf6779d7f1e7e884249738f11da"
+      },
+      "optimizers/patchD_autoencoder_optimizer.py": {
+        "sha256": "25ec9e4adee79d3025190919b482742502b523d9e60d41a6d2a6cadabba719c3",
+        "git_blob": "e20ee1459a694a0ed323fffe76710e3fa1eae6ab"
+      },
+      "optimizers/swapping_autoencoder_optimizer.py": {
+        "sha256": "93732bd6dd7e2a9d4b59d006e697158889d5700f54707ef71959870b4733d644",
+        "git_blob": "7198389dc4c8ad4dd934d04e807d8fef68c8d3b8"
+      },
+      "options/__init__.py": {
+        "sha256": "e1fcdbfafb69110303904ef43af6bbc88b4c83f7ca5bb199511ccde42e44ded9",
+        "git_blob": "b5a65ba3dd33b5356c61f125c5d7c636b41a6272"
+      },
+      "test.py": {
+        "sha256": "0fa7c474901a920d832b3db4246389239978015f07e33ac2a5f2068174689c14",
+        "git_blob": "e02ba68f92f9d87ffc946caa3b02713ac45764d4"
+      },
+      "train.py": {
+        "sha256": "53246dbb259ec5820e5709d60cd090552b393e91f81590910133e723f3ac8893",
+        "git_blob": "4dbec654ea16daa5bf9e521597f7d9c145866372"
+      },
+      "util/__init__.py": {
+        "sha256": "fef00d173578ede08f3f447aa3f8321a41c69f7826c7ebcd4cdc61752683e3f4",
+        "git_blob": "c6fc2783df5a30a1e998472e8af00cc1a6c967d4"
+      },
+      "util/html.py": {
+        "sha256": "04ac471b0c38fdef2e330ce2dbef855b4fe6883f63fe7b60239f97cdb77b97c1",
+        "git_blob": "ca5daf051767e141b655d673ba6ffc63068ff13a"
+      },
+      "util/iter_counter.py": {
+        "sha256": "2be878b5ea39d335b7d007430350bc35e5fce725dbd87fd22081bff56b11acbb",
+        "git_blob": "abee50ed496c42809642631bb8c5cfbd2b86a415"
+      },
+      "util/kmeans.py": {
+        "sha256": "52aefc8cdb39d8988759dffd11347964e6ccbe9549ac3f2f79f0740d24c12558",
+        "git_blob": "eeb548bcb4b52e19974fb2242a3c40056d08507a"
+      },
+      "util/metric_tracker.py": {
+        "sha256": "b6a90177c2ef45fad3212f599d484d46ccc1be09eab6865a3b2c0ab750a0de5b",
+        "git_blob": "bb4f4752ec01a517267e0297d43da8652d89cc38"
+      },
+      "util/pca.py": {
+        "sha256": "6b6268a7d13fee5d65ffb19704dac6346957a19fc5211f9ebaa8f958c93c39c5",
+        "git_blob": "389523db24b7f7164dfcb1212743112ae44969b5"
+      },
+      "util/util.py": {
+        "sha256": "1877a389417a0c6f746006da852d09b3109ecfed2b119d5dc692519aa848b3eb",
+        "git_blob": "934ec56dbda48d78d3a581d0db437701abe0e4ce"
+      },
+      "util/visualizer.py": {
+        "sha256": "e717e71afca6109d19b5e145d749f64c8ce2a9876acaa4ff115e797ba8b94ece",
+        "git_blob": "c62e6d2cb8677df675e995feb41355ff9cd1b23d"
+      }
+    },
+    "worktree_status": ""
+  },
+  "generated_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source",
+  "patches": [
+    {
+      "file": "util/util.py",
+      "original_sha256": "1877a389417a0c6f746006da852d09b3109ecfed2b119d5dc692519aa848b3eb",
+      "generated_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "reason_and_semantic_proof": "Correct CUDA >=10.1 version comparison: the original rejects 11.0/12.0/13.0. Only selects the real pinned CUDA kernels; no tensor operation changes.",
+      "diff": "--- pinned/util/util.py\n+++ generated/util/util.py\n@@ -433,7 +433,7 @@\n     version_str = str(torch.version.cuda).split(\".\")\n     major = version_str[0]\n     minor = version_str[1]\n-    return int(major) >= 10 and int(minor) >= 1\n+    return (int(major), int(minor)) >= (10, 1)\n \n \n def shuffle_batch(x):\n"
+    }
+  ],
+  "generated_files_sha256": {
+    "data/__init__.py": "7d9f5b1d38a3d041eb00e7a97d6c080eeafa7d6db159b1c5a651096febb98571",
+    "data/base_dataset.py": "16e795df4a6c1ee2799198aa8acf589b3fd59906c4a54acbb98bb63a27400b3d",
+    "data/cifar100_dataset.py": "021d1289794cf186e87682b367584c1ab13ca84b117971f98ba78119eb4acd21",
+    "data/dataset_tools.py": "d9bb114ddf426b8dcdc518fd9f0244e9ca0233eced1a5b9d563091d7202788f3",
+    "data/image_folder.py": "43492e62da79caf54b8ac9795b1c6955637c09ed2b6214cda79442396026aed3",
+    "data/imagefolder_dataset.py": "73f69115d878bc39f17682e2615a738837cac7c406c85faf33da924750ca230e",
+    "data/lmdb_dataset.py": "78a6ae10f22996ddf464a66d11fe4d86ae2c1debbcb324cc77d629fef8a922e6",
+    "data/unaligned_dataset.py": "0a54ea4c68dc5670c95b11d748e328c7d7deb800af4a9fc59ae131dae1c17130",
+    "data/unaligned_lmdb_dataset.py": "38e9bf51ac89a2059286ad3ecbd32c0e4d133245c88c6880ac10e84bce262905",
+    "evaluation/__init__.py": "83e991601c3f0e160ae2ad3c656ff8bba200c75c60435fb24ce690afb8b5611d",
+    "evaluation/base_evaluator.py": "2b4ca9437b64d18bb398fcbfde0f7dd13133a58c3c45b1173a14f8334e12c6e7",
+    "evaluation/group_evaluator.py": "0becda1b4e5c0564b68e3609d42c890244d38d4b4a5994a5e53b199f636c31aa",
+    "evaluation/none_evaluator.py": "5f444c4d97903050f6842770bebeb01e307cbcda17f8309ee696ca899284e4d8",
+    "evaluation/simple_swapping_evaluator.py": "57ec006a7ac95537994a854bf7c2f2ac2edf0b710846c79100949ff8a7212fba",
+    "evaluation/structure_style_grid_generation_evaluator.py": "8b921fc9f595c3da85f0dab009a1fada772fca6a3666de8ff7fe83cf6e6562dd",
+    "evaluation/swap_generation_from_arranged_result_evaluator.py": "7587270d831123027e049d7d72528f800d45402b097ad929cbe6f6534f33d42c",
+    "evaluation/swap_visualization_evaluator.py": "f376cf29a1dbfba39161efd8a39a0a154793ef42a206edca185141ec66fbaa5d",
+    "experiments/__init__.py": "907712b6e2204328ef03d1718f709204e775924e86fca0baed7e3984630f9698",
+    "experiments/__main__.py": "165633458eb94e702f2519b6ab2218f08c568abd0cc31f6e5a1d5914c35f1a2a",
+    "experiments/afhq_pretrained_launcher.py": "ba8c7792fb3318bb64bc5b95bd1c297af01f9da0a1de0c88c5effbb54283010e",
+    "experiments/bedroom_launcher.py": "cd1ebc318bfb7fdf57335e3e2f895fb6c8919b571cb44644396762b7dfb36913",
+    "experiments/bedroom_pretrained_launcher.py": "2076f9646680d67ea867d931bf0575e346c8fc75854a7d604c31b6b5563d99f7",
+    "experiments/church_launcher.py": "1f0926c5e90c09f397ccf5e2f90466ec5a9b7de9d33bb1d31caba358f1d856f1",
+    "experiments/church_pretrained_launcher.py": "df9b37fb7149d73e3e668c2fb1b3d51429070fbf15edbeb421c0057d81c8749c",
+    "experiments/ffhq1024_pretrained_launcher.py": "c2e2e3224d707b7adb920c2e89259a351d595b9e09fe876f3d17a115e50886d8",
+    "experiments/ffhq512_pretrained_launcher.py": "67b1cd1169475a9cd675cdfe416e525c05ea2286493c0c9d9da59f48255ad002",
+    "experiments/ffhq_launcher.py": "543ac61b7d2c23e08a9c9db1b23a279efae3d851258e879406e788251d6ac492",
+    "experiments/mountain_launcher.py": "ac37e8217a51d88e823219348032f8a4ad52f2654323cc89014bebb0ea07a7c3",
+    "experiments/mountain_pretrained_launcher.py": "79000fa7e132ea6ca95d9344991627172fb9a16a9477b83628c73db20d20264e",
+    "experiments/tmux_launcher.py": "fb308f3fec3c048c2d33da7591b6dea7b59a0fd01c6cca0c20b9606d11bee6dc",
+    "models/__init__.py": "b4f02244c30143f6d73df89d35bf4f25e5caba68d478732f570eddbf4467198d",
+    "models/base_model.py": "f7baecfff6d555488aaaf7df5e9c6d80a2170ef895dab4f4873d0111108cf1b7",
+    "models/networks/__init__.py": "bfd9a3b013d0fed1ac310fe22a112dc74bf086dcbae58b652a46b59680714be0",
+    "models/networks/base_network.py": "33c07e02f4aa8d07ced51e6966a425aa0c13857b685470571b5a14241645371f",
+    "models/networks/classifier.py": "a664b8287e9736a4b566de86f714a26e4ee8a93d2fd0922f71fcbb1ad2f91d2d",
+    "models/networks/discriminator.py": "5389055129c709e93102c9275f30a20b1e708c23744343919d0a6da6edbd38e4",
+    "models/networks/encoder.py": "5a059500d7964969bc7adefe8ea60e12185f1747d95f0d16dc54d53c84400f58",
+    "models/networks/generator.py": "c8d31a71e5956e53d2dd44faadea7fce395d3589ddd5ab23bab95cd59102c705",
+    "models/networks/inception.py": "d0be513e1c961cfe309f466f057b9b775f4bef3df4782801d7cc6b57ce9e2c1c",
+    "models/networks/loss.py": "b4ee3ef8eb4aa6935feacf3d70a52d59e359891a58e27a3e3d8492c3d95b9447",
+    "models/networks/patch_discriminator.py": "a886122242d5c8d9a4878ee0f1f1684bac51c27c2e588c554c52a4ca92164e7d",
+    "models/networks/pyramidnet.py": "c65e719f79fda8e2963d3549a5437364bf7bd656598d5e181b41fd7e6408bf18",
+    "models/networks/stylegan2_layers.py": "2bb9f9e798bee049020f335e2da79f20fed57178be07c08f9b0df0caf4fe6673",
+    "models/networks/stylegan2_op/__init__.py": "d3bdebb6b1ea35ab8e7dd14af32919f11ae630ab9154d4c84f839397b98b2bf6",
+    "models/networks/stylegan2_op/fused_act.py": "bf00baa057078cd5fa4044dc86101ca95bc482d10ccaf544b89c4c0da8a2532a",
+    "models/networks/stylegan2_op/fused_bias_act.cpp": "a69d7233252bceaf18639d9fb9715a71cf0eb5eff11aa6c11c659e0850b155ea",
+    "models/networks/stylegan2_op/fused_bias_act_kernel.cu": "42c217064d68d91756cd0f92e19377c61824b4734b4659095b9282075e9113f4",
+    "models/networks/stylegan2_op/upfirdn2d.cpp": "a913696caa8630ca5030db24dfdc08391473bf2a2543216d883df3ede5cba923",
+    "models/networks/stylegan2_op/upfirdn2d.py": "228c5fb1ef64d08db2380a0e3c5af40dccbd757f634a759a07d33f1b586120ec",
+    "models/networks/stylegan2_op/upfirdn2d_kernel.cu": "bccda85f1ed59a965d982e212ad78b00d630aad5438216a242187a3aa842bf3e",
+    "models/swapping_autoencoder_model.py": "71df763244ea5b17c55d93384595c37dccb04386802f00a9d407a72e31b83e7f",
+    "optimizers/__init__.py": "7d3b4883855260c6bf19296ff6984fff9bed1acddec3c250a751d4060916881c",
+    "optimizers/base_optimizer.py": "5e43e4972167ab7f1d8a0d4a7659166eb74ae2fefb2dd44c97e4cf6c4220e7dd",
+    "optimizers/classifier_optimizer.py": "c79f5bc780105ccb97cdde40c579dba85ade37ad004892d544f36fcd85074a9b",
+    "optimizers/patchD_autoencoder_optimizer.py": "25ec9e4adee79d3025190919b482742502b523d9e60d41a6d2a6cadabba719c3",
+    "optimizers/swapping_autoencoder_optimizer.py": "93732bd6dd7e2a9d4b59d006e697158889d5700f54707ef71959870b4733d644",
+    "options/__init__.py": "e1fcdbfafb69110303904ef43af6bbc88b4c83f7ca5bb199511ccde42e44ded9",
+    "test.py": "0fa7c474901a920d832b3db4246389239978015f07e33ac2a5f2068174689c14",
+    "train.py": "53246dbb259ec5820e5709d60cd090552b393e91f81590910133e723f3ac8893",
+    "util/__init__.py": "fef00d173578ede08f3f447aa3f8321a41c69f7826c7ebcd4cdc61752683e3f4",
+    "util/html.py": "04ac471b0c38fdef2e330ce2dbef855b4fe6883f63fe7b60239f97cdb77b97c1",
+    "util/iter_counter.py": "2be878b5ea39d335b7d007430350bc35e5fce725dbd87fd22081bff56b11acbb",
+    "util/kmeans.py": "52aefc8cdb39d8988759dffd11347964e6ccbe9549ac3f2f79f0740d24c12558",
+    "util/metric_tracker.py": "b6a90177c2ef45fad3212f599d484d46ccc1be09eab6865a3b2c0ab750a0de5b",
+    "util/pca.py": "6b6268a7d13fee5d65ffb19704dac6346957a19fc5211f9ebaa8f958c93c39c5",
+    "util/util.py": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+    "util/visualizer.py": "e717e71afca6109d19b5e145d749f64c8ce2a9876acaa4ff115e797ba8b94ece"
+  },
+  "source_cache_modified": false,
+  "cuda_kernel_arithmetic_modified": false
+}

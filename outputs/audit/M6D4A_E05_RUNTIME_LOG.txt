@@ -1,0 +1,197 @@
+===== attempt_1.log =====
+[1/3] c++ -MMD -MF fused_bias_act.o.d -DTORCH_EXTENSION_NAME=fused -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -fPIC -std=c++20 -c /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp -o fused_bias_act.o 
+In file included from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/headeronly/core/DeviceType.h:9,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/c10/core/DeviceType.h:8,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/c10/core/Device.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/TensorBody.h:12,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/Tensor.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/Tensor.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/function_hook.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/cpp_hook.h:3,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/variable.h:7,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/autograd.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include/torch/autograd.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include/torch/all.h:8,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/extension.h:6,
+                 from /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp:1:
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp: In function ‘at::Tensor fused_bias_act(const at::Tensor&, const at::Tensor&, const at::Tensor&, int, int, float, float)’:
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp:7:41: warning: ‘at::DeprecatedTypeProperties& at::Tensor::type() const’ is deprecated: Tensor.type() is deprecated. Instead use Tensor.options(), which in many cases (e.g. in a constructor) is a drop-in replacement. If you were using data from type(), that is now available from Tensor itself, so instead of tensor.type().scalar_type(), use tensor.scalar_type() instead and instead of tensor.type().backend() use tensor.device(). [-Wdeprecated-declarations]
+    7 | #define CHECK_CUDA(x) TORCH_CHECK(x.type().is_cuda(), #x " must be a CUDA tensor")
+      |                                         ^
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp:13:5: note: in expansion of macro ‘CHECK_CUDA’
+   13 |     CHECK_CUDA(input);
+      |     ^~~~~~~~~~
+/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/TensorBody.h:231:30: note: declared here
+  231 |   DeprecatedTypeProperties & type() const {
+      |                              ^~~~
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp:7:41: warning: ‘at::DeprecatedTypeProperties& at::Tensor::type() const’ is deprecated: Tensor.type() is deprecated. Instead use Tensor.options(), which in many cases (e.g. in a constructor) is a drop-in replacement. If you were using data from type(), that is now available from Tensor itself, so instead of tensor.type().scalar_type(), use tensor.scalar_type() instead and instead of tensor.type().backend() use tensor.device(). [-Wdeprecated-declarations]
+    7 | #define CHECK_CUDA(x) TORCH_CHECK(x.type().is_cuda(), #x " must be a CUDA tensor")
+      |                                         ^
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp:14:5: note: in expansion of macro ‘CHECK_CUDA’
+   14 |     CHECK_CUDA(bias);
+      |     ^~~~~~~~~~
+/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/TensorBody.h:231:30: note: declared here
+  231 |   DeprecatedTypeProperties & type() const {
+      |                              ^~~~
+[2/3] /home/student20261/miniconda3/envs/gpat-m6-e05/bin/nvcc -MD -MF fused_bias_act_kernel.cuda.o.d -DTORCH_EXTENSION_NAME=fused -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_86,code=sm_86 --compiler-options '-fPIC' -std=c++20 -c /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act_kernel.cu -o fused_bias_act_kernel.cuda.o 
+[3/3] c++ fused_bias_act.o fused_bias_act_kernel.cuda.o -shared -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib -lcudart -o fused.so
+Loading custom kernel...
+[1/3] c++ -MMD -MF upfirdn2d.o.d -DTORCH_EXTENSION_NAME=upfirdn2d -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -fPIC -std=c++20 -c /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp -o upfirdn2d.o 
+In file included from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/headeronly/core/DeviceType.h:9,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/c10/core/DeviceType.h:8,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/c10/core/Device.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/TensorBody.h:12,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/Tensor.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/Tensor.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/function_hook.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/cpp_hook.h:3,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/variable.h:7,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/autograd/autograd.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include/torch/autograd.h:4,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include/torch/all.h:8,
+                 from /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/extension.h:6,
+                 from /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp:1:
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp: In function ‘at::Tensor upfirdn2d(const at::Tensor&, const at::Tensor&, int, int, int, int, int, int, int, int)’:
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp:8:41: warning: ‘at::DeprecatedTypeProperties& at::Tensor::type() const’ is deprecated: Tensor.type() is deprecated. Instead use Tensor.options(), which in many cases (e.g. in a constructor) is a drop-in replacement. If you were using data from type(), that is now available from Tensor itself, so instead of tensor.type().scalar_type(), use tensor.scalar_type() instead and instead of tensor.type().backend() use tensor.device(). [-Wdeprecated-declarations]
+    8 | #define CHECK_CUDA(x) TORCH_CHECK(x.type().is_cuda(), #x " must be a CUDA tensor")
+      |                                         ^
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp:15:5: note: in expansion of macro ‘CHECK_CUDA’
+   15 |     CHECK_CUDA(input);
+      |     ^~~~~~~~~~
+/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/TensorBody.h:231:30: note: declared here
+  231 |   DeprecatedTypeProperties & type() const {
+      |                              ^~~~
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp:8:41: warning: ‘at::DeprecatedTypeProperties& at::Tensor::type() const’ is deprecated: Tensor.type() is deprecated. Instead use Tensor.options(), which in many cases (e.g. in a constructor) is a drop-in replacement. If you were using data from type(), that is now available from Tensor itself, so instead of tensor.type().scalar_type(), use tensor.scalar_type() instead and instead of tensor.type().backend() use tensor.device(). [-Wdeprecated-declarations]
+    8 | #define CHECK_CUDA(x) TORCH_CHECK(x.type().is_cuda(), #x " must be a CUDA tensor")
+      |                                         ^
+/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp:16:5: note: in expansion of macro ‘CHECK_CUDA’
+   16 |     CHECK_CUDA(kernel);
+      |     ^~~~~~~~~~
+/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/ATen/core/TensorBody.h:231:30: note: declared here
+  231 |   DeprecatedTypeProperties & type() const {
+      |                              ^~~~
+[2/3] /home/student20261/miniconda3/envs/gpat-m6-e05/bin/nvcc -MD -MF upfirdn2d_kernel.cuda.o.d -DTORCH_EXTENSION_NAME=upfirdn2d -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_86,code=sm_86 --compiler-options '-fPIC' -std=c++20 -c /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d_kernel.cu -o upfirdn2d_kernel.cuda.o 
+[3/3] c++ upfirdn2d.o upfirdn2d_kernel.cuda.o -shared -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib -lcudart -o upfirdn2d.so
+/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py:222: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:838.)
+  'reference_max_abs_error': float((out-oracle).abs().max()), 'real_cuda': True}
+Traceback (most recent call last):
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 334, in <module>
+    main()
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 328, in main
+    result = prepare(build,args.modern_cpp) if args.prepare else qualify(build)
+                                                                 ^^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 303, in qualify
+    require(before==result['environment_after'], 'environment stable during qualification')
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 29, in require
+    raise RuntimeError('M6D4a gate: ' + message)
+RuntimeError: M6D4a gate: environment stable during qualification
+
+===== attempt_2.log =====
+ninja: no work to do.
+Loading custom kernel...
+ninja: no work to do.
+Traceback (most recent call last):
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 329, in <module>
+    main()
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 323, in main
+    result = prepare(build) if args.prepare else qualify(build)
+                                                 ^^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 299, in qualify
+    require(not differences, 'environment stable during qualification: '+json.dumps(differences))
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/pcgan/runtime_qualification.py", line 29, in require
+    raise RuntimeError('M6D4a gate: ' + message)
+RuntimeError: M6D4a gate: environment stable during qualification: {"packages": {"before": {"Jinja2": "3.1.6", "MarkupSafe": "3.0.3", "PyYAML": "6.0.3", "Pygments": "2.21.0", "cloudpickle": "3.1.2", "cuda-bindings": "13.3.1", "cuda-pathfinder": "1.6.0", "cuda-toolkit": "13.0.2", "dominate": "2.9.1", "filelock": "3.32.3", "fsspec": "2026.7.0", "func_timeout": "4.3.5", "iniconfig": "2.3.0", "joblib": "1.6.0", "mpmath": "1.3.0", "narwhals": "2.26.0", "networkx": "3.6.1", "ninja": "1.13.2", "numpy": "2.4.6", "nvidia-cublas": "13.1.1.3", "nvidia-cuda-cupti": "13.0.85", "nvidia-cuda-nvrtc": "13.0.88", "nvidia-cuda-runtime": "13.0.96", "nvidia-cudnn-cu13": "9.20.0.48", "nvidia-cufft": "12.0.0.61", "nvidia-cufile": "1.15.1.6", "nvidia-curand": "10.4.0.35", "nvidia-cusolver": "12.0.4.66", "nvidia-cusparse": "12.6.3.3", "nvidia-cusparselt-cu13": "0.8.1", "nvidia-nccl-cu13": "2.29.7", "nvidia-nvjitlink": "13.0.88", "nvidia-nvshmem-cu13": "3.4.5", "nvidia-nvtx": "13.0.85", "opencv-python-headless": "5.0.0.93", "packaging": "26.3", "pandas": "3.0.6", "pillow": "12.3.0", "pip": "26.2.1", "pluggy": "1.6.0", "pyarrow": "25.0.1", "pytest": "9.1.1", "python-dateutil": "2.9.0.post0", "scikit-learn": "1.9.1", "scipy": "1.17.1", "setuptools": "78.1.0", "six": "1.17.0", "sympy": "1.14.0", "threadpoolctl": "3.7.0", "torch": "2.12.1+cu130", "torchvision": "0.27.1+cu130", "triton": "3.7.1", "typing_extensions": "4.16.0", "wheel": "0.48.0"}, "after": {"Jinja2": "3.1.6", "MarkupSafe": "3.0.3", "PyYAML": "6.0.3", "Pygments": "2.21.0", "autocommand": "2.2.2", "backports.tarfile": "1.2.0", "cloudpickle": "3.1.2", "cuda-bindings": "13.3.1", "cuda-pathfinder": "1.6.0", "cuda-toolkit": "13.0.2", "dominate": "2.9.1", "filelock": "3.32.3", "fsspec": "2026.7.0", "func_timeout": "4.3.5", "importlib_metadata": "8.0.0", "inflect": "7.3.1", "iniconfig": "2.3.0", "jaraco.collections": "5.1.0", "jaraco.context": "5.3.0", "jaraco.functools": "4.0.1", "jaraco.text": "3.12.1", "joblib": "1.6.0", "more-itertools": "10.3.0", "mpmath": "1.3.0", "narwhals": "2.26.0", "networkx": "3.6.1", "ninja": "1.13.2", "numpy": "2.4.6", "nvidia-cublas": "13.1.1.3", "nvidia-cuda-cupti": "13.0.85", "nvidia-cuda-nvrtc": "13.0.88", "nvidia-cuda-runtime": "13.0.96", "nvidia-cudnn-cu13": "9.20.0.48", "nvidia-cufft": "12.0.0.61", "nvidia-cufile": "1.15.1.6", "nvidia-curand": "10.4.0.35", "nvidia-cusolver": "12.0.4.66", "nvidia-cusparse": "12.6.3.3", "nvidia-cusparselt-cu13": "0.8.1", "nvidia-nccl-cu13": "2.29.7", "nvidia-nvjitlink": "13.0.88", "nvidia-nvshmem-cu13": "3.4.5", "nvidia-nvtx": "13.0.85", "opencv-python-headless": "5.0.0.93", "packaging": "26.3", "pandas": "3.0.6", "pillow": "12.3.0", "pip": "26.2.1", "platformdirs": "4.2.2", "pluggy": "1.6.0", "pyarrow": "25.0.1", "pytest": "9.1.1", "python-dateutil": "2.9.0.post0", "scikit-learn": "1.9.1", "scipy": "1.17.1", "setuptools": "78.1.0", "six": "1.17.0", "sympy": "1.14.0", "threadpoolctl": "3.7.0", "tomli": "2.0.1", "torch": "2.12.1+cu130", "torchvision": "0.27.1+cu130", "triton": "3.7.1", "typeguard": "4.3.0", "typing_extensions": "4.16.0", "wheel": "0.48.0", "zipp": "3.19.2"}}}
+
+===== process_1.log =====
+ninja: no work to do.
+Loading custom kernel...
+ninja: no work to do.
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/process_1.json"}
+
+===== process_2.log =====
+ninja: no work to do.
+Loading custom kernel...
+ninja: no work to do.
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/process_2.json"}
+
+===== GPU FOCUSED TESTS =====
+test_a5_bound_to_exact_base_and_document (tests.test_m6c2b2_pcgan.TestPCGAN.test_a5_bound_to_exact_base_and_document) ... ok
+test_all_scientific_overrides_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_all_scientific_overrides_rejected) ... ok
+test_bad_seed_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_bad_seed_rejected) ... ok
+test_changed_overlay_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_changed_overlay_rejected) ... ok
+test_common_learned_checkpoint_metadata_support (tests.test_m6c2b2_pcgan.TestPCGAN.test_common_learned_checkpoint_metadata_support) ... ok
+test_config_hash_and_snapshot (tests.test_m6c2b2_pcgan.TestPCGAN.test_config_hash_and_snapshot) ... ok
+test_exact_loss_terms_and_unit_weights (tests.test_m6c2b2_pcgan.TestPCGAN.test_exact_loss_terms_and_unit_weights) ... ok
+test_missing_overlay_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_missing_overlay_rejected) ... ok
+test_no_execution_in_plan (tests.test_m6c2b2_pcgan.TestPCGAN.test_no_execution_in_plan) ... ok
+test_no_split_selection (tests.test_m6c2b2_pcgan.TestPCGAN.test_no_split_selection) ... ok
+test_reporting_fidelity (tests.test_m6c2b2_pcgan.TestPCGAN.test_reporting_fidelity) ... ok
+test_required_source_missing_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_required_source_missing_rejected) ... ok
+test_source_byte_change_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_byte_change_rejected) ... ok
+test_source_checkout_missing_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_checkout_missing_rejected) ... ok
+test_source_pin_and_repository (tests.test_m6c2b2_pcgan.TestPCGAN.test_source_pin_and_repository) ... ok
+test_terminal_event_and_rejections (tests.test_m6c2b2_pcgan.TestPCGAN.test_terminal_event_and_rejections) ... ok
+test_terminal_policy (tests.test_m6c2b2_pcgan.TestPCGAN.test_terminal_policy) ... ok
+test_three_seed_plans (tests.test_m6c2b2_pcgan.TestPCGAN.test_three_seed_plans) ... ok
+test_training_budget_and_optimizer (tests.test_m6c2b2_pcgan.TestPCGAN.test_training_budget_and_optimizer) ... ok
+test_training_supervision_firewall (tests.test_m6c2b2_pcgan.TestPCGAN.test_training_supervision_firewall) ... ok
+test_wrong_method_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_method_rejected) ... ok
+test_wrong_repository_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_repository_rejected) ... ok
+test_wrong_source_commit_rejected (tests.test_m6c2b2_pcgan.TestPCGAN.test_wrong_source_commit_rejected) ... ok
+test_a5_blur_exact_mapping (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_a5_blur_exact_mapping) ... ok
+test_canonical_spatial_and_output_shape (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_canonical_spatial_and_output_shape) ... ok
+test_invalid_blur_shape_rejected_before_pooling (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_invalid_blur_shape_rejected_before_pooling) ... ok
+test_pinned_defaults_have_provenance (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_pinned_defaults_have_provenance) ... ok
+test_real_torch_pooling_and_gradients (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_real_torch_pooling_and_gradients) ... ok
+test_stylegan2_evidence_and_no_adain_substitution (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_stylegan2_evidence_and_no_adain_substitution) ... ok
+test_two_branch_dispatch_without_detach_or_fallback (tests.test_m6c2b2_pcgan_architecture.TestArchitecture.test_two_branch_dispatch_without_detach_or_fallback) ... ok
+test_binding_and_identity (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_binding_and_identity) ... ok
+test_canonical_geometry (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_canonical_geometry) ... ok
+test_constant_preserved (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_constant_preserved) ... ok
+test_deterministic_and_channel_independent (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_deterministic_and_channel_independent) ... ok
+test_disjoint_windows_and_no_padding (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_disjoint_windows_and_no_padding) ... ok
+test_exact_pooling_parameters (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_exact_pooling_parameters) ... ok
+test_explicit_numeric_mean_without_rounding (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_explicit_numeric_mean_without_rounding) ... ok
+test_no_fallback_or_extra_parameters (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_no_fallback_or_extra_parameters) ... ok
+test_only_blur_resolution_and_identity (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_only_blur_resolution_and_identity) ... ok
+test_original_snapshot_unchanged (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_original_snapshot_unchanged) ... ok
+test_original_yaml_unchanged (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_original_yaml_unchanged) ... ok
+test_other_loss_values_preserved (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_other_loss_values_preserved) ... ok
+test_symmetric_loss_branch_contract (tests.test_m6a7_e05_blur_contract.TestM6A7E05BlurContract.test_symmetric_loss_branch_contract) ... ok
+test_a5_real_torch (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_a5_real_torch) ... ok
+test_all_forward_and_backward_finite (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_all_forward_and_backward_finite) ... ok
+test_blur_gradient_continuity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_blur_gradient_continuity) ... ok
+test_compatibility_patch_closure (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_compatibility_patch_closure) ... ok
+test_custom_ops_real_cuda (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_custom_ops_real_cuda) ... ok
+test_discriminator_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_discriminator_shapes) ... ok
+test_encoder_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_encoder_construction) ... ok
+test_environment_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_environment_identity) ... ok
+test_firewall_rejects_data_and_weights_before_io (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_firewall_rejects_data_and_weights_before_io) ... ok
+test_fp32_controls (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_fp32_controls) ... ok
+test_generator_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_generator_construction) ... ok
+test_image_D_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_image_D_construction) ... ok
+test_measured_encoder_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_measured_encoder_shapes) ... ok
+test_no_benchmark_access (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_benchmark_access) ... ok
+test_no_optimizer_or_parameter_update (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_optimizer_or_parameter_update) ... ok
+test_no_pretrained_checkpoint_or_bank (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_no_pretrained_checkpoint_or_bank) ... ok
+test_patch_D_construction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_patch_D_construction) ... ok
+test_pinned_patch_extraction (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_pinned_patch_extraction) ... ok
+test_repeatability_structural_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_repeatability_structural_identity) ... ok
+test_rgb_shapes (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_rgb_shapes) ... ok
+test_scope_and_status (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_scope_and_status) ... ok
+test_source_identity (tests.test_m6d4a_e05_runtime.TestE05Runtime.test_source_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 65 tests in 2.544s
+
+OK
+{"tests": 65, "failures": 0, "errors": 0, "skips": 0, "firewall_denied": []}
+
+===== LAPTOP FIREWALL TESTS =====
+...........................s.....................................
+----------------------------------------------------------------------
+Ran 65 tests in 2.427s
+
+OK (skipped=1)
+{"tests": 65, "failures": 0, "errors": 0, "skips": 1, "firewall_denied": []}

@@ -1,0 +1,130 @@
+{
+  "build_input_sha256": {
+    "models/networks/stylegan2_op/__init__.py": "d3bdebb6b1ea35ab8e7dd14af32919f11ae630ab9154d4c84f839397b98b2bf6",
+    "models/networks/stylegan2_op/fused_act.py": "bf00baa057078cd5fa4044dc86101ca95bc482d10ccaf544b89c4c0da8a2532a",
+    "models/networks/stylegan2_op/fused_bias_act.cpp": "a69d7233252bceaf18639d9fb9715a71cf0eb5eff11aa6c11c659e0850b155ea",
+    "models/networks/stylegan2_op/fused_bias_act_kernel.cu": "42c217064d68d91756cd0f92e19377c61824b4734b4659095b9282075e9113f4",
+    "models/networks/stylegan2_op/upfirdn2d.cpp": "a913696caa8630ca5030db24dfdc08391473bf2a2543216d883df3ede5cba923",
+    "models/networks/stylegan2_op/upfirdn2d.py": "228c5fb1ef64d08db2380a0e3c5af40dccbd757f634a759a07d33f1b586120ec",
+    "models/networks/stylegan2_op/upfirdn2d_kernel.cu": "bccda85f1ed59a965d982e212ad78b00d630aad5438216a242187a3aa842bf3e"
+  },
+  "compatibility_patch_manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+  "created_for": "M6D4a E05 architecture qualification",
+  "custom_ops": {
+    "fused_bias_act": {
+      "build_ninja": "ninja_required_version = 1.3\ncxx = c++\nnvcc = /home/student20261/miniconda3/envs/gpat-m6-e05/bin/nvcc\n\ncflags = -DTORCH_EXTENSION_NAME=fused -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -fPIC -std=c++20\npost_cflags = \ncuda_cflags = -DTORCH_EXTENSION_NAME=fused -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_86,code=sm_86 --compiler-options '-fPIC' -std=c++20\ncuda_post_cflags = \ncuda_dlink_post_cflags = \nsycl_dlink_post_cflags = \nldflags = -shared -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib -lcudart\n\nrule compile\n  command = $cxx -MMD -MF $out.d $cflags -c $in -o $out $post_cflags\n  depfile = $out.d\n  deps = gcc\n\nrule cuda_compile\n  depfile = $out.d\n  deps = gcc\n  command = $nvcc -MD -MF $out.d $cuda_cflags -c $in -o $out $cuda_post_cflags\n\n\n\n\n\nrule link\n  command = $cxx $in $ldflags -o $out\n\nbuild fused_bias_act.o: compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp\nbuild fused_bias_act_kernel.cuda.o: cuda_compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act_kernel.cu\n\n\n\n\n\nbuild fused.so: link fused_bias_act.o fused_bias_act_kernel.cuda.o\n\ndefault fused.so\n",
+      "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so",
+        "sha256": "5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab"
+      }
+    },
+    "upfirdn2d": {
+      "build_ninja": "ninja_required_version = 1.3\ncxx = c++\nnvcc = /home/student20261/miniconda3/envs/gpat-m6-e05/bin/nvcc\n\ncflags = -DTORCH_EXTENSION_NAME=upfirdn2d -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -fPIC -std=c++20\npost_cflags = \ncuda_cflags = -DTORCH_EXTENSION_NAME=upfirdn2d -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_86,code=sm_86 --compiler-options '-fPIC' -std=c++20\ncuda_post_cflags = \ncuda_dlink_post_cflags = \nsycl_dlink_post_cflags = \nldflags = -shared -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib -lcudart\n\nrule compile\n  command = $cxx -MMD -MF $out.d $cflags -c $in -o $out $post_cflags\n  depfile = $out.d\n  deps = gcc\n\nrule cuda_compile\n  depfile = $out.d\n  deps = gcc\n  command = $nvcc -MD -MF $out.d $cuda_cflags -c $in -o $out $cuda_post_cflags\n\n\n\n\n\nrule link\n  command = $cxx $in $ldflags -o $out\n\nbuild upfirdn2d.o: compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp\nbuild upfirdn2d_kernel.cuda.o: cuda_compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d_kernel.cu\n\n\n\n\n\nbuild upfirdn2d.so: link upfirdn2d.o upfirdn2d_kernel.cuda.o\n\ndefault upfirdn2d.so\n",
+      "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so",
+        "sha256": "40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081"
+      }
+    }
+  },
+  "environment_name": "gpat-m6-e05",
+  "exports_sha256": {
+    "conda-explicit.txt": "4569370108e704ea32ccc7188ca36b125aa6d8f76d7073ea2c0a2484777253a3",
+    "pip-freeze.txt": "de0fbb8cb71161b53472143f0d62f34d0c99a1dc1a8f5a1a7e5f99d781c06d44"
+  },
+  "identity": {
+    "compiler": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "cuda": "13.0",
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_HOME": "/home/student20261/miniconda3/envs/gpat-m6-e05",
+      "MAX_JOBS": "2",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60401",
+      "PYTHONNOUSERSITE": "1",
+      "TORCH_CUDA_ARCH_LIST": "8.6",
+      "TORCH_EXTENSIONS_DIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions"
+    },
+    "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Aug_20_01:58:59_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.88\nBuild cuda_13.0.r13.0/compiler.36424714_0",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "cloudpickle": "3.1.2",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "dominate": "2.9.1",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "func_timeout": "4.3.5",
+      "iniconfig": "2.3.0",
+      "joblib": "1.6.0",
+      "mpmath": "1.3.0",
+      "narwhals": "2.26.0",
+      "networkx": "3.6.1",
+      "ninja": "1.13.2",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.17.1",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "threadpoolctl": "3.7.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "d3255ce6eac7a06a653a6f238d703ebf863423912b39ec957334ce2974364244",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  },
+  "runtime_harness_sha256": "6798d026c8bc6ef0fc3f2048f4666c580a57c0d922586d62631189d4996f07b2",
+  "schema_version": 1,
+  "source_commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7"
+}

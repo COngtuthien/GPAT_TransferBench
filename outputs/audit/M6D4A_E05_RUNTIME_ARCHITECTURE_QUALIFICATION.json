@@ -1,0 +1,4098 @@
+{
+  "a5": {
+    "block_mean_reference_pass": true,
+    "both_branches_independent": true,
+    "detach": false,
+    "fallback": false,
+    "generated_gradient_connected": true,
+    "operator": {
+      "align_corners": "NOT_APPLICABLE",
+      "antialias_parameter": "NOT_APPLICABLE",
+      "application": "independently_before_existing_reconstruction_distance",
+      "application_branches": [
+        "x_tgt",
+        "G(z_pat_src, z_con_tgt)"
+      ],
+      "authorized_fallbacks": [],
+      "boundary_extension": "NONE",
+      "ceil_mode": false,
+      "count_include_pad": false,
+      "detach_due_to_blur": false,
+      "framework_reference": "torch.nn.functional.avg_pool2d",
+      "input_resolution": 256,
+      "kernel_size": 2,
+      "learnable_parameters": 0,
+      "output_resolution": 128,
+      "padding": 0,
+      "reduction": "arithmetic_mean_over_each_nonoverlapping_2x2_block",
+      "stride": 2
+    },
+    "target_and_mixed_shape": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "target_gradient_exact": 0.25
+  },
+  "architecture_basis": {
+    "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+    "disclosure": "Pinned Swapping Autoencoder is an executable architecture basis, not an official PCGAN implementation.",
+    "repository": "https://github.com/taesungp/swapping-autoencoder-pytorch"
+  },
+  "artifact_index": {
+    "CRLF": true,
+    "baseline_rows": 530,
+    "final_rows": 544,
+    "method": "Committed metadata plus explicit additive artifact allowlist; no runtime data or historical manifest targets traversed."
+  },
+  "artifacts_sha256": {
+    "environments/e05.compatibility_patch_manifest.json": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+    "environments/e05.conda-explicit.txt": "4569370108e704ea32ccc7188ca36b125aa6d8f76d7073ea2c0a2484777253a3",
+    "environments/e05.lock.json": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50",
+    "environments/e05.pip-freeze.txt": "de0fbb8cb71161b53472143f0d62f34d0c99a1dc1a8f5a1a7e5f99d781c06d44",
+    "environments/e05.runtime.json": "00bd4e51531ee98540ffc3e4f314cf03eaeab95039c092199154c894c3968c96",
+    "methods/pcgan/runtime_qualification.py": "6798d026c8bc6ef0fc3f2048f4666c580a57c0d922586d62631189d4996f07b2",
+    "outputs/audit/M6D4A_E05_RUNTIME_LOG.txt": "86776f2435c7922129e0d55faabaea684e2a654b7e8e07d380a5777b65f6aca6",
+    "outputs/audit/M6D4A_E05_SYNTHETIC_PROCESS_1.json": "1e4eeab1c74d1383d6abe861f184076ad83bb6a886d801e382c110179102ba8f",
+    "outputs/audit/M6D4A_E05_SYNTHETIC_PROCESS_2.json": "1a36563489c938abd309f9018cf06f9256816af51d46c8a994b807807fab32e9",
+    "outputs/audit/M6D4A_GPU_SYNC.json": "99cf53f45d562594c62ca1da3fcedbf6801b10c2c2a62fcf11a0f033c2250f89",
+    "tests/test_m6d4a_e05_runtime.py": "df0d2426d2884e7ad2209add676d5d685a656ae952ebf3fbe8efe0c3d8c296ea",
+    "tools/m6d4a_e05_runtime_preflight.py": "04599aa68f1633da7d3bd1e646369023668c3caf6466ded2eb973a38f0131016"
+  },
+  "authority_commit": "05e90efa6c36e11405822c79fed8511c2179f043",
+  "benchmark_training": "NOT_STARTED",
+  "compatibility_changes": [
+    {
+      "diff": "--- pinned/util/util.py\n+++ generated/util/util.py\n@@ -433,7 +433,7 @@\n     version_str = str(torch.version.cuda).split(\".\")\n     major = version_str[0]\n     minor = version_str[1]\n-    return int(major) >= 10 and int(minor) >= 1\n+    return (int(major), int(minor)) >= (10, 1)\n \n \n def shuffle_batch(x):\n",
+      "file": "util/util.py",
+      "generated_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "original_sha256": "1877a389417a0c6f746006da852d09b3109ecfed2b119d5dc692519aa848b3eb",
+      "reason_and_semantic_proof": "Correct CUDA >=10.1 version comparison: the original rejects 11.0/12.0/13.0. Only selects the real pinned CUDA kernels; no tensor operation changes."
+    }
+  ],
+  "custom_ops": {
+    "fused_bias_act": {
+      "build_ninja": "ninja_required_version = 1.3\ncxx = c++\nnvcc = /home/student20261/miniconda3/envs/gpat-m6-e05/bin/nvcc\n\ncflags = -DTORCH_EXTENSION_NAME=fused -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -fPIC -std=c++20\npost_cflags = \ncuda_cflags = -DTORCH_EXTENSION_NAME=fused -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_86,code=sm_86 --compiler-options '-fPIC' -std=c++20\ncuda_post_cflags = \ncuda_dlink_post_cflags = \nsycl_dlink_post_cflags = \nldflags = -shared -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib -lcudart\n\nrule compile\n  command = $cxx -MMD -MF $out.d $cflags -c $in -o $out $post_cflags\n  depfile = $out.d\n  deps = gcc\n\nrule cuda_compile\n  depfile = $out.d\n  deps = gcc\n  command = $nvcc -MD -MF $out.d $cuda_cflags -c $in -o $out $cuda_post_cflags\n\n\n\n\n\nrule link\n  command = $cxx $in $ldflags -o $out\n\nbuild fused_bias_act.o: compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act.cpp\nbuild fused_bias_act_kernel.cuda.o: cuda_compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/fused_bias_act_kernel.cu\n\n\n\n\n\nbuild fused.so: link fused_bias_act.o fused_bias_act_kernel.cuda.o\n\ndefault fused.so\n",
+      "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so",
+        "sha256": "5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab"
+      }
+    },
+    "upfirdn2d": {
+      "build_ninja": "ninja_required_version = 1.3\ncxx = c++\nnvcc = /home/student20261/miniconda3/envs/gpat-m6-e05/bin/nvcc\n\ncflags = -DTORCH_EXTENSION_NAME=upfirdn2d -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -fPIC -std=c++20\npost_cflags = \ncuda_cflags = -DTORCH_EXTENSION_NAME=upfirdn2d -DTORCH_API_INCLUDE_EXTENSION_H -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/include/torch/csrc/api/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include -isystem /home/student20261/miniconda3/envs/gpat-m6-e05/include/python3.11 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr -gencode=arch=compute_86,code=sm_86 --compiler-options '-fPIC' -std=c++20\ncuda_post_cflags = \ncuda_dlink_post_cflags = \nsycl_dlink_post_cflags = \nldflags = -shared -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib/python3.11/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/home/student20261/miniconda3/envs/gpat-m6-e05/lib -lcudart\n\nrule compile\n  command = $cxx -MMD -MF $out.d $cflags -c $in -o $out $post_cflags\n  depfile = $out.d\n  deps = gcc\n\nrule cuda_compile\n  depfile = $out.d\n  deps = gcc\n  command = $nvcc -MD -MF $out.d $cuda_cflags -c $in -o $out $cuda_post_cflags\n\n\n\n\n\nrule link\n  command = $cxx $in $ldflags -o $out\n\nbuild upfirdn2d.o: compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d.cpp\nbuild upfirdn2d_kernel.cuda.o: cuda_compile /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/models/networks/stylegan2_op/upfirdn2d_kernel.cu\n\n\n\n\n\nbuild upfirdn2d.so: link upfirdn2d.o upfirdn2d_kernel.cuda.o\n\ndefault upfirdn2d.so\n",
+      "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so",
+        "sha256": "40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081"
+      }
+    }
+  },
+  "decision": "E05_ARCHITECTURE_RUNTIME_QUALIFIED",
+  "environment_lock_sha256": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50",
+  "existing_environment_reused_unchanged": false,
+  "exploratory_attempts": [
+    {
+      "resolution": "Acquired exact authorized source commit; source contains no tracked model weights.",
+      "result": "source preflight refused absent GPU cache; no model import"
+    },
+    {
+      "resolution": "Setuptools inserts bundled distribution metadata into sys.path during extension import. Fixed inventory to explicit installed-package paths; no environment packages changed during execution. Logs retained.",
+      "result": "Two complete synthetic forward/backward attempts rejected final environment metadata comparison"
+    }
+  ],
+  "fidelity": "CONTROLLED_ADAPTATION",
+  "final_status": [
+    "E05_ARCHITECTURE_RUNTIME_QUALIFIED",
+    "E05_TRAINING_RUNNER_NOT_YET_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "five_loss_runner": "NOT_YET_QUALIFIED; no numerical PCGAN losses implemented",
+  "gpat_m5_preserved": true,
+  "gpu_sync": {
+    "ancestor_distance": 1,
+    "archive": "/home/student20261/workdir/GPAT_TransferBench_runtime/recovery/M6D3e_pre_sync_20260924T082949_365687Z",
+    "archive_verified": 19,
+    "clean_after_sync": true,
+    "clean_before_sync": true,
+    "divergence": [
+      0,
+      0
+    ],
+    "post_merge_hash_matches": 19,
+    "post_merge_head": "05e90efa6c36e11405822c79fed8511c2179f043",
+    "pre_cleanup_head": "90263169f0731b397dfa459d7ac94eaafd2c69ec",
+    "sha256": {
+      "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Implementation_M6D3e.md": "c45f049abb77ab39447a68beaf6d18de9d8a999e1f12cb1a5761cf63ac2f18e4",
+      "environments/e04_training.compatibility_patch_manifest.json": "92a1dfbefc930c07fc505605be77a2cc2ed1fddf0eb7f46c0fd75ccd91e833a2",
+      "environments/e04_training.lock.json": "a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd",
+      "environments/e04_training.runtime.json": "3dc558858ab55fd401c63fd964d6653c5aba8482fc3187b08b4bfc78dff10ff9",
+      "methods/physics_std/losses.py": "94476c2b4bddc9e9692d478e271c145c1d595b7d2410fd2773606dfcc0c3ff02",
+      "methods/physics_std/network.py": "9d691809d487c5c9c27b5c9e08389225f606f8d72f1017d2991cd71e6214da21",
+      "methods/physics_std/trace_transfer.py": "8152a7643858cb523344dcfa8fbe1a84168082d545d6ca68f7435cf2a06882cd",
+      "methods/physics_std/training_contract.py": "f5c7962699320014a9711605a3fddc4d8d673f6c91fd2df9af5d216f628b36bd",
+      "methods/physics_std/training_graph.py": "af17ab2789f203834d9fd9121b357dd3e44e49689fccac6be25024926bf69f51",
+      "methods/physics_std/training_runtime.py": "2f3abac9287e1749c7358fc58a748f143c19a8a28a13339e4e2d6732e410a3df",
+      "outputs/audit/ARTIFACT_INDEX.csv": "296c669299657363fc0e5daf11b4b4c69a3275546c81abed92dba1949f26e533",
+      "outputs/audit/EXECUTION_LEDGER.jsonl": "10d52a4eb584d0dc200fe0e890794073861e484971f8131e023b9b5f13e6540f",
+      "outputs/audit/M6D3E_E04_SYNTHETIC_PROCESS_1.json": "8337804de8a8a493c361ea5dbbaa5c1e5b1339228f5d855af4c29746c51b29ef",
+      "outputs/audit/M6D3E_E04_SYNTHETIC_PROCESS_2.json": "a8f5cdb5fc7f3287c6a30f207d82fa5f70c406b3c2938f384e908deee03ec604",
+      "outputs/audit/M6D3E_E04_SYNTHETIC_RUNTIME_LOG.txt": "64caeeb4e3ae21ebbcd931e69bf4b49a58390ecf3f730bbd474987492e9e875c",
+      "outputs/audit/M6D3E_E04_TRAINING_GRAPH_QUALIFICATION.json": "f213ebeb9081f88085a03cce2e6b118d96f96d08794eae78ae3c6b21177e919d",
+      "outputs/audit/M6D3E_E04_TRAINING_GRAPH_QUALIFICATION.md": "27ebfe99a78b28a80372521cc2901c5607f23670ebbccd24b01cb0a99f5458b8",
+      "tests/test_m6d3e_e04_training_graph.py": "746a650f2af8db13707993dd56d6ffbfa39c3f75c41c7319f50c7a6c08af722f",
+      "tools/m6d3e_e04_training_preflight.py": "ece1768484223e212f4cac714cf7dff3b182f611b9b8ec9de9139be873730421"
+    }
+  },
+  "gradient_smokes": {
+    "blur_mixed": {
+      "all_finite": true,
+      "tensors": 46
+    },
+    "blur_target": {
+      "all_finite": true,
+      "tensors": 1
+    },
+    "image_D_mixed": {
+      "all_finite": true,
+      "tensors": 39
+    },
+    "image_D_real": {
+      "all_finite": true,
+      "tensors": 39
+    },
+    "image_D_reconstruction": {
+      "all_finite": true,
+      "tensors": 39
+    },
+    "mixed": {
+      "all_finite": true,
+      "tensors": 63
+    },
+    "patch_D": {
+      "all_finite": true,
+      "tensors": 44
+    },
+    "src_reconstruction": {
+      "all_finite": true,
+      "tensors": 60
+    },
+    "tgt_reconstruction": {
+      "all_finite": true,
+      "tensors": 60
+    }
+  },
+  "ledger": {
+    "after": 106,
+    "before": 105,
+    "first_105_byte_identical": true,
+    "prefix_sha256": "10d52a4eb584d0dc200fe0e890794073861e484971f8131e023b9b5f13e6540f"
+  },
+  "measured_shapes": {
+    "blur_mixed": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "blur_target": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "image_D_mixed": [
+      1,
+      1
+    ],
+    "image_D_real": [
+      1,
+      1
+    ],
+    "image_D_reconstruction": [
+      1,
+      1
+    ],
+    "mixed": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "patch_D": [
+      8,
+      1
+    ],
+    "patch_mixed": [
+      1,
+      8,
+      3,
+      128,
+      128
+    ],
+    "patch_mixed_features": [
+      8,
+      384,
+      2,
+      2
+    ],
+    "patch_source": [
+      1,
+      8,
+      3,
+      128,
+      128
+    ],
+    "patch_source_features": [
+      8,
+      384,
+      2,
+      2
+    ],
+    "src_global": [
+      1,
+      2048
+    ],
+    "src_reconstruction": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "src_spatial": [
+      1,
+      8,
+      128,
+      128
+    ],
+    "tgt_global": [
+      1,
+      2048
+    ],
+    "tgt_reconstruction": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "tgt_spatial": [
+      1,
+      8,
+      128,
+      128
+    ]
+  },
+  "milestone": "M6D4a",
+  "models_full_options_buffers_module_trees": "Both M6D4A_E05_SYNTHETIC_PROCESS JSON artifacts",
+  "parameter_counts": {
+    "encoder": 929960,
+    "generator": 3699233,
+    "image_discriminator": 28859521,
+    "patch_discriminator": 24522145
+  },
+  "patch_interface": "util.apply_random_crop -> extract_features(aggregate=patch_use_aggregation for reference) -> discriminate_features; upstream get_random_crops/compute_patch_discriminator_losses call path; no loss evaluated",
+  "patch_interface_note": "Use the active upstream apply_random_crop/extract_features/discriminate_features path. BasePatchDiscriminator.forward references missing sample_patches and is not invoked by the upstream training model. No tile semantics or PCGAN loss convention was invented.",
+  "preserved_inputs_sha256": {
+    "configs/amendments/e05_a5_blur_operator_resolution.yaml": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1",
+    "configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A5_E05_Blur_Operator_Resolution.md": "05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd",
+    "frozen_config_snapshot/configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "methods/pcgan/__init__.py": "efe5e8e011798e47a04e72305f80e787409722f392ccb47e8454e243d007552e",
+    "methods/pcgan/adapter.py": "7a4119fb1dac33aaee6d5e454f88dd7212b121808da3500c3c6d044de500fb44",
+    "methods/pcgan/architecture.py": "d0da76078283c82549250b7d0c8f02cc6057f7e091f4095cacc1cc7c02551826",
+    "methods/pcgan/blur.py": "ec16f8620534d7908ba23bb459ffdf5844d9d85a0ed8f6ad8668b094c67cdde9",
+    "methods/pcgan/contract.py": "2578d6e41bd9c86800a553ee57d8c469efa7f401e7f52bb1dcfa41200a9a64fe",
+    "methods/pcgan/source.py": "9c46f8869ce87124a9ecbcf5d03717b9cfc0f872b2ffb2b1c14822f36d9017b3",
+    "methods/pcgan/source_traceability.md": "61645843f65a51e7858787cfbc7cf30f1ff75763c8ded6da41d96410d4c5c1bd",
+    "outputs/audit/M6A7_E05_BLUR_OPERATOR_RESOLUTION.md": "235e5411ef129cac01f8b4c15a53d9dc042f7b010ea876e1e617c55bb02f0302",
+    "outputs/audit/M6C2B2_IMPLEMENTATION.md": "b8ff7ef9c7feb61948647b86419816265502328176bead12abf9ba75bc48893b",
+    "tests/test_m6a7_e05_blur_contract.py": "e004cda10df32f14cca26a85c8a771d87978f00be16c2ba7ba835283d59a195e",
+    "tests/test_m6c2b2_pcgan.py": "8f34f784069f60f732f30585c3c4de55e27cd1f136cfaedfce21c21838d00316",
+    "tests/test_m6c2b2_pcgan_architecture.py": "c7f2939a8782bb2f50d6f3667b1a3aa16090d8e91f7b5b01c3877d72c6358936"
+  },
+  "repeatability": {
+    "all_forward_bitwise_equal": true,
+    "all_gradient_bitwise_equal": false,
+    "independent_processes": 2,
+    "measurement_limit": "Tensor hashes and scalar-statistic differences; scalar differences are not elementwise error bounds. No output images/tensor bank persisted.",
+    "measurements": {
+      "forward/blur_mixed": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/blur_target": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/image_D_mixed": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/image_D_real": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/image_D_reconstruction": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/mixed": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/patch_D": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/patch_mixed": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/patch_mixed_features": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/patch_source": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/patch_source_features": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/src_global": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/src_reconstruction": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/src_spatial": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/tgt_global": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/tgt_reconstruction": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "forward/tgt_spatial": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.2017145051567155e-12,
+          "max": 0.0,
+          "mean": 1.1176837233506376e-11,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.0658351331664937e-12,
+          "max": 0.0,
+          "mean": 1.8189894035458565e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.668684669005725e-14,
+          "max": 0.0,
+          "mean": 2.632991328628152e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.1674965464877896e-12,
+          "max": 0.0,
+          "mean": 2.2453938218188683e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 8.731149137020111e-11,
+          "max": 8.731149137020111e-11,
+          "mean": 8.731149137020111e-11,
+          "min": 8.731149137020111e-11
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.938639081020213e-11,
+          "max": 0.0,
+          "mean": 4.632738637155853e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.918055538152057e-13,
+          "max": 0.0,
+          "mean": 4.405364961712621e-13,
+          "min": 1.4551915228366852e-11
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4512142640474464e-14,
+          "max": 0.0,
+          "mean": 3.380440250091377e-18,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.1156670045904296e-14,
+          "max": 0.0,
+          "mean": 4.629593569094347e-17,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4551915228366852e-10,
+          "max": 1.4551915228366852e-10,
+          "mean": 1.4551915228366852e-10,
+          "min": 1.4551915228366852e-10
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock0.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.3882357680013455e-12,
+          "max": 0.0,
+          "mean": 7.051542509628472e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 9.761291774879055e-11,
+          "max": 0.0,
+          "mean": 1.864730592160413e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.512261433236355e-13,
+          "max": 0.0,
+          "mean": 2.0605739337042905e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.324517278082811e-14,
+          "max": 0.0,
+          "mean": 3.834195034793439e-18,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.50006721454099e-12,
+          "max": 0.0,
+          "mean": 9.745471400185348e-17,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.637978807091713e-11,
+          "max": 3.637978807091713e-11,
+          "mean": 3.637978807091713e-11,
+          "min": 3.637978807091713e-11
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4968174269491819e-10,
+          "max": 0.0,
+          "mean": 1.035616037370346e-12,
+          "min": 4.656612873077393e-10
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.1300558932939593e-13,
+          "max": 0.0,
+          "mean": 2.4868995751603507e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.5345851583985154e-15,
+          "max": 0.0,
+          "mean": 1.8632137961475819e-19,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.265406608304877e-13,
+          "max": 0.0,
+          "mean": 2.1288424469421902e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6370904631912708e-11,
+          "max": 1.6370904631912708e-11,
+          "mean": 1.6370904631912708e-11,
+          "min": 1.6370904631912708e-11
+        }
+      },
+      "gradient/blur_mixed/G.HeadResnetBlock1.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.0676570304929411e-12,
+          "max": 0.0,
+          "mean": 2.4429599104281233e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.SpatialCodeModulation.bias.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.397403026626165e-12,
+          "max": 0.0,
+          "mean": 1.4551915228366852e-11,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.SpatialCodeModulation.bias.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.087460842543521e-14,
+          "max": 0.0,
+          "mean": 1.1565260806868129e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.SpatialCodeModulation.scale.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.3783071906026123e-13,
+          "max": 0.0,
+          "mean": 1.8189894035458565e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.SpatialCodeModulation.scale.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.0824409864849134e-15,
+          "max": 0.0,
+          "mean": 1.3426636884283135e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.ToRGB.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.ToRGB.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.ToRGB.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.ToRGB.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv1.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv1.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv1.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv1.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv1.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv2.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv2.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv2.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv2.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.conv2.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.skip.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.4200681309503054e-11,
+          "max": 0.0,
+          "mean": 3.0127011996228248e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/G.UpsamplingResBlock16.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.3855869456821406e-14,
+          "max": 0.0,
+          "mean": 4.9678482356464715e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/global_code": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.476779281141873e-11,
+          "max": 0.0,
+          "mean": 2.184918912462308e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/source_input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.8974661184184387e-14,
+          "max": 2.1316282072803006e-14,
+          "mean": 1.2197353022620117e-18,
+          "min": 7.105427357601002e-15
+        }
+      },
+      "gradient/blur_mixed/spatial_code": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.8679402263947183e-14,
+          "max": 0.0,
+          "mean": 5.673668879192659e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/blur_mixed/target_input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.978075853552706e-13,
+          "max": 5.684341886080802e-14,
+          "mean": 3.826369943421815e-16,
+          "min": 1.1368683772161603e-13
+        }
+      },
+      "gradient/blur_target/target_input": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.0.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.0.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.1.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.1.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.1.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.1.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.1.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.2.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.2.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.2.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.2.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.2.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.3.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.3.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.3.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.3.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.3.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.4.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.4.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.4.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.4.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.4.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.5.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.5.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.5.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.5.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.5.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.6.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.6.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.6.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.6.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.convs.6.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.final_conv.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.final_conv.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.final_linear.0.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.final_linear.0.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.final_linear.1.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/D.stylegan2_D.final_linear.1.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_mixed/image_input": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.0.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.0.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.1.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.1.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.1.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.1.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.1.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.2.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.2.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.2.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.2.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.2.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.3.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.3.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.3.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.3.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.3.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.4.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.4.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.4.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.4.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.4.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.5.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.5.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.5.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.5.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.5.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.6.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.6.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.6.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.6.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.convs.6.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.final_conv.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.final_conv.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.final_linear.0.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.final_linear.0.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.final_linear.1.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/D.stylegan2_D.final_linear.1.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_real/image_input": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.0.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.0.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.1.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.1.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.1.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.1.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.1.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.2.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.2.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.2.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.2.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.2.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.3.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.3.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.3.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.3.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.3.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.4.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.4.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.4.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.4.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.4.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.5.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.5.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.5.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.5.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.5.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.6.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.6.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.6.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.6.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.convs.6.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.final_conv.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.final_conv.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.final_linear.0.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.final_linear.0.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.final_linear.1.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/D.stylegan2_D.final_linear.1.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/image_D_reconstruction/image_input": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/E.DownToGlobalCode.ConvLayerDownBy2.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.890905507138002e-11,
+          "max": 0.0,
+          "mean": 5.205613717862434e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/E.DownToGlobalCode.ConvLayerDownBy2.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.9129497060065577e-11,
+          "max": 5.4569682106375694e-12,
+          "mean": 4.954320145390931e-14,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/mixed/E.DownToGlobalCode.ConvLayerDownBy4.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.656246209936102e-11,
+          "max": 0.0,
+          "mean": 9.880984919163893e-13,
+          "min": 1.1641532182693481e-10
+        }
+      },
+      "gradient/mixed/E.DownToGlobalCode.ConvLayerDownBy4.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.626352737719606e-11,
+          "max": 0.0,
+          "mean": 9.604429568475316e-15,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/mixed/E.DownToSpatialCode.ResBlockDownBy1.conv1.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.3779905797157987e-10,
+          "max": 5.820766091346741e-11,
+          "mean": 1.9895196601282805e-12,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/mixed/E.DownToSpatialCode.ResBlockDownBy1.conv1.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.4652722817027646e-11,
+          "max": 3.637978807091713e-12,
+          "mean": 3.3181983348479866e-14,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/mixed/E.DownToSpatialCode.ResBlockDownBy1.conv2.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 9.101180226123162e-11,
+          "max": 0.0,
+          "mean": 4.575895218295045e-12,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/mixed/E.DownToSpatialCode.ResBlockDownBy1.conv2.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.9056514030782743e-11,
+          "max": 3.637978807091713e-12,
+          "mean": 5.405854017811662e-14,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/mixed/E.DownToSpatialCode.ResBlockDownBy1.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.1099326116564426e-11,
+          "max": 3.637978807091713e-12,
+          "mean": 2.5034488371211694e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/E.FromRGB.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6016677979562022e-10,
+          "max": 0.0,
+          "mean": 1.0231815394945443e-12,
+          "min": 1.1641532182693481e-10
+        }
+      },
+      "gradient/mixed/E.FromRGB.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.5077319304396837e-11,
+          "max": 0.0,
+          "mean": 2.8788823178625114e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/E.ToGlobalCode.0.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.154488471991291e-11,
+          "max": 0.0,
+          "mean": 1.176298641825113e-13,
+          "min": 2.9103830456733704e-11
+        }
+      },
+      "gradient/mixed/E.ToGlobalCode.0.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.5921423250978006e-11,
+          "max": 0.0,
+          "mean": 1.5356455043633636e-15,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/mixed/E.ToSpatialCode.0.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.770419856723937e-12,
+          "max": 0.0,
+          "mean": 5.639932965095795e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/E.ToSpatialCode.0.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.711384719175647e-13,
+          "max": 0.0,
+          "mean": 1.5439038936193583e-15,
+          "min": 9.094947017729282e-13
+        }
+      },
+      "gradient/mixed/E.ToSpatialCode.1.Conv.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.0159415546557322e-12,
+          "max": 0.0,
+          "mean": 3.183231456205249e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/E.ToSpatialCode.1.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.363784352716475e-13,
+          "max": 0.0,
+          "mean": 7.925951561738032e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.204137649648331e-11,
+          "max": 0.0,
+          "mean": 3.247180302423658e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.379378200885075e-11,
+          "max": 0.0,
+          "mean": 3.637978807091713e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.362782191116905e-13,
+          "max": 0.0,
+          "mean": 2.7997138824274e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.5725265057123239e-12,
+          "max": 7.275957614183426e-12,
+          "mean": 5.445181053456542e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.3655745685100555e-11,
+          "max": 4.3655745685100555e-11,
+          "mean": 4.3655745685100555e-11,
+          "min": 4.3655745685100555e-11
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.7143550468112778e-11,
+          "max": 0.0,
+          "mean": 5.002220859751105e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 9.810194648816883e-12,
+          "max": 2.9103830456733704e-11,
+          "mean": 4.121147867408581e-13,
+          "min": 1.4551915228366852e-11
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.1904713997788084e-13,
+          "max": 2.842170943040401e-14,
+          "mean": 2.4233202003319583e-18,
+          "min": 5.684341886080802e-14
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.485086467863106e-12,
+          "max": 0.0,
+          "mean": 8.944623189077885e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.820766091346741e-11,
+          "max": 5.820766091346741e-11,
+          "mean": 5.820766091346741e-11,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock0.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.792321150314196e-12,
+          "max": 0.0,
+          "mean": 3.8259272052559856e-14,
+          "min": 1.4551915228366852e-11
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.542683134014844e-10,
+          "max": 9.313225746154785e-10,
+          "mean": 4.1318060084449826e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.837012096259083e-12,
+          "max": 0.0,
+          "mean": 3.090860900556436e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.97983681871706e-14,
+          "max": 0.0,
+          "mean": 2.3798572875150665e-18,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.216720068076941e-13,
+          "max": 9.094947017729282e-13,
+          "mean": 7.197147632080164e-17,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.1641532182693481e-10,
+          "max": 1.1641532182693481e-10,
+          "mean": 1.1641532182693481e-10,
+          "min": 1.1641532182693481e-10
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.1465898369644734e-10,
+          "max": 0.0,
+          "mean": 4.277467269275803e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.685501014615011e-12,
+          "max": 0.0,
+          "mean": 3.1530333899354446e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 8.305501943205e-14,
+          "max": 0.0,
+          "mean": 1.212841339930099e-18,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.0384865670464158e-13,
+          "max": 1.8189894035458565e-12,
+          "mean": 1.522274787370031e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.8189894035458565e-12,
+          "max": 1.8189894035458565e-12,
+          "mean": 1.8189894035458565e-12,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/mixed/G.HeadResnetBlock1.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.187628976221047e-13,
+          "max": 0.0,
+          "mean": 8.567507444999121e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.SpatialCodeModulation.bias.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.293102566834463e-10,
+          "max": 1.862645149230957e-09,
+          "mean": 3.4924596548080444e-10,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.SpatialCodeModulation.bias.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4107240983024516e-11,
+          "max": 3.637978807091713e-12,
+          "mean": 2.669319301186468e-15,
+          "min": 7.275957614183426e-12
+        }
+      },
+      "gradient/mixed/G.SpatialCodeModulation.scale.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.3943707299901575e-13,
+          "max": 0.0,
+          "mean": 1.8189894035458565e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.SpatialCodeModulation.scale.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.058154857821238e-15,
+          "max": 0.0,
+          "mean": 2.5481292152251117e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.ToRGB.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.ToRGB.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.ToRGB.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.ToRGB.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv1.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv1.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv1.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv1.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv1.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv2.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv2.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv2.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv2.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.conv2.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.skip.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.408787819351836e-11,
+          "max": 0.0,
+          "mean": 2.1884716261411086e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/G.UpsamplingResBlock16.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2006758434712772e-13,
+          "max": 0.0,
+          "mean": 1.4007883598183245e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/global_code": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.989330988971254e-10,
+          "max": 0.0,
+          "mean": 1.98596694644948e-12,
+          "min": 4.656612873077393e-10
+        }
+      },
+      "gradient/mixed/source_input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.3649639731504685e-14,
+          "max": 7.105427357601002e-15,
+          "mean": 3.127268181934569e-18,
+          "min": 1.4210854715202004e-14
+        }
+      },
+      "gradient/mixed/spatial_code": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 8.773998407430195e-15,
+          "max": 1.4210854715202004e-14,
+          "mean": 3.3064407552104444e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/mixed/target_input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4017973522413574e-12,
+          "max": 5.684341886080802e-14,
+          "mean": 1.604241048154822e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.0.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.0.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.1.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.1.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.1.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.1.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.1.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.128x128.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.128x128.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.128x128.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.128x128.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.128x128.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.2.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.2.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.2.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.2.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.2.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.3.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.3.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.3.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.3.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.3.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.4.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.4.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.4.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.4.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.4.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.5.conv1.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.5.conv1.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.5.conv2.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.5.conv2.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.5.skip.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.6.Act.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.convs.6.Conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.0.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.0.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.1.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.1.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.2.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.2.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.3.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/P.pairlinear.3.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/patch_D/mixed_input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.827923229447137e-12,
+          "max": 1.4551915228366852e-11,
+          "mean": 2.291982216810675e-16,
+          "min": 7.275957614183426e-12
+        }
+      },
+      "gradient/patch_D/source_input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.392538416331249e-12,
+          "max": 0.0,
+          "mean": 1.8104490684942888e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.DownToGlobalCode.ConvLayerDownBy2.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2381618495239943e-10,
+          "max": 5.820766091346741e-11,
+          "mean": 3.887556943027448e-12,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/src_reconstruction/E.DownToGlobalCode.ConvLayerDownBy2.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.9812932573109194e-11,
+          "max": 1.8189894035458565e-12,
+          "mean": 2.9477074710307374e-14,
+          "min": 9.094947017729282e-12
+        }
+      },
+      "gradient/src_reconstruction/E.DownToGlobalCode.ConvLayerDownBy4.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2312072368569904e-11,
+          "max": 0.0,
+          "mean": 8.620881786214341e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.DownToGlobalCode.ConvLayerDownBy4.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.9591899517357225e-12,
+          "max": 3.637978807091713e-12,
+          "mean": 2.689410211320013e-15,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/src_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv1.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.489454767484969e-11,
+          "max": 0.0,
+          "mean": 6.30961949354969e-12,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/src_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv1.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.0451271467183665e-11,
+          "max": 0.0,
+          "mean": 3.5501076760591547e-14,
+          "min": 7.275957614183426e-12
+        }
+      },
+      "gradient/src_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv2.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 9.464984915621977e-11,
+          "max": 5.820766091346741e-11,
+          "mean": 8.72546479513403e-12,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/src_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv2.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.8068297129737038e-11,
+          "max": 5.4569682106375694e-12,
+          "mean": 5.801332231811927e-14,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/src_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.8777029031028653e-11,
+          "max": 3.637978807091713e-12,
+          "mean": 2.643512578975882e-13,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/src_reconstruction/E.FromRGB.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.4950255283514604e-11,
+          "max": 5.820766091346741e-11,
+          "mean": 1.304556462855544e-11,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/src_reconstruction/E.FromRGB.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.0016918934943608e-12,
+          "max": 0.0,
+          "mean": 1.8474111129762605e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.ToGlobalCode.0.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.2677879065884374e-11,
+          "max": 0.0,
+          "mean": 2.3869795029440866e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.ToGlobalCode.0.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2398501062632628e-11,
+          "max": 0.0,
+          "mean": 2.604125074442991e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.ToSpatialCode.0.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.500814767943116e-13,
+          "max": 0.0,
+          "mean": 1.7541523789077473e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.ToSpatialCode.0.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.7678775652597845e-13,
+          "max": 1.8189894035458565e-12,
+          "mean": 2.3312786163326438e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.ToSpatialCode.1.Conv.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.207456227017567e-12,
+          "max": 0.0,
+          "mean": 9.094947017729282e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/E.ToSpatialCode.1.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2533430510889426e-12,
+          "max": 0.0,
+          "mean": 7.957176584305614e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.034695395646828e-11,
+          "max": 0.0,
+          "mean": 8.341771717823576e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.9430131132211526e-12,
+          "max": 2.9103830456733704e-11,
+          "mean": 1.1823431123048067e-11,
+          "min": 2.9103830456733704e-11
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6447052019732868e-13,
+          "max": 0.0,
+          "mean": 1.6996499592133747e-16,
+          "min": 5.684341886080802e-14
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 9.084724075444917e-13,
+          "max": 0.0,
+          "mean": 3.3253056612534554e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.3096723705530167e-10,
+          "max": 1.3096723705530167e-10,
+          "mean": 1.3096723705530167e-10,
+          "min": 1.3096723705530167e-10
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.257053390355203e-11,
+          "max": 0.0,
+          "mean": 5.151434834260726e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.929965840260673e-12,
+          "max": 0.0,
+          "mean": 1.6555645743210334e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.374982905118804e-14,
+          "max": 0.0,
+          "mean": 1.7436709206417313e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2044033305402824e-12,
+          "max": 0.0,
+          "mean": 1.1112372671701548e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.820766091346741e-11,
+          "max": 5.820766091346741e-11,
+          "mean": 5.820766091346741e-11,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock0.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4200639362332845e-12,
+          "max": 0.0,
+          "mean": 1.6106907474444654e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.0052404181569727e-11,
+          "max": 0.0,
+          "mean": 2.708944180085382e-13,
+          "min": 4.656612873077393e-10
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6475460318937651e-12,
+          "max": 0.0,
+          "mean": 8.402167850363185e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.976505268728919e-14,
+          "max": 0.0,
+          "mean": 6.518048474026194e-18,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6217962302972344e-13,
+          "max": 0.0,
+          "mean": 4.052416418371876e-16,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.9103830456733704e-11,
+          "max": 2.9103830456733704e-11,
+          "mean": 2.9103830456733704e-11,
+          "min": 2.9103830456733704e-11
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.0943997364474285e-14,
+          "max": 0.0,
+          "mean": 8.588685318500211e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.971123226942987e-12,
+          "max": 1.4551915228366852e-11,
+          "mean": 5.409006575973763e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2402091072866162e-13,
+          "max": 2.842170943040401e-14,
+          "mean": 4.548310481378656e-18,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6487082966226696e-13,
+          "max": 9.094947017729282e-13,
+          "mean": 1.5997653029004731e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.637978807091713e-12,
+          "max": 3.637978807091713e-12,
+          "mean": 3.637978807091713e-12,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/src_reconstruction/G.HeadResnetBlock1.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.2613102716609896e-13,
+          "max": 0.0,
+          "mean": 8.733207735910152e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.SpatialCodeModulation.bias.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.253344855822185e-10,
+          "max": 0.0,
+          "mean": 2.1827872842550278e-10,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.SpatialCodeModulation.bias.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.3460129061684811e-11,
+          "max": 0.0,
+          "mean": 3.317973744062022e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.SpatialCodeModulation.scale.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.6404579004112314e-11,
+          "max": 0.0,
+          "mean": 2.7284841053187847e-11,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.SpatialCodeModulation.scale.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 8.01126255178114e-13,
+          "max": 0.0,
+          "mean": 2.103250570668208e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.ToRGB.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.ToRGB.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.ToRGB.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.ToRGB.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv1.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv1.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv1.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv1.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv1.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv2.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv2.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv2.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv2.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.conv2.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.skip.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.073857495981212e-10,
+          "max": 0.0,
+          "mean": 1.9182433419473455e-12,
+          "min": 4.656612873077393e-10
+        }
+      },
+      "gradient/src_reconstruction/G.UpsamplingResBlock16.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.629203700396879e-13,
+          "max": 0.0,
+          "mean": 2.105276567598922e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/src_reconstruction/input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 8.441813938967098e-13,
+          "max": 1.1368683772161603e-13,
+          "mean": 1.9593052622162203e-15,
+          "min": 5.684341886080802e-14
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToGlobalCode.ConvLayerDownBy2.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.2756334617086695e-11,
+          "max": 0.0,
+          "mean": 1.9308998844280723e-12,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToGlobalCode.ConvLayerDownBy2.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.991632432914395e-12,
+          "max": 1.8189894035458565e-12,
+          "mean": 5.958284760843431e-15,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToGlobalCode.ConvLayerDownBy4.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.934099573887906e-12,
+          "max": 0.0,
+          "mean": 2.3828855555407813e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToGlobalCode.ConvLayerDownBy4.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.0883995447844592e-12,
+          "max": 0.0,
+          "mean": 1.530740852395644e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv1.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.528577912994938e-11,
+          "max": 1.1641532182693481e-10,
+          "mean": 4.916955731459893e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv1.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4253223167698392e-11,
+          "max": 1.8189894035458565e-12,
+          "mean": 1.470869621236835e-14,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv2.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6646397585015626e-11,
+          "max": 2.9103830456733704e-11,
+          "mean": 2.3021584638627246e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.conv2.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 8.848520006987659e-12,
+          "max": 1.8189894035458565e-12,
+          "mean": 2.5372212837490484e-15,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/tgt_reconstruction/E.DownToSpatialCode.ResBlockDownBy1.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 9.671643423202897e-12,
+          "max": 3.637978807091713e-12,
+          "mean": 1.7804659656339705e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.FromRGB.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.062234260932221e-12,
+          "max": 1.1641532182693481e-10,
+          "mean": 8.29913915367797e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.FromRGB.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.8671629090024076e-11,
+          "max": 0.0,
+          "mean": 2.1095717768067584e-12,
+          "min": 1.4551915228366852e-11
+        }
+      },
+      "gradient/tgt_reconstruction/E.ToGlobalCode.0.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.161940749316308e-12,
+          "max": 0.0,
+          "mean": 1.1992230125601466e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.ToGlobalCode.0.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.5059750281830606e-12,
+          "max": 0.0,
+          "mean": 1.5538026118085477e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.ToSpatialCode.0.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.4275212956160743e-13,
+          "max": 0.0,
+          "mean": 4.618527782440651e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/E.ToSpatialCode.0.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.284580502889046e-13,
+          "max": 0.0,
+          "mean": 1.5247135151663649e-15,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/tgt_reconstruction/E.ToSpatialCode.1.Conv.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.688356128081575e-11,
+          "max": 0.0,
+          "mean": 3.637978807091713e-12,
+          "min": 2.9103830456733704e-11
+        }
+      },
+      "gradient/tgt_reconstruction/E.ToSpatialCode.1.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.132654605493781e-13,
+          "max": 0.0,
+          "mean": 8.208711488322251e-15,
+          "min": 3.637978807091713e-12
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.904847444337946e-11,
+          "max": 0.0,
+          "mean": 7.432277016050648e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.55079854008722e-12,
+          "max": 0.0,
+          "mean": 3.637978807091713e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.0385048466250886e-13,
+          "max": 0.0,
+          "mean": 2.0608470425374737e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.0547657799259147e-11,
+          "max": 0.0,
+          "mean": 2.4770974849015973e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.820766091346741e-11,
+          "max": 5.820766091346741e-11,
+          "mean": 5.820766091346741e-11,
+          "min": 5.820766091346741e-11
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.671534422657665e-11,
+          "max": 0.0,
+          "mean": 2.0605739337042905e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.183950824346693e-12,
+          "max": 0.0,
+          "mean": 1.8971491044794675e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.04152024638997e-14,
+          "max": 0.0,
+          "mean": 1.8622615613360473e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 9.083136803464398e-13,
+          "max": 0.0,
+          "mean": 1.2969947424067954e-15,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.9103830456733704e-11,
+          "max": 2.9103830456733704e-11,
+          "mean": 2.9103830456733704e-11,
+          "min": 2.9103830456733704e-11
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock0.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.669743324664521e-13,
+          "max": 7.275957614183426e-12,
+          "mean": 1.7747739042284216e-14,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv1.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.375665761860212e-10,
+          "max": 0.0,
+          "mean": 3.398170633772679e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv1.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.290862687545473e-12,
+          "max": 0.0,
+          "mean": 3.907985046680551e-13,
+          "min": 2.9103830456733704e-11
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv1.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.3919412362095249e-13,
+          "max": 5.684341886080802e-14,
+          "mean": 4.887186855586705e-18,
+          "min": 5.684341886080802e-14
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv1.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 8.197859708777844e-13,
+          "max": 0.0,
+          "mean": 6.000518577982249e-16,
+          "min": 1.8189894035458565e-12
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv1.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.1641532182693481e-10,
+          "max": 1.1641532182693481e-10,
+          "mean": 1.1641532182693481e-10,
+          "min": 1.1641532182693481e-10
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv2.activate.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 7.652038724881294e-12,
+          "max": 0.0,
+          "mean": 1.4583889651476056e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv2.conv.modulation.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.8460765645263453e-12,
+          "max": 0.0,
+          "mean": 1.2256862191861728e-13,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv2.conv.modulation.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 6.277362527354335e-14,
+          "max": 0.0,
+          "mean": 1.0462230147654418e-18,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv2.conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 2.6860512512133505e-13,
+          "max": 0.0,
+          "mean": 9.865962271202094e-17,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.conv2.noise.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.547473508864641e-12,
+          "max": 4.547473508864641e-12,
+          "mean": 4.547473508864641e-12,
+          "min": 4.547473508864641e-12
+        }
+      },
+      "gradient/tgt_reconstruction/G.HeadResnetBlock1.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 5.559181587289075e-13,
+          "max": 0.0,
+          "mean": 3.3519603057958905e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.SpatialCodeModulation.bias.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.SpatialCodeModulation.bias.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.SpatialCodeModulation.scale.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 4.914251991450236e-10,
+          "max": 0.0,
+          "mean": 1.1095835361629725e-10,
+          "min": 9.313225746154785e-10
+        }
+      },
+      "gradient/tgt_reconstruction/G.SpatialCodeModulation.scale.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.1339712372229749e-11,
+          "max": 0.0,
+          "mean": 9.409448136053647e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.ToRGB.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.ToRGB.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.ToRGB.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.ToRGB.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv1.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv1.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv1.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv1.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv1.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv2.activate.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv2.conv.modulation.bias": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv2.conv.modulation.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv2.conv.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.conv2.noise.weight": {
+        "bitwise_equal": true,
+        "summary_absolute_differences": {
+          "l2": 0.0,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.skip.Act.bias": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.7747420200109332e-10,
+          "max": 0.0,
+          "mean": 4.433786671143025e-12,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/G.UpsamplingResBlock16.skip.Conv.weight": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 3.9272697507225507e-13,
+          "max": 0.0,
+          "mean": 6.352501464852549e-16,
+          "min": 0.0
+        }
+      },
+      "gradient/tgt_reconstruction/input": {
+        "bitwise_equal": false,
+        "summary_absolute_differences": {
+          "l2": 1.6693852517794122e-13,
+          "max": 0.0,
+          "mean": 7.412915014799437e-16,
+          "min": 0.0
+        }
+      }
+    },
+    "nondeterminism_note": "Backward variance is consistent with native CUDA accumulation, including bilinear interpolation backward in the generator skip and grid_sample backward in the patch-crop path. Kernel-level attribution is inferred, not directly profiled. Scientific operations were not altered.",
+    "structural_identity": {
+      "diagnostic_seed": true,
+      "environment_before": true,
+      "extensions": true,
+      "generated_copy_manifest_sha256": true,
+      "models": true,
+      "parameter_sha256_before": true,
+      "source_before": true
+    }
+  },
+  "repeatability_summary": {
+    "all_diagnostic_tensors": 408,
+    "changed_by_branch": {
+      "blur_mixed": 32,
+      "mixed": 49,
+      "patch_D": 2,
+      "src_reconstruction": 46,
+      "tgt_reconstruction": 44
+    },
+    "changed_gradient_tensors": 173,
+    "maximum_summary_absolute_differences": {
+      "l2": 6.989330988971254e-10,
+      "max": 1.862645149230957e-09,
+      "mean": 3.4924596548080444e-10,
+      "min": 9.313225746154785e-10
+    }
+  },
+  "reporting_label": "PCGAN (controlled architecture resolution)",
+  "runtime_created": "gpat-m6-e05",
+  "safety": {
+    "TEST_sample_access": false,
+    "TRAIN_sample_access": false,
+    "VAL_sample_access": false,
+    "benchmark_data_access": false,
+    "benchmark_image_decode": false,
+    "benchmark_image_filename_enumeration": false,
+    "benchmark_training": false,
+    "commit": false,
+    "frozen_config_mutation": false,
+    "optimizer_step": false,
+    "pretrained_weights": false,
+    "push": false,
+    "scientific_checkpoint": false,
+    "source_cache_mutation": false,
+    "synthetic_bank": false
+  },
+  "scientific_contract": {
+    "Adam": {
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "lr": 1e-06
+    },
+    "TEST": "FORBIDDEN",
+    "alpha": 0.2,
+    "alpha_beta_scope": "PMN; not weights for the five PCGAN terms",
+    "batch_size": 1,
+    "beta": 1e-06,
+    "checkpoint_rule": "BASELINE_FINAL_STATE_V1",
+    "iterations": 4000,
+    "losses": [
+      "L_rec",
+      "L_recblur",
+      "L_advrec",
+      "L_advmix",
+      "L_pat"
+    ],
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "terminal_state": "iteration_4000",
+    "training": 256,
+    "weights": "ALL_UNIT_WEIGHTED"
+  },
+  "source_integrity": {
+    "before_after_equal": true,
+    "cache_worktree_clean": true,
+    "code_files_with_git_blob_and_sha256": 67,
+    "required_files_verified": 23
+  },
+  "successful_qualification_processes": 2,
+  "test_scope": "43 preserved E05/A5 tests plus 22 focused runtime evidence/guard tests. Laptop skips only pre-existing real Torch pooling test because Torch is absent; GPU runs all 65. Full repository suite not run.",
+  "tests": {
+    "gpu": {
+      "errors": 0,
+      "failures": 0,
+      "firewall_denied": [],
+      "skips": 0,
+      "tests": 65
+    },
+    "laptop": {
+      "errors": 0,
+      "failures": 0,
+      "firewall_denied": [],
+      "skips": 1,
+      "tests": 65
+    }
+  },
+  "timestamp_utc": "2026-09-24T08:57:46.403605+00:00",
+  "total_model_diagnostic_processes_including_exploratory": 4,
+  "unresolved_scientific_ambiguity_encountered": false
+}
