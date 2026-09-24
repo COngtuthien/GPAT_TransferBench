@@ -1,0 +1,42 @@
+{
+  "engineering_compatibility": [
+    "Direct isolated package load avoids the newer-Python geometry/controller imports; graph executes native TensorFlow1.",
+    "Native TF1 bilinear resize and gather warp are CPU placed; convolution device assignments are recorded as GPU.",
+    "TF1 exposes no auto_mixed_precision_mkl field: conditional guard leaves missing field unset; all available AMP/global precision rewrites disabled.",
+    "Standard batch-normalization UPDATE_OPS explicitly sequenced before each apply as frozen in the implementation record.",
+    "Optional CUPTI profiler library unavailable; native executor device placement still recorded, no package installation.",
+    "GPU Git fetch used a temporary GIT_SSH_COMMAND hostname address override with HostKeyAlias=github.com after DNS failure. No Git/system configuration changed."
+  ],
+  "environment_mutation": false,
+  "environment_owner": "E03",
+  "packages_installed": [],
+  "precision_controls": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "CUDA_VISIBLE_DEVICES": "0",
+    "NVIDIA_TF32_OVERRIDE": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "TF_CUDNN_DETERMINISTIC": "1",
+    "TF_DETERMINISTIC_OPS": "1",
+    "TF_ENABLE_AUTO_MIXED_PRECISION": "0",
+    "TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE": "0",
+    "TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32": "0",
+    "TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32": "0",
+    "TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32": "0",
+    "TF_ENABLE_ONEDNN_OPTS": "0",
+    "TF_XLA_FLAGS": "--tf_xla_auto_jit=0"
+  },
+  "schema_version": 1,
+  "scientific_contract_changed": false,
+  "source_sha256": {
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Training_Graph_Implementation_M6D3e.md": "c45f049abb77ab39447a68beaf6d18de9d8a999e1f12cb1a5761cf63ac2f18e4",
+    "methods/physics_std/losses.py": "94476c2b4bddc9e9692d478e271c145c1d595b7d2410fd2773606dfcc0c3ff02",
+    "methods/physics_std/network.py": "9d691809d487c5c9c27b5c9e08389225f606f8d72f1017d2991cd71e6214da21",
+    "methods/physics_std/trace_transfer.py": "8152a7643858cb523344dcfa8fbe1a84168082d545d6ca68f7435cf2a06882cd",
+    "methods/physics_std/training_contract.py": "f5c7962699320014a9711605a3fddc4d8d673f6c91fd2df9af5d216f628b36bd",
+    "methods/physics_std/training_graph.py": "af17ab2789f203834d9fd9121b357dd3e44e49689fccac6be25024926bf69f51",
+    "methods/physics_std/training_runtime.py": "2f3abac9287e1749c7358fc58a748f143c19a8a28a13339e4e2d6732e410a3df",
+    "tests/test_m6d3e_e04_training_graph.py": "746a650f2af8db13707993dd56d6ffbfa39c3f75c41c7319f50c7a6c08af722f",
+    "tools/m6d3e_e04_training_preflight.py": "ece1768484223e212f4cac714cf7dff3b182f611b9b8ec9de9139be873730421"
+  }
+}
