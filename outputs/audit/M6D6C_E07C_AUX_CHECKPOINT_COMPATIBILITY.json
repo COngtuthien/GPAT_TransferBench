@@ -1,0 +1,742 @@
+{
+  "artifacts_sha256": {
+    "methods/difffas/aux_checkpoint.py": "a794eac24b3572fc28158c1ca087d7487c1d9682be87ca232ce24a6295a4b944",
+    "methods/difffas/aux_checkpoint_qualification.py": "d5b8eb30ffc5d439351d464c10dd5e1c5f7195f980b451947d07ce05d1d65922",
+    "outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_COMPATIBILITY.md": "066e848e05616f2a94de2ecf055a2e3a84f42d5dd073d524332e2571338c79ac",
+    "outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_LOADER_PROCESS_1.json": "70d0dd7318679d84437f626a8a27adff59d339236de9828c8fc69ff08b262321",
+    "outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_LOADER_PROCESS_2.json": "70d0dd7318679d84437f626a8a27adff59d339236de9828c8fc69ff08b262321",
+    "outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_RUNTIME_LOG.txt": "29e91ce7c914614147682af35fd35e92024e99a046bff9c90b6f0031d8149c1c",
+    "outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_WRITER.json": "2dc399daef05b5bce189480c00482e0f187f6b324194838fd121dc3c65e17e39",
+    "tests/test_m6d6c_e07c_aux_checkpoint.py": "881dc0af6dc39202dee934837ff06b27b671db1d9f50f515fa738e3f72a3d9ab",
+    "tools/m6d6c_e07c_aux_checkpoint_preflight.py": "ff311b3d4f48cff3f3241436f41c1e521fd4ac2b078e960b080a39e87bc14074"
+  },
+  "authority": {
+    "committed_head": "b89b8d0e0ac5f12fe43a7cfb09b02cda255f4661",
+    "gpu_head_after": "b89b8d0e0ac5f12fe43a7cfb09b02cda255f4661",
+    "gpu_head_before": "ca206cdc15de830e467484baace84208678fb5ce",
+    "gpu_sync": [
+      "git fetch origin",
+      "git merge-base --is-ancestor HEAD origin/m6-baselines",
+      "git merge --ff-only origin/m6-baselines"
+    ],
+    "remote_m6_baselines": "b89b8d0e0ac5f12fe43a7cfb09b02cda255f4661",
+    "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "starting_worktree": "clean (laptop and GPU)"
+  },
+  "auxiliary_encoder_trained": false,
+  "auxiliary_encoder_training_seed_used": false,
+  "benchmark_data_access": false,
+  "checkpoint": {
+    "NOT_A_SCIENTIFIC_CHECKPOINT": true,
+    "NOT_ELIGIBLE_FOR_BANK": true,
+    "NOT_ELIGIBLE_FOR_DOWNSTREAM": true,
+    "NOT_ELIGIBLE_FOR_REPORTING": true,
+    "QUALIFICATION_ONLY": true,
+    "archive": {
+      "archive_prefix": "e07c_aux_encoder_QUALIFICATION_ONLY/",
+      "data_pkl_sha256": "db83427150c5aef745c94e012994f12debbe96c931a38b1bc0aa87f515d72b35",
+      "format": "torch zip archive",
+      "globals": [
+        "__builtin__.set",
+        "collections.OrderedDict",
+        "custom_rn.BasicBlock",
+        "custom_rn.ResNet",
+        "torch.FloatStorage",
+        "torch.LongStorage",
+        "torch._utils._rebuild_parameter",
+        "torch._utils._rebuild_tensor_v2",
+        "torch.nn.modules.activation.ReLU",
+        "torch.nn.modules.batchnorm.BatchNorm1d",
+        "torch.nn.modules.batchnorm.BatchNorm2d",
+        "torch.nn.modules.container.Sequential",
+        "torch.nn.modules.conv.Conv2d",
+        "torch.nn.modules.instancenorm.InstanceNorm2d",
+        "torch.nn.modules.linear.Linear",
+        "torch.nn.modules.pooling.AdaptiveAvgPool2d",
+        "torch.nn.modules.pooling.MaxPool2d"
+      ],
+      "method": "pickletools.genops opcode listing; no object constructed",
+      "pickle_protocol": 2,
+      "record_kinds": [
+        ".data",
+        ".format_version",
+        ".storage_alignment",
+        "byteorder",
+        "data",
+        "data.pkl",
+        "version"
+      ],
+      "records": 229,
+      "storage_records": 223
+    },
+    "attempt_1_sha256": "cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b",
+    "deterministic_across_writer_processes": true,
+    "format": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+    "path": "<runtime_root>/builds/e07c_difffas/m6d6c/checkpoint/e07c_aux_encoder_QUALIFICATION_ONLY.pkl",
+    "serialization_api": "torch.save(model, path)",
+    "sha256": "cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b",
+    "size_bytes": 185141005,
+    "training_flags_at_save": [
+      true
+    ],
+    "writer_identity": {
+      "block": "BasicBlock",
+      "class": "ResNet",
+      "fc": {
+        "bias": true,
+        "in_features": 512,
+        "out_features": 7
+      },
+      "module": "custom_rn",
+      "module_file_sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "topology": [
+        3,
+        4,
+        6,
+        3
+      ]
+    },
+    "writer_state": {
+      "aggregate_buffer_sha256": "a50c6e185beebf42a1cd717511b7a7e7bfd6e7371acc013dbd20e4753118c5cc",
+      "aggregate_parameter_sha256": "5ae1416a98a03369914d48e0b1cabf1e4a7ac4f975a25478c7b996706cd99cf2",
+      "buffers": 111,
+      "devices": [
+        "cuda:0"
+      ],
+      "dtypes": [
+        "torch.float32"
+      ],
+      "parameter_tensors": 112,
+      "parameters": 46233707
+    }
+  },
+  "checkpoint_format_authority": {
+    "amendment_a3": "Checkpoint format is preserved: torch.save(model) of the whole nn.Module (A3 5.2)",
+    "amendment_a6": "whole-module checkpoint format unchanged",
+    "caller_source": {
+      "file": "FAS_train.py",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statements": {
+        "encoder = model.encoder(args.pretrain_classifier)": 34,
+        "encoder.eval()": 35
+      }
+    },
+    "config": "configs/methods/e07c_difffas_bin_idfree.yaml conditioning_encoder.checkpoint_format",
+    "consumer_source": {
+      "consumer_module_import": [
+        "from .custom_rn import resnet18"
+      ],
+      "file": "models/unet_autoenc.py",
+      "lines": {
+        "model_autoencoder = model_autoencoder.cuda()": 76,
+        "model_autoencoder = resnet18()": 74,
+        "model_autoencoder = torch.load(path)": 75,
+        "return model_autoencoder": 77
+      },
+      "method": "BeatGANsAutoencModel.encoder",
+      "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+      "torch_load_arguments": "path only (no weights_only, no map_location)"
+    },
+    "state_dict_substitution": "FORBIDDEN_AND_NOT_USED",
+    "value": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+    "writer_source": {
+      "cuda_before_save_line": 17,
+      "file": "models/pretrain_classifier.py",
+      "inside_epoch_loop": true,
+      "line": 45,
+      "pickled_class_module_name": "custom_rn",
+      "saved_object": "resnet18 (whole nn.Module)",
+      "sha256": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "statement": "torch.save(resnet18, './PADISI.pkl')",
+      "writer_import": "from custom_rn import resnet18"
+    }
+  },
+  "classification": "M6D6C_E07C_AUX_CHECKPOINT_COMPATIBILITY_QUALIFICATION",
+  "cleanup": {
+    "checkpoint_bytes_in_git": false,
+    "encoder_final_pkl": "ABSENT",
+    "qualification_pkl": "ABSENT",
+    "removed_after": "writer and both loader records existed",
+    "runs_root": "ABSENT",
+    "weight_suffix_files_in_build_root": 0
+  },
+  "commit": false,
+  "compatibility_decision": {
+    "alternative_not_adopted": "torch.serialization.add_safe_globals allowlist: a separate restricted-loader contract GPAT would have to enumerate and maintain; not needed once trust is bounded by SHA256-before-deserialize",
+    "checkpoint_format_changed": false,
+    "classification": "RUNTIME_COMPATIBILITY_ADAPTATION_RESTORING_LEGACY_WHOLE_MODULE_LOAD_SEMANTICS",
+    "default_resolves_to_weights_only_true": true,
+    "global_torch_load_patch": false,
+    "justification": "the upstream call form torch.load(path) and weights_only=True both raise UnpicklingError because custom_rn.ResNet is not an allowed global; weights_only=False restores the pinned class with bitwise-identical state; without the pinned module the load fails, so module identity is supplied by methods.common.upstream.upstream_modules",
+    "mechanism": "methods/difffas/aux_checkpoint.py::load_verified_whole_module (explicit weights_only=False)",
+    "observed": "DEFAULT_AND_WEIGHTS_ONLY_TRUE_REJECT_WEIGHTS_ONLY_FALSE_RESTORES",
+    "scientific_adaptation": false,
+    "selected": "EXPLICIT_WEIGHTS_ONLY_FALSE_AFTER_SHA256_VERIFICATION",
+    "source_modified": false
+  },
+  "counters": {
+    "loader_per_process": {
+      "autograd_grad_calls": 0,
+      "backward_calls": 0,
+      "optimizer_constructions": 0,
+      "optimizer_step_calls": 0,
+      "torch_load_calls": 5,
+      "torch_save_calls": 0
+    },
+    "writer": {
+      "autograd_grad_calls": 0,
+      "backward_calls": 0,
+      "optimizer_constructions": 0,
+      "optimizer_step_calls": 0,
+      "torch_load_calls": 0,
+      "torch_save_calls": 1
+    }
+  },
+  "deviation": "DEV-021",
+  "eligibility": {
+    "NOT_A_SCIENTIFIC_CHECKPOINT": true,
+    "NOT_ELIGIBLE_FOR_BANK": true,
+    "NOT_ELIGIBLE_FOR_DOWNSTREAM": true,
+    "NOT_ELIGIBLE_FOR_REPORTING": true,
+    "QUALIFICATION_ONLY": true
+  },
+  "environment_lock_sha256": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+  "environment_reverification": {
+    "before_and_after_processes": true,
+    "conda_explicit_sha256": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "environment": "/home/student20261/miniconda3/envs/gpat-m6-e07c",
+    "environment_rebuilt_or_mutated": false,
+    "executed_identity_equals_lock_except": [
+      "PYTHONHASHSEED",
+      "TMPDIR"
+    ],
+    "packages_installed_updated_removed": 0,
+    "pip_check_pass": true,
+    "pip_freeze_sha256": "42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285",
+    "protected_environments_unchanged": true,
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "verifier": "r_verify_env.sh 0085caa0dbdfe007dea3a1d3a1903a89c8029cb78fec484f43efc793ef4620ad"
+  },
+  "experiment_seeds_used": [],
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "final_status": "PASS",
+  "implementation": {
+    "amendments_modified": false,
+    "audited_test_wrapper_sha256": "8248e8a94c702d4dc6610fda43cc1a4ea6d285a1e06e29c9eb682cdf0f17145f",
+    "build_root": "<runtime_root>/builds/e07c_difffas/m6d6c",
+    "frozen_config_modified": false,
+    "harness": "methods/difffas/aux_checkpoint_qualification.py",
+    "harness_sha256": "d5b8eb30ffc5d439351d464c10dd5e1c5f7195f980b451947d07ce05d1d65922",
+    "launcher_run_m6d6c_sh_sha256": "0ae8ef24932107f7b5e3646d507656d42b7919f659abf4cd8a34359b45425426",
+    "m6d6a_helpers_imported_unchanged_sha256": "1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541",
+    "pinned_source_modified": false,
+    "seam": "methods/difffas/aux_checkpoint.py",
+    "seam_sha256": "a794eac24b3572fc28158c1ca087d7487c1d9682be87ca232ce24a6295a4b944"
+  },
+  "integration_observations": {
+    "main_runner_encoder_load": "FAS_train.py:34 calls BeatGANsAutoencModel.encoder(path), whose bare torch.load(path) is the call observed to be rejected; a future main runner must obtain the encoder through load_frozen_aux_encoder (no source patch)",
+    "module_name": "writer pickles top-level custom_rn; consumer imports .custom_rn inside models; the seam supplies the pinned file as top-level custom_rn, the identity the writer recorded",
+    "throwaway_resnet18_rng": "unet_autoenc.py:74 constructs resnet18() (17-way, RNG-consuming) before torch.load overwrites it; whether to reproduce that RNG consumption is an open main-runner decision"
+  },
+  "main_difffas_training": false,
+  "method_id": "E07c",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D6c",
+  "module_identity": {
+    "class_is_pinned_module_class": true,
+    "find_class_globals": [
+      "__builtin__.set",
+      "collections.OrderedDict",
+      "custom_rn.BasicBlock",
+      "custom_rn.ResNet",
+      "torch._utils._rebuild_parameter",
+      "torch._utils._rebuild_tensor_v2",
+      "torch.nn.modules.activation.ReLU",
+      "torch.nn.modules.batchnorm.BatchNorm1d",
+      "torch.nn.modules.batchnorm.BatchNorm2d",
+      "torch.nn.modules.container.Sequential",
+      "torch.nn.modules.conv.Conv2d",
+      "torch.nn.modules.instancenorm.InstanceNorm2d",
+      "torch.nn.modules.linear.Linear",
+      "torch.nn.modules.pooling.AdaptiveAvgPool2d",
+      "torch.nn.modules.pooling.MaxPool2d"
+    ],
+    "live_module_file": "third_party/source_cache/difffas/models/custom_rn.py",
+    "loader_mechanism": "upstream_modules(<pinned>/models, ('custom_rn',), {'custom_rn'})",
+    "pickle_globals_custom_rn": [
+      "custom_rn.BasicBlock",
+      "custom_rn.ResNet"
+    ],
+    "without_pinned_module": {
+      "call": "torch.load(path, weights_only=False)",
+      "category": "PINNED_CUSTOM_RN_MODULE_NOT_IMPORTABLE",
+      "exception_class": "builtins.ModuleNotFoundError",
+      "message_head": "No module named 'custom_rn'",
+      "outcome": "REJECTED",
+      "pinned_custom_rn_importable": false,
+      "sha256_verified_before_call": true
+    }
+  },
+  "new_deviation": false,
+  "not_qualified": [
+    "REAL_TRAIN_PATH",
+    "AUXILIARY_ENCODER_200_EPOCH_TRAINING",
+    "AUX_B256_TRAINING_MEMORY",
+    "AUX_PRODUCTION_RUNNER",
+    "PRODUCTION_PRECISION_POLICY",
+    "MAIN_DIFFFAS_TRAINING_GRAPH",
+    "MAIN_CHECKPOINT_RESUME",
+    "MAIN_RUNNER_ENCODER_LOAD_INTEGRATION",
+    "SCIENTIFIC_TRAINING",
+    "M8_BANK"
+  ],
+  "precision_policy_audit": {
+    "findings": "spec AMP entries cover GPAT generator, ArtifactProbeNet and detector only; spec 8.7 defers to the repository, which sets no autocast/GradScaler/TF32/cudnn flag; E03-E06c precision decisions are method-specific; lock NVIDIA_TF32_OVERRIDE=0 is a recorded qualification launch variable explicitly not deciding production policy",
+    "library_defaults_observed": {
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": false,
+      "cudnn_tf32": true,
+      "default_dtype": "torch.float32",
+      "float32_matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "precision_value_added_to_config": false,
+    "qualification_controls": {
+      "autocast": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "deterministic_algorithms_forced": false,
+      "dtype": "float32",
+      "float32_matmul_precision": "highest",
+      "grad_scaler": false,
+      "matmul_tf32": false
+    },
+    "result": "PRECISION_POLICY_DECISION_REQUIRED",
+    "searched": [
+      "frozen specification text (docx XML)",
+      "Amendments A1/A2/A3/A6 + A6 overlay",
+      "configs/methods/e07c_difffas_bin_idfree.yaml",
+      "configs/frozen/difffas_bin_idfree_v1.yaml",
+      "pinned models/pretrain_classifier.py",
+      "environments/e07c.lock.json / e07c.runtime.json",
+      "M6D6a / M6D6a-r / M6D6b evidence"
+    ]
+  },
+  "preserved_inputs_sha256": {
+    "configs/CONFIG_STATUS.md": "0bfe711ad973124d068066895c34c7a62653da7401f98de6f0fc0ec431874f04",
+    "configs/amendments/e07c_a6_feature_interface_source_correction.yaml": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81",
+    "environments/e07c.conda-explicit.txt": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "environments/e07c.lock.json": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+    "environments/e07c.pip-freeze.txt": "42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285",
+    "environments/e07c.pip-requirements.txt": "9ea38ed8b8eb4de00dff577cfb7a1360201fa66dd6c28bf174a8bfb01de26f8f",
+    "environments/e07c.runtime.json": "0855943bb1aa00d12bf61f8145bdfad4598b467f8226b2cc05842902796d2d61",
+    "frozen_config_snapshot/configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "frozen_config_snapshot/configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "methods/common/config.py": "786f934716ab05c9e30dc957b4da3a6de4ce4e0370ac5fa2ad75bfa09683b4a3",
+    "methods/common/learned.py": "20252494a7a8e02ddf9a448de011d91cf7e391ca739ac5a5532267d79b4f0525",
+    "methods/common/upstream.py": "0df26ae0147f142df0aca7fff98558ce0477491c85528b825df1caa7269035cc",
+    "methods/difffas/__init__.py": "796bc58fdd40e9501937a1e57be4ba7beb409edb0e90c97adb0e51da421e7cb2",
+    "methods/difffas/adapter.py": "d2bc7cbd1f88333ed35ac9ef444db3ec88c3d99c4ddb1e07edcd531f45e9c323",
+    "methods/difffas/aux_training_qualification.py": "2377dfbad02aaad0eff722bba84cabaa88a6c53aed6df505349d809608973f0f",
+    "methods/difffas/contract.py": "4db1bc9af5f8455ab8b8f80e18808bbf3424b3bc1756697de627fa6eff3e7011",
+    "methods/difffas/encoder.py": "83a5146f3c07a45208e0a4b6f93d974279a313f8b1ef11d552416a86570c069f",
+    "methods/difffas/runtime_qualification.py": "1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541",
+    "methods/difffas/sampler.py": "992354b939d3bda91bebbc061b8010b9121f6cb1076a43e30a69ec67c8929762",
+    "methods/difffas/seed_adapter.py": "9bd12dea10636f7dcfad500d5737a50a7e3e360d7bd44eaa1dee094e3622b65c",
+    "methods/difffas/source.py": "19ca1ae9c535bf4a45985644c76974527f64137dfe7bb9a74ac4808c9df0ef2d",
+    "outputs/audit/M6D6A_R_E07C_CLEAN_REQUALIFICATION.json": "10ac9e78b7327fe3b656a695172bad2626811839288ee77421d2f2522bbb36b6",
+    "outputs/audit/M6D6B_E07C_AUX_TRAINING_GRAPH_QUALIFICATION.json": "6d156b2d91198f198b9b03b6e061a5a0c79bdb62f91cdf898d0d24899b98b30e",
+    "outputs/audit/M6D6B_E07C_AUX_TRAINING_GRAPH_QUALIFICATION.md": "0d83ed47dc43edf96236787807dcd808f70a11f0340f312ae850164154bb44a5",
+    "outputs/audit/M6D6B_E07C_AUX_TRAINING_PROCESS_1.json": "7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b",
+    "outputs/audit/M6D6B_E07C_AUX_TRAINING_PROCESS_2.json": "7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b",
+    "outputs/audit/M6D6B_E07C_AUX_TRAINING_RUNTIME_LOG.txt": "a04f71b70033cbe89dbcb3eadc0a7f3e6ed9785311c25e6f3a5f7a377efcb004",
+    "outputs/audit/STAGE_STATE.json": "a8abf8288feaba561916b7ffe513014cbe2b5831be86d048702f2718059dd50d",
+    "tests/test_m6c2b3_contract.py": "a710a15cfde92c048624206e7bb4c25f5c7f4ce8942c747746a157dc59345cfa",
+    "tests/test_m6c2b3_encoder.py": "8231500a320404a92ebf176158f6e32e2964b0cdf72539085c48d61b51141a57",
+    "tests/test_m6c2b3_runtime.py": "b942d1eed50689bdab2c53136f56f8379e804eb5cbda7955ec379b9fd5f2e8d5",
+    "tests/test_m6d6a_e07c_runtime.py": "15e3fb28455c77094f039b1851e136da35b8bceab13def6f830b7f10a76496dc",
+    "tests/test_m6d6b_e07c_aux_training_graph.py": "c91ca8c7acddd290557156091ee4072c70b333f4610c3b566b22d7cf720a6cde",
+    "third_party/source_pins.json": "484558032f53b536cb7832803980c5273264c262ab74a6eb2c67f27641d72cec",
+    "tools/build_artifact_index.py": "e1496b1502f1a6145d7ba23f9104703df9b65fc049a4ccd0b42f23d4864b73af",
+    "tools/m6d6b_e07c_aux_training_graph_preflight.py": "cac900f3f042c042628280d9cf01afed10ca4a40e56f6512afc7e9c79fa29756"
+  },
+  "prior_attempts": [
+    {
+      "checkpoint_removed": true,
+      "checkpoint_sha256": "cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b",
+      "harness_sha256": "ee227053ee735891508a5925c3352fd73dc85eeece2ce16390ba149d1965c26d",
+      "process": "writer attempt 1",
+      "reason": "torch_load_signature captured after the counting wrapper; fixed by capturing the signature before Counters.install()",
+      "status": "PASS but superseded"
+    }
+  ],
+  "probes": {
+    "default_no_argument": {
+      "call": "torch.load(path)",
+      "category": "WEIGHTS_ONLY_UNPICKLER_REJECTS_CUSTOM_MODULE_GLOBAL",
+      "exception_class": "_pickle.UnpicklingError",
+      "message_head": "Weights only load failed. This file can still be loaded, to do so you have two options, \u001b[1mdo those steps only if you trust the source of the checkpoint\u001b[0m. ",
+      "outcome": "REJECTED",
+      "pinned_custom_rn_importable": true,
+      "sha256_verified_before_call": true
+    },
+    "weights_only_false": {
+      "call": "torch.load(path, weights_only=False)",
+      "devices": [
+        "cuda:0"
+      ],
+      "is_pinned_custom_rn_ResNet": true,
+      "outcome": "LOADED",
+      "pinned_custom_rn_importable": true,
+      "sha256_verified_before_call": true,
+      "type": "custom_rn.ResNet"
+    },
+    "weights_only_false_without_pinned_module": {
+      "call": "torch.load(path, weights_only=False)",
+      "category": "PINNED_CUSTOM_RN_MODULE_NOT_IMPORTABLE",
+      "exception_class": "builtins.ModuleNotFoundError",
+      "message_head": "No module named 'custom_rn'",
+      "outcome": "REJECTED",
+      "pinned_custom_rn_importable": false,
+      "sha256_verified_before_call": true
+    },
+    "weights_only_true": {
+      "call": "torch.load(path, weights_only=True)",
+      "category": "WEIGHTS_ONLY_UNPICKLER_REJECTS_CUSTOM_MODULE_GLOBAL",
+      "exception_class": "_pickle.UnpicklingError",
+      "message_head": "Weights only load failed. This file can still be loaded, to do so you have two options, \u001b[1mdo those steps only if you trust the source of the checkpoint\u001b[0m. ",
+      "outcome": "REJECTED",
+      "pinned_custom_rn_importable": true,
+      "sha256_verified_before_call": true
+    }
+  },
+  "push": false,
+  "qualification_scope": "whole-module serialization and SHA-gated loader MECHANISM only; not epoch-200 checkpoint timing, not a production runner, not a scientific checkpoint",
+  "qualification_seed": 60603,
+  "qualified_statuses": [
+    "E07c_AUX_CHECKPOINT_WHOLE_MODULE_SERIALIZATION_QUALIFIED",
+    "E07c_AUX_CHECKPOINT_LOADER_COMPATIBILITY_QUALIFIED",
+    "E07c_AUX_CHECKPOINT_SHA_BEFORE_DESERIALIZE_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "repeatability": {
+    "loader_json_bytes_identical": true,
+    "loader_process_sha256": "70d0dd7318679d84437f626a8a27adff59d339236de9828c8fc69ff08b262321",
+    "loader_processes": 2,
+    "tolerance_used": "NONE (bitwise)"
+  },
+  "reporting_label": "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)",
+  "retained_statuses": [
+    "E07c_EXECUTION_ENVIRONMENT_QUALIFIED",
+    "E07c_CONDITIONING_ENCODER_RUNTIME_QUALIFIED",
+    "E07c_MAIN_ARCHITECTURE_RUNTIME_QUALIFIED",
+    "E07c_SYNTHETIC_FORWARD_RUNTIME_QUALIFIED",
+    "E07c_AUX_ENCODER_TRAINING_GRAPH_QUALIFIED",
+    "E07c_AUX_ENCODER_OPTIMIZER_STEP_QUALIFIED"
+  ],
+  "round_trip": {
+    "buffer_devices": [
+      "cuda:0"
+    ],
+    "buffer_dtypes": [
+      "torch.float32",
+      "torch.int64"
+    ],
+    "buffer_tensors_bitwise_equal": 111,
+    "buffers": 111,
+    "fc": {
+      "in_features": 512,
+      "out_features": 7
+    },
+    "identity": {
+      "block": "BasicBlock",
+      "class": "ResNet",
+      "fc": {
+        "bias": true,
+        "in_features": 512,
+        "out_features": 7
+      },
+      "module": "custom_rn",
+      "module_file_sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "topology": [
+        3,
+        4,
+        6,
+        3
+      ]
+    },
+    "module_tree_equal": true,
+    "parameter_devices": [
+      "cuda:0"
+    ],
+    "parameter_dtypes": [
+      "torch.float32"
+    ],
+    "parameter_tensors": 112,
+    "parameter_tensors_bitwise_equal": 112,
+    "parameters": 46233707,
+    "projection_or_adapter_modules_added": false,
+    "training_flags_after_load": [
+      true
+    ]
+  },
+  "scientific_checkpoint_created": false,
+  "scientific_training": false,
+  "session_access_audit": {
+    "counts": {
+      "TEST_reads": 0,
+      "TRAIN_reads": 0,
+      "VAL_reads": 0,
+      "auxiliary_encoder_training_runs": 0,
+      "backward_calls": 0,
+      "benchmark_image_reads": 0,
+      "benchmark_manifest_reads": 0,
+      "firewall_denials": 0,
+      "optimizer_step_calls": 0,
+      "qualification_torch_load_calls": 10,
+      "qualification_torch_save_calls": 2,
+      "scientific_checkpoint_loads": 0,
+      "scientific_checkpoints_created": 0,
+      "scientific_seed_runs_completed": 0
+    },
+    "procedure": "explicit allowlisted paths; no recursive scan; no shell here-document; tools/build_artifact_index.py not run",
+    "scope": "COMPLETE_M6D6C_SESSION_LAPTOP_AND_GPU"
+  },
+  "sha_before_deserialize": {
+    "hash_scope": "the exact in-memory bytes passed to torch.load (no re-read)",
+    "production_entry": "load_frozen_aux_encoder -> encoder.verify_future_checkpoint -> load_verified_whole_module",
+    "seam_event_order": [
+      "open_checkpoint",
+      "sha256_verified",
+      "torch.load",
+      "find_class x15"
+    ],
+    "torch_load_call": {
+      "kwargs": {
+        "weights_only": "False"
+      },
+      "source": "bytes"
+    }
+  },
+  "source": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "custom_rn_sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+    "modified": false,
+    "pretrain_classifier_sha256": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "unet_autoenc_sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+  },
+  "synthetic_bank": false,
+  "synthetic_forward_equivalence": {
+    "a6_feature_shapes": [
+      [
+        4,
+        256,
+        32,
+        32
+      ],
+      [
+        4,
+        512,
+        16,
+        16
+      ],
+      [
+        4,
+        512,
+        8,
+        8
+      ]
+    ],
+    "bitwise_equal": {
+      "logits": true,
+      "x16x16": true,
+      "x32x32": true,
+      "x8x8": true
+    },
+    "fourth_output_shape": [
+      4,
+      7
+    ],
+    "input": "rq.synthetic analytic B=4 256x256, phase 53 (no RNG, no file)",
+    "mode": "eval (FAS_train.py:35), torch.no_grad",
+    "output_sha256": {
+      "logits": "bd0bd39c929842da7a1e6d68fb7f49f715fab21fb94b26489b497ee79230ed00",
+      "x16x16": "31ac069cfa324bfdc5a56eaedf87abcf60440611c05703d775e17bc4523e4774",
+      "x32x32": "f8ba37a2a55bcf1be42be315242b8ae662d449ef49445fc1ef7dd8559ff694fa",
+      "x8x8": "86f364ae538a3f1cfb19eb987183d82e9682f79736004b87a803f6c3ce2e29eb"
+    },
+    "tolerance_used": "NONE (bitwise)"
+  },
+  "tests": [
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 370,
+      "errors": 0,
+      "failures": 1,
+      "final": false,
+      "host": "laptop",
+      "note": "pre-fix test file (digest not recorded): precision-key substring scan matched 'sampler'; live Torch test skipped",
+      "run": 21,
+      "skipped": 1,
+      "suite": "tests.test_m6d6c_e07c_aux_checkpoint"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 370,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "laptop",
+      "note": "live Torch test skipped",
+      "run": 21,
+      "skipped": 1,
+      "suite": "tests.test_m6d6c_e07c_aux_checkpoint"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 281,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "laptop",
+      "run": 17,
+      "skipped": 1,
+      "suite": "tests.test_m6d6b_e07c_aux_training_graph"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 385,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "laptop",
+      "run": 16,
+      "skipped": 1,
+      "suite": "tests.test_m6d6a_e07c_runtime"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 1107,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "laptop",
+      "run": 46,
+      "skipped": 1,
+      "suite": "tests.test_m6c2b3_contract+encoder+runtime"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 3069,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "gpu",
+      "note": "CUDA hidden; live identity/guard test ran with torch.save/torch.load patched: 0 calls",
+      "run": 21,
+      "skipped": 0,
+      "suite": "tests.test_m6d6c_e07c_aux_checkpoint"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 3005,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "gpu",
+      "run": 17,
+      "skipped": 0,
+      "suite": "tests.test_m6d6b_e07c_aux_training_graph"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 3177,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "gpu",
+      "run": 16,
+      "skipped": 0,
+      "suite": "tests.test_m6d6a_e07c_runtime"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 4306,
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "gpu",
+      "run": 46,
+      "skipped": 0,
+      "suite": "tests.test_m6c2b3_contract+encoder+runtime"
+    }
+  ],
+  "torch_load_runtime": {
+    "env_overrides": {
+      "TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD": null,
+      "TORCH_FORCE_WEIGHTS_ONLY_LOAD": null
+    },
+    "signature": "(f: Union[str, os.PathLike[str], IO[bytes]], map_location: collections.abc.Callable[[torch.types.Storage, str], torch.types.Storage] | torch.device | str | dict[str, str] | None = None, pickle_module: Any = None, *, weights_only: bool | None = None, mmap: bool | None = None, **pickle_load_args: Any) -> Any",
+    "torch": "2.12.1+cu130",
+    "weights_only_default": "None"
+  },
+  "wrong_sha_rejection": {
+    "malformed_sha256": {
+      "events": [],
+      "exception": "PreparationError",
+      "find_class_events": 0,
+      "message": "record and freeze auxiliary SHA256 before any deserialization",
+      "torch_load_calls": 0
+    },
+    "wrong_sha256_one_hex_digit": {
+      "events": [
+        "open_checkpoint",
+        "sha256_rejected"
+      ],
+      "exception": "PreparationError",
+      "find_class_events": 0,
+      "message": "auxiliary checkpoint SHA256 mismatch; refusing to deserialize",
+      "torch_load_calls": 0
+    }
+  }
+}

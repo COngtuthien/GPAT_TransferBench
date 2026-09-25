@@ -1,0 +1,189 @@
+M6D6C E07C AUX CHECKPOINT RUNTIME LOG — whole-module serialization + loader compatibility qualification
+All times UTC 2026-09-25. Laptop /home/cong/GPAT_TransferBench; GPU student20261@100.121.84.44.
+Log written with a file-writing tool (no shell here-document; no evaluation of prose).
+QUALIFICATION_ONLY · NOT_ELIGIBLE_FOR_BANK · NOT_ELIGIBLE_FOR_DOWNSTREAM · NOT_ELIGIBLE_FOR_REPORTING · NOT_A_SCIENTIFIC_CHECKPOINT
+
+== A1. Authority (explicit git metadata commands)
+laptop: git branch --show-current -> m6-baselines; git rev-parse HEAD -> b89b8d0e0ac5f12fe43a7cfb09b02cda255f4661;
+        git status --short -> (empty); git ls-remote origin refs/heads/m6-baselines -> b89b8d0e0ac5f12fe43a7cfb09b02cda255f4661
+GPU before: branch m6-baselines; HEAD ca206cdc15de830e467484baace84208678fb5ce; status lines 0
+GPU sync:   git fetch origin (ca206cd..b89b8d0); git merge-base --is-ancestor HEAD origin/m6-baselines -> ANCESTOR_OK;
+            git merge --ff-only origin/m6-baselines -> Fast-forward ca206cd..b89b8d0 (M6D6b commit)
+GPU after:  HEAD b89b8d0e0ac5f12fe43a7cfb09b02cda255f4661; status lines 0. No reset, clean, rebase or forced checkout.
+
+== A2. Pre-run read-only environment / protected-environment / source verification
+(existing M6D6a-r verifier r_verify_env.sh, sha256 0085caa0dbdfe007dea3a1d3a1903a89c8029cb78fec484f43efc793ef4620ad)
+m6d6c build root before: M6D6C_BUILD_ABSENT
+conda_explicit 2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864 (= lock)
+pip_freeze_all 42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285 (= lock)
+python_sha256 83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe (= lock identity)
+pip check: No broken requirements found.  protected environments: PROTECTED_UNCHANGED
+pinned source 23f40519ec25a833ebc06842aa6fbab74fad4d15 tree d190a5fb4a94cb9e423215f9a24a7863aa17ea65 status_lines 0;
+24 explicit source-file hashes identical to M6D6b (custom_rn.py fa788c4d…, pretrain_classifier.py 3444691f…,
+unet_autoenc.py 127ecd59…). runs root: RUNS_ABSENT. No package installed, updated or removed; environment not rebuilt.
+
+== A3. Staging (untracked, byte-identical laptop == GPU; removed after the session)
+a794eac24b3572fc28158c1ca087d7487c1d9682be87ca232ce24a6295a4b944  methods/difffas/aux_checkpoint.py
+d5b8eb30ffc5d439351d464c10dd5e1c5f7195f980b451947d07ce05d1d65922  methods/difffas/aux_checkpoint_qualification.py (final)
+0ae8ef24932107f7b5e3646d507656d42b7919f659abf4cd8a34359b45425426  <runtime>/builds/e07c_difffas/m6d6c/run_m6d6c.sh
+Unchanged M6D6a helper module imported by the harness: methods/difffas/runtime_qualification.py 1eeb7c03… (committed).
+Launch env: CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0
+            CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60603 TMPDIR=<build>/m6d6c/tmp
+
+== A4. Writer attempt 1 (DISCLOSED; superseded, not evidence)
+harness ee227053ee735891508a5925c3352fd73dc85eeece2ce16390ba149d1965c26d. The process PASSed every gate, but its
+torch_load_signature field was captured AFTER the counting wrapper replaced torch.load, so it recorded the wrapper's
+"(*args, **kwargs)" instead of the genuine signature (the weights_only default "None" had been captured before the
+wrapper and was correct). Harness fix: capture inspect.signature(torch.load) once, before Counters.install().
+No seam, model, contract or evidence logic changed. Attempt-1 JSON/log moved to <build>/m6d6c/attempt_1/ (outside Git);
+its checkpoint (sha256 cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b) was removed before the rerun.
+== writer m6d6c_writer.json start 2026-09-25T16:25:37Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_before: ABSENT
+254 MiB
+harness_sha256: ee227053ee735891508a5925c3352fd73dc85eeece2ce16390ba149d1965c26d
+seam_sha256: a794eac24b3572fc28158c1ca087d7487c1d9682be87ca232ce24a6295a4b944
+m6d6a_helpers_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6c/m6d6c_writer.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_after: PRESENT 185141005 bytes
+254 MiB
+gpu_repo_status: ?? methods/difffas/aux_checkpoint.py;?? methods/difffas/aux_checkpoint_qualification.py;
+source_cache_status: []
+== writer m6d6c_writer.json end 2026-09-25T16:25:41Z
+attempt-1 cleanup:
+cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b  <build>/m6d6c/checkpoint/e07c_aux_encoder_QUALIFICATION_ONLY.pkl
+removed '<build>/m6d6c/checkpoint/e07c_aux_encoder_QUALIFICATION_ONLY.pkl'
+rmdir: removing directory, '<build>/m6d6c/checkpoint'
+
+== A5. Authoritative processes: 1 fresh writer + 2 fresh loaders (qualification_seed 60603)
+== writer m6d6c_writer.json start 2026-09-25T16:26:17Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_before: ABSENT
+254 MiB
+harness_sha256: d5b8eb30ffc5d439351d464c10dd5e1c5f7195f980b451947d07ce05d1d65922
+seam_sha256: a794eac24b3572fc28158c1ca087d7487c1d9682be87ca232ce24a6295a4b944
+m6d6a_helpers_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6c/m6d6c_writer.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_after: PRESENT 185141005 bytes
+254 MiB
+gpu_repo_status: ?? methods/difffas/aux_checkpoint.py;?? methods/difffas/aux_checkpoint_qualification.py;
+source_cache_status: []
+== writer m6d6c_writer.json end 2026-09-25T16:26:21Z
+writer-recorded checkpoint: sha256 cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b, 185141005 bytes
+(byte-identical to the attempt-1 checkpoint: torch.save output is deterministic across fresh processes)
+expected SHA256 passed explicitly to each loader: cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b
+== loader m6d6c_loader_1.json start 2026-09-25T16:26:39Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_before: PRESENT 185141005 bytes
+254 MiB
+harness_sha256: d5b8eb30ffc5d439351d464c10dd5e1c5f7195f980b451947d07ce05d1d65922
+seam_sha256: a794eac24b3572fc28158c1ca087d7487c1d9682be87ca232ce24a6295a4b944
+m6d6a_helpers_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6c/m6d6c_loader_1.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_after: PRESENT 185141005 bytes
+254 MiB
+gpu_repo_status: ?? methods/difffas/aux_checkpoint.py;?? methods/difffas/aux_checkpoint_qualification.py;
+source_cache_status: []
+== loader m6d6c_loader_1.json end 2026-09-25T16:26:44Z
+== loader m6d6c_loader_2.json start 2026-09-25T16:26:53Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_before: PRESENT 185141005 bytes
+254 MiB
+harness_sha256: d5b8eb30ffc5d439351d464c10dd5e1c5f7195f980b451947d07ce05d1d65922
+seam_sha256: a794eac24b3572fc28158c1ca087d7487c1d9682be87ca232ce24a6295a4b944
+m6d6a_helpers_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6c/m6d6c_loader_2.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+qualification_checkpoint_after: PRESENT 185141005 bytes
+254 MiB
+gpu_repo_status: ?? methods/difffas/aux_checkpoint.py;?? methods/difffas/aux_checkpoint_qualification.py;
+source_cache_status: []
+== loader m6d6c_loader_2.json end 2026-09-25T16:26:57Z
+
+== A6. Process evidence
+2dc399daef05b5bce189480c00482e0f187f6b324194838fd121dc3c65e17e39  m6d6c_writer.json
+70d0dd7318679d84437f626a8a27adff59d339236de9828c8fc69ff08b262321  m6d6c_loader_1.json
+70d0dd7318679d84437f626a8a27adff59d339236de9828c8fc69ff08b262321  m6d6c_loader_2.json
+copied (scp, new names) to outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_WRITER.json and
+M6D6C_E07C_AUX_CHECKPOINT_LOADER_PROCESS_{1,2}.json — byte-identical to the GPU files.
+
+== A7. Qualification checkpoint cleanup (after writer + both loader records existed)
+== cleanup start 2026-09-25T16:27:24Z
+cf89680a56cdb257e9739fb0ded55522631a9f8291719d972a05c1168460522b  <build>/m6d6c/checkpoint/e07c_aux_encoder_QUALIFICATION_ONLY.pkl
+removed '<build>/m6d6c/checkpoint/e07c_aux_encoder_QUALIFICATION_ONLY.pkl'
+rmdir: removing directory, '<build>/m6d6c/checkpoint'
+QUALIFICATION_PKL_ABSENT
+ENCODER_FINAL_ABSENT
+RUNS_ABSENT
+weight-suffix files (*.pkl, *.pt, *.pth) under <build>/m6d6c: 0
+== cleanup end 2026-09-25T16:27:24Z
+build root kept outside Git: m6d6c_writer.json/.log, m6d6c_loader_{1,2}.json/.log, run_m6d6c.sh, attempt_1/ (json+log),
+tmp/torchinductor_<user> (empty directory created by torch import under TMPDIR).
+
+== A8. Audited tests (audited_tests.py 8248e8a94c702d4dc6610fda43cc1a4ea6d285a1e06e29c9eb682cdf0f17145f: Python audit hook
+   denying/counting manifests, parquet, images, faces_256, runtime data/runs; same wrapper as M6D6a-r / M6D6b)
+laptop (no Torch), PYTHONDONTWRITEBYTECODE=1:
+  FIRST laptop run of tests.test_m6d6c_e07c_aux_checkpoint (pre-fix test file; digest not recorded): run=21 failures=1
+        errors=0 skipped=1, AUDIT open=370 denied=0. Failure was in the TEST only: the precision-key scan used substring
+        matching, so 'amp' matched the frozen keys sampler / sample_initial_noise / per_sample_record_required. Fix: match
+        whole '_'-separated key tokens. No harness, seam, evidence or config changed.
+  tests.test_m6d6c_e07c_aux_checkpoint (fixed, 881dc0af…)              RESULT run=21 failures=0 errors=0 skipped=1
+        AUDIT open=370 denied=0 manifest=0 image=0 data_or_runs=0   (skip: live Torch identity/guard test)
+  tests.test_m6d6b_e07c_aux_training_graph (unchanged)                RESULT run=17 failures=0 errors=0 skipped=1
+        AUDIT open=281 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6d6a_e07c_runtime (unchanged)                            RESULT run=16 failures=0 errors=0 skipped=1
+        AUDIT open=385 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6c2b3_contract/_encoder/_runtime (unchanged)             RESULT run=46 failures=0 errors=0 skipped=1
+        AUDIT open=1107 denied=0 manifest=0 image=0 data_or_runs=0
+GPU (gpat-m6-e07c, CUDA_VISIBLE_DEVICES= empty, PYTHONDONTWRITEBYTECODE=1, PYTHONNOUSERSITE=1, TMPDIR=<build>/m6d6c/tmp);
+staged untracked copies byte-identical to the laptop files (runtime log = sections A1-A7 at that time):
+  tests.test_m6d6c_e07c_aux_checkpoint (881dc0af…)                     RESULT run=21 failures=0 errors=0 skipped=0
+        AUDIT open=3069 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6d6b_e07c_aux_training_graph (unchanged)                RESULT run=17 failures=0 errors=0 skipped=0
+        AUDIT open=3005 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6d6a_e07c_runtime (unchanged)                            RESULT run=16 failures=0 errors=0 skipped=0
+        AUDIT open=3177 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6c2b3_contract/_encoder/_runtime (unchanged)             RESULT run=46 failures=0 errors=0 skipped=0
+        AUDIT open=4306 denied=0 manifest=0 image=0 data_or_runs=0
+The live M6D6c test constructs the encoder on CPU with torch.save/torch.load patched to record calls: 0 calls.
+GPU tmp after tests: only the empty torchinductor_<user> directory.
+
+== A9. Post-run read-only re-verification (same verifier; explicit paths only)
+conda_explicit 2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864
+pip_freeze_all 42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285
+python_sha256 83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe
+pip check: No broken requirements found.  PROTECTED_UNCHANGED
+pinned source 23f40519ec25a833ebc06842aa6fbab74fad4d15 / d190a5fb4a94cb9e423215f9a24a7863aa17ea65, status_lines 0
+launcher run_q.sh 31952506…, audited_tests.py 8248e8a9… (unchanged). RUNS_ABSENT.
+
+== A10. GPU cleanup (explicit rm of the 7 staged paths)
+removed 'methods/difffas/aux_checkpoint.py'
+removed 'methods/difffas/aux_checkpoint_qualification.py'
+removed 'tests/test_m6d6c_e07c_aux_checkpoint.py'
+removed 'outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_WRITER.json'
+removed 'outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_LOADER_PROCESS_1.json'
+removed 'outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_LOADER_PROCESS_2.json'
+removed 'outputs/audit/M6D6C_E07C_AUX_CHECKPOINT_RUNTIME_LOG.txt'
+status_lines 0
+b89b8d0e0ac5f12fe43a7cfb09b02cda255f4661
+source_cache_status_lines 0
+QUALIFICATION_PKL_ABSENT
+ENCODER_FINAL_ABSENT
+GPU compute apps: 0
+
+== A11. Session access statement
+Every command in this session used explicit allowlisted paths (repository authority/config/amendment/spec/source/environment/
+audit files, the pinned DiffFAS cache, the E07c build root). The frozen specification text was read from its docx XML only.
+No git ls-files|xargs, no recursive repository or runtime scan (the one find ran inside <build>/m6d6c only), no shell
+here-document, no manifest, parquet, image, faces_256, runtime data or runs path opened. All three GPU qualification processes
+and all audited test runs were audit-hooked: 0 denials. torch.save ran once per writer process (disclosed attempt 1 +
+authoritative writer = 2 in the session, byte-identical output) and torch.load five times per loader process (10), ONLY on
+the QUALIFICATION_ONLY checkpoint; zero backward, zero optimizer construction/step. No scientific run root,
+no aux_encoder/seed_42 directory and no encoder_final.pkl existed before or after.
