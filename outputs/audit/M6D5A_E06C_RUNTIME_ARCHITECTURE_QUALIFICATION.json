@@ -1,0 +1,545 @@
+{
+  "TEST_access": false,
+  "artifacts_sha256": {
+    "environments/e06c.conda-explicit.txt": "40feecfc1b9498a117bfcdf09ff84970fec2a89911413ab48970c3c29a5b40fd",
+    "environments/e06c.lock.json": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+    "environments/e06c.pip-freeze.txt": "527a5ec89fc9fb951130b7cc2a9a9b0bbf77c653a93b8aee35ff2c01cd27fec2",
+    "environments/e06c.runtime.json": "178a60848c53b0e0c5ab8cd704d04fe917efec06f71fdc00ce32f115d6d1e26f",
+    "methods/dsdg/runtime.py": "789dd59f5a25eba72fe894808b2b36552904fc31303ebcf8f984e1c1afc4fba4",
+    "outputs/audit/M6D5A_E06C_RUNTIME_ARCHITECTURE_QUALIFICATION.md": "b32fcf8efd5d89cef2bb95d8245e428b548990ce2f0b366c11335a6cb8e106e8",
+    "outputs/audit/M6D5A_E06C_RUNTIME_LOG.txt": "62a7b416aac2508979006b36813567b608cb2c961511de132bd5a5458f329402",
+    "outputs/audit/M6D5A_E06C_SYNTHETIC_PROCESS_1.json": "05de38af9561dd065311acaa80933127af734fbd5c4f851d32e94093d4e9874a",
+    "outputs/audit/M6D5A_E06C_SYNTHETIC_PROCESS_2.json": "05de38af9561dd065311acaa80933127af734fbd5c4f851d32e94093d4e9874a",
+    "tests/test_m6d5a_e06c_runtime.py": "65e0b09828b305957877d637eb8025431aab3101fa4f7dc06baf6c82444d32d8",
+    "tools/m6d5a_e06c_runtime_preflight.py": "8b8f75dd0eab7661629bf65f5a8f3932b79370dda39f00f0d01bc7ead760e73e"
+  },
+  "attempts": {
+    "api_probe": "legacy torch.cuda.FloatTensor + bilinear interpolate only; no model/data",
+    "attempt_1": {
+      "cause": "harness write firewall refused torchvision temp-dir probe under /tmp",
+      "deserialized": false,
+      "harness_sha256": "0090d7dac1f88a90bcbb28b5223c1c5689872ff42729cb9ccbe96c582ed1120c",
+      "model_constructed": false,
+      "rc": 1
+    },
+    "attempt_2": {
+      "harness_sha256": "789dd59f5a25eba72fe894808b2b36552904fc31303ebcf8f984e1c1afc4fba4",
+      "json_sha256": "05de38af9561dd065311acaa80933127af734fbd5c4f851d32e94093d4e9874a",
+      "rc": 0
+    },
+    "final_processes": 2,
+    "total_harness_launches": 4
+  },
+  "authority": {
+    "agents_md": {
+      "exists": false,
+      "other_discovery": false,
+      "path": "/home/cong/GPAT_TransferBench/AGENTS.md"
+    },
+    "laptop_clean_at_start": true,
+    "laptop_divergence": [
+      0,
+      0
+    ],
+    "laptop_head": "13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8",
+    "laptop_origin": "13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8"
+  },
+  "backward_passes": 0,
+  "benchmark_data_access": false,
+  "binding": {
+    "netCls": {
+      "class": "Cls",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netE_nir": {
+      "class": "Encoder_s",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netE_vis": {
+      "class": "Encoder",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netG": {
+      "class": "Decoder_s",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netIP": {
+      "class": "network_29layers_v2",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "module": "networks.light_cnn",
+      "wrapper": "torch.nn.DataParallel"
+    }
+  },
+  "checkpoint_created": false,
+  "classification": "M6D5A_E06C_RUNTIME_ARCHITECTURE_QUALIFICATION",
+  "commit": false,
+  "contract": {
+    "all_epochs": 200,
+    "attack_type": 1,
+    "batch_one_training_refused_by_adapter": true,
+    "checkpoint_rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "deviation": "DEV-020",
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "hdim": 128,
+    "input_resolution": 256,
+    "losses": {
+      "lambda_ip": 1000,
+      "lambda_mmd": 50,
+      "lambda_ort": 1,
+      "lambda_pair": 0.0,
+      "lambda_type": 10
+    },
+    "optimizer": {
+      "learning_rate": 0.0002,
+      "name": "Adam",
+      "netCls_in_optimizer": false,
+      "scope": "netE_nir + netE_vis + netG"
+    },
+    "optimizer_contract_inspection": "STATIC_ONLY",
+    "physical_batch_policy": "E06C_REQUIRES_PHYSICAL_BATCH_240_FOR_OBJECTIVE_EQUIVALENCE",
+    "physical_batch_required": 240
+  },
+  "cuda_memory": {
+    "allocated_bytes": 267419648,
+    "autograd": "torch.no_grad forward; no activation graph retained",
+    "batch_240_extrapolation": "NOT_PERFORMED",
+    "establishes_physical_batch_240_feasibility": false,
+    "label": "DIAGNOSTIC_BATCH1_ONLY",
+    "peak_allocated_bytes": 353616896,
+    "peak_reserved_bytes": 369098752,
+    "reserved_bytes": 369098752
+  },
+  "deviation": "DEV-020",
+  "diagnostic_seed": 60501,
+  "environment": {
+    "cloned_from": "gpat-m5",
+    "compatibility_patch": "NONE",
+    "compiler": "NOT_USED",
+    "cuda": "13.0",
+    "cudnn": 92000,
+    "gpat_m5_unchanged": true,
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "name": "gpat-m6-e06c",
+    "numpy": "2.4.6",
+    "packages_added": [],
+    "path": "/home/student20261/miniconda3/envs/gpat-m6-e06c",
+    "pillow": "12.3.0",
+    "python": "3.11.16",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "final_status": [
+    "E06c_RUNTIME_ENVIRONMENT_QUALIFIED",
+    "E06c_ARCHITECTURE_RUNTIME_QUALIFIED",
+    "E06c_TRAINING_GRAPH_NOT_YET_QUALIFIED",
+    "E06c_PHYSICAL_BATCH_240_NOT_YET_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "finite_all": true,
+  "gpu_sync": {
+    "ancestor": true,
+    "ancestor_distance": 1,
+    "fetch": "git fetch --no-tags origin refs/heads/m6-baselines:refs/remotes/origin/m6-baselines",
+    "final_clean": true,
+    "final_clean_after_staging": true,
+    "final_divergence": [
+      0,
+      0
+    ],
+    "final_head": "13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8",
+    "final_origin": "13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8",
+    "merge": "git merge --ff-only origin/m6-baselines",
+    "staged_files_removed_after_use": true,
+    "start_clean": true,
+    "start_divergence": [
+      0,
+      0
+    ],
+    "start_head": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72",
+    "start_origin": "32c8f979e14d1ea37ee2047cbd5489cb83c64b72"
+  },
+  "lightcnn": {
+    "gpu": {
+      "bytes": 123844849,
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+      "present_before_milestone": false,
+      "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+      "transferred": "exact file only, scp"
+    },
+    "laptop": {
+      "bytes": 123844849,
+      "path": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+      "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+      "verified_before_transfer": true
+    },
+    "runtime_compatibility": {
+      "checkpoint_tensor_count": 61,
+      "expected_model_tensor_count": 60,
+      "filtered_extra_keys": {
+        "module.fc2.weight": [
+          80013,
+          256
+        ]
+      },
+      "loaded_values_equal_checkpoint": true,
+      "loader": "train_generator.py:75-84 filter k in model_dict -> update -> load_state_dict -> requires_grad=False",
+      "matched": 60,
+      "missing": [],
+      "non_tensor_entries": {
+        "arch": "LightCNN",
+        "epoch": 50,
+        "prec1": 99.46
+      },
+      "shape_mismatches": [],
+      "top_level_keys": [
+        "arch",
+        "epoch",
+        "prec1",
+        "state_dict"
+      ],
+      "torch_load_weights_only": true
+    }
+  },
+  "method_id": "E06c",
+  "method_name": "DSDG-BIN-IDFREE",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D5a",
+  "modes": {
+    "netCls": true,
+    "netE_nir": true,
+    "netE_vis": true,
+    "netG": true,
+    "netIP": false
+  },
+  "one_logit_classifier": {
+    "converted_to_two_logits": false,
+    "cross_entropy": 0.0,
+    "logit_shape": [
+      1,
+      1
+    ],
+    "reason": "log_softmax over one logit is identically 0; A1 discloses loss_cls as degenerate",
+    "status": "EXPECTED_DEGENERACY_CONFIRMED",
+    "target_class_index": 0
+  },
+  "optimizer_applications": 0,
+  "optimizer_constructed": false,
+  "optimizer_ownership": {
+    "netCls_excluded": true,
+    "netIP_excluded": true,
+    "optimizer_constructed": false,
+    "owned_modules": [
+      "netE_nir",
+      "netE_vis",
+      "netG"
+    ],
+    "parameter_tensors": 55,
+    "parameters": 45370182,
+    "source": "addition_module/DSDG/train_generator.py:87-88"
+  },
+  "parameters": {
+    "netCls": {
+      "parameter_tensors": 2,
+      "parameters": 129
+    },
+    "netE_nir": {
+      "parameter_tensors": 17,
+      "parameters": 13790048
+    },
+    "netE_vis": {
+      "parameter_tensors": 17,
+      "parameters": 11692640
+    },
+    "netG": {
+      "parameter_tensors": 21,
+      "parameters": 19887494
+    },
+    "netIP": {
+      "parameter_tensors": 60,
+      "parameters": 10475872
+    }
+  },
+  "physical_batch_240_qualified": false,
+  "preflight": {
+    "cuda": false,
+    "model_construction": false,
+    "optimizer": false,
+    "static": true,
+    "tool": "tools/m6d5a_e06c_runtime_preflight.py",
+    "torch_import": false
+  },
+  "preserved_inputs_sha256": {
+    "configs/frozen/dsdg_bin_idfree_v1.yaml": "a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de",
+    "configs/methods/e06c_dsdg_bin_idfree.yaml": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+    "methods/common/config.py": "786f934716ab05c9e30dc957b4da3a6de4ce4e0370ac5fa2ad75bfa09683b4a3",
+    "methods/common/learned.py": "20252494a7a8e02ddf9a448de011d91cf7e391ca739ac5a5532267d79b4f0525",
+    "methods/common/upstream.py": "0df26ae0147f142df0aca7fff98558ce0477491c85528b825df1caa7269035cc",
+    "methods/dsdg/__init__.py": "6e9136f0934016da997e0c496fc1342bf09c687018cfe2da5075287ca01c4274",
+    "methods/dsdg/adapter.py": "d38fa46ce2fbbf331417c140b738052d572dcaca3eb4187ad2d9b4cff72bef3e",
+    "methods/dsdg/source.py": "32829fa926bb1f107c3a99d3e2903e13529b4ab6ffc95106852404ca04b91b15",
+    "outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json": "f75989a098466db6f96cf85d0154897d41febe156ee25475ac544a58373cb0ee",
+    "outputs/audit/M6C2A_IMPLEMENTATION.json": "fa7f61b22f9107a4e20e258b2c184b80cf59148b7b5f67f506dcd1c504bb58ab",
+    "outputs/audit/M6C2A_IMPLEMENTATION.md": "9d685d73bf1113724b3e8244bf03ed15edc39fd68087b963101be6b04089d419",
+    "third_party/source_pins.json": "484558032f53b536cb7832803980c5273264c262ab74a6eb2c67f27641d72cec"
+  },
+  "push": false,
+  "recursive_filesystem_search": false,
+  "reparameterization": {
+    "altered": false,
+    "distribution": "eps ~ N(0,1) via torch.cuda.FloatTensor(std.size()).normal_(); z = eps*exp(0.5*logvar)+mu",
+    "function": "misc/util.py::reparameterize",
+    "max_abs_standardized_eps": {
+      "z_cls": 2.5357353687286377,
+      "z_nir": 3.5451037883758545,
+      "z_vis": 2.2735579013824463
+    },
+    "rng": "global CUDA default generator, seeded by torch.cuda.manual_seed_all(diagnostic_seed)"
+  },
+  "repeatability": {
+    "all_forward_bitwise_equal": true,
+    "field_identity": {
+      "asset_before": true,
+      "binding": true,
+      "contract": true,
+      "counters": true,
+      "cuda_memory": true,
+      "diagnostic_seed": true,
+      "environment_before": true,
+      "forward": true,
+      "lightcnn": true,
+      "modes": true,
+      "one_logit_classifier": true,
+      "optimizer_ownership": true,
+      "parameters": true,
+      "reparameterization": true,
+      "shapes": true,
+      "source_after": true,
+      "source_before": true
+    },
+    "forward_bitwise_equal": 28,
+    "forward_tensors_compared": 28,
+    "independent_processes": 2,
+    "initial_parameters_bitwise_equal": true,
+    "process_json_bytes_identical": true,
+    "stochastic_note": "reparameterize draws eps from the global CUDA default generator; with the fixed qualification seed both fresh processes drew identical eps. Equality is observed, not forced: RNG semantics were not changed."
+  },
+  "reporting_label": "DSDG-BIN-IDFREE (Amendment A1 identity-free controlled adaptation)",
+  "schema_version": 1,
+  "shapes": {
+    "latent": [
+      1,
+      384
+    ],
+    "logvar_a": [
+      1,
+      128
+    ],
+    "logvar_nir": [
+      1,
+      128
+    ],
+    "logvar_vis": [
+      1,
+      128
+    ],
+    "mu_a": [
+      1,
+      128
+    ],
+    "mu_nir": [
+      1,
+      128
+    ],
+    "mu_vis": [
+      1,
+      128
+    ],
+    "pre_spoof": [
+      1,
+      1
+    ],
+    "rec": [
+      1,
+      6,
+      256,
+      256
+    ],
+    "rec_live": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "rec_live_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "rec_live_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "rec_live_ip_feature": [
+      1,
+      256
+    ],
+    "rec_spoof": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "rec_spoof_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "rec_spoof_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "rec_spoof_ip_feature": [
+      1,
+      256
+    ],
+    "x_live": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "x_live_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "x_live_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "x_live_ip_feature": [
+      1,
+      256
+    ],
+    "x_spoof": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "x_spoof_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "x_spoof_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "x_spoof_ip_feature": [
+      1,
+      256
+    ],
+    "z_cls": [
+      1,
+      128
+    ],
+    "z_nir": [
+      1,
+      128
+    ],
+    "z_vis": [
+      1,
+      128
+    ]
+  },
+  "source": {
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "files_sha256": {
+      "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+      "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+      "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+      "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+      "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+      "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+      "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+      "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+      "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+      "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+      "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+    },
+    "gpu_acquisition": "sparse addition_module/DSDG, blob:none, depth 1 at exact pin; recorded CDCN_U_P1.pkl removed from worktree, never read",
+    "identical_before_after": true,
+    "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+    "source_cache_modified": false,
+    "source_pins_modified": false,
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "worktree_status_laptop_and_gpu": "D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl"
+  },
+  "synthetic_bank": false,
+  "tests": {
+    "existing_tests_modified": false,
+    "file": "tests/test_m6d5a_e06c_runtime.py",
+    "full_repository_suite_run": false,
+    "gpu": {
+      "failed": 0,
+      "passed": 22,
+      "runner": "pytest (gpat-m6-e06c)",
+      "skipped": 0
+    },
+    "laptop": {
+      "failed": 0,
+      "passed": 22,
+      "runner": "unittest (.venv, no torch)",
+      "skipped": 0
+    },
+    "note": "GPU run used an earlier draft of the audit report (SHA256 c70b73584d75aa1a44163ae252fd31387831d96f48628eff9692820ac3117af5) that differs only in the attempt-1 disclosure sentence; the only report-reading test checks forbidden wording. Laptop run repeated on final bytes."
+  },
+  "training_graph_qualified": false,
+  "training_launched": false
+}

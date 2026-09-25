@@ -1,0 +1,88 @@
+M6D5a E06c DSDG-BIN-IDFREE runtime log (chronological; UTC dates 2026-09-25)
+==========================================================================
+[laptop] authority: HEAD=origin/m6-baselines=13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8 divergence 0 0, clean; test -f AGENTS.md -> absent
+[gpu] start: HEAD=origin=32c8f979e14d1ea37ee2047cbd5489cb83c64b72 divergence 0 0, clean
+[gpu] git fetch --no-tags origin refs/heads/m6-baselines:refs/remotes/origin/m6-baselines -> 13fc86c
+[gpu] merge-base --is-ancestor HEAD 13fc86c -> true; distance 1; git merge --ff-only origin/m6-baselines
+[gpu] final: HEAD=origin=13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8 divergence 0 0, clean
+[gpu] nvidia-smi: NVIDIA GeForce RTX 3090, driver 595.84, 24576 MiB, no compute processes
+[gpu] source_cache/facexzoo absent; LightCNN absent at runtime path
+[laptop] LightCNN verified before transfer: 123844849 bytes, sha256 d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964
+[transfer] scp of exactly that file -> GPU third_party_weights/lightcnn/; GPU re-verified: 123844849 bytes, same sha256
+[gpu] source acquired: git init; remote https://github.com/JDAI-CV/FaceX-Zoo; promisor/blob:none; sparse-checkout set addition_module/DSDG;
+      fetch --depth 1 --filter=blob:none 16b793a7...; checkout FETCH_HEAD; rm addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl (recorded removal; never read)
+[gpu] source: HEAD 16b793a7564a4b9308cf94e62bdb2ffacb3a725a tree 0d2216bdbdd9977130db1100641abf336f46ac9d; status ' D .../CDCN_U_P1.pkl' (= laptop); 13 closure blobs OK, sha256 = laptop
+[gpu] gpat-m5 fingerprint before: pip a6067c98... conda-explicit 40feecfc... python 47297c3d...
+[gpu] conda create -y -q --offline -n gpat-m6-e06c --clone gpat-m5  (no packages added afterwards)
+[gpu] gpat-m5 fingerprint after: identical; gpat-m6-e06c: pip a6067c98... conda-explicit 40feecfc... python d736cf0b... (prefix-relocated binary)
+[gpu] API probe (no model/data): torch 2.12.1+cu130; torch.cuda.FloatTensor([1,4]).normal_() works with deprecation UserWarning; F.interpolate bilinear default OK
+[stage] methods/dsdg/runtime.py sha256 0090d7dac1f88a90bcbb28b5223c1c5689872ff42729cb9ccbe96c582ed1120c copied to GPU worktree (temporary)
+[gpu] attempt_1 (rc=1): harness write firewall refused torchvision temp-dir probe /tmp/...; no model constructed, no deserialization. Full log:
+    Traceback (most recent call last):
+      File "/home/student20261/workdir/GPAT_TransferBench/methods/dsdg/runtime.py", line 402, in <module>
+        main()
+      File "/home/student20261/workdir/GPAT_TransferBench/methods/dsdg/runtime.py", line 396, in main
+        result = qualify(build)
+                 ^^^^^^^^^^^^^^
+      File "/home/student20261/workdir/GPAT_TransferBench/methods/dsdg/runtime.py", line 259, in qualify
+        before = environment()
+                 ^^^^^^^^^^^^^
+      File "/home/student20261/workdir/GPAT_TransferBench/methods/dsdg/runtime.py", line 152, in environment
+        import torchvision
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torchvision/__init__.py", line 8, in <module>
+        from torchvision import (
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torchvision/models/__init__.py", line 2, in <module>
+        from .convnext import *
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torchvision/models/convnext.py", line 9, in <module>
+        from ..ops.misc import Conv2dNormActivation, Permute
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torchvision/ops/__init__.py", line 23, in <module>
+        from .poolers import MultiScaleRoIAlign
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torchvision/ops/poolers.py", line 10, in <module>
+        from .roi_align import roi_align
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torchvision/ops/roi_align.py", line 7, in <module>
+        from torch._dynamo.utils import is_compile_supported
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torch/_dynamo/__init__.py", line 13, in <module>
+        from . import (
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torch/_dynamo/aot_compile.py", line 19, in <module>
+        from torch._dynamo.package import SystemInfo
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torch/_dynamo/package.py", line 1206, in <module>
+        DynamoCache = DiskDynamoCache(os.path.join(cache_dir(), "dynamo"))
+                                                   ^^^^^^^^^^^
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torch/_dynamo/package.py", line 1203, in cache_dir
+        return cache_dir()
+               ^^^^^^^^^^^
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torch/_inductor/runtime/cache_dir_utils.py", line 17, in cache_dir
+        os.environ["TORCHINDUCTOR_CACHE_DIR"] = cache_dir = default_cache_dir()
+                                                            ^^^^^^^^^^^^^^^^^^^
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/site-packages/torch/_inductor/runtime/cache_dir_utils.py", line 25, in default_cache_dir
+        tempfile.gettempdir() if not is_fbcode() else "/var/tmp",
+        ^^^^^^^^^^^^^^^^^^^^^
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/tempfile.py", line 316, in gettempdir
+        return _os.fsdecode(_gettempdir())
+                            ^^^^^^^^^^^^^
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/tempfile.py", line 309, in _gettempdir
+        tempdir = _get_default_tempdir()
+                  ^^^^^^^^^^^^^^^^^^^^^^
+      File "/home/student20261/miniconda3/envs/gpat-m6-e06c/lib/python3.11/tempfile.py", line 204, in _get_default_tempdir
+        fd = _os.open(filename, _bin_openflags, 0o600)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      File "/home/student20261/workdir/GPAT_TransferBench/methods/dsdg/runtime.py", line 145, in __call__
+        raise RuntimeError('DATA/WRITE FIREWALL: ' + path)
+    RuntimeError: DATA/WRITE FIREWALL: /tmp/t_ezbkap
+[fix] engineering-only: TMPDIR must be inside the dedicated build root (checked in main); no /tmp firewall exception
+[stage] methods/dsdg/runtime.py sha256 789dd59f5a25eba72fe894808b2b36552904fc31303ebcf8f984e1c1afc4fba4 (final harness)
+[gpu] launch env: CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60501 TMPDIR=<build>/tmp
+[gpu] attempt_2 (rc=0):
+    {"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg/attempt_2.json"}
+[gpu] process_1 started 2026-09-25T03:14:31Z (rc=0):
+    {"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg/process_1.json"}
+[gpu] process_2 started 2026-09-25T03:14:35Z (rc=0):
+    {"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg/process_2.json"}
+[gpu] sha256 attempt_2.json = process_1.json = process_2.json = 05de38af9561dd065311acaa80933127af734fbd5c4f851d32e94093d4e9874a
+[gpu] exports: conda list --explicit --md5 -> 40feecfc1b9498a117bfcdf09ff84970fec2a89911413ab48970c3c29a5b40fd; pip freeze --all -> 527a5ec89fc9fb951130b7cc2a9a9b0bbf77c653a93b8aee35ff2c01cd27fec2
+[stage] test/evidence/runtime.json/report copied to GPU worktree (temporary); pytest in gpat-m6-e06c:
+    ......................                                                   [100%]
+    22 passed in 0.20s
+[gpu] staged copies removed; git status --porcelain empty; HEAD 13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8; source cache status unchanged
+[laptop] tests/test_m6d5a_e06c_runtime.py via unittest (no Torch): Ran 22 tests, OK
+Counts over the whole milestone: optimizer constructions 0, optimizer steps 0, backward passes 0, checkpoints 0, benchmark data opens 0.

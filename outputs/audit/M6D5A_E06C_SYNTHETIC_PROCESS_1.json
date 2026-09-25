@@ -1,0 +1,1707 @@
+{
+  "TEST_access": false,
+  "asset_after": {
+    "bytes": 123844849,
+    "config_external_runtime_path_laptop": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964"
+  },
+  "asset_before": {
+    "bytes": 123844849,
+    "config_external_runtime_path_laptop": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964"
+  },
+  "backward_passes": 0,
+  "benchmark_data_access": false,
+  "binding": {
+    "netCls": {
+      "class": "Cls",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netE_nir": {
+      "class": "Encoder_s",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netE_vis": {
+      "class": "Encoder",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netG": {
+      "class": "Decoder_s",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netIP": {
+      "class": "network_29layers_v2",
+      "device_ids": [
+        0
+      ],
+      "file_sha256": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "module": "networks.light_cnn",
+      "wrapper": "torch.nn.DataParallel"
+    }
+  },
+  "checkpoint_created": false,
+  "compatibility_patch": "NONE",
+  "contract": {
+    "all_epochs": 200,
+    "attack_type": 1,
+    "batch_one_training_refused_by_adapter": true,
+    "checkpoint_rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "deviation": "DEV-020",
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "hdim": 128,
+    "input_resolution": 256,
+    "losses": {
+      "lambda_ip": 1000,
+      "lambda_mmd": 50,
+      "lambda_ort": 1,
+      "lambda_pair": 0.0,
+      "lambda_type": 10
+    },
+    "optimizer": {
+      "learning_rate": 0.0002,
+      "name": "Adam",
+      "netCls_in_optimizer": false,
+      "scope": "netE_nir + netE_vis + netG"
+    },
+    "optimizer_contract_inspection": "STATIC_ONLY",
+    "physical_batch_policy": "E06C_REQUIRES_PHYSICAL_BATCH_240_FOR_OBJECTIVE_EQUIVALENCE",
+    "physical_batch_required": 240
+  },
+  "counters": {
+    "backward_passes": 0,
+    "checkpoint_saves": 0,
+    "optimizer_applications": 0,
+    "optimizer_constructions": 0
+  },
+  "cuda_memory": {
+    "allocated_bytes": 267419648,
+    "autograd": "torch.no_grad forward; no activation graph retained",
+    "batch_240_extrapolation": "NOT_PERFORMED",
+    "establishes_physical_batch_240_feasibility": false,
+    "label": "DIAGNOSTIC_BATCH1_ONLY",
+    "peak_allocated_bytes": 353616896,
+    "peak_reserved_bytes": 369098752,
+    "reserved_bytes": 369098752
+  },
+  "diagnostic_seed": 60501,
+  "environment_after": {
+    "compiler": "NOT_USED: no extension build; pinned DSDG uses standard torch.nn operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60501",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "wheel": "0.48.0"
+    },
+    "pillow": "12.3.0",
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_before": {
+    "compiler": "NOT_USED: no extension build; pinned DSDG uses standard torch.nn operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60501",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "wheel": "0.48.0"
+    },
+    "pillow": "12.3.0",
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  },
+  "fidelity": "CONTROLLED_ADAPTATION",
+  "finite_all": true,
+  "firewall": {
+    "denied": [],
+    "event_counts": {
+      "open": 2370,
+      "os.listdir": 276,
+      "os.scandir": 306
+    },
+    "lightcnn_read_opens": 3
+  },
+  "forward": {
+    "latent": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 21.72665872358383,
+      "max": 4.240015506744385,
+      "mean": 0.05030530068324879,
+      "min": -3.6336307525634766,
+      "sha256": "384306083baeb6a1dda3dc25ed0a5c9a13e02381193cdfaebbd34e56b7d3c13f",
+      "shape": [
+        1,
+        384
+      ]
+    },
+    "logvar_a": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 5.1293299030397455,
+      "max": 1.6685963869094849,
+      "mean": 0.037806441850079864,
+      "min": -0.889967143535614,
+      "sha256": "466f8564a5ca92943faf10e6f175bcd3578d93202ae040ce3a7a4e4683a88b84",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "logvar_nir": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 4.535580638747288,
+      "max": 0.9659458994865417,
+      "mean": 0.003897212338870304,
+      "min": -0.8470414280891418,
+      "sha256": "c7caf947cd2fd7ce1821e006204cd1318ca5c79f9b56311becc9245e9aa16186",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "logvar_vis": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 4.97344506496329,
+      "max": 1.326505422592163,
+      "mean": 0.020318772509199334,
+      "min": -0.9066875576972961,
+      "sha256": "436072aa39d7e81509ba94fd70e99fa4fcba255d80802e853d4fc1a875c97e81",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "mu_a": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 5.095268637486151,
+      "max": 1.1126526594161987,
+      "mean": -0.009121165097894846,
+      "min": -1.2492884397506714,
+      "sha256": "4dad2fc84619a7ccc5dc4ed57922742324896d9c86aeb7cc53af1c5252c11637",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "mu_nir": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 5.109605069037258,
+      "max": 1.3055555820465088,
+      "mean": 0.0634783532423171,
+      "min": -1.148342251777649,
+      "sha256": "7db907633fde4eaedcfe55373e3b9868a195ca33f60837c025c1471d93576f90",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "mu_vis": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 4.66466829912006,
+      "max": 0.9717058539390564,
+      "mean": 0.05844646743753401,
+      "min": -1.3053081035614014,
+      "sha256": "df20a19cc1fa7dd10d3baee6b1e8b8cbaf2f6b33d0489d85156acb79ad88ac05",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "pre_spoof": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 0.8072889447212219,
+      "max": -0.8072889447212219,
+      "mean": -0.8072889447212219,
+      "min": -0.8072889447212219,
+      "sha256": "9a0e280588f9e38758c168e4958a9457f450b5d016016b1b78f1995031bcb175",
+      "shape": [
+        1,
+        1
+      ]
+    },
+    "rec": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 327.3457697452477,
+      "max": 0.9334274530410767,
+      "mean": 0.5093402782335564,
+      "min": 0.07609790563583374,
+      "sha256": "01889fa9996aa9eadae98dd11326d367af062fcad2147d12b05b9a6578e13420",
+      "shape": [
+        1,
+        6,
+        256,
+        256
+      ]
+    },
+    "rec_live": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 239.6721817538143,
+      "max": 0.9334274530410767,
+      "mean": 0.5286217374721218,
+      "min": 0.14782392978668213,
+      "sha256": "8a874826c93d6f1f678e1529d933373bb5c9208ef227752ed8afab9a04cdbf7d",
+      "shape": [
+        1,
+        3,
+        256,
+        256
+      ]
+    },
+    "rec_live_128": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 119.75467670009968,
+      "max": 0.9190704822540283,
+      "mean": 0.5286217375420771,
+      "min": 0.18103942275047302,
+      "sha256": "64906ebeee5cceca76285a5a855a0a0044e06e087d6c61b7069349e5e2676029",
+      "shape": [
+        1,
+        3,
+        128,
+        128
+      ]
+    },
+    "rec_live_gray": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 65.59660051854055,
+      "max": 0.7001146674156189,
+      "mean": 0.5091921145340166,
+      "min": 0.29905956983566284,
+      "sha256": "340a80f16ff09f1af65644cb6a2b59391cd5af87c19c60540655ea582af16946",
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ]
+    },
+    "rec_live_ip_feature": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 66.82922067737894,
+      "max": 11.643752098083496,
+      "mean": -0.16583648856612854,
+      "min": -14.548897743225098,
+      "sha256": "ef47e7bd5fffca2e305877beb896a90f1f6570ce111ac2efb952484d3006f5cf",
+      "shape": [
+        1,
+        256
+      ]
+    },
+    "rec_spoof": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 222.9629975208338,
+      "max": 0.843610942363739,
+      "mean": 0.490058818994991,
+      "min": 0.07609790563583374,
+      "sha256": "ecad3ed7032f2531390f676df1a7aa3876d5412f83aeee6a8ec88da4f7fbbb05",
+      "shape": [
+        1,
+        3,
+        256,
+        256
+      ]
+    },
+    "rec_spoof_128": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 111.39529898087889,
+      "max": 0.8323532938957214,
+      "mean": 0.4900588189939299,
+      "min": 0.08278553187847137,
+      "sha256": "c3520b62a86faf5437fa078222f42faca6ee1c89b629e84e7221e182ee5a032c",
+      "shape": [
+        1,
+        3,
+        128,
+        128
+      ]
+    },
+    "rec_spoof_gray": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 65.50277935408052,
+      "max": 0.7104048132896423,
+      "mean": 0.5076064134509579,
+      "min": 0.2401498556137085,
+      "sha256": "9ccd71490e075a6d59d9fe46b63a845c3b8b3664338665d7789e7bb1fb2e8911",
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ]
+    },
+    "rec_spoof_ip_feature": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 69.48011105227526,
+      "max": 13.139859199523926,
+      "mean": -0.28378081291157287,
+      "min": -11.173872947692871,
+      "sha256": "1f23c5ebc648a39943197a1777942dfd61f909fa5cc1036d1f38cf065e8b839c",
+      "shape": [
+        1,
+        256
+      ]
+    },
+    "x_live": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 234.43957063485334,
+      "max": 1.0,
+      "mean": 0.4244792110153192,
+      "min": 0.0,
+      "sha256": "6b56ecdc6dae52ddcafa93788b62fdafd77d82eb2cd66d7b27ba615f0c9f1986",
+      "shape": [
+        1,
+        3,
+        256,
+        256
+      ]
+    },
+    "x_live_128": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 117.21902236285341,
+      "max": 0.9999827146530151,
+      "mean": 0.4244792115469947,
+      "min": 3.844675575237488e-06,
+      "sha256": "ebd38d02cf2ad9ffa73e6ec32eb14e4217275654e18110ed8f28883bbd4d95ad",
+      "shape": [
+        1,
+        3,
+        128,
+        128
+      ]
+    },
+    "x_live_gray": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 65.29101236244813,
+      "max": 0.8848443031311035,
+      "mean": 0.4785078574172985,
+      "min": 0.11546848714351654,
+      "sha256": "c3142046e55a0505da1af1c8066896bd42eea1d626c825ba103378108cbea9ff",
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ]
+    },
+    "x_live_ip_feature": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 134.17047901214454,
+      "max": 20.5134334564209,
+      "mean": -0.6228299007925671,
+      "min": -22.998828887939453,
+      "sha256": "f9ab3569c4e5bfe1a2ff34ffa0edc16b43b2ca1ca4e0b4b7224dfa21962bc87f",
+      "shape": [
+        1,
+        256
+      ]
+    },
+    "x_spoof": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 252.0511210801014,
+      "max": 1.0,
+      "mean": 0.4988594247461151,
+      "min": 0.0,
+      "sha256": "7ca765de2289fe6a1058866f7c6a112c2d15462fa050e65fd3061d99f9640b16",
+      "shape": [
+        1,
+        3,
+        256,
+        256
+      ]
+    },
+    "x_spoof_128": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 126.02390296503783,
+      "max": 0.9998067021369934,
+      "mean": 0.4988594248931501,
+      "min": 0.00017673522233963013,
+      "sha256": "37f2ab62235acc0c17c6604af902b74e53cbbad1100652f2b5488758ca3f1765",
+      "shape": [
+        1,
+        3,
+        128,
+        128
+      ]
+    },
+    "x_spoof_gray": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 68.59382942845068,
+      "max": 0.9513686895370483,
+      "mean": 0.499609925594541,
+      "min": 0.05951943248510361,
+      "sha256": "e8442acdd35b88b4cc695b4ff3c5447611f686d48cd9ec1e01ff6f8b03e12ed8",
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ]
+    },
+    "x_spoof_ip_feature": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 119.24729340738543,
+      "max": 28.45702362060547,
+      "mean": -0.169486682756542,
+      "min": -20.54065704345703,
+      "sha256": "8885abcbf18f4465e81fed7459a39abb96786c108759ac64108f81c33f418988",
+      "shape": [
+        1,
+        256
+      ]
+    },
+    "z_cls": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 13.321515708024695,
+      "max": 2.7083253860473633,
+      "mean": 0.06585279933642596,
+      "min": -3.6336307525634766,
+      "sha256": "f46275e3a1f35114a8c5cbbcb4c6f63f5325998d68e99d36753861f4fe75937d",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "z_nir": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 12.492998087522222,
+      "max": 4.240015506744385,
+      "mean": 0.07010637468192726,
+      "min": -2.3640201091766357,
+      "sha256": "7c507db65e62cacef3931972d9e122f80c41c5cbbf6f7e257888e85c2e2753e0",
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "z_vis": {
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 11.769023634826251,
+      "max": 3.248966932296753,
+      "mean": 0.01495672803139314,
+      "min": -2.9943928718566895,
+      "sha256": "ab6e1b4aa1fd08135208e95f3f07d1647add5d9c6042c839afd6076993c7215f",
+      "shape": [
+        1,
+        128
+      ]
+    }
+  },
+  "label": "DIAGNOSTIC_ARCHITECTURE_BATCH_ONLY",
+  "lightcnn": {
+    "checkpoint_tensor_count": 61,
+    "expected_model_tensor_count": 60,
+    "filtered_extra_keys": {
+      "module.fc2.weight": [
+        80013,
+        256
+      ]
+    },
+    "loaded_values_equal_checkpoint": true,
+    "loader": "train_generator.py:75-84 filter k in model_dict -> update -> load_state_dict -> requires_grad=False",
+    "matched": 60,
+    "missing": [],
+    "non_tensor_entries": {
+      "arch": "LightCNN",
+      "epoch": 50,
+      "prec1": 99.46
+    },
+    "shape_mismatches": [],
+    "top_level_keys": [
+      "arch",
+      "epoch",
+      "prec1",
+      "state_dict"
+    ],
+    "torch_load_weights_only": true
+  },
+  "modes": {
+    "netCls": true,
+    "netE_nir": true,
+    "netE_vis": true,
+    "netG": true,
+    "netIP": false
+  },
+  "one_logit_classifier": {
+    "converted_to_two_logits": false,
+    "cross_entropy": 0.0,
+    "logit_shape": [
+      1,
+      1
+    ],
+    "reason": "log_softmax over one logit is identically 0; A1 discloses loss_cls as degenerate",
+    "status": "EXPECTED_DEGENERACY_CONFIRMED",
+    "target_class_index": 0
+  },
+  "optimizer_applications": 0,
+  "optimizer_constructed": false,
+  "optimizer_ownership": {
+    "netCls_excluded": true,
+    "netIP_excluded": true,
+    "optimizer_constructed": false,
+    "owned_modules": [
+      "netE_nir",
+      "netE_vis",
+      "netG"
+    ],
+    "parameter_tensors": 55,
+    "parameters": 45370182,
+    "source": "addition_module/DSDG/train_generator.py:87-88"
+  },
+  "parameters": {
+    "netCls": {
+      "buffers": 0,
+      "parameter_tensors": 2,
+      "parameters": 129,
+      "requires_grad_parameters": 129,
+      "sha256": {
+        "module.fc.bias": "8919e6d38e10b1fbd21b7ab3e7c181cfb2e395c8f9018fc45cbf1a8d147fa5c2",
+        "module.fc.weight": "9f76bfa39c851fcdad8636dd3a7baddee92f6a01c44e4ebb02b92029689160a7"
+      },
+      "shapes": {
+        "module.fc.bias": [
+          1
+        ],
+        "module.fc.weight": [
+          1,
+          128
+        ]
+      }
+    },
+    "netE_nir": {
+      "buffers": 0,
+      "parameter_tensors": 17,
+      "parameters": 13790048,
+      "requires_grad_parameters": 13790048,
+      "sha256": {
+        "module.fc.bias": "f79a01b7b1b754bdea8cd25bc7381226ae6fcd43eb3be2333257647f7599d3f5",
+        "module.fc.weight": "c82eb763a8469503a0c8663904861b2ea7913ce2eac2b668a1c2383d9b08f104",
+        "module.main.0.weight": "8f68b70f96af2d773b29bdf3c050ab27fc18bd5b641cc1120df1afc21e27ca74",
+        "module.main.10.0.conv1.weight": "a5c26c52a0b977ec6788b7b38a8a9446823b218bb3833772fa392facab6a666f",
+        "module.main.10.0.conv2.weight": "38ac0e80f82b42461b925a2b1f006771adc207f6426c39934ef64411c528e75a",
+        "module.main.10.0.conv_expand.weight": "1c80c62a67f73cb763ce876760b76b48ee37a62959eb688b09452e2b122b6456",
+        "module.main.12.0.conv1.weight": "e7d6add5008612661b22d58ac7b381860322642683678b51e04e6c3f69f245fc",
+        "module.main.12.0.conv2.weight": "ad679331f438c79492cf4529c585cdd53a20204e35072007b66ff85791cddb2f",
+        "module.main.4.0.conv1.weight": "4accb0496012c22541443a12a8d5dbb1fc02893385085e58eeb8dfd8bd9d79e9",
+        "module.main.4.0.conv2.weight": "709a550ba02e43f607fb8df1fa6d1e302445250a7ca50458087870d0c3d15438",
+        "module.main.4.0.conv_expand.weight": "0452451c76f3e10038b6d97fcefef3e326dfefe82d535d53e19ab67448874fc9",
+        "module.main.6.0.conv1.weight": "38ef8a4d7eb1fe4471018abe32451310169473a1f4eb6b11444d24db8317899b",
+        "module.main.6.0.conv2.weight": "0802bf2da2705540fd5cc3f720dbc0e927928b4d0851a879a920fe78d51b10e3",
+        "module.main.6.0.conv_expand.weight": "b0a7c6fe7368dadfa9f98ece2bb6e76a5d42df306e22ff4a442425df8438a0ae",
+        "module.main.8.0.conv1.weight": "790bef75d2daa8a2dac42f4b18d568f0ab6c4f44ad282de2e09cf59ab767c9dc",
+        "module.main.8.0.conv2.weight": "993d2139f857d90047e4eeb9eabd5a0b68137f16277c01ff0bdbe44e0b0b784f",
+        "module.main.8.0.conv_expand.weight": "37ebe473f1955a1bbb18567f13f21b7c50eeb61e4a6350255db793cf421ce16c"
+      },
+      "shapes": {
+        "module.fc.bias": [
+          512
+        ],
+        "module.fc.weight": [
+          512,
+          8192
+        ],
+        "module.main.0.weight": [
+          32,
+          3,
+          5,
+          5
+        ],
+        "module.main.10.0.conv1.weight": [
+          512,
+          256,
+          3,
+          3
+        ],
+        "module.main.10.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.10.0.conv_expand.weight": [
+          512,
+          256,
+          1,
+          1
+        ],
+        "module.main.12.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.12.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv1.weight": [
+          64,
+          32,
+          3,
+          3
+        ],
+        "module.main.4.0.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.4.0.conv_expand.weight": [
+          64,
+          32,
+          1,
+          1
+        ],
+        "module.main.6.0.conv1.weight": [
+          128,
+          64,
+          3,
+          3
+        ],
+        "module.main.6.0.conv2.weight": [
+          128,
+          128,
+          3,
+          3
+        ],
+        "module.main.6.0.conv_expand.weight": [
+          128,
+          64,
+          1,
+          1
+        ],
+        "module.main.8.0.conv1.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.main.8.0.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "module.main.8.0.conv_expand.weight": [
+          256,
+          128,
+          1,
+          1
+        ]
+      }
+    },
+    "netE_vis": {
+      "buffers": 0,
+      "parameter_tensors": 17,
+      "parameters": 11692640,
+      "requires_grad_parameters": 11692640,
+      "sha256": {
+        "module.fc.bias": "bf32c1f739920d7ee9e78e2caa33ccea47f6e38e0a833b6778fb3268d0e3de44",
+        "module.fc.weight": "cec383ce3291ef9ab58424738a5836e9078657a9e6c7f8c6e800ac3df40c48bc",
+        "module.main.0.weight": "171889f71fe709d8f06c25a2fe3edef675543fbf326526ffdbbfe76dc145fe32",
+        "module.main.10.0.conv1.weight": "46e8eb4b13d6152519805568b640f52d3d07f0c17c47343fe3acc713e9998eb4",
+        "module.main.10.0.conv2.weight": "b2e7a0efb33bbd644d658240898938d61f81f962d13027b2d829cf0ebb9548b6",
+        "module.main.10.0.conv_expand.weight": "3678bf6d37071a4a47a5cf37fbdc128c39963e198fd73a15bc1ab2b865e110d7",
+        "module.main.12.0.conv1.weight": "7207bc92329a8b95cce58ee20f73a63133c6e92be6b02a53c378bf0d2d2f787d",
+        "module.main.12.0.conv2.weight": "52fba1ad56424e32efcf2ab3df923eabb7b7a722d5fa48a3c4e9957a014789c0",
+        "module.main.4.0.conv1.weight": "8e85bec4dfa3520128ddb6076907f0cc42a73a6762d9eeede8e5623f84e8076e",
+        "module.main.4.0.conv2.weight": "dd02f2a34a1147ce6d14e5bb46ee88676edc48ae3fe58f977b76f4d63ab8c0b3",
+        "module.main.4.0.conv_expand.weight": "b6da0798f4d0b6f9b4d789e0a9240220e372b7b0377f81dabb327c2aa9e09992",
+        "module.main.6.0.conv1.weight": "3962f9ecaeecd0da4ad5914e659aebe631f938776ccbd66de582b284cdf9078c",
+        "module.main.6.0.conv2.weight": "9e1649501cd82231f887b46263b27133dfbb85e6a5551812faacaeb1c4ccae17",
+        "module.main.6.0.conv_expand.weight": "8773f5c0a9a674bf2dca829dd235402d45077e17344ce0bb22dc548fac2c3250",
+        "module.main.8.0.conv1.weight": "07ca2bcb5f86c51bfe302e9e6744009dfad86fb6ff747fcb50a54176d412bff7",
+        "module.main.8.0.conv2.weight": "4c159b24581675ba866f1a5bb738cae1af158bdde3268f868b11b6371347f9cf",
+        "module.main.8.0.conv_expand.weight": "d4f2abcd41f0056d0985dbc3a0b36d14d776c0f9a3d4e176e5e69ead6df896df"
+      },
+      "shapes": {
+        "module.fc.bias": [
+          256
+        ],
+        "module.fc.weight": [
+          256,
+          8192
+        ],
+        "module.main.0.weight": [
+          32,
+          3,
+          5,
+          5
+        ],
+        "module.main.10.0.conv1.weight": [
+          512,
+          256,
+          3,
+          3
+        ],
+        "module.main.10.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.10.0.conv_expand.weight": [
+          512,
+          256,
+          1,
+          1
+        ],
+        "module.main.12.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.12.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv1.weight": [
+          64,
+          32,
+          3,
+          3
+        ],
+        "module.main.4.0.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.4.0.conv_expand.weight": [
+          64,
+          32,
+          1,
+          1
+        ],
+        "module.main.6.0.conv1.weight": [
+          128,
+          64,
+          3,
+          3
+        ],
+        "module.main.6.0.conv2.weight": [
+          128,
+          128,
+          3,
+          3
+        ],
+        "module.main.6.0.conv_expand.weight": [
+          128,
+          64,
+          1,
+          1
+        ],
+        "module.main.8.0.conv1.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.main.8.0.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "module.main.8.0.conv_expand.weight": [
+          256,
+          128,
+          1,
+          1
+        ]
+      }
+    },
+    "netG": {
+      "buffers": 0,
+      "parameter_tensors": 21,
+      "parameters": 19887494,
+      "requires_grad_parameters": 19887494,
+      "sha256": {
+        "module.fc.0.bias": "3bf2e459125783eafc780b5eccc2e85ddd238952cf98cd1613d7022f0ae597a4",
+        "module.fc.0.weight": "9c1faa0b3345439d4b2c179c5f7a228e16b0e291bf1c5ebbf383f80cce85391e",
+        "module.main.0.0.conv1.weight": "8643f8f70a3e22bf4c3378e866a64760c496d9b200046f6a8ea7bc3087bc2f95",
+        "module.main.0.0.conv2.weight": "de41acd5b049e318d2d3187b7aa080931b60ee9db7a96aa93c394a0ec29bfffa",
+        "module.main.10.0.conv1.weight": "f660997fb9982095fab2f410db8f44131977eac8f1fe5ab3abbbaea384458c70",
+        "module.main.10.0.conv2.weight": "8f81f5c4d663cda458afec2c1d11f2a2d943f0cebcfb62b32a83fa10dc257d9c",
+        "module.main.10.0.conv_expand.weight": "db2e9d16801df80dd23535461261ef4ac5ee59556127fffb6b8e4bd3c68246d3",
+        "module.main.10.1.conv1.weight": "f0e7b1626ced903cfc979749e6d73d85a2f1b7c2035c97239896fad81e83bd4e",
+        "module.main.10.1.conv2.weight": "bbb8e316866aff67e9a580f47f1badbb56e832d1d628d9ed3bbe9e5f4fd4724a",
+        "module.main.12.bias": "ca315166281ad287b4b5893dd420d6d0de8d33ff35554bf595e8ae4a8e7e414c",
+        "module.main.12.weight": "3b7e9b5a1fd385ef63e5c818295a18744445875eed56ac89aae7f56193890670",
+        "module.main.2.0.conv1.weight": "4363cafec6a33dde8796be0c68f4b5731966f6c54da526a19c867788295754af",
+        "module.main.2.0.conv2.weight": "406618596d2ea898a6a918b95685da62b7c0f8d1eed6ac6072e280ce0384a1f8",
+        "module.main.4.0.conv1.weight": "e23b892f3bfaeae26e42b5ab1e54cc6e45dc87894136989d2eba41b963a9312b",
+        "module.main.4.0.conv2.weight": "f50e37619a6fb94e58b59da22109d3b1aea6245fdea146a77bac2131089894fa",
+        "module.main.6.0.conv1.weight": "661dbe5cc0be0f3cb2baca6d81a1c96ef9ea206539d04b69a7597ea25d15894f",
+        "module.main.6.0.conv2.weight": "ce466fa460a2374b6b8483a957bd9fbe51f7fbd2ae4d8140b105c050d195a5ac",
+        "module.main.6.0.conv_expand.weight": "1cb9545ee7e933a3c21e6d6405e64fdf41faa07599a16784131582ba62c6a6e2",
+        "module.main.8.0.conv1.weight": "e9b6499ef0bec2ca3caa257a58e18f02f62e3c55fa436b19971ce95d79949018",
+        "module.main.8.0.conv2.weight": "5a3edc51355770d6bf4db302318a65d007007804cd75b7088a17f3afbbe2f32b",
+        "module.main.8.0.conv_expand.weight": "c0fe57729d2d5133c7af3b7ef564819dd51a2f95b1b49b7be62c5c90cd477018"
+      },
+      "shapes": {
+        "module.fc.0.bias": [
+          8192
+        ],
+        "module.fc.0.weight": [
+          8192,
+          384
+        ],
+        "module.main.0.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.0.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.10.0.conv1.weight": [
+          64,
+          128,
+          3,
+          3
+        ],
+        "module.main.10.0.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.10.0.conv_expand.weight": [
+          64,
+          128,
+          1,
+          1
+        ],
+        "module.main.10.1.conv1.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.10.1.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.12.bias": [
+          6
+        ],
+        "module.main.12.weight": [
+          6,
+          64,
+          5,
+          5
+        ],
+        "module.main.2.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.2.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.6.0.conv1.weight": [
+          256,
+          512,
+          3,
+          3
+        ],
+        "module.main.6.0.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "module.main.6.0.conv_expand.weight": [
+          256,
+          512,
+          1,
+          1
+        ],
+        "module.main.8.0.conv1.weight": [
+          128,
+          256,
+          3,
+          3
+        ],
+        "module.main.8.0.conv2.weight": [
+          128,
+          128,
+          3,
+          3
+        ],
+        "module.main.8.0.conv_expand.weight": [
+          128,
+          256,
+          1,
+          1
+        ]
+      }
+    },
+    "netIP": {
+      "buffers": 0,
+      "parameter_tensors": 60,
+      "parameters": 10475872,
+      "requires_grad_parameters": 0,
+      "sha256": {
+        "module.block1.0.conv1.filter.bias": "954a6e2b1a6bdb9bfcb064a4e65f3aa7ae2ad1db5587510fec1882ed2fe0d213",
+        "module.block1.0.conv1.filter.weight": "e27abacb72f77ac0e010b2bd17d708a7a576805e6d75355f61d1d9b214b27121",
+        "module.block1.0.conv2.filter.bias": "c4f8153cc47a13e5faa8a426096442fb325769b9684dca26eaaa006e1afeae9f",
+        "module.block1.0.conv2.filter.weight": "f191dd9ca678e6f6d277f835d5958457299e34a74733275520002af73118437c",
+        "module.block2.0.conv1.filter.bias": "76c328eb22d435c387a9aeeb0199959b620936602d08315ef86988bd1dbdfaec",
+        "module.block2.0.conv1.filter.weight": "ee69bc256ed76b3bb9e17162a6bd077190acd544f8b703aa1a2dd87034013c42",
+        "module.block2.0.conv2.filter.bias": "c225f8cb0e218aa771320b7b56d52ef612d7b49c689fa0f5eed6763835559d58",
+        "module.block2.0.conv2.filter.weight": "2e68d0078690386fa32c2ae30a404c4a093ace0c4b1513e3b8a6348222b1861c",
+        "module.block2.1.conv1.filter.bias": "06b015e262e3f7a909acff8c0fe7ddb56c79a5ad2ff3485c132778aa3a4e7849",
+        "module.block2.1.conv1.filter.weight": "021f4fbf36afade23ef8d8a0850a78707fac579a564d7168934e77d66066b25d",
+        "module.block2.1.conv2.filter.bias": "9a14b5f420363cafa63640af46ce82718772c32768f8ab170f05aa17c1e2a619",
+        "module.block2.1.conv2.filter.weight": "39273838c11bdc526bcca5c73e3fa8fc8ffdf8d28b34c273b612af300756f547",
+        "module.block3.0.conv1.filter.bias": "b1cd89f447a416ee4e76cf50cb060adc01fbe4b3bb6213b34a9640ad068ea11a",
+        "module.block3.0.conv1.filter.weight": "e3c22768998bdfa0248ab7c00eb95c5e298fb0fcdf613d1469048b3ce2f1b5ba",
+        "module.block3.0.conv2.filter.bias": "348d370aba5e2af9fd629dc66a0ad17c5811a1145cb421defba6d1a27fb5570d",
+        "module.block3.0.conv2.filter.weight": "f9a2fd9dd5d713bfb8e9cc7f4e6c0bdda9b9921952d8185b1ab718aa5a17225d",
+        "module.block3.1.conv1.filter.bias": "4b97954eac196fc18ec63014a3dc9b636431154f688a368de9b2599ca24ecada",
+        "module.block3.1.conv1.filter.weight": "8e0b6b0a94fb2c2b035dec912975326940521fee0efd6002ffe5b30a019d55b5",
+        "module.block3.1.conv2.filter.bias": "182f9e02251bf5d9a238a7ca5541ca6ebfda9f224f8452e03203d75759f8f4bd",
+        "module.block3.1.conv2.filter.weight": "9f0bce8002632dbd529df50b39312ef8990d9bf7e755e9ab1b5021f81785b6ce",
+        "module.block3.2.conv1.filter.bias": "3fe98b72d95a77ab45328a04ec06f8ac8c397efa3fbd365c61e6c19bb928c1e0",
+        "module.block3.2.conv1.filter.weight": "1b23ba749c77416245bf072ca90447517cb34171f055b4116def56942ca9a174",
+        "module.block3.2.conv2.filter.bias": "98da9698f557164ad693d2c70ba269e374e105603b494b38317d8a8e5f237cd8",
+        "module.block3.2.conv2.filter.weight": "8c05351d6b062a113569044f57194b74e5daa3a384babd43e91946b28fd05d6a",
+        "module.block4.0.conv1.filter.bias": "d6c9e9eaf6176c7eec5ef354c308f255f25aa81010ffe5a7620fd487548cef09",
+        "module.block4.0.conv1.filter.weight": "d454e538541fd6c406df6c51c2c01a7459c51e8ab8261549b3908bdf2829eb47",
+        "module.block4.0.conv2.filter.bias": "76a1fb3e50f83208bc0c71032af29dff5cd48f654d20b2ad1f556883b13492b2",
+        "module.block4.0.conv2.filter.weight": "34d5fd46122c5f8601e57707188c5e42642a250a5da9911f3f8bec14ad9e7217",
+        "module.block4.1.conv1.filter.bias": "a1ba2ad0067dc1b67b440a40ba533ffc969ac43d659b997d55333e7fa016e15f",
+        "module.block4.1.conv1.filter.weight": "5408872e5bd8519203e852b4bee279322cca7b72621804edc9a0cc2a16904c4b",
+        "module.block4.1.conv2.filter.bias": "64d150e6e9717660f88a53265c9ca20fa5ed0cd4ed775c761a9e2d078dad77d6",
+        "module.block4.1.conv2.filter.weight": "1fc07b9ac3e81e6b0bcea5c3c3f20879f0be578dcb2da5917f1c6b5e47176277",
+        "module.block4.2.conv1.filter.bias": "ddb980a3873ea436f8d46bbfc33b3f14dd893fa59a0077eeecf5f5913705c8e4",
+        "module.block4.2.conv1.filter.weight": "b4d1eac87a791a4e29b630ffaf0dc52af49833f1a8e9e9b86161b7b3a810978d",
+        "module.block4.2.conv2.filter.bias": "ec8b11ad18d2c2cf3078f73927a6fc9cf287da4d5be81f528f69e12c5c9fe481",
+        "module.block4.2.conv2.filter.weight": "bb5432050ad48febf3ade78ec06c024a09aadef4611f8bc212981d4c5c6ae5fc",
+        "module.block4.3.conv1.filter.bias": "1fb33e399cf3d3f886096ea17e5e2822b3296fd1fe56d8fc106f0a7c07e48de9",
+        "module.block4.3.conv1.filter.weight": "da283ebc99611d6531320f1d87d64e5daf9ca4751e5435d3338308f447460abe",
+        "module.block4.3.conv2.filter.bias": "1c75c97b88ed4d7264f52c48a721036fbfb6f80d17a8dc450e248aa62f709a2b",
+        "module.block4.3.conv2.filter.weight": "7bb70266d4ba8676a635186c4b3d58f7ea242dc60cc5a9dbb4815ea99a7e1fa9",
+        "module.conv1.filter.bias": "9456819403c87b6f8d1e06abde1ffd82b4c062fdbf0744ef5d7c37fedbed833d",
+        "module.conv1.filter.weight": "f4f7bd8a93e4cac20784d58b57ea195ded31d39269871288cd4b7624c28508b1",
+        "module.fc.bias": "ba0e35cfcaa8db7d8b40b249ff7842294c7b18eee7178d270037c47ade403fc1",
+        "module.fc.weight": "75d131272c6927c89fe0033545279df3c5750d84ef1f21be7b6cd35eb7fe38f0",
+        "module.group1.conv.filter.bias": "a7fab946358742e6bc4119d7a179afd5c525107e4accb3b40b027550cafb6ceb",
+        "module.group1.conv.filter.weight": "6816879dd559873782c30806130bf278e7e04adf15df76c5f439fff34d53f917",
+        "module.group1.conv_a.filter.bias": "9e157b13c4a2a32b17338aa78775f3c90a63681d52960bff25693e7293b80c72",
+        "module.group1.conv_a.filter.weight": "2e8eec16ad6bb05a5b99a5d37614b9464ddbb370adcee35aff45ae563cdc4c1f",
+        "module.group2.conv.filter.bias": "e7016ee855c1af38153203d6f9f63e6a41c50c46f9990d387edab6819cdf3a0a",
+        "module.group2.conv.filter.weight": "12a531ed5b4186c4865459210877e53b9d6ac68f4b2306e7fed62443847fcb98",
+        "module.group2.conv_a.filter.bias": "63ec858df1199d34967b29c1003a03be0b4a4c400afdf606b2be16e55a8ce90a",
+        "module.group2.conv_a.filter.weight": "78ffd2c8c82052862206eb400fc711530e4a81ebc2b73a9ff394e0f0f5cf9f4b",
+        "module.group3.conv.filter.bias": "7f43d0b096e73cddf06561d55d786b25424321e4823ab11b392a6e0cba2cae25",
+        "module.group3.conv.filter.weight": "29389a5b5b91514a82bcca4f8560d9e57b9b8479248bf354536601bf70a4bca5",
+        "module.group3.conv_a.filter.bias": "4cb2a82aa2d1fd0ad98fa2d072d69d8735083bee820f59e2f38538c905556d1b",
+        "module.group3.conv_a.filter.weight": "441eebfbe43a9a2855ec94d5b17b1f61aefcbae28797997ca2bcaae891c964a9",
+        "module.group4.conv.filter.bias": "7cc98c0080f576b0ef7eed6e38b0356487aaa2d1fbbdad91b0a4ed8aaa061722",
+        "module.group4.conv.filter.weight": "534617fa53113102568090ad9efb275aaa790a73619e4569d6c73c85115b49e1",
+        "module.group4.conv_a.filter.bias": "401ecfedb813c107b493160d2eb13e2ec1d0983cc125d166d4e5762e97d78cf2",
+        "module.group4.conv_a.filter.weight": "6606e14f8df94f8bbe51479d5f0182276801c57b28c974f08287d3e98362457a"
+      },
+      "shapes": {
+        "module.block1.0.conv1.filter.bias": [
+          96
+        ],
+        "module.block1.0.conv1.filter.weight": [
+          96,
+          48,
+          3,
+          3
+        ],
+        "module.block1.0.conv2.filter.bias": [
+          96
+        ],
+        "module.block1.0.conv2.filter.weight": [
+          96,
+          48,
+          3,
+          3
+        ],
+        "module.block2.0.conv1.filter.bias": [
+          192
+        ],
+        "module.block2.0.conv1.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block2.0.conv2.filter.bias": [
+          192
+        ],
+        "module.block2.0.conv2.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block2.1.conv1.filter.bias": [
+          192
+        ],
+        "module.block2.1.conv1.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block2.1.conv2.filter.bias": [
+          192
+        ],
+        "module.block2.1.conv2.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block3.0.conv1.filter.bias": [
+          384
+        ],
+        "module.block3.0.conv1.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.0.conv2.filter.bias": [
+          384
+        ],
+        "module.block3.0.conv2.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.1.conv1.filter.bias": [
+          384
+        ],
+        "module.block3.1.conv1.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.1.conv2.filter.bias": [
+          384
+        ],
+        "module.block3.1.conv2.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.2.conv1.filter.bias": [
+          384
+        ],
+        "module.block3.2.conv1.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.2.conv2.filter.bias": [
+          384
+        ],
+        "module.block3.2.conv2.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block4.0.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.0.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.0.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.0.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.1.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.1.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.1.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.1.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.2.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.2.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.2.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.2.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.3.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.3.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.3.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.3.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.conv1.filter.bias": [
+          96
+        ],
+        "module.conv1.filter.weight": [
+          96,
+          1,
+          5,
+          5
+        ],
+        "module.fc.bias": [
+          256
+        ],
+        "module.fc.weight": [
+          256,
+          8192
+        ],
+        "module.group1.conv.filter.bias": [
+          192
+        ],
+        "module.group1.conv.filter.weight": [
+          192,
+          48,
+          3,
+          3
+        ],
+        "module.group1.conv_a.filter.bias": [
+          96
+        ],
+        "module.group1.conv_a.filter.weight": [
+          96,
+          48,
+          1,
+          1
+        ],
+        "module.group2.conv.filter.bias": [
+          384
+        ],
+        "module.group2.conv.filter.weight": [
+          384,
+          96,
+          3,
+          3
+        ],
+        "module.group2.conv_a.filter.bias": [
+          192
+        ],
+        "module.group2.conv_a.filter.weight": [
+          192,
+          96,
+          1,
+          1
+        ],
+        "module.group3.conv.filter.bias": [
+          256
+        ],
+        "module.group3.conv.filter.weight": [
+          256,
+          192,
+          3,
+          3
+        ],
+        "module.group3.conv_a.filter.bias": [
+          384
+        ],
+        "module.group3.conv_a.filter.weight": [
+          384,
+          192,
+          1,
+          1
+        ],
+        "module.group4.conv.filter.bias": [
+          256
+        ],
+        "module.group4.conv.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.group4.conv_a.filter.bias": [
+          256
+        ],
+        "module.group4.conv_a.filter.weight": [
+          256,
+          128,
+          1,
+          1
+        ]
+      }
+    }
+  },
+  "physical_batch_240_qualified": false,
+  "reparameterization": {
+    "altered": false,
+    "distribution": "eps ~ N(0,1) via torch.cuda.FloatTensor(std.size()).normal_(); z = eps*exp(0.5*logvar)+mu",
+    "function": "misc/util.py::reparameterize",
+    "max_abs_standardized_eps": {
+      "z_cls": 2.5357353687286377,
+      "z_nir": 3.5451037883758545,
+      "z_vis": 2.2735579013824463
+    },
+    "rng": "global CUDA default generator, seeded by torch.cuda.manual_seed_all(diagnostic_seed)"
+  },
+  "shapes": {
+    "latent": [
+      1,
+      384
+    ],
+    "logvar_a": [
+      1,
+      128
+    ],
+    "logvar_nir": [
+      1,
+      128
+    ],
+    "logvar_vis": [
+      1,
+      128
+    ],
+    "mu_a": [
+      1,
+      128
+    ],
+    "mu_nir": [
+      1,
+      128
+    ],
+    "mu_vis": [
+      1,
+      128
+    ],
+    "pre_spoof": [
+      1,
+      1
+    ],
+    "rec": [
+      1,
+      6,
+      256,
+      256
+    ],
+    "rec_live": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "rec_live_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "rec_live_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "rec_live_ip_feature": [
+      1,
+      256
+    ],
+    "rec_spoof": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "rec_spoof_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "rec_spoof_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "rec_spoof_ip_feature": [
+      1,
+      256
+    ],
+    "x_live": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "x_live_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "x_live_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "x_live_ip_feature": [
+      1,
+      256
+    ],
+    "x_spoof": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "x_spoof_128": [
+      1,
+      3,
+      128,
+      128
+    ],
+    "x_spoof_gray": [
+      1,
+      1,
+      128,
+      128
+    ],
+    "x_spoof_ip_feature": [
+      1,
+      256
+    ],
+    "z_cls": [
+      1,
+      128
+    ],
+    "z_nir": [
+      1,
+      128
+    ],
+    "z_vis": [
+      1,
+      128
+    ]
+  },
+  "source_after": {
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "files_sha256": {
+      "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+      "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+      "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+      "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+      "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+      "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+      "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+      "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+      "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+      "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+      "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+    },
+    "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/facexzoo",
+    "sparse_checkout": "addition_module/DSDG",
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "verification": "PASS",
+    "worktree_status": "D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl"
+  },
+  "source_before": {
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "files_sha256": {
+      "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+      "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+      "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+      "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+      "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+      "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+      "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+      "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+      "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+      "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+      "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+    },
+    "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/facexzoo",
+    "sparse_checkout": "addition_module/DSDG",
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "verification": "PASS",
+    "worktree_status": "D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl"
+  },
+  "status": "PASS",
+  "synthetic_bank": false,
+  "training_graph_qualified": false,
+  "training_launched": false,
+  "warnings": [
+    "UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended. It's best to use methods such as torch.tensor(data, dtype=*, device='cuda') to create tensors. (Triggered internally at /pytorch/torch/csrc/tensor/python_tensor.cpp:78.)"
+  ]
+}
