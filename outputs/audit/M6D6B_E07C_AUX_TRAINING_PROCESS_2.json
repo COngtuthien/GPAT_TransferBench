@@ -1,0 +1,3349 @@
+{
+  "NOT_ELIGIBLE_FOR_BANK": true,
+  "NOT_ELIGIBLE_FOR_DOWNSTREAM": true,
+  "NOT_ELIGIBLE_FOR_REPORTING": true,
+  "QUALIFICATION_ONLY": true,
+  "TEST_access": false,
+  "TRAIN_access": false,
+  "VAL_access": false,
+  "auxiliary_encoder_trained": false,
+  "auxiliary_encoder_training_seed": null,
+  "backward_calls": 1,
+  "batch_256_training_memory_not_qualified": true,
+  "benchmark_data_access": false,
+  "checkpoint_created": false,
+  "checkpoint_loaded": false,
+  "compatibility_patch": "NONE",
+  "contract": {
+    "authoritative_generation_tensor_set": "model",
+    "auxiliary_objective_classes": [
+      "live",
+      "makeup",
+      "mask_2d",
+      "mask_3d",
+      "partial",
+      "print",
+      "replay"
+    ],
+    "auxiliary_runs": 1,
+    "auxiliary_seed": 42,
+    "auxiliary_training_contract": {
+      "augmentation": "NONE",
+      "batch_size": 256,
+      "benchmark_defined_additions": [
+        "K7_label_space",
+        "TRAIN_data_source",
+        "auxiliary_encoder_training_seed",
+        "auxiliary_encoder_training_runs"
+      ],
+      "checkpoint_rule": "FINAL_STATE_AFTER_EPOCH_200",
+      "checkpoint_rule_source": "OFFICIAL \u2014 torch.save overwrites in-loop, so the surviving file IS the final epoch's",
+      "class_balancing": "NONE",
+      "class_balancing_note": "official code has none; adding it would be a benchmark invention",
+      "drop_last": true,
+      "epochs": 200,
+      "head": "fc = nn.Linear(512, 7)",
+      "input_resolution": 256,
+      "learning_rate": 0.002,
+      "loss": "CrossEntropyLoss_on_fourth_forward_output",
+      "momentum": 0.9,
+      "optimizer": "SGD",
+      "preprocessing": "Resize((256,256)) -> ToTensor -> Normalize([0.5]*3, [0.5]*3)",
+      "scheduler": "NONE",
+      "shuffle": true,
+      "weight_decay": 0.005,
+      "workers": 6
+    },
+    "checkpoint_rule": "BASELINE_FINAL_STATE_V1",
+    "contract_inspection": "STATIC_ONLY_NOT_EXECUTED",
+    "deviation": "DEV-021",
+    "diffusion": {
+      "linear_end": 0.02,
+      "linear_start": 0.0001,
+      "model_mean_type": "EPSILON",
+      "n_timestep": 1000,
+      "schedule": "linear",
+      "variance": "LEARNED_RANGE"
+    },
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "feature_interface_effective_A6_HWC": {
+      "embg": [
+        "B",
+        7
+      ],
+      "x16x16": [
+        16,
+        16,
+        512
+      ],
+      "x32x32": [
+        32,
+        32,
+        256
+      ],
+      "x8x8": [
+        8,
+        8,
+        512
+      ]
+    },
+    "feature_interface_historical_frozen_HWC": {
+      "embg": [
+        "B",
+        "K"
+      ],
+      "x16x16": [
+        16,
+        16,
+        256
+      ],
+      "x32x32": [
+        32,
+        32,
+        128
+      ],
+      "x8x8": [
+        8,
+        8,
+        512
+      ]
+    },
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "main_training": {
+      "batch_size": 4,
+      "guidance_prob": 0.2,
+      "input_resolution": 256,
+      "max_epochs": 400,
+      "means_size": 5,
+      "model_in_channels": 3,
+      "use_pair": false,
+      "var_size": 3
+    },
+    "optimizer": {
+      "ema": {
+        "before_warmup": 0.0,
+        "decay": 0.9999
+      },
+      "learning_rate": 1e-05,
+      "name": "AdamW",
+      "scheduler": {
+        "decay": [
+          "linear",
+          "flat"
+        ],
+        "lr": 1e-05,
+        "n_iter": 2400000,
+        "type": "cycle",
+        "warmup": 5000
+      }
+    },
+    "reused_for_main_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "sampler": {
+      "DDIM_skip": 10,
+      "algorithm": "ddim",
+      "cond_scale": 2.0,
+      "effective_steps": 25,
+      "entrypoint": "FAS_sample.py",
+      "sample_initial_noise": 250,
+      "tensor_set_loaded": "model"
+    },
+    "sampler_timesteps_ascending": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240
+    ]
+  },
+  "counters": {
+    "autograd_grad_calls": 0,
+    "backward_calls": 1,
+    "checkpoint_loads": 0,
+    "checkpoint_saves": 0,
+    "grad_clipping_calls": 0,
+    "optimizer_constructions": 1,
+    "optimizer_step_calls": 1,
+    "scheduler_constructions": 0,
+    "sgd_constructions": 1,
+    "zero_grad_calls": 1
+  },
+  "cuda_memory": {
+    "after_construction_allocated_bytes": 185067520,
+    "after_construction_reserved_bytes": 213909504,
+    "batch_size": 4,
+    "label": "AUX_ENCODER_SYNTHETIC_TRAINING_STEP_MEMORY_OBSERVATION",
+    "one_step": {
+      "peak_allocated_bytes": 1192865280,
+      "peak_reserved_bytes": 1300234240
+    },
+    "qualifies_scientific_batch_size": false,
+    "qualifies_training_memory": false,
+    "statement": "B256 scientific training memory remains unqualified"
+  },
+  "encoder": {
+    "batchnorm": {
+      "batchnorm2d_layers": 36,
+      "frozen_bn_or_running_stat_workaround": false,
+      "min_values_per_channel_at_B4": 256,
+      "mode": "train (batch statistics; running stats updated)"
+    },
+    "block": "BasicBlock",
+    "class": "ResNet",
+    "construction_seam": "methods/difffas/encoder.py::encoder_model (committed A3 seam)",
+    "factory": "models/custom_rn.py::resnet18(pretrained=False)",
+    "file_sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+    "head": {
+      "bias": true,
+      "in_features": 512,
+      "out_features": 7,
+      "type": "Linear"
+    },
+    "mode": {
+      "default_training_all_modules": true,
+      "eval_called": false,
+      "model_train_called": true,
+      "source_evidence": "pretrain_classifier.py has no .train()/.eval(); nn.Module default is train"
+    },
+    "module": "custom_rn",
+    "projection_or_adapter_modules_added": false,
+    "source_unused_modules": [
+      "norm",
+      "in1"
+    ],
+    "source_unused_note": "custom_rn.py:273 self.norm = nn.BatchNorm1d(18) and :274 self.in1 = nn.InstanceNorm2d(64) are built but never called by _forward_impl; norm.weight/norm.bias are inside resnet18.parameters() (the pinned SGD set) and receive no gradient, exactly as in the pinned source",
+    "stage_widths": [
+      64,
+      256,
+      512,
+      512
+    ],
+    "state_initial": {
+      "aggregate_buffer_sha256": "a50c6e185beebf42a1cd717511b7a7e7bfd6e7371acc013dbd20e4753118c5cc",
+      "aggregate_parameter_sha256": "aa4c2cdd88055cb214d370b2dafb901bd880772610eed604e40c1304f685ba46",
+      "buffer_sha256": {
+        "bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "bn1.running_mean": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "bn1.running_var": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.0.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer1.0.bn1.running_mean": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.0.bn1.running_var": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.0.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer1.0.bn2.running_mean": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.0.bn2.running_var": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.1.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer1.1.bn1.running_mean": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.1.bn1.running_var": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.1.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer1.1.bn2.running_mean": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.1.bn2.running_var": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.2.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer1.2.bn1.running_mean": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.2.bn1.running_var": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.2.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer1.2.bn2.running_mean": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.2.bn2.running_var": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer2.0.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.0.bn1.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.0.bn1.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.0.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.0.bn2.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.0.bn2.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.0.downsample.1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.0.downsample.1.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.0.downsample.1.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.1.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.1.bn1.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.1.bn1.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.1.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.1.bn2.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.1.bn2.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.2.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.2.bn1.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.2.bn1.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.2.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.2.bn2.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.2.bn2.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.3.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.3.bn1.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.3.bn1.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.3.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer2.3.bn2.running_mean": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.3.bn2.running_var": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer3.0.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.0.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.0.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.0.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.0.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.0.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.0.downsample.1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.0.downsample.1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.0.downsample.1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.1.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.1.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.1.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.1.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.1.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.1.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.2.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.2.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.2.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.2.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.2.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.2.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.3.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.3.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.3.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.3.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.3.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.3.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.4.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.4.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.4.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.4.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.4.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.4.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.5.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.5.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.5.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.5.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer3.5.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.5.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.0.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer4.0.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.0.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.0.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer4.0.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.0.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.0.downsample.1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer4.0.downsample.1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.0.downsample.1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.1.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer4.1.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.1.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.1.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer4.1.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.1.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.2.bn1.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer4.2.bn1.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.2.bn1.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.2.bn2.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "layer4.2.bn2.running_mean": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.2.bn2.running_var": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "norm.num_batches_tracked": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+        "norm.running_mean": "834a709ba2534ebe3ee1397fd4f7bd288b2acc1d20a08d6c862dcd99b6f04400",
+        "norm.running_var": "cb20f90237d216aff937f8753f7070e5fde514a80130f10572838485729343eb"
+      },
+      "buffers": 111,
+      "devices": [
+        "cuda:0"
+      ],
+      "dtypes": [
+        "torch.float32"
+      ],
+      "parameter_sha256": {
+        "bn1.bias": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "bn1.weight": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "conv1.weight": "a50d0846b5fa39134168e5af8bd9d119efad1b7df81f57c2c5b20c4f3e6e9298",
+        "fc.bias": "52e5affe4a0258876b6a2e3ede3f5d07d2477ef7c51830a19bb5833a35645d5b",
+        "fc.weight": "e1b6d0f9c37189310fb4c86feb9d063e7964cfe9a0afe4e226dedaf848475fc1",
+        "layer1.0.bn1.bias": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.0.bn1.weight": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.0.bn2.bias": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.0.bn2.weight": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.0.conv1.weight": "28b3b7c6d5a085c3bf44ad8fed8dd72585fd027046ed57eb62a01ee33fbb670b",
+        "layer1.0.conv2.weight": "ebf834145ecadc9237d50e65009e51eb58dc8c5f21ce649c0265f1542f24f4c4",
+        "layer1.1.bn1.bias": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.1.bn1.weight": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.1.bn2.bias": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.1.bn2.weight": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.1.conv1.weight": "821ecb00b23f202de3093a906379626112e567ee851adebd2bdd984bdf7fb21c",
+        "layer1.1.conv2.weight": "0e6e61f02d35b9d20731f7f11cc7cf1c54a365f3c5ebc5e479e6353468f1c3a3",
+        "layer1.2.bn1.bias": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.2.bn1.weight": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.2.bn2.bias": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "layer1.2.bn2.weight": "2f20cd03c9cd392a406c56232b0ff93a15f6d6d7da79086bfa14f55d4a4031b0",
+        "layer1.2.conv1.weight": "fb16b2739f46f6f53439157bd93a1c9ee0b1fb7665eb071ffba2c8fed383e229",
+        "layer1.2.conv2.weight": "7c3847544514449e7d9a152e2b542d88ba06c1acd21930294e78abb3ea72e420",
+        "layer2.0.bn1.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.0.bn1.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.0.bn2.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.0.bn2.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.0.conv1.weight": "aca2734be96f8edaae47cdea4c7321161fc1ac8748ea47f80d791b5b1fe80c35",
+        "layer2.0.conv2.weight": "da7081a503a4e337d5e893c785b9724fe91883e8d24cb8dd9a11c36de46fe63f",
+        "layer2.0.downsample.0.weight": "26c1d90aedcb9cae79185d340820983b6df7f9b3f06ae13c1b59aa9e36e7ddb9",
+        "layer2.0.downsample.1.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.0.downsample.1.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.1.bn1.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.1.bn1.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.1.bn2.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.1.bn2.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.1.conv1.weight": "344dddca5a0ab6ff1155b75ab5a3695f27808582e616d3af6a181746b2b15983",
+        "layer2.1.conv2.weight": "0f55d55c2e79d8feeb1e2573c9f53f88263373d71a32cdc640500db69b765c07",
+        "layer2.2.bn1.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.2.bn1.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.2.bn2.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.2.bn2.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.2.conv1.weight": "617254f9a4e43088e1c7a8e21656c5eebf8d4f846553f01190977af269ce46bc",
+        "layer2.2.conv2.weight": "519717c10214450e450281e3a8bd5e269baa461286515832417a03c119e854fd",
+        "layer2.3.bn1.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.3.bn1.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.3.bn2.bias": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "layer2.3.bn2.weight": "893a106828fbdb9521e1d868c985aab7ad2ae2f606edc55329265a5e7676006c",
+        "layer2.3.conv1.weight": "3656887ebf211407cb50f39b7d3f15fdec0488b89cc0f10f474c7cf348c1f734",
+        "layer2.3.conv2.weight": "fd588c4095e380309042bba6a0a31cec6856222df5c83953c26a2d8ea7a1008e",
+        "layer3.0.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.0.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.0.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.0.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.0.conv1.weight": "46eda6e56437b209d5bb75c6270531a2cbfe80cc897ef489f5e46057aa1e8d05",
+        "layer3.0.conv2.weight": "66f621bcc9192cea8713d78c77c2a2b6ef9fe2771e7129f8d70dc26cd8a48fcd",
+        "layer3.0.downsample.0.weight": "b1d51fb9e909ac310d513019d6d18352bec9ad371d31354996794e59bd919bc3",
+        "layer3.0.downsample.1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.0.downsample.1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.1.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.1.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.1.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.1.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.1.conv1.weight": "9f9e65c74af5a652a2029c7bd1cbfbcf81cc6909b0152c7b237d2546536d6da3",
+        "layer3.1.conv2.weight": "bbaf6675ce3d8af938fecd2ecc09a6c02695996e1996d9758f9e9d938961313d",
+        "layer3.2.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.2.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.2.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.2.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.2.conv1.weight": "371f1d37be0fdcd22d21ea91f58e855a5694f45f54aa901b61d5f5b993c2d3ea",
+        "layer3.2.conv2.weight": "293127c998a1ba001248915d8811f4c7af5a3467d58aa0cd913a4470f7d20ee0",
+        "layer3.3.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.3.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.3.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.3.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.3.conv1.weight": "d4381e47e9526873df21c9e892ccde2c44bb0a35c6ec81aef9e4830638ba829d",
+        "layer3.3.conv2.weight": "94b456afc6c2f21beb1d61242c2d8593949a8f11be2447b503a4022f95c0a152",
+        "layer3.4.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.4.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.4.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.4.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.4.conv1.weight": "1f38f9bff9cefe471fc646bdc0cb3ab74e748468365107c2d161c2ff5b56ef53",
+        "layer3.4.conv2.weight": "1d4d2f88cde2cf409cd17e1b6a8259967999a09126e3241dbb4f5e58a8766005",
+        "layer3.5.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.5.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.5.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer3.5.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer3.5.conv1.weight": "ca50260f8c3cff7814b4c3f009560cd5e3104c7fc068801ff132cd5c9e2cc00a",
+        "layer3.5.conv2.weight": "4d0d60b5ff363b2239615016fb2af77031cb63410e2d63912cce12360a7b533b",
+        "layer4.0.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.0.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.0.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.0.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.0.conv1.weight": "2c101c0375b9929835fd42d2771eab71808070bf0e93eafe86b64909c77f56e2",
+        "layer4.0.conv2.weight": "b34002226096177d9f419533917f5760fef9b68162b144fda5e4f1c719f79daa",
+        "layer4.0.downsample.0.weight": "efe1dfbcf1afca0a7f032571ccae5807bf44b58d3e876d50c225c534a6e7542d",
+        "layer4.0.downsample.1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.0.downsample.1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.1.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.1.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.1.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.1.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.1.conv1.weight": "e0a81e3aa6e46b6bd1ad4c63b66110fb13f205eb3ad81c62a05e499806b9cfa1",
+        "layer4.1.conv2.weight": "3358b135a23d8181c399f96a0a92f2b7e7617c401529b05dccb33df2948263e1",
+        "layer4.2.bn1.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.2.bn1.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.2.bn2.bias": "e5a00aa9991ac8a5ee3109844d84a55583bd20572ad3ffcd42792f3c36b183ad",
+        "layer4.2.bn2.weight": "fef951e6c76ad6a01b208af650ca6d95769bec840e009981c5ae1316a42c90b1",
+        "layer4.2.conv1.weight": "c61045fd470a171723be8121a3f9c66941629716eafe00f19f75dc65ee978c63",
+        "layer4.2.conv2.weight": "483dee0ed1e84eabc5cd4a509938ef318f34ac8ba8ad1d40ffd9e97da249e7b0",
+        "norm.bias": "834a709ba2534ebe3ee1397fd4f7bd288b2acc1d20a08d6c862dcd99b6f04400",
+        "norm.weight": "cb20f90237d216aff937f8753f7070e5fde514a80130f10572838485729343eb"
+      },
+      "parameter_tensors": 112,
+      "parameters": 46233707,
+      "shapes": {
+        "bn1.bias": [
+          64
+        ],
+        "bn1.weight": [
+          64
+        ],
+        "conv1.weight": [
+          64,
+          3,
+          7,
+          7
+        ],
+        "fc.bias": [
+          7
+        ],
+        "fc.weight": [
+          7,
+          512
+        ],
+        "layer1.0.bn1.bias": [
+          64
+        ],
+        "layer1.0.bn1.weight": [
+          64
+        ],
+        "layer1.0.bn2.bias": [
+          64
+        ],
+        "layer1.0.bn2.weight": [
+          64
+        ],
+        "layer1.0.conv1.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "layer1.0.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "layer1.1.bn1.bias": [
+          64
+        ],
+        "layer1.1.bn1.weight": [
+          64
+        ],
+        "layer1.1.bn2.bias": [
+          64
+        ],
+        "layer1.1.bn2.weight": [
+          64
+        ],
+        "layer1.1.conv1.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "layer1.1.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "layer1.2.bn1.bias": [
+          64
+        ],
+        "layer1.2.bn1.weight": [
+          64
+        ],
+        "layer1.2.bn2.bias": [
+          64
+        ],
+        "layer1.2.bn2.weight": [
+          64
+        ],
+        "layer1.2.conv1.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "layer1.2.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "layer2.0.bn1.bias": [
+          256
+        ],
+        "layer2.0.bn1.weight": [
+          256
+        ],
+        "layer2.0.bn2.bias": [
+          256
+        ],
+        "layer2.0.bn2.weight": [
+          256
+        ],
+        "layer2.0.conv1.weight": [
+          256,
+          64,
+          3,
+          3
+        ],
+        "layer2.0.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "layer2.0.downsample.0.weight": [
+          256,
+          64,
+          1,
+          1
+        ],
+        "layer2.0.downsample.1.bias": [
+          256
+        ],
+        "layer2.0.downsample.1.weight": [
+          256
+        ],
+        "layer2.1.bn1.bias": [
+          256
+        ],
+        "layer2.1.bn1.weight": [
+          256
+        ],
+        "layer2.1.bn2.bias": [
+          256
+        ],
+        "layer2.1.bn2.weight": [
+          256
+        ],
+        "layer2.1.conv1.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "layer2.1.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "layer2.2.bn1.bias": [
+          256
+        ],
+        "layer2.2.bn1.weight": [
+          256
+        ],
+        "layer2.2.bn2.bias": [
+          256
+        ],
+        "layer2.2.bn2.weight": [
+          256
+        ],
+        "layer2.2.conv1.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "layer2.2.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "layer2.3.bn1.bias": [
+          256
+        ],
+        "layer2.3.bn1.weight": [
+          256
+        ],
+        "layer2.3.bn2.bias": [
+          256
+        ],
+        "layer2.3.bn2.weight": [
+          256
+        ],
+        "layer2.3.conv1.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "layer2.3.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "layer3.0.bn1.bias": [
+          512
+        ],
+        "layer3.0.bn1.weight": [
+          512
+        ],
+        "layer3.0.bn2.bias": [
+          512
+        ],
+        "layer3.0.bn2.weight": [
+          512
+        ],
+        "layer3.0.conv1.weight": [
+          512,
+          256,
+          3,
+          3
+        ],
+        "layer3.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.0.downsample.0.weight": [
+          512,
+          256,
+          1,
+          1
+        ],
+        "layer3.0.downsample.1.bias": [
+          512
+        ],
+        "layer3.0.downsample.1.weight": [
+          512
+        ],
+        "layer3.1.bn1.bias": [
+          512
+        ],
+        "layer3.1.bn1.weight": [
+          512
+        ],
+        "layer3.1.bn2.bias": [
+          512
+        ],
+        "layer3.1.bn2.weight": [
+          512
+        ],
+        "layer3.1.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.1.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.2.bn1.bias": [
+          512
+        ],
+        "layer3.2.bn1.weight": [
+          512
+        ],
+        "layer3.2.bn2.bias": [
+          512
+        ],
+        "layer3.2.bn2.weight": [
+          512
+        ],
+        "layer3.2.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.2.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.3.bn1.bias": [
+          512
+        ],
+        "layer3.3.bn1.weight": [
+          512
+        ],
+        "layer3.3.bn2.bias": [
+          512
+        ],
+        "layer3.3.bn2.weight": [
+          512
+        ],
+        "layer3.3.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.3.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.4.bn1.bias": [
+          512
+        ],
+        "layer3.4.bn1.weight": [
+          512
+        ],
+        "layer3.4.bn2.bias": [
+          512
+        ],
+        "layer3.4.bn2.weight": [
+          512
+        ],
+        "layer3.4.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.4.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.5.bn1.bias": [
+          512
+        ],
+        "layer3.5.bn1.weight": [
+          512
+        ],
+        "layer3.5.bn2.bias": [
+          512
+        ],
+        "layer3.5.bn2.weight": [
+          512
+        ],
+        "layer3.5.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer3.5.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer4.0.bn1.bias": [
+          512
+        ],
+        "layer4.0.bn1.weight": [
+          512
+        ],
+        "layer4.0.bn2.bias": [
+          512
+        ],
+        "layer4.0.bn2.weight": [
+          512
+        ],
+        "layer4.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer4.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer4.0.downsample.0.weight": [
+          512,
+          512,
+          1,
+          1
+        ],
+        "layer4.0.downsample.1.bias": [
+          512
+        ],
+        "layer4.0.downsample.1.weight": [
+          512
+        ],
+        "layer4.1.bn1.bias": [
+          512
+        ],
+        "layer4.1.bn1.weight": [
+          512
+        ],
+        "layer4.1.bn2.bias": [
+          512
+        ],
+        "layer4.1.bn2.weight": [
+          512
+        ],
+        "layer4.1.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer4.1.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer4.2.bn1.bias": [
+          512
+        ],
+        "layer4.2.bn1.weight": [
+          512
+        ],
+        "layer4.2.bn2.bias": [
+          512
+        ],
+        "layer4.2.bn2.weight": [
+          512
+        ],
+        "layer4.2.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "layer4.2.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "norm.bias": [
+          18
+        ],
+        "norm.weight": [
+          18
+        ]
+      },
+      "trainable_parameters": 46233707
+    },
+    "structural_difference_vs_pinned_resnet18": [
+      "fc"
+    ],
+    "topology": [
+      3,
+      4,
+      6,
+      3
+    ],
+    "torchvision_substitute": false,
+    "weights_loaded": false
+  },
+  "environment_after": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60602",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6b/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_before": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60602",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6b/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "epochs": 0,
+  "executable_semantics": {
+    "block": "BasicBlock",
+    "fourth_output_discarded": true,
+    "sampler_tensor_set": "model",
+    "symbols": [
+      {
+        "file": "FAS_train.py",
+        "line": 167,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "seed_torch"
+      },
+      {
+        "file": "FAS_train.py",
+        "line": 28,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "train"
+      },
+      {
+        "file": "FAS_sample.py",
+        "line": 32,
+        "sha256": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+        "symbol": "main"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 797,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "GaussianDiffusion.training_losses"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 977,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "create_gaussian_diffusion"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 47,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "ddim_steps"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 367,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "resnet18"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 329,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "ResNet._forward_impl"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 138,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.forward"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 73,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.encoder"
+      }
+    ],
+    "topology": [
+      3,
+      4,
+      6,
+      3
+    ],
+    "training_content_inert": true
+  },
+  "experiment_seed": null,
+  "fidelity": "CONTROLLED_ADAPTATION",
+  "firewall": {
+    "attempts": {
+      "benchmark_image": 0,
+      "benchmark_manifest": 0,
+      "blocked_weight_or_array": 0,
+      "runtime_data": 0,
+      "scientific_run_root": 0,
+      "write_outside_build": 0
+    },
+    "denied": [],
+    "event_counts": {
+      "open": 2423,
+      "os.listdir": 262,
+      "os.scandir": 357,
+      "subprocess.Popen": 105
+    },
+    "subprocesses": [
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "/sbin/ldconfig",
+        "-p"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ]
+    ]
+  },
+  "forward": {
+    "called_modules": 115,
+    "feature_shapes": [
+      [
+        4,
+        256,
+        32,
+        32
+      ],
+      [
+        4,
+        512,
+        16,
+        16
+      ],
+      [
+        4,
+        512,
+        8,
+        8
+      ]
+    ],
+    "logits": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 2.434382949861815,
+      "max": 0.768111526966095,
+      "mean": -0.11656030054603304,
+      "min": -0.8789380788803101,
+      "sha256": "05b69444998af1ed37ebc176df332009832efd9821429b673856752fcecd422a",
+      "shape": [
+        4,
+        7
+      ]
+    },
+    "logits_shape": [
+      4,
+      7
+    ],
+    "loss_attached_to": "outputs[3] only"
+  },
+  "gradients": {
+    "all_finite": true,
+    "checked": "after backward, before optimizer.step",
+    "fc_bias": {
+      "finite": true,
+      "l2": 0.38517559431246917,
+      "max_abs": 0.28431451320648193,
+      "nonzero_elements": 7,
+      "numel": 7,
+      "sha256": "53a05903f3a8151965f0d4716bcaee14f6a59e113e88dd3c5cfc7061222ac824"
+    },
+    "fc_weight": {
+      "finite": true,
+      "l2": 9.238764631728229,
+      "max_abs": 0.32337307929992676,
+      "nonzero_elements": 3584,
+      "numel": 3584,
+      "sha256": "49e39162936f8e2f276270d93ff0e8a00ebefb0b4fe01fdd884fdaf293a1caf7"
+    },
+    "global_l2": 64.71264691180497,
+    "max_abs": 3.301124095916748,
+    "none_grad_classification": "SOURCE_NATIVE_UNUSED_MODULE",
+    "none_grad_tensors": [
+      "norm.bias",
+      "norm.weight"
+    ],
+    "per_tensor": {
+      "bn1.bias": {
+        "finite": true,
+        "l2": 0.7468908743977867,
+        "max_abs": 0.2430117279291153,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "bbb5c82505eb4cbff645d2861f5c27d652c9d61271c50ab522ba9b275b48739e"
+      },
+      "bn1.weight": {
+        "finite": true,
+        "l2": 1.0428143101431804,
+        "max_abs": 0.2972851097583771,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "5a1dd6ddb1f21df5bb41afa6a94ae08008d0f691ef252065d276daf3b29991c0"
+      },
+      "conv1.weight": {
+        "finite": true,
+        "l2": 54.16420915543823,
+        "max_abs": 3.301124095916748,
+        "nonzero_elements": 9408,
+        "numel": 9408,
+        "sha256": "af2391ca26880c4fcba8f81493f482416df539e1a822bd379b34c8d26c6305eb"
+      },
+      "fc.bias": {
+        "finite": true,
+        "l2": 0.38517559431246917,
+        "max_abs": 0.28431451320648193,
+        "nonzero_elements": 7,
+        "numel": 7,
+        "sha256": "53a05903f3a8151965f0d4716bcaee14f6a59e113e88dd3c5cfc7061222ac824"
+      },
+      "fc.weight": {
+        "finite": true,
+        "l2": 9.238764631728229,
+        "max_abs": 0.32337307929992676,
+        "nonzero_elements": 3584,
+        "numel": 3584,
+        "sha256": "49e39162936f8e2f276270d93ff0e8a00ebefb0b4fe01fdd884fdaf293a1caf7"
+      },
+      "layer1.0.bn1.bias": {
+        "finite": true,
+        "l2": 0.6107273252820777,
+        "max_abs": 0.19771304726600647,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "b50bae5e1db8cc7f6a012cb69c02ca37e906392196059a123d8e89e91009d23d"
+      },
+      "layer1.0.bn1.weight": {
+        "finite": true,
+        "l2": 0.6170667399003167,
+        "max_abs": 0.20396234095096588,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "57dcbaa6cef74e4aca77a247999843e796effebb2236d03ca51ef4577b887314"
+      },
+      "layer1.0.bn2.bias": {
+        "finite": true,
+        "l2": 0.34816276971707494,
+        "max_abs": 0.12545359134674072,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "7150f4c6e9d732cd2c5364a5001e637b819e633f5b42a700d6450d996d0b39c6"
+      },
+      "layer1.0.bn2.weight": {
+        "finite": true,
+        "l2": 0.5153886608260968,
+        "max_abs": 0.14385579526424408,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "3d5c47af76c564589d411edec70003f100637b1cb73f5f926d3049ff17097591"
+      },
+      "layer1.0.conv1.weight": {
+        "finite": true,
+        "l2": 15.153826423347924,
+        "max_abs": 0.6082969903945923,
+        "nonzero_elements": 36864,
+        "numel": 36864,
+        "sha256": "8a1627e80a08c346a75e262adf928cc69a6c7d2fdebccbc9176f6b7f27466b5a"
+      },
+      "layer1.0.conv2.weight": {
+        "finite": true,
+        "l2": 10.242084995439987,
+        "max_abs": 0.30644121766090393,
+        "nonzero_elements": 36864,
+        "numel": 36864,
+        "sha256": "0d78690f9e3c114503b9eda74558394554cb8b41487804360e591eebb5db6487"
+      },
+      "layer1.1.bn1.bias": {
+        "finite": true,
+        "l2": 0.32423923573803043,
+        "max_abs": 0.08475689589977264,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "2089cb9837a8ae64f05dc7e851513c3c32d3a4730b59967b045dd1d2c176b7fc"
+      },
+      "layer1.1.bn1.weight": {
+        "finite": true,
+        "l2": 0.373036676385504,
+        "max_abs": 0.10786036401987076,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "4493b4e1dd55ca343c9030b19c07670c4081db27480b89eabf22af205eeabfcd"
+      },
+      "layer1.1.bn2.bias": {
+        "finite": true,
+        "l2": 0.22639147458126374,
+        "max_abs": 0.06398972868919373,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "3dbde206e246d8c145780c0c626ee7e589931d2fc5ff28dd5a30d0d25ac88698"
+      },
+      "layer1.1.bn2.weight": {
+        "finite": true,
+        "l2": 0.3463704885423617,
+        "max_abs": 0.14464622735977173,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "191cea57a8f088691f0635d8047fda51ebe6aa4d9750381957a395a5a9e5c023"
+      },
+      "layer1.1.conv1.weight": {
+        "finite": true,
+        "l2": 8.823903286345773,
+        "max_abs": 0.27402669191360474,
+        "nonzero_elements": 36864,
+        "numel": 36864,
+        "sha256": "69447e6f6fde95f60dc1ca4ce8866b9ebe9ffdf57b62c7e248e788b40261675b"
+      },
+      "layer1.1.conv2.weight": {
+        "finite": true,
+        "l2": 6.706937034588089,
+        "max_abs": 0.1436772644519806,
+        "nonzero_elements": 36864,
+        "numel": 36864,
+        "sha256": "816cbbaf57983f20f05a5acf138d593916a818ae98479a44af5b1b4b8f4f6f68"
+      },
+      "layer1.2.bn1.bias": {
+        "finite": true,
+        "l2": 0.28343268886379375,
+        "max_abs": 0.08344870805740356,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "fdddbbb26a7c511d770f57a00426893a023a928b7c9722b7051077eb69b06e7b"
+      },
+      "layer1.2.bn1.weight": {
+        "finite": true,
+        "l2": 0.30766024294801114,
+        "max_abs": 0.11518843472003937,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "ec4f4c1dee5a51043736d327212d771d322b68084d57add1c5277e2602fa24bb"
+      },
+      "layer1.2.bn2.bias": {
+        "finite": true,
+        "l2": 0.16707981636296984,
+        "max_abs": 0.06569895893335342,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "b8c50f3fd182aeb6543ac728c463effb981ad6e04ec34999a63ddf0626a24b31"
+      },
+      "layer1.2.bn2.weight": {
+        "finite": true,
+        "l2": 0.2062323438560204,
+        "max_abs": 0.05058266967535019,
+        "nonzero_elements": 64,
+        "numel": 64,
+        "sha256": "c6af28dbb8e13deb61017ff37482e142703c20a7e2fd6849b4d17a82029352dc"
+      },
+      "layer1.2.conv1.weight": {
+        "finite": true,
+        "l2": 6.045777469827433,
+        "max_abs": 0.17770211398601532,
+        "nonzero_elements": 36864,
+        "numel": 36864,
+        "sha256": "6f6feeac1221daac518d1df48abad6ea12301b7a4fd676f04f7c0fec4147f260"
+      },
+      "layer1.2.conv2.weight": {
+        "finite": true,
+        "l2": 4.978495705278888,
+        "max_abs": 0.12188946455717087,
+        "nonzero_elements": 36864,
+        "numel": 36864,
+        "sha256": "be7d9dae888d540879d51a532533e034f5f118f5e901b1e9f9d2112fd050135d"
+      },
+      "layer2.0.bn1.bias": {
+        "finite": true,
+        "l2": 0.2154902021906843,
+        "max_abs": 0.04979724809527397,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "a771fc059f1fefdb5386a20a7c0495812613d1149a946c66aa7aef44bb53e0a0"
+      },
+      "layer2.0.bn1.weight": {
+        "finite": true,
+        "l2": 0.2625644706217529,
+        "max_abs": 0.04170310124754906,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "216024eb04b7c7faa3c20ca354bd21572b14f1015816c94d38f02fa30e5a6800"
+      },
+      "layer2.0.bn2.bias": {
+        "finite": true,
+        "l2": 0.19231524657056226,
+        "max_abs": 0.03574647381901741,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "d14c96badb03eb7473d7ac5ed30c04aeee71aa748c759f50f2383effb20cff3d"
+      },
+      "layer2.0.bn2.weight": {
+        "finite": true,
+        "l2": 0.2373809239524871,
+        "max_abs": 0.042770326137542725,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "526d5f57caf34c7827c294545acda9bcc926fa1169d8d45e34bf08478fa656da"
+      },
+      "layer2.0.conv1.weight": {
+        "finite": true,
+        "l2": 11.060395461322091,
+        "max_abs": 0.1573966145515442,
+        "nonzero_elements": 147456,
+        "numel": 147456,
+        "sha256": "632d099132a7132065703542189cd64cbf61319c61b989190c5811b8af3bc0c5"
+      },
+      "layer2.0.conv2.weight": {
+        "finite": true,
+        "l2": 8.830745042723967,
+        "max_abs": 0.06780125945806503,
+        "nonzero_elements": 589824,
+        "numel": 589824,
+        "sha256": "17dda4797277dae9ebc9bdaf1033b2c160337c39cc330dc12af996883a9cee07"
+      },
+      "layer2.0.downsample.0.weight": {
+        "finite": true,
+        "l2": 2.9393416498599536,
+        "max_abs": 0.11207892000675201,
+        "nonzero_elements": 16384,
+        "numel": 16384,
+        "sha256": "96de50bd4fcffc2c91883e6cf582e9884d1b9c0130a0485c661a6bcd8413449a"
+      },
+      "layer2.0.downsample.1.bias": {
+        "finite": true,
+        "l2": 0.19231524657056226,
+        "max_abs": 0.03574647381901741,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "d14c96badb03eb7473d7ac5ed30c04aeee71aa748c759f50f2383effb20cff3d"
+      },
+      "layer2.0.downsample.1.weight": {
+        "finite": true,
+        "l2": 0.24206145385816458,
+        "max_abs": 0.057702112942934036,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "2c228408ad324335ec56e3d043edb372cac1813ef243b30d621810c9473901b2"
+      },
+      "layer2.1.bn1.bias": {
+        "finite": true,
+        "l2": 0.1775338713236576,
+        "max_abs": 0.03632481023669243,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "78ff0bb6bc8ee4576bbd023c0273e85895cf832cac190b6d7f865fc65603e980"
+      },
+      "layer2.1.bn1.weight": {
+        "finite": true,
+        "l2": 0.19501837296719196,
+        "max_abs": 0.0412384495139122,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "2f50ad4df764d5d3e4494389ca05d48f8e235f33f30323233f8c24cfb98aaece"
+      },
+      "layer2.1.bn2.bias": {
+        "finite": true,
+        "l2": 0.12722266839286225,
+        "max_abs": 0.024515695869922638,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "272dc1494fe93d879af54fc527391b2701a921f58978ac55c59de44bc7845dc5"
+      },
+      "layer2.1.bn2.weight": {
+        "finite": true,
+        "l2": 0.17497881383425568,
+        "max_abs": 0.03758964687585831,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "13ca4a4cbda87ddca6ca5a440f7aadc67ecf44a7006eb2025b82b08dda578755"
+      },
+      "layer2.1.conv1.weight": {
+        "finite": true,
+        "l2": 8.215980576733884,
+        "max_abs": 0.06318335235118866,
+        "nonzero_elements": 589824,
+        "numel": 589824,
+        "sha256": "f5f474ea2602b3373fceb0ce18aec88120395091a74aba20bcf3f6091201cda7"
+      },
+      "layer2.1.conv2.weight": {
+        "finite": true,
+        "l2": 6.782597171288268,
+        "max_abs": 0.04808995872735977,
+        "nonzero_elements": 589824,
+        "numel": 589824,
+        "sha256": "a1f17da36321d98bf41957b091a4ec49df8e93b46a57da7ed39cdf0b729b7a1a"
+      },
+      "layer2.2.bn1.bias": {
+        "finite": true,
+        "l2": 0.1287703245273468,
+        "max_abs": 0.018741823732852936,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "864a2fc38b0a00599f0044d079bd5334d4c6af1e5a6cc7409c0c4ba4d4676a61"
+      },
+      "layer2.2.bn1.weight": {
+        "finite": true,
+        "l2": 0.14661716198896327,
+        "max_abs": 0.030948856845498085,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "4bf408f875de6637510482e1c36dff0dbc16bc1391f40934fe18413e70f5af23"
+      },
+      "layer2.2.bn2.bias": {
+        "finite": true,
+        "l2": 0.0895292223573174,
+        "max_abs": 0.0169302299618721,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "1c25c0034b213ca8eba0fafafdd52a8cb42b8eab0d2a63c8e6ea4a649bb2b2d9"
+      },
+      "layer2.2.bn2.weight": {
+        "finite": true,
+        "l2": 0.13413725628131187,
+        "max_abs": 0.020850632339715958,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "08103f93f3b3e1d0c4d50371cc440b23ad723add165249aeb738729ad4a703a9"
+      },
+      "layer2.2.conv1.weight": {
+        "finite": true,
+        "l2": 6.195160449567242,
+        "max_abs": 0.04832487553358078,
+        "nonzero_elements": 589824,
+        "numel": 589824,
+        "sha256": "e6cc0e9511d7893168bafeeffe3c593fd35aa1f401aebdb09bf89918763e5589"
+      },
+      "layer2.2.conv2.weight": {
+        "finite": true,
+        "l2": 5.127410660354909,
+        "max_abs": 0.03682214021682739,
+        "nonzero_elements": 589824,
+        "numel": 589824,
+        "sha256": "16b1048ceafb1d3140e7dd9a40fc73d2bfa7de858cf8cf25533079160e785d69"
+      },
+      "layer2.3.bn1.bias": {
+        "finite": true,
+        "l2": 0.09463389769805294,
+        "max_abs": 0.017200134694576263,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "a66e42bd72cc6d6085f44825368a19f7f82c35e9b63c0018467d8e2679a42bae"
+      },
+      "layer2.3.bn1.weight": {
+        "finite": true,
+        "l2": 0.1117830579434781,
+        "max_abs": 0.019650254398584366,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "104da5e2eaef86418bd2b1eff6540073f4728122f5b3996ccf5a1deebd98866b"
+      },
+      "layer2.3.bn2.bias": {
+        "finite": true,
+        "l2": 0.060420539809933255,
+        "max_abs": 0.011915899813175201,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "4ca91e05fce5886a3ff4c0576236fc5fb33db586834eb8270d24bc665429f434"
+      },
+      "layer2.3.bn2.weight": {
+        "finite": true,
+        "l2": 0.10298294197053395,
+        "max_abs": 0.021077221259474754,
+        "nonzero_elements": 256,
+        "numel": 256,
+        "sha256": "787ad613b22fc633ccd772cc41782a78768e53675002bd1438d9f5bc3ccaa459"
+      },
+      "layer2.3.conv1.weight": {
+        "finite": true,
+        "l2": 4.913989861112242,
+        "max_abs": 0.0363084115087986,
+        "nonzero_elements": 589824,
+        "numel": 589824,
+        "sha256": "399cb294039ad66b012bbab802b3530d40033c6c95583b8736da8509adcee186"
+      },
+      "layer2.3.conv2.weight": {
+        "finite": true,
+        "l2": 4.05985307767693,
+        "max_abs": 0.026445800438523293,
+        "nonzero_elements": 589824,
+        "numel": 589824,
+        "sha256": "6d365348fc8693b6418a87125648f4be43d92693c47992f193375766e15e245e"
+      },
+      "layer3.0.bn1.bias": {
+        "finite": true,
+        "l2": 0.09826418173332462,
+        "max_abs": 0.01406379695981741,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "9cec61df7ed100378797a1168764e4e18f64a9c052eec257463104905392a9f9"
+      },
+      "layer3.0.bn1.weight": {
+        "finite": true,
+        "l2": 0.11497649624258395,
+        "max_abs": 0.016250813379883766,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "d2db6a84d9fc42776c803c308af2e6e41e608ffac04069294a3c3c008aa207ce"
+      },
+      "layer3.0.bn2.bias": {
+        "finite": true,
+        "l2": 0.09110273147055584,
+        "max_abs": 0.01127741951495409,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "233878358e7418e7129ecc2b9f1f9add5d3730d2fb28ec2ecfac4fe14c4a7fae"
+      },
+      "layer3.0.bn2.weight": {
+        "finite": true,
+        "l2": 0.11045594171697098,
+        "max_abs": 0.015094968490302563,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "f21b3708a735e171b6371f97ed8f35595c9321fcf183c67b5c4e4ac522d71088"
+      },
+      "layer3.0.conv1.weight": {
+        "finite": true,
+        "l2": 6.771761999775765,
+        "max_abs": 0.033873360604047775,
+        "nonzero_elements": 1179648,
+        "numel": 1179648,
+        "sha256": "9880e7dcda47102f8163b4365a1befb564ca0428242669f47b118d35dc5ecaba"
+      },
+      "layer3.0.conv2.weight": {
+        "finite": true,
+        "l2": 5.6465319373246095,
+        "max_abs": 0.020531632006168365,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "8946045709dbcf09e93f5a085a41c4d2c1f83e13319da18006c326a393035a08"
+      },
+      "layer3.0.downsample.0.weight": {
+        "finite": true,
+        "l2": 1.8619550849965754,
+        "max_abs": 0.026213420554995537,
+        "nonzero_elements": 131072,
+        "numel": 131072,
+        "sha256": "2c867eacd069f011fb8f6e18529e577a80276314d5e4ae500d8cf6f5da4bc9eb"
+      },
+      "layer3.0.downsample.1.bias": {
+        "finite": true,
+        "l2": 0.09110273147055584,
+        "max_abs": 0.01127741951495409,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "233878358e7418e7129ecc2b9f1f9add5d3730d2fb28ec2ecfac4fe14c4a7fae"
+      },
+      "layer3.0.downsample.1.weight": {
+        "finite": true,
+        "l2": 0.10459061248759814,
+        "max_abs": 0.01391054317355156,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "1c14264a9184c00cd721f1816b0ab3f2e29d261a7098c5cf471f6b0ff0f4a55a"
+      },
+      "layer3.1.bn1.bias": {
+        "finite": true,
+        "l2": 0.0800245954525956,
+        "max_abs": 0.011369750835001469,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "a808fad7d13efc50c67ffcecb53e8f8c2f1b0d6a369a8e71cc30cc277136beef"
+      },
+      "layer3.1.bn1.weight": {
+        "finite": true,
+        "l2": 0.09020598646737904,
+        "max_abs": 0.012123838067054749,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "d4384e337048239f0b40d4fc17e1b5425422bbf84385a1f9a251a280727fcce7"
+      },
+      "layer3.1.bn2.bias": {
+        "finite": true,
+        "l2": 0.05888925823710354,
+        "max_abs": 0.008870670571923256,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "88d1997d0a6f0cb2a6643741f543169fe38b6c0c84811f845250bdd0e96f80b1"
+      },
+      "layer3.1.bn2.weight": {
+        "finite": true,
+        "l2": 0.07993070800309196,
+        "max_abs": 0.010189681313931942,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "a3f5d29816093e881bbbb8a7497d519fbfc3930fc16dfaf2c5dabd5ca15366fb"
+      },
+      "layer3.1.conv1.weight": {
+        "finite": true,
+        "l2": 5.247193530518445,
+        "max_abs": 0.018963037058711052,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "ac1019dd84edd24763b9a2fdf42fda283c65b272f8329202bbc252cd56e8d018"
+      },
+      "layer3.1.conv2.weight": {
+        "finite": true,
+        "l2": 4.365947669029567,
+        "max_abs": 0.015024082735180855,
+        "nonzero_elements": 2359295,
+        "numel": 2359296,
+        "sha256": "64c224e834439812809d43f363a06d5cf012018e4efcc62f1f890d3dabe9cc9e"
+      },
+      "layer3.2.bn1.bias": {
+        "finite": true,
+        "l2": 0.060957710827615925,
+        "max_abs": 0.0077313571237027645,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "f81b5437c1dc85cd4bfb023826d078afb49fdb0722b5eb7a5e44b37dee747716"
+      },
+      "layer3.2.bn1.weight": {
+        "finite": true,
+        "l2": 0.06975954505764294,
+        "max_abs": 0.012174014933407307,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "82615f69802c6a38e19ca4b7e9723c3b1d0cfcdcb2ade2aa3956898b379ebdce"
+      },
+      "layer3.2.bn2.bias": {
+        "finite": true,
+        "l2": 0.045311877754722125,
+        "max_abs": 0.00659054983407259,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "8c04d5bffbff6c6634bd49a650dd7edafc54ac743d12c4b22cf41e403bcb96cb"
+      },
+      "layer3.2.bn2.weight": {
+        "finite": true,
+        "l2": 0.06649071663765938,
+        "max_abs": 0.009084513410925865,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "dc7f5b7d25f5fa73f65ed1df533046bed07fae667ddf786b2d86addfab93152d"
+      },
+      "layer3.2.conv1.weight": {
+        "finite": true,
+        "l2": 4.023608209546708,
+        "max_abs": 0.013183334842324257,
+        "nonzero_elements": 2359295,
+        "numel": 2359296,
+        "sha256": "8c8892424dc38f0448e693d32cb976438d2adc293271dd8b19bc05bf3da4c5f2"
+      },
+      "layer3.2.conv2.weight": {
+        "finite": true,
+        "l2": 3.354480615156448,
+        "max_abs": 0.012072354555130005,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "c75a6b52ee21bc4f4bf3bfb3417e4d116cd2adff79f8249649c2eb3e5a87abd0"
+      },
+      "layer3.3.bn1.bias": {
+        "finite": true,
+        "l2": 0.04789756580303474,
+        "max_abs": 0.007161853369325399,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "521160d502f4ac99f6c2f792a72e4c78f503834adbdf00050cf74420bfd250a0"
+      },
+      "layer3.3.bn1.weight": {
+        "finite": true,
+        "l2": 0.0570100379883509,
+        "max_abs": 0.007310945075005293,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "9e066aa13f3da66d4fe1d6bf84d50cbc3ec7d6120c49131be2b3fb24ae83dd40"
+      },
+      "layer3.3.bn2.bias": {
+        "finite": true,
+        "l2": 0.033473614449587144,
+        "max_abs": 0.0045576803386211395,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "91daef433f538919fbafd27356677342d6056ab33ba354df2f86e87d4f1bda06"
+      },
+      "layer3.3.bn2.weight": {
+        "finite": true,
+        "l2": 0.04922460518840775,
+        "max_abs": 0.007245984859764576,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "21d49c9356dd248fa60b11b067931c8d254615d442de6f852c0390f4f0735495"
+      },
+      "layer3.3.conv1.weight": {
+        "finite": true,
+        "l2": 3.2143772132377193,
+        "max_abs": 0.012309001758694649,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "5d1bc69172660e2cf3ede7d1dddbb9d2caba205ad6e105e0ecc3057e678f6c72"
+      },
+      "layer3.3.conv2.weight": {
+        "finite": true,
+        "l2": 2.684176893051659,
+        "max_abs": 0.009961946867406368,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "5c409ccbb993a0d7d65c3a2ac4d33144241c7263bf33b9aef8185493d5957b0d"
+      },
+      "layer3.4.bn1.bias": {
+        "finite": true,
+        "l2": 0.03996002799689192,
+        "max_abs": 0.005423470865935087,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "fbe058bbc54f1900e07bf50d44dbc7aa88722e5cfcf24c932f306195097ccc8f"
+      },
+      "layer3.4.bn1.weight": {
+        "finite": true,
+        "l2": 0.046397727986112317,
+        "max_abs": 0.005655573680996895,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "a0c882ce294dc11eebc56e218c38eef40d76c9ec5b173b0ff71ba659cefc1b49"
+      },
+      "layer3.4.bn2.bias": {
+        "finite": true,
+        "l2": 0.02472636428357576,
+        "max_abs": 0.0038158204406499863,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "62de35d1e5409625537ba2f2a385ae2d96a6aed137853f0af22625001229a71c"
+      },
+      "layer3.4.bn2.weight": {
+        "finite": true,
+        "l2": 0.04312602948794357,
+        "max_abs": 0.006375128868967295,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "4da61b00bd6d3fa12d3c816c1c7d78ce1e74b7819ea34b0ab55a366b5ebe594c"
+      },
+      "layer3.4.conv1.weight": {
+        "finite": true,
+        "l2": 2.664048985167217,
+        "max_abs": 0.010362593457102776,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "aace805fc470ebfc64d2d055cfeea381aedf26e634c50079adbb0f79c0f1847c"
+      },
+      "layer3.4.conv2.weight": {
+        "finite": true,
+        "l2": 2.2319734722769096,
+        "max_abs": 0.008303971961140633,
+        "nonzero_elements": 2359295,
+        "numel": 2359296,
+        "sha256": "09a82cf27d729d23a7670bf8b25d217deb14ce2031b91b5f7f1490b819d553ed"
+      },
+      "layer3.5.bn1.bias": {
+        "finite": true,
+        "l2": 0.033936556908202097,
+        "max_abs": 0.005182478576898575,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "99349bb308b49b1f78e5eb38d0517246bb754dd7eccbbdce18c587858fb77f42"
+      },
+      "layer3.5.bn1.weight": {
+        "finite": true,
+        "l2": 0.04002525631449512,
+        "max_abs": 0.006241407711058855,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "ff06283e2ef8f56a3db1b954a4de06fe38d8a82318d2829486b9b4b03f9177e2"
+      },
+      "layer3.5.bn2.bias": {
+        "finite": true,
+        "l2": 0.019029412692556865,
+        "max_abs": 0.0029008800629526377,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "0735f5a5ff902f7f6859907eb0e354270fae877932d36c2d9c8f2b8769d74706"
+      },
+      "layer3.5.bn2.weight": {
+        "finite": true,
+        "l2": 0.03422363053051043,
+        "max_abs": 0.005330491811037064,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "a0341c7651151edc93c3554c1cc208409ed8be6d1f2cdcb1f48c1217baf6934d"
+      },
+      "layer3.5.conv1.weight": {
+        "finite": true,
+        "l2": 2.2833199242830813,
+        "max_abs": 0.008163126185536385,
+        "nonzero_elements": 2359295,
+        "numel": 2359296,
+        "sha256": "448b7dcd2be7fbe672b25923da658aabf961d908e3e1bfb28192c95b0e5b99a1"
+      },
+      "layer3.5.conv2.weight": {
+        "finite": true,
+        "l2": 1.9111257246164115,
+        "max_abs": 0.007088186219334602,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "2f4b2f10725380d3e91e48bb0ec7e416377c97e4b3bf57ad2362a2d83facfaab"
+      },
+      "layer4.0.bn1.bias": {
+        "finite": true,
+        "l2": 0.03999104572122439,
+        "max_abs": 0.007088801357895136,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "bcdd6bfaa0a743ec2b141455ad336d5440cd67c445c0d8350b6e5fce92814964"
+      },
+      "layer4.0.bn1.weight": {
+        "finite": true,
+        "l2": 0.0463068425127512,
+        "max_abs": 0.006993202492594719,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "0261f490495e4ad62c7ee39ab1bbeaaf9365897e5f2c7bc433b8000dfdab86ee"
+      },
+      "layer4.0.bn2.bias": {
+        "finite": true,
+        "l2": 0.08307589062078773,
+        "max_abs": 0.0104048578068614,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "a882d70942d2f0cf0aaf06ab46b7728ff7f4fa47f75016ff6dd5f64755688a4b"
+      },
+      "layer4.0.bn2.weight": {
+        "finite": true,
+        "l2": 0.06581899500627443,
+        "max_abs": 0.00836691353470087,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "127a7b7935cdc8cea76ebc98eca7bc2d793a98e6a4e22f781f55c2901ea8549a"
+      },
+      "layer4.0.conv1.weight": {
+        "finite": true,
+        "l2": 2.6092330784325637,
+        "max_abs": 0.01183436531573534,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "f3637b73a1c04e1cada5f0ae26ad8c49b53e2278bfb7731e854f891da3e63286"
+      },
+      "layer4.0.conv2.weight": {
+        "finite": true,
+        "l2": 2.1984664235868165,
+        "max_abs": 0.011369461193680763,
+        "nonzero_elements": 2359295,
+        "numel": 2359296,
+        "sha256": "9b12a0528e1562f3b9bc80e7ff7f2dbb4647cccbbe4363c0ebd97dc118dff16d"
+      },
+      "layer4.0.downsample.0.weight": {
+        "finite": true,
+        "l2": 0.7361763749678292,
+        "max_abs": 0.008347845636308193,
+        "nonzero_elements": 262144,
+        "numel": 262144,
+        "sha256": "0d59ba74c82f2bb113b1ccc9778a37ddb5b700f3daaaae0a7d31c486d84290db"
+      },
+      "layer4.0.downsample.1.bias": {
+        "finite": true,
+        "l2": 0.08307589062078773,
+        "max_abs": 0.0104048578068614,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "a882d70942d2f0cf0aaf06ab46b7728ff7f4fa47f75016ff6dd5f64755688a4b"
+      },
+      "layer4.0.downsample.1.weight": {
+        "finite": true,
+        "l2": 0.06680728418871267,
+        "max_abs": 0.00930557306855917,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "011279ea1c425824c6c45abfbf386d95a89bf0e91eddfc7095679759a5f97de0"
+      },
+      "layer4.1.bn1.bias": {
+        "finite": true,
+        "l2": 0.03079961522073212,
+        "max_abs": 0.004551291465759277,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "c13c4e7f563af240af6abc8a21a3fce3d92579aa90b95752aa06bd7c4e3bc95d"
+      },
+      "layer4.1.bn1.weight": {
+        "finite": true,
+        "l2": 0.03646286243467555,
+        "max_abs": 0.007891767658293247,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "4cadccc8ecaeebc177122526580b12c63acd6b376e2ebb08dee1a46e433a63f3"
+      },
+      "layer4.1.bn2.bias": {
+        "finite": true,
+        "l2": 0.12103518883589191,
+        "max_abs": 0.014182375743985176,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "4bbbda2710aff46fb9b854b3f6855cc69e35c25490e4d99ea6e406650919f494"
+      },
+      "layer4.1.bn2.weight": {
+        "finite": true,
+        "l2": 0.0729206867468862,
+        "max_abs": 0.009397211484611034,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "867fe94766e3f7c5a638aa64374a0d2e76ecbcee88e026fed3bc49cf20352544"
+      },
+      "layer4.1.conv1.weight": {
+        "finite": true,
+        "l2": 2.0376886810931265,
+        "max_abs": 0.011479385197162628,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "b0172289644b77726c5d574833855df732ec0238aaf085286eeed94f4f527596"
+      },
+      "layer4.1.conv2.weight": {
+        "finite": true,
+        "l2": 1.7408524823185594,
+        "max_abs": 0.008852037601172924,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "dd82d7ed388fbf2e2ddcd90f32de99ccdca6f3e971f77e375611d506355288f0"
+      },
+      "layer4.2.bn1.bias": {
+        "finite": true,
+        "l2": 0.026621582600365432,
+        "max_abs": 0.004707007668912411,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "ba1d9bf4d555b6ac681be289f3b990c2fec81279347bc5741e1fed3ce3a66536"
+      },
+      "layer4.2.bn1.weight": {
+        "finite": true,
+        "l2": 0.031257196371843814,
+        "max_abs": 0.0057618399150669575,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "8a135d0b8bf71fde37ba5daafe1da0466af857a4b4941e3048f4b82c30c4787b"
+      },
+      "layer4.2.bn2.bias": {
+        "finite": true,
+        "l2": 0.15778358148503344,
+        "max_abs": 0.017766878008842468,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "c0d8e283902fa7229f6c9b5ca8f2431198e93b583ea57235d3f4ff20c560404a"
+      },
+      "layer4.2.bn2.weight": {
+        "finite": true,
+        "l2": 0.06792702329066334,
+        "max_abs": 0.009728696197271347,
+        "nonzero_elements": 512,
+        "numel": 512,
+        "sha256": "0f106f82e9a10b709edbd3130502be08a02bfe87bad9b3bdd429c77f39f30d3c"
+      },
+      "layer4.2.conv1.weight": {
+        "finite": true,
+        "l2": 1.643474172873035,
+        "max_abs": 0.008876211941242218,
+        "nonzero_elements": 2359296,
+        "numel": 2359296,
+        "sha256": "2c4ff2cba04436893f0aeb1233f096c8f4211f18ce951ef7a9994573fc323a0e"
+      },
+      "layer4.2.conv2.weight": {
+        "finite": true,
+        "l2": 1.4215657553343888,
+        "max_abs": 0.0073816366493701935,
+        "nonzero_elements": 2359295,
+        "numel": 2359296,
+        "sha256": "a50d88c5292083f047ba14b7db1ea71fdc427df9abf1e8c40be7055038c2d9a3"
+      },
+      "norm.bias": null,
+      "norm.weight": null
+    },
+    "stem_conv1": {
+      "finite": true,
+      "l2": 54.16420915543823,
+      "max_abs": 3.301124095916748,
+      "nonzero_elements": 9408,
+      "numel": 9408,
+      "sha256": "af2391ca26880c4fcba8f81493f482416df539e1a822bd379b34c8d26c6305eb"
+    },
+    "tensors_with_all_zero_grad": [],
+    "tensors_with_grad": 110,
+    "tensors_with_nonzero_grad": 110,
+    "unexpected_disconnected_tensors": []
+  },
+  "label": "AUX_ENCODER_SYNTHETIC_TRAINING_GRAPH_ONLY",
+  "loss": {
+    "abs_deviation_from_reference": 1.6282493486841076e-07,
+    "criterion": "torch.nn.CrossEntropyLoss()",
+    "finite": true,
+    "float64_reference": 2.049288110032731,
+    "label_smoothing": 0.0,
+    "reduction": "mean",
+    "value": 2.049288272857666,
+    "value_float32_hex": "0x1.064f140000000p+1",
+    "weight": null
+  },
+  "main_difffas_model_constructed": false,
+  "main_difffas_training": false,
+  "milestone": "M6D6b",
+  "optimizer": {
+    "class": "torch.optim.SGD",
+    "grad_clipping": null,
+    "hyperparameters": {
+      "dampening": 0,
+      "differentiable": false,
+      "foreach": null,
+      "fused": null,
+      "lr": 0.002,
+      "maximize": false,
+      "momentum": 0.9,
+      "nesterov": false,
+      "weight_decay": 0.005
+    },
+    "momentum_buffers_after_step": 110,
+    "nesterov": false,
+    "optimized_parameters": 46233707,
+    "optimized_tensors": 112,
+    "param_groups": 1,
+    "param_set": "model.parameters() (identity-verified, whole network incl. fc and source norm)",
+    "scheduler": null
+  },
+  "optimizer_step_calls": 1,
+  "parameter_update": {
+    "aggregate_parameter_sha256_after": "3fc8d8b37f0b0a46cb805abe137cf2f8542b6a0985ad8f1bf5c860494a588aa6",
+    "aggregate_parameter_sha256_before": "aa4c2cdd88055cb214d370b2dafb901bd880772610eed604e40c1304f685ba46",
+    "all_finite_after": true,
+    "backbone_changed_tensors": 108,
+    "buffers_changed_by_backward_or_step": [],
+    "buffers_changed_by_train_mode_forward": [
+      "bn1.num_batches_tracked",
+      "bn1.running_mean",
+      "bn1.running_var",
+      "layer1.0.bn1.num_batches_tracked",
+      "layer1.0.bn1.running_mean",
+      "layer1.0.bn1.running_var",
+      "layer1.0.bn2.num_batches_tracked",
+      "layer1.0.bn2.running_mean",
+      "layer1.0.bn2.running_var",
+      "layer1.1.bn1.num_batches_tracked",
+      "layer1.1.bn1.running_mean",
+      "layer1.1.bn1.running_var",
+      "layer1.1.bn2.num_batches_tracked",
+      "layer1.1.bn2.running_mean",
+      "layer1.1.bn2.running_var",
+      "layer1.2.bn1.num_batches_tracked",
+      "layer1.2.bn1.running_mean",
+      "layer1.2.bn1.running_var",
+      "layer1.2.bn2.num_batches_tracked",
+      "layer1.2.bn2.running_mean",
+      "layer1.2.bn2.running_var",
+      "layer2.0.bn1.num_batches_tracked",
+      "layer2.0.bn1.running_mean",
+      "layer2.0.bn1.running_var",
+      "layer2.0.bn2.num_batches_tracked",
+      "layer2.0.bn2.running_mean",
+      "layer2.0.bn2.running_var",
+      "layer2.0.downsample.1.num_batches_tracked",
+      "layer2.0.downsample.1.running_mean",
+      "layer2.0.downsample.1.running_var",
+      "layer2.1.bn1.num_batches_tracked",
+      "layer2.1.bn1.running_mean",
+      "layer2.1.bn1.running_var",
+      "layer2.1.bn2.num_batches_tracked",
+      "layer2.1.bn2.running_mean",
+      "layer2.1.bn2.running_var",
+      "layer2.2.bn1.num_batches_tracked",
+      "layer2.2.bn1.running_mean",
+      "layer2.2.bn1.running_var",
+      "layer2.2.bn2.num_batches_tracked",
+      "layer2.2.bn2.running_mean",
+      "layer2.2.bn2.running_var",
+      "layer2.3.bn1.num_batches_tracked",
+      "layer2.3.bn1.running_mean",
+      "layer2.3.bn1.running_var",
+      "layer2.3.bn2.num_batches_tracked",
+      "layer2.3.bn2.running_mean",
+      "layer2.3.bn2.running_var",
+      "layer3.0.bn1.num_batches_tracked",
+      "layer3.0.bn1.running_mean",
+      "layer3.0.bn1.running_var",
+      "layer3.0.bn2.num_batches_tracked",
+      "layer3.0.bn2.running_mean",
+      "layer3.0.bn2.running_var",
+      "layer3.0.downsample.1.num_batches_tracked",
+      "layer3.0.downsample.1.running_mean",
+      "layer3.0.downsample.1.running_var",
+      "layer3.1.bn1.num_batches_tracked",
+      "layer3.1.bn1.running_mean",
+      "layer3.1.bn1.running_var",
+      "layer3.1.bn2.num_batches_tracked",
+      "layer3.1.bn2.running_mean",
+      "layer3.1.bn2.running_var",
+      "layer3.2.bn1.num_batches_tracked",
+      "layer3.2.bn1.running_mean",
+      "layer3.2.bn1.running_var",
+      "layer3.2.bn2.num_batches_tracked",
+      "layer3.2.bn2.running_mean",
+      "layer3.2.bn2.running_var",
+      "layer3.3.bn1.num_batches_tracked",
+      "layer3.3.bn1.running_mean",
+      "layer3.3.bn1.running_var",
+      "layer3.3.bn2.num_batches_tracked",
+      "layer3.3.bn2.running_mean",
+      "layer3.3.bn2.running_var",
+      "layer3.4.bn1.num_batches_tracked",
+      "layer3.4.bn1.running_mean",
+      "layer3.4.bn1.running_var",
+      "layer3.4.bn2.num_batches_tracked",
+      "layer3.4.bn2.running_mean",
+      "layer3.4.bn2.running_var",
+      "layer3.5.bn1.num_batches_tracked",
+      "layer3.5.bn1.running_mean",
+      "layer3.5.bn1.running_var",
+      "layer3.5.bn2.num_batches_tracked",
+      "layer3.5.bn2.running_mean",
+      "layer3.5.bn2.running_var",
+      "layer4.0.bn1.num_batches_tracked",
+      "layer4.0.bn1.running_mean",
+      "layer4.0.bn1.running_var",
+      "layer4.0.bn2.num_batches_tracked",
+      "layer4.0.bn2.running_mean",
+      "layer4.0.bn2.running_var",
+      "layer4.0.downsample.1.num_batches_tracked",
+      "layer4.0.downsample.1.running_mean",
+      "layer4.0.downsample.1.running_var",
+      "layer4.1.bn1.num_batches_tracked",
+      "layer4.1.bn1.running_mean",
+      "layer4.1.bn1.running_var",
+      "layer4.1.bn2.num_batches_tracked",
+      "layer4.1.bn2.running_mean",
+      "layer4.1.bn2.running_var",
+      "layer4.2.bn1.num_batches_tracked",
+      "layer4.2.bn1.running_mean",
+      "layer4.2.bn1.running_var",
+      "layer4.2.bn2.num_batches_tracked",
+      "layer4.2.bn2.running_mean",
+      "layer4.2.bn2.running_var"
+    ],
+    "changed_parameters_outside_optimizer_scope": 0,
+    "changed_tensors": 110,
+    "fc_changed": true,
+    "parameter_sha256_after": {
+      "bn1.bias": "1762554d50a73469364068807ba55bb12728ae5abdf1ab61eb41795e8daa9be8",
+      "bn1.weight": "59b90e5811e109bbfcf78c056d07eba1cd900dc92831b8a1fad92c5e596327c4",
+      "conv1.weight": "6292f78b82cb1dbd5729e5fb62708d8901f365b139096b4c9274de9edc636115",
+      "fc.bias": "d372bbb4feefc320bfe699d3451d7239afb0dd0396ab3379626c2e4b35e95bb7",
+      "fc.weight": "ff9381450bc16b822d070f4a22a01dab2af4d044e384d3edd61c1ad388c61365",
+      "layer1.0.bn1.bias": "05f610f05f16def9126def28dad2cd478b879ce01408ab1c52894fede7abdfd3",
+      "layer1.0.bn1.weight": "bdf96c935c1fef35586c18bb34ee7ca0159951fad66ff833a701612718422643",
+      "layer1.0.bn2.bias": "d2f78964bb33b7df6a4f6baa3f650b84190247512a3fb79589eb17271b2feedc",
+      "layer1.0.bn2.weight": "372e3c64ecd43bfa303dfa9d4605553d8fa6c0152930948ba8ba31c40118bf61",
+      "layer1.0.conv1.weight": "7287e8307069213d6ab6a3f1e6e5ad1f0423e5ba18d0e02adb05e4c747b5f032",
+      "layer1.0.conv2.weight": "1033fceb9f34bcc3af40ec3e9053468aa0a7592d9ffd02e5a7f9102a50f58f44",
+      "layer1.1.bn1.bias": "6ab2de7684e52fe43355bd1f307fbb2b056d3d232e7da3496b545d87384d8252",
+      "layer1.1.bn1.weight": "fb430533a69fd28c65b31be56b787e93183ae7e2fea540c6785d27e45bb2c47a",
+      "layer1.1.bn2.bias": "420d53b8b9ee97c224b1cd05eab18d4725fe5bfb5a96be4583d8d7a4c94fc705",
+      "layer1.1.bn2.weight": "2b5f61a6462c0a2d29614390561958fd822b38cdb50335ae7700140917a0d9c8",
+      "layer1.1.conv1.weight": "f332f691cf24cf527de5f8d2156debf293d346d8016bfc3175e18e6d83fde5aa",
+      "layer1.1.conv2.weight": "a6ab288be4f8e5cb46b4cef797e9393f979571c7f1d5d41fd553abfeadf3365c",
+      "layer1.2.bn1.bias": "aeedb3b8e8a996c43ac293e3337b5f3de4def60339fb78aa0e09e53f2446a090",
+      "layer1.2.bn1.weight": "e572f5b3160f1cd3be6fbbd0c14bcf924b49d5ec2f7c4231dbe95248055fe240",
+      "layer1.2.bn2.bias": "7684f1026229047652faf8f592f2dd4dbd5bd88191efda32f22681c235ca94de",
+      "layer1.2.bn2.weight": "5b29bd4df3322366ac0efd6e6873801a1875faee2142f7179945055892c42be4",
+      "layer1.2.conv1.weight": "c5552a5ce288d10a5ec3fb3fa1f4339265a54b59ee7bca991106ab4d85e0c393",
+      "layer1.2.conv2.weight": "d3cc406004e8b79eaec77cfe809ff3a7e3506f46943e4fa6c34f94e6b7d92f57",
+      "layer2.0.bn1.bias": "26832545c372e48527f756b7797a87220c3048c4fb5a2f1fcc7f6660b184f0e5",
+      "layer2.0.bn1.weight": "72a791e564deefac676b6e2a940a5ddebb2a7f24912b6ac9be8e0e65fc49e4d2",
+      "layer2.0.bn2.bias": "96e8c8c0263b890681e9b2de1981d38f7bf5aa7c0226a52a36750e058dd232f3",
+      "layer2.0.bn2.weight": "3f3368e9a2a5c4ca4618e2f1722a47c0231af123a0e29db936813c8f3ef3923e",
+      "layer2.0.conv1.weight": "9cc0dc9d65702ea04ca7b6160b4e9e8f12894532d9894b1ae2dfc05ea5dd98ba",
+      "layer2.0.conv2.weight": "ab0a3f508d58e5de0fa087535083b720e177ba65bd87e5065bde42f7b0b1b1bf",
+      "layer2.0.downsample.0.weight": "c277bdd4c5da3abd3d8b63ca71efebc7ecefaf8f9a139752f2392f267069edb8",
+      "layer2.0.downsample.1.bias": "96e8c8c0263b890681e9b2de1981d38f7bf5aa7c0226a52a36750e058dd232f3",
+      "layer2.0.downsample.1.weight": "d603efff967b3e932797f732d446b5f04ac2f970a8082f1d2ec5364b37d6ea5f",
+      "layer2.1.bn1.bias": "58252fc40ba38c9dd84c072ba9ad449022bd2a2c1c9ca42dadbf38f306bfcd5e",
+      "layer2.1.bn1.weight": "f0a395900ffc5675609365379c47b473da72758fa3ed62770e1093ba5373c0f7",
+      "layer2.1.bn2.bias": "2177e16dbbdb88edace6ed98e20b46876a2c4ff3f569117acc60fbaf7906a13b",
+      "layer2.1.bn2.weight": "ca385e0f53f2678dcfcad5d0c5bb2caf408b57e2f4e87f2bb6521c63b583b421",
+      "layer2.1.conv1.weight": "51b98b33a3e0b3e73ec15fa433bef7f36caed9a7ac7657d080a22ec182ef6d59",
+      "layer2.1.conv2.weight": "cc813a3f8ea671a2c368fe40182c03a927ff81383713e67eca4a94c32bbc2c6b",
+      "layer2.2.bn1.bias": "65ffe3709d5706133a7681794e99de832e679c9485324bb2ae24948b1e2a173a",
+      "layer2.2.bn1.weight": "3979b722eef41b02f93638f74b1f49e4a7dcfd9b9ea141d5166edcfc4c05eec4",
+      "layer2.2.bn2.bias": "a10548b0f2c469c1314d9facfc1c34b8eb6967ee55aa075dd6eed822f857237b",
+      "layer2.2.bn2.weight": "a8b05c8a9d94f2d35e59a9115828a24e49f8d79c19ca66c40390863e9d2dd26a",
+      "layer2.2.conv1.weight": "52650a984be9a3867b705b35d61d85f43a92a428f2127c76110f35e5bce06ace",
+      "layer2.2.conv2.weight": "35281e9328fac9566a2f6f710931f98c1fa2381d88e3c7ae548fd72f743bd05c",
+      "layer2.3.bn1.bias": "64d1e304137c8e5913d44784565a80f48c9b671558b46814956441d50198a204",
+      "layer2.3.bn1.weight": "88f19c07c3db2b2c7a0c7eee2917dea0c4c66d9dae4905b4939c65edd074932a",
+      "layer2.3.bn2.bias": "62ffa53e872f5add64867d5384a7c41b1ad0a303576dd0657d07a4dad7be2296",
+      "layer2.3.bn2.weight": "a7dd0b0d78cc1b7ce2e3aed4faeca2a63be909e219f747cd1ba665ca3edcd6f3",
+      "layer2.3.conv1.weight": "dd88ad03e300b866b40b7ab0fac29682b448c795d7e4ec0af3e686d17eead3a0",
+      "layer2.3.conv2.weight": "2e2c3f5719bbe99a6139c49f43d1197f3a989f9f938818e78a66e88aaf4cf5b4",
+      "layer3.0.bn1.bias": "5fc64e195729abcddc9b4abbab273fd4ff59f36a94f84b50af801ca04d29df4a",
+      "layer3.0.bn1.weight": "5f19148ba5ab8fd913fa83ae24286496c7f5ff89eb9bf1f091280277922a5382",
+      "layer3.0.bn2.bias": "7305b2a6d38c3ede36697c39b611b78a75e590819019b89b31864083e61435e9",
+      "layer3.0.bn2.weight": "159902d13783cda16b8b0a575850753942b32b5e9b52ff3c61e344e45562c4dc",
+      "layer3.0.conv1.weight": "12d578474f80c4e6870f66bb717f20164e6006ce8eb9c17839d6a9dd357300e8",
+      "layer3.0.conv2.weight": "3df7e8e86905755dbeec8834db9df8a67e3078470d445d23e407e7a372cb044c",
+      "layer3.0.downsample.0.weight": "3420a64bf9103e8b047068e1535eaf182da700e6ed2bbbb68cd77eb3a5c00a65",
+      "layer3.0.downsample.1.bias": "7305b2a6d38c3ede36697c39b611b78a75e590819019b89b31864083e61435e9",
+      "layer3.0.downsample.1.weight": "aa66773fae20368463f1030a41f5afc34bb2cce4dcd6f617fab8280f4d1da7c7",
+      "layer3.1.bn1.bias": "c02ec44269be8b82807aed27fbe67b5001cf27c1cba01d3316204cc9debfea76",
+      "layer3.1.bn1.weight": "446558cad6707b8f136680e63dd40b998cd32369e0eca346331e16826fdc63c7",
+      "layer3.1.bn2.bias": "29153a474364d3ff077fb2b5dbe77638b623aacd9e2ff4dd4953afdcf448370a",
+      "layer3.1.bn2.weight": "2f8240a59956d0eab31d687a027bf40f4cbc10b94521259a0f8a76de3cc16ee7",
+      "layer3.1.conv1.weight": "c8f42f8207cd2cd21af9ea2cba54635a39559dd3da489e86946ccc007dff909e",
+      "layer3.1.conv2.weight": "01e63f35266f42ff4e88562b5c3b5a80d9b1261fe3c3cb401ff6b9ddb4e5a9cf",
+      "layer3.2.bn1.bias": "0725e73c387154788a0c79ea78261ed0e965c46451cd07e47e9948325028e1d0",
+      "layer3.2.bn1.weight": "a3bda5f00863de721c982d02fc493fd0999a04d78a748955d187e83646fba873",
+      "layer3.2.bn2.bias": "a1d89c0a5fbe2279ba592a274e8a57b07e396cfc9195d4dc96a3c70f06e6dca1",
+      "layer3.2.bn2.weight": "d3531583c78e27a0cbcd762db61a97ba799dd53cfa8f35be3180919f97d1e6e0",
+      "layer3.2.conv1.weight": "617863cd43fd4e1eb373b9be011d04cf426275d275a609bfe003442a1fd0ea44",
+      "layer3.2.conv2.weight": "20fe5ac088ba61ca5a909dc79e429cc413ff4b298600c8bec0655e0a89e4c7d4",
+      "layer3.3.bn1.bias": "894a81418ea515f6b50241be87fe2a190ecc0ba5975e60d2f6076bb59cdc2c29",
+      "layer3.3.bn1.weight": "a6331f47ea810b455b51e5bb6c415527736c1af08ee6cbe8ff05917f63df4833",
+      "layer3.3.bn2.bias": "324d4668881f916e76366e7bcd039695b7c72188dbc7b8c51cf9011fcddd2afe",
+      "layer3.3.bn2.weight": "bd0815429c989545a80c4f146ce87d80d61e72974082e7f91c2242361d49941a",
+      "layer3.3.conv1.weight": "aa3758e5dbbb7356fba642ffead923baadd54c11b718a98353b0300f84bc9dd3",
+      "layer3.3.conv2.weight": "750dc5ffb3a7458e1da94856a50da99e19e965de9571285150142a4496222c06",
+      "layer3.4.bn1.bias": "9e1b01ef972e4a312b1123bb94934ac4f202911a2d1f539e725fc77fb9f3ff53",
+      "layer3.4.bn1.weight": "ec04fb2da293d0a669148d3b0396815643b396a5c710ae3c0594f6b38ab02ca2",
+      "layer3.4.bn2.bias": "16790d4a3ba18c7cc6ba04327c0007d425c00f6eba28ed02666350e9b2008547",
+      "layer3.4.bn2.weight": "2f925af7dd83af4b122a82886e811b8b2295b87580a9e1b045c34657a4ae255e",
+      "layer3.4.conv1.weight": "e4518038bc60873dba6c279372c71bfb22a6ee94a730222035671d87a8f90ca9",
+      "layer3.4.conv2.weight": "4a9c5d3904b567a8b952548a4d81cb646e5b159876be8bdeb96f78696d7a1cd1",
+      "layer3.5.bn1.bias": "6d4aa28da019c32f5e9975028c88f07a95e18d748075dee5d128202fbd213474",
+      "layer3.5.bn1.weight": "8f035024749bc6c78cfeb0980da291ac84d3287d3446e0bd7f063fd962fc1af7",
+      "layer3.5.bn2.bias": "c84ece8bbead00f99f7242d8b6dc7701a2096f7c31f0d2543906f8294008c00d",
+      "layer3.5.bn2.weight": "3e0e3fbcff8bf955794d7a1a4d5a84a56254d1ea45e12eb1e4ed2bb4ecb195d6",
+      "layer3.5.conv1.weight": "68e5d520c62d95b41767259aa95120cb4f0bd3f5a54c3ea58f32be0ae4360685",
+      "layer3.5.conv2.weight": "e7f7940753b1d52b984597290e8bb3cbbf40e588df92a72cbdf2b1e020d99de6",
+      "layer4.0.bn1.bias": "847be8560779e453a2ad398b10244a39940e557509a68763278ea1ac5611400d",
+      "layer4.0.bn1.weight": "1b623b0c33e58062437191cddd221e167133c5db89a0d9fe86ebe9ee705dae9c",
+      "layer4.0.bn2.bias": "f9d1129e2bf52185090bac0fd8d7ec3824041ffbbd2182a367bd01c1442a1e05",
+      "layer4.0.bn2.weight": "97028c0788706804df557d68b940e08b1d89f6ff784b49f4a10380e67e16639d",
+      "layer4.0.conv1.weight": "9b3c1945be5eacb813567a2cf3cc94428a8669abed9a18ac88038c3bc2b42ab1",
+      "layer4.0.conv2.weight": "c5a3574a142211e7f5b764d17cae74093258cfde7f336cb87c346fb466c4b126",
+      "layer4.0.downsample.0.weight": "f0df58aed6b2a2ea7de734cde73769cea7a58ce38a9bd53758c35c02976ec132",
+      "layer4.0.downsample.1.bias": "f9d1129e2bf52185090bac0fd8d7ec3824041ffbbd2182a367bd01c1442a1e05",
+      "layer4.0.downsample.1.weight": "e3bed6ad9f110853697da834c146285641bb5cc4dffdf93a8a431a79397a3800",
+      "layer4.1.bn1.bias": "7ea4a2a725b0b7a13ba0d4ecce281349f2b7b93aa710ff2724287a86266317ea",
+      "layer4.1.bn1.weight": "845c4eae1ebe3f93eedc2c4f3c153997336b385c4ec10cdf285e74966e2407ee",
+      "layer4.1.bn2.bias": "8eed6252712280a4614b485c99d5f232e8b9ce0cb4c79f7b05236d4f18bed790",
+      "layer4.1.bn2.weight": "4142b5bd5844e1e4797bc9ac425798dcfc5abb66c009bcd0755ed2a873dc478e",
+      "layer4.1.conv1.weight": "dcf2e8a0811371ac3792ee6e8f5d827f28734ebff3b9534fba1ee0bbc2250eff",
+      "layer4.1.conv2.weight": "92782269f86e29ec550a897dedc306860297dc196d6469f028ac2dcbeec88466",
+      "layer4.2.bn1.bias": "16b7e615f257f2ea1cabdbd82b50075d2e8802816100ce3ca2b92f1e717f2d33",
+      "layer4.2.bn1.weight": "4d7d2a94c9d4faac07c4e30a05cbd4d064d5b8edb127d561a7dac9ab5e523ffd",
+      "layer4.2.bn2.bias": "d3735a6f1eb27a8881667cd8fd55a01fc899f69a12a0e1a5faa01e3663e7d1db",
+      "layer4.2.bn2.weight": "170ed53479e4fa4525bd4c56d11f4be271135957c0b2e9b62e4d1e3ce6339267",
+      "layer4.2.conv1.weight": "e4934763b9aa373383dd880541caef3412b477732560e969284cac022bfce200",
+      "layer4.2.conv2.weight": "ff63d94d99474f89c85d75d3fa063abccd6fb8f17004ecb1285d5b72fada3701",
+      "norm.bias": "834a709ba2534ebe3ee1397fd4f7bd288b2acc1d20a08d6c862dcd99b6f04400",
+      "norm.weight": "cb20f90237d216aff937f8753f7070e5fde514a80130f10572838485729343eb"
+    },
+    "sgd_first_step_formula_max_abs_deviation": 1.4901161193847656e-08,
+    "sgd_formula_tolerance": 1e-06,
+    "unchanged_tensors": [
+      "norm.bias",
+      "norm.weight"
+    ]
+  },
+  "precision": {
+    "controls": {
+      "autocast": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "deterministic_algorithms_forced": false,
+      "dtype": "float32",
+      "float32_matmul_precision": "highest",
+      "grad_scaler": false,
+      "matmul_tf32": false
+    },
+    "freezes_scientific_precision_policy": false,
+    "label": "ENGINEERING_QUALIFICATION_CONTROLS",
+    "library_defaults_observed_before_controls": {
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": false,
+      "cudnn_tf32": true,
+      "default_dtype": "torch.float32",
+      "float32_matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "open_issue": "pinned pretrain_classifier.py sets no precision/cudnn flag; under library defaults cuDNN convolutions may use TF32 on Ampere. The production auxiliary precision policy still needs an explicit decision; this qualification decides nothing.",
+    "pinned_source_policy": "NONE_EXPLICIT: no autocast, GradScaler, TF32 flag, dtype cast or cudnn flag; FP32 parameters under library defaults"
+  },
+  "qualification_batch_size": 4,
+  "qualification_seed": 60602,
+  "scientific_aux_batch_size": 256,
+  "scientific_seed_consumed": false,
+  "scientific_training": false,
+  "seed_note": "frozen auxiliary_encoder_training_seed 42 is NOT used; 60602 seeds this graph check only",
+  "source_after": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "source_before": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "status": "PASS",
+  "synthetic_bank": false,
+  "synthetic_batch": {
+    "input": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 490.80247091192575,
+      "max": 0.9999995827674866,
+      "mean": 1.6558102020212153e-06,
+      "min": -0.9999995827674866,
+      "sha256": "621d27eb1ecf2869836779638233ca4f4a8329f1dcbedf9f52c486cf6791bdba",
+      "shape": [
+        4,
+        3,
+        256,
+        256
+      ]
+    },
+    "input_generator": "rq.synthetic analytic sin/cos family (no RNG, no file)",
+    "input_phase": 37,
+    "label": "SYNTHETIC_IN_MEMORY_NOT_BENCHMARK_SAMPLES",
+    "target_dtype": "torch.int64",
+    "target_rule": "(3*i + 1) % 7 for i in range(4): class INDICES only, no class names attached",
+    "target_sha256": "ee95e5ce03458f25fb4e128760252a5282b52f885f463a6718491098d3b47032",
+    "target_values": [
+      1,
+      4,
+      0,
+      3
+    ]
+  },
+  "upstream_training_semantics": {
+    "construction": {
+      "resnet18 = resnet18()": 15,
+      "resnet18 = resnet18.cuda()": 17,
+      "resnet18.fc = nn.Linear(512, 17)": 16
+    },
+    "criterion": {
+      "arguments": "NONE (mean reduction, no weight, no label smoothing)",
+      "line": 28,
+      "statement": "nn.CrossEntropyLoss()"
+    },
+    "epochs": 200,
+    "file": "models/pretrain_classifier.py",
+    "gradient_clipping": "NONE",
+    "imported_or_executed": false,
+    "loader": {
+      "batch_size": 256,
+      "drop_last": true,
+      "line": 26,
+      "num_workers": 6,
+      "shuffle": true
+    },
+    "mode_calls": [],
+    "mode_semantics": "no .train()/.eval() anywhere; torch.nn.Module defaults to training=True, so BatchNorm2d uses batch statistics and updates running stats",
+    "optimizer": {
+      "class": "optim.SGD",
+      "constructed_after_fc_replacement_and_cuda": true,
+      "hyperparameters": {
+        "lr": 0.002,
+        "momentum": 0.9,
+        "weight_decay": 0.005
+      },
+      "line": 27,
+      "params": "resnet18.parameters()",
+      "statement": "optimizer = optim.SGD(resnet18.parameters(), lr=0.002, momentum=0.9, weight_decay=0.005)"
+    },
+    "precision_controls": [],
+    "precision_semantics": "NONE_EXPLICIT: no autocast, GradScaler, TF32 flag, dtype cast or cudnn flag; FP32 parameters under library defaults",
+    "scheduler": "NONE",
+    "sha256": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+    "step_order": {
+      "_, _, _, outputs = resnet18(inputs)": 37,
+      "loss = loss_asym": 39,
+      "loss.backward()": 40,
+      "loss_asym = criteria(outputs, labels)": 38,
+      "optimizer.step()": 41,
+      "optimizer.zero_grad()": 36
+    },
+    "torch_save_calls_in_script": 1
+  },
+  "warnings": []
+}

@@ -1,0 +1,642 @@
+{
+ "artifacts_sha256": {
+  "methods/difffas/aux_training_qualification.py": "2377dfbad02aaad0eff722bba84cabaa88a6c53aed6df505349d809608973f0f",
+  "outputs/audit/M6D6B_E07C_AUX_TRAINING_GRAPH_QUALIFICATION.md": "0d83ed47dc43edf96236787807dcd808f70a11f0340f312ae850164154bb44a5",
+  "outputs/audit/M6D6B_E07C_AUX_TRAINING_PROCESS_1.json": "7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b",
+  "outputs/audit/M6D6B_E07C_AUX_TRAINING_PROCESS_2.json": "7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b",
+  "outputs/audit/M6D6B_E07C_AUX_TRAINING_RUNTIME_LOG.txt": "a04f71b70033cbe89dbcb3eadc0a7f3e6ed9785311c25e6f3a5f7a377efcb004",
+  "tests/test_m6d6b_e07c_aux_training_graph.py": "c91ca8c7acddd290557156091ee4072c70b333f4610c3b566b22d7cf720a6cde",
+  "tools/m6d6b_e07c_aux_training_graph_preflight.py": "cac900f3f042c042628280d9cf01afed10ca4a40e56f6512afc7e9c79fa29756"
+ },
+ "authority": {
+  "committed_head": "ca206cdc15de830e467484baace84208678fb5ce",
+  "gpu_head_after": "ca206cdc15de830e467484baace84208678fb5ce",
+  "gpu_head_before": "596d8459c9f2e54a5f36e2463099b662b800eb7f",
+  "gpu_sync": [
+   "git fetch origin",
+   "git merge-base --is-ancestor HEAD origin/m6-baselines",
+   "git merge --ff-only origin/m6-baselines"
+  ],
+  "remote_m6_baselines": "ca206cdc15de830e467484baace84208678fb5ce",
+  "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "starting_worktree": "clean (laptop and GPU)"
+ },
+ "auxiliary_encoder_trained": false,
+ "batchnorm": {
+  "batchnorm2d_layers": 36,
+  "frozen_bn_or_running_stat_workaround": false,
+  "min_values_per_channel_at_B4": 256,
+  "mode": "train (batch statistics; running stats updated)"
+ },
+ "benchmark_data_access": false,
+ "buffers_changed_by_train_mode_forward_count": 108,
+ "checkpoint_created": false,
+ "checkpoint_loaded": false,
+ "classification": "M6D6B_E07C_AUX_TRAINING_GRAPH_QUALIFICATION",
+ "commit": false,
+ "counters_per_process": {
+  "autograd_grad_calls": 0,
+  "backward_calls": 1,
+  "checkpoint_loads": 0,
+  "checkpoint_saves": 0,
+  "grad_clipping_calls": 0,
+  "optimizer_constructions": 1,
+  "optimizer_step_calls": 1,
+  "scheduler_constructions": 0,
+  "sgd_constructions": 1,
+  "zero_grad_calls": 1
+ },
+ "counters_total_two_processes": {
+  "backward_calls": 2,
+  "checkpoint_loads": 0,
+  "checkpoint_saves": 0,
+  "optimizer_step_calls": 2
+ },
+ "cuda_memory": {
+  "after_construction_allocated_bytes": 185067520,
+  "after_construction_reserved_bytes": 213909504,
+  "batch_size": 4,
+  "label": "AUX_ENCODER_SYNTHETIC_TRAINING_STEP_MEMORY_OBSERVATION",
+  "one_step": {
+   "peak_allocated_bytes": 1192865280,
+   "peak_reserved_bytes": 1300234240
+  },
+  "qualifies_scientific_batch_size": false,
+  "qualifies_training_memory": false,
+  "statement": "B256 scientific training memory remains unqualified"
+ },
+ "deviation": "DEV-021",
+ "eligibility": {
+  "NOT_ELIGIBLE_FOR_BANK": true,
+  "NOT_ELIGIBLE_FOR_DOWNSTREAM": true,
+  "NOT_ELIGIBLE_FOR_REPORTING": true,
+  "QUALIFICATION_ONLY": true
+ },
+ "environment_lock_sha256": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+ "environment_reverification": {
+  "before_and_after_processes": true,
+  "conda_explicit_sha256": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+  "environment": "/home/student20261/miniconda3/envs/gpat-m6-e07c",
+  "environment_rebuilt_or_mutated": false,
+  "executed_identity_equals_lock_except": [
+   "PYTHONHASHSEED",
+   "TMPDIR"
+  ],
+  "packages_installed_updated_removed": 0,
+  "pip_check_pass": true,
+  "pip_freeze_sha256": "42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285",
+  "protected_environments_unchanged": true,
+  "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+  "verifier": "r_verify_env.sh (M6D6a-r)",
+  "verifier_script_sha256": "0085caa0dbdfe007dea3a1d3a1903a89c8029cb78fec484f43efc793ef4620ad"
+ },
+ "execution_artifact_state": "auxiliary conditioning encoder NOT_YET_TRAINED",
+ "experiment_seeds_used": [],
+ "feature_shapes": [
+  [
+   4,
+   256,
+   32,
+   32
+  ],
+  [
+   4,
+   512,
+   16,
+   16
+  ],
+  [
+   4,
+   512,
+   8,
+   8
+  ]
+ ],
+ "fidelity_class": "CONTROLLED_ADAPTATION",
+ "final_status": "PASS",
+ "gradients": {
+  "all_finite": true,
+  "checked": "after backward, before optimizer.step",
+  "fc_bias": {
+   "finite": true,
+   "l2": 0.38517559431246917,
+   "max_abs": 0.28431451320648193,
+   "nonzero_elements": 7,
+   "numel": 7,
+   "sha256": "53a05903f3a8151965f0d4716bcaee14f6a59e113e88dd3c5cfc7061222ac824"
+  },
+  "fc_weight": {
+   "finite": true,
+   "l2": 9.238764631728229,
+   "max_abs": 0.32337307929992676,
+   "nonzero_elements": 3584,
+   "numel": 3584,
+   "sha256": "49e39162936f8e2f276270d93ff0e8a00ebefb0b4fe01fdd884fdaf293a1caf7"
+  },
+  "global_l2": 64.71264691180497,
+  "max_abs": 3.301124095916748,
+  "none_grad_classification": "SOURCE_NATIVE_UNUSED_MODULE",
+  "none_grad_tensors": [
+   "norm.bias",
+   "norm.weight"
+  ],
+  "stem_conv1": {
+   "finite": true,
+   "l2": 54.16420915543823,
+   "max_abs": 3.301124095916748,
+   "nonzero_elements": 9408,
+   "numel": 9408,
+   "sha256": "af2391ca26880c4fcba8f81493f482416df539e1a822bd379b34c8d26c6305eb"
+  },
+  "tensors_with_all_zero_grad": [],
+  "tensors_with_grad": 110,
+  "tensors_with_nonzero_grad": 110,
+  "unexpected_disconnected_tensors": []
+ },
+ "implementation": {
+  "audited_test_wrapper_sha256": "8248e8a94c702d4dc6610fda43cc1a4ea6d285a1e06e29c9eb682cdf0f17145f",
+  "batch_256_training_memory_not_qualified": true,
+  "build_root": "<runtime_root>/builds/e07c_difffas/m6d6b",
+  "harness": "methods/difffas/aux_training_qualification.py",
+  "harness_sha256": "2377dfbad02aaad0eff722bba84cabaa88a6c53aed6df505349d809608973f0f",
+  "launcher_run_m6d6b_sh_sha256": "3bcdd011e1df3617dfa29e10ba7625545abee0e5a0f8ea0e5060397213e2d6dd",
+  "m6d6a_helpers_imported_unchanged_sha256": "1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541",
+  "prior_failed_attempts": 0,
+  "qualification_batch_size": 4,
+  "qualification_seed": 60602,
+  "scientific_aux_batch_size": 256
+ },
+ "logits_shape": [
+  4,
+  7
+ ],
+ "loss": {
+  "abs_deviation_from_reference": 1.6282493486841076e-07,
+  "criterion": "torch.nn.CrossEntropyLoss()",
+  "finite": true,
+  "float64_reference": 2.049288110032731,
+  "label_smoothing": 0.0,
+  "reduction": "mean",
+  "value": 2.049288272857666,
+  "value_float32_hex": "0x1.064f140000000p+1",
+  "weight": null
+ },
+ "main_difffas_training": false,
+ "method_id": "E07c",
+ "method_status": "IMPLEMENTED_NOT_EXECUTED",
+ "milestone": "M6D6b",
+ "mode": {
+  "default_training_all_modules": true,
+  "eval_called": false,
+  "model_train_called": true,
+  "source_evidence": "pretrain_classifier.py has no .train()/.eval(); nn.Module default is train"
+ },
+ "not_qualified": [
+  "REAL_TRAIN_PATH",
+  "AUXILIARY_ENCODER_TRAINING",
+  "AUX_B256_TRAINING_MEMORY",
+  "AUX_PRODUCTION_RUNNER",
+  "CHECKPOINT_WRITER",
+  "CHECKPOINT_LOADER",
+  "RESUME",
+  "MAIN_DIFFFAS_TRAINING_GRAPH",
+  "SCIENTIFIC_TRAINING",
+  "M8_BANK"
+ ],
+ "open_future_issues": {
+  "aux_b256_training_memory": "only B=4 observed; the scientific B=256 path is unqualified",
+  "precision_policy": "pinned pretrain_classifier.py sets no precision/cudnn flag; under library defaults cuDNN convolutions may use TF32 on Ampere. The production auxiliary precision policy still needs an explicit decision; this qualification decides nothing.",
+  "torch_load_weights_only": "qualified runtime torch.load defaults to weights_only=True; the whole-module auxiliary checkpoint (torch.save(model), pretrain_classifier.py:45) and its consumer torch.load(path) in unet_autoenc.encoder need an explicit loader decision; M6D6b neither saved nor loaded"
+ },
+ "optimizer": {
+  "class": "torch.optim.SGD",
+  "grad_clipping": null,
+  "hyperparameters": {
+   "dampening": 0,
+   "differentiable": false,
+   "foreach": null,
+   "fused": null,
+   "lr": 0.002,
+   "maximize": false,
+   "momentum": 0.9,
+   "nesterov": false,
+   "weight_decay": 0.005
+  },
+  "momentum_buffers_after_step": 110,
+  "nesterov": false,
+  "optimized_parameters": 46233707,
+  "optimized_tensors": 112,
+  "param_groups": 1,
+  "param_set": "model.parameters() (identity-verified, whole network incl. fc and source norm)",
+  "scheduler": null
+ },
+ "parameter_update": {
+  "aggregate_parameter_sha256_after": "3fc8d8b37f0b0a46cb805abe137cf2f8542b6a0985ad8f1bf5c860494a588aa6",
+  "aggregate_parameter_sha256_before": "aa4c2cdd88055cb214d370b2dafb901bd880772610eed604e40c1304f685ba46",
+  "all_finite_after": true,
+  "backbone_changed_tensors": 108,
+  "buffers_changed_by_backward_or_step": [],
+  "changed_parameters_outside_optimizer_scope": 0,
+  "changed_tensors": 110,
+  "fc_changed": true,
+  "sgd_first_step_formula_max_abs_deviation": 1.4901161193847656e-08,
+  "sgd_formula_tolerance": 1e-06,
+  "unchanged_tensors": [
+   "norm.bias",
+   "norm.weight"
+  ]
+ },
+ "precision": {
+  "controls": {
+   "autocast": false,
+   "cudnn_benchmark": false,
+   "cudnn_deterministic": true,
+   "cudnn_tf32": false,
+   "deterministic_algorithms_forced": false,
+   "dtype": "float32",
+   "float32_matmul_precision": "highest",
+   "grad_scaler": false,
+   "matmul_tf32": false
+  },
+  "freezes_scientific_precision_policy": false,
+  "label": "ENGINEERING_QUALIFICATION_CONTROLS",
+  "library_defaults_observed_before_controls": {
+   "cudnn_benchmark": false,
+   "cudnn_deterministic": false,
+   "cudnn_tf32": true,
+   "default_dtype": "torch.float32",
+   "float32_matmul_precision": "highest",
+   "matmul_tf32": false
+  },
+  "open_issue": "pinned pretrain_classifier.py sets no precision/cudnn flag; under library defaults cuDNN convolutions may use TF32 on Ampere. The production auxiliary precision policy still needs an explicit decision; this qualification decides nothing.",
+  "pinned_source_policy": "NONE_EXPLICIT: no autocast, GradScaler, TF32 flag, dtype cast or cudnn flag; FP32 parameters under library defaults"
+ },
+ "preserved_inputs_sha256": {
+  "configs/CONFIG_STATUS.md": "0bfe711ad973124d068066895c34c7a62653da7401f98de6f0fc0ec431874f04",
+  "configs/amendments/e07c_a6_feature_interface_source_correction.yaml": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+  "configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+  "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+  "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+  "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+  "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+  "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+  "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81",
+  "environments/e07c.conda-explicit.txt": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+  "environments/e07c.lock.json": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+  "environments/e07c.pip-freeze.txt": "42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285",
+  "environments/e07c.pip-requirements.txt": "9ea38ed8b8eb4de00dff577cfb7a1360201fa66dd6c28bf174a8bfb01de26f8f",
+  "environments/e07c.runtime.json": "0855943bb1aa00d12bf61f8145bdfad4598b467f8226b2cc05842902796d2d61",
+  "frozen_config_snapshot/configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+  "frozen_config_snapshot/configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+  "methods/common/config.py": "786f934716ab05c9e30dc957b4da3a6de4ce4e0370ac5fa2ad75bfa09683b4a3",
+  "methods/common/learned.py": "20252494a7a8e02ddf9a448de011d91cf7e391ca739ac5a5532267d79b4f0525",
+  "methods/common/upstream.py": "0df26ae0147f142df0aca7fff98558ce0477491c85528b825df1caa7269035cc",
+  "methods/difffas/__init__.py": "796bc58fdd40e9501937a1e57be4ba7beb409edb0e90c97adb0e51da421e7cb2",
+  "methods/difffas/adapter.py": "d2bc7cbd1f88333ed35ac9ef444db3ec88c3d99c4ddb1e07edcd531f45e9c323",
+  "methods/difffas/contract.py": "4db1bc9af5f8455ab8b8f80e18808bbf3424b3bc1756697de627fa6eff3e7011",
+  "methods/difffas/encoder.py": "83a5146f3c07a45208e0a4b6f93d974279a313f8b1ef11d552416a86570c069f",
+  "methods/difffas/runtime_qualification.py": "1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541",
+  "methods/difffas/sampler.py": "992354b939d3bda91bebbc061b8010b9121f6cb1076a43e30a69ec67c8929762",
+  "methods/difffas/seed_adapter.py": "9bd12dea10636f7dcfad500d5737a50a7e3e360d7bd44eaa1dee094e3622b65c",
+  "methods/difffas/source.py": "19ca1ae9c535bf4a45985644c76974527f64137dfe7bb9a74ac4808c9df0ef2d",
+  "outputs/audit/M6C2B3_IMPLEMENTATION.json": "da85c41b201cb59f74917dc0d20eb021ef71da07376128390d0f292b1b53fe6d",
+  "outputs/audit/M6C2B3_IMPLEMENTATION.md": "476624a7047b3af66f95dc69170fcd40bc64221c60d909d3c5020dd4bf41eeb5",
+  "outputs/audit/M6D6A_E07C_RUNTIME_QUALIFICATION.md": "8ce6b02cad29f448c6a369003f8f95d7002367a8263837820d00e41c94c6f611",
+  "outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_1.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+  "outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_2.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+  "outputs/audit/M6D6A_R_E07C_CLEAN_REQUALIFICATION.json": "10ac9e78b7327fe3b656a695172bad2626811839288ee77421d2f2522bbb36b6",
+  "outputs/audit/M6D6A_R_E07C_CLEAN_REQUALIFICATION.md": "b40b4ff427caa5c69949c862614369465c052fc9ca71a434f9eb1651848f0ca4",
+  "outputs/audit/M6D6A_R_E07C_SYNTHETIC_PROCESS_1.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+  "outputs/audit/M6D6A_R_E07C_SYNTHETIC_PROCESS_2.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+  "outputs/audit/STAGE_STATE.json": "a8abf8288feaba561916b7ffe513014cbe2b5831be86d048702f2718059dd50d",
+  "tests/test_m6c2b3_contract.py": "a710a15cfde92c048624206e7bb4c25f5c7f4ce8942c747746a157dc59345cfa",
+  "tests/test_m6c2b3_encoder.py": "8231500a320404a92ebf176158f6e32e2964b0cdf72539085c48d61b51141a57",
+  "tests/test_m6c2b3_runtime.py": "b942d1eed50689bdab2c53136f56f8379e804eb5cbda7955ec379b9fd5f2e8d5",
+  "tests/test_m6d6a_e07c_runtime.py": "15e3fb28455c77094f039b1851e136da35b8bceab13def6f830b7f10a76496dc",
+  "third_party/source_pins.json": "484558032f53b536cb7832803980c5273264c262ab74a6eb2c67f27641d72cec",
+  "tools/build_artifact_index.py": "e1496b1502f1a6145d7ba23f9104703df9b65fc049a4ccd0b42f23d4864b73af"
+ },
+ "push": false,
+ "qualified_statuses": [
+  "E07c_AUX_ENCODER_TRAINING_GRAPH_QUALIFIED",
+  "E07c_AUX_ENCODER_OPTIMIZER_STEP_QUALIFIED",
+  "IMPLEMENTED_NOT_EXECUTED",
+  "CONTROLLED_ADAPTATION"
+ ],
+ "repeatability": {
+  "all_bitwise_equal": true,
+  "changed_tensor_counts_equal": true,
+  "determinism_note": "qualification_seed 60602; frozen cudnn benchmark=False/deterministic=True; TF32 off; CUBLAS_WORKSPACE_CONFIG=:4096:8; torch deterministic algorithms NOT forced. Equality observed, not manufactured.",
+  "gradient_tensors_bitwise_equal": 112,
+  "gradient_tensors_compared": 112,
+  "independent_processes": 2,
+  "initial_state_identical": true,
+  "post_step_parameter_tensors_bitwise_equal": 112,
+  "post_step_parameter_tensors_compared": 112,
+  "pre_step_loss_bitwise_equal": true,
+  "process_json_bytes_identical": true,
+  "process_sha256": "7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b",
+  "synthetic_input_sha256_identical": true,
+  "synthetic_target_sha256_identical": true,
+  "tolerance_used": "NONE (bitwise)"
+ },
+ "reporting_label": "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)",
+ "retained_statuses": [
+  "E07c_EXECUTION_ENVIRONMENT_QUALIFIED",
+  "E07c_CONDITIONING_ENCODER_RUNTIME_QUALIFIED",
+  "E07c_MAIN_ARCHITECTURE_RUNTIME_QUALIFIED",
+  "E07c_SYNTHETIC_FORWARD_RUNTIME_QUALIFIED"
+ ],
+ "scientific_run_roots": {
+  "aux_encoder_seed_42": "ABSENT",
+  "checked": "before and after each process; after cleanup",
+  "e07c_root": "ABSENT",
+  "encoder_final_pkl": "ABSENT",
+  "runs_root": "ABSENT"
+ },
+ "scientific_training": false,
+ "session_access_audit": {
+  "counts": {
+   "TEST_reads": 0,
+   "TRAIN_reads": 0,
+   "VAL_reads": 0,
+   "auxiliary_encoder_training_runs": 0,
+   "backward_calls": 2,
+   "benchmark_image_reads": 0,
+   "benchmark_manifest_reads": 0,
+   "checkpoint_loads": 0,
+   "checkpoint_saves": 0,
+   "firewall_denials": 0,
+   "optimizer_step_calls": 2,
+   "scientific_checkpoints_created": 0,
+   "scientific_seed_runs_completed": 0
+  },
+  "procedure": "explicit allowlisted paths; no recursive scan; no shell here-document; tools/build_artifact_index.py not run",
+  "scope": "COMPLETE_M6D6B_SESSION_LAPTOP_AND_GPU"
+ },
+ "source": {
+  "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+  "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+  "custom_rn_sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+  "modified": false,
+  "pretrain_classifier_sha256": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+  "repository": "https://github.com/murphytju/DiffFAS",
+  "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65"
+ },
+ "source_native_disconnected": {
+  "modules": [
+   "norm",
+   "in1"
+  ],
+  "note": "custom_rn.py:273 self.norm = nn.BatchNorm1d(18) and :274 self.in1 = nn.InstanceNorm2d(64) are built but never called by _forward_impl; norm.weight/norm.bias are inside resnet18.parameters() (the pinned SGD set) and receive no gradient, exactly as in the pinned source",
+  "tensors": [
+   "norm.bias",
+   "norm.weight"
+  ]
+ },
+ "synthetic_bank": false,
+ "synthetic_batch": {
+  "input": {
+   "device": "cuda:0",
+   "dtype": "torch.float32",
+   "finite": true,
+   "l2": 490.80247091192575,
+   "max": 0.9999995827674866,
+   "mean": 1.6558102020212153e-06,
+   "min": -0.9999995827674866,
+   "sha256": "621d27eb1ecf2869836779638233ca4f4a8329f1dcbedf9f52c486cf6791bdba",
+   "shape": [
+    4,
+    3,
+    256,
+    256
+   ]
+  },
+  "input_generator": "rq.synthetic analytic sin/cos family (no RNG, no file)",
+  "input_phase": 37,
+  "label": "SYNTHETIC_IN_MEMORY_NOT_BENCHMARK_SAMPLES",
+  "target_dtype": "torch.int64",
+  "target_rule": "(3*i + 1) % 7 for i in range(4): class INDICES only, no class names attached",
+  "target_sha256": "ee95e5ce03458f25fb4e128760252a5282b52f885f463a6718491098d3b47032",
+  "target_values": [
+   1,
+   4,
+   0,
+   3
+  ]
+ },
+ "tests": [
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 281,
+   "errors": 0,
+   "failures": 0,
+   "final": false,
+   "host": "laptop",
+   "note": "pre-fix test file 3df5ca9e\u2026; live Torch test skipped",
+   "run": 17,
+   "skipped": 1,
+   "suite": "tests.test_m6d6b_e07c_aux_training_graph"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 385,
+   "errors": 0,
+   "failures": 0,
+   "final": true,
+   "host": "laptop",
+   "run": 16,
+   "skipped": 1,
+   "suite": "tests.test_m6d6a_e07c_runtime"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 1107,
+   "errors": 0,
+   "failures": 0,
+   "final": true,
+   "host": "laptop",
+   "run": 46,
+   "skipped": 1,
+   "suite": "tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 3005,
+   "errors": 0,
+   "failures": 1,
+   "final": false,
+   "host": "gpu",
+   "note": "TEST-HELPER bug: graph walk de-duplicated by id() of freed autograd wrappers; fixed by keeping visited nodes alive; no harness/evidence change",
+   "run": 17,
+   "skipped": 0,
+   "suite": "tests.test_m6d6b_e07c_aux_training_graph"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 3177,
+   "errors": 0,
+   "failures": 0,
+   "final": false,
+   "host": "gpu",
+   "note": "first GPU pass",
+   "run": 16,
+   "skipped": 0,
+   "suite": "tests.test_m6d6a_e07c_runtime"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 4306,
+   "errors": 0,
+   "failures": 0,
+   "final": false,
+   "host": "gpu",
+   "note": "first GPU pass",
+   "run": 46,
+   "skipped": 0,
+   "suite": "tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 3005,
+   "errors": 0,
+   "failures": 0,
+   "final": true,
+   "host": "gpu",
+   "note": "fixed test file c91ca8c7\u2026",
+   "run": 17,
+   "skipped": 0,
+   "suite": "tests.test_m6d6b_e07c_aux_training_graph"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 3177,
+   "errors": 0,
+   "failures": 0,
+   "final": true,
+   "host": "gpu",
+   "run": 16,
+   "skipped": 0,
+   "suite": "tests.test_m6d6a_e07c_runtime"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 4306,
+   "errors": 0,
+   "failures": 0,
+   "final": true,
+   "host": "gpu",
+   "run": 46,
+   "skipped": 0,
+   "suite": "tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 281,
+   "errors": 0,
+   "failures": 0,
+   "final": false,
+   "host": "laptop",
+   "note": "fixed test file; rerun after fix",
+   "run": 17,
+   "skipped": 1,
+   "suite": "tests.test_m6d6b_e07c_aux_training_graph"
+  },
+  {
+   "audit_data_or_runs": 0,
+   "audit_denied": 0,
+   "audit_image": 0,
+   "audit_manifest": 0,
+   "audit_open_events": 281,
+   "errors": 0,
+   "failures": 0,
+   "final": true,
+   "host": "laptop",
+   "note": "fixed test file; rerun after runtime-log completion",
+   "run": 17,
+   "skipped": 1,
+   "suite": "tests.test_m6d6b_e07c_aux_training_graph"
+  }
+ ],
+ "upstream_training_semantics": {
+  "construction": {
+   "resnet18 = resnet18()": 15,
+   "resnet18 = resnet18.cuda()": 17,
+   "resnet18.fc = nn.Linear(512, 17)": 16
+  },
+  "criterion": {
+   "arguments": "NONE (mean reduction, no weight, no label smoothing)",
+   "line": 28,
+   "statement": "nn.CrossEntropyLoss()"
+  },
+  "epochs": 200,
+  "file": "models/pretrain_classifier.py",
+  "gradient_clipping": "NONE",
+  "imported_or_executed": false,
+  "loader": {
+   "batch_size": 256,
+   "drop_last": true,
+   "line": 26,
+   "num_workers": 6,
+   "shuffle": true
+  },
+  "mode_calls": [],
+  "mode_semantics": "no .train()/.eval() anywhere; torch.nn.Module defaults to training=True, so BatchNorm2d uses batch statistics and updates running stats",
+  "optimizer": {
+   "class": "optim.SGD",
+   "constructed_after_fc_replacement_and_cuda": true,
+   "hyperparameters": {
+    "lr": 0.002,
+    "momentum": 0.9,
+    "weight_decay": 0.005
+   },
+   "line": 27,
+   "params": "resnet18.parameters()",
+   "statement": "optimizer = optim.SGD(resnet18.parameters(), lr=0.002, momentum=0.9, weight_decay=0.005)"
+  },
+  "precision_controls": [],
+  "precision_semantics": "NONE_EXPLICIT: no autocast, GradScaler, TF32 flag, dtype cast or cudnn flag; FP32 parameters under library defaults",
+  "scheduler": "NONE",
+  "sha256": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+  "step_order": {
+   "_, _, _, outputs = resnet18(inputs)": 37,
+   "loss = loss_asym": 39,
+   "loss.backward()": 40,
+   "loss_asym = criteria(outputs, labels)": 38,
+   "optimizer.step()": 41,
+   "optimizer.zero_grad()": 36
+  },
+  "torch_save_calls_in_script": 1
+ }
+}

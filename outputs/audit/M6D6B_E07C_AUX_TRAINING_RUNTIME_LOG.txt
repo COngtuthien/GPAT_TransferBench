@@ -1,0 +1,155 @@
+M6D6B E07C AUX TRAINING RUNTIME LOG — auxiliary conditioning-encoder training-graph qualification
+All times UTC 2026-09-25. Laptop /home/cong/GPAT_TransferBench; GPU student20261@100.121.84.44.
+Log written by a Python file writer (no shell here-document; no evaluation of prose).
+QUALIFICATION_ONLY · NOT_ELIGIBLE_FOR_BANK · NOT_ELIGIBLE_FOR_DOWNSTREAM · NOT_ELIGIBLE_FOR_REPORTING
+
+== A1. Authority (explicit git metadata commands)
+laptop: git branch --show-current -> m6-baselines; git rev-parse HEAD -> ca206cdc15de830e467484baace84208678fb5ce;
+        git status --short -> (empty); git ls-remote origin refs/heads/m6-baselines -> ca206cdc15de830e467484baace84208678fb5ce
+GPU before: branch m6-baselines; HEAD 596d8459c9f2e54a5f36e2463099b662b800eb7f; status lines 0
+GPU sync:   git fetch origin (596d845..ca206cd); git merge-base --is-ancestor HEAD origin/m6-baselines -> ANCESTOR_OK;
+            git merge --ff-only origin/m6-baselines -> Fast-forward 596d845..ca206cd (19 files, M6D6a commit)
+GPU after:  HEAD ca206cdc15de830e467484baace84208678fb5ce; status lines 0. No reset, clean, rebase or forced checkout.
+
+== A2. Pre-run read-only environment / protected-environment / source verification
+(existing M6D6a-r verifier r_verify_env.sh, sha256 0085caa0dbdfe007dea3a1d3a1903a89c8029cb78fec484f43efc793ef4620ad)
+conda_explicit 2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864 (= lock)
+pip_freeze_all 42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285 (= lock)
+python_sha256 83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe (= lock identity)
+pip check: No broken requirements found.  protected environments: PROTECTED_UNCHANGED
+pinned source 23f40519ec25a833ebc06842aa6fbab74fad4d15 tree d190a5fb4a94cb9e423215f9a24a7863aa17ea65 status_lines 0;
+24 explicit source-file hashes identical to the laptop cache and to e07c.lock.json (incl. custom_rn.py fa788c4d…,
+pretrain_classifier.py 3444691f…). runs root: RUNS_ABSENT. GPU: RTX 3090, 254 MiB used, no compute apps, driver 595.84.
+No package installed, updated or removed; environment not rebuilt.
+
+== A3. Staging (untracked, byte-identical; removed after the session)
+laptop == GPU sha256:
+2377dfbad02aaad0eff722bba84cabaa88a6c53aed6df505349d809608973f0f  methods/difffas/aux_training_qualification.py
+3bcdd011e1df3617dfa29e10ba7625545abee0e5a0f8ea0e5060397213e2d6dd  <runtime>/builds/e07c_difffas/m6d6b/run_m6d6b.sh
+Unchanged M6D6a helper module imported by the harness: methods/difffas/runtime_qualification.py 1eeb7c03… (committed).
+
+== A4. Two fresh clean qualification processes (qualification_seed 60602, batch 4, one step each). No prior attempt.
+== m6d6b_process_1.json start 2026-09-25T15:51:49Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 2377dfbad02aaad0eff722bba84cabaa88a6c53aed6df505349d809608973f0f
+m6d6a_helpers_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6b/m6d6b_process_1.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/aux_training_qualification.py;
+source_cache_status: []
+== m6d6b_process_1.json end 2026-09-25T15:51:53Z
+== m6d6b_process_2.json start 2026-09-25T15:52:01Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 2377dfbad02aaad0eff722bba84cabaa88a6c53aed6df505349d809608973f0f
+m6d6a_helpers_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6b/m6d6b_process_2.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/aux_training_qualification.py;
+source_cache_status: []
+== m6d6b_process_2.json end 2026-09-25T15:52:05Z
+
+== A5. Process evidence
+7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b  m6d6b_process_1.json
+7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b  m6d6b_process_2.json
+copied (scp, new names) to outputs/audit/M6D6B_E07C_AUX_TRAINING_PROCESS_{1,2}.json — byte-identical to the GPU files.
+tmp/torchinductor_<user>: empty directory created by torch import under TMPDIR inside the build root (0 entries).
+
+== A6. Post-run read-only re-verification (same verifier; explicit paths only)
+== e07c exports (sha256 of fresh GPU stdout)
+conda_explicit 2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864
+pip_freeze_all 42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285
+python_sha256 83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe
+== pip check
+No broken requirements found.
+== protected fingerprints vs recorded protected_after.txt
+PROTECTED_UNCHANGED
+== pinned source
+23f40519ec25a833ebc06842aa6fbab74fad4d15
+d190a5fb4a94cb9e423215f9a24a7863aa17ea65
+status_lines 0
+0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f  FAS_dataset.py
+8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0  FAS_sample.py
+c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84  FAS_train.py
+9828822fcea2c85604476749fa0b2a58ffeeb4e702df3f0916ccd53ce9054653  README.md
+fa0a2224390c302134bb52f0538c2c124d06eff24ad3e552f0d0568f756112eb  config/__init__.py
+20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987  config/diffconfig.py
+41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37  config/diffusion.conf
+fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3  custom_rn.py
+403fd501c302932126d86799987cf77bc8a7b5a1df945acd8007ed2bda5eb4e0  datasets/OCIM/OCIM.json
+e45f5f1dd7dadb6c56383a7f46c21c0ab3f52168c4488d28de015df6853f9cfe  datasets/PADISI/PADISI.json
+af79b6644fda28402962f0802bdfdbfd8fc6e771627855cec4d0144cc12504a0  datasets/WMCA/WMCA.json
+71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5  diffusion.py
+8c85015717f7809128079bd5097701db0637d432a23a6ff73fd16f3c7fda9475  environment.yml
+dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5  models/__init__.py
+8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5  models/blocks.py
+4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04  models/choices.py
+dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705  models/config_base.py
+fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3  models/custom_rn.py
+bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466  models/latentnet.py
+68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f  models/losses.py
+175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843  models/nn.py
+3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16  models/pretrain_classifier.py
+76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401  models/unet.py
+127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963  models/unet_autoenc.py
+== launcher
+319525061106b538722719e1dd912fd1f44444c0e3c09776058fa98b063e410a  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/run_q.sh
+8248e8a94c702d4dc6610fda43cc1a4ea6d285a1e06e29c9eb682cdf0f17145f  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/audited_tests.py
+== scientific run root
+RUNS_ABSENT
+== m6d6b build root
+3bcdd011e1df3617dfa29e10ba7625545abee0e5a0f8ea0e5060397213e2d6dd  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6b/run_m6d6b.sh
+7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6b/m6d6b_process_1.json
+7390c6c9836b5a9de6a80be528ef9fc01a1bafadef69aca87e7a268d279ab31b  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6b/m6d6b_process_2.json
+2377dfbad02aaad0eff722bba84cabaa88a6c53aed6df505349d809608973f0f  /home/student20261/workdir/GPAT_TransferBench/methods/difffas/aux_training_qualification.py
+0
+
+== A7. Audited tests (audited_tests.py 8248e8a94c702d4dc6610fda43cc1a4ea6d285a1e06e29c9eb682cdf0f17145f: Python audit hook
+   denying/counting manifests, parquet, images, faces_256, runtime data/runs; same wrapper as M6D6a-r)
+laptop (no Torch), PYTHONDONTWRITEBYTECODE=1:
+  tests.test_m6d6b_e07c_aux_training_graph (test file c91ca8c7…)      RESULT run=17 failures=0 errors=0 skipped=1
+        AUDIT open=281 denied=0 manifest=0 image=0 data_or_runs=0   (skip: live Torch graph walk)
+  tests.test_m6d6a_e07c_runtime (unchanged)                            RESULT run=16 failures=0 errors=0 skipped=1
+        AUDIT open=385 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6c2b3_contract/_encoder/_runtime (unchanged)             RESULT run=46 failures=0 errors=0 skipped=1
+        AUDIT open=1107 denied=0 manifest=0 image=0 data_or_runs=0
+GPU (gpat-m6-e07c, CUDA_VISIBLE_DEVICES= empty, PYTHONDONTWRITEBYTECODE=1, PYTHONNOUSERSITE=1, TMPDIR=<build>/m6d6b/tmp);
+staged untracked copies byte-identical to the laptop files:
+  FIRST GPU run of tests.test_m6d6b_e07c_aux_training_graph (test file 3df5ca9e…): run=17 failures=1 errors=0 skipped=0,
+        AUDIT open=3005 denied=0. Failure was in the TEST HELPER only: the live graph walk de-duplicated autograd nodes
+        by id() of transient Python wrappers, which CPython reuses after they are freed, so the walk stopped early.
+        Fix: keep every visited node alive (dict id -> node). No harness, evidence or model code changed; the live test
+        runs no backward() and no optimizer.step().
+  tests.test_m6d6b_e07c_aux_training_graph (fixed, c91ca8c7…)          RESULT run=17 failures=0 errors=0 skipped=0
+        AUDIT open=3005 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6d6a_e07c_runtime (unchanged)                            RESULT run=16 failures=0 errors=0 skipped=0
+        AUDIT open=3177 denied=0 manifest=0 image=0 data_or_runs=0
+  tests.test_m6c2b3_contract/_encoder/_runtime (unchanged)             RESULT run=46 failures=0 errors=0 skipped=0
+        AUDIT open=4306 denied=0 manifest=0 image=0 data_or_runs=0
+  (the first GPU pass of m6d6a/m6c2b3 suites before the fix gave identical results: 16/16 and 46/46, 0 denials)
+laptop rerun of tests.test_m6d6b_e07c_aux_training_graph with the fixed file: run=17 failures=0 errors=0 skipped=1,
+        AUDIT open=281 denied=0.
+GPU source_cache_status_lines 0 after tests.
+
+== A8. GPU cleanup (explicit rm of the 5 staged paths; build-root evidence kept outside Git)
+removed 'methods/difffas/aux_training_qualification.py'
+removed 'tests/test_m6d6b_e07c_aux_training_graph.py'
+removed 'outputs/audit/M6D6B_E07C_AUX_TRAINING_PROCESS_1.json'
+removed 'outputs/audit/M6D6B_E07C_AUX_TRAINING_PROCESS_2.json'
+removed 'outputs/audit/M6D6B_E07C_AUX_TRAINING_RUNTIME_LOG.txt'
+status_lines 0
+ca206cdc15de830e467484baace84208678fb5ce
+source_cache_status_lines 0
+RUNS_ABSENT
+
+== A9. Session access statement
+Every command in this session used explicit allowlisted paths (repository authority/config/amendment/source/environment/audit
+files, the pinned DiffFAS cache, the E07c build root). No git ls-files|xargs, no recursive repository or runtime scan, no shell
+here-document, no manifest, parquet, image, faces_256, runtime data or runs path opened. Both GPU qualification processes and
+all audited test runs were audit-hooked: 0 denials. torch.save / torch.load were replaced by counting forbid-wrappers in both
+processes: 0 calls. No scientific run root, no aux_encoder/seed_42 directory and no encoder_final.pkl exist before or after.
