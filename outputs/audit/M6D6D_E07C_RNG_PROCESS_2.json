@@ -1,0 +1,2354 @@
+{
+  "TEST_access": false,
+  "TRAIN_access": false,
+  "VAL_access": false,
+  "a7": {
+    "classification": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+    "document": {
+      "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A7_E07c_Execution_Policy.md",
+      "sha256": "0a46c3b06e277ad38b17a6e85fe2924441d8d13b1de887bf54903dda9aa292ba"
+    },
+    "overlay": "configs/amendments/e07c_a7_execution_policy.yaml",
+    "overlay_sha256": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3"
+  },
+  "auxiliary_encoder_trained": false,
+  "auxiliary_encoder_training_seed": null,
+  "backward_calls": 0,
+  "benchmark_data_access": false,
+  "contract": {
+    "authoritative_generation_tensor_set": "model",
+    "auxiliary_objective_classes": [
+      "live",
+      "makeup",
+      "mask_2d",
+      "mask_3d",
+      "partial",
+      "print",
+      "replay"
+    ],
+    "auxiliary_runs": 1,
+    "auxiliary_seed": 42,
+    "auxiliary_training_contract": {
+      "augmentation": "NONE",
+      "batch_size": 256,
+      "benchmark_defined_additions": [
+        "K7_label_space",
+        "TRAIN_data_source",
+        "auxiliary_encoder_training_seed",
+        "auxiliary_encoder_training_runs"
+      ],
+      "checkpoint_rule": "FINAL_STATE_AFTER_EPOCH_200",
+      "checkpoint_rule_source": "OFFICIAL \u2014 torch.save overwrites in-loop, so the surviving file IS the final epoch's",
+      "class_balancing": "NONE",
+      "class_balancing_note": "official code has none; adding it would be a benchmark invention",
+      "drop_last": true,
+      "epochs": 200,
+      "head": "fc = nn.Linear(512, 7)",
+      "input_resolution": 256,
+      "learning_rate": 0.002,
+      "loss": "CrossEntropyLoss_on_fourth_forward_output",
+      "momentum": 0.9,
+      "optimizer": "SGD",
+      "preprocessing": "Resize((256,256)) -> ToTensor -> Normalize([0.5]*3, [0.5]*3)",
+      "scheduler": "NONE",
+      "shuffle": true,
+      "weight_decay": 0.005,
+      "workers": 6
+    },
+    "checkpoint_rule": "BASELINE_FINAL_STATE_V1",
+    "contract_inspection": "STATIC_ONLY_NOT_EXECUTED",
+    "deviation": "DEV-021",
+    "diffusion": {
+      "linear_end": 0.02,
+      "linear_start": 0.0001,
+      "model_mean_type": "EPSILON",
+      "n_timestep": 1000,
+      "schedule": "linear",
+      "variance": "LEARNED_RANGE"
+    },
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "feature_interface_effective_A6_HWC": {
+      "embg": [
+        "B",
+        7
+      ],
+      "x16x16": [
+        16,
+        16,
+        512
+      ],
+      "x32x32": [
+        32,
+        32,
+        256
+      ],
+      "x8x8": [
+        8,
+        8,
+        512
+      ]
+    },
+    "feature_interface_historical_frozen_HWC": {
+      "embg": [
+        "B",
+        "K"
+      ],
+      "x16x16": [
+        16,
+        16,
+        256
+      ],
+      "x32x32": [
+        32,
+        32,
+        128
+      ],
+      "x8x8": [
+        8,
+        8,
+        512
+      ]
+    },
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "main_training": {
+      "batch_size": 4,
+      "guidance_prob": 0.2,
+      "input_resolution": 256,
+      "max_epochs": 400,
+      "means_size": 5,
+      "model_in_channels": 3,
+      "use_pair": false,
+      "var_size": 3
+    },
+    "optimizer": {
+      "ema": {
+        "before_warmup": 0.0,
+        "decay": 0.9999
+      },
+      "learning_rate": 1e-05,
+      "name": "AdamW",
+      "scheduler": {
+        "decay": [
+          "linear",
+          "flat"
+        ],
+        "lr": 1e-05,
+        "n_iter": 2400000,
+        "type": "cycle",
+        "warmup": 5000
+      }
+    },
+    "reused_for_main_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "sampler": {
+      "DDIM_skip": 10,
+      "algorithm": "ddim",
+      "cond_scale": 2.0,
+      "effective_steps": 25,
+      "entrypoint": "FAS_sample.py",
+      "sample_initial_noise": 250,
+      "tensor_set_loaded": "model"
+    },
+    "sampler_timesteps_ascending": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240
+    ]
+  },
+  "counters": {
+    "autocast_entries": 0,
+    "autograd_grad_calls": 0,
+    "backward_calls": 0,
+    "grad_scaler_constructions": 0,
+    "optimizer_constructions": 0,
+    "optimizer_step_calls": 0,
+    "torch_load_calls": 0,
+    "torch_load_intercepted_before_io": 1,
+    "torch_save_calls": 0
+  },
+  "environment_after": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60604",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6d/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_before": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60604",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6d/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "epochs": 0,
+  "executable_semantics": {
+    "block": "BasicBlock",
+    "fourth_output_discarded": true,
+    "sampler_tensor_set": "model",
+    "symbols": [
+      {
+        "file": "FAS_train.py",
+        "line": 167,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "seed_torch"
+      },
+      {
+        "file": "FAS_train.py",
+        "line": 28,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "train"
+      },
+      {
+        "file": "FAS_sample.py",
+        "line": 32,
+        "sha256": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+        "symbol": "main"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 797,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "GaussianDiffusion.training_losses"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 977,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "create_gaussian_diffusion"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 47,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "ddim_steps"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 367,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "resnet18"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 329,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "ResNet._forward_impl"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 138,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.forward"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 73,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.encoder"
+      }
+    ],
+    "topology": [
+      3,
+      4,
+      6,
+      3
+    ],
+    "training_content_inert": true
+  },
+  "experiment_seed": null,
+  "fidelity": "CONTROLLED_ADAPTATION",
+  "firewall": {
+    "attempts": {
+      "benchmark_image": 0,
+      "benchmark_manifest": 0,
+      "blocked_weight_or_array": 0,
+      "runtime_data": 0,
+      "scientific_run_root": 0,
+      "write_outside_build": 0
+    },
+    "denied": [],
+    "event_counts": {
+      "open": 3065,
+      "os.listdir": 317,
+      "os.scandir": 357,
+      "subprocess.Popen": 175
+    },
+    "subprocesses": [
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "/sbin/ldconfig",
+        "-p"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ]
+    ]
+  },
+  "label": "EXECUTION_POLICY_QUALIFICATION_ONLY",
+  "main_difffas_training": false,
+  "milestone": "M6D6d",
+  "optimizer_step_calls": 0,
+  "precision": {
+    "api": "execution_policy.apply_e07c_precision_policy",
+    "applied_state": {
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "float32_matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "autocast_entered": false,
+    "expected_state": {
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "float32_matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "grad_scaler_constructed": false,
+    "library_defaults_before_policy": {
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": false,
+      "cudnn_tf32": true,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "float32_matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "state_after_all_sections": {
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "float32_matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "use_deterministic_algorithms": "NOT_SET"
+  },
+  "qualification_seed": 60604,
+  "rng_equivalence": {
+    "bypass_next_rand_sha256": "65ddce509a9c14c7382ecca332e26f81f88c4ec1f44b667e9743b5aa2d2890f9",
+    "call_site_interception": {
+      "argument": "INTERCEPT_PATH (never opened)",
+      "caller": {
+        "file": "unet_autoenc.py",
+        "function": "encoder",
+        "line": 75
+      },
+      "deserialization": false,
+      "extra_args": 0,
+      "io_performed": false,
+      "kwargs": [],
+      "object": {
+        "aggregate_parameter_sha256": "2800ca74b7ed0b06683793173621184a83e62b8a61143dbbb5f55a21d5e35454",
+        "devices": [
+          "cpu"
+        ],
+        "fc": [
+          512,
+          17
+        ],
+        "type": "models.custom_rn.ResNet"
+      },
+      "rng_at_torch_load": {
+        "cpu_sha256": "530629ef50c480dd347ccd9ccccf3fdd4858f40074879f773893e45d91c06b71",
+        "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+        "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+        "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+      }
+    },
+    "equal": {
+      "after_call_site_eq_direct": true,
+      "after_helper_ctx_eq_direct": true,
+      "after_helper_eq_direct": true,
+      "before_all_paths": true,
+      "bypass_next_rand_differs": true,
+      "cuda_rng_untouched": true,
+      "next_rand_equal_replay_paths": true,
+      "python_and_numpy_rng_untouched": true
+    },
+    "initial_cpu_rng_sha256": "c73af325596cd62bc1ba2ed2e6be7a49ffd5ea6da044ac565f01cf8bfc0e8d01",
+    "initial_seeding": "torch.manual_seed(60604)",
+    "order_of_paths": [
+      "helper",
+      "direct",
+      "call_site",
+      "helper_ctx",
+      "bypass"
+    ],
+    "paths": {
+      "bypass": {
+        "after": {
+          "cpu_sha256": "c73af325596cd62bc1ba2ed2e6be7a49ffd5ea6da044ac565f01cf8bfc0e8d01",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "before": {
+          "cpu_sha256": "c73af325596cd62bc1ba2ed2e6be7a49ffd5ea6da044ac565f01cf8bfc0e8d01",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "cpu_state_changed": false,
+        "cuda_memory_allocated_delta_bytes": 0,
+        "next_rand": {
+          "call": "torch.rand(16)",
+          "first4": [
+            0.28210657835006714,
+            0.960669219493866,
+            0.809450626373291,
+            0.45073384046554565
+          ],
+          "sha256": "65ddce509a9c14c7382ecca332e26f81f88c4ec1f44b667e9743b5aa2d2890f9"
+        },
+        "return_value": null,
+        "return_value_plain_data": true,
+        "throwaway_instances_after": 0,
+        "throwaway_instances_before": 0
+      },
+      "call_site": {
+        "after": {
+          "cpu_sha256": "530629ef50c480dd347ccd9ccccf3fdd4858f40074879f773893e45d91c06b71",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "before": {
+          "cpu_sha256": "c73af325596cd62bc1ba2ed2e6be7a49ffd5ea6da044ac565f01cf8bfc0e8d01",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "cpu_state_changed": true,
+        "cuda_memory_allocated_delta_bytes": 0,
+        "next_rand": {
+          "call": "torch.rand(16)",
+          "first4": [
+            0.2123870849609375,
+            0.5232563018798828,
+            0.8629953265190125,
+            0.7757153511047363
+          ],
+          "sha256": "ad0e952d042755ac13e21c5fe8dbb3880191b565ced7a01c517f5fcf25636464"
+        },
+        "return_value": null,
+        "return_value_plain_data": true,
+        "throwaway_instances_after": 0,
+        "throwaway_instances_before": 0
+      },
+      "direct": {
+        "after": {
+          "cpu_sha256": "530629ef50c480dd347ccd9ccccf3fdd4858f40074879f773893e45d91c06b71",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "before": {
+          "cpu_sha256": "c73af325596cd62bc1ba2ed2e6be7a49ffd5ea6da044ac565f01cf8bfc0e8d01",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "cpu_state_changed": true,
+        "cuda_memory_allocated_delta_bytes": 0,
+        "next_rand": {
+          "call": "torch.rand(16)",
+          "first4": [
+            0.2123870849609375,
+            0.5232563018798828,
+            0.8629953265190125,
+            0.7757153511047363
+          ],
+          "sha256": "ad0e952d042755ac13e21c5fe8dbb3880191b565ced7a01c517f5fcf25636464"
+        },
+        "object": {
+          "aggregate_parameter_sha256": "2800ca74b7ed0b06683793173621184a83e62b8a61143dbbb5f55a21d5e35454",
+          "devices": [
+            "cpu"
+          ],
+          "fc": [
+            512,
+            17
+          ],
+          "type": "custom_rn.ResNet"
+        },
+        "return_value": null,
+        "return_value_plain_data": true,
+        "throwaway_instances_after": 0,
+        "throwaway_instances_before": 0
+      },
+      "helper": {
+        "after": {
+          "cpu_sha256": "530629ef50c480dd347ccd9ccccf3fdd4858f40074879f773893e45d91c06b71",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "before": {
+          "cpu_sha256": "c73af325596cd62bc1ba2ed2e6be7a49ffd5ea6da044ac565f01cf8bfc0e8d01",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "cpu_state_changed": true,
+        "cuda_memory_allocated_delta_bytes": 0,
+        "next_rand": {
+          "call": "torch.rand(16)",
+          "first4": [
+            0.2123870849609375,
+            0.5232563018798828,
+            0.8629953265190125,
+            0.7757153511047363
+          ],
+          "sha256": "ad0e952d042755ac13e21c5fe8dbb3880191b565ced7a01c517f5fcf25636464"
+        },
+        "return_value": {
+          "constructor": "custom_rn.resnet18(pretrained=False)",
+          "device": "cpu",
+          "object_returned": false,
+          "replays": "models/unet_autoenc.py:74 model_autoencoder = resnet18()",
+          "role": "RNG_COMPATIBILITY_ONLY"
+        },
+        "return_value_plain_data": true,
+        "throwaway_instances_after": 0,
+        "throwaway_instances_before": 0
+      },
+      "helper_ctx": {
+        "after": {
+          "cpu_sha256": "530629ef50c480dd347ccd9ccccf3fdd4858f40074879f773893e45d91c06b71",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "before": {
+          "cpu_sha256": "c73af325596cd62bc1ba2ed2e6be7a49ffd5ea6da044ac565f01cf8bfc0e8d01",
+          "cuda_sha256": "9c185b2d6afd17cee20f7d1ba48af1d04af92a54b57bceaac81dd75a1dd9d367",
+          "numpy_sha256": "cb8e7f306e95d81f1e810bf219d2353569a126f187bd4725a6c4ebb4ee77d5bc",
+          "python_random_sha256": "28e5dabb04456724f5e56f6a645152618c3498f87f5460b6ab1eb4b2c2d4767d"
+        },
+        "cpu_state_changed": true,
+        "cuda_memory_allocated_delta_bytes": 0,
+        "next_rand": {
+          "call": "torch.rand(16)",
+          "first4": [
+            0.2123870849609375,
+            0.5232563018798828,
+            0.8629953265190125,
+            0.7757153511047363
+          ],
+          "sha256": "ad0e952d042755ac13e21c5fe8dbb3880191b565ced7a01c517f5fcf25636464"
+        },
+        "return_value": {
+          "constructor": "custom_rn.resnet18(pretrained=False)",
+          "device": "cpu",
+          "object_returned": false,
+          "replays": "models/unet_autoenc.py:74 model_autoencoder = resnet18()",
+          "role": "RNG_COMPATIBILITY_ONLY"
+        },
+        "return_value_plain_data": true,
+        "throwaway_instances_after": 0,
+        "throwaway_instances_before": 0
+      }
+    },
+    "reference_after_cpu_rng_sha256": "530629ef50c480dd347ccd9ccccf3fdd4858f40074879f773893e45d91c06b71",
+    "reference_next_rand_sha256": "ad0e952d042755ac13e21c5fe8dbb3880191b565ced7a01c517f5fcf25636464",
+    "rng_state_api": "torch.get_rng_state() bytes (CPU default generator, mt19937)"
+  },
+  "runtime_forward": {
+    "a6_feature_shapes": [
+      [
+        4,
+        256,
+        32,
+        32
+      ],
+      [
+        4,
+        512,
+        16,
+        16
+      ],
+      [
+        4,
+        512,
+        8,
+        8
+      ]
+    ],
+    "architecture_changed": false,
+    "autograd": "torch.no_grad",
+    "backward": false,
+    "checkpoint": false,
+    "encoder": {
+      "construction_seam": "methods/difffas/encoder.py::encoder_model (A3 seam, fc -> Linear(512, 7))",
+      "untrained_in_memory_only": true,
+      "weights_loaded": false
+    },
+    "finite_all": true,
+    "input_label": "SYNTHETIC_IN_MEMORY_NOT_BENCHMARK_SAMPLES",
+    "input_phases": {
+      "encoder_input": 61,
+      "x_cond": 71,
+      "x_t": 67
+    },
+    "label": "SYNTHETIC_FORWARD_UNDER_A7_POLICY",
+    "main_model": {
+      "construction": "config/diffconfig.py::get_model_conf().make_model()",
+      "final_output_zero_note": "zero-initialised final projection (M6D6a); internal stages recorded",
+      "means_size": 5,
+      "prob": 1,
+      "use_pair": false,
+      "var_size": 3
+    },
+    "mode": "eval",
+    "optimizer_step": false,
+    "outputs": {
+      "encoder_embg": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "finite": true,
+        "l2": 94.7186498780262,
+        "max": 32.74737548828125,
+        "mean": 3.0407780153410777,
+        "min": -17.123493194580078,
+        "sha256": "a5fc51767e708c9bcc94b7918f3af99f891a5a2c13962120b4255ff9869031ca",
+        "shape": [
+          4,
+          7
+        ]
+      },
+      "encoder_x16x16": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "finite": true,
+        "l2": 9055.46873916386,
+        "max": 66.90715026855469,
+        "mean": 7.94990373435432,
+        "min": 0.0,
+        "sha256": "a5c44b8387de51439f17879acc8d45c83aa2adb24b7f086301134fe4bbdf4d20",
+        "shape": [
+          4,
+          512,
+          16,
+          16
+        ]
+      },
+      "encoder_x32x32": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "finite": true,
+        "l2": 1836.6669632683604,
+        "max": 9.073342323303223,
+        "mean": 1.2222909427051285,
+        "min": 0.0,
+        "sha256": "2ecad4cab122e1f49ca8a673f7aa7121e05ae6f9c53a929a195e592e0701cc74",
+        "shape": [
+          4,
+          256,
+          32,
+          32
+        ]
+      },
+      "encoder_x8x8": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "finite": true,
+        "l2": 12507.379386095261,
+        "max": 182.94549560546875,
+        "mean": 22.428252899488186,
+        "min": 0.0,
+        "sha256": "57efb0bc00bc43e56a7bc73eca1ca9e7e2c619ee08f5158b0f94affd9dec9f28",
+        "shape": [
+          4,
+          512,
+          8,
+          8
+        ]
+      },
+      "main_middle_block": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "finite": true,
+        "l2": 579.4401030730713,
+        "max": 7.673799991607666,
+        "mean": 0.022888178925335012,
+        "min": -7.757441520690918,
+        "sha256": "849c3ee1d128515ad600ad8ad93466f40db94b47ab40f58d47a5aed43ad624da",
+        "shape": [
+          4,
+          512,
+          8,
+          8
+        ]
+      },
+      "main_model_output": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "finite": true,
+        "l2": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "sha256": "b69dae56a14d1a8314ed40664c4033ea0a550eea2673e04df42a66ac6b9faf2c",
+        "shape": [
+          4,
+          6,
+          256,
+          256
+        ]
+      },
+      "main_output_blocks.17": {
+        "device": "cuda:0",
+        "dtype": "torch.float32",
+        "finite": true,
+        "l2": 898.2702910108493,
+        "max": 0.7536414265632629,
+        "mean": 0.008945296059576517,
+        "min": -0.7885881662368774,
+        "sha256": "da9ab8a416478fa42dae5a0cdb7a647de4fdff37ed17183331750c1a6a2f4e1c",
+        "shape": [
+          4,
+          128,
+          256,
+          256
+        ]
+      }
+    },
+    "precision_state_inside_forwards": [
+      "encoder",
+      "main_model"
+    ]
+  },
+  "scientific_checkpoint_created": false,
+  "scientific_checkpoint_loaded": false,
+  "scientific_seed_consumed": false,
+  "scientific_training": false,
+  "seed_note": "60604 seeds this check only; auxiliary 42 and main 42/1337/2026 are not used",
+  "source_after": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "source_before": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "source_patch": "NONE",
+  "status": "PASS",
+  "synthetic_bank": false,
+  "torch_load_calls": 0,
+  "torch_save_calls": 0,
+  "upstream_loader_semantics": {
+    "constructor": {
+      "cuda_in_constructor": false,
+      "defaults": {
+        "pretrained": false,
+        "progress": true
+      },
+      "file": "models/custom_rn.py",
+      "function": "resnet18",
+      "head": "nn.Linear(512 * block.expansion, 17)",
+      "init": "kaiming_normal_ on Conv2d; default nn.Linear init",
+      "line": 367,
+      "returns": "_resnet('resnet18', BasicBlock, [3, 4, 6, 3], pretrained, progress, **kwargs)",
+      "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3"
+    },
+    "consumer": {
+      "body": [
+        [
+          "model_autoencoder = resnet18()",
+          74
+        ],
+        [
+          "model_autoencoder = torch.load(path)",
+          75
+        ],
+        [
+          "model_autoencoder = model_autoencoder.cuda()",
+          76
+        ],
+        [
+          "return model_autoencoder",
+          77
+        ]
+      ],
+      "file": "models/unet_autoenc.py",
+      "method": "BeatGANsAutoencModel.encoder",
+      "resnet18_import": "from .custom_rn import resnet18 (line 10)",
+      "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "imported_or_executed": false,
+    "throwaway_overwritten_at_line": 75
+  },
+  "upstream_main_order": [
+    {
+      "file": "FAS_train.py",
+      "line": 180,
+      "role": "scientific_seed_initialization",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "seed_torch(seed=1)",
+      "step": 1
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 184,
+      "role": "transform_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor(), transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])])",
+      "step": 2
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 189,
+      "role": "dataset_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "if args.protocol == 'PADISI':",
+      "step": 3
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 205,
+      "role": "dataloader_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)",
+      "step": 4
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 216,
+      "role": "main_model_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "model = get_model_conf().make_model()",
+      "step": 5
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 217,
+      "role": "main_model_to_device",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "model = model.to(args.device)",
+      "step": 6
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 218,
+      "role": "ema_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "ema = get_model_conf().make_model()",
+      "step": 7
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 219,
+      "role": "ema_to_device",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "ema = ema.to(args.device)",
+      "step": 8
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 222,
+      "role": "optimizer_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "optimizer = DiffConf.training.optimizer.make(model.parameters())",
+      "step": 9
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 223,
+      "role": "scheduler_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "scheduler = DiffConf.training.scheduler.make(optimizer)",
+      "step": 10
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 226,
+      "role": "resume_branch_not_taken_on_fresh_run",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "if args.pretrain_path is not None:",
+      "step": 11
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 234,
+      "role": "beta_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "betas = DiffConf.diffusion.beta_schedule.make()",
+      "step": 12
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 235,
+      "role": "diffusion_construction",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "diffusion = create_gaussian_diffusion(betas, predict_xstart=False)",
+      "step": 13
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 236,
+      "role": "enter_train",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "train(DiffConf, dataloader, dataloader, model, ema, diffusion, betas, optimizer, scheduler, args.guidance_prob, args.cond_scale, args.device, args.means_size, args.var_size)",
+      "step": 14
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 34,
+      "role": "encoder_load_call",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "encoder = model.encoder(args.pretrain_classifier)",
+      "step": 15
+    },
+    {
+      "file": "models/unet_autoenc.py",
+      "line": 74,
+      "role": "throwaway_constructor_rng_consumption",
+      "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+      "statement": "model_autoencoder = resnet18()",
+      "step": 16
+    },
+    {
+      "file": "models/unet_autoenc.py",
+      "line": 75,
+      "role": "secure_frozen_auxiliary_checkpoint_load",
+      "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+      "statement": "model_autoencoder = torch.load(path)",
+      "step": 17
+    },
+    {
+      "file": "models/unet_autoenc.py",
+      "line": 76,
+      "role": "encoder_to_cuda",
+      "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+      "statement": "model_autoencoder = model_autoencoder.cuda()",
+      "step": 18
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 35,
+      "role": "encoder_eval",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "encoder.eval()",
+      "step": 19
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 37,
+      "role": "epoch_loop",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "for epoch in range(args.max_epochs):",
+      "step": 20
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 40,
+      "role": "training_iterator_cpu_rng",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "progress_bar = tqdm(loader, desc='Training')",
+      "step": 21
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 41,
+      "role": "first_batch_iteration",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "for batch in progress_bar:",
+      "step": 22
+    },
+    {
+      "file": "FAS_train.py",
+      "line": 50,
+      "role": "timestep_sampling_cuda_rng",
+      "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "statement": "time_t = torch.randint(0, conf.diffusion.beta_schedule['n_timestep'], (img.shape[0],), device=device)",
+      "step": 23
+    }
+  ],
+  "upstream_precision_requests": [],
+  "warnings": [
+    "DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13",
+    "DeprecationWarning: lib2to3 package is deprecated and may not be able to parse Python 3.10+"
+  ]
+}

@@ -1,0 +1,110 @@
+amendment_id: A7_E07C_EXECUTION_POLICY
+status: OWNER_FROZEN_ADDITIVE_NON_DESTRUCTIVE
+classification: DETERMINISTIC_IMPLEMENTATION_CLARIFICATION
+provenance: OWNER_FROZEN_BENCHMARK_EXECUTION_POLICY
+upstream_author_choice_claimed: false
+milestone: M6D6d
+method_id: E07c
+amendment_document:
+  path: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A7_E07c_Execution_Policy.md
+  sha256: 0a46c3b06e277ad38b17a6e85fe2924441d8d13b1de887bf54903dda9aa292ba
+base_config_path: configs/methods/e07c_difffas_bin_idfree.yaml
+base_config_sha256: dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c
+amendment_a3:
+  path: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md
+  sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a
+a6_overlay:
+  path: configs/amendments/e07c_a6_feature_interface_source_correction.yaml
+  sha256: dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b
+source:
+  repository: https://github.com/murphytju/DiffFAS
+  pinned_commit: 23f40519ec25a833ebc06842aa6fbab74fad4d15
+  source_pin_changed: false
+  official_source_modified: false
+  files_sha256:
+    FAS_train.py: c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84
+    FAS_sample.py: 8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0
+    models/unet_autoenc.py: 127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963
+    models/custom_rn.py: fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3
+    models/pretrain_classifier.py: 3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16
+fidelity:
+  fidelity_class: CONTROLLED_ADAPTATION
+  deviation: DEV-021
+  new_fidelity_class: false
+  new_deviation: false
+scope: [auxiliary_encoder_production, main_difffas_production]
+
+precision:
+  dtype: float32
+  autocast: false
+  grad_scaler: false
+  matmul_tf32: false
+  cudnn_tf32: false
+  forbidden: [AMP, FP16, BF16, mixed_precision]
+  float32_matmul_precision_observed: highest   # consequence of matmul_tf32=false; not an extra control
+cudnn:
+  benchmark: false
+  deterministic: true
+  applies_to: [auxiliary_encoder_production, main_difffas_production]
+  main_training_existing_authority: configs/methods/e07c_difffas_bin_idfree.yaml training.cudnn
+use_deterministic_algorithms: NOT_SET
+launch_environment_changed: false
+
+rng_compatibility:
+  preserve_upstream_throwaway_encoder_constructor_rng: true
+  role: RNG_COMPATIBILITY_CONSUMPTION
+  conditioning_role: false
+  upstream_call_site: {file: models/unet_autoenc.py, method: BeatGANsAutoencModel.encoder, line: 74,
+                       statement: model_autoencoder = resnet18()}
+  overwritten_by: {file: models/unet_autoenc.py, line: 75, statement: model_autoencoder = torch.load(path)}
+  constructor: custom_rn.resnet18(pretrained=False)
+  head: pinned default Linear(512, 17); A3 K=7 replacement NOT applied
+  device: cpu
+  generator_consumed: torch_cpu_default
+  count: 1
+  object_used: false
+  object_moved_to_gpu: false
+  object_saved: false
+  object_retained: false
+  object_returned: false
+  forbidden_substitutes: [manual_torch_rand, estimated_draw_count, torchvision_resnet, architecture_change]
+  helper: methods/difffas/execution_policy.py::consume_upstream_encoder_loader_rng
+  helper_label: RNG_COMPATIBILITY_ONLY
+  sampler_FAS_sample_py_48: NOT_DECIDED_BY_A7
+secure_loader:
+  mandatory: true
+  entry: methods/difffas/aux_checkpoint.py::load_frozen_aux_encoder
+  order: [sha256_of_exact_bytes, pinned_custom_rn_module_identity, torch_load_bytes_weights_only_false,
+          identity_validation, cuda]
+  composed_main_runner_seam: methods/difffas/execution_policy.py::main_runner_encoder
+  replaces: FAS_train.py:34 encoder = model.encoder(args.pretrain_classifier)
+
+main_runner_order:
+  - {step: 1, role: scientific_seed_initialization, file: FAS_train.py, line: 180, statement: seed_torch(seed=1)}
+  - {step: 2, role: transform_construction, file: FAS_train.py, line: 184, statement: "transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor(), transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])])"}
+  - {step: 3, role: dataset_construction, file: FAS_train.py, line: 189, statement: "if args.protocol == 'PADISI':"}
+  - {step: 4, role: dataloader_construction, file: FAS_train.py, line: 205, statement: "dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)"}
+  - {step: 5, role: main_model_construction, file: FAS_train.py, line: 216, statement: model = get_model_conf().make_model()}
+  - {step: 6, role: main_model_to_device, file: FAS_train.py, line: 217, statement: model = model.to(args.device)}
+  - {step: 7, role: ema_construction, file: FAS_train.py, line: 218, statement: ema = get_model_conf().make_model()}
+  - {step: 8, role: ema_to_device, file: FAS_train.py, line: 219, statement: ema = ema.to(args.device)}
+  - {step: 9, role: optimizer_construction, file: FAS_train.py, line: 222, statement: optimizer = DiffConf.training.optimizer.make(model.parameters())}
+  - {step: 10, role: scheduler_construction, file: FAS_train.py, line: 223, statement: scheduler = DiffConf.training.scheduler.make(optimizer)}
+  - {step: 11, role: resume_branch_not_taken_on_fresh_run, file: FAS_train.py, line: 226, statement: "if args.pretrain_path is not None:"}
+  - {step: 12, role: beta_construction, file: FAS_train.py, line: 234, statement: betas = DiffConf.diffusion.beta_schedule.make()}
+  - {step: 13, role: diffusion_construction, file: FAS_train.py, line: 235, statement: "diffusion = create_gaussian_diffusion(betas, predict_xstart=False)"}
+  - {step: 14, role: enter_train, file: FAS_train.py, line: 236, statement: "train(DiffConf, dataloader, dataloader, model, ema, diffusion, betas, optimizer, scheduler, args.guidance_prob, args.cond_scale, args.device, args.means_size, args.var_size)"}
+  - {step: 15, role: encoder_load_call, file: FAS_train.py, line: 34, statement: encoder = model.encoder(args.pretrain_classifier)}
+  - {step: 16, role: throwaway_constructor_rng_consumption, file: models/unet_autoenc.py, line: 74, statement: model_autoencoder = resnet18()}
+  - {step: 17, role: secure_frozen_auxiliary_checkpoint_load, file: models/unet_autoenc.py, line: 75, statement: model_autoencoder = torch.load(path)}
+  - {step: 18, role: encoder_to_cuda, file: models/unet_autoenc.py, line: 76, statement: model_autoencoder = model_autoencoder.cuda()}
+  - {step: 19, role: encoder_eval, file: FAS_train.py, line: 35, statement: encoder.eval()}
+  - {step: 20, role: epoch_loop, file: FAS_train.py, line: 37, statement: "for epoch in range(args.max_epochs):"}
+  - {step: 21, role: training_iterator_cpu_rng, file: FAS_train.py, line: 40, statement: "progress_bar = tqdm(loader, desc='Training')"}
+  - {step: 22, role: first_batch_iteration, file: FAS_train.py, line: 41, statement: "for batch in progress_bar:"}
+  - {step: 23, role: timestep_sampling_cuda_rng, file: FAS_train.py, line: 50, statement: "time_t = torch.randint(0, conf.diffusion.beta_schedule['n_timestep'], (img.shape[0],), device=device)"}
+
+qualification:
+  qualification_seed: 60604
+  scientific_auxiliary_runs: 0
+  scientific_main_runs: 0
