@@ -1,0 +1,321 @@
+{
+  "artifacts_sha256": {
+    "outputs/audit/M6D6A_R_E07C_CLEAN_REQUALIFICATION.md": "b40b4ff427caa5c69949c862614369465c052fc9ca71a434f9eb1651848f0ca4",
+    "outputs/audit/M6D6A_R_E07C_RUNTIME_LOG.txt": "b6ac2be2e947f375835997df34275cbbe57a9bcb98cf2f0530c50d9904bce83b",
+    "outputs/audit/M6D6A_R_E07C_SYNTHETIC_PROCESS_1.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+    "outputs/audit/M6D6A_R_E07C_SYNTHETIC_PROCESS_2.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+    "tools/m6d6a_r_e07c_clean_requalification_preflight.py": "eb5953a1609b99ab0d2d0e113f9d58fb21808d240879c3522c8484e7f841626b"
+  },
+  "authority": {
+    "committed_head": "596d8459c9f2e54a5f36e2463099b662b800eb7f",
+    "gpu_head": "596d8459c9f2e54a5f36e2463099b662b800eb7f",
+    "gpu_sync_needed": false,
+    "remote_m6_baselines": "596d8459c9f2e54a5f36e2463099b662b800eb7f",
+    "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "starting_worktree": "exactly the 11 expected untracked initial-candidate files; nothing staged; no tracked modification"
+  },
+  "classification": "M6D6A_E07C_RUNTIME_QUALIFICATION",
+  "commit": false,
+  "corrective_requalification": "M6D6a-r",
+  "cuda_memory": {
+    "after_construction_allocated_bytes": 838215168,
+    "after_construction_reserved_bytes": 851443712,
+    "autograd": "torch.no_grad; no activation graph retained",
+    "batch_size": 4,
+    "eval_connectivity_forwards": {
+      "peak_allocated_bytes": 8685248000,
+      "peak_reserved_bytes": 9252634624
+    },
+    "forward_loss_path": {
+      "peak_allocated_bytes": 8697844736,
+      "peak_reserved_bytes": 9252634624
+    },
+    "label": "SYNTHETIC_FORWARD_MEMORY_OBSERVATION",
+    "qualifies_400_epoch_feasibility": false,
+    "qualifies_scientific_batch_size": false,
+    "qualifies_training_memory": false
+  },
+  "deviation": "DEV-021",
+  "encoder_parameters": 46233707,
+  "environment_lock_sha256": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+  "environment_reverification": {
+    "conda_explicit_sha256": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "environment": "/home/student20261/miniconda3/envs/gpat-m6-e07c",
+    "environment_rebuilt_or_mutated": false,
+    "packages_installed_updated_removed": 0,
+    "pip_check_pass": true,
+    "pip_freeze_sha256": "42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285",
+    "protected_environments_unchanged": true,
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "verifier_script_sha256": "0085caa0dbdfe007dea3a1d3a1903a89c8029cb78fec484f43efc793ef4620ad"
+  },
+  "execution_artifact_state": "auxiliary conditioning encoder NOT_YET_TRAINED",
+  "feature_consumer_blocks": {
+    "embg": [],
+    "x16x16": [
+      "input_blocks.14.1",
+      "output_blocks.4.1"
+    ],
+    "x32x32": [
+      "input_blocks.11.1",
+      "output_blocks.7.1"
+    ],
+    "x8x8": [
+      "input_blocks.17.1",
+      "middle_block.1",
+      "output_blocks.1.1"
+    ]
+  },
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "final_status": "CLEAN_REQUALIFICATION_PASS",
+  "forward_loss_mean": 1.0351096391677856,
+  "history_overwritten": false,
+  "implementation": {
+    "audited_test_wrapper_sha256": "8248e8a94c702d4dc6610fda43cc1a4ea6d285a1e06e29c9eb682cdf0f17145f",
+    "batch_size": 4,
+    "changed_for_rerun": false,
+    "harness_sha256": "1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541",
+    "launcher_run_q_sh_sha256": "319525061106b538722719e1dd912fd1f44444c0e3c09776058fa98b063e410a",
+    "qualification_seed": 60601,
+    "tests_sha256": "15e3fb28455c77094f039b1851e136da35b8bceab13def6f830b7f10a76496dc"
+  },
+  "initial_candidate_sha256": {
+    "environments/e07c.conda-explicit.txt": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "environments/e07c.lock.json": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+    "environments/e07c.pip-freeze.txt": "42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285",
+    "environments/e07c.pip-requirements.txt": "9ea38ed8b8eb4de00dff577cfb7a1360201fa66dd6c28bf174a8bfb01de26f8f",
+    "environments/e07c.runtime.json": "0855943bb1aa00d12bf61f8145bdfad4598b467f8226b2cc05842902796d2d61",
+    "methods/difffas/runtime_qualification.py": "1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541",
+    "outputs/audit/M6D6A_E07C_RUNTIME_QUALIFICATION.md": "8ce6b02cad29f448c6a369003f8f95d7002367a8263837820d00e41c94c6f611",
+    "outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_1.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+    "outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_2.json": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+    "tests/test_m6d6a_e07c_runtime.py": "15e3fb28455c77094f039b1851e136da35b8bceab13def6f830b7f10a76496dc",
+    "tools/m6d6a_e07c_runtime_preflight.py": "b7f02e2cafcdabf418aeadb63fc45c73025b0f6d1081b51e620840cc1008be7d"
+  },
+  "initial_deviation": {
+    "bytes_read": "raw bytes of all 666 Git-tracked files streamed through sha256sum, incl. 11 benchmark manifest/metadata files",
+    "cause": "unquoted laptop shell here-document evaluated the prose text `git ls-files | xargs sha256sum` during log assembly",
+    "checkpoint_created": false,
+    "gpu_or_test_process_involved": false,
+    "hash_output_written_as_evidence": false,
+    "images_opened": false,
+    "initial_candidate_stopped_before": [
+      "runtime_log",
+      "audit_json",
+      "preflight_run",
+      "ledger_append",
+      "index_rebuild"
+    ],
+    "initial_preflight_never_run": "tools/m6d6a_e07c_runtime_preflight.py (unchanged; superseded by the corrective preflight)",
+    "manifest_files": [
+      "manifests/artifact_probe_classes_v1.json",
+      "manifests/difffas_bin_idfree_train_v1.parquet",
+      "manifests/inventory.parquet",
+      "manifests/inventory_videos.parquet",
+      "manifests/m2_sample_accounting.parquet",
+      "manifests/pair_train_stats_v1.json",
+      "manifests/pairs_train_v1.parquet",
+      "manifests/raw_file_index.parquet",
+      "manifests/split_groups_v1.parquet",
+      "manifests/split_v1.parquet",
+      "manifests/val_pairs_v1.parquet"
+    ],
+    "manifest_semantics_consumed": false,
+    "occurred_after_gpu_evidence_existed": true,
+    "optimizer_step": false,
+    "rows_parsed": false,
+    "scientific_execution": false
+  },
+  "initial_status": "PROCEDURAL_FIREWALL_DEVIATION",
+  "live_interface_CHW": {
+    "embg": [
+      7
+    ],
+    "x16x16": [
+      512,
+      16,
+      16
+    ],
+    "x32x32": [
+      256,
+      32,
+      32
+    ],
+    "x8x8": [
+      512,
+      8,
+      8
+    ]
+  },
+  "main_model_parameters": 159363974,
+  "method_id": "E07c",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D6a",
+  "not_qualified": [
+    "REAL_TRAIN_PATH",
+    "TRAINING_GRAPH_BACKWARD",
+    "TRAINING_MEMORY",
+    "AUXILIARY_ENCODER_TRAINING",
+    "CHECKPOINT_WRITER",
+    "RESUME",
+    "PRODUCTION_RUNNER",
+    "SCIENTIFIC_TRAINING",
+    "M8_BANK"
+  ],
+  "open_future_issues": {
+    "precision_policy": "forward qualification ran FP32 with TF32 disabled; the authoritative E07c training precision policy still needs an explicit decision before scientific training; no AMP/TF32 behaviour invented",
+    "torch_load_weights_only": "qualified runtime torch.load defaults to weights_only=True; the future whole-module auxiliary checkpoint loader and the sampling checkpoint loader need an explicit decision before any checkpoint is consumed; not exercised"
+  },
+  "preserved_inputs_sha256": {
+    "configs/CONFIG_STATUS.md": "0bfe711ad973124d068066895c34c7a62653da7401f98de6f0fc0ec431874f04",
+    "configs/amendments/e07c_a6_feature_interface_source_correction.yaml": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81",
+    "frozen_config_snapshot/configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "frozen_config_snapshot/configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "methods/common/config.py": "786f934716ab05c9e30dc957b4da3a6de4ce4e0370ac5fa2ad75bfa09683b4a3",
+    "methods/common/learned.py": "20252494a7a8e02ddf9a448de011d91cf7e391ca739ac5a5532267d79b4f0525",
+    "methods/common/upstream.py": "0df26ae0147f142df0aca7fff98558ce0477491c85528b825df1caa7269035cc",
+    "methods/difffas/__init__.py": "796bc58fdd40e9501937a1e57be4ba7beb409edb0e90c97adb0e51da421e7cb2",
+    "methods/difffas/adapter.py": "d2bc7cbd1f88333ed35ac9ef444db3ec88c3d99c4ddb1e07edcd531f45e9c323",
+    "methods/difffas/contract.py": "4db1bc9af5f8455ab8b8f80e18808bbf3424b3bc1756697de627fa6eff3e7011",
+    "methods/difffas/encoder.py": "83a5146f3c07a45208e0a4b6f93d974279a313f8b1ef11d552416a86570c069f",
+    "methods/difffas/sampler.py": "992354b939d3bda91bebbc061b8010b9121f6cb1076a43e30a69ec67c8929762",
+    "methods/difffas/seed_adapter.py": "9bd12dea10636f7dcfad500d5737a50a7e3e360d7bd44eaa1dee094e3622b65c",
+    "methods/difffas/source.py": "19ca1ae9c535bf4a45985644c76974527f64137dfe7bb9a74ac4808c9df0ef2d",
+    "methods/difffas/source_traceability.md": "8dd298794e316e6429c0e748d2e6e1d4b690830d85f540a572306881fe2b10b6",
+    "outputs/audit/M6C2B3_IMPLEMENTATION.json": "da85c41b201cb59f74917dc0d20eb021ef71da07376128390d0f292b1b53fe6d",
+    "outputs/audit/M6C2B3_IMPLEMENTATION.md": "476624a7047b3af66f95dc69170fcd40bc64221c60d909d3c5020dd4bf41eeb5",
+    "outputs/audit/STAGE_STATE.json": "a8abf8288feaba561916b7ffe513014cbe2b5831be86d048702f2718059dd50d",
+    "tests/test_m6c2b3_contract.py": "a710a15cfde92c048624206e7bb4c25f5c7f4ce8942c747746a157dc59345cfa",
+    "tests/test_m6c2b3_encoder.py": "8231500a320404a92ebf176158f6e32e2964b0cdf72539085c48d61b51141a57",
+    "tests/test_m6c2b3_runtime.py": "b942d1eed50689bdab2c53136f56f8379e804eb5cbda7955ec379b9fd5f2e8d5",
+    "third_party/source_pins.json": "484558032f53b536cb7832803980c5273264c262ab74a6eb2c67f27641d72cec",
+    "tools/m6c2b3_preflight.py": "2185339fbad10adbe2f92bd871d1e946aeca86ae003b5526cbfd47d1ec47a39a"
+  },
+  "processes": {
+    "outputs/audit/M6D6A_R_E07C_SYNTHETIC_PROCESS_1.json": {
+      "sha256": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+      "status": "PASS"
+    },
+    "outputs/audit/M6D6A_R_E07C_SYNTHETIC_PROCESS_2.json": {
+      "sha256": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2",
+      "status": "PASS"
+    }
+  },
+  "push": false,
+  "qualified_statuses": [
+    "E07c_EXECUTION_ENVIRONMENT_QUALIFIED",
+    "E07c_CONDITIONING_ENCODER_RUNTIME_QUALIFIED",
+    "E07c_MAIN_ARCHITECTURE_RUNTIME_QUALIFIED",
+    "E07c_SYNTHETIC_FORWARD_RUNTIME_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "repeatability": {
+    "all_bitwise_equal": true,
+    "corrective_equals_initial_evidence_bytes": true,
+    "determinism_note": "Fixed qualification seed 60601, frozen cudnn benchmark=False/deterministic=True, TF32 off, CUBLAS_WORKSPACE_CONFIG=:4096:8; torch deterministic algorithms NOT forced. Equality observed, not manufactured.",
+    "forward_bitwise_equal": 12,
+    "forward_tensors_compared": 12,
+    "independent_processes": 2,
+    "internal_stage_bitwise_equal": 45,
+    "internal_stage_tensors_compared": 45,
+    "process_json_bytes_identical": true,
+    "process_sha256": "0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2"
+  },
+  "reporting_label": "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)",
+  "schema_version": 1,
+  "session_access_audit": {
+    "counts": {
+      "TEST_reads": 0,
+      "TRAIN_reads": 0,
+      "VAL_reads": 0,
+      "auxiliary_encoder_training_runs": 0,
+      "backward_calls": 0,
+      "benchmark_image_reads": 0,
+      "benchmark_manifest_reads": 0,
+      "firewall_denials": 0,
+      "optimizer_step_calls": 0,
+      "scientific_checkpoints_created": 0,
+      "scientific_seed_runs_completed": 0
+    },
+    "empty_directories_created_by_tooling": 0,
+    "method": "GPU processes: Python audit-hook firewall (0 denials, 0 attempts in every class); tests: audit-hook wrapper on both hosts (0 manifest/image/data/runs events); all shell commands used explicit allowlisted paths; no recursive scan; no git ls-files|xargs; log/report/JSON written by Python writers or the editor tool, never by evaluating prose in a shell",
+    "scientific_run_root_absent_before_and_after": true,
+    "scope": "COMPLETE_CORRECTIVE_SESSION_LAPTOP_AND_GPU"
+  },
+  "source": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "all_identical": true,
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "custom_rn_sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+    "explicit_files_compared_with_laptop": 24,
+    "gpu_worktree_status_lines": 0,
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "source_modified": false,
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "unet_autoenc_sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+  },
+  "source_contract_state": "RESOLVED (A3 controlled reconstruction)",
+  "tests": [
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 625,
+      "errors": 0,
+      "failures": 0,
+      "host": "laptop",
+      "run": 16,
+      "skipped": 1,
+      "suite": "tests.test_m6d6a_e07c_runtime"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 2230,
+      "errors": 0,
+      "failures": 0,
+      "host": "laptop",
+      "run": 46,
+      "skipped": 1,
+      "suite": "tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 3177,
+      "errors": 0,
+      "failures": 0,
+      "host": "gpu",
+      "run": 16,
+      "skipped": 0,
+      "suite": "tests.test_m6d6a_e07c_runtime"
+    },
+    {
+      "audit_data_or_runs": 0,
+      "audit_denied": 0,
+      "audit_image": 0,
+      "audit_manifest": 0,
+      "audit_open_events": 4306,
+      "errors": 0,
+      "failures": 0,
+      "host": "gpu",
+      "run": 46,
+      "skipped": 0,
+      "suite": "tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime"
+    }
+  ]
+}

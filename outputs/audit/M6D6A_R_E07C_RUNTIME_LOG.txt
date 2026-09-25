@@ -1,0 +1,484 @@
+M6D6A-R E07C RUNTIME LOG — clean corrective requalification (plus preserved initial-candidate record)
+All times UTC 2026-09-25. Laptop /home/cong/GPAT_TransferBench; GPU student20261@100.121.84.44.
+Log written by a Python file writer (no shell here-document evaluation of prose).
+
+################ PART A — CORRECTIVE CLEAN SESSION (M6D6a-r) ################
+== A1. Authority and worktree (explicit git metadata commands)
+laptop: git branch --show-current -> m6-baselines; git rev-parse HEAD -> 596d8459c9f2e54a5f36e2463099b662b800eb7f;
+        git ls-remote origin refs/heads/m6-baselines -> 596d8459c9f2e54a5f36e2463099b662b800eb7f;
+        git status --porcelain --untracked-files=all -> exactly the 11 expected M6D6a candidate files; staged 0; modified tracked 0
+GPU:    branch m6-baselines; HEAD 596d8459c9f2e54a5f36e2463099b662b800eb7f; status lines 0 (no sync needed)
+== A2. Preserved initial-candidate hashes recorded BEFORE the rerun (sha256sum of 11 explicit paths)
+8ce6b02cad29f448c6a369003f8f95d7002367a8263837820d00e41c94c6f611  outputs/audit/M6D6A_E07C_RUNTIME_QUALIFICATION.md
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_1.json
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_2.json
+1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541  methods/difffas/runtime_qualification.py
+15e3fb28455c77094f039b1851e136da35b8bceab13def6f830b7f10a76496dc  tests/test_m6d6a_e07c_runtime.py
+b7f02e2cafcdabf418aeadb63fc45c73025b0f6d1081b51e620840cc1008be7d  tools/m6d6a_e07c_runtime_preflight.py
+0855943bb1aa00d12bf61f8145bdfad4598b467f8226b2cc05842902796d2d61  environments/e07c.runtime.json
+0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450  environments/e07c.lock.json
+2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864  environments/e07c.conda-explicit.txt
+42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285  environments/e07c.pip-freeze.txt
+9ea38ed8b8eb4de00dff577cfb7a1360201fa66dd6c28bf174a8bfb01de26f8f  environments/e07c.pip-requirements.txt
+== A3. Read-only environment / protected-environment / source verification (r_verify_env.sh, explicit paths only)
+== e07c exports (sha256 of fresh GPU stdout)
+conda_explicit 2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864
+pip_freeze_all 42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285
+python_sha256 83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe
+== pip check
+No broken requirements found.
+== protected fingerprints vs recorded protected_after.txt
+PROTECTED_UNCHANGED
+== pinned source
+23f40519ec25a833ebc06842aa6fbab74fad4d15
+d190a5fb4a94cb9e423215f9a24a7863aa17ea65
+status_lines 0
+0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f  FAS_dataset.py
+8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0  FAS_sample.py
+c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84  FAS_train.py
+9828822fcea2c85604476749fa0b2a58ffeeb4e702df3f0916ccd53ce9054653  README.md
+fa0a2224390c302134bb52f0538c2c124d06eff24ad3e552f0d0568f756112eb  config/__init__.py
+20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987  config/diffconfig.py
+41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37  config/diffusion.conf
+fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3  custom_rn.py
+403fd501c302932126d86799987cf77bc8a7b5a1df945acd8007ed2bda5eb4e0  datasets/OCIM/OCIM.json
+e45f5f1dd7dadb6c56383a7f46c21c0ab3f52168c4488d28de015df6853f9cfe  datasets/PADISI/PADISI.json
+af79b6644fda28402962f0802bdfdbfd8fc6e771627855cec4d0144cc12504a0  datasets/WMCA/WMCA.json
+71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5  diffusion.py
+8c85015717f7809128079bd5097701db0637d432a23a6ff73fd16f3c7fda9475  environment.yml
+dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5  models/__init__.py
+8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5  models/blocks.py
+4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04  models/choices.py
+dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705  models/config_base.py
+fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3  models/custom_rn.py
+bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466  models/latentnet.py
+68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f  models/losses.py
+175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843  models/nn.py
+3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16  models/pretrain_classifier.py
+76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401  models/unet.py
+127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963  models/unet_autoenc.py
+== launcher
+319525061106b538722719e1dd912fd1f44444c0e3c09776058fa98b063e410a  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/run_q.sh
+8248e8a94c702d4dc6610fda43cc1a4ea6d285a1e06e29c9eb682cdf0f17145f  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/audited_tests.py
+== scientific run root
+RUNS_ABSENT
+laptop comparison: e07c.conda-explicit.txt 2c5a2bbc…4b864 == GPU; e07c.pip-freeze.txt 42cebd80…ea285 == GPU;
+lock identity python_sha256 83c01e86…028afe == GPU; 24 pinned source file hashes identical to laptop (explicit list).
+== A4. Two fresh clean qualification processes (same harness 1eeb7c03…, same launcher run_q.sh 31952506…, qualification_seed 60601)
+NEW_OUTPUT_NAMES_FREE
+== r_process_1.json start 2026-09-25T15:18:37Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/r_process_1.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== r_process_1.json end 2026-09-25T15:18:48Z
+== r_process_2.json start 2026-09-25T15:18:48Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/r_process_2.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== r_process_2.json end 2026-09-25T15:18:59Z
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/r_process_1.json
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/r_process_2.json
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/process_1.json
+-- r_process_1.log
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/r_process_1.json"}
+-- r_process_2.log
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/r_process_2.json"}
+copied to outputs/audit/M6D6A_R_E07C_SYNTHETIC_PROCESS_{1,2}.json (new names; initial files not overwritten; sha256sum -c of all 11 initial hashes: OK)
+== A5. Audited tests (audited_tests.py 8248e8a9…: Python audit hook denying/counting manifests, parquet, images, faces_256, runtime data/runs)
+== laptop: tests.test_m6d6a_e07c_runtime
+test_cpu_construction_of_pinned_encoder (tests.test_m6d6a_e07c_runtime.TestE07cRuntime.test_cpu_construction_of_pinned_encoder) ... skipped 'Torch unavailable on this host; CUDA evidence validated from process JSON'
+Ran 16 tests in 0.389s
+OK (skipped=1)
+AUDIT {'open': 625, 'denied': 0, 'manifest': 0, 'image': 0, 'data_or_runs': 0} []
+RESULT run=16 failures=0 errors=0 skipped=1
+== laptop: tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime
+test_real_cpu_encoder_construction (tests.test_m6c2b3_encoder.TestEncoder.test_real_cpu_encoder_construction) ... skipped 'PyTorch/torchvision unavailable: pinned custom_rn CPU construction requires both; AST/interface verified separately'
+Ran 46 tests in 2.232s
+OK (skipped=1)
+AUDIT {'open': 2230, 'denied': 0, 'manifest': 0, 'image': 0, 'data_or_runs': 0} []
+RESULT run=46 failures=0 errors=0 skipped=1
+GPU (gpat-m6-e07c, CUDA_VISIBLE_DEVICES= empty, PYTHONDONTWRITEBYTECODE=1, TMPDIR=<build>/tmp); staged temporary copies byte-identical on both hosts:
+== GPU: tests.test_m6d6a_e07c_runtime
+Ran 16 tests in 1.958s
+AUDIT {'open': 3177, 'denied': 0, 'manifest': 0, 'image': 0, 'data_or_runs': 0} []
+RESULT run=16 failures=0 errors=0 skipped=0
+== GPU: tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime
+Ran 46 tests in 3.433s
+AUDIT {'open': 4306, 'denied': 0, 'manifest': 0, 'image': 0, 'data_or_runs': 0} []
+RESULT run=46 failures=0 errors=0 skipped=0
+source_cache_status_lines 0
+== A6. GPU cleanup (explicit rm of the 10 staged paths)
+removed 'methods/difffas/runtime_qualification.py'
+removed 'tests/test_m6d6a_e07c_runtime.py'
+removed 'outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_1.json'
+removed 'outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_2.json'
+removed 'environments/e07c.runtime.json'
+removed 'environments/e07c.lock.json'
+removed 'environments/e07c.conda-explicit.txt'
+removed 'environments/e07c.pip-freeze.txt'
+removed 'environments/e07c.pip-requirements.txt'
+removed 'outputs/audit/M6D6A_E07C_RUNTIME_QUALIFICATION.md'
+status_lines 0
+596d8459c9f2e54a5f36e2463099b662b800eb7f
+0	0
+RUNS_ABSENT
+== A7. Corrective-session access statement
+Every command in this session used explicit allowlisted paths (repository authority/config/amendment/source/environment/audit files,
+the pinned DiffFAS cache, the E07c build root). No git ls-files|xargs, no recursive repository or runtime scan, no manifest,
+parquet, image, faces_256, runtime data or runs path was opened. GPU processes and all four test runs were audit-hooked: 0 denials.
+
+################ PART B — PRESERVED INITIAL M6D6a CANDIDATE RECORD (historical) ################
+Initial status: PROCEDURAL_FIREWALL_DEVIATION. After the initial GPU evidence existed, an unquoted laptop shell here-document
+used to assemble this log evaluated the prose text `git ls-files | xargs sha256sum` in the repository root. It streamed the raw
+bytes of all 666 Git-tracked files through sha256sum, including 11 manifests/metadata files: manifests/artifact_probe_classes_v1.json,
+difffas_bin_idfree_train_v1.parquet, inventory.parquet, inventory_videos.parquet, m2_sample_accounting.parquet,
+pair_train_stats_v1.json, pairs_train_v1.parquet, raw_file_index.parquet, split_groups_v1.parquet, split_v1.parquet,
+val_pairs_v1.parquet. No row was parsed, no semantics consumed, no image opened (tracked data/ dirs hold only .gitkeep), no GPU
+or test process involved; the generated Python failed with SyntaxError so the hash output was never written as evidence.
+The initial candidate stopped before its runtime log, audit JSON, preflight run, ledger append and index rebuild.
+-- B1. GPU sync (initial session)
+git fetch origin -> cd125db..596d845; merge-base --is-ancestor PASS (distance 1); git merge --ff-only -> 596d845, clean
+-- B2. Pinned DiffFAS acquisition on GPU (absent before): git init; remote add origin https://github.com/murphytju/DiffFAS;
+   fetch --depth 1 origin 23f40519ec25a833ebc06842aa6fbab74fad4d15; checkout --detach FETCH_HEAD
+   HEAD 23f40519ec25a833ebc06842aa6fbab74fad4d15 tree d190a5fb4a94cb9e423215f9a24a7863aa17ea65 shallow true status_lines 0
+   24 tracked-file sha256 identical to laptop cache:
+0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f  FAS_dataset.py
+8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0  FAS_sample.py
+c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84  FAS_train.py
+9828822fcea2c85604476749fa0b2a58ffeeb4e702df3f0916ccd53ce9054653  README.md
+fa0a2224390c302134bb52f0538c2c124d06eff24ad3e552f0d0568f756112eb  config/__init__.py
+20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987  config/diffconfig.py
+41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37  config/diffusion.conf
+fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3  custom_rn.py
+403fd501c302932126d86799987cf77bc8a7b5a1df945acd8007ed2bda5eb4e0  datasets/OCIM/OCIM.json
+e45f5f1dd7dadb6c56383a7f46c21c0ab3f52168c4488d28de015df6853f9cfe  datasets/PADISI/PADISI.json
+af79b6644fda28402962f0802bdfdbfd8fc6e771627855cec4d0144cc12504a0  datasets/WMCA/WMCA.json
+71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5  diffusion.py
+8c85015717f7809128079bd5097701db0637d432a23a6ff73fd16f3c7fda9475  environment.yml
+dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5  models/__init__.py
+8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5  models/blocks.py
+4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04  models/choices.py
+dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705  models/config_base.py
+fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3  models/custom_rn.py
+bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466  models/latentnet.py
+68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f  models/losses.py
+175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843  models/nn.py
+3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16  models/pretrain_classifier.py
+76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401  models/unet.py
+127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963  models/unet_autoenc.py
+-- B3. Environment creation script setup_e07c.sh
+#!/usr/bin/env bash
+# M6D6a E07c environment creation. Runs on the GPU host; writes only under the build root + new env.
+set -euo pipefail
+C=/home/student20261/miniconda3/bin/conda
+E=/home/student20261/miniconda3/envs
+B=/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas
+cd "$B"
+fp() {  # read-only fingerprint of a conda prefix
+  local p=$1
+  printf '%s conda_explicit_md5_sha256=%s pip_freeze_sha256=%s python_sha256=%s\n' "$(basename $p)" \
+    "$($C list --explicit --md5 -p "$p" 2>/dev/null | grep -v '^#' | sha256sum | cut -d' ' -f1)" \
+    "$("$p/bin/python" -m pip list --format=freeze 2>/dev/null | sha256sum | cut -d' ' -f1)" \
+    "$(sha256sum "$(readlink -f "$p/bin/python")" | cut -d' ' -f1)"
+}
+PROTECTED="/home/student20261/miniconda3 $E/gpat-m5 $E/gpat-m6-e03 $E/gpat-m6-e04-geometry $E/gpat-m6-e05 $E/gpat-m6-e06c $E/stdn"
+test ! -e "$E/gpat-m6-e07c" || { echo "REFUSE: gpat-m6-e07c already exists"; exit 3; }
+for p in $PROTECTED; do fp "$p"; done > protected_before.txt
+echo "+ $C create -y -q --offline -n gpat-m6-e07c --clone gpat-m5"
+$C create -y -q --offline -n gpat-m6-e07c --clone gpat-m5 > clone.log 2>&1
+P=$E/gpat-m6-e07c/bin/python
+echo "+ pip install --no-index --no-deps --no-build-isolation --require-hashes --find-links $B/wheels -r e07c.pip-requirements.txt"
+PYTHONNOUSERSITE=1 $P -m pip install --no-cache-dir --no-index --no-deps --no-build-isolation --require-hashes \
+  --find-links "$B/wheels" -r "$B/e07c.pip-requirements.txt" > install.log 2>&1
+PYTHONNOUSERSITE=1 $P -m pip check > pip_check.log 2>&1 && echo PIP_CHECK_PASS || { echo PIP_CHECK_FAIL; cat pip_check.log; }
+for p in $PROTECTED; do fp "$p"; done > protected_after.txt
+diff protected_before.txt protected_after.txt && echo PROTECTED_ENVIRONMENTS_UNCHANGED
+tail -3 install.log
+-- clone.log
+2 channel Terms of Service accepted
+Source:      /home/student20261/miniconda3/envs/gpat-m5
+Destination: /home/student20261/miniconda3/envs/gpat-m6-e07c
+Packages: 30
+Files: 28005
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+WARNING conda.conda_pypi.main:notify_externally_managed_future(156): 
+  Did you know? You can install many PyPI packages with conda
+  using the conda-pypi beta. Get started:
+    https://docs.conda.io/projects/conda/en/stable/new-features.html
+-- install.log
+Looking in links: /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/wheels
+Processing ./wheels/tensorfn-0.1.28-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 8))
+Processing ./wheels/pydantic-1.9.2-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 9))
+Processing ./wheels/pyhocon-0.3.60.tar.gz (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 10))
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Processing ./wheels/pyparsing-3.1.0-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 11))
+Processing ./wheels/termcolor-1.1.0.tar.gz (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 12))
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Processing ./wheels/tabulate-0.8.10-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 13))
+Processing ./wheels/boto3-1.23.10-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 14))
+Processing ./wheels/botocore-1.26.10-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 15))
+Processing ./wheels/jmespath-0.10.0-py2.py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 16))
+Processing ./wheels/s3transfer-0.5.2-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 17))
+Processing ./wheels/urllib3-1.26.16-py2.py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 18))
+Processing ./wheels/rich-12.6.0-py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 19))
+Processing ./wheels/commonmark-0.9.1-py2.py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 20))
+Processing ./wheels/tqdm-4.62.3-py2.py3-none-any.whl (from -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt (line 21))
+Building wheels for collected packages: pyhocon, termcolor
+  Building wheel for pyhocon (pyproject.toml): started
+  Building wheel for pyhocon (pyproject.toml): finished with status 'done'
+  Created wheel for pyhocon: filename=pyhocon-0.3.60-py3-none-any.whl size=20922 sha256=7027ef2586cd52d8d835f2830d879c55a548bcb32e8c379a5cfb5ebc7b7b7dd6
+  Stored in directory: /tmp/pip-ephem-wheel-cache-2uizb1vv/wheels/67/a3/5d/ab18f58aee79fd6af297847141f66f3293bd2522e34d33cfc8
+  Building wheel for termcolor (pyproject.toml): started
+  Building wheel for termcolor (pyproject.toml): finished with status 'done'
+  Created wheel for termcolor: filename=termcolor-1.1.0-py3-none-any.whl size=4902 sha256=5527dc1293c40742c37fcfea49b605248bfc3996cbe90ed1b889363715ffb760
+  Stored in directory: /tmp/pip-ephem-wheel-cache-2uizb1vv/wheels/53/08/75/5453ac08986d06cc303b13b0b5af5ed8693bfbb55dabac9842
+Successfully built pyhocon termcolor
+Installing collected packages: termcolor, tensorfn, pyhocon, commonmark, urllib3, tqdm, tabulate, s3transfer, rich, pyparsing, pydantic, jmespath, botocore, boto3
+
+Successfully installed boto3-1.23.10 botocore-1.26.10 commonmark-0.9.1 jmespath-0.10.0 pydantic-1.9.2 pyhocon-0.3.60 pyparsing-3.1.0 rich-12.6.0 s3transfer-0.5.2 tabulate-0.8.10 tensorfn-0.1.28 termcolor-1.1.0 tqdm-4.62.3 urllib3-1.26.16
+-- pip_check.log
+No broken requirements found.
+-- protected_before.txt
+miniconda3 conda_explicit_md5_sha256=4b7767d693a6a0b68a37470b33c316bec974a89f050bbec97528348d65a6d45d pip_freeze_sha256=a5f497340f3fe9a6c218b16e78663f18f08bda8c9f030d13c44fe050c81c6aa9 python_sha256=ffb8cac2ed0037e824f1075759cf871e01575b4251501026ccb179e9cecb18b0
+gpat-m5 conda_explicit_md5_sha256=2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf pip_freeze_sha256=a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff python_sha256=47297c3d7b57445bfb190ee410d005762e5b356ac26dc96f43218be71334df2c
+gpat-m6-e03 conda_explicit_md5_sha256=90effd6fa3f35c32e0371ffe9ab7af771781c546d666512d26f289829807f211 pip_freeze_sha256=fdb90086eb93ac5ac397362b980d5c9c5be564536fd6c99c024401beeeddda16 python_sha256=37f55912330708a4fb94028daeb8c8ae62d9023d141a75beff68721e48c5dfa6
+gpat-m6-e04-geometry conda_explicit_md5_sha256=bd99e619c9983dc780ba4785451177ca9efa2e463951c1ce00b6f80d4558d9c9 pip_freeze_sha256=e54a043afee91f8d7097aa13669e6cbbab5a62506cb4b8eba036c6c2af4ff401 python_sha256=240398eb6986c015e2bc5190deba3be5a658165b9f15f7b3ea871ca71869fd38
+gpat-m6-e05 conda_explicit_md5_sha256=547cc84a6846560740734abb249a8bb5f2ab4e4229002742215a6fb8c46b74c4 pip_freeze_sha256=ef4c195ed2b277575450f536b8981ad2308564874436f94965488028ebd28013 python_sha256=d3255ce6eac7a06a653a6f238d703ebf863423912b39ec957334ce2974364244
+gpat-m6-e06c conda_explicit_md5_sha256=2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf pip_freeze_sha256=a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff python_sha256=d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e
+stdn conda_explicit_md5_sha256=addedd75f6184e8205dd7e9223c2454a93bb937ceaaa04ae4877fa336cf91cef pip_freeze_sha256=aee11151241e51a3d0e648d713ffafdeee6f3b8cf3f0b3c31013153d46af9b42 python_sha256=4f07e9659e9fc28d2affd815a229e3f5a4e1d285f9b47c615bb6bbfa61085a8d
+-- protected_after.txt
+miniconda3 conda_explicit_md5_sha256=4b7767d693a6a0b68a37470b33c316bec974a89f050bbec97528348d65a6d45d pip_freeze_sha256=a5f497340f3fe9a6c218b16e78663f18f08bda8c9f030d13c44fe050c81c6aa9 python_sha256=ffb8cac2ed0037e824f1075759cf871e01575b4251501026ccb179e9cecb18b0
+gpat-m5 conda_explicit_md5_sha256=2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf pip_freeze_sha256=a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff python_sha256=47297c3d7b57445bfb190ee410d005762e5b356ac26dc96f43218be71334df2c
+gpat-m6-e03 conda_explicit_md5_sha256=90effd6fa3f35c32e0371ffe9ab7af771781c546d666512d26f289829807f211 pip_freeze_sha256=fdb90086eb93ac5ac397362b980d5c9c5be564536fd6c99c024401beeeddda16 python_sha256=37f55912330708a4fb94028daeb8c8ae62d9023d141a75beff68721e48c5dfa6
+gpat-m6-e04-geometry conda_explicit_md5_sha256=bd99e619c9983dc780ba4785451177ca9efa2e463951c1ce00b6f80d4558d9c9 pip_freeze_sha256=e54a043afee91f8d7097aa13669e6cbbab5a62506cb4b8eba036c6c2af4ff401 python_sha256=240398eb6986c015e2bc5190deba3be5a658165b9f15f7b3ea871ca71869fd38
+gpat-m6-e05 conda_explicit_md5_sha256=547cc84a6846560740734abb249a8bb5f2ab4e4229002742215a6fb8c46b74c4 pip_freeze_sha256=ef4c195ed2b277575450f536b8981ad2308564874436f94965488028ebd28013 python_sha256=d3255ce6eac7a06a653a6f238d703ebf863423912b39ec957334ce2974364244
+gpat-m6-e06c conda_explicit_md5_sha256=2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf pip_freeze_sha256=a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff python_sha256=d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e
+stdn conda_explicit_md5_sha256=addedd75f6184e8205dd7e9223c2454a93bb937ceaaa04ae4877fa336cf91cef pip_freeze_sha256=aee11151241e51a3d0e648d713ffafdeee6f3b8cf3f0b3c31013153d46af9b42 python_sha256=4f07e9659e9fc28d2affd815a229e3f5a4e1d285f9b47c615bb6bbfa61085a8d
+-- B4. Launcher run_q.sh
+#!/usr/bin/env bash
+# M6D6a launcher: one qualification process. Usage: run_q.sh <output.json>
+set -uo pipefail
+R=/home/student20261/workdir/GPAT_TransferBench
+RT=/home/student20261/workdir/GPAT_TransferBench_runtime
+B=$RT/builds/e07c_difffas
+OUT=$1
+mkdir -p $B/tmp
+echo "== $OUT start $(date -u +%FT%TZ)"
+echo "scientific_paths_before: runs=$(test -e $RT/runs && echo PRESENT || echo ABSENT) e07c_root=$(test -e $RT/runs/m6/E07c && echo PRESENT || echo ABSENT) encoder_final=$(test -e $RT/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl && echo PRESENT || echo ABSENT)"
+nvidia-smi --query-gpu=memory.used --format=csv,noheader; nvidia-smi --query-compute-apps=pid,name --format=csv,noheader
+echo "harness_sha256: $(sha256sum $R/methods/difffas/runtime_qualification.py | cut -d' ' -f1)"
+cd $R && env CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 \
+  CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60601 TMPDIR=$B/tmp \
+  /home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python methods/difffas/runtime_qualification.py \
+  --build-root $B --output $OUT > $B/${OUT%.json}.log 2>&1
+rc=$?
+tail -5 $B/${OUT%.json}.log
+echo "exit=$rc"
+echo "scientific_paths_after: runs=$(test -e $RT/runs && echo PRESENT || echo ABSENT) e07c_root=$(test -e $RT/runs/m6/E07c && echo PRESENT || echo ABSENT) encoder_final=$(test -e $RT/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl && echo PRESENT || echo ABSENT)"
+nvidia-smi --query-gpu=memory.used --format=csv,noheader
+echo "gpu_repo_status: $(git -C $R status --porcelain | tr '\n' ';')"
+echo "source_cache_status: [$(git -C $R/third_party/source_cache/difffas status --porcelain --untracked-files=all | tr '\n' ';')]"
+echo "== $OUT end $(date -u +%FT%TZ)"
+-- B5.1 attempt_1: STOPPED: harness subprocess firewall refused ctypes.util.find_library /sbin/ldconfig -p (no model built); fix: allow that exact read-only argv
+== attempt_1.json start 2026-09-25T14:54:16Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 38f1872982ff85f08ba0a89883dbf155763c7b46900ad730215672f2da0d81b1
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/subprocess.py", line 1823, in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 115, in __call__
+    raise RuntimeError('SUBPROCESS FIREWALL: ' + exe)
+RuntimeError: SUBPROCESS FIREWALL: ldconfig
+exit=1
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== attempt_1.json end 2026-09-25T14:54:17Z
+-- attempt_1.log
+Traceback (most recent call last):
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 600, in <module>
+    main()
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 594, in main
+    result = qualify(build)
+             ^^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 309, in qualify
+    import torch
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/torch/__init__.py", line 2182, in <module>
+    _C._initExtension(_manager_path())
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/torch/cuda/__init__.py", line 29, in <module>
+    from ._utils import _get_device_index
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/torch/cuda/_utils.py", line 9, in <module>
+    from cuda.bindings import (  # pyrefly: ignore[missing-import]
+  File "cuda/bindings/runtime.pyx", line 1, in init cuda.bindings.runtime
+  File "cuda/bindings/cyruntime.pyx", line 1029, in init cuda.bindings.cyruntime
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/cuda/pathfinder/__init__.py", line 22, in <module>
+    from cuda.pathfinder._dynamic_libs.load_nvidia_dynamic_lib import load_nvidia_dynamic_lib as load_nvidia_dynamic_lib
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/cuda/pathfinder/_dynamic_libs/load_nvidia_dynamic_lib.py", line 20, in <module>
+    from cuda.pathfinder._dynamic_libs.platform_loader import LOADER
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/cuda/pathfinder/_dynamic_libs/platform_loader.py", line 37, in <module>
+    from cuda.pathfinder._dynamic_libs import load_dl_linux as _impl
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/cuda/pathfinder/_dynamic_libs/load_dl_linux.py", line 32, in <module>
+    LIBDL = _load_libdl()
+            ^^^^^^^^^^^^^
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/cuda/pathfinder/_dynamic_libs/load_dl_linux.py", line 25, in _load_libdl
+    name = ctypes.util.find_library("dl") or "libdl.so.2"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/ctypes/util.py", line 353, in find_library
+    _findSoname_ldconfig(name) or \
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/ctypes/util.py", line 293, in _findSoname_ldconfig
+    with subprocess.Popen(['/sbin/ldconfig', '-p'],
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/subprocess.py", line 1823, in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 115, in __call__
+    raise RuntimeError('SUBPROCESS FIREWALL: ' + exe)
+RuntimeError: SUBPROCESS FIREWALL: ldconfig
+-- B5.2 attempt_2: STOPPED: torch.load signature read after forbid-stub; fix: capture weights_only default before patching
+== attempt_2.json start 2026-09-25T14:54:45Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 6949732263eabca9180e4a77307e4827f8bdcbbdc2a9f67aac0c45c1a241a09d
+             ^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 152, in environment
+    'torch_load_weights_only_default': repr(inspect.signature(torch.load).parameters['weights_only'].default),
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+KeyError: 'weights_only'
+exit=1
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== attempt_2.json end 2026-09-25T14:54:47Z
+-- attempt_2.log
+Traceback (most recent call last):
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 604, in <module>
+    main()
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 598, in main
+    result = qualify(build)
+             ^^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 340, in qualify
+    before = environment()
+             ^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 152, in environment
+    'torch_load_weights_only_default': repr(inspect.signature(torch.load).parameters['weights_only'].default),
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+KeyError: 'weights_only'
+-- B5.3 attempt_3: STOPPED at harness gate: untrained final output identically zero (pinned zero_module self.out); fix: internal-stage proofs
+== attempt_3.json start 2026-09-25T14:55:06Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: b352d230cf0fbfb5a2f00bfff21f0107c2092c733eb1624598e843d0bf400982
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 503, in qualify
+    require(sensitivity[name] > 0, f'zeroing {name} changes the model output (consumed)')
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 52, in require
+    raise RuntimeError('M6D6a gate: ' + message)
+RuntimeError: M6D6a gate: zeroing x32x32 changes the model output (consumed)
+exit=1
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== attempt_3.json end 2026-09-25T14:55:12Z
+-- attempt_3.log
+Traceback (most recent call last):
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 607, in <module>
+    main()
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 601, in main
+    result = qualify(build)
+             ^^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 503, in qualify
+    require(sensitivity[name] > 0, f'zeroing {name} changes the model output (consumed)')
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/runtime_qualification.py", line 52, in require
+    raise RuntimeError('M6D6a gate: ' + message)
+RuntimeError: M6D6a gate: zeroing x32x32 changes the model output (consumed)
+-- B5.4 attempt_4: PASS (byte-identical to the final pair)
+== attempt_4.json start 2026-09-25T14:56:25Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/attempt_4.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== attempt_4.json end 2026-09-25T14:56:36Z
+-- attempt_4.log
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/attempt_4.json"}
+-- B6. Initial final pair
+== process_1.json start 2026-09-25T14:57:09Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/process_1.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== process_1.json end 2026-09-25T14:57:20Z
+== process_2.json start 2026-09-25T14:57:20Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+harness_sha256: 1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/process_2.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT encoder_final=ABSENT
+254 MiB
+gpu_repo_status: ?? methods/difffas/runtime_qualification.py;
+source_cache_status: []
+== process_2.json end 2026-09-25T14:57:31Z
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/attempt_4.json
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/process_1.json
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/process_2.json
+-- B7. Initial audited tests: laptop M6D6a 16 run/1 skip, M6C2b3 46 run/1 skip; GPU M6D6a 16/16, M6C2b3 46/46; all audit denials 0
+0855943bb1aa00d12bf61f8145bdfad4598b467f8226b2cc05842902796d2d61  environments/e07c.runtime.json
+0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450  environments/e07c.lock.json
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_1.json
+0ccc5a963e4eeb277478ecdde725ce9c39151ed96dafb29de8825f21afa4dab2  outputs/audit/M6D6A_E07C_SYNTHETIC_PROCESS_2.json
+15e3fb28455c77094f039b1851e136da35b8bceab13def6f830b7f10a76496dc  tests/test_m6d6a_e07c_runtime.py
+1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541  methods/difffas/runtime_qualification.py
+2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864  environments/e07c.conda-explicit.txt
+42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285  environments/e07c.pip-freeze.txt
+8ce6b02cad29f448c6a369003f8f95d7002367a8263837820d00e41c94c6f611  outputs/audit/M6D6A_E07C_RUNTIME_QUALIFICATION.md
+9ea38ed8b8eb4de00dff577cfb7a1360201fa66dd6c28bf174a8bfb01de26f8f  environments/e07c.pip-requirements.txt
+== GPU: tests.test_m6d6a_e07c_runtime
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.962s
+
+OK
+AUDIT {'open': 3177, 'denied': 0, 'manifest': 0, 'image': 0, 'data_or_runs': 0} []
+RESULT run=16 failures=0 errors=0 skipped=0
+== GPU: tests.test_m6c2b3_contract tests.test_m6c2b3_encoder tests.test_m6c2b3_runtime
+
+----------------------------------------------------------------------
+Ran 46 tests in 3.488s
+
+OK
+AUDIT {'open': 4306, 'denied': 0, 'manifest': 0, 'image': 0, 'data_or_runs': 0} []
+RESULT run=46 failures=0 errors=0 skipped=0
+0
+
+NO BENCHMARK DATA ACCESS IN THE CORRECTIVE SESSION. NO OPTIMIZER STEP. NO BACKWARD. NO CHECKPOINT. NO AUXILIARY ENCODER TRAINING.
+NO SCIENTIFIC TRAINING. NO SYNTHETIC BANK. NO COMMIT. NO PUSH.

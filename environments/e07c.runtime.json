@@ -1,0 +1,379 @@
+{
+  "artifact_acquisition": "pip download --no-cache-dir --no-deps (wheels: --only-binary=:all: for cp311 manylinux/any; pyhocon/termcolor: --no-binary=:all: pure-Python sdists, inspected: no .c/.pyx/.so) into /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/wheels",
+  "benchmark_training_started": false,
+  "build_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas",
+  "clone_command": "conda create -y -q --offline -n gpat-m6-e07c --clone gpat-m5",
+  "cloned_from": "gpat-m5",
+  "compatibility": {
+    "api_aliases": [],
+    "compatibility_patch": "NONE",
+    "engineering_notes": [
+      "Pinned DiffFAS files are imported unchanged from the verified source cache via methods.common.upstream.upstream_modules (config.diffconfig, diffusion, models.unet_autoenc; custom_rn through the committed methods/difffas/encoder.py seam). FAS_train.py/FAS_sample.py/FAS_dataset.py are not imported or executed.",
+      "diffusion.training_losses uses F.mse_loss(reduction='elementwise_mean'); torch 2.12.1 maps this deprecated alias to reduction='mean' with a UserWarning; semantics unchanged.",
+      "GaussianDiffusion.__init__ does np.array(betas: torch.float64 tensor, dtype=np.float64); NumPy 2.4.6 emits a __array__ copy-keyword DeprecationWarning; values are the same float64 betas.",
+      "tensorfn 0.1.28 imports botocore (cgi DeprecationWarning) and lib2to3 (DeprecationWarning) on Python 3.11; import only.",
+      "torch CUDA initialisation (cuda.pathfinder -> ctypes.util.find_library) runs the read-only '/sbin/ldconfig -p' query."
+    ],
+    "open_future_compatibility_items_not_resolved_in_M6D6a": [
+      "torch.load default weights_only: torch 2.12.1 signature default is None (resolves to weights_only=True). The pinned BeatGANsAutoencModel.encoder(path) loads a WHOLE pickled nn.Module via torch.load(path), and FAS_sample.py loads a checkpoint dict containing a tensorfn/pydantic conf object; both require an explicit decision before any checkpoint is loaded (auxiliary-encoder consumption / sampling milestones). Not exercised here: M6D6a loads nothing.",
+      "Precision policy: qualification ran FP32 with TF32 disabled (M6D runtime controls; frozen cudnn benchmark=False, deterministic=True applied). The E07c production precision policy is not decided by M6D6a; historical-stack TF32 behaviour was not measured."
+    ],
+    "source_patches": []
+  },
+  "created_by_E07c": true,
+  "created_for": "M6D6a E07c execution environment + live architecture/runtime qualification",
+  "d0b_version_ambiguity_resolution": "M6D0b recorded NEW_ENV_REQUIRED and BLOCKED_BY_VERSION_AMBIGUITY (CUDA 11.3 vs 11.7 declarations; tensorfn missing). Resolved experimentally, not by choosing either historical CUDA: consistent with the E03 runtime compatibility addendum principle and the E05/E06c precedent, historical framework versions are provenance, not execution pins. The upstream PyTorch build string identifies CUDA 11.3; the separately declared 11.7 packages were not executed or measured here. The executed runtime is torch 2.12.1+cu130 on the RTX 3090 (sm_86), which runs the unchanged pinned source; tensorfn is now present at its upstream pin. The historical stack was not attempted and no equivalence to it is claimed. This runtime selection is disclosed for owner review.",
+  "environment_name": "gpat-m6-e07c",
+  "environment_path": "/home/student20261/miniconda3/envs/gpat-m6-e07c",
+  "framework_packages_from_gpat_m5_unchanged": {
+    "numpy": "2.4.6",
+    "opencv-python-headless": "5.0.0.93",
+    "pillow": "12.3.0",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  },
+  "gpat_m5_unchanged": true,
+  "gpu_source_acquisition": {
+    "all_file_sha256_equal_to_laptop": true,
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "git_ignored_in_gpat_repo": true,
+    "mode": "git init; remote https://github.com/murphytju/DiffFAS; fetch --depth 1 origin <pin>; checkout --detach FETCH_HEAD (laptop recorded mode: full tree, depth 1, detached at FETCH_HEAD)",
+    "path": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "tracked_files": 24,
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "weights_in_repository": "none (source_pins: [])"
+  },
+  "historical_upstream_environment": {
+    "also_declared_cuda_11_7_packages": [
+      "pytorch-cuda=11.7",
+      "cuda-runtime=11.7.1",
+      "cuda-cudart=11.7.99",
+      "cuda-libraries=11.7.1"
+    ],
+    "cudatoolkit": "11.3.1",
+    "numpy": "1.19.2",
+    "pydantic": "1.9.2",
+    "python": "3.6.13",
+    "pytorch": "1.10.2 (build py3.6_cuda11.3_cudnn8.2.0_0)",
+    "role": "PROVENANCE_NOT_EXECUTION_PIN",
+    "tensorfn": "0.1.28",
+    "torchvision": "0.11.3 (py36_cu113)"
+  },
+  "identity": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60601",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "install_command": "PYTHONNOUSERSITE=1 <env>/bin/python -m pip install --no-cache-dir --no-index --no-deps --no-build-isolation --require-hashes --find-links /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/wheels -r /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/e07c.pip-requirements.txt",
+  "install_spec": "environments/e07c.pip-requirements.txt",
+  "install_spec_sha256": "9ea38ed8b8eb4de00dff577cfb7a1360201fa66dd6c28bf174a8bfb01de26f8f",
+  "locally_built_wheels": {
+    "pyhocon-0.3.60-py3-none-any.whl": "7027ef2586cd52d8d835f2830d879c55a548bcb32e8c379a5cfb5ebc7b7b7dd6",
+    "termcolor-1.1.0-py3-none-any.whl": "5527dc1293c40742c37fcfea49b605248bfc3996cbe90ed1b889363715ffb760"
+  },
+  "optimizer_constructed": false,
+  "packages_added_after_clone": [
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "65264192c821e8e53a0ed0c874dbde8eebce1f84b0f6fe0b022c965bd313826c",
+      "name": "tensorfn",
+      "version": "0.1.28",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "78a4d6bdfd116a559aeec9a4cfe77dda62acc6233f8b56a716edad2651023e5e",
+      "name": "pydantic",
+      "version": "1.9.2",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "sdist (pure Python, built locally without build isolation)",
+      "artifact_sha256": "ea18520ea126981e5320a72281f1a5fef2c27923f70cc54e1bd241c26525fd4b",
+      "name": "pyhocon",
+      "version": "0.3.60",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "d554a96d1a7d3ddaf7183104485bc19fd80543ad6ac5bdb6426719d766fb06c1",
+      "name": "pyparsing",
+      "version": "3.1.0",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "sdist (pure Python, built locally without build isolation)",
+      "artifact_sha256": "1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b",
+      "name": "termcolor",
+      "version": "1.1.0",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "0ba055423dbaa164b9e456abe7920c5e8ed33fcc16f6d1b2f2d152c8e1e8b4fc",
+      "name": "tabulate",
+      "version": "0.8.10",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "40d08614f17a69075e175c02c5d5aab69a6153fd50e40fa7057b913ac7bf40e7",
+      "name": "boto3",
+      "version": "1.23.10",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "8a4a984bf901ccefe40037da11ba2abd1ddbcb3b490a492b7f218509c99fc12f",
+      "name": "botocore",
+      "version": "1.26.10",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "cdf6525904cc597730141d61b36f2e4b8ecc257c420fa2f4549bac2c2d0cb72f",
+      "name": "jmespath",
+      "version": "0.10.0",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "7a6f4c4d1fdb9a2b640244008e142cbc2cd3ae34b386584ef044dd0f27101971",
+      "name": "s3transfer",
+      "version": "0.5.2",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "8d36afa7616d8ab714608411b4a3b13e58f463aee519024578e062e141dce20f",
+      "name": "urllib3",
+      "version": "1.26.16",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "a4eb26484f2c82589bd9a17c73d32a010b1e29d89f1604cd9bf3a2097b81bb5e",
+      "name": "rich",
+      "version": "12.6.0",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "da2f38c92590f83de410ba1a3cbceafbc74fee9def35f9251ba9a971d6d66fd9",
+      "name": "commonmark",
+      "version": "0.9.1",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    },
+    {
+      "artifact": "wheel (py3-none-any)",
+      "artifact_sha256": "8dd278a422499cd6b727e6ae4061c40b48fce8b76d1ccbf5d34fca9b7f925b0c",
+      "name": "tqdm",
+      "version": "4.62.3",
+      "version_source": "UPSTREAM_DIFFFAS_ENVIRONMENT_YML_PIN"
+    }
+  ],
+  "pip_check": "No broken requirements found.",
+  "protected_environment_fingerprints": {
+    "after": {
+      "gpat-m5": {
+        "conda_explicit_md5_sha256": "2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf",
+        "pip_freeze_sha256": "a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff",
+        "python_sha256": "47297c3d7b57445bfb190ee410d005762e5b356ac26dc96f43218be71334df2c"
+      },
+      "gpat-m6-e03": {
+        "conda_explicit_md5_sha256": "90effd6fa3f35c32e0371ffe9ab7af771781c546d666512d26f289829807f211",
+        "pip_freeze_sha256": "fdb90086eb93ac5ac397362b980d5c9c5be564536fd6c99c024401beeeddda16",
+        "python_sha256": "37f55912330708a4fb94028daeb8c8ae62d9023d141a75beff68721e48c5dfa6"
+      },
+      "gpat-m6-e04-geometry": {
+        "conda_explicit_md5_sha256": "bd99e619c9983dc780ba4785451177ca9efa2e463951c1ce00b6f80d4558d9c9",
+        "pip_freeze_sha256": "e54a043afee91f8d7097aa13669e6cbbab5a62506cb4b8eba036c6c2af4ff401",
+        "python_sha256": "240398eb6986c015e2bc5190deba3be5a658165b9f15f7b3ea871ca71869fd38"
+      },
+      "gpat-m6-e05": {
+        "conda_explicit_md5_sha256": "547cc84a6846560740734abb249a8bb5f2ab4e4229002742215a6fb8c46b74c4",
+        "pip_freeze_sha256": "ef4c195ed2b277575450f536b8981ad2308564874436f94965488028ebd28013",
+        "python_sha256": "d3255ce6eac7a06a653a6f238d703ebf863423912b39ec957334ce2974364244"
+      },
+      "gpat-m6-e06c": {
+        "conda_explicit_md5_sha256": "2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf",
+        "pip_freeze_sha256": "a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff",
+        "python_sha256": "d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e"
+      },
+      "miniconda3": {
+        "conda_explicit_md5_sha256": "4b7767d693a6a0b68a37470b33c316bec974a89f050bbec97528348d65a6d45d",
+        "pip_freeze_sha256": "a5f497340f3fe9a6c218b16e78663f18f08bda8c9f030d13c44fe050c81c6aa9",
+        "python_sha256": "ffb8cac2ed0037e824f1075759cf871e01575b4251501026ccb179e9cecb18b0"
+      },
+      "stdn": {
+        "conda_explicit_md5_sha256": "addedd75f6184e8205dd7e9223c2454a93bb937ceaaa04ae4877fa336cf91cef",
+        "pip_freeze_sha256": "aee11151241e51a3d0e648d713ffafdeee6f3b8cf3f0b3c31013153d46af9b42",
+        "python_sha256": "4f07e9659e9fc28d2affd815a229e3f5a4e1d285f9b47c615bb6bbfa61085a8d"
+      }
+    },
+    "before": {
+      "gpat-m5": {
+        "conda_explicit_md5_sha256": "2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf",
+        "pip_freeze_sha256": "a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff",
+        "python_sha256": "47297c3d7b57445bfb190ee410d005762e5b356ac26dc96f43218be71334df2c"
+      },
+      "gpat-m6-e03": {
+        "conda_explicit_md5_sha256": "90effd6fa3f35c32e0371ffe9ab7af771781c546d666512d26f289829807f211",
+        "pip_freeze_sha256": "fdb90086eb93ac5ac397362b980d5c9c5be564536fd6c99c024401beeeddda16",
+        "python_sha256": "37f55912330708a4fb94028daeb8c8ae62d9023d141a75beff68721e48c5dfa6"
+      },
+      "gpat-m6-e04-geometry": {
+        "conda_explicit_md5_sha256": "bd99e619c9983dc780ba4785451177ca9efa2e463951c1ce00b6f80d4558d9c9",
+        "pip_freeze_sha256": "e54a043afee91f8d7097aa13669e6cbbab5a62506cb4b8eba036c6c2af4ff401",
+        "python_sha256": "240398eb6986c015e2bc5190deba3be5a658165b9f15f7b3ea871ca71869fd38"
+      },
+      "gpat-m6-e05": {
+        "conda_explicit_md5_sha256": "547cc84a6846560740734abb249a8bb5f2ab4e4229002742215a6fb8c46b74c4",
+        "pip_freeze_sha256": "ef4c195ed2b277575450f536b8981ad2308564874436f94965488028ebd28013",
+        "python_sha256": "d3255ce6eac7a06a653a6f238d703ebf863423912b39ec957334ce2974364244"
+      },
+      "gpat-m6-e06c": {
+        "conda_explicit_md5_sha256": "2428ce5536b3a82d2dbfb776d00b820dce4f150497f2b9f85264b3c0901f5aaf",
+        "pip_freeze_sha256": "a6067c98f8c1f520c67a2690e16e053e2ec7e640d58e38094de98b74991c01ff",
+        "python_sha256": "d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e"
+      },
+      "miniconda3": {
+        "conda_explicit_md5_sha256": "4b7767d693a6a0b68a37470b33c316bec974a89f050bbec97528348d65a6d45d",
+        "pip_freeze_sha256": "a5f497340f3fe9a6c218b16e78663f18f08bda8c9f030d13c44fe050c81c6aa9",
+        "python_sha256": "ffb8cac2ed0037e824f1075759cf871e01575b4251501026ccb179e9cecb18b0"
+      },
+      "stdn": {
+        "conda_explicit_md5_sha256": "addedd75f6184e8205dd7e9223c2454a93bb937ceaaa04ae4877fa336cf91cef",
+        "pip_freeze_sha256": "aee11151241e51a3d0e648d713ffafdeee6f3b8cf3f0b3c31013153d46af9b42",
+        "python_sha256": "4f07e9659e9fc28d2affd815a229e3f5a4e1d285f9b47c615bb6bbfa61085a8d"
+      }
+    },
+    "method": "conda list --explicit --md5 -p <prefix> | sha256; <prefix>/bin/python -m pip list --format=freeze | sha256; sha256(realpath(bin/python))",
+    "unchanged": true
+  },
+  "reused_existing_environment": false,
+  "run_command": "cd /home/student20261/workdir/GPAT_TransferBench && env CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60601 TMPDIR=/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/tmp /home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python methods/difffas/runtime_qualification.py --build-root /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas --output process_<1_or_2>.json",
+  "runtime_harness": "methods/difffas/runtime_qualification.py",
+  "runtime_harness_sha256": "1eeb7c037dbb25876eb6257a4eb0dee40bc3a998d5d20c03a2b4b937abe12541",
+  "schema_version": 1,
+  "selection_rationale": "The pinned DiffFAS import closure (FAS_train.py, config/diffconfig.py, diffusion.py, models/*) needs torch, torchvision, numpy, cv2, tqdm and tensorfn (+pydantic/pyhocon). tensorfn 0.1.28 is written against the pydantic v1 API (imports ArbitraryTypeError, __get_validators__, unannotated field warmup_multiplier) so pydantic 2 cannot import it; the upstream environment.yml pin pydantic==1.9.2 is used. Every added package uses its exact upstream environment.yml version (all available for CPython 3.11). Framework packages come unchanged from the already-qualified gpat-m5 CUDA 13.0 stack (also the base of gpat-m6-e05/e06c). SciPy is not imported by any pinned DiffFAS file and is not installed. Only this combination was executed and qualified; no other combination is claimed equivalent.",
+  "setup_script_sha256": "de4a1692136d8ea21358d9ee4c34b18d15acf4d2b6d16c6f12c324b4778a1342",
+  "untouched_environments": [
+    "base",
+    "gpat-m5",
+    "gpat-m6-e03",
+    "gpat-m6-e04-geometry",
+    "gpat-m6-e05",
+    "gpat-m6-e06c",
+    "stdn"
+  ]
+}
