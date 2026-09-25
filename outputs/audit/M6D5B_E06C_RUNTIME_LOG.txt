@@ -1,0 +1,38 @@
+M6D5b E06c DSDG-BIN-IDFREE exact training-graph / physical-batch-240 log (chronological; UTC 2026-09-25)
+=====================================================================================================
+[laptop] authority: HEAD=origin/m6-baselines=6e3dd3384add2ef723c4fc00e30512e58cd761c5 divergence 0 0, clean; test -f AGENTS.md -> absent
+[laptop] ledger 111 rows; artifact index 584 data rows (585 lines incl. header); environments/e06c.lock.json sha256 91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95
+[gpu] start: HEAD=origin=13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8 divergence 0 0, clean
+[gpu] git fetch --no-tags origin refs/heads/m6-baselines:refs/remotes/origin/m6-baselines -> 6e3dd33
+[gpu] merge-base --is-ancestor HEAD origin/m6-baselines -> true; distance 1; git merge --ff-only origin/m6-baselines
+[gpu] final: HEAD=origin=6e3dd3384add2ef723c4fc00e30512e58cd761c5 divergence 0 0, clean
+[gpu] environments/e06c.lock.json sha256 91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95
+[gpu] LightCNN 123844849 bytes, sha256 d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964
+[gpu] source cache HEAD 16b793a7564a4b9308cf94e62bdb2ffacb3a725a; status ' D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl' (recorded removal)
+[gpu] nvidia-smi 2026-09-25T03:47:42Z: RTX 3090, total 24576 MiB, used 254 MiB, free 23870 MiB; compute processes: none
+      (display-only graphics processes: Xorg, gnome-shell, xdg-desktop-portal-gnome, snapd-desktop-integration, gnome-control-center, nautilus; ~160 MiB total)
+[stage] methods/dsdg/training_graph.py sha256 d355978de4cb0e6c8a068f3a1bc36e917885c18c7dba054f9ab13b0233a66892 copied to GPU worktree (temporary, untracked)
+[stage] methods/dsdg/training_qualification.py sha256 1db60e6eb7fe2b06b68683b29ea717a4222c20e856b6eb216a9e672c9cf356fe copied to GPU worktree (temporary, untracked)
+[gpu] build root /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg_m6d5b (new; M6D5a build root untouched)
+[gpu] launch env: CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60502 TMPDIR=<build>/tmp
+[gpu] process_1 started 2026-09-25T03:47:51Z, ended 03:47:58Z (rc=3):
+    {"status": "STOP_OOM", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg_m6d5b/process_1.json"}
+[gpu] process_1 in-process pre-attempt nvidia-smi: used 254 MiB, free 23870 MiB, compute processes [] -> resource_clean=True
+[gpu] process_1 OOM phase: forward_classifier_generator (netCls + netG/Decoder_s forward, train_generator.py:130-133)
+[gpu] process_1 OOM error (OutOfMemoryError): CUDA out of memory. Tried to allocate 960.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 634.44 MiB is free. Including non-PyTorch memory, this process has 22.69 GiB memory in use. Of the allocated memory 21.23 GiB is allocated by PyTorch, and 1.13 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[gpu] process_1 allocator at OOM: allocated 22799887872 B (peak 22800297984), reserved 24008196096 B (peak 24010293248), alloc retries 2, ooms 1
+[gpu] process_1 device at OOM: free 665255936 B of 25294995456 B; nvidia-smi used 23489 MiB, only compute process = own pid 612989
+[gpu] process_1 optimizer step entered: False; optimizer application: False; any parameter changed: False
+[gpu] process_1 counters: {"activation_checkpoint_calls": 0, "autograd_backward_calls": 0, "autograd_grad_calls": 0, "backward_passes": 0, "checkpoint_saves": 0, "optimizer_applications": 0, "optimizer_constructions": 1, "optimizer_step_entries": 0}
+[gpu] nvidia-smi after process_1: used 254 MiB (device released)
+[gpu] sha256 process_1.json = 934bd8d89a6c91eed1206e8e9c9b7a2d36bfd49f5e254aaf03057306055a8236 (copied to outputs/audit/M6D5B_E06C_SYNTHETIC_PROCESS_1.json, identical)
+[decision] clean-resource CUDA OOM at exact B=240 -> STOP_AND_REPORT. Process 2 NOT launched (rule P/T). No retry at B<240, no accumulation,
+           no AMP/FP16/BF16/TF32, no activation checkpointing, no offload, no allocator reconfiguration, no graph change.
+[stage] tests/test_m6d5b_e06c_training_graph.py, process_1 evidence and STOP report copied to GPU worktree (temporary); pytest in gpat-m6-e06c (CPU toy tensors, no optimizer, no backward):
+    ................................                                         [100%]
+    32 passed in 2.13s
+[gpu] staged copies removed; git status --porcelain empty; HEAD=origin=6e3dd3384add2ef723c4fc00e30512e58cd761c5 divergence 0 0; source cache status unchanged;
+      lock sha256 91416a20...; LightCNN sha256 d0750746...; nvidia-smi used 254 MiB
+[laptop] tests/test_m6d5b_e06c_training_graph.py via unittest (no Torch): Ran 32 tests, OK (skipped=10 Torch formula tests); tests/test_m6d5a_e06c_runtime.py: OK
+Counts over the whole milestone: GPU qualification processes 1, optimizer constructions 1, optimizer step entries 0, optimizer applications 0,
+backward passes 0, checkpoints 0, benchmark data opens 0, TEST opens 0.

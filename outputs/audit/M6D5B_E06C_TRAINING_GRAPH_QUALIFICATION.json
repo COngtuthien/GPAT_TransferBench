@@ -1,0 +1,480 @@
+{
+  "TEST_access": false,
+  "adam_state_b240": "NOT_REACHED",
+  "artifacts_sha256": {
+    "methods/dsdg/training_graph.py": "d355978de4cb0e6c8a068f3a1bc36e917885c18c7dba054f9ab13b0233a66892",
+    "methods/dsdg/training_qualification.py": "1db60e6eb7fe2b06b68683b29ea717a4222c20e856b6eb216a9e672c9cf356fe",
+    "outputs/audit/M6D5B_E06C_RUNTIME_LOG.txt": "fc1287bb70c6f414a1ff15c2ebe2a9238b18c437313aa44544aee8d7dfb636e8",
+    "outputs/audit/M6D5B_E06C_SYNTHETIC_PROCESS_1.json": "934bd8d89a6c91eed1206e8e9c9b7a2d36bfd49f5e254aaf03057306055a8236",
+    "outputs/audit/M6D5B_E06C_TRAINING_GRAPH_QUALIFICATION.md": "823125a28cffe1905a550138c74317249fe6e89af9477b53651a999adb09a9a0",
+    "tests/test_m6d5b_e06c_training_graph.py": "501a290bb4502487550d39debba66eade285097ffa0a486a3d828570e7f26523",
+    "tools/m6d5b_e06c_training_preflight.py": "7db86d9d4fc6208ba506ead0ee2014ef7db11cf143fb4007037c002cda9e9b2e"
+  },
+  "authority": {
+    "agents_md": "absent (test -f only)",
+    "commit": "6e3dd3384add2ef723c4fc00e30512e58cd761c5",
+    "index_rows_start": 584,
+    "laptop_clean": true,
+    "laptop_divergence": [
+      0,
+      0
+    ],
+    "ledger_rows_start": 111,
+    "subject": "M6D5a: qualify E06c runtime architecture"
+  },
+  "backward_passes": 0,
+  "benchmark_data_access": false,
+  "benchmark_training": false,
+  "checkpoint_created": false,
+  "classification": "M6D5B_E06C_TRAINING_GRAPH_STOPPED_OOM",
+  "commit": false,
+  "decision": "STOP_AND_REPORT",
+  "deviation": "DEV-020",
+  "environment": {
+    "compatibility_patch": "NONE",
+    "cuda": "13.0",
+    "cudnn": 92000,
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "identity_fields_matching_lock": [
+      "compiler",
+      "cuda",
+      "cudnn",
+      "executable",
+      "gpu_capability",
+      "gpu_driver",
+      "numpy",
+      "packages",
+      "pillow",
+      "precision",
+      "python",
+      "python_sha256",
+      "torch",
+      "torchvision"
+    ],
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60502",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg_m6d5b/tmp"
+    },
+    "lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+    "name": "gpat-m6-e06c",
+    "packages_changed": false,
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "torch": "2.12.1+cu130"
+  },
+  "failure_classification": "CUDA_OOM_PHYSICAL_BATCH_240",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "final_status": [
+    "E06c_RUNTIME_ENVIRONMENT_QUALIFIED",
+    "E06c_ARCHITECTURE_RUNTIME_QUALIFIED",
+    "E06c_TRAINING_GRAPH_PHYSICAL_BATCH_240_STOPPED_OOM",
+    "E06c_PHYSICAL_BATCH_240_NOT_QUALIFIED",
+    "E06c_FULL_TRAINING_NOT_EXECUTED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "future_resolution_categories_non_authoritative": [
+    "larger-memory single device or multi-GPU global-batch DataParallel runtime",
+    "owner-approved demonstrated semantics-preserving execution of batch-dependent MMD/orthogonality",
+    "recompute-based activation checkpointing",
+    "allocator reconfiguration (insufficient alone)",
+    "reduced precision",
+    "offload"
+  ],
+  "gpu_sync": {
+    "ancestry_distance": 1,
+    "fetch": "refs/heads/m6-baselines only",
+    "final": "6e3dd3384add2ef723c4fc00e30512e58cd761c5",
+    "final_clean": true,
+    "final_divergence": [
+      0,
+      0
+    ],
+    "method": "git merge --ff-only origin/m6-baselines",
+    "staged_temporary_copies_removed": true,
+    "start": "13fc86c15ecb9303e4ec678ab3f0f55ff61a51d8"
+  },
+  "gradient_accumulation_steps": 1,
+  "gradient_inventory_b240": "NOT_REACHED",
+  "graph_semantics_code": {
+    "epoch1": "rec + 0.01*(kl+mmd+ip+pair+cls+ort)",
+    "loss_cls": "10*CE(one logit, 0) == 0",
+    "loss_ip": "1000*(MSE(rec_nir_fc, nir_fc.detach())+MSE(rec_vis_fc, vis_fc.detach()))/2; reconstructed features not detached",
+    "loss_kl": "(kl(nir)+kl(vis)+kl(a)).mean()/3 via pinned kl_loss",
+    "loss_mmd": "50*|mean0(z_nir)-mean0(z_vis)|.mean() over the full physical batch",
+    "loss_ort": "1*|sum1(z_cls*z_nir).mean()| over the full physical batch",
+    "loss_pair": "0.0*MSE(rec_nir_fc, rec_vis_fc); lambda_pair=0 (A1), upstream 5 not restored",
+    "loss_rec": "reconstruction_loss(rec, img, True)/2.0 (per-sample sum, batch mean)",
+    "module": "methods/dsdg/training_graph.py",
+    "pinned_order": "forward -> losses -> zero_grad (line 180) -> backward -> step",
+    "postwarmup": "rec+kl+mmd+ip+pair+cls+ort",
+    "transcribes": "train_generator.py:87-182",
+    "unit_test_evidence": "CPU toy nets + pinned util, no optimizer/backward; not B=240 evidence"
+  },
+  "lightcnn": {
+    "bytes": 123844849,
+    "filtered": [
+      "module.fc2.weight"
+    ],
+    "matched": 60,
+    "missing": 0,
+    "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+    "shape_mismatches": 0,
+    "unchanged_before_after": true
+  },
+  "loss_components_b240": "NOT_REACHED (OOM before loss construction); no value fabricated",
+  "method_id": "E06c",
+  "method_name": "DSDG-BIN-IDFREE",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D5b",
+  "models": {
+    "netCls": {
+      "parameter_tensors": 2,
+      "parameters": 129,
+      "requires_grad_parameters": 129
+    },
+    "netE_nir": {
+      "parameter_tensors": 17,
+      "parameters": 13790048,
+      "requires_grad_parameters": 13790048
+    },
+    "netE_vis": {
+      "parameter_tensors": 17,
+      "parameters": 11692640,
+      "requires_grad_parameters": 11692640
+    },
+    "netG": {
+      "parameter_tensors": 21,
+      "parameters": 19887494,
+      "requires_grad_parameters": 19887494
+    },
+    "netIP": {
+      "parameter_tensors": 60,
+      "parameters": 10475872,
+      "requires_grad_parameters": 0
+    }
+  },
+  "modes": {
+    "netCls": true,
+    "netE_nir": true,
+    "netE_vis": true,
+    "netG": true,
+    "netIP": false
+  },
+  "optimizer": {
+    "class": "torch.optim.adam.Adam",
+    "constructor_call": "torch.optim.Adam(list(netE_nir.parameters()) + list(netE_vis.parameters()) + list(netG.parameters()), lr=2e-4)",
+    "duplicates": 0,
+    "explicit_arguments_beyond_lr": [],
+    "overlap_netCls_netIP": 0,
+    "param_groups": 1,
+    "parameter_tensors": 55,
+    "parameters": 45370182,
+    "resolved_group_defaults": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "capturable": false,
+      "decoupled_weight_decay": false,
+      "differentiable": false,
+      "eps": 1e-08,
+      "foreach": null,
+      "fused": null,
+      "lr": 0.0002,
+      "maximize": false,
+      "weight_decay": 0
+    },
+    "source": "train_generator.py:87-88"
+  },
+  "optimizer_applications": 0,
+  "optimizer_constructed": true,
+  "parameter_change": {
+    "any": false,
+    "per_module": {
+      "netCls": 0,
+      "netE_nir": 0,
+      "netE_vis": 0,
+      "netG": 0,
+      "netIP": 0
+    }
+  },
+  "physical_batch_240_qualified": false,
+  "physical_batch_size": 240,
+  "preflight": {
+    "command": "python3 -I -S -B tools/m6d5b_e06c_training_preflight.py --rebuild-index",
+    "constructs_model": false,
+    "imports_torch": false,
+    "tool": "tools/m6d5b_e06c_training_preflight.py",
+    "validates": "retained STOP_OOM state"
+  },
+  "preserved_inputs_sha256": {
+    "configs/frozen/dsdg_bin_idfree_v1.yaml": "a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de",
+    "configs/methods/e06c_dsdg_bin_idfree.yaml": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+    "environments/e06c.conda-explicit.txt": "40feecfc1b9498a117bfcdf09ff84970fec2a89911413ab48970c3c29a5b40fd",
+    "environments/e06c.lock.json": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+    "environments/e06c.pip-freeze.txt": "527a5ec89fc9fb951130b7cc2a9a9b0bbf77c653a93b8aee35ff2c01cd27fec2",
+    "environments/e06c.runtime.json": "178a60848c53b0e0c5ab8cd704d04fe917efec06f71fdc00ce32f115d6d1e26f",
+    "methods/common/config.py": "786f934716ab05c9e30dc957b4da3a6de4ce4e0370ac5fa2ad75bfa09683b4a3",
+    "methods/common/learned.py": "20252494a7a8e02ddf9a448de011d91cf7e391ca739ac5a5532267d79b4f0525",
+    "methods/common/upstream.py": "0df26ae0147f142df0aca7fff98558ce0477491c85528b825df1caa7269035cc",
+    "methods/dsdg/__init__.py": "6e9136f0934016da997e0c496fc1342bf09c687018cfe2da5075287ca01c4274",
+    "methods/dsdg/adapter.py": "d38fa46ce2fbbf331417c140b738052d572dcaca3eb4187ad2d9b4cff72bef3e",
+    "methods/dsdg/runtime.py": "789dd59f5a25eba72fe894808b2b36552904fc31303ebcf8f984e1c1afc4fba4",
+    "methods/dsdg/source.py": "32829fa926bb1f107c3a99d3e2903e13529b4ab6ffc95106852404ca04b91b15",
+    "outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json": "f75989a098466db6f96cf85d0154897d41febe156ee25475ac544a58373cb0ee",
+    "outputs/audit/M6C2A_IMPLEMENTATION.json": "fa7f61b22f9107a4e20e258b2c184b80cf59148b7b5f67f506dcd1c504bb58ab",
+    "outputs/audit/M6C2A_IMPLEMENTATION.md": "9d685d73bf1113724b3e8244bf03ed15edc39fd68087b963101be6b04089d419",
+    "outputs/audit/M6D5A_E06C_RUNTIME_ARCHITECTURE_QUALIFICATION.json": "1a4346de9c4d344ca4c733a521a190bf0c7f6801e47c43b240d56c9a901ef909",
+    "outputs/audit/M6D5A_E06C_RUNTIME_ARCHITECTURE_QUALIFICATION.md": "b32fcf8efd5d89cef2bb95d8245e428b548990ce2f0b366c11335a6cb8e106e8",
+    "outputs/audit/M6D5A_E06C_RUNTIME_LOG.txt": "62a7b416aac2508979006b36813567b608cb2c961511de132bd5a5458f329402",
+    "outputs/audit/M6D5A_E06C_SYNTHETIC_PROCESS_1.json": "05de38af9561dd065311acaa80933127af734fbd5c4f851d32e94093d4e9874a",
+    "outputs/audit/M6D5A_E06C_SYNTHETIC_PROCESS_2.json": "05de38af9561dd065311acaa80933127af734fbd5c4f851d32e94093d4e9874a",
+    "tests/test_m6d5a_e06c_runtime.py": "65e0b09828b305957877d637eb8025431aab3101fa4f7dc06baf6c82444d32d8",
+    "third_party/source_pins.json": "484558032f53b536cb7832803980c5273264c262ab74a6eb2c67f27641d72cec",
+    "tools/m6d5a_e06c_runtime_preflight.py": "8b8f75dd0eab7661629bf65f5a8f3932b79370dda39f00f0d01bc7ead760e73e"
+  },
+  "process_1": {
+    "counters": {
+      "activation_checkpoint_calls": 0,
+      "autograd_backward_calls": 0,
+      "autograd_grad_calls": 0,
+      "backward_passes": 0,
+      "checkpoint_saves": 0,
+      "optimizer_applications": 0,
+      "optimizer_constructions": 1,
+      "optimizer_step_entries": 0
+    },
+    "diagnostic_seed": 60502,
+    "ended_utc": "2026-09-25T03:47:58Z",
+    "exit_code": 3,
+    "firewall": {
+      "denied": [],
+      "event_counts": {
+        "open": 2235,
+        "os.listdir": 264,
+        "os.scandir": 357
+      },
+      "lightcnn_read_opens": 3
+    },
+    "memory_by_phase": [
+      {
+        "allocated_bytes": 229401088,
+        "device_free_bytes": 24388239360,
+        "device_total_bytes": 25294995456,
+        "peak_allocated_bytes": 353616896,
+        "peak_reserved_bytes": 367001600,
+        "phase": "after_model_construction",
+        "reserved_bytes": 367001600
+      },
+      {
+        "allocated_bytes": 606890496,
+        "device_free_bytes": 23966711808,
+        "device_total_bytes": 25294995456,
+        "peak_allocated_bytes": 606891008,
+        "peak_reserved_bytes": 744488960,
+        "phase": "after_input_allocation",
+        "reserved_bytes": 744488960
+      }
+    ],
+    "oom": {
+      "allocator": {
+        "allocated_bytes.all.current": 22799887872,
+        "allocated_bytes.all.peak": 22800297984,
+        "inactive_split_bytes.all.current": 1208308224,
+        "num_alloc_retries": 2,
+        "num_ooms": 1,
+        "reserved_bytes.all.current": 24008196096,
+        "reserved_bytes.all.peak": 24010293248
+      },
+      "any_parameter_changed": false,
+      "error": "CUDA out of memory. Tried to allocate 960.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 634.44 MiB is free. Including non-PyTorch memory, this process has 22.69 GiB memory in use. Of the allocated memory 21.23 GiB is allocated by PyTorch, and 1.13 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)",
+      "error_type": "OutOfMemoryError",
+      "gpu_at_oom": {
+        "compute_processes": [
+          {
+            "pid": "612989",
+            "process_name": "python",
+            "used_mib": "23230"
+          }
+        ],
+        "free_mib": 635,
+        "own_pid": 612989,
+        "total_mib": 24576,
+        "used_mib": 23489
+      },
+      "memory_at_oom": {
+        "allocated_bytes": 22799887872,
+        "device_free_bytes": 665255936,
+        "device_total_bytes": 25294995456,
+        "peak_allocated_bytes": 22800297984,
+        "peak_reserved_bytes": 24010293248,
+        "phase": "at_oom",
+        "reserved_bytes": 24008196096
+      },
+      "optimizer_application_occurred": false,
+      "optimizer_step_entered": false,
+      "parameters_changed": {
+        "netCls": 0,
+        "netE_nir": 0,
+        "netE_vis": 0,
+        "netG": 0,
+        "netIP": 0
+      },
+      "phase": "forward_classifier_generator"
+    },
+    "path": "outputs/audit/M6D5B_E06C_SYNTHETIC_PROCESS_1.json",
+    "phase_seconds": {
+      "forward_encoders": 0.1808,
+      "input_allocation": 2.2804,
+      "model_construction": 1.3199,
+      "optimizer_construction": 0.0007
+    },
+    "phases_not_reached": [
+      "lightcnn_path",
+      "loss_construction",
+      "zero_grad",
+      "backward",
+      "optimizer_step"
+    ],
+    "rng": {
+      "after_inputs": {
+        "cpu_sha256": "1525cde7ae3bfbec477243104891f22550f2b04be48b322fbf89f581cc9d92ae",
+        "cuda_sha256": "ed263f47cfbb08a3dbb90351ba4bd3013f814c1d337c6ec40d448ac4739d5926"
+      },
+      "after_seed": {
+        "cpu_sha256": "6755173801835f5f9055012044e3810a09b6d9a1b26fdcdc363e495c1e7d43f0",
+        "cuda_sha256": "ed263f47cfbb08a3dbb90351ba4bd3013f814c1d337c6ec40d448ac4739d5926"
+      }
+    },
+    "sha256": "934bd8d89a6c91eed1206e8e9c9b7a2d36bfd49f5e254aaf03057306055a8236",
+    "started_utc": "2026-09-25T03:47:51Z",
+    "status": "STOP_OOM",
+    "warnings": [
+      "UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended. It's best to use methods such as torch.tensor(data, dtype=*, device='cuda') to create tensors. (Triggered internally at /pytorch/torch/csrc/tensor/python_tensor.cpp:78.)"
+    ]
+  },
+  "process_2": {
+    "launched": false,
+    "reason": "clean reproducible CUDA OOM in process 1; rule P/T forbids double-confirmation runs"
+  },
+  "push": false,
+  "recursive_filesystem_search": false,
+  "repeatability": "NOT_APPLICABLE (single process by rule after clean OOM)",
+  "replica_factor": 1,
+  "reporting_label": "DSDG-BIN-IDFREE (Amendment A1 identity-free controlled adaptation)",
+  "resource_contamination": false,
+  "resource_state": {
+    "display_only_processes": "Xorg, gnome-shell, xdg-desktop-portal-gnome, snapd-desktop-integration, gnome-control-center, nautilus (~160 MiB)",
+    "in_process_before": {
+      "compute_processes": [],
+      "free_mib": 23870,
+      "own_pid": 612989,
+      "total_mib": 24576,
+      "used_mib": 254
+    },
+    "processes_killed": 0,
+    "resource_clean": true,
+    "shell_nvidia_smi_utc": "2026-09-25T03:47:42Z"
+  },
+  "schema_version": 1,
+  "source": {
+    "closure_files": 13,
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "pinned_statement_mismatches": [],
+    "pinned_statements_verified": 46,
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "unchanged_before_after": true
+  },
+  "synthetic_bank": false,
+  "synthetic_input": {
+    "construction": "methods/dsdg/training_graph.py::synthetic_pair (analytic, CPU float64 -> FP32 CUDA)",
+    "distinct_rows": 480,
+    "files_or_decoder": false,
+    "label": "SYNTHETIC_PHYSICAL_BATCH_240",
+    "label_spoof": {
+      "device": "cuda:0",
+      "dtype": "torch.int64",
+      "finite": true,
+      "l2": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "nonzero": 0,
+      "sha256": "155e437b946ac82ae591ff382b8d19efda9397b2282672dbabd91ec31ce8a651",
+      "shape": [
+        240
+      ]
+    },
+    "pattern": "row b: fx=1+(b mod 17), fy=1+(7b mod 13), phase=2*pi*b/240+c; spoof=0.5+0.5*sin(fx*pi*x+phase)*cos(fy*pi*y-0.7c); live=0.5+0.5*cos(fy*pi*(x+y)/2+1.3*phase)*sin(fx*pi*x*y+c+0.5)",
+    "rng_used": false,
+    "x_live": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 3827.5378346100542,
+      "max": 0.9999999403953552,
+      "mean": 0.49766505221831053,
+      "min": 6.91146837539236e-08,
+      "nonzero": 47185920,
+      "sha256": "b4fea619f2d81a0b4f46dd6db2cec9e4bb953047d312c1022ed1ec93bdcd42c0",
+      "shape": [
+        240,
+        3,
+        256,
+        256
+      ]
+    },
+    "x_spoof": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 3839.7987026646915,
+      "max": 1.0,
+      "mean": 0.49994870368764943,
+      "min": 0.0,
+      "nonzero": 47185828,
+      "sha256": "e4ec45dbe45375cb21c8c63004b266faa7bba246df4f058bc874af6acd1012c8",
+      "shape": [
+        240,
+        3,
+        256,
+        256
+      ]
+    }
+  },
+  "tests": {
+    "existing_tests_modified": false,
+    "file": "tests/test_m6d5b_e06c_training_graph.py",
+    "full_suite_run": false,
+    "gpu_pytest_gpat_m6_e06c": "32 passed",
+    "laptop_unittest": "32 run, OK, 10 skipped (Torch absent)",
+    "m6d5a_tests_laptop": "OK"
+  },
+  "training_graph_qualified": false,
+  "training_launched": false,
+  "upstream_launch_context": "train_generator.sh gpu_ids='0,1,2,3': upstream DataParallel split global batch 240 over four GPUs; this runtime has replica_factor=1 on one RTX 3090",
+  "workarounds_attempted": [],
+  "zero_grad": {
+    "M6D5c_issue": "later iterations differ only if an optimizer-owned tensor receives no gradient (Adam skips None, but applies moment decay for zero-filled); production runner must verify 55/55 gradient coverage per step or take an explicit owner-approved set_to_none decision",
+    "analysis": "first step: all grads None under both 1.6 in-place zero and 2.12 set_to_none=True -> identical",
+    "first_step_numerical_demonstration": "NOT_REACHED (OOM precedes line 180)",
+    "historical_pytorch_1_6_default": "zero_grad(self): p.grad.detach_(); p.grad.zero_() for p.grad not None",
+    "pinned_call": "optimizer.zero_grad()  # train_generator.py:180, no argument",
+    "runtime_signature_default_set_to_none": true
+  }
+}
