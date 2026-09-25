@@ -1,0 +1,64 @@
+M6D5d E06c DSDG-BIN-IDFREE GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V2 tail-batch execution-resolution log (chronological; UTC 2026-09-25)
+=====================================================================================================================================
+[laptop] authority: HEAD=origin/m6-baselines=666aba4803468c1d2888e347f8b09afa2ca47401 ("M6D5c: resolve E06c global batch 240 execution") divergence 0 0, clean
+[laptop] test -f /home/cong/GPAT_TransferBench/AGENTS.md -> absent; no other instruction discovery; no recursive search
+[laptop] ledger 113 rows (sha256 aa6e1ea56fb36c547e94bf750fbf3c86c698c61eac20c96bec05a4b740c2c292, 311249 bytes); artifact index 604 data rows (605 lines, CRLF)
+[laptop] committed M6D5c files equal M6D5c evidence: microbatch_execution.py 67f2ae80..., microbatch_qualification.py f85972bf..., PROCESS_1 1e9abb41...
+[laptop] note: tools/m6d5c_e06c_memory_preflight.py now stops at 'HEAD authority' (it pins AUTHORITY=0c62dbe by design; HEAD moved to 666aba4). Not modified.
+[gpu] start: HEAD=0c62dbe0bc07b305b80eabadf050d8aedeb22859 clean; nvidia-smi used 254 MiB, free 23870 MiB, no compute processes
+[gpu] git fetch --no-tags origin refs/heads/m6-baselines:refs/remotes/origin/m6-baselines -> 666aba4; merge-base --is-ancestor -> true; distance 1
+[gpu] git merge --ff-only origin/m6-baselines -> HEAD=origin=666aba4803468c1d2888e347f8b09afa2ca47401 divergence 0 0, clean
+[laptop] TRAIN row-count provenance (retained evidence; files opened by exact path):
+         outputs/audit/M4_COMMON_PAIR_AUDIT.json (json: expected_rows.TRAIN 8838, status PASS)
+         outputs/audit/pairs_train_v1.sha256 (json sidecar: rows 8838, sha256 a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243)
+         configs/frozen/dsdg_bin_idfree_v1.yaml (read earlier in M6D5c; rows 8838 = casia 2520 + msu 1200 + siw 5118)
+         also: `grep -l pairs_train_v1` over outputs/audit/*.json|*.md (repository audit files only); `grep pairs_train_v1` in ARTIFACT_INDEX.csv
+[laptop] manifest touches (disclosed): one `ls manifests/` (manifest filenames only); one `sha256sum manifests/pairs_train_v1.parquet`
+         (raw bytes streamed through SHA256, NOT parsed) -> a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243 == frozen value.
+         manifests/pair_train_stats_v1.json head read (TRAIN pose statistics, n_train_complete per dataset; no sample rows).
+         No parquet parsed; no VAL/TEST rows; no image bytes; no benchmark data root opened.
+[laptop] upstream DataLoader: third_party/source_cache/facexzoo @ 16b793a7564a4b9308cf94e62bdb2ffacb3a725a tree 0d2216bd...; train_generator.py sha256 5b7bf426...b370
+         lines 94-97: DataLoader(GenDataset_s(...), batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True); no 'drop_last' anywhere in file
+[laptop] epoch arithmetic: divmod(8838, 240) = (36, 198) -> [240]x36 + [198] -> 37 optimizer steps/epoch (planned 7400 for 200 epochs; algebra only)
+[laptop] additive files written: configs/amendments/e06c_m6d5d_tail_batch_execution_resolution.yaml, methods/dsdg/microbatch_execution_v2.py,
+         methods/dsdg/microbatch_qualification_v2.py, tests/test_m6d5d_e06c_tail_batch_execution.py (V1, M6D5a/b/c files, frozen configs untouched)
+[laptop] unittest static contract (no Torch): 10 run; only the report-wording test errored (report not yet written)
+[stage] 05:55:06Z copied to GPU worktree (temporary, untracked; sha256 verified equal on both hosts):
+        microbatch_execution_v2.py d5af6c52a8a5367cb114d888bd8f2f39c1234e358f5ed754f32fe750979fdb21
+        microbatch_qualification_v2.py c659b5c017b93e7eb8e1d83857589e82d802315aa4d703965c8b59de7d77aa19
+        e06c_m6d5d_tail_batch_execution_resolution.yaml f1ea0543f51b2403399080ccc2a3856ab2c0f07e5e0a962603357d7a7d83ec97
+        test_m6d5d_e06c_tail_batch_execution.py 7d9db930f98672d65ec86eb6007d795862622aae47b0da1f86783544f1ec0198
+[gpu] pre-run (gpat-m6-e06c, CUDA_VISIBLE_DEVICES=""): Contract + Formula tests 15 passed, 4 deselected (report test + 3 evidence tests)
+[gpu] build root /home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg_m6d5d (new; earlier build roots untouched)
+[gpu] launch env (every process): CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8
+        PYTHONHASHSEED=60504 TMPDIR=<build>/tmp; interpreter /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python; seed 60504 (qualification only)
+[gpu] 05:55:28Z nvidia-smi: total 24576 MiB, used 254 MiB, free 23870 MiB; compute processes: none
+[gpu] reference7 (B=7, max microbatch 3, chunks 3,3,1) pid 675155 started 05:55:28Z ended 05:55:32Z status PASS
+        total_rel_error 4.22e-08; gradient cosine 0.99999987, rel-L2 5.08e-04; owned grads 55/55 both paths; counters 2 optimizers / 2 applications / 4 backward
+        (the launcher printed rc=0 of the `| tail` pipe; the JSON status is authoritative PASS)
+[gpu] after reference7: nvidia-smi used 254 MiB
+[gpu] 05:55:32Z nvidia-smi: total 24576 MiB, used 254 MiB, free 23870 MiB; compute processes: none
+[gpu] v1compat (B=240, V1 run_global_batch vs V2 run_global_batch_v2) pid 675282 started 05:55:32Z ended 05:55:46Z status PASS
+        chunks 12x20 both; delta/losses/gradients bitwise equal; post-step parameters bitwise equal; counters 2 / 2 / 24 backward
+[gpu] after v1compat: nvidia-smi used 254 MiB
+[gpu] 05:56:11Z nvidia-smi: total 24576 MiB, used 254 MiB, free 23870 MiB; compute processes: none
+[gpu] b198 process_1 pid 675884 started 05:56:11Z ended 05:56:20Z rc=0 status PASS
+        chunks [20x9, 18]; epsilon [198,128]x3; 10 backward; 1 optimizer application; epoch-1 global loss 14501.720875212004;
+        overall peak allocated 5947622400 B, reserved 7165968384 B
+[gpu] after process_1: nvidia-smi used 254 MiB
+[gpu] 05:56:29Z nvidia-smi: total 24576 MiB, used 254 MiB, free 23870 MiB; compute processes: none
+[gpu] b198 process_2 pid 676186 started 05:56:29Z ended 05:56:39Z rc=0 status PASS (same values; see repeatability)
+[gpu] after process_2: nvidia-smi used 254 MiB
+[gpu] sha256 reference7.json 7f126aace95a7d27d0cd70e2d72433fc8e7811ea6afa6d1ccc794cd519f41781 -> outputs/audit/M6D5D_E06C_REFERENCE_CHECK.json (identical)
+[gpu] sha256 v1compat.json dfa2661375c121910bc0327ed739b03a0e9edb29375eea17a1eef617d72ca5e5 -> outputs/audit/M6D5D_E06C_V1_COMPATIBILITY.json (identical)
+[gpu] sha256 b198_process_1.json 517a9ff329d4878506b48598e1333a5f57ec6fe7216917c903258dd4d64a8ef3 -> outputs/audit/M6D5D_E06C_B198_PROCESS_1.json (identical)
+[gpu] sha256 b198_process_2.json a6a2cbf62031d19f0b18b77063c0481b4b1690555e65fd021f95765b4fa0e595 -> outputs/audit/M6D5D_E06C_B198_PROCESS_2.json (identical)
+[laptop] repeatability b198 process_1 vs process_2: differing JSON fields only started_utc/ended_utc, PIDs, phase_seconds
+[stage] 05:58:49Z test file, four evidence JSONs and the M6D5d report copied to GPU worktree (temporary); pytest in gpat-m6-e06c (CUDA_VISIBLE_DEVICES=""):
+        test_m6d5d + test_m6d5c + test_m6d5b + test_m6d5a: 104 passed in 3.72s
+[gpu] 05:58:54Z all staged copies removed; git status --porcelain empty; HEAD=origin=666aba4803468c1d2888e347f8b09afa2ca47401 divergence 0 0;
+      source cache status ' D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl' (recorded removal, unchanged); lock sha256 91416a20...; nvidia-smi used 254 MiB
+[laptop] unittest (no Torch) test_m6d5d + test_m6d5c + test_m6d5b + test_m6d5a: Ran 104, OK (skipped=27); test_m6d5d alone: 19 run, OK (skipped=6)
+Counts over the whole milestone: GPU qualification processes 4 (reference7, v1compat, b198 x2). Qualification-only totals: optimizer constructions 6,
+optimizer applications 6, backward calls 48 (reference7 2/2/4, v1compat 2/2/24, b198 1/1/10 each). B=198 alone: 2 applications, 20 backward.
+Checkpoints 0, autograd.grad 0, activation checkpoints 0, firewall denials 0, benchmark data opens 0, VAL opens 0, TEST opens 0.

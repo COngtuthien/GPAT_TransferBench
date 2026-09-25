@@ -1,0 +1,4618 @@
+{
+  "TEST_access": false,
+  "VAL_access": false,
+  "adapter_generic_accumulation_refused": true,
+  "asset_after": {
+    "bytes": 123844849,
+    "config_external_runtime_path_laptop": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964"
+  },
+  "asset_before": {
+    "bytes": 123844849,
+    "config_external_runtime_path_laptop": "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+    "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964"
+  },
+  "backward_calls": 10,
+  "batch_coupling": {
+    "batchnorm_modules": 0,
+    "consequence": "per-sample layers; MMD and orthogonality are the only batch-coupled terms",
+    "instancenorm_affine": false,
+    "instancenorm_modules": 36,
+    "instancenorm_track_running_stats": false,
+    "per_model": {
+      "netCls": {
+        "buffers": 0
+      },
+      "netE_nir": {
+        "InstanceNorm2d": [
+          [
+            false,
+            false
+          ]
+        ],
+        "buffers": 0
+      },
+      "netE_vis": {
+        "InstanceNorm2d": [
+          [
+            false,
+            false
+          ]
+        ],
+        "buffers": 0
+      },
+      "netG": {
+        "InstanceNorm2d": [
+          [
+            false,
+            false
+          ]
+        ],
+        "buffers": 0
+      },
+      "netIP": {
+        "buffers": 0
+      }
+    }
+  },
+  "benchmark_data_access": false,
+  "benchmark_training": false,
+  "binding": {
+    "netCls": {
+      "class": "Cls",
+      "device_ids": [
+        0
+      ],
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netE_nir": {
+      "class": "Encoder_s",
+      "device_ids": [
+        0
+      ],
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netE_vis": {
+      "class": "Encoder",
+      "device_ids": [
+        0
+      ],
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netG": {
+      "class": "Decoder_s",
+      "device_ids": [
+        0
+      ],
+      "module": "networks.generator",
+      "wrapper": "torch.nn.DataParallel"
+    },
+    "netIP": {
+      "class": "network_29layers_v2",
+      "device_ids": [
+        0
+      ],
+      "module": "networks.light_cnn",
+      "wrapper": "torch.nn.DataParallel"
+    }
+  },
+  "checkpoint_created": false,
+  "chunk_evidence": [
+    {
+      "chunk": 0,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0008479998796246946,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0011256138095632195,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0008534150547347963,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011413671309128404,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 10.477006912231445,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 10.59428596496582,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 10.649521827697754,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.447585105895996,
+        "loss_kl": 19.01753044128418,
+        "loss_mmd_surrogate": 1.8933345079421997,
+        "loss_ort_surrogate": 0.2405143827199936,
+        "loss_pair": 0.0,
+        "loss_rec": 14451.3564453125
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        0,
+        20
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 1,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0008098309044726193,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0011066329898312688,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0008053802885115147,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011421237140893936,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 9.92016887664795,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 9.777242660522461,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.675518035888672,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.345611572265625,
+        "loss_kl": 18.506376266479492,
+        "loss_mmd_surrogate": 1.549297571182251,
+        "loss_ort_surrogate": -0.05893152952194214,
+        "loss_pair": 0.0,
+        "loss_rec": 14630.384765625
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        20,
+        40
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 2,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0007932395092211664,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.001118173124268651,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0008055559592321515,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011304473737254739,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 10.162156105041504,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 10.144550323486328,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.99278736114502,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.343451499938965,
+        "loss_kl": 18.330223083496094,
+        "loss_mmd_surrogate": 1.6431094408035278,
+        "loss_ort_surrogate": 0.45531490445137024,
+        "loss_pair": 0.0,
+        "loss_rec": 14472.853515625
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        40,
+        60
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 3,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.000810825964435935,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0011178781278431416,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0008420846424996853,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011243236949667335,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 9.477242469787598,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 9.403977394104004,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.222410202026367,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.307153224945068,
+        "loss_kl": 18.416133880615234,
+        "loss_mmd_surrogate": 1.5900379419326782,
+        "loss_ort_surrogate": -0.3925646245479584,
+        "loss_pair": 0.0,
+        "loss_rec": 14253.822265625
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        60,
+        80
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 4,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0009164593648165464,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0011295247822999954,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0007801547180861235,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011198249412700534,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 9.204814910888672,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 9.12039852142334,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.103375434875488,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.347496032714844,
+        "loss_kl": 18.468074798583984,
+        "loss_mmd_surrogate": 1.6076207160949707,
+        "loss_ort_surrogate": -0.5275870561599731,
+        "loss_pair": 0.0,
+        "loss_rec": 14690.345703125
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        80,
+        100
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 5,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0008204200421459973,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0011212999233976007,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0008790962165221572,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011340108467265964,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 10.316056251525879,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 10.285433769226074,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 10.4433012008667,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.381267547607422,
+        "loss_kl": 18.7076416015625,
+        "loss_mmd_surrogate": 1.8120825290679932,
+        "loss_ort_surrogate": 1.0622915029525757,
+        "loss_pair": 0.0,
+        "loss_rec": 14692.736328125
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        100,
+        120
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 6,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0008361483924090862,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0011058455565944314,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0007744042086414993,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.001137968385592103,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 10.005109786987305,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 10.066573143005371,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.839317321777344,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.317468643188477,
+        "loss_kl": 18.718687057495117,
+        "loss_mmd_surrogate": 1.611806035041809,
+        "loss_ort_surrogate": -0.3814679980278015,
+        "loss_pair": 0.0,
+        "loss_rec": 14410.962890625
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        120,
+        140
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 7,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0007389506208710372,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0010977156925946474,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0008344099624082446,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011476664803922176,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 10.108966827392578,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 9.971888542175293,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.803820610046387,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.328135967254639,
+        "loss_kl": 18.24541473388672,
+        "loss_mmd_surrogate": 1.4723650217056274,
+        "loss_ort_surrogate": -0.01036731619387865,
+        "loss_pair": 0.0,
+        "loss_rec": 14600.0126953125
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        140,
+        160
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 8,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            20,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.0008340353379026055,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0011321200290694833,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0008638810832053423,
+          "nonzero": 983040,
+          "shape": [
+            20,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0011359208729118109,
+          "nonzero": 5120,
+          "shape": [
+            20,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 9.828804016113281,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 9.835590362548828,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.891294479370117,
+          "nonzero": 2560,
+          "shape": [
+            20,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.453322410583496,
+        "loss_kl": 18.408544540405273,
+        "loss_mmd_surrogate": 1.650880217552185,
+        "loss_ort_surrogate": 0.14199836552143097,
+        "loss_pair": 0.0,
+        "loss_rec": 14379.041015625
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        160,
+        180
+      ],
+      "size": 20,
+      "vis_fc_requires_grad": false
+    },
+    {
+      "chunk": 9,
+      "grads": {
+        "pre_spoof": {
+          "finite": true,
+          "l2": 0.0,
+          "nonzero": 0,
+          "shape": [
+            18,
+            1
+          ]
+        },
+        "rec_nir": {
+          "finite": true,
+          "l2": 0.000719187839422375,
+          "nonzero": 884736,
+          "shape": [
+            18,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_nir_fc": {
+          "finite": true,
+          "l2": 0.0010542606469243765,
+          "nonzero": 4608,
+          "shape": [
+            18,
+            256
+          ]
+        },
+        "rec_vis": {
+          "finite": true,
+          "l2": 0.0007282857550308108,
+          "nonzero": 884736,
+          "shape": [
+            18,
+            3,
+            128,
+            128
+          ]
+        },
+        "rec_vis_fc": {
+          "finite": true,
+          "l2": 0.0010691148927435279,
+          "nonzero": 4608,
+          "shape": [
+            18,
+            256
+          ]
+        },
+        "z_cls": {
+          "finite": true,
+          "l2": 9.206339836120605,
+          "nonzero": 2304,
+          "shape": [
+            18,
+            128
+          ]
+        },
+        "z_nir": {
+          "finite": true,
+          "l2": 9.227123260498047,
+          "nonzero": 2304,
+          "shape": [
+            18,
+            128
+          ]
+        },
+        "z_vis": {
+          "finite": true,
+          "l2": 9.260822296142578,
+          "nonzero": 2304,
+          "shape": [
+            18,
+            128
+          ]
+        }
+      },
+      "losses": {
+        "loss_cls": 0.0,
+        "loss_ip": 6.285107135772705,
+        "loss_kl": 18.423507690429688,
+        "loss_mmd_surrogate": 1.6982121467590332,
+        "loss_ort_surrogate": -0.3888416588306427,
+        "loss_pair": 0.0,
+        "loss_rec": 14423.7861328125
+      },
+      "nir_fc_requires_grad": false,
+      "rec_nir_fc_grad_fn": "DivBackward0",
+      "rec_nir_fc_requires_grad": true,
+      "rec_vis_fc_requires_grad": true,
+      "rows": [
+        180,
+        198
+      ],
+      "size": 18,
+      "vis_fc_requires_grad": false
+    }
+  ],
+  "chunk_sizes": [
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    18
+  ],
+  "classification": "CONTROLLED_EXECUTION_ADAPTATION",
+  "compatibility_patch": "NONE",
+  "contract": {
+    "all_epochs": 200,
+    "attack_type": 1,
+    "batch_one_training_refused_by_adapter": true,
+    "checkpoint_rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "deviation": "DEV-020",
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "hdim": 128,
+    "input_resolution": 256,
+    "losses": {
+      "lambda_ip": 1000,
+      "lambda_mmd": 50,
+      "lambda_ort": 1,
+      "lambda_pair": 0.0,
+      "lambda_type": 10
+    },
+    "optimizer": {
+      "learning_rate": 0.0002,
+      "name": "Adam",
+      "netCls_in_optimizer": false,
+      "scope": "netE_nir + netE_vis + netG"
+    },
+    "optimizer_contract_inspection": "STATIC_ONLY",
+    "physical_batch_policy": "E06C_REQUIRES_PHYSICAL_BATCH_240_FOR_OBJECTIVE_EQUIVALENCE",
+    "physical_batch_required": 240
+  },
+  "counters": {
+    "activation_checkpoint_calls": 0,
+    "autograd_backward_calls": 10,
+    "autograd_grad_calls": 0,
+    "backward_calls": 10,
+    "checkpoint_saves": 0,
+    "optimizer_applications": 1,
+    "optimizer_constructions": 1,
+    "optimizer_step_entries": 1,
+    "zero_grad_calls": [
+      {
+        "backward_calls_before": 0,
+        "set_to_none": false
+      }
+    ]
+  },
+  "dataloader_evidence": {
+    "drop_last_in_source": false,
+    "mismatches": [],
+    "pinned_lines": {
+      "94": "train_loader = torch.utils.data.DataLoader(",
+      "95": "GenDataset_s(img_root=args.img_root, list_file=args.train_list, attack_type=args.attack_type),",
+      "96": "batch_size=args.batch_size, shuffle=True,",
+      "97": "num_workers=args.workers, pin_memory=True)"
+    },
+    "runtime_torch_default_drop_last": false
+  },
+  "diagnostic_seed": 60504,
+  "draw_policy": "STOCHASTIC_DRAW_REPLAY_FOR_RECOMPUTATION",
+  "drop_last": false,
+  "ended_utc": "2026-09-25T05:56:20Z",
+  "environment_after": {
+    "compiler": "NOT_USED: no extension build; pinned DSDG uses standard torch.nn operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60504",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg_m6d5d/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "wheel": "0.48.0"
+    },
+    "pillow": "12.3.0",
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_before": {
+    "compiler": "NOT_USED: no extension build; pinned DSDG uses standard torch.nn operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60504",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e06c_dsdg_m6d5d/tmp"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "wheel": "0.48.0"
+    },
+    "pillow": "12.3.0",
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "d736cf0bafbf6e32412a384a5e256f817d965d983f1e9ec345a9ae6e1f45864e",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_lock_identity_match": [
+    "compiler",
+    "cuda",
+    "cudnn",
+    "executable",
+    "gpu_capability",
+    "gpu_driver",
+    "numpy",
+    "packages",
+    "pillow",
+    "precision",
+    "python",
+    "python_sha256",
+    "torch",
+    "torchvision"
+  ],
+  "environment_lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+  "epoch_batch_plan": {
+    "batch_size": 240,
+    "drop_last": false,
+    "final_batch": 198,
+    "full_batches": 36,
+    "optimizer_steps_per_epoch": 37,
+    "rows": 8838,
+    "rows_covered": 8838
+  },
+  "epoch_semantics": 1,
+  "epsilon": {
+    "bitwise_equal_to_pinned_reparameterize_draws": {
+      "cls": true,
+      "nir": true,
+      "vis": true
+    },
+    "dtype": "torch.float32",
+    "method": "torch.empty((B,128), float32, cuda).normal_() == torch.cuda.FloatTensor(size).normal_()",
+    "moments": {
+      "cls": {
+        "mean": 0.0007044087924285093,
+        "std": 0.9950930088375941
+      },
+      "nir": {
+        "mean": -0.0027963092966618386,
+        "std": 1.0009335425781563
+      },
+      "vis": {
+        "mean": 0.004081814202177266,
+        "std": 0.9879726217969597
+      }
+    },
+    "order": [
+      "cls",
+      "nir",
+      "vis"
+    ],
+    "rng_state_after_equal": true,
+    "sha256": {
+      "cls": "526f85908e16391028dd0cca5c3fd398364a32d791ea708f56b56ca2c569ab70",
+      "nir": "9673e1dc7ffa3d79539378426118885163e0b520417fe20cdfc847dabd440a5d",
+      "vis": "979ac9eb52513b2127d181e74df09cc944d43704a9fd6564f954a416dc927587"
+    },
+    "shape": [
+      198,
+      128
+    ]
+  },
+  "execution_mode": "GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V2",
+  "execution_policy": {
+    "amp": false,
+    "classification": "CONTROLLED_EXECUTION_ADAPTATION",
+    "execution_mode": "GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V1",
+    "global_batch_size": 240,
+    "microbatch_size": 20,
+    "microbatches_per_step": 12,
+    "optimizer_steps_per_global_batch": 1,
+    "physical_batch_240": "OOM_RETAINED",
+    "precision": "FP32",
+    "tf32": false
+  },
+  "fidelity": "CONTROLLED_ADAPTATION",
+  "final_chunk": 18,
+  "firewall": {
+    "denied": [],
+    "event_counts": {
+      "open": 2239,
+      "os.listdir": 264,
+      "os.scandir": 459
+    },
+    "lightcnn_read_opens": 3
+  },
+  "global_batch_size": 198,
+  "global_statistics": {
+    "delta": {
+      "l1_mean": 0.3305749297142029,
+      "negative": 63,
+      "positive": 65,
+      "sha256": "9b6b8af7e41104cb4263383c44dd5333846be4c1c204c4bebf50f9d8dc460add",
+      "shape": [
+        128
+      ],
+      "zero_coordinates": 0
+    },
+    "diagnostic_naive_microbatch_average_not_used": {
+      "loss_mmd": 21.2699556805803,
+      "loss_ort": 3.666053163835451
+    },
+    "loss_mmd_global_float64_recomputed": 16.52874715494207,
+    "loss_mmd_global_fp32": 16.528745651245117,
+    "loss_ort_global_float64_recomputed": 0.14035895845653704,
+    "loss_ort_global_fp32": 0.14035889506340027,
+    "mmd_sign_sha256": "2f2288581f1880de947c026f302fafd2b82ddc45ddf7a7a847900de14bf3f50f",
+    "ort_mean": -0.14035889506340027,
+    "ort_sign": -1.0,
+    "pass2_latents_bitwise_equal_pass1": {
+      "z_cls": true,
+      "z_nir": true,
+      "z_vis": true
+    },
+    "pass2_recomputed_ort_sign_equal": true,
+    "pass2_recomputed_sign_mismatches": 0,
+    "pass2_vs_pass1_latent_max_abs_diff": {
+      "z_cls": 0.0,
+      "z_nir": 0.0,
+      "z_vis": 0.0
+    },
+    "surrogate_sums_pass2": {
+      "loss_mmd_surrogate": 16.528746128082275,
+      "loss_ort_surrogate": 0.14035897236317396
+    }
+  },
+  "gpu_after": {
+    "compute_processes": [
+      {
+        "pid": "675884",
+        "process_name": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+        "used_mib": "7206"
+      }
+    ],
+    "free_mib": 16659,
+    "own_pid": 675884,
+    "total_mib": 24576,
+    "used_mib": 7465
+  },
+  "gpu_before": {
+    "compute_processes": [],
+    "free_mib": 23870,
+    "own_pid": 675884,
+    "total_mib": 24576,
+    "used_mib": 254
+  },
+  "gradient_inventory": {
+    "netCls": {
+      "elements": 129,
+      "finite": 2,
+      "non_none": 2,
+      "nonzero_elements": 0,
+      "nonzero_tensors": 0,
+      "per_tensor": {
+        "module.fc.bias": {
+          "finite": true,
+          "l2": 0.0,
+          "max_abs": 0.0,
+          "nonzero": 0,
+          "numel": 1,
+          "present": true
+        },
+        "module.fc.weight": {
+          "finite": true,
+          "l2": 0.0,
+          "max_abs": 0.0,
+          "nonzero": 0,
+          "numel": 128,
+          "present": true
+        }
+      },
+      "tensors": 2
+    },
+    "netE_nir": {
+      "elements": 13790048,
+      "finite": 17,
+      "non_none": 17,
+      "nonzero_elements": 13790048,
+      "nonzero_tensors": 17,
+      "per_tensor": {
+        "module.fc.bias": {
+          "finite": true,
+          "l2": 50.00400668428487,
+          "max_abs": 10.506025314331055,
+          "nonzero": 512,
+          "numel": 512,
+          "present": true
+        },
+        "module.fc.weight": {
+          "finite": true,
+          "l2": 3341.867221538479,
+          "max_abs": 21.111236572265625,
+          "nonzero": 4194304,
+          "numel": 4194304,
+          "present": true
+        },
+        "module.main.0.weight": {
+          "finite": true,
+          "l2": 931.8101197640096,
+          "max_abs": 94.63871002197266,
+          "nonzero": 2400,
+          "numel": 2400,
+          "present": true
+        },
+        "module.main.10.0.conv1.weight": {
+          "finite": true,
+          "l2": 2114.0241445372812,
+          "max_abs": 10.759475708007812,
+          "nonzero": 1179648,
+          "numel": 1179648,
+          "present": true
+        },
+        "module.main.10.0.conv2.weight": {
+          "finite": true,
+          "l2": 2623.374393356476,
+          "max_abs": 9.867630958557129,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.10.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 362.12365549790985,
+          "max_abs": 4.80728816986084,
+          "nonzero": 131072,
+          "numel": 131072,
+          "present": true
+        },
+        "module.main.12.0.conv1.weight": {
+          "finite": true,
+          "l2": 1994.7952080129976,
+          "max_abs": 8.414016723632812,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.12.0.conv2.weight": {
+          "finite": true,
+          "l2": 1716.4673657029077,
+          "max_abs": 7.376916885375977,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.4.0.conv1.weight": {
+          "finite": true,
+          "l2": 1297.9571049913204,
+          "max_abs": 52.10593032836914,
+          "nonzero": 18432,
+          "numel": 18432,
+          "present": true
+        },
+        "module.main.4.0.conv2.weight": {
+          "finite": true,
+          "l2": 1406.8874685825338,
+          "max_abs": 46.370765686035156,
+          "nonzero": 36864,
+          "numel": 36864,
+          "present": true
+        },
+        "module.main.4.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 293.7590194066108,
+          "max_abs": 35.06159973144531,
+          "nonzero": 2048,
+          "numel": 2048,
+          "present": true
+        },
+        "module.main.6.0.conv1.weight": {
+          "finite": true,
+          "l2": 1361.7450198574652,
+          "max_abs": 27.125442504882812,
+          "nonzero": 73728,
+          "numel": 73728,
+          "present": true
+        },
+        "module.main.6.0.conv2.weight": {
+          "finite": true,
+          "l2": 1681.3069362162216,
+          "max_abs": 27.481304168701172,
+          "nonzero": 147456,
+          "numel": 147456,
+          "present": true
+        },
+        "module.main.6.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 360.24304174250693,
+          "max_abs": 17.74410057067871,
+          "nonzero": 8192,
+          "numel": 8192,
+          "present": true
+        },
+        "module.main.8.0.conv1.weight": {
+          "finite": true,
+          "l2": 1711.4614347495867,
+          "max_abs": 16.657865524291992,
+          "nonzero": 294912,
+          "numel": 294912,
+          "present": true
+        },
+        "module.main.8.0.conv2.weight": {
+          "finite": true,
+          "l2": 2091.604231330044,
+          "max_abs": 18.160303115844727,
+          "nonzero": 589824,
+          "numel": 589824,
+          "present": true
+        },
+        "module.main.8.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 367.0650059241729,
+          "max_abs": 10.334701538085938,
+          "nonzero": 32768,
+          "numel": 32768,
+          "present": true
+        }
+      },
+      "tensors": 17
+    },
+    "netE_vis": {
+      "elements": 11692640,
+      "finite": 17,
+      "non_none": 17,
+      "nonzero_elements": 11692640,
+      "nonzero_tensors": 17,
+      "per_tensor": {
+        "module.fc.bias": {
+          "finite": true,
+          "l2": 37.66515657192061,
+          "max_abs": 6.872621059417725,
+          "nonzero": 256,
+          "numel": 256,
+          "present": true
+        },
+        "module.fc.weight": {
+          "finite": true,
+          "l2": 2491.0038979510887,
+          "max_abs": 16.740854263305664,
+          "nonzero": 2097152,
+          "numel": 2097152,
+          "present": true
+        },
+        "module.main.0.weight": {
+          "finite": true,
+          "l2": 538.2212697918608,
+          "max_abs": 34.546634674072266,
+          "nonzero": 2400,
+          "numel": 2400,
+          "present": true
+        },
+        "module.main.10.0.conv1.weight": {
+          "finite": true,
+          "l2": 1289.1138408817474,
+          "max_abs": 7.267374038696289,
+          "nonzero": 1179648,
+          "numel": 1179648,
+          "present": true
+        },
+        "module.main.10.0.conv2.weight": {
+          "finite": true,
+          "l2": 1691.4898242355655,
+          "max_abs": 6.209033012390137,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.10.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 305.33022478167555,
+          "max_abs": 4.223200798034668,
+          "nonzero": 131072,
+          "numel": 131072,
+          "present": true
+        },
+        "module.main.12.0.conv1.weight": {
+          "finite": true,
+          "l2": 1258.3118459810446,
+          "max_abs": 5.023438930511475,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.12.0.conv2.weight": {
+          "finite": true,
+          "l2": 1120.627653373239,
+          "max_abs": 4.7392988204956055,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.4.0.conv1.weight": {
+          "finite": true,
+          "l2": 791.7385329156342,
+          "max_abs": 25.602210998535156,
+          "nonzero": 18432,
+          "numel": 18432,
+          "present": true
+        },
+        "module.main.4.0.conv2.weight": {
+          "finite": true,
+          "l2": 912.100633763662,
+          "max_abs": 20.781112670898438,
+          "nonzero": 36864,
+          "numel": 36864,
+          "present": true
+        },
+        "module.main.4.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 196.5624033888183,
+          "max_abs": 16.899423599243164,
+          "nonzero": 2048,
+          "numel": 2048,
+          "present": true
+        },
+        "module.main.6.0.conv1.weight": {
+          "finite": true,
+          "l2": 785.7116269562279,
+          "max_abs": 16.12236213684082,
+          "nonzero": 73728,
+          "numel": 73728,
+          "present": true
+        },
+        "module.main.6.0.conv2.weight": {
+          "finite": true,
+          "l2": 1027.5398439336802,
+          "max_abs": 13.039319038391113,
+          "nonzero": 147456,
+          "numel": 147456,
+          "present": true
+        },
+        "module.main.6.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 231.16512380741926,
+          "max_abs": 11.852787971496582,
+          "nonzero": 8192,
+          "numel": 8192,
+          "present": true
+        },
+        "module.main.8.0.conv1.weight": {
+          "finite": true,
+          "l2": 967.3079695371579,
+          "max_abs": 11.273934364318848,
+          "nonzero": 294912,
+          "numel": 294912,
+          "present": true
+        },
+        "module.main.8.0.conv2.weight": {
+          "finite": true,
+          "l2": 1272.009860101005,
+          "max_abs": 9.610405921936035,
+          "nonzero": 589824,
+          "numel": 589824,
+          "present": true
+        },
+        "module.main.8.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 260.67456295946283,
+          "max_abs": 8.030851364135742,
+          "nonzero": 32768,
+          "numel": 32768,
+          "present": true
+        }
+      },
+      "tensors": 17
+    },
+    "netG": {
+      "elements": 19887494,
+      "finite": 21,
+      "non_none": 21,
+      "nonzero_elements": 19887494,
+      "nonzero_tensors": 21,
+      "per_tensor": {
+        "module.fc.0.bias": {
+          "finite": true,
+          "l2": 96.69461874499305,
+          "max_abs": 5.2657976150512695,
+          "nonzero": 8192,
+          "numel": 8192,
+          "present": true
+        },
+        "module.fc.0.weight": {
+          "finite": true,
+          "l2": 2082.210334517974,
+          "max_abs": 10.928879737854004,
+          "nonzero": 3145728,
+          "numel": 3145728,
+          "present": true
+        },
+        "module.main.0.0.conv1.weight": {
+          "finite": true,
+          "l2": 3808.6953564744063,
+          "max_abs": 14.015583992004395,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.0.0.conv2.weight": {
+          "finite": true,
+          "l2": 3445.4520816079535,
+          "max_abs": 12.740675926208496,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.10.0.conv1.weight": {
+          "finite": true,
+          "l2": 3466.5563177184895,
+          "max_abs": 67.34769439697266,
+          "nonzero": 73728,
+          "numel": 73728,
+          "present": true
+        },
+        "module.main.10.0.conv2.weight": {
+          "finite": true,
+          "l2": 2992.6439675559764,
+          "max_abs": 66.92398834228516,
+          "nonzero": 36864,
+          "numel": 36864,
+          "present": true
+        },
+        "module.main.10.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 1326.5818677104664,
+          "max_abs": 77.52375030517578,
+          "nonzero": 8192,
+          "numel": 8192,
+          "present": true
+        },
+        "module.main.10.1.conv1.weight": {
+          "finite": true,
+          "l2": 2280.7712812113787,
+          "max_abs": 55.285888671875,
+          "nonzero": 36864,
+          "numel": 36864,
+          "present": true
+        },
+        "module.main.10.1.conv2.weight": {
+          "finite": true,
+          "l2": 2333.679322761163,
+          "max_abs": 62.77500915527344,
+          "nonzero": 36864,
+          "numel": 36864,
+          "present": true
+        },
+        "module.main.12.bias": {
+          "finite": true,
+          "l2": 1293.7706276440535,
+          "max_abs": 1017.5567016601562,
+          "nonzero": 6,
+          "numel": 6,
+          "present": true
+        },
+        "module.main.12.weight": {
+          "finite": true,
+          "l2": 21195.352071410274,
+          "max_abs": 622.2520751953125,
+          "nonzero": 9600,
+          "numel": 9600,
+          "present": true
+        },
+        "module.main.2.0.conv1.weight": {
+          "finite": true,
+          "l2": 1782.6460291875744,
+          "max_abs": 6.386361122131348,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.2.0.conv2.weight": {
+          "finite": true,
+          "l2": 1620.2594934948957,
+          "max_abs": 6.161844253540039,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.4.0.conv1.weight": {
+          "finite": true,
+          "l2": 1514.9799961465412,
+          "max_abs": 5.936026573181152,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.4.0.conv2.weight": {
+          "finite": true,
+          "l2": 1390.9393052356336,
+          "max_abs": 6.347768783569336,
+          "nonzero": 2359296,
+          "numel": 2359296,
+          "present": true
+        },
+        "module.main.6.0.conv1.weight": {
+          "finite": true,
+          "l2": 2969.9326603556974,
+          "max_abs": 13.918342590332031,
+          "nonzero": 1179648,
+          "numel": 1179648,
+          "present": true
+        },
+        "module.main.6.0.conv2.weight": {
+          "finite": true,
+          "l2": 2151.8478400434083,
+          "max_abs": 15.894899368286133,
+          "nonzero": 589824,
+          "numel": 589824,
+          "present": true
+        },
+        "module.main.6.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 1240.1209685772249,
+          "max_abs": 17.299823760986328,
+          "nonzero": 131072,
+          "numel": 131072,
+          "present": true
+        },
+        "module.main.8.0.conv1.weight": {
+          "finite": true,
+          "l2": 2814.505011010389,
+          "max_abs": 25.739215850830078,
+          "nonzero": 294912,
+          "numel": 294912,
+          "present": true
+        },
+        "module.main.8.0.conv2.weight": {
+          "finite": true,
+          "l2": 2394.250646059109,
+          "max_abs": 36.64377975463867,
+          "nonzero": 147456,
+          "numel": 147456,
+          "present": true
+        },
+        "module.main.8.0.conv_expand.weight": {
+          "finite": true,
+          "l2": 1065.269455108154,
+          "max_abs": 35.615665435791016,
+          "nonzero": 32768,
+          "numel": 32768,
+          "present": true
+        }
+      },
+      "tensors": 21
+    },
+    "netIP": {
+      "elements": 10475872,
+      "finite": 0,
+      "non_none": 0,
+      "nonzero_elements": 0,
+      "nonzero_tensors": 0,
+      "per_tensor": {
+        "module.block1.0.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block1.0.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block1.0.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block1.0.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block2.0.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block2.0.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block2.0.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block2.0.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block2.1.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block2.1.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block2.1.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block2.1.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block3.0.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block3.0.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block3.0.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block3.0.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block3.1.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block3.1.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block3.1.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block3.1.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block3.2.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block3.2.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block3.2.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block3.2.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block4.0.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block4.0.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block4.0.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block4.0.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block4.1.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block4.1.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block4.1.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block4.1.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block4.2.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block4.2.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block4.2.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block4.2.conv2.filter.weight": {
+          "present": false
+        },
+        "module.block4.3.conv1.filter.bias": {
+          "present": false
+        },
+        "module.block4.3.conv1.filter.weight": {
+          "present": false
+        },
+        "module.block4.3.conv2.filter.bias": {
+          "present": false
+        },
+        "module.block4.3.conv2.filter.weight": {
+          "present": false
+        },
+        "module.conv1.filter.bias": {
+          "present": false
+        },
+        "module.conv1.filter.weight": {
+          "present": false
+        },
+        "module.fc.bias": {
+          "present": false
+        },
+        "module.fc.weight": {
+          "present": false
+        },
+        "module.group1.conv.filter.bias": {
+          "present": false
+        },
+        "module.group1.conv.filter.weight": {
+          "present": false
+        },
+        "module.group1.conv_a.filter.bias": {
+          "present": false
+        },
+        "module.group1.conv_a.filter.weight": {
+          "present": false
+        },
+        "module.group2.conv.filter.bias": {
+          "present": false
+        },
+        "module.group2.conv.filter.weight": {
+          "present": false
+        },
+        "module.group2.conv_a.filter.bias": {
+          "present": false
+        },
+        "module.group2.conv_a.filter.weight": {
+          "present": false
+        },
+        "module.group3.conv.filter.bias": {
+          "present": false
+        },
+        "module.group3.conv.filter.weight": {
+          "present": false
+        },
+        "module.group3.conv_a.filter.bias": {
+          "present": false
+        },
+        "module.group3.conv_a.filter.weight": {
+          "present": false
+        },
+        "module.group4.conv.filter.bias": {
+          "present": false
+        },
+        "module.group4.conv.filter.weight": {
+          "present": false
+        },
+        "module.group4.conv_a.filter.bias": {
+          "present": false
+        },
+        "module.group4.conv_a.filter.weight": {
+          "present": false
+        }
+      },
+      "tensors": 60
+    }
+  },
+  "gradient_sha256": {
+    "netE_nir.module.fc.bias": "403e78450122551791c173034cb262b5b090d80e3a69ecb5cb443932769f0fde",
+    "netE_nir.module.fc.weight": "c6a96d899e725ea1ad202decaa347edc8cf3b727e931d604a0b3bf9c0bebfe48",
+    "netE_nir.module.main.0.weight": "f15b87fd836238a0124f9c9830e8134de6bd6e499e0d21ee9ca579bdb4e86649",
+    "netE_nir.module.main.10.0.conv1.weight": "a6e207850da64912f71536e768bbb14f1176b9df02e34b6c504a5decd53f810c",
+    "netE_nir.module.main.10.0.conv2.weight": "428631fe02d7cf436f32104c61df161627f8dfe22706e36048148ddca3093543",
+    "netE_nir.module.main.10.0.conv_expand.weight": "11d3ecce2d6dc36c57542880fec48813f8c412094c8ef1f3c78aada13e3f8e13",
+    "netE_nir.module.main.12.0.conv1.weight": "e512a416462236ebdef5f5735eabbf74d577e781b37cab919bf7ef3eb20fb25c",
+    "netE_nir.module.main.12.0.conv2.weight": "9ce4e8f2462fe5f0df385dfba200a7f362c104610404d4361d9e8e35157fbd44",
+    "netE_nir.module.main.4.0.conv1.weight": "4c1c69e3781f3ab7acc6196e32f421e8d95511f3a0dfc11bbb68c8291299e4c5",
+    "netE_nir.module.main.4.0.conv2.weight": "119e4522de717641ec256641040cb752b2ba9af4a7b29378a565e30f7299ac77",
+    "netE_nir.module.main.4.0.conv_expand.weight": "62d6ee7b449e03ecb00e4f1ecdcbe956a994faf92b8f7585c541dfbe77bdad67",
+    "netE_nir.module.main.6.0.conv1.weight": "eced15bcb976530ec54b8004242143c4d1bf358ecbda04fe4c53ead5f3403de1",
+    "netE_nir.module.main.6.0.conv2.weight": "7c2613cba3384d8bc14887421ab3ec60f57accbcb18ee2d48c926e81b3cc17a9",
+    "netE_nir.module.main.6.0.conv_expand.weight": "27f2b732723f80439a92fa5ed80ecf999d571661eaa04ae6b1ecb46aa29a1c5f",
+    "netE_nir.module.main.8.0.conv1.weight": "140fdc7c25f16a4a2fca4c762178f598b9254bb8836d4042cd86cd9ceb529819",
+    "netE_nir.module.main.8.0.conv2.weight": "540a21ffddb122f388f6db2e7a4ed2939b60a6a2069113209913364dfc88d7fe",
+    "netE_nir.module.main.8.0.conv_expand.weight": "d0fb8dfa9fe2542fbd4d9bec52c1e7ae180c7e0dc4959dfd285c0eff6a50181f",
+    "netE_vis.module.fc.bias": "0026a1849e47520a716147ee8194854c32c69fa13e02a830ecfadffb802f467b",
+    "netE_vis.module.fc.weight": "56eb08e755606504675c5b21468d8b78a0da5a10a9256d210619128fe3c9c8a2",
+    "netE_vis.module.main.0.weight": "fddb9efde7dceff00e980380b9f8ccb0d3de8ea05d88559ffce5f0b94657cdac",
+    "netE_vis.module.main.10.0.conv1.weight": "1832de9a5c755f05ad5846e3c7e879efe27468121969ba6d65a1a02b99c9b037",
+    "netE_vis.module.main.10.0.conv2.weight": "54eebd8965a8a473d7b0d1d28af66facf8b10d7f1c5015baa41efa2ae56b38bc",
+    "netE_vis.module.main.10.0.conv_expand.weight": "05bc73240a4b9c38bb1ff4894c637ae6ac42d3d53ea62652e419955522dcbeb9",
+    "netE_vis.module.main.12.0.conv1.weight": "a18c8cfa74055ceb7f15ea8fa06f4c446ce0e9f0fc5b8322e2e544bb4730d3b4",
+    "netE_vis.module.main.12.0.conv2.weight": "6f4a6f8a61535b3ffe3b4bca87a2aba1017c1dd21f98212c9eb4c446bd093c12",
+    "netE_vis.module.main.4.0.conv1.weight": "dbaf02f82e13faa693992bd23b99ad5945dcce19824fb8d5260c3c63b5552a22",
+    "netE_vis.module.main.4.0.conv2.weight": "e857dfe31ba6baf59efc9c8a2ebe7f5aff345071bce5645673a08125cf377220",
+    "netE_vis.module.main.4.0.conv_expand.weight": "9fa5a10b62f3b6f84ac4ed9d9793fa9b37a6d003ac50dd90e5876b71863578dc",
+    "netE_vis.module.main.6.0.conv1.weight": "369ab1465e9f0a1582644e20e4f2b10e0e9ac6400c0a1a1018287db31407f5f4",
+    "netE_vis.module.main.6.0.conv2.weight": "30e5bab3c283c0474f63525c0632b94dcf17a2906263cf921eb7c1fd4a065451",
+    "netE_vis.module.main.6.0.conv_expand.weight": "14aa0456a0f157f60d5d6f35d081417a135f88e0efb59f85f59173c67596877b",
+    "netE_vis.module.main.8.0.conv1.weight": "1aeb4280e8a580d25e7a5a5d015801fa3489dc96443d9fb389104a3fb1fcd4be",
+    "netE_vis.module.main.8.0.conv2.weight": "4bfd140c6ed87b8e166b3b49080a10aa7b9857a39a0a11510ad086a5339c620b",
+    "netE_vis.module.main.8.0.conv_expand.weight": "a518c21653bbf56fd267aca354de757a359e21e1de4b78f2e29e568ed4edeae1",
+    "netG.module.fc.0.bias": "a11590457201b2a7dc7b84caeef183a85673159cc02e6301108588b5e36b6164",
+    "netG.module.fc.0.weight": "02f30049aebb3fa7ba8d90065c9978f90d9597cbae912327d7dcd5a848f8c0fd",
+    "netG.module.main.0.0.conv1.weight": "dcd1a5fc12cde9b29c33b762ff86a99bc55e0eac0797c2aceb90adf8b2e137fe",
+    "netG.module.main.0.0.conv2.weight": "f9d06f1551a3298277cf585167d296a4f7079b7747da4731b8981f327eaeb6fd",
+    "netG.module.main.10.0.conv1.weight": "3893563916289874050c7a5586450fe5b89de971f933f5ae0e1e5be59f230eae",
+    "netG.module.main.10.0.conv2.weight": "595a841b479a8492f745535a4775b94a6767e7d3fb72706565d7fed2d3f764a8",
+    "netG.module.main.10.0.conv_expand.weight": "d6b588868062b2a775b3ba2cf0be644625297a71886ce564c01490d4e770621f",
+    "netG.module.main.10.1.conv1.weight": "2a5b3c2cfcad8dfb9b371421d8972e1f581c3cb032db41968e8aa55468ecd55c",
+    "netG.module.main.10.1.conv2.weight": "f971b37bcd7071079edd30a0e27e2b8528327dd0c7a384a3d9cd570f0c35c271",
+    "netG.module.main.12.bias": "6e458ce75aa92113687cb1a0341af0f3fe7c92228b6a718d557736509a560c79",
+    "netG.module.main.12.weight": "3e7c08d225e2e25827954567291d7bcb5581f651f1ef59443e840773080e5e48",
+    "netG.module.main.2.0.conv1.weight": "a2cf2dd3c9c537dd14708e14f4398b5115b807058bac3ab02b18bc0aa642ca57",
+    "netG.module.main.2.0.conv2.weight": "2a8e5282b66b3fea4b22eaf562d85fd87949559eaeb09ad37e9cfad3bf1852b9",
+    "netG.module.main.4.0.conv1.weight": "a072e7bba72f9e580f011021b15cd29d2926edaaa713c59829670dac78a05aef",
+    "netG.module.main.4.0.conv2.weight": "982445d15ae91e04ea8d1ee634b15cf208b9c1244d649d3616d272fa0802bca3",
+    "netG.module.main.6.0.conv1.weight": "2c80dbc74fe9b861f975ee390fa4e4cbd85292d96106f685aa7fa74164f9efb2",
+    "netG.module.main.6.0.conv2.weight": "9fc4d9545aee2e3cbe70e8002cb431ac5e36c3ad0e5560cb23d1a9337f539ce0",
+    "netG.module.main.6.0.conv_expand.weight": "6f38dd708e9ac94d396898e1a69c20a7ac0843f5e1fefa2588dce3ecb4c29834",
+    "netG.module.main.8.0.conv1.weight": "10711528d809d788a3293a447845a844b52f00b0ba6a490018cb5cd7fc418bfc",
+    "netG.module.main.8.0.conv2.weight": "665fccf90cbd43346eea054533c70af61b95934d69fb36d3fef05ec61918369b",
+    "netG.module.main.8.0.conv_expand.weight": "4ba64ea6cba6b2ba9024d7c9acb7cc6df896e737928442268a113ed8684007b4"
+  },
+  "inputs": {
+    "construction": "methods/dsdg/training_graph.py::synthetic_pair(198) (unchanged M6D5b)",
+    "distinct_rows": 396,
+    "label": "SYNTHETIC_FINAL_PARTIAL_GLOBAL_BATCH_198",
+    "label_spoof": {
+      "device": "cuda:0",
+      "dtype": "torch.int64",
+      "finite": true,
+      "l2": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "nonzero": 0,
+      "sha256": "c87499548f9efbd98c824a95a664af38f414efb1c9eede544e55e019473d6b24",
+      "shape": [
+        198
+      ]
+    },
+    "rows": 396,
+    "x_live": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 3469.903063476191,
+      "max": 0.9999999403953552,
+      "mean": 0.49658455890604275,
+      "min": 7.043842487064467e-08,
+      "nonzero": 38928384,
+      "sha256": "80bfaa4471506030b6fcffda9436111c064e0e5b3d8cc52ee28297e2ccb5c14f",
+      "shape": [
+        198,
+        3,
+        256,
+        256
+      ]
+    },
+    "x_spoof": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 3486.693152721249,
+      "max": 1.0,
+      "mean": 0.4997736265051431,
+      "min": 8.71107008748595e-09,
+      "nonzero": 38928384,
+      "sha256": "05cab9375cc67e146b9abe35473ea35b553e2a64459633ad8a5dc13dd92a34b5",
+      "shape": [
+        198,
+        3,
+        256,
+        256
+      ]
+    }
+  },
+  "lambdas": {
+    "lambda_ip": 1000,
+    "lambda_mmd": 50,
+    "lambda_ort": 1,
+    "lambda_pair": 0.0,
+    "lambda_type": 10
+  },
+  "latents": {
+    "z_cls": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 178.02468131320498,
+      "max": 4.9698357582092285,
+      "mean": -0.025251133395567643,
+      "min": -6.292713642120361,
+      "nonzero": 25344,
+      "sha256": "8072ef19d66eec776e17e88b73ece08a5994f53f551fd0cef696626e933aa227",
+      "shape": [
+        198,
+        128
+      ]
+    },
+    "z_nir": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 184.0551345766176,
+      "max": 5.364638805389404,
+      "mean": 0.04028042822388633,
+      "min": -6.623202800750732,
+      "nonzero": 25344,
+      "sha256": "f8c22f52113bbbafb838fb154a12b3d918daa0f72526e8c333fd3c829f2d1263",
+      "shape": [
+        198,
+        128
+      ]
+    },
+    "z_vis": {
+      "device": "cuda:0",
+      "dtype": "torch.float32",
+      "finite": true,
+      "l2": 179.81234380239644,
+      "max": 4.933253288269043,
+      "mean": 0.015481150480487909,
+      "min": -5.458666801452637,
+      "nonzero": 25344,
+      "sha256": "e8b5f1fdc2464925c21f92c3e9571bb8a69a4ff70b6646cf5ce8f4e55a2e89c6",
+      "shape": [
+        198,
+        128
+      ]
+    }
+  },
+  "lightcnn": {
+    "checkpoint_tensor_count": 61,
+    "expected_model_tensor_count": 60,
+    "filtered_extra_keys": {
+      "module.fc2.weight": [
+        80013,
+        256
+      ]
+    },
+    "loaded_values_equal_checkpoint": true,
+    "loader": "train_generator.py:75-84 filter k in model_dict -> update -> load_state_dict -> requires_grad=False",
+    "matched": 60,
+    "missing": [],
+    "non_tensor_entries": {
+      "arch": "LightCNN",
+      "epoch": 50,
+      "prec1": 99.46
+    },
+    "shape_mismatches": [],
+    "top_level_keys": [
+      "arch",
+      "epoch",
+      "prec1",
+      "state_dict"
+    ],
+    "torch_load_weights_only": true
+  },
+  "losses": {
+    "epoch1_formula": "rec + 0.01*(kl + mmd + ip + pair + cls + ort)",
+    "epoch1_total_reconstructed": 14501.720875212004,
+    "global_components": {
+      "loss_cls": 0.0,
+      "loss_ip": 6.356372568342421,
+      "loss_kl": 18.525230638908617,
+      "loss_mmd": 16.528745651245117,
+      "loss_ort": 0.14035889506340027,
+      "loss_pair": 0.0,
+      "loss_rec": 14501.305368134468
+    },
+    "local_weights": [
+      0.10101010101010101,
+      0.10101010101010101,
+      0.10101010101010101,
+      0.10101010101010101,
+      0.10101010101010101,
+      0.10101010101010101,
+      0.10101010101010101,
+      0.10101010101010101,
+      0.10101010101010101,
+      0.09090909090909091
+    ],
+    "per_chunk": [
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.447585105895996,
+        "loss_kl": 19.01753044128418,
+        "loss_mmd_surrogate": 1.8933345079421997,
+        "loss_ort_surrogate": 0.2405143827199936,
+        "loss_pair": 0.0,
+        "loss_rec": 14451.3564453125
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.345611572265625,
+        "loss_kl": 18.506376266479492,
+        "loss_mmd_surrogate": 1.549297571182251,
+        "loss_ort_surrogate": -0.05893152952194214,
+        "loss_pair": 0.0,
+        "loss_rec": 14630.384765625
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.343451499938965,
+        "loss_kl": 18.330223083496094,
+        "loss_mmd_surrogate": 1.6431094408035278,
+        "loss_ort_surrogate": 0.45531490445137024,
+        "loss_pair": 0.0,
+        "loss_rec": 14472.853515625
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.307153224945068,
+        "loss_kl": 18.416133880615234,
+        "loss_mmd_surrogate": 1.5900379419326782,
+        "loss_ort_surrogate": -0.3925646245479584,
+        "loss_pair": 0.0,
+        "loss_rec": 14253.822265625
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.347496032714844,
+        "loss_kl": 18.468074798583984,
+        "loss_mmd_surrogate": 1.6076207160949707,
+        "loss_ort_surrogate": -0.5275870561599731,
+        "loss_pair": 0.0,
+        "loss_rec": 14690.345703125
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.381267547607422,
+        "loss_kl": 18.7076416015625,
+        "loss_mmd_surrogate": 1.8120825290679932,
+        "loss_ort_surrogate": 1.0622915029525757,
+        "loss_pair": 0.0,
+        "loss_rec": 14692.736328125
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.317468643188477,
+        "loss_kl": 18.718687057495117,
+        "loss_mmd_surrogate": 1.611806035041809,
+        "loss_ort_surrogate": -0.3814679980278015,
+        "loss_pair": 0.0,
+        "loss_rec": 14410.962890625
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.328135967254639,
+        "loss_kl": 18.24541473388672,
+        "loss_mmd_surrogate": 1.4723650217056274,
+        "loss_ort_surrogate": -0.01036731619387865,
+        "loss_pair": 0.0,
+        "loss_rec": 14600.0126953125
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.453322410583496,
+        "loss_kl": 18.408544540405273,
+        "loss_mmd_surrogate": 1.650880217552185,
+        "loss_ort_surrogate": 0.14199836552143097,
+        "loss_pair": 0.0,
+        "loss_rec": 14379.041015625
+      },
+      {
+        "loss_cls": 0.0,
+        "loss_ip": 6.285107135772705,
+        "loss_kl": 18.423507690429688,
+        "loss_mmd_surrogate": 1.6982121467590332,
+        "loss_ort_surrogate": -0.3888416588306427,
+        "loss_pair": 0.0,
+        "loss_rec": 14423.7861328125
+      }
+    ],
+    "postwarmup_executed": false,
+    "postwarmup_total_algebraic_only": 14542.856075888027,
+    "sum_of_chunk_objectives": 14501.720703125
+  },
+  "max_microbatch": 20,
+  "memory_by_phase": [
+    {
+      "allocated_bytes": 229401088,
+      "device_free_bytes": 24388239360,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 353616896,
+      "peak_reserved_bytes": 367001600,
+      "phase": "after_model_construction",
+      "reserved_bytes": 367001600
+    },
+    {
+      "allocated_bytes": 540830208,
+      "device_free_bytes": 24029626368,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 540830208,
+      "peak_reserved_bytes": 681574400,
+      "phase": "after_optimizer_and_input_allocation",
+      "reserved_bytes": 681574400
+    },
+    {
+      "allocated_bytes": 541134336,
+      "device_free_bytes": 24029626368,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 541743104,
+      "peak_reserved_bytes": 681574400,
+      "phase": "after_epsilon_allocation",
+      "reserved_bytes": 681574400
+    },
+    {
+      "allocated_bytes": 574995968,
+      "device_free_bytes": 23949934592,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 669358592,
+      "peak_reserved_bytes": 723517440,
+      "phase": "pass1_peak",
+      "reserved_bytes": 723517440
+    },
+    {
+      "allocated_bytes": 797665792,
+      "device_free_bytes": 18788843520,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5726179328,
+      "peak_reserved_bytes": 5844762624,
+      "phase": "pass2_chunk_00_peak",
+      "reserved_bytes": 5844762624
+    },
+    {
+      "allocated_bytes": 797696512,
+      "device_free_bytes": 17471832064,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947407360,
+      "peak_reserved_bytes": 7161774080,
+      "phase": "pass2_chunk_01_peak",
+      "reserved_bytes": 7161774080
+    },
+    {
+      "allocated_bytes": 797727232,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947438080,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_02_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797757952,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947468800,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_03_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797788672,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947499520,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_04_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797819392,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947530240,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_05_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797850112,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947560960,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_06_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797880832,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947591680,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_07_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797911552,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5947622400,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_08_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797939200,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 5566324736,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "pass2_chunk_09_peak",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 797939200,
+      "device_free_bytes": 17469734912,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 797939200,
+      "peak_reserved_bytes": 7163871232,
+      "phase": "before_optimizer_step",
+      "reserved_bytes": 7163871232
+    },
+    {
+      "allocated_bytes": 1169028608,
+      "device_free_bytes": 17467637760,
+      "device_total_bytes": 25294995456,
+      "peak_allocated_bytes": 1351951872,
+      "peak_reserved_bytes": 7165968384,
+      "phase": "after_optimizer_step",
+      "reserved_bytes": 7165968384
+    }
+  ],
+  "mode": "b198",
+  "modes": {
+    "netCls": true,
+    "netE_nir": true,
+    "netE_vis": true,
+    "netG": true,
+    "netIP": false
+  },
+  "nominal_global_batch": 240,
+  "optimizer": {
+    "class": "torch.optim.adam.Adam",
+    "constructor_call": "torch.optim.Adam(list(netE_nir.parameters()) + list(netE_vis.parameters()) + list(netG.parameters()), lr=2e-4)",
+    "duplicates": 0,
+    "explicit_arguments_beyond_lr": [],
+    "overlap_netCls_netIP": 0,
+    "param_groups": 1,
+    "parameter_tensors": 55,
+    "parameters": 45370182,
+    "resolved_group_defaults": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "capturable": false,
+      "decoupled_weight_decay": false,
+      "differentiable": false,
+      "eps": 1e-08,
+      "foreach": null,
+      "fused": null,
+      "lr": 0.0002,
+      "maximize": false,
+      "weight_decay": 0
+    },
+    "source": "train_generator.py:87-88"
+  },
+  "optimizer_applications": 1,
+  "optimizer_constructions": 1,
+  "optimizer_state": {
+    "entries": 55,
+    "exp_avg_sha256": {
+      "netE_nir.module.fc.bias": "03f7ab50ae28cc3664b95089bd49c0f4061507986a4640b8b07fed91c685a146",
+      "netE_nir.module.fc.weight": "641d1e921bb6247913ca376f557f30888bd4c22cc590aeee791b0bae060a8cd6",
+      "netE_nir.module.main.0.weight": "1aafc04f2ef04147f3e00111406015dbb66acc47dd40ecbd153087ac9012e1b7",
+      "netE_nir.module.main.10.0.conv1.weight": "d66901d86193d3db841f4381ddfbb7976b0d95344df3df01c69341b40fd207a4",
+      "netE_nir.module.main.10.0.conv2.weight": "289aa608aa03e669cbaf91000106cf3542f05fa8d7b84b60a5fc91c3af0b7589",
+      "netE_nir.module.main.10.0.conv_expand.weight": "733c6e17bdfff735704586135779320677d49df1fb0d848d022311a25998c656",
+      "netE_nir.module.main.12.0.conv1.weight": "81aa117f5933404c32d45fac2d120fe8072609d7bde157c26bbe3567c9208506",
+      "netE_nir.module.main.12.0.conv2.weight": "c64c9805be4d689c6d75343b8c5a42b6dc630bf74c059b1ae0d040f7ca66247e",
+      "netE_nir.module.main.4.0.conv1.weight": "98cd2a3ffd080a5eaa7510fd2bbd45930fe4f2d81b94014d71f520ab403b55e7",
+      "netE_nir.module.main.4.0.conv2.weight": "ec0b01c1e7d5404ac4222903d4b07ada1f87a321db09c6122816df779f1dde30",
+      "netE_nir.module.main.4.0.conv_expand.weight": "800fc0926f1391aef0ef0f6bd444283cbec22ac9af073230cfd9cb00e64fecc0",
+      "netE_nir.module.main.6.0.conv1.weight": "fe86612c10e3ffb0174bdeec3e25b411201c11dcb74630c67d7d9e881bdda663",
+      "netE_nir.module.main.6.0.conv2.weight": "c5d41c20b7be72315f6fa91b4a9ffcd1347d97717582ccda4747751e4e8438c5",
+      "netE_nir.module.main.6.0.conv_expand.weight": "d46630a74ed035b37f676a7416128d0b6b05db13aca2e5436a292ebd050480e2",
+      "netE_nir.module.main.8.0.conv1.weight": "5c2e01eccefc11c0533654987e76ccd69e00e688b63396a79f8e3fa8070efa20",
+      "netE_nir.module.main.8.0.conv2.weight": "556ef95dc8727b13acac8c2d86ec828d6378e46f5dceaebc7d2a7b289be222ff",
+      "netE_nir.module.main.8.0.conv_expand.weight": "fac855ed2b28cbed9d3295d8ed983d88d08bbeeb9d2c99858f1cbbf09cbdd80c",
+      "netE_vis.module.fc.bias": "ef4904b0356fcaee7e002da5513517bfd95247ebfbba9ef204791ea2493e514f",
+      "netE_vis.module.fc.weight": "0bbc5f5728a14882ed8c38125241ee42c112c5eefafee42969a34498488c52cf",
+      "netE_vis.module.main.0.weight": "e36780984b97a52ad336283cce97b640bedad4475feb8bce138083cb83e5eca0",
+      "netE_vis.module.main.10.0.conv1.weight": "183ad54556bba9adfc3dc15d7c5f6a05b63db7de7c834c7d6678da472907a3d3",
+      "netE_vis.module.main.10.0.conv2.weight": "a85677b3468cc13e40dd4b4abeb1d44fcffb70dc8dd3170a3548cb78cd5dd5d4",
+      "netE_vis.module.main.10.0.conv_expand.weight": "ca3a087e2d7c694b7da14988215fc38e207516b8f4e3bd6a6a06bb0c8fb3f301",
+      "netE_vis.module.main.12.0.conv1.weight": "afefc71ab128bd87be582b25346d80dd3baaba1e3738713a862713ef4c65591f",
+      "netE_vis.module.main.12.0.conv2.weight": "0663e6c07fd8acdd192bc18ce8f75bef34e7a1973fd1ff50cd8857b915290411",
+      "netE_vis.module.main.4.0.conv1.weight": "efac21be297a1f4830f5a9f1b682558386d800c88441035df18a8f4c5ebce0d5",
+      "netE_vis.module.main.4.0.conv2.weight": "517b251f07314b164d3842b527adad1ac0754e573ff775be96f0dade7fdce5c0",
+      "netE_vis.module.main.4.0.conv_expand.weight": "18bbe235e81c866cd2c82754253029ad5b107d0f193ccd8d4c1505d2edd2ce81",
+      "netE_vis.module.main.6.0.conv1.weight": "256cff19d169db58965675b1e1447b09c73849921433da19646bb4d88c2242a4",
+      "netE_vis.module.main.6.0.conv2.weight": "2ebe7028e6dc7faec96222e40263cd1cf3eb01f89d95889690a5e78241679233",
+      "netE_vis.module.main.6.0.conv_expand.weight": "68fb0d3c9026a834b9e66128e6981d10de0990959926ce41aca8bb25ed975530",
+      "netE_vis.module.main.8.0.conv1.weight": "af750ce5736274cbd6fe49f081a39784d74b83a9517524b80c2affc12ee65e81",
+      "netE_vis.module.main.8.0.conv2.weight": "60e80ee9e578c26d275d8bb7f935cbfd50a9c1cabfe4ac82a41d8ca074153c8f",
+      "netE_vis.module.main.8.0.conv_expand.weight": "d1cd5dfda54faad7a135428478b66e72697c458308ede222ea39b0ed1df0fbca",
+      "netG.module.fc.0.bias": "3ac7a76be362cd07eae3ee73f516ec743e6862c3093ba557f07bbc72da5ea413",
+      "netG.module.fc.0.weight": "07e193c22a657b0adbba9131895d720526ad0488f22d8b0d1d22378d8d486985",
+      "netG.module.main.0.0.conv1.weight": "2eceffd57c79c6d41556025d366671734a9d572e636774d6611098acfc5c7747",
+      "netG.module.main.0.0.conv2.weight": "d91acc5f1b296220a3df4ac2c14d23849f060421e56e9fa92a074337cf3d477c",
+      "netG.module.main.10.0.conv1.weight": "c96c447d30ba414a61b197ef6ad0be35695e2367bc03f94a6b1a5be721e9f913",
+      "netG.module.main.10.0.conv2.weight": "1c658da3f4c937e36f2b86ced1eedbf124d16d5f876226209ddccafcb91e5f38",
+      "netG.module.main.10.0.conv_expand.weight": "fd3d9214cc79731c25bd7dd1f66962ab5d3395639172e1a984edb7e77206a62c",
+      "netG.module.main.10.1.conv1.weight": "30ef669403d2961c873c18796b39ccfd0dc986cf7dc8c04c4758468eccbb1ffd",
+      "netG.module.main.10.1.conv2.weight": "5f780a956aa233fb8751917e80f6510b6d964b9819259e74b5a9d3ade66ff3c5",
+      "netG.module.main.12.bias": "48f34443238b927757c6edeb73a6f48dc33e3c8cf58022843e11ca6913b5e8b0",
+      "netG.module.main.12.weight": "d0c7a85a3da3068fa8f4733f4ae881aebe102f0ea885cc3721619a52e142c5b6",
+      "netG.module.main.2.0.conv1.weight": "dc8bbe5c80e41a0ed2fe190bb53eb05571f5c158a8c9750e67cb2aca6ccf4e1e",
+      "netG.module.main.2.0.conv2.weight": "9a6638bbc689e7701aa59871cf91faeb96078448c609f4bd339271270285ed8c",
+      "netG.module.main.4.0.conv1.weight": "0fcb8c6f3bd92835425d5bd2d82edc81afc450580009ccaa98337909ee44242e",
+      "netG.module.main.4.0.conv2.weight": "edee6062fb1d502bcba4023b0a22e80838aa2efc1ba75485c974861f20431d2f",
+      "netG.module.main.6.0.conv1.weight": "1bac3b7a95275463f0e24288e2bd5b562efcc7e08b308ad2fef1fbcdf4c9b119",
+      "netG.module.main.6.0.conv2.weight": "ae4f38a63f604c6c31cff1360a3cc8dff9fb0e92cc46f5bd751153b72fb709e8",
+      "netG.module.main.6.0.conv_expand.weight": "ab931e9c370d839994a052796986c8490968468dd691cb86ba410492ca7370a8",
+      "netG.module.main.8.0.conv1.weight": "21eb6b5633bf214a37ead30e5d6faca399d5028ed6c27fdba844b3d49a7cb182",
+      "netG.module.main.8.0.conv2.weight": "529b1dcc0e8039cbc0c15c5252c5e7c77efc0159f7346c4ed7af64cb76ac4d4f",
+      "netG.module.main.8.0.conv_expand.weight": "436fd5161f8dc2c4e5ecb2fe6fdf813bc5a73f3e390bf813b8f6fb02867eda17"
+    },
+    "finite_moments": true,
+    "keys": [
+      "exp_avg",
+      "exp_avg_sq",
+      "step"
+    ],
+    "only_owned": true,
+    "step_values": [
+      1.0
+    ]
+  },
+  "overall_peak": {
+    "allocated_bytes": 5947622400,
+    "reserved_bytes": 7165968384
+  },
+  "parameter_change": {
+    "netCls": {
+      "changed_elements": 0,
+      "changed_tensors": 0,
+      "elements": 129,
+      "max_abs_delta": 0.0,
+      "per_tensor": {
+        "module.fc.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 1,
+          "sha256_after": "bc97d4c7f08f3ad15a21dca73f7489d280d06df81da93969468e20069d0b1ca7",
+          "sha256_before": "bc97d4c7f08f3ad15a21dca73f7489d280d06df81da93969468e20069d0b1ca7"
+        },
+        "module.fc.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 128,
+          "sha256_after": "73383546d6e51d5d0d875f9ef31c8f077390030db8f0c0763cc0465e6be3a23a",
+          "sha256_before": "73383546d6e51d5d0d875f9ef31c8f077390030db8f0c0763cc0465e6be3a23a"
+        }
+      },
+      "tensors": 2
+    },
+    "netE_nir": {
+      "changed_elements": 13790048,
+      "changed_tensors": 17,
+      "elements": 13790048,
+      "max_abs_delta": 0.00020000338554382324,
+      "per_tensor": {
+        "module.fc.bias": {
+          "changed_elements": 512,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 512,
+          "sha256_after": "a2ad8e80e851528d79e54558c7c6501b87389883de1c6384b0861d3a6c0b805b",
+          "sha256_before": "187708e7835ecfddf9893028e825869d3a22c27c3a2045f98a69bf86dca1ceb1"
+        },
+        "module.fc.weight": {
+          "changed_elements": 4194304,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 4194304,
+          "sha256_after": "30c7f0b7860e0ee1e0e850a2c8102499f469449897bada8a8e2ae2c6276e3fb6",
+          "sha256_before": "185c6003faa8f57b09614d7cebb2377fbe354a7d4e02f3505b5407aba4a0ebc1"
+        },
+        "module.main.0.weight": {
+          "changed_elements": 2400,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 2400,
+          "sha256_after": "0ea7681fc8ea7da482b7667574d60300d1412dc01c2b4b95ba1acf0b6d74c76f",
+          "sha256_before": "6a6ba1ebbaec0fef155687d2b9d6a092ecae18077ebb272bbb63bc10820b716b"
+        },
+        "module.main.10.0.conv1.weight": {
+          "changed_elements": 1179648,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 1179648,
+          "sha256_after": "c22eeda615a7b1c5419e16be3571f0735da2a332609131c1a8150977b951cd5e",
+          "sha256_before": "00d5a8128d019c7af7fe0f50c9433b6e22c145c96b734b0652a457656e0c603e"
+        },
+        "module.main.10.0.conv2.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "a54bc0c5d48d093b8a3f03416196f17fc9d43bb19a595ec4817953039adfddc2",
+          "sha256_before": "35f4d49847905026c2de4e7bd2136449c2bd5ecbe0253c16cd984434a8efca55"
+        },
+        "module.main.10.0.conv_expand.weight": {
+          "changed_elements": 131072,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 131072,
+          "sha256_after": "4c5a3a9b9db683f0818e57c5d8401a905069fe5c0229763c2ecbcdc3af8935b5",
+          "sha256_before": "ee98026e0a50db709374a6cfddc2f23448eafe3e4d35e507deca454abbac4b0e"
+        },
+        "module.main.12.0.conv1.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "628afb9b11af14b81d7b80927ad33d8fdba0a73302b37716e16a88f32d9d06ec",
+          "sha256_before": "bf4a65433863f1d8ead2ab148b32623d9813b695566507ae23bc62c9c7fc7582"
+        },
+        "module.main.12.0.conv2.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "bf05a69b22610220ec1c6e334a3e50f055e2df8b22ecf1fbbcd93ac1b1359d4e",
+          "sha256_before": "2891fc912f7c695e0b9891c5c8362efa26c53e47ea9fecb16ca3191aa336e7bf"
+        },
+        "module.main.4.0.conv1.weight": {
+          "changed_elements": 18432,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 18432,
+          "sha256_after": "cd2324a201a4b7c4da56162ce9bba189d05e98b8870f5fb18bb0a4439ac368a1",
+          "sha256_before": "ac196bae506f6b15846d718fd8c7ee776bb4b817189c4af9149dc3d431cc32bc"
+        },
+        "module.main.4.0.conv2.weight": {
+          "changed_elements": 36864,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 36864,
+          "sha256_after": "b876a252354ebea7b9a35cb5b66d5875b3d581fda39293cf6a86e319da15a518",
+          "sha256_before": "1213295fffafe122c00e7638cd141868beb030cbb50149ec4217f39d05cb178f"
+        },
+        "module.main.4.0.conv_expand.weight": {
+          "changed_elements": 2048,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 2048,
+          "sha256_after": "8d873ceb93fdc9bee16aa0ab22a1e31e249f0f1443b51659bba9a0232d6f606f",
+          "sha256_before": "bed8271a90d1f93e4b7c6d86a22eca1ac6f070dee63c4b0ca501c9c905e95b2a"
+        },
+        "module.main.6.0.conv1.weight": {
+          "changed_elements": 73728,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 73728,
+          "sha256_after": "ae9aebaf9b668e5c77077500e6dd62cb8d2b2fc5e21720de4a5333ffa775e154",
+          "sha256_before": "f7d8ede9510f01a4d7f2336a9d37467bef076096b38d43929ed57d59e0eafaf3"
+        },
+        "module.main.6.0.conv2.weight": {
+          "changed_elements": 147456,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 147456,
+          "sha256_after": "9dd3f8d03c50e321c1fea835d6726994304798a22733f01222e71e8f7bcc5f5c",
+          "sha256_before": "e63c951480b0fc441a7cc9af85f8e63f932debb83937bf199d807ad0270bbb58"
+        },
+        "module.main.6.0.conv_expand.weight": {
+          "changed_elements": 8192,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 8192,
+          "sha256_after": "e0101ad9f2a7dcc746776d511373ac68e6c5d759613b21103aa46e2257f4c4a1",
+          "sha256_before": "84d592691570387bb1029f5b14eb3c6fda7169d10c9b1fb5e7d2adb60270a4a0"
+        },
+        "module.main.8.0.conv1.weight": {
+          "changed_elements": 294912,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 294912,
+          "sha256_after": "bcba12e23bac808fbf7c2c8625f12732e16972bbc123b1d573cd65cdf5f3269f",
+          "sha256_before": "9c25e8bf9491ac64b67d9ceaa4a4ed2b4686fa9d7aaae1c6287383ef23d81e12"
+        },
+        "module.main.8.0.conv2.weight": {
+          "changed_elements": 589824,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 589824,
+          "sha256_after": "1823cf037ad8249d8d8deaf611bba40d0378fb071b891cca94b7534540720400",
+          "sha256_before": "f813ad8cbef7282353a47b010b775647f903e071b5148d634d0669a00fce04b0"
+        },
+        "module.main.8.0.conv_expand.weight": {
+          "changed_elements": 32768,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 32768,
+          "sha256_after": "09405817488556e99e5c201fff74c92688c639a3620beac35b958cce4af71525",
+          "sha256_before": "91dd945873c8adcc8156fb14490af0863cc7934ed5f06de015943e9c3c6fb756"
+        }
+      },
+      "tensors": 17
+    },
+    "netE_vis": {
+      "changed_elements": 11692640,
+      "changed_tensors": 17,
+      "elements": 11692640,
+      "max_abs_delta": 0.00020000338554382324,
+      "per_tensor": {
+        "module.fc.bias": {
+          "changed_elements": 256,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 256,
+          "sha256_after": "793351d6c43da4237eb97720df4c0b596bf1023ca5ff0e25d7504d08f386b37c",
+          "sha256_before": "5f86569ac0b7d9f25b15d47112760ab038625534f5e08abd8d758bc8f9b86cae"
+        },
+        "module.fc.weight": {
+          "changed_elements": 2097152,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2097152,
+          "sha256_after": "090dfe83dc79e92580670e901ceec7179cba41454aff1d623ad8065706ab9f00",
+          "sha256_before": "9d0896ddfdf081faed3b4174b6dd092a3896eb3afae022f33573d4b6153c58de"
+        },
+        "module.main.0.weight": {
+          "changed_elements": 2400,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 2400,
+          "sha256_after": "549e144f9db9c7ac0888d757f701d1d364a8fa1df4e5215aa046f02e36751851",
+          "sha256_before": "ce3db54f542230168a0b63bb171e738767cd300014ef3c7e6b52c14e4c96e814"
+        },
+        "module.main.10.0.conv1.weight": {
+          "changed_elements": 1179648,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 1179648,
+          "sha256_after": "4182778ded521813c2c16e188f26e17e41833d5ca83d0d0b35602ddbefd815e7",
+          "sha256_before": "67a4a1094559cd443094bb7bea8d3d31ef3d308f02edf814a89353b7041cf77e"
+        },
+        "module.main.10.0.conv2.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "55fe1702e00ddffb1d17da9c5b478288c1f7dc54e9aecd9d970453048247d8db",
+          "sha256_before": "ca87cb226abc060fad457a1e66ff620ae83fe1eace7323b64cf41925fc6dc876"
+        },
+        "module.main.10.0.conv_expand.weight": {
+          "changed_elements": 131072,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 131072,
+          "sha256_after": "821f8cdbf38945b4d2045342c619e6e78812ad610a0bdeb1dc45e5c75361403a",
+          "sha256_before": "8816c6fb621a60b7e95e9effa5739134b3520658e7d963fac242832c98bee22b"
+        },
+        "module.main.12.0.conv1.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "0a3b61c37db807f1a406e7e7774e21195ff85dea1c9b2ca9c4ac33af183724f0",
+          "sha256_before": "55afd4489f164e43e0a5e1c20d113c713966f1d1551800026d703cc0de42fe53"
+        },
+        "module.main.12.0.conv2.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "f243daed6c72a2a3ea73fcd93acd567699b94dbd4af1326ae416c0e2b2be4088",
+          "sha256_before": "2abc1bde4dd052ff94e9af2d2d577f498f521f442d609f2b5de49a4d225ce640"
+        },
+        "module.main.4.0.conv1.weight": {
+          "changed_elements": 18432,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 18432,
+          "sha256_after": "545940dfcc56cf0490bca68ba606dddbb5607692586592503ba24641e19b9099",
+          "sha256_before": "67df1f9ac075e53902d869ca212c6b9d8fb1c68ddf84286ee386549926c5c5a2"
+        },
+        "module.main.4.0.conv2.weight": {
+          "changed_elements": 36864,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 36864,
+          "sha256_after": "ffbab40e80171ddfc3acefffe816e80c62af66c28d1f4cbdda96441c92c946d7",
+          "sha256_before": "c1110b42928ef0cdf68b0aa17415e75ff3756c4a5fd2d6d681e0ed8af69c5eb6"
+        },
+        "module.main.4.0.conv_expand.weight": {
+          "changed_elements": 2048,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 2048,
+          "sha256_after": "4a82c92d95e1d08ed1e99ca041028c9e4e4208abfbad88ed3c5ec017e8e767e1",
+          "sha256_before": "4bd58263fa731aae15bf0dfe129e9bd15df5da67a088ed1210265fd9d66deb4e"
+        },
+        "module.main.6.0.conv1.weight": {
+          "changed_elements": 73728,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 73728,
+          "sha256_after": "35099ebf3e56c22284df61d90f44fca377168e925d838949746db4a2331ee5b7",
+          "sha256_before": "c177b59999bbc4864b8185b8cc478a0a1b3dc48922b14fe3779a056a51f51605"
+        },
+        "module.main.6.0.conv2.weight": {
+          "changed_elements": 147456,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 147456,
+          "sha256_after": "b30ae87b46bb2646030683b8894a15d3ebb28603372a8a243177ce30e202862b",
+          "sha256_before": "62042f5e6ed3f28d1a8147013796bf2dab8f0cde4324bf9ce8e1e01759251a9a"
+        },
+        "module.main.6.0.conv_expand.weight": {
+          "changed_elements": 8192,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 8192,
+          "sha256_after": "dbe59686efc92b0fe7b314e1a7a8efcd0ca8dd228f39cdb4cfe9317f61a1ab78",
+          "sha256_before": "d74df052fc0a5678ed9c04ef7b651f33bfe7c98a8d16fb325c0218ed9d67cf92"
+        },
+        "module.main.8.0.conv1.weight": {
+          "changed_elements": 294912,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 294912,
+          "sha256_after": "3d908eed988a7ba10a0dbb48bf253b7acf36d072de0f84c813df562c446e6016",
+          "sha256_before": "5805ae30af4448a9c6c55a67edd87ade34fbdc86b3b10765496b6b478760ecfb"
+        },
+        "module.main.8.0.conv2.weight": {
+          "changed_elements": 589824,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 589824,
+          "sha256_after": "077287a48356bf88f9f7643597e54ec3000a194d2394e8daf3a44e30aa53de22",
+          "sha256_before": "bb807f4d0355b998e0aa603eed1b4ad4d4008324ea78b17812953f8128e332e4"
+        },
+        "module.main.8.0.conv_expand.weight": {
+          "changed_elements": 32768,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 32768,
+          "sha256_after": "b3c8e212131ceb6e3e280baee49eb57b04fc9574a68ea6002e73604a969b58be",
+          "sha256_before": "03bf85875efe0be5f5ed00f7dd1f86f83cd36e4fe7a0c94b303a3252932ae087"
+        }
+      },
+      "tensors": 17
+    },
+    "netG": {
+      "changed_elements": 19887494,
+      "changed_tensors": 21,
+      "elements": 19887494,
+      "max_abs_delta": 0.00020000338554382324,
+      "per_tensor": {
+        "module.fc.0.bias": {
+          "changed_elements": 8192,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 8192,
+          "sha256_after": "a3e6f987cadba35709266ecc454e7be570702b70ee6955bc1fbdd66c0058e158",
+          "sha256_before": "513b3c7105bd4d34ae5e7be89c31f7fde6f75b62434740b15e1c54d14b821387"
+        },
+        "module.fc.0.weight": {
+          "changed_elements": 3145728,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 3145728,
+          "sha256_after": "84b13a47e251ac88f621f982c1879face3dee3565dbd21c209601dfc66fc6f11",
+          "sha256_before": "0fb5a4a84c4ced2e373e39b219f5095ab408dfc1a230e5f2340dfeb5f586b3d4"
+        },
+        "module.main.0.0.conv1.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "e648c1e592b5d14fffbed0fe52a3aa1f9d6c8327f1eddcb38cc288251b8d1af8",
+          "sha256_before": "c2c8c071921d0cb00d29b83d7195876e91c57d57a8a38266288316b46165c41a"
+        },
+        "module.main.0.0.conv2.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "fb1631de4700a09ce170ca08605f84608ada45eb9d0febeafaea1e8593915cb6",
+          "sha256_before": "dd27f98ebef9a41f83ac215200a2111067ed78faf9975bfaa00527ba75850f08"
+        },
+        "module.main.10.0.conv1.weight": {
+          "changed_elements": 73728,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 73728,
+          "sha256_after": "1ad0dc11f33096858b5a90439edfd0a6fe854df44fdc22db05041b808fbbdb1d",
+          "sha256_before": "23d8d4c54cd00040d8f90ccf11a17567550cc78352ae7befdea8debc53c6174b"
+        },
+        "module.main.10.0.conv2.weight": {
+          "changed_elements": 36864,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 36864,
+          "sha256_after": "1fd54fa887c204b1137a4dd7cb3eeefeb56d17f6b44fe402c01abecca6dd31b2",
+          "sha256_before": "a217c4be7ee90121c18f71537f538d9af72794943861c4681c67040da143601e"
+        },
+        "module.main.10.0.conv_expand.weight": {
+          "changed_elements": 8192,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 8192,
+          "sha256_after": "996ecec6f290178d5bc46fa317402bee2a11f4df9fc58d0706c160a1d470d11a",
+          "sha256_before": "02faaadbbd1fde89213550c4b1f8b31a9e4560b02a594a5b53f1efbfce1fb293"
+        },
+        "module.main.10.1.conv1.weight": {
+          "changed_elements": 36864,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 36864,
+          "sha256_after": "d843ca832b968837d5cd3fd7c2a2b1f74f00e7ff33a752718a597a329d92513f",
+          "sha256_before": "f1dab1410591934046903529b8c9ea43a1da6356cb6d9226e5deba3e648a9def"
+        },
+        "module.main.10.1.conv2.weight": {
+          "changed_elements": 36864,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 36864,
+          "sha256_after": "e81dfd80e80cd73f7805b932e0870818ffd725fc0f06079c0318c65d98bc7c96",
+          "sha256_before": "05174c6c11dd4b0a22a54d84d3fca3cf6adc95e4c4ab0146d9eca5368505754c"
+        },
+        "module.main.12.bias": {
+          "changed_elements": 6,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 6,
+          "sha256_after": "2c58a196c5b4208e918077e39e1a288a1e96d40caeed81b5099f9b4c8b15a2d1",
+          "sha256_before": "ee4fb0fd784d4732393284ffa126d7269b090b1bda6a6f5c7c1953b812f71285"
+        },
+        "module.main.12.weight": {
+          "changed_elements": 9600,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 9600,
+          "sha256_after": "1b76e5bca4c228f37e3c4a65301625ca153ff3455c9f4605c0e35fb6507ea4bb",
+          "sha256_before": "350dca2226989e7c76a3f33af6abb7a1b56ea7be05499e21fbe49edbdc7f50b1"
+        },
+        "module.main.2.0.conv1.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "5f1a2660ee15b77448e230276f2bc4e56b6eaad300d75aa79b412dd70d688e34",
+          "sha256_before": "76734af8eb9bd75e8f0b4538aa9f21eb08491442484028a3c02d21b8a9b91c0b"
+        },
+        "module.main.2.0.conv2.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "a235868a84e3a3484b2f1794d364002bbd01eb2741f48a5017d03636681203fc",
+          "sha256_before": "2262d2c7c0e2849e08122a20cd35b7dd00dbbcc7aa2f798faf758d3f75c5d7fd"
+        },
+        "module.main.4.0.conv1.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "e878c5a524e4401fb858759ebe6cc2ab929467b7f6c165212e367ac4b2ffd550",
+          "sha256_before": "9bf7f80b1758e8405419ded0588f65bf4d8c2a39f147dc892bb12e78fc0063d8"
+        },
+        "module.main.4.0.conv2.weight": {
+          "changed_elements": 2359296,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 2359296,
+          "sha256_after": "7bdbc9b06a802aa979967e4b78623e21706ca9e038902514efcd4a8c88544ea7",
+          "sha256_before": "3dd33c2a11d9ac7528d0eb25820c9c73f81d794421188b503d0ef6c8fe4a5b74"
+        },
+        "module.main.6.0.conv1.weight": {
+          "changed_elements": 1179648,
+          "max_abs_delta": 0.0002000001259148121,
+          "numel": 1179648,
+          "sha256_after": "b14d3c4253821fa2aa4e6a3bca08e04a2ec777f9c42d841cef9c5d56992aca02",
+          "sha256_before": "eb3362e4ca34571a3dddab3e051e58119698a36105f04db054396debca38f867"
+        },
+        "module.main.6.0.conv2.weight": {
+          "changed_elements": 589824,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 589824,
+          "sha256_after": "4876830b7d202d027ecf466617426a014c431f6c6b4d2b7ccae7cbe6bfb60275",
+          "sha256_before": "3c2c386cba76160b8b7a5387ccc4e9e9569667d75716a302ab48aed43b44534a"
+        },
+        "module.main.6.0.conv_expand.weight": {
+          "changed_elements": 131072,
+          "max_abs_delta": 0.000200001522898674,
+          "numel": 131072,
+          "sha256_after": "d18294ebe0ae3348ff08441b06011ca8549364bd9743b5656dbdc72f7bec0440",
+          "sha256_before": "a0b06c10b9bb5f73fba248a555d033a415711353c22905984cb1e40e6f72e9b1"
+        },
+        "module.main.8.0.conv1.weight": {
+          "changed_elements": 294912,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 294912,
+          "sha256_after": "8a16d2e344ee6b67adf10db2857bdb07ab6a5c40c982f358a214be066806bdf5",
+          "sha256_before": "6c9feb07141df99d6b53dabc51c4c01d1d87b48611b65457f9ea0f0d84c99e16"
+        },
+        "module.main.8.0.conv2.weight": {
+          "changed_elements": 147456,
+          "max_abs_delta": 0.0002000005915760994,
+          "numel": 147456,
+          "sha256_after": "8bfcfd9e6713706c46d36d43e4ac39ae0ea96fc10631e9c655a3deb985ce1ade",
+          "sha256_before": "724589afd1a2465b63d79544409d49b596f19537593332f94c13d0312d6ae3aa"
+        },
+        "module.main.8.0.conv_expand.weight": {
+          "changed_elements": 32768,
+          "max_abs_delta": 0.00020000338554382324,
+          "numel": 32768,
+          "sha256_after": "900d0c78f5f1f530e20386c56960c55da2f34ff3d92bcf83cc2b40ae2cdb2f5c",
+          "sha256_before": "61acd4453664cc878a65bb13b9df130ad1d119b5e19fc42c7131cb3e90a36ef9"
+        }
+      },
+      "tensors": 21
+    },
+    "netIP": {
+      "changed_elements": 0,
+      "changed_tensors": 0,
+      "elements": 10475872,
+      "max_abs_delta": 0.0,
+      "per_tensor": {
+        "module.block1.0.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 96,
+          "sha256_after": "954a6e2b1a6bdb9bfcb064a4e65f3aa7ae2ad1db5587510fec1882ed2fe0d213",
+          "sha256_before": "954a6e2b1a6bdb9bfcb064a4e65f3aa7ae2ad1db5587510fec1882ed2fe0d213"
+        },
+        "module.block1.0.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 41472,
+          "sha256_after": "e27abacb72f77ac0e010b2bd17d708a7a576805e6d75355f61d1d9b214b27121",
+          "sha256_before": "e27abacb72f77ac0e010b2bd17d708a7a576805e6d75355f61d1d9b214b27121"
+        },
+        "module.block1.0.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 96,
+          "sha256_after": "c4f8153cc47a13e5faa8a426096442fb325769b9684dca26eaaa006e1afeae9f",
+          "sha256_before": "c4f8153cc47a13e5faa8a426096442fb325769b9684dca26eaaa006e1afeae9f"
+        },
+        "module.block1.0.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 41472,
+          "sha256_after": "f191dd9ca678e6f6d277f835d5958457299e34a74733275520002af73118437c",
+          "sha256_before": "f191dd9ca678e6f6d277f835d5958457299e34a74733275520002af73118437c"
+        },
+        "module.block2.0.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 192,
+          "sha256_after": "76c328eb22d435c387a9aeeb0199959b620936602d08315ef86988bd1dbdfaec",
+          "sha256_before": "76c328eb22d435c387a9aeeb0199959b620936602d08315ef86988bd1dbdfaec"
+        },
+        "module.block2.0.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 165888,
+          "sha256_after": "ee69bc256ed76b3bb9e17162a6bd077190acd544f8b703aa1a2dd87034013c42",
+          "sha256_before": "ee69bc256ed76b3bb9e17162a6bd077190acd544f8b703aa1a2dd87034013c42"
+        },
+        "module.block2.0.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 192,
+          "sha256_after": "c225f8cb0e218aa771320b7b56d52ef612d7b49c689fa0f5eed6763835559d58",
+          "sha256_before": "c225f8cb0e218aa771320b7b56d52ef612d7b49c689fa0f5eed6763835559d58"
+        },
+        "module.block2.0.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 165888,
+          "sha256_after": "2e68d0078690386fa32c2ae30a404c4a093ace0c4b1513e3b8a6348222b1861c",
+          "sha256_before": "2e68d0078690386fa32c2ae30a404c4a093ace0c4b1513e3b8a6348222b1861c"
+        },
+        "module.block2.1.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 192,
+          "sha256_after": "06b015e262e3f7a909acff8c0fe7ddb56c79a5ad2ff3485c132778aa3a4e7849",
+          "sha256_before": "06b015e262e3f7a909acff8c0fe7ddb56c79a5ad2ff3485c132778aa3a4e7849"
+        },
+        "module.block2.1.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 165888,
+          "sha256_after": "021f4fbf36afade23ef8d8a0850a78707fac579a564d7168934e77d66066b25d",
+          "sha256_before": "021f4fbf36afade23ef8d8a0850a78707fac579a564d7168934e77d66066b25d"
+        },
+        "module.block2.1.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 192,
+          "sha256_after": "9a14b5f420363cafa63640af46ce82718772c32768f8ab170f05aa17c1e2a619",
+          "sha256_before": "9a14b5f420363cafa63640af46ce82718772c32768f8ab170f05aa17c1e2a619"
+        },
+        "module.block2.1.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 165888,
+          "sha256_after": "39273838c11bdc526bcca5c73e3fa8fc8ffdf8d28b34c273b612af300756f547",
+          "sha256_before": "39273838c11bdc526bcca5c73e3fa8fc8ffdf8d28b34c273b612af300756f547"
+        },
+        "module.block3.0.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "b1cd89f447a416ee4e76cf50cb060adc01fbe4b3bb6213b34a9640ad068ea11a",
+          "sha256_before": "b1cd89f447a416ee4e76cf50cb060adc01fbe4b3bb6213b34a9640ad068ea11a"
+        },
+        "module.block3.0.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 663552,
+          "sha256_after": "e3c22768998bdfa0248ab7c00eb95c5e298fb0fcdf613d1469048b3ce2f1b5ba",
+          "sha256_before": "e3c22768998bdfa0248ab7c00eb95c5e298fb0fcdf613d1469048b3ce2f1b5ba"
+        },
+        "module.block3.0.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "348d370aba5e2af9fd629dc66a0ad17c5811a1145cb421defba6d1a27fb5570d",
+          "sha256_before": "348d370aba5e2af9fd629dc66a0ad17c5811a1145cb421defba6d1a27fb5570d"
+        },
+        "module.block3.0.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 663552,
+          "sha256_after": "f9a2fd9dd5d713bfb8e9cc7f4e6c0bdda9b9921952d8185b1ab718aa5a17225d",
+          "sha256_before": "f9a2fd9dd5d713bfb8e9cc7f4e6c0bdda9b9921952d8185b1ab718aa5a17225d"
+        },
+        "module.block3.1.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "4b97954eac196fc18ec63014a3dc9b636431154f688a368de9b2599ca24ecada",
+          "sha256_before": "4b97954eac196fc18ec63014a3dc9b636431154f688a368de9b2599ca24ecada"
+        },
+        "module.block3.1.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 663552,
+          "sha256_after": "8e0b6b0a94fb2c2b035dec912975326940521fee0efd6002ffe5b30a019d55b5",
+          "sha256_before": "8e0b6b0a94fb2c2b035dec912975326940521fee0efd6002ffe5b30a019d55b5"
+        },
+        "module.block3.1.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "182f9e02251bf5d9a238a7ca5541ca6ebfda9f224f8452e03203d75759f8f4bd",
+          "sha256_before": "182f9e02251bf5d9a238a7ca5541ca6ebfda9f224f8452e03203d75759f8f4bd"
+        },
+        "module.block3.1.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 663552,
+          "sha256_after": "9f0bce8002632dbd529df50b39312ef8990d9bf7e755e9ab1b5021f81785b6ce",
+          "sha256_before": "9f0bce8002632dbd529df50b39312ef8990d9bf7e755e9ab1b5021f81785b6ce"
+        },
+        "module.block3.2.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "3fe98b72d95a77ab45328a04ec06f8ac8c397efa3fbd365c61e6c19bb928c1e0",
+          "sha256_before": "3fe98b72d95a77ab45328a04ec06f8ac8c397efa3fbd365c61e6c19bb928c1e0"
+        },
+        "module.block3.2.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 663552,
+          "sha256_after": "1b23ba749c77416245bf072ca90447517cb34171f055b4116def56942ca9a174",
+          "sha256_before": "1b23ba749c77416245bf072ca90447517cb34171f055b4116def56942ca9a174"
+        },
+        "module.block3.2.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "98da9698f557164ad693d2c70ba269e374e105603b494b38317d8a8e5f237cd8",
+          "sha256_before": "98da9698f557164ad693d2c70ba269e374e105603b494b38317d8a8e5f237cd8"
+        },
+        "module.block3.2.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 663552,
+          "sha256_after": "8c05351d6b062a113569044f57194b74e5daa3a384babd43e91946b28fd05d6a",
+          "sha256_before": "8c05351d6b062a113569044f57194b74e5daa3a384babd43e91946b28fd05d6a"
+        },
+        "module.block4.0.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "d6c9e9eaf6176c7eec5ef354c308f255f25aa81010ffe5a7620fd487548cef09",
+          "sha256_before": "d6c9e9eaf6176c7eec5ef354c308f255f25aa81010ffe5a7620fd487548cef09"
+        },
+        "module.block4.0.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "d454e538541fd6c406df6c51c2c01a7459c51e8ab8261549b3908bdf2829eb47",
+          "sha256_before": "d454e538541fd6c406df6c51c2c01a7459c51e8ab8261549b3908bdf2829eb47"
+        },
+        "module.block4.0.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "76a1fb3e50f83208bc0c71032af29dff5cd48f654d20b2ad1f556883b13492b2",
+          "sha256_before": "76a1fb3e50f83208bc0c71032af29dff5cd48f654d20b2ad1f556883b13492b2"
+        },
+        "module.block4.0.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "34d5fd46122c5f8601e57707188c5e42642a250a5da9911f3f8bec14ad9e7217",
+          "sha256_before": "34d5fd46122c5f8601e57707188c5e42642a250a5da9911f3f8bec14ad9e7217"
+        },
+        "module.block4.1.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "a1ba2ad0067dc1b67b440a40ba533ffc969ac43d659b997d55333e7fa016e15f",
+          "sha256_before": "a1ba2ad0067dc1b67b440a40ba533ffc969ac43d659b997d55333e7fa016e15f"
+        },
+        "module.block4.1.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "5408872e5bd8519203e852b4bee279322cca7b72621804edc9a0cc2a16904c4b",
+          "sha256_before": "5408872e5bd8519203e852b4bee279322cca7b72621804edc9a0cc2a16904c4b"
+        },
+        "module.block4.1.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "64d150e6e9717660f88a53265c9ca20fa5ed0cd4ed775c761a9e2d078dad77d6",
+          "sha256_before": "64d150e6e9717660f88a53265c9ca20fa5ed0cd4ed775c761a9e2d078dad77d6"
+        },
+        "module.block4.1.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "1fc07b9ac3e81e6b0bcea5c3c3f20879f0be578dcb2da5917f1c6b5e47176277",
+          "sha256_before": "1fc07b9ac3e81e6b0bcea5c3c3f20879f0be578dcb2da5917f1c6b5e47176277"
+        },
+        "module.block4.2.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "ddb980a3873ea436f8d46bbfc33b3f14dd893fa59a0077eeecf5f5913705c8e4",
+          "sha256_before": "ddb980a3873ea436f8d46bbfc33b3f14dd893fa59a0077eeecf5f5913705c8e4"
+        },
+        "module.block4.2.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "b4d1eac87a791a4e29b630ffaf0dc52af49833f1a8e9e9b86161b7b3a810978d",
+          "sha256_before": "b4d1eac87a791a4e29b630ffaf0dc52af49833f1a8e9e9b86161b7b3a810978d"
+        },
+        "module.block4.2.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "ec8b11ad18d2c2cf3078f73927a6fc9cf287da4d5be81f528f69e12c5c9fe481",
+          "sha256_before": "ec8b11ad18d2c2cf3078f73927a6fc9cf287da4d5be81f528f69e12c5c9fe481"
+        },
+        "module.block4.2.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "bb5432050ad48febf3ade78ec06c024a09aadef4611f8bc212981d4c5c6ae5fc",
+          "sha256_before": "bb5432050ad48febf3ade78ec06c024a09aadef4611f8bc212981d4c5c6ae5fc"
+        },
+        "module.block4.3.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "1fb33e399cf3d3f886096ea17e5e2822b3296fd1fe56d8fc106f0a7c07e48de9",
+          "sha256_before": "1fb33e399cf3d3f886096ea17e5e2822b3296fd1fe56d8fc106f0a7c07e48de9"
+        },
+        "module.block4.3.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "da283ebc99611d6531320f1d87d64e5daf9ca4751e5435d3338308f447460abe",
+          "sha256_before": "da283ebc99611d6531320f1d87d64e5daf9ca4751e5435d3338308f447460abe"
+        },
+        "module.block4.3.conv2.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "1c75c97b88ed4d7264f52c48a721036fbfb6f80d17a8dc450e248aa62f709a2b",
+          "sha256_before": "1c75c97b88ed4d7264f52c48a721036fbfb6f80d17a8dc450e248aa62f709a2b"
+        },
+        "module.block4.3.conv2.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "7bb70266d4ba8676a635186c4b3d58f7ea242dc60cc5a9dbb4815ea99a7e1fa9",
+          "sha256_before": "7bb70266d4ba8676a635186c4b3d58f7ea242dc60cc5a9dbb4815ea99a7e1fa9"
+        },
+        "module.conv1.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 96,
+          "sha256_after": "9456819403c87b6f8d1e06abde1ffd82b4c062fdbf0744ef5d7c37fedbed833d",
+          "sha256_before": "9456819403c87b6f8d1e06abde1ffd82b4c062fdbf0744ef5d7c37fedbed833d"
+        },
+        "module.conv1.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 2400,
+          "sha256_after": "f4f7bd8a93e4cac20784d58b57ea195ded31d39269871288cd4b7624c28508b1",
+          "sha256_before": "f4f7bd8a93e4cac20784d58b57ea195ded31d39269871288cd4b7624c28508b1"
+        },
+        "module.fc.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "ba0e35cfcaa8db7d8b40b249ff7842294c7b18eee7178d270037c47ade403fc1",
+          "sha256_before": "ba0e35cfcaa8db7d8b40b249ff7842294c7b18eee7178d270037c47ade403fc1"
+        },
+        "module.fc.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 2097152,
+          "sha256_after": "75d131272c6927c89fe0033545279df3c5750d84ef1f21be7b6cd35eb7fe38f0",
+          "sha256_before": "75d131272c6927c89fe0033545279df3c5750d84ef1f21be7b6cd35eb7fe38f0"
+        },
+        "module.group1.conv.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 192,
+          "sha256_after": "a7fab946358742e6bc4119d7a179afd5c525107e4accb3b40b027550cafb6ceb",
+          "sha256_before": "a7fab946358742e6bc4119d7a179afd5c525107e4accb3b40b027550cafb6ceb"
+        },
+        "module.group1.conv.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 82944,
+          "sha256_after": "6816879dd559873782c30806130bf278e7e04adf15df76c5f439fff34d53f917",
+          "sha256_before": "6816879dd559873782c30806130bf278e7e04adf15df76c5f439fff34d53f917"
+        },
+        "module.group1.conv_a.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 96,
+          "sha256_after": "9e157b13c4a2a32b17338aa78775f3c90a63681d52960bff25693e7293b80c72",
+          "sha256_before": "9e157b13c4a2a32b17338aa78775f3c90a63681d52960bff25693e7293b80c72"
+        },
+        "module.group1.conv_a.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 4608,
+          "sha256_after": "2e8eec16ad6bb05a5b99a5d37614b9464ddbb370adcee35aff45ae563cdc4c1f",
+          "sha256_before": "2e8eec16ad6bb05a5b99a5d37614b9464ddbb370adcee35aff45ae563cdc4c1f"
+        },
+        "module.group2.conv.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "e7016ee855c1af38153203d6f9f63e6a41c50c46f9990d387edab6819cdf3a0a",
+          "sha256_before": "e7016ee855c1af38153203d6f9f63e6a41c50c46f9990d387edab6819cdf3a0a"
+        },
+        "module.group2.conv.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 331776,
+          "sha256_after": "12a531ed5b4186c4865459210877e53b9d6ac68f4b2306e7fed62443847fcb98",
+          "sha256_before": "12a531ed5b4186c4865459210877e53b9d6ac68f4b2306e7fed62443847fcb98"
+        },
+        "module.group2.conv_a.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 192,
+          "sha256_after": "63ec858df1199d34967b29c1003a03be0b4a4c400afdf606b2be16e55a8ce90a",
+          "sha256_before": "63ec858df1199d34967b29c1003a03be0b4a4c400afdf606b2be16e55a8ce90a"
+        },
+        "module.group2.conv_a.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 18432,
+          "sha256_after": "78ffd2c8c82052862206eb400fc711530e4a81ebc2b73a9ff394e0f0f5cf9f4b",
+          "sha256_before": "78ffd2c8c82052862206eb400fc711530e4a81ebc2b73a9ff394e0f0f5cf9f4b"
+        },
+        "module.group3.conv.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "7f43d0b096e73cddf06561d55d786b25424321e4823ab11b392a6e0cba2cae25",
+          "sha256_before": "7f43d0b096e73cddf06561d55d786b25424321e4823ab11b392a6e0cba2cae25"
+        },
+        "module.group3.conv.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 442368,
+          "sha256_after": "29389a5b5b91514a82bcca4f8560d9e57b9b8479248bf354536601bf70a4bca5",
+          "sha256_before": "29389a5b5b91514a82bcca4f8560d9e57b9b8479248bf354536601bf70a4bca5"
+        },
+        "module.group3.conv_a.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 384,
+          "sha256_after": "4cb2a82aa2d1fd0ad98fa2d072d69d8735083bee820f59e2f38538c905556d1b",
+          "sha256_before": "4cb2a82aa2d1fd0ad98fa2d072d69d8735083bee820f59e2f38538c905556d1b"
+        },
+        "module.group3.conv_a.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 73728,
+          "sha256_after": "441eebfbe43a9a2855ec94d5b17b1f61aefcbae28797997ca2bcaae891c964a9",
+          "sha256_before": "441eebfbe43a9a2855ec94d5b17b1f61aefcbae28797997ca2bcaae891c964a9"
+        },
+        "module.group4.conv.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "7cc98c0080f576b0ef7eed6e38b0356487aaa2d1fbbdad91b0a4ed8aaa061722",
+          "sha256_before": "7cc98c0080f576b0ef7eed6e38b0356487aaa2d1fbbdad91b0a4ed8aaa061722"
+        },
+        "module.group4.conv.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 294912,
+          "sha256_after": "534617fa53113102568090ad9efb275aaa790a73619e4569d6c73c85115b49e1",
+          "sha256_before": "534617fa53113102568090ad9efb275aaa790a73619e4569d6c73c85115b49e1"
+        },
+        "module.group4.conv_a.filter.bias": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 256,
+          "sha256_after": "401ecfedb813c107b493160d2eb13e2ec1d0983cc125d166d4e5762e97d78cf2",
+          "sha256_before": "401ecfedb813c107b493160d2eb13e2ec1d0983cc125d166d4e5762e97d78cf2"
+        },
+        "module.group4.conv_a.filter.weight": {
+          "changed_elements": 0,
+          "max_abs_delta": 0.0,
+          "numel": 32768,
+          "sha256_after": "6606e14f8df94f8bbe51479d5f0182276801c57b28c974f08287d3e98362457a",
+          "sha256_before": "6606e14f8df94f8bbe51479d5f0182276801c57b28c974f08287d3e98362457a"
+        }
+      },
+      "tensors": 60
+    }
+  },
+  "parameters_after_sha256": {
+    "netCls": {
+      "module.fc.bias": "bc97d4c7f08f3ad15a21dca73f7489d280d06df81da93969468e20069d0b1ca7",
+      "module.fc.weight": "73383546d6e51d5d0d875f9ef31c8f077390030db8f0c0763cc0465e6be3a23a"
+    },
+    "netE_nir": {
+      "module.fc.bias": "a2ad8e80e851528d79e54558c7c6501b87389883de1c6384b0861d3a6c0b805b",
+      "module.fc.weight": "30c7f0b7860e0ee1e0e850a2c8102499f469449897bada8a8e2ae2c6276e3fb6",
+      "module.main.0.weight": "0ea7681fc8ea7da482b7667574d60300d1412dc01c2b4b95ba1acf0b6d74c76f",
+      "module.main.10.0.conv1.weight": "c22eeda615a7b1c5419e16be3571f0735da2a332609131c1a8150977b951cd5e",
+      "module.main.10.0.conv2.weight": "a54bc0c5d48d093b8a3f03416196f17fc9d43bb19a595ec4817953039adfddc2",
+      "module.main.10.0.conv_expand.weight": "4c5a3a9b9db683f0818e57c5d8401a905069fe5c0229763c2ecbcdc3af8935b5",
+      "module.main.12.0.conv1.weight": "628afb9b11af14b81d7b80927ad33d8fdba0a73302b37716e16a88f32d9d06ec",
+      "module.main.12.0.conv2.weight": "bf05a69b22610220ec1c6e334a3e50f055e2df8b22ecf1fbbcd93ac1b1359d4e",
+      "module.main.4.0.conv1.weight": "cd2324a201a4b7c4da56162ce9bba189d05e98b8870f5fb18bb0a4439ac368a1",
+      "module.main.4.0.conv2.weight": "b876a252354ebea7b9a35cb5b66d5875b3d581fda39293cf6a86e319da15a518",
+      "module.main.4.0.conv_expand.weight": "8d873ceb93fdc9bee16aa0ab22a1e31e249f0f1443b51659bba9a0232d6f606f",
+      "module.main.6.0.conv1.weight": "ae9aebaf9b668e5c77077500e6dd62cb8d2b2fc5e21720de4a5333ffa775e154",
+      "module.main.6.0.conv2.weight": "9dd3f8d03c50e321c1fea835d6726994304798a22733f01222e71e8f7bcc5f5c",
+      "module.main.6.0.conv_expand.weight": "e0101ad9f2a7dcc746776d511373ac68e6c5d759613b21103aa46e2257f4c4a1",
+      "module.main.8.0.conv1.weight": "bcba12e23bac808fbf7c2c8625f12732e16972bbc123b1d573cd65cdf5f3269f",
+      "module.main.8.0.conv2.weight": "1823cf037ad8249d8d8deaf611bba40d0378fb071b891cca94b7534540720400",
+      "module.main.8.0.conv_expand.weight": "09405817488556e99e5c201fff74c92688c639a3620beac35b958cce4af71525"
+    },
+    "netE_vis": {
+      "module.fc.bias": "793351d6c43da4237eb97720df4c0b596bf1023ca5ff0e25d7504d08f386b37c",
+      "module.fc.weight": "090dfe83dc79e92580670e901ceec7179cba41454aff1d623ad8065706ab9f00",
+      "module.main.0.weight": "549e144f9db9c7ac0888d757f701d1d364a8fa1df4e5215aa046f02e36751851",
+      "module.main.10.0.conv1.weight": "4182778ded521813c2c16e188f26e17e41833d5ca83d0d0b35602ddbefd815e7",
+      "module.main.10.0.conv2.weight": "55fe1702e00ddffb1d17da9c5b478288c1f7dc54e9aecd9d970453048247d8db",
+      "module.main.10.0.conv_expand.weight": "821f8cdbf38945b4d2045342c619e6e78812ad610a0bdeb1dc45e5c75361403a",
+      "module.main.12.0.conv1.weight": "0a3b61c37db807f1a406e7e7774e21195ff85dea1c9b2ca9c4ac33af183724f0",
+      "module.main.12.0.conv2.weight": "f243daed6c72a2a3ea73fcd93acd567699b94dbd4af1326ae416c0e2b2be4088",
+      "module.main.4.0.conv1.weight": "545940dfcc56cf0490bca68ba606dddbb5607692586592503ba24641e19b9099",
+      "module.main.4.0.conv2.weight": "ffbab40e80171ddfc3acefffe816e80c62af66c28d1f4cbdda96441c92c946d7",
+      "module.main.4.0.conv_expand.weight": "4a82c92d95e1d08ed1e99ca041028c9e4e4208abfbad88ed3c5ec017e8e767e1",
+      "module.main.6.0.conv1.weight": "35099ebf3e56c22284df61d90f44fca377168e925d838949746db4a2331ee5b7",
+      "module.main.6.0.conv2.weight": "b30ae87b46bb2646030683b8894a15d3ebb28603372a8a243177ce30e202862b",
+      "module.main.6.0.conv_expand.weight": "dbe59686efc92b0fe7b314e1a7a8efcd0ca8dd228f39cdb4cfe9317f61a1ab78",
+      "module.main.8.0.conv1.weight": "3d908eed988a7ba10a0dbb48bf253b7acf36d072de0f84c813df562c446e6016",
+      "module.main.8.0.conv2.weight": "077287a48356bf88f9f7643597e54ec3000a194d2394e8daf3a44e30aa53de22",
+      "module.main.8.0.conv_expand.weight": "b3c8e212131ceb6e3e280baee49eb57b04fc9574a68ea6002e73604a969b58be"
+    },
+    "netG": {
+      "module.fc.0.bias": "a3e6f987cadba35709266ecc454e7be570702b70ee6955bc1fbdd66c0058e158",
+      "module.fc.0.weight": "84b13a47e251ac88f621f982c1879face3dee3565dbd21c209601dfc66fc6f11",
+      "module.main.0.0.conv1.weight": "e648c1e592b5d14fffbed0fe52a3aa1f9d6c8327f1eddcb38cc288251b8d1af8",
+      "module.main.0.0.conv2.weight": "fb1631de4700a09ce170ca08605f84608ada45eb9d0febeafaea1e8593915cb6",
+      "module.main.10.0.conv1.weight": "1ad0dc11f33096858b5a90439edfd0a6fe854df44fdc22db05041b808fbbdb1d",
+      "module.main.10.0.conv2.weight": "1fd54fa887c204b1137a4dd7cb3eeefeb56d17f6b44fe402c01abecca6dd31b2",
+      "module.main.10.0.conv_expand.weight": "996ecec6f290178d5bc46fa317402bee2a11f4df9fc58d0706c160a1d470d11a",
+      "module.main.10.1.conv1.weight": "d843ca832b968837d5cd3fd7c2a2b1f74f00e7ff33a752718a597a329d92513f",
+      "module.main.10.1.conv2.weight": "e81dfd80e80cd73f7805b932e0870818ffd725fc0f06079c0318c65d98bc7c96",
+      "module.main.12.bias": "2c58a196c5b4208e918077e39e1a288a1e96d40caeed81b5099f9b4c8b15a2d1",
+      "module.main.12.weight": "1b76e5bca4c228f37e3c4a65301625ca153ff3455c9f4605c0e35fb6507ea4bb",
+      "module.main.2.0.conv1.weight": "5f1a2660ee15b77448e230276f2bc4e56b6eaad300d75aa79b412dd70d688e34",
+      "module.main.2.0.conv2.weight": "a235868a84e3a3484b2f1794d364002bbd01eb2741f48a5017d03636681203fc",
+      "module.main.4.0.conv1.weight": "e878c5a524e4401fb858759ebe6cc2ab929467b7f6c165212e367ac4b2ffd550",
+      "module.main.4.0.conv2.weight": "7bdbc9b06a802aa979967e4b78623e21706ca9e038902514efcd4a8c88544ea7",
+      "module.main.6.0.conv1.weight": "b14d3c4253821fa2aa4e6a3bca08e04a2ec777f9c42d841cef9c5d56992aca02",
+      "module.main.6.0.conv2.weight": "4876830b7d202d027ecf466617426a014c431f6c6b4d2b7ccae7cbe6bfb60275",
+      "module.main.6.0.conv_expand.weight": "d18294ebe0ae3348ff08441b06011ca8549364bd9743b5656dbdc72f7bec0440",
+      "module.main.8.0.conv1.weight": "8a16d2e344ee6b67adf10db2857bdb07ab6a5c40c982f358a214be066806bdf5",
+      "module.main.8.0.conv2.weight": "8bfcfd9e6713706c46d36d43e4ac39ae0ea96fc10631e9c655a3deb985ce1ade",
+      "module.main.8.0.conv_expand.weight": "900d0c78f5f1f530e20386c56960c55da2f34ff3d92bcf83cc2b40ae2cdb2f5c"
+    },
+    "netIP": {
+      "module.block1.0.conv1.filter.bias": "954a6e2b1a6bdb9bfcb064a4e65f3aa7ae2ad1db5587510fec1882ed2fe0d213",
+      "module.block1.0.conv1.filter.weight": "e27abacb72f77ac0e010b2bd17d708a7a576805e6d75355f61d1d9b214b27121",
+      "module.block1.0.conv2.filter.bias": "c4f8153cc47a13e5faa8a426096442fb325769b9684dca26eaaa006e1afeae9f",
+      "module.block1.0.conv2.filter.weight": "f191dd9ca678e6f6d277f835d5958457299e34a74733275520002af73118437c",
+      "module.block2.0.conv1.filter.bias": "76c328eb22d435c387a9aeeb0199959b620936602d08315ef86988bd1dbdfaec",
+      "module.block2.0.conv1.filter.weight": "ee69bc256ed76b3bb9e17162a6bd077190acd544f8b703aa1a2dd87034013c42",
+      "module.block2.0.conv2.filter.bias": "c225f8cb0e218aa771320b7b56d52ef612d7b49c689fa0f5eed6763835559d58",
+      "module.block2.0.conv2.filter.weight": "2e68d0078690386fa32c2ae30a404c4a093ace0c4b1513e3b8a6348222b1861c",
+      "module.block2.1.conv1.filter.bias": "06b015e262e3f7a909acff8c0fe7ddb56c79a5ad2ff3485c132778aa3a4e7849",
+      "module.block2.1.conv1.filter.weight": "021f4fbf36afade23ef8d8a0850a78707fac579a564d7168934e77d66066b25d",
+      "module.block2.1.conv2.filter.bias": "9a14b5f420363cafa63640af46ce82718772c32768f8ab170f05aa17c1e2a619",
+      "module.block2.1.conv2.filter.weight": "39273838c11bdc526bcca5c73e3fa8fc8ffdf8d28b34c273b612af300756f547",
+      "module.block3.0.conv1.filter.bias": "b1cd89f447a416ee4e76cf50cb060adc01fbe4b3bb6213b34a9640ad068ea11a",
+      "module.block3.0.conv1.filter.weight": "e3c22768998bdfa0248ab7c00eb95c5e298fb0fcdf613d1469048b3ce2f1b5ba",
+      "module.block3.0.conv2.filter.bias": "348d370aba5e2af9fd629dc66a0ad17c5811a1145cb421defba6d1a27fb5570d",
+      "module.block3.0.conv2.filter.weight": "f9a2fd9dd5d713bfb8e9cc7f4e6c0bdda9b9921952d8185b1ab718aa5a17225d",
+      "module.block3.1.conv1.filter.bias": "4b97954eac196fc18ec63014a3dc9b636431154f688a368de9b2599ca24ecada",
+      "module.block3.1.conv1.filter.weight": "8e0b6b0a94fb2c2b035dec912975326940521fee0efd6002ffe5b30a019d55b5",
+      "module.block3.1.conv2.filter.bias": "182f9e02251bf5d9a238a7ca5541ca6ebfda9f224f8452e03203d75759f8f4bd",
+      "module.block3.1.conv2.filter.weight": "9f0bce8002632dbd529df50b39312ef8990d9bf7e755e9ab1b5021f81785b6ce",
+      "module.block3.2.conv1.filter.bias": "3fe98b72d95a77ab45328a04ec06f8ac8c397efa3fbd365c61e6c19bb928c1e0",
+      "module.block3.2.conv1.filter.weight": "1b23ba749c77416245bf072ca90447517cb34171f055b4116def56942ca9a174",
+      "module.block3.2.conv2.filter.bias": "98da9698f557164ad693d2c70ba269e374e105603b494b38317d8a8e5f237cd8",
+      "module.block3.2.conv2.filter.weight": "8c05351d6b062a113569044f57194b74e5daa3a384babd43e91946b28fd05d6a",
+      "module.block4.0.conv1.filter.bias": "d6c9e9eaf6176c7eec5ef354c308f255f25aa81010ffe5a7620fd487548cef09",
+      "module.block4.0.conv1.filter.weight": "d454e538541fd6c406df6c51c2c01a7459c51e8ab8261549b3908bdf2829eb47",
+      "module.block4.0.conv2.filter.bias": "76a1fb3e50f83208bc0c71032af29dff5cd48f654d20b2ad1f556883b13492b2",
+      "module.block4.0.conv2.filter.weight": "34d5fd46122c5f8601e57707188c5e42642a250a5da9911f3f8bec14ad9e7217",
+      "module.block4.1.conv1.filter.bias": "a1ba2ad0067dc1b67b440a40ba533ffc969ac43d659b997d55333e7fa016e15f",
+      "module.block4.1.conv1.filter.weight": "5408872e5bd8519203e852b4bee279322cca7b72621804edc9a0cc2a16904c4b",
+      "module.block4.1.conv2.filter.bias": "64d150e6e9717660f88a53265c9ca20fa5ed0cd4ed775c761a9e2d078dad77d6",
+      "module.block4.1.conv2.filter.weight": "1fc07b9ac3e81e6b0bcea5c3c3f20879f0be578dcb2da5917f1c6b5e47176277",
+      "module.block4.2.conv1.filter.bias": "ddb980a3873ea436f8d46bbfc33b3f14dd893fa59a0077eeecf5f5913705c8e4",
+      "module.block4.2.conv1.filter.weight": "b4d1eac87a791a4e29b630ffaf0dc52af49833f1a8e9e9b86161b7b3a810978d",
+      "module.block4.2.conv2.filter.bias": "ec8b11ad18d2c2cf3078f73927a6fc9cf287da4d5be81f528f69e12c5c9fe481",
+      "module.block4.2.conv2.filter.weight": "bb5432050ad48febf3ade78ec06c024a09aadef4611f8bc212981d4c5c6ae5fc",
+      "module.block4.3.conv1.filter.bias": "1fb33e399cf3d3f886096ea17e5e2822b3296fd1fe56d8fc106f0a7c07e48de9",
+      "module.block4.3.conv1.filter.weight": "da283ebc99611d6531320f1d87d64e5daf9ca4751e5435d3338308f447460abe",
+      "module.block4.3.conv2.filter.bias": "1c75c97b88ed4d7264f52c48a721036fbfb6f80d17a8dc450e248aa62f709a2b",
+      "module.block4.3.conv2.filter.weight": "7bb70266d4ba8676a635186c4b3d58f7ea242dc60cc5a9dbb4815ea99a7e1fa9",
+      "module.conv1.filter.bias": "9456819403c87b6f8d1e06abde1ffd82b4c062fdbf0744ef5d7c37fedbed833d",
+      "module.conv1.filter.weight": "f4f7bd8a93e4cac20784d58b57ea195ded31d39269871288cd4b7624c28508b1",
+      "module.fc.bias": "ba0e35cfcaa8db7d8b40b249ff7842294c7b18eee7178d270037c47ade403fc1",
+      "module.fc.weight": "75d131272c6927c89fe0033545279df3c5750d84ef1f21be7b6cd35eb7fe38f0",
+      "module.group1.conv.filter.bias": "a7fab946358742e6bc4119d7a179afd5c525107e4accb3b40b027550cafb6ceb",
+      "module.group1.conv.filter.weight": "6816879dd559873782c30806130bf278e7e04adf15df76c5f439fff34d53f917",
+      "module.group1.conv_a.filter.bias": "9e157b13c4a2a32b17338aa78775f3c90a63681d52960bff25693e7293b80c72",
+      "module.group1.conv_a.filter.weight": "2e8eec16ad6bb05a5b99a5d37614b9464ddbb370adcee35aff45ae563cdc4c1f",
+      "module.group2.conv.filter.bias": "e7016ee855c1af38153203d6f9f63e6a41c50c46f9990d387edab6819cdf3a0a",
+      "module.group2.conv.filter.weight": "12a531ed5b4186c4865459210877e53b9d6ac68f4b2306e7fed62443847fcb98",
+      "module.group2.conv_a.filter.bias": "63ec858df1199d34967b29c1003a03be0b4a4c400afdf606b2be16e55a8ce90a",
+      "module.group2.conv_a.filter.weight": "78ffd2c8c82052862206eb400fc711530e4a81ebc2b73a9ff394e0f0f5cf9f4b",
+      "module.group3.conv.filter.bias": "7f43d0b096e73cddf06561d55d786b25424321e4823ab11b392a6e0cba2cae25",
+      "module.group3.conv.filter.weight": "29389a5b5b91514a82bcca4f8560d9e57b9b8479248bf354536601bf70a4bca5",
+      "module.group3.conv_a.filter.bias": "4cb2a82aa2d1fd0ad98fa2d072d69d8735083bee820f59e2f38538c905556d1b",
+      "module.group3.conv_a.filter.weight": "441eebfbe43a9a2855ec94d5b17b1f61aefcbae28797997ca2bcaae891c964a9",
+      "module.group4.conv.filter.bias": "7cc98c0080f576b0ef7eed6e38b0356487aaa2d1fbbdad91b0a4ed8aaa061722",
+      "module.group4.conv.filter.weight": "534617fa53113102568090ad9efb275aaa790a73619e4569d6c73c85115b49e1",
+      "module.group4.conv_a.filter.bias": "401ecfedb813c107b493160d2eb13e2ec1d0983cc125d166d4e5762e97d78cf2",
+      "module.group4.conv_a.filter.weight": "6606e14f8df94f8bbe51479d5f0182276801c57b28c974f08287d3e98362457a"
+    }
+  },
+  "parameters_initial": {
+    "netCls": {
+      "buffers": 0,
+      "parameter_tensors": 2,
+      "parameters": 129,
+      "requires_grad_parameters": 129,
+      "sha256": {
+        "module.fc.bias": "bc97d4c7f08f3ad15a21dca73f7489d280d06df81da93969468e20069d0b1ca7",
+        "module.fc.weight": "73383546d6e51d5d0d875f9ef31c8f077390030db8f0c0763cc0465e6be3a23a"
+      },
+      "shapes": {
+        "module.fc.bias": [
+          1
+        ],
+        "module.fc.weight": [
+          1,
+          128
+        ]
+      }
+    },
+    "netE_nir": {
+      "buffers": 0,
+      "parameter_tensors": 17,
+      "parameters": 13790048,
+      "requires_grad_parameters": 13790048,
+      "sha256": {
+        "module.fc.bias": "187708e7835ecfddf9893028e825869d3a22c27c3a2045f98a69bf86dca1ceb1",
+        "module.fc.weight": "185c6003faa8f57b09614d7cebb2377fbe354a7d4e02f3505b5407aba4a0ebc1",
+        "module.main.0.weight": "6a6ba1ebbaec0fef155687d2b9d6a092ecae18077ebb272bbb63bc10820b716b",
+        "module.main.10.0.conv1.weight": "00d5a8128d019c7af7fe0f50c9433b6e22c145c96b734b0652a457656e0c603e",
+        "module.main.10.0.conv2.weight": "35f4d49847905026c2de4e7bd2136449c2bd5ecbe0253c16cd984434a8efca55",
+        "module.main.10.0.conv_expand.weight": "ee98026e0a50db709374a6cfddc2f23448eafe3e4d35e507deca454abbac4b0e",
+        "module.main.12.0.conv1.weight": "bf4a65433863f1d8ead2ab148b32623d9813b695566507ae23bc62c9c7fc7582",
+        "module.main.12.0.conv2.weight": "2891fc912f7c695e0b9891c5c8362efa26c53e47ea9fecb16ca3191aa336e7bf",
+        "module.main.4.0.conv1.weight": "ac196bae506f6b15846d718fd8c7ee776bb4b817189c4af9149dc3d431cc32bc",
+        "module.main.4.0.conv2.weight": "1213295fffafe122c00e7638cd141868beb030cbb50149ec4217f39d05cb178f",
+        "module.main.4.0.conv_expand.weight": "bed8271a90d1f93e4b7c6d86a22eca1ac6f070dee63c4b0ca501c9c905e95b2a",
+        "module.main.6.0.conv1.weight": "f7d8ede9510f01a4d7f2336a9d37467bef076096b38d43929ed57d59e0eafaf3",
+        "module.main.6.0.conv2.weight": "e63c951480b0fc441a7cc9af85f8e63f932debb83937bf199d807ad0270bbb58",
+        "module.main.6.0.conv_expand.weight": "84d592691570387bb1029f5b14eb3c6fda7169d10c9b1fb5e7d2adb60270a4a0",
+        "module.main.8.0.conv1.weight": "9c25e8bf9491ac64b67d9ceaa4a4ed2b4686fa9d7aaae1c6287383ef23d81e12",
+        "module.main.8.0.conv2.weight": "f813ad8cbef7282353a47b010b775647f903e071b5148d634d0669a00fce04b0",
+        "module.main.8.0.conv_expand.weight": "91dd945873c8adcc8156fb14490af0863cc7934ed5f06de015943e9c3c6fb756"
+      },
+      "shapes": {
+        "module.fc.bias": [
+          512
+        ],
+        "module.fc.weight": [
+          512,
+          8192
+        ],
+        "module.main.0.weight": [
+          32,
+          3,
+          5,
+          5
+        ],
+        "module.main.10.0.conv1.weight": [
+          512,
+          256,
+          3,
+          3
+        ],
+        "module.main.10.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.10.0.conv_expand.weight": [
+          512,
+          256,
+          1,
+          1
+        ],
+        "module.main.12.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.12.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv1.weight": [
+          64,
+          32,
+          3,
+          3
+        ],
+        "module.main.4.0.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.4.0.conv_expand.weight": [
+          64,
+          32,
+          1,
+          1
+        ],
+        "module.main.6.0.conv1.weight": [
+          128,
+          64,
+          3,
+          3
+        ],
+        "module.main.6.0.conv2.weight": [
+          128,
+          128,
+          3,
+          3
+        ],
+        "module.main.6.0.conv_expand.weight": [
+          128,
+          64,
+          1,
+          1
+        ],
+        "module.main.8.0.conv1.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.main.8.0.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "module.main.8.0.conv_expand.weight": [
+          256,
+          128,
+          1,
+          1
+        ]
+      }
+    },
+    "netE_vis": {
+      "buffers": 0,
+      "parameter_tensors": 17,
+      "parameters": 11692640,
+      "requires_grad_parameters": 11692640,
+      "sha256": {
+        "module.fc.bias": "5f86569ac0b7d9f25b15d47112760ab038625534f5e08abd8d758bc8f9b86cae",
+        "module.fc.weight": "9d0896ddfdf081faed3b4174b6dd092a3896eb3afae022f33573d4b6153c58de",
+        "module.main.0.weight": "ce3db54f542230168a0b63bb171e738767cd300014ef3c7e6b52c14e4c96e814",
+        "module.main.10.0.conv1.weight": "67a4a1094559cd443094bb7bea8d3d31ef3d308f02edf814a89353b7041cf77e",
+        "module.main.10.0.conv2.weight": "ca87cb226abc060fad457a1e66ff620ae83fe1eace7323b64cf41925fc6dc876",
+        "module.main.10.0.conv_expand.weight": "8816c6fb621a60b7e95e9effa5739134b3520658e7d963fac242832c98bee22b",
+        "module.main.12.0.conv1.weight": "55afd4489f164e43e0a5e1c20d113c713966f1d1551800026d703cc0de42fe53",
+        "module.main.12.0.conv2.weight": "2abc1bde4dd052ff94e9af2d2d577f498f521f442d609f2b5de49a4d225ce640",
+        "module.main.4.0.conv1.weight": "67df1f9ac075e53902d869ca212c6b9d8fb1c68ddf84286ee386549926c5c5a2",
+        "module.main.4.0.conv2.weight": "c1110b42928ef0cdf68b0aa17415e75ff3756c4a5fd2d6d681e0ed8af69c5eb6",
+        "module.main.4.0.conv_expand.weight": "4bd58263fa731aae15bf0dfe129e9bd15df5da67a088ed1210265fd9d66deb4e",
+        "module.main.6.0.conv1.weight": "c177b59999bbc4864b8185b8cc478a0a1b3dc48922b14fe3779a056a51f51605",
+        "module.main.6.0.conv2.weight": "62042f5e6ed3f28d1a8147013796bf2dab8f0cde4324bf9ce8e1e01759251a9a",
+        "module.main.6.0.conv_expand.weight": "d74df052fc0a5678ed9c04ef7b651f33bfe7c98a8d16fb325c0218ed9d67cf92",
+        "module.main.8.0.conv1.weight": "5805ae30af4448a9c6c55a67edd87ade34fbdc86b3b10765496b6b478760ecfb",
+        "module.main.8.0.conv2.weight": "bb807f4d0355b998e0aa603eed1b4ad4d4008324ea78b17812953f8128e332e4",
+        "module.main.8.0.conv_expand.weight": "03bf85875efe0be5f5ed00f7dd1f86f83cd36e4fe7a0c94b303a3252932ae087"
+      },
+      "shapes": {
+        "module.fc.bias": [
+          256
+        ],
+        "module.fc.weight": [
+          256,
+          8192
+        ],
+        "module.main.0.weight": [
+          32,
+          3,
+          5,
+          5
+        ],
+        "module.main.10.0.conv1.weight": [
+          512,
+          256,
+          3,
+          3
+        ],
+        "module.main.10.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.10.0.conv_expand.weight": [
+          512,
+          256,
+          1,
+          1
+        ],
+        "module.main.12.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.12.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv1.weight": [
+          64,
+          32,
+          3,
+          3
+        ],
+        "module.main.4.0.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.4.0.conv_expand.weight": [
+          64,
+          32,
+          1,
+          1
+        ],
+        "module.main.6.0.conv1.weight": [
+          128,
+          64,
+          3,
+          3
+        ],
+        "module.main.6.0.conv2.weight": [
+          128,
+          128,
+          3,
+          3
+        ],
+        "module.main.6.0.conv_expand.weight": [
+          128,
+          64,
+          1,
+          1
+        ],
+        "module.main.8.0.conv1.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.main.8.0.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "module.main.8.0.conv_expand.weight": [
+          256,
+          128,
+          1,
+          1
+        ]
+      }
+    },
+    "netG": {
+      "buffers": 0,
+      "parameter_tensors": 21,
+      "parameters": 19887494,
+      "requires_grad_parameters": 19887494,
+      "sha256": {
+        "module.fc.0.bias": "513b3c7105bd4d34ae5e7be89c31f7fde6f75b62434740b15e1c54d14b821387",
+        "module.fc.0.weight": "0fb5a4a84c4ced2e373e39b219f5095ab408dfc1a230e5f2340dfeb5f586b3d4",
+        "module.main.0.0.conv1.weight": "c2c8c071921d0cb00d29b83d7195876e91c57d57a8a38266288316b46165c41a",
+        "module.main.0.0.conv2.weight": "dd27f98ebef9a41f83ac215200a2111067ed78faf9975bfaa00527ba75850f08",
+        "module.main.10.0.conv1.weight": "23d8d4c54cd00040d8f90ccf11a17567550cc78352ae7befdea8debc53c6174b",
+        "module.main.10.0.conv2.weight": "a217c4be7ee90121c18f71537f538d9af72794943861c4681c67040da143601e",
+        "module.main.10.0.conv_expand.weight": "02faaadbbd1fde89213550c4b1f8b31a9e4560b02a594a5b53f1efbfce1fb293",
+        "module.main.10.1.conv1.weight": "f1dab1410591934046903529b8c9ea43a1da6356cb6d9226e5deba3e648a9def",
+        "module.main.10.1.conv2.weight": "05174c6c11dd4b0a22a54d84d3fca3cf6adc95e4c4ab0146d9eca5368505754c",
+        "module.main.12.bias": "ee4fb0fd784d4732393284ffa126d7269b090b1bda6a6f5c7c1953b812f71285",
+        "module.main.12.weight": "350dca2226989e7c76a3f33af6abb7a1b56ea7be05499e21fbe49edbdc7f50b1",
+        "module.main.2.0.conv1.weight": "76734af8eb9bd75e8f0b4538aa9f21eb08491442484028a3c02d21b8a9b91c0b",
+        "module.main.2.0.conv2.weight": "2262d2c7c0e2849e08122a20cd35b7dd00dbbcc7aa2f798faf758d3f75c5d7fd",
+        "module.main.4.0.conv1.weight": "9bf7f80b1758e8405419ded0588f65bf4d8c2a39f147dc892bb12e78fc0063d8",
+        "module.main.4.0.conv2.weight": "3dd33c2a11d9ac7528d0eb25820c9c73f81d794421188b503d0ef6c8fe4a5b74",
+        "module.main.6.0.conv1.weight": "eb3362e4ca34571a3dddab3e051e58119698a36105f04db054396debca38f867",
+        "module.main.6.0.conv2.weight": "3c2c386cba76160b8b7a5387ccc4e9e9569667d75716a302ab48aed43b44534a",
+        "module.main.6.0.conv_expand.weight": "a0b06c10b9bb5f73fba248a555d033a415711353c22905984cb1e40e6f72e9b1",
+        "module.main.8.0.conv1.weight": "6c9feb07141df99d6b53dabc51c4c01d1d87b48611b65457f9ea0f0d84c99e16",
+        "module.main.8.0.conv2.weight": "724589afd1a2465b63d79544409d49b596f19537593332f94c13d0312d6ae3aa",
+        "module.main.8.0.conv_expand.weight": "61acd4453664cc878a65bb13b9df130ad1d119b5e19fc42c7131cb3e90a36ef9"
+      },
+      "shapes": {
+        "module.fc.0.bias": [
+          8192
+        ],
+        "module.fc.0.weight": [
+          8192,
+          384
+        ],
+        "module.main.0.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.0.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.10.0.conv1.weight": [
+          64,
+          128,
+          3,
+          3
+        ],
+        "module.main.10.0.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.10.0.conv_expand.weight": [
+          64,
+          128,
+          1,
+          1
+        ],
+        "module.main.10.1.conv1.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.10.1.conv2.weight": [
+          64,
+          64,
+          3,
+          3
+        ],
+        "module.main.12.bias": [
+          6
+        ],
+        "module.main.12.weight": [
+          6,
+          64,
+          5,
+          5
+        ],
+        "module.main.2.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.2.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv1.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.4.0.conv2.weight": [
+          512,
+          512,
+          3,
+          3
+        ],
+        "module.main.6.0.conv1.weight": [
+          256,
+          512,
+          3,
+          3
+        ],
+        "module.main.6.0.conv2.weight": [
+          256,
+          256,
+          3,
+          3
+        ],
+        "module.main.6.0.conv_expand.weight": [
+          256,
+          512,
+          1,
+          1
+        ],
+        "module.main.8.0.conv1.weight": [
+          128,
+          256,
+          3,
+          3
+        ],
+        "module.main.8.0.conv2.weight": [
+          128,
+          128,
+          3,
+          3
+        ],
+        "module.main.8.0.conv_expand.weight": [
+          128,
+          256,
+          1,
+          1
+        ]
+      }
+    },
+    "netIP": {
+      "buffers": 0,
+      "parameter_tensors": 60,
+      "parameters": 10475872,
+      "requires_grad_parameters": 0,
+      "sha256": {
+        "module.block1.0.conv1.filter.bias": "954a6e2b1a6bdb9bfcb064a4e65f3aa7ae2ad1db5587510fec1882ed2fe0d213",
+        "module.block1.0.conv1.filter.weight": "e27abacb72f77ac0e010b2bd17d708a7a576805e6d75355f61d1d9b214b27121",
+        "module.block1.0.conv2.filter.bias": "c4f8153cc47a13e5faa8a426096442fb325769b9684dca26eaaa006e1afeae9f",
+        "module.block1.0.conv2.filter.weight": "f191dd9ca678e6f6d277f835d5958457299e34a74733275520002af73118437c",
+        "module.block2.0.conv1.filter.bias": "76c328eb22d435c387a9aeeb0199959b620936602d08315ef86988bd1dbdfaec",
+        "module.block2.0.conv1.filter.weight": "ee69bc256ed76b3bb9e17162a6bd077190acd544f8b703aa1a2dd87034013c42",
+        "module.block2.0.conv2.filter.bias": "c225f8cb0e218aa771320b7b56d52ef612d7b49c689fa0f5eed6763835559d58",
+        "module.block2.0.conv2.filter.weight": "2e68d0078690386fa32c2ae30a404c4a093ace0c4b1513e3b8a6348222b1861c",
+        "module.block2.1.conv1.filter.bias": "06b015e262e3f7a909acff8c0fe7ddb56c79a5ad2ff3485c132778aa3a4e7849",
+        "module.block2.1.conv1.filter.weight": "021f4fbf36afade23ef8d8a0850a78707fac579a564d7168934e77d66066b25d",
+        "module.block2.1.conv2.filter.bias": "9a14b5f420363cafa63640af46ce82718772c32768f8ab170f05aa17c1e2a619",
+        "module.block2.1.conv2.filter.weight": "39273838c11bdc526bcca5c73e3fa8fc8ffdf8d28b34c273b612af300756f547",
+        "module.block3.0.conv1.filter.bias": "b1cd89f447a416ee4e76cf50cb060adc01fbe4b3bb6213b34a9640ad068ea11a",
+        "module.block3.0.conv1.filter.weight": "e3c22768998bdfa0248ab7c00eb95c5e298fb0fcdf613d1469048b3ce2f1b5ba",
+        "module.block3.0.conv2.filter.bias": "348d370aba5e2af9fd629dc66a0ad17c5811a1145cb421defba6d1a27fb5570d",
+        "module.block3.0.conv2.filter.weight": "f9a2fd9dd5d713bfb8e9cc7f4e6c0bdda9b9921952d8185b1ab718aa5a17225d",
+        "module.block3.1.conv1.filter.bias": "4b97954eac196fc18ec63014a3dc9b636431154f688a368de9b2599ca24ecada",
+        "module.block3.1.conv1.filter.weight": "8e0b6b0a94fb2c2b035dec912975326940521fee0efd6002ffe5b30a019d55b5",
+        "module.block3.1.conv2.filter.bias": "182f9e02251bf5d9a238a7ca5541ca6ebfda9f224f8452e03203d75759f8f4bd",
+        "module.block3.1.conv2.filter.weight": "9f0bce8002632dbd529df50b39312ef8990d9bf7e755e9ab1b5021f81785b6ce",
+        "module.block3.2.conv1.filter.bias": "3fe98b72d95a77ab45328a04ec06f8ac8c397efa3fbd365c61e6c19bb928c1e0",
+        "module.block3.2.conv1.filter.weight": "1b23ba749c77416245bf072ca90447517cb34171f055b4116def56942ca9a174",
+        "module.block3.2.conv2.filter.bias": "98da9698f557164ad693d2c70ba269e374e105603b494b38317d8a8e5f237cd8",
+        "module.block3.2.conv2.filter.weight": "8c05351d6b062a113569044f57194b74e5daa3a384babd43e91946b28fd05d6a",
+        "module.block4.0.conv1.filter.bias": "d6c9e9eaf6176c7eec5ef354c308f255f25aa81010ffe5a7620fd487548cef09",
+        "module.block4.0.conv1.filter.weight": "d454e538541fd6c406df6c51c2c01a7459c51e8ab8261549b3908bdf2829eb47",
+        "module.block4.0.conv2.filter.bias": "76a1fb3e50f83208bc0c71032af29dff5cd48f654d20b2ad1f556883b13492b2",
+        "module.block4.0.conv2.filter.weight": "34d5fd46122c5f8601e57707188c5e42642a250a5da9911f3f8bec14ad9e7217",
+        "module.block4.1.conv1.filter.bias": "a1ba2ad0067dc1b67b440a40ba533ffc969ac43d659b997d55333e7fa016e15f",
+        "module.block4.1.conv1.filter.weight": "5408872e5bd8519203e852b4bee279322cca7b72621804edc9a0cc2a16904c4b",
+        "module.block4.1.conv2.filter.bias": "64d150e6e9717660f88a53265c9ca20fa5ed0cd4ed775c761a9e2d078dad77d6",
+        "module.block4.1.conv2.filter.weight": "1fc07b9ac3e81e6b0bcea5c3c3f20879f0be578dcb2da5917f1c6b5e47176277",
+        "module.block4.2.conv1.filter.bias": "ddb980a3873ea436f8d46bbfc33b3f14dd893fa59a0077eeecf5f5913705c8e4",
+        "module.block4.2.conv1.filter.weight": "b4d1eac87a791a4e29b630ffaf0dc52af49833f1a8e9e9b86161b7b3a810978d",
+        "module.block4.2.conv2.filter.bias": "ec8b11ad18d2c2cf3078f73927a6fc9cf287da4d5be81f528f69e12c5c9fe481",
+        "module.block4.2.conv2.filter.weight": "bb5432050ad48febf3ade78ec06c024a09aadef4611f8bc212981d4c5c6ae5fc",
+        "module.block4.3.conv1.filter.bias": "1fb33e399cf3d3f886096ea17e5e2822b3296fd1fe56d8fc106f0a7c07e48de9",
+        "module.block4.3.conv1.filter.weight": "da283ebc99611d6531320f1d87d64e5daf9ca4751e5435d3338308f447460abe",
+        "module.block4.3.conv2.filter.bias": "1c75c97b88ed4d7264f52c48a721036fbfb6f80d17a8dc450e248aa62f709a2b",
+        "module.block4.3.conv2.filter.weight": "7bb70266d4ba8676a635186c4b3d58f7ea242dc60cc5a9dbb4815ea99a7e1fa9",
+        "module.conv1.filter.bias": "9456819403c87b6f8d1e06abde1ffd82b4c062fdbf0744ef5d7c37fedbed833d",
+        "module.conv1.filter.weight": "f4f7bd8a93e4cac20784d58b57ea195ded31d39269871288cd4b7624c28508b1",
+        "module.fc.bias": "ba0e35cfcaa8db7d8b40b249ff7842294c7b18eee7178d270037c47ade403fc1",
+        "module.fc.weight": "75d131272c6927c89fe0033545279df3c5750d84ef1f21be7b6cd35eb7fe38f0",
+        "module.group1.conv.filter.bias": "a7fab946358742e6bc4119d7a179afd5c525107e4accb3b40b027550cafb6ceb",
+        "module.group1.conv.filter.weight": "6816879dd559873782c30806130bf278e7e04adf15df76c5f439fff34d53f917",
+        "module.group1.conv_a.filter.bias": "9e157b13c4a2a32b17338aa78775f3c90a63681d52960bff25693e7293b80c72",
+        "module.group1.conv_a.filter.weight": "2e8eec16ad6bb05a5b99a5d37614b9464ddbb370adcee35aff45ae563cdc4c1f",
+        "module.group2.conv.filter.bias": "e7016ee855c1af38153203d6f9f63e6a41c50c46f9990d387edab6819cdf3a0a",
+        "module.group2.conv.filter.weight": "12a531ed5b4186c4865459210877e53b9d6ac68f4b2306e7fed62443847fcb98",
+        "module.group2.conv_a.filter.bias": "63ec858df1199d34967b29c1003a03be0b4a4c400afdf606b2be16e55a8ce90a",
+        "module.group2.conv_a.filter.weight": "78ffd2c8c82052862206eb400fc711530e4a81ebc2b73a9ff394e0f0f5cf9f4b",
+        "module.group3.conv.filter.bias": "7f43d0b096e73cddf06561d55d786b25424321e4823ab11b392a6e0cba2cae25",
+        "module.group3.conv.filter.weight": "29389a5b5b91514a82bcca4f8560d9e57b9b8479248bf354536601bf70a4bca5",
+        "module.group3.conv_a.filter.bias": "4cb2a82aa2d1fd0ad98fa2d072d69d8735083bee820f59e2f38538c905556d1b",
+        "module.group3.conv_a.filter.weight": "441eebfbe43a9a2855ec94d5b17b1f61aefcbae28797997ca2bcaae891c964a9",
+        "module.group4.conv.filter.bias": "7cc98c0080f576b0ef7eed6e38b0356487aaa2d1fbbdad91b0a4ed8aaa061722",
+        "module.group4.conv.filter.weight": "534617fa53113102568090ad9efb275aaa790a73619e4569d6c73c85115b49e1",
+        "module.group4.conv_a.filter.bias": "401ecfedb813c107b493160d2eb13e2ec1d0983cc125d166d4e5762e97d78cf2",
+        "module.group4.conv_a.filter.weight": "6606e14f8df94f8bbe51479d5f0182276801c57b28c974f08287d3e98362457a"
+      },
+      "shapes": {
+        "module.block1.0.conv1.filter.bias": [
+          96
+        ],
+        "module.block1.0.conv1.filter.weight": [
+          96,
+          48,
+          3,
+          3
+        ],
+        "module.block1.0.conv2.filter.bias": [
+          96
+        ],
+        "module.block1.0.conv2.filter.weight": [
+          96,
+          48,
+          3,
+          3
+        ],
+        "module.block2.0.conv1.filter.bias": [
+          192
+        ],
+        "module.block2.0.conv1.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block2.0.conv2.filter.bias": [
+          192
+        ],
+        "module.block2.0.conv2.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block2.1.conv1.filter.bias": [
+          192
+        ],
+        "module.block2.1.conv1.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block2.1.conv2.filter.bias": [
+          192
+        ],
+        "module.block2.1.conv2.filter.weight": [
+          192,
+          96,
+          3,
+          3
+        ],
+        "module.block3.0.conv1.filter.bias": [
+          384
+        ],
+        "module.block3.0.conv1.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.0.conv2.filter.bias": [
+          384
+        ],
+        "module.block3.0.conv2.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.1.conv1.filter.bias": [
+          384
+        ],
+        "module.block3.1.conv1.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.1.conv2.filter.bias": [
+          384
+        ],
+        "module.block3.1.conv2.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.2.conv1.filter.bias": [
+          384
+        ],
+        "module.block3.2.conv1.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block3.2.conv2.filter.bias": [
+          384
+        ],
+        "module.block3.2.conv2.filter.weight": [
+          384,
+          192,
+          3,
+          3
+        ],
+        "module.block4.0.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.0.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.0.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.0.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.1.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.1.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.1.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.1.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.2.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.2.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.2.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.2.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.3.conv1.filter.bias": [
+          256
+        ],
+        "module.block4.3.conv1.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.block4.3.conv2.filter.bias": [
+          256
+        ],
+        "module.block4.3.conv2.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.conv1.filter.bias": [
+          96
+        ],
+        "module.conv1.filter.weight": [
+          96,
+          1,
+          5,
+          5
+        ],
+        "module.fc.bias": [
+          256
+        ],
+        "module.fc.weight": [
+          256,
+          8192
+        ],
+        "module.group1.conv.filter.bias": [
+          192
+        ],
+        "module.group1.conv.filter.weight": [
+          192,
+          48,
+          3,
+          3
+        ],
+        "module.group1.conv_a.filter.bias": [
+          96
+        ],
+        "module.group1.conv_a.filter.weight": [
+          96,
+          48,
+          1,
+          1
+        ],
+        "module.group2.conv.filter.bias": [
+          384
+        ],
+        "module.group2.conv.filter.weight": [
+          384,
+          96,
+          3,
+          3
+        ],
+        "module.group2.conv_a.filter.bias": [
+          192
+        ],
+        "module.group2.conv_a.filter.weight": [
+          192,
+          96,
+          1,
+          1
+        ],
+        "module.group3.conv.filter.bias": [
+          256
+        ],
+        "module.group3.conv.filter.weight": [
+          256,
+          192,
+          3,
+          3
+        ],
+        "module.group3.conv_a.filter.bias": [
+          384
+        ],
+        "module.group3.conv_a.filter.weight": [
+          384,
+          192,
+          1,
+          1
+        ],
+        "module.group4.conv.filter.bias": [
+          256
+        ],
+        "module.group4.conv.filter.weight": [
+          256,
+          128,
+          3,
+          3
+        ],
+        "module.group4.conv_a.filter.bias": [
+          256
+        ],
+        "module.group4.conv_a.filter.weight": [
+          256,
+          128,
+          1,
+          1
+        ]
+      }
+    }
+  },
+  "phase_seconds": {
+    "epsilon_allocation": 0.033,
+    "input_allocation": 1.685,
+    "model_construction": 1.2769,
+    "optimizer_construction": 0.0006,
+    "optimizer_step": 0.0369,
+    "pass1": 0.195,
+    "pass2": 3.2454
+  },
+  "physical_batch_240": "OOM_RETAINED",
+  "pinned_statement_mismatches": [],
+  "pinned_statements_verified": 46,
+  "resource_clean": true,
+  "rng": {
+    "after_epsilon": {
+      "cpu_sha256": "844c1538948969f351ae92a1445078187f55bf3faa1d44ad11186569f7f6d461",
+      "cuda_sha256": "55aece7b945cc0f93027661abeeb9ca6a84260b44bc00f86fdf0efc4be65b021"
+    },
+    "after_pass1": {
+      "cpu_sha256": "844c1538948969f351ae92a1445078187f55bf3faa1d44ad11186569f7f6d461",
+      "cuda_sha256": "55aece7b945cc0f93027661abeeb9ca6a84260b44bc00f86fdf0efc4be65b021"
+    },
+    "after_step": {
+      "cpu_sha256": "844c1538948969f351ae92a1445078187f55bf3faa1d44ad11186569f7f6d461",
+      "cuda_sha256": "55aece7b945cc0f93027661abeeb9ca6a84260b44bc00f86fdf0efc4be65b021"
+    },
+    "before_step": {
+      "cpu_sha256": "844c1538948969f351ae92a1445078187f55bf3faa1d44ad11186569f7f6d461",
+      "cuda_sha256": "55aece7b945cc0f93027661abeeb9ca6a84260b44bc00f86fdf0efc4be65b021"
+    }
+  },
+  "rng_no_redraw": true,
+  "source_after": {
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "files_sha256": {
+      "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+      "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+      "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+      "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+      "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+      "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+      "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+      "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+      "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+      "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+      "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+    },
+    "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/facexzoo",
+    "sparse_checkout": "addition_module/DSDG",
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "verification": "PASS",
+    "worktree_status": "D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl"
+  },
+  "source_before": {
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "files_sha256": {
+      "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+      "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+      "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+      "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+      "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+      "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+      "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+      "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+      "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+      "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+      "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+    },
+    "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/facexzoo",
+    "sparse_checkout": "addition_module/DSDG",
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "verification": "PASS",
+    "worktree_status": "D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl"
+  },
+  "started_utc": "2026-09-25T05:56:11Z",
+  "status": "PASS",
+  "synthetic_bank": false,
+  "tail_batch_198_executed": true,
+  "v1_resolution_sha256": "aa9d70899f950c461ea801e6f92537e71a072e54f6f2a54d08b291945fd487d7",
+  "v2_execution_policy": {
+    "amp": false,
+    "classification": "CONTROLLED_EXECUTION_ADAPTATION",
+    "drop_last": false,
+    "execution_mode": "GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V2",
+    "final_batch_policy": "EXACT_REMAINDER_NO_PADDING_NO_DUPLICATION",
+    "max_microbatch": 20,
+    "nominal_global_batch": 240,
+    "precision": "FP32",
+    "tf32": false
+  },
+  "v2_resolution_sha256": "f1ea0543f51b2403399080ccc2a3856ab2c0f07e5e0a962603357d7a7d83ec97",
+  "warnings": [
+    "UserWarning: The torch.cuda.*DtypeTensor constructors are no longer recommended. It's best to use methods such as torch.tensor(data, dtype=*, device='cuda') to create tensors. (Triggered internally at /pytorch/torch/csrc/tensor/python_tensor.cpp:78.)"
+  ],
+  "zero_grad": {
+    "calls": [
+      {
+        "backward_calls_before": 0,
+        "set_to_none": false
+      }
+    ],
+    "grads_before_first_zero_grad": 0,
+    "set_to_none": false
+  }
+}
