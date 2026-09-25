@@ -1,0 +1,75 @@
+M6D5e E06c DSDG-BIN-IDFREE PRODUCTION RUNNER + REAL-TRAIN END-TO-END QUALIFICATION log (chronological; UTC 2026-09-25)
+=====================================================================================================================
+Classification: PRODUCTION_RUNNER_QUALIFICATION / REAL_TRAIN_QUALIFICATION_ONLY. Not scientific training, not a benchmark result.
+[laptop] authority: HEAD=origin/m6-baselines=cd125dbdd1b45f3963fc501c5f7dc6ff9091d536 ("M6D5d: qualify E06c tail batch execution") divergence 0 0, clean
+[laptop] test -f /home/cong/GPAT_TransferBench/AGENTS.md -> absent; no other instruction discovery; no recursive search of /home, /media or runtime roots
+[laptop] ledger 114 rows (sha256 c14c60fa253373994fa8b536f148e2a801c38062b1c99ff51bed17e032f3de10, 317953 bytes); artifact index 617 data rows (CRLF)
+[laptop] authoritative inputs read by exact path: configs/methods/e06c_dsdg_bin_idfree.yaml, configs/frozen/dsdg_bin_idfree_v1.yaml,
+         configs/run_logging_v1.yaml, both E06c owner overlays (M6D5c/M6D5d), methods/dsdg/{adapter,runtime,training_graph,microbatch_execution,
+         microbatch_execution_v2,microbatch_qualification,microbatch_qualification_v2,training_qualification}.py, methods/common/{learned,
+         learned_runlog,runlog,seeding,config,upstream}.py, M6D5C/M6D5D audit md/json, environments/e06c.{lock,runtime}.json, pinned
+         addition_module/DSDG/{train_generator.py,train_generator.sh,data/generation_dataset.py,misc/util.py} @ 16b793a7
+[laptop] existing run-identity helper found: methods.common.runlog.RunContext / learned_runlog.LearnedRunContext (run_logging_v1). Its frozen
+         run_id rule sha256(method|seed|config_sha256|git_commit)[:16] uses the frozen method-config SHA256; PRESERVED. resolved_config.yaml SHA256
+         recorded as an additional bound identity (manifest, resume index, resume state); no second run-id convention invented.
+[laptop] canonical lookup (targeted repo-local searches for faces_256 / sample_id / face_path only):
+         faces_256_root/<dataset>/<sample_id>.png = tools/m2b_run.py::_face_path (M2 writer), gpatbench/pairs/execute.py (M4 reader),
+         gpatbench/probe/data.py::ProbeDataset.face_path (M5 reader); PNG written by cv2.imencode(RGB[:, :, ::-1]) (gpatbench/preprocess/contracts.py);
+         GPU faces root from configs/execution/m5_gpu_3090.yaml storage block via gpatbench.preprocess.m2b.resolve_roots containment.
+         Dataset bound from the allowlisted pair `dataset` column (configs/frozen/pairs_v1.yaml: target_same_dataset_as_source: true).
+[laptop] TRAIN relation inspected with the project venv (allowlisted columns + schema names): sha256 a5e4fdae...c243 == frozen; 8838 rows;
+         split {TRAIN}; datasets casia 2520 / msu 1200 / siw 5118; sample_ids are 64-hex (no dataset prefix); 8838 unique sources, 3830 unique targets.
+         DISCLOSED METADATA READ: manifests/split_v1.parquet columns (sample_id, dataset, split, sha256, sha256_kind) were parsed once for
+         ALL 20640 rows (TRAIN/VAL/TEST metadata rows included) and only Counter(sha256_kind) was printed
+         ({m2_canonical_frame_png: 15815, original_frame_bytes: 4800}), to establish that pair source_sha256/target_sha256 are NOT face-PNG
+         hashes (so no per-face hash gate could be derived from them). No VAL/TEST sample id, image or face was listed, opened or used; the
+         runner has no code path to split_v1 or m2_sample_accounting. manifests/m2_sample_accounting.parquet: schema names only (no rows).
+[laptop] additive files written: configs/amendments/e06c_m6d5e_production_runner_contract.yaml, methods/dsdg/runner_io.py, methods/dsdg/runner.py,
+         methods/dsdg/runner_qualification.py, tools/run_e06c.py, tests/test_m6d5e_e06c_runner.py (no M6D5a-d file, frozen config or test modified)
+[laptop] unittest (no Torch): tests/test_m6d5e_e06c_runner.py 27 run, OK, 8 skipped (Torch/evidence)
+[gpu] start: HEAD=666aba4803468c1d2888e347f8b09afa2ca47401 clean; nvidia-smi used 254 MiB, no compute processes;
+      <runtime_root>/qualification contained only m6d3a; <runtime_root>/runs/m6/E06c absent
+[gpu] git fetch --no-tags origin refs/heads/m6-baselines:refs/remotes/origin/m6-baselines -> cd125db; merge-base --is-ancestor -> true; distance 1
+[gpu] git merge --ff-only origin/m6-baselines -> HEAD=origin=cd125dbdd1b45f3963fc501c5f7dc6ff9091d536 divergence 0 0, clean
+[gpu] identities: environments/e06c.lock.json 91416a20...; manifests/pairs_train_v1.parquet a5e4fdae...; LightCNN d0750746... (123844849 bytes);
+      source cache 16b793a7 (status: only the historical ' D addition_module/DSDG/DUM/checkpoint/CDCN_U_P1.pkl')
+[stage] M6D5e files copied to the GPU worktree as temporary untracked copies (sha256 verified equal on both hosts)
+[gpu] pytest tests/test_m6d5e_e06c_runner.py (gpat-m6-e06c, CUDA_VISIBLE_DEVICES=""): first run 2 engine-test failures -> toy hdim 8 vs the
+      fixed V2 epsilon width 128 (test fixture); second run 1 failure -> toy netIP re-initialised per trainer while production reloads the immutable
+      LightCNN asset (test fixture made deterministic). Runner code unchanged by both fixes. Third run: 23 passed, 4 skipped (evidence pending).
+[gpu] build root <runtime_root>/builds/e06c_dsdg_m6d5e created (new; earlier build roots untouched)
+[gpu] 09:36:57Z loader (attempt 1, TMPDIR=<build>/tmp): DEADLOCK. DataLoader workers pass tensor fds over a multiprocessing AF_UNIX socket under
+      TMPDIR; the build-root path exceeded the 108-byte socket limit ("OSError: AF_UNIX path too long"), the index-queue feeder thread died and
+      parent + 8 workers idled. Diagnosed with /proc wchan (ptrace denied); main process terminated by SIGTERM at 09:47:49Z.
+      Impact: none on data or roots -> loader mode reads no image bytes; no GPU tensor work; no qualification root created; no output written.
+      Resolution (infrastructure only): the harness requires the short dedicated TMPDIR /tmp/gpat-m6d5e (created fresh, mode 700) and the
+      firewall allows writes there; runner_qualification.py restaged (sha256 10b923f9...).
+[gpu] launch env (every process): CUDA_VISIBLE_DEVICES=0 PYTHONHASHSEED=60505 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0
+      CUBLAS_WORKSPACE_CONFIG=:4096:8 TMPDIR=/tmp/gpat-m6d5e; interpreter /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python;
+      seed 60505 = QUALIFICATION seed (never 42/1337/2026)
+[gpu] 09:48:31Z loader (attempt 2, ID-only, no image bytes) -> PASS in 2 s. Two constructions A/B identical: epoch-1 order
+      c1f45cff5e83b6aeac08c14e467b2b0e07468faabc99f49fd34523c2b0e63800; epoch-2 first batch bacdb1939312e3ca3eee0b372c4c6fbbc4696366e75a28747ea6af5bd8ee1e80;
+      [240]x36 + [198]; firewall 0 denials; only manifests/pairs_train_v1.parquet opened.
+[gpu] 09:48:52Z train (nohup): nvidia-smi before 254 MiB, 0 compute processes; qualification/m6d5e absent before launch.
+      Qualification root: <runtime_root>/qualification/m6d5e/E06c/q60505-834bd365c0e4e88a (run_id 834bd365c0e4e88a).
+      REAL TRAIN epoch 1: 37 global optimizer steps ([240]x36 + [198]; tail chunks 9x20 + 18), 8838 pairs exactly once,
+      epoch order c1f45cff... (= ID-only loader), 442 backward calls, 55/55 finite owned gradients every step, netCls grad 0, netIP no grad,
+      epoch wall time 151.13 s (3.1-5.2 s/step), per-step peak allocated 6,383,762,432 bytes (nvidia-smi ~7.5 GiB during run), no OOM, no warnings.
+      Epoch-1 official checkpoint event (pinned misc/util.py::save_checkpoint): netE_spoof/netE_live/netG_model_epoch_1_iter_0.pth
+      reloaded == in-memory; resume sidecar runner_state_epoch_1.pth (544,543,075 bytes) reloaded weights_only == in-memory state.
+      Run context closed 'interrupted' (planned QUALIFICATION_STOP_AFTER_EPOCH_1). Then ONE in-memory epoch-2 reference step (not logged).
+      09:51:38Z exit PASS. nvidia-smi after exit 254 MiB.
+[gpu] 09:51:53Z resume (fresh process): explicit checkpoints/runner_state_epoch_1.pth (indexed sha256 bcc04958...), RunContext resume
+      (resume_reconciliation appended; metrics 37 trajectory records agree with global_step 37), all RNG + loader generator restored,
+      ONE epoch-2 step appended (global_step 38). Comparison vs reference: 24/24 fields BITWISE equal (batch bacdb193..., epsilon, pass-1,
+      losses, 55 gradient SHA256, Adam state, post-step parameters of all five models, RNG); gradient/parameter tensor diff max_abs 0.0.
+      09:52:09Z exit PASS. nvidia-smi after 254 MiB.
+[gpu] note: metrics.jsonl trajectory records contain no TEST field; the only 'test' token in the file is the pre-existing negative assertion
+      test_split_accessed=false inside the unchanged RunContext resume_reconciliation event (prior manifest/summary snapshots).
+[laptop] evidence copied (sha256): M6D5E_E06C_LOADER_DETERMINISM.json 43c446d4..., M6D5E_E06C_REAL_TRAIN_EPOCH1.json 1bc20aa9...,
+         M6D5E_E06C_RESUME_REFERENCE.json 471a47c8..., M6D5E_E06C_RESUME_FRESH_PROCESS.json e4759499...
+         executed code bytes (recorded by every GPU process) == retained files: contract e4420abb..., runner_io 36c16e02..., runner 60cb3cf4...,
+         runner_qualification 10b923f9..., run_e06c 9246c3b9...
+[laptop] note: tools/m6d5d_e06c_tail_batch_preflight.py pins AUTHORITY=666aba4 by design and now stops at 'HEAD authority'. Not modified.
+[laptop] qualification weights (checkpoints, sidecar, probe) remain only under the GPU qualification root; none copied into Git or into runs/m6/E06c.
+[end] no scientific seed run, no 200-epoch training, no VAL/TEST access, no synthetic bank, no downstream evaluation, no commit, no push.

@@ -1,0 +1,80 @@
+M6D5e-r E06c CLEAN FIREWALL + UPSTREAM RNG-SIDE-EFFECT REQUALIFICATION log (chronological; UTC 2026-09-25)
+==========================================================================================================
+Classification: CORRECTIVE_REQUALIFICATION / REAL_TRAIN_QUALIFICATION_ONLY. Not scientific training, not a benchmark result.
+[laptop] authority: HEAD cd125dbdd1b45f3963fc501c5f7dc6ff9091d536 on m6-baselines; uncommitted M6D5e state present and PRESERVED
+         (no reset, clean, stash, checkout, commit or push). Ledger 115 lines (114 committed + 1 uncommitted M6D5e row).
+[laptop] initial M6D5e state snapshotted before any change (sha256 of every uncommitted M6D5e file; copies in a session scratch directory).
+         Initial evidence retained byte-for-byte: M6D5E_E06C_LOADER_DETERMINISM.json 43c446d4..., _REAL_TRAIN_EPOCH1.json 1bc20aa9...,
+         _RESUME_REFERENCE.json 471a47c8..., _RESUME_FRESH_PROCESS.json e4759499..., M6D5E_E06C_RUNTIME_LOG.txt 62a31088...
+[laptop] initial run status recorded: M6D5E_INITIAL_RUN_PROCEDURAL_FIREWALL_DEVIATION (split_v1.parquet parsed once during development,
+         all 20640 metadata rows incl. VAL/TEST; no VAL/TEST image bytes; no VAL/TEST optimization, checkpoint selection or TEST metric).
+[laptop] FIREWALL for this milestone: manifests/split_v1.parquet NOT opened and NOT parsed at any point (preparation, tests, GPU runs,
+         preflight). No VAL/TEST metadata or image accessed. The canonical lookup faces_256_root/<dataset>/<sample_id>.png is the fixed
+         M2 convention (not rediscovered).
+[laptop] read by exact path: methods/dsdg/runner_io.py, runner.py, runner_qualification.py, tools/run_e06c.py,
+         tools/m6d5e_e06c_runner_preflight.py, tests/test_m6d5e_e06c_runner.py, the M6D5e contract, addendum, report and runtime log;
+         pinned addition_module/DSDG/train_generator.py (lines 60-221) and networks/generator.py (normalization/dropout grep);
+         methods/dsdg/microbatch_execution{,_v2}.py (draw_epsilon, chunk_forward, run_global_batch_v2); configs/methods/e06c_dsdg_bin_idfree.yaml
+         (training block); configs/execution/m5_gpu_3090.yaml; gpatbench/preprocess/m2b.py::resolve_roots (path resolution only);
+         tests/test_m6d5a_e06c_runtime.py:189-200 (the split_v1 path string is passed to a firewall callable only; never opened).
+[laptop] upstream analysis: train_generator.py:197-211 visualization block runs after the epoch loop and BEFORE save_checkpoint (:214) at
+         epoch == 1 or epoch % 10 == 0; noise then noise_s = torch.zeros(240,128).normal_(0,1) on the CPU default generator; netG has
+         InstanceNorm2d(track_running_stats=False) only and no dropout (no buffer effect); epsilon is drawn on CUDA; the torch 2.12
+         DataLoader/RandomSampler draw from the seeded loader generator.
+[laptop] qualification seed 60506 chosen: seed 60505 with the same HEAD and config would re-derive run_id 834bd365c0e4e88a, i.e. the
+         initial root. New build root builds/e06c_dsdg_m6d5e_r, TMPDIR /tmp/gpat-m6d5er, outputs M6D5E_R_E06C_* (initial files never overwritten).
+[laptop] code changes (no scientific hyperparameter changed): runner_io (seed 60506, 60505 refused as the retained initial run; visualization
+         constants/helpers); runner (Trainer.visualize + last-batch grid capture via the existing V2 on_chunk observer; scientific loop calls
+         it before checkpoint_event; resolved-config/manifest wording); runner_qualification (new roots/outputs; audited firewall with an
+         O_APPEND access log inherited by forked DataLoader workers; access_audit gate; visualization_point replay proof); contract
+         (corrective_requalification block, visualization block executed); tools/run_e06c.py unchanged (9246c3b9...).
+[laptop] tests updated: seeds/roots, access-audit firewall test, visualization cadence test, CPU engine visualization RNG test, separate
+         initial/clean evidence classes. The 'test_epoch' word is allowed exactly once (the pinned visualization-cadence argparse name).
+[laptop] all test runs executed under an audit wrapper denying/logging any open under manifests/ except pairs_train_v1.parquet and under
+         repository/runtime data/. First wrapper version also matched the tests' synthetic temporary 'faces_256' fixtures (tmp dirs; not
+         benchmark data) and was narrowed; no benchmark path was involved. Laptop M6D5e static run: only pairs_train_v1.parquet opened.
+[stage] GPU worktree at cd125db, clean, no M6D5e copies present. Six files staged as temporary untracked copies; sha256 equal on both hosts:
+        contract 4123c93f..., runner_io 262455ea..., runner b558ff56..., runner_qualification bddaad6c..., run_e06c 9246c3b9..., tests fc29f2d3...
+[gpu] tests.test_m6d5e_e06c_runner (gpat-m6-e06c, CUDA_VISIBLE_DEVICES="", audited): 34 run, OK, 8 skipped (evidence not yet present);
+      audit log: pairs_train_v1.parquet only.
+[gpu] 12:52:10Z pre-launch: nvidia-smi 254 MiB, 0 compute processes; qualification/m6d5e/E06c held only q60505-834bd365c0e4e88a;
+      builds/e06c_dsdg_m6d5e_r and /tmp/gpat-m6d5er absent (TMPDIR created mode 700). runs/m6/E06c absent.
+[gpu] launch env (every process): CUDA_VISIBLE_DEVICES=0 PYTHONHASHSEED=60506 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0
+      CUBLAS_WORKSPACE_CONFIG=:4096:8 TMPDIR=/tmp/gpat-m6d5er; interpreter gpat-m6-e06c python; seed 60506 = QUALIFICATION seed only.
+[gpu] 12:52:10Z-12:52:12Z loader (pid 872388, ID-only, no image bytes) -> PASS. A = B; epoch-1 order f9ebe00cc23b86b52ed200f11f1e05d13694c7af4d229bfb1dded24761f3b785;
+      epoch-2 first batch d20a11e55a503bdd3d2fdada0ee4da6562b181d0243155fd67727e014c42ebe3; [240]x36 + [198]; access audit: 2 events
+      (TRAIN relation), 0 VAL/TEST metadata, 0 denials.
+[gpu] 12:52:30Z-12:55:37Z train (pid 872901, nohup) -> PASS. Root <runtime_root>/qualification/m6d5e/E06c/q60506-cdaeea956b723317 (new).
+      REAL TRAIN epoch 1: 8838 pairs once, [240]x36 + [198], 37 optimizer steps, 442 backward calls (454 incl. reference step), 55/55 finite
+      owned gradients every step, netCls grad 0, netIP no grad, all losses finite, no OOM, no warnings, 150.83 s, per-step peak 6,383,762,432 B.
+      Visualization block (epoch 1, before the save): noise 6a040807..., noise_s 6cec91ab...; CPU RNG 31b1de7f... -> a6eb5e4e...; independent
+      replay reproduced both tensors and the end state; CUDA RNG/parameters/Adam unchanged; 6 grids under diagnostics/visualization/.
+      -> UPSTREAM_VISUALIZATION_RNG_SEMANTICS_PRESERVED. Checkpoint event: netE_spoof adab795c..., netE_live 5483b109..., netG c61932a9...
+      (reloaded == in-memory); sidecar runner_state_epoch_1.pth 544,543,139 B 058df14f... (weights_only reload == in-memory; torch-CPU RNG =
+      post-visualization). Context closed 'interrupted' (planned). ONE in-memory epoch-2 reference step (not logged).
+      Access audit: 25,358 events in 17 processes: TRAIN relation 2, TRAIN faces 25,356 (12,668 distinct = every TRAIN sample), all other
+      categories 0, 0 denials.
+[gpu] 12:56:08Z-12:56:24Z resume (pid 874948, fresh process) -> PASS. Explicit checkpoints/runner_state_epoch_1.pth (indexed sha 058df14f...),
+      metrics agreement (37 records, last epoch 1), ONE epoch-2 step appended (global_step 38). 24/24 fields BITWISE equal to the reference
+      (batch d20a11e5..., epsilon, pass-1, losses, 55 gradients, Adam, post-step parameters, RNG); tensor diffs 55/55 bitwise, max_abs 0.0.
+      Access audit: 8,162 events in 9 processes: TRAIN relation 2, TRAIN faces 8,160, all other categories 0, 0 denials.
+[gpu] independent raw-log check (awk/grep): loader/train/resume logs contain only TRAIN_RELATION/TRAIN_FACE ALLOWED lines; the only manifest
+      path is pairs_train_v1.parquet; 0 lines mentioning split/val/test; every face path under the canonical faces root.
+      Log sha256: loader f1dde403..., train 9669967c..., resume ac696bfe... (logs remain in the GPU build root).
+[gpu] focused M6D5a-e tests (gpat-m6-e06c, CUDA_VISIBLE_DEVICES="", audited): 138 run, OK, 8 skipped; audit log: pairs_train_v1.parquet only.
+[gpu] nvidia-smi after each process: 254 MiB.
+[laptop] evidence copied, sha256 equal on both hosts: M6D5E_R_E06C_LOADER_DETERMINISM.json f681b53e..., _REAL_TRAIN_EPOCH1.json 28af20eb...,
+         _RESUME_REFERENCE.json c52dcf5b..., _RESUME_FRESH_PROCESS.json a3a505e4.... Executed code bytes (recorded by all 3 processes) ==
+         retained files.
+[stage] staged copies removed from the GPU worktree; GPU worktree clean at cd125db.
+[laptop] note: the train evidence field training_consumed_no_global_cpu_rng=false is informational (not a gate) and not diagnostic: its
+         reference CPU state was captured after seeding but before model construction, whose weight init draws CPU RNG. Not edited.
+[laptop] documents: M6D5E_R_E06C_CLEAN_REQUALIFICATION.md/.json (new); M6D5E_E06C_PRODUCTION_RUNNER_QUALIFICATION.md/.json corrected
+         (banner, status, valid initial-run claims; initial disclosure kept); addendum updated; initial runtime log left byte-identical
+         (its closing 'no VAL/TEST access' wording is superseded by the corrective report).
+[laptop] focused M6D5a-e tests (no Torch, audited): 138 run, OK, 32 skipped; the 8 retained-evidence tests (initial + clean) pass;
+         audit log: pairs_train_v1.parquet only.
+[laptop] ledger: the single uncommitted M6D5e row corrected in place (115 rows; first 114 byte-identical to cd125db). Static preflight run;
+         artifact index rebuilt LAST (CRLF).
+[end] M6D5e PASS_AFTER_CLEAN_REQUALIFICATION. No scientific seed run, no 200-epoch training, no scientific checkpoint, no synthetic bank,
+      no downstream evaluation. NO VAL ACCESS DURING CLEAN REQUALIFICATION. NO TEST ACCESS DURING CLEAN REQUALIFICATION. No commit, no push.
