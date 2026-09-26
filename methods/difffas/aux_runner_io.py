@@ -9,7 +9,9 @@ they are parsed; the split manifest is read through a column allowlist with a TR
 subject/video/raw-attack columns and VAL/TEST rows never reach Python. Canonical faces are
 resolved exactly as the M2 writer stored them (faces_256_root/<dataset>/<sample_id>.png) and
 the reader accepts a TRAIN sample_id only.
-Qualification (seed 60605) and scientific (auxiliary seed 42) roots can never coincide.
+Qualification (seeds 60605 / 60606) and scientific (auxiliary seed 42) roots can never coincide.
+M6D6f (Amendment A8) adds the resume-qualification seed 60606, whose roots live under
+qualification/m6d6f and carry a process-role label; everything else is unchanged.
 """
 import hashlib
 import io
@@ -28,9 +30,13 @@ RUN_LABEL = 'E07c/aux_encoder'        # run_logging_v1 run-id method label; neve
 SCIENTIFIC, QUALIFICATION = 'SCIENTIFIC', 'QUALIFICATION'
 SCIENTIFIC_SEED = 42                   # A3 5.4b auxiliary_encoder_training_seed (not an experiment-seed run)
 QUALIFICATION_SEED = 60605             # engineering only; never 42/1337/2026
+RESUME_QUALIFICATION_SEED = 60606      # M6D6f (A8) resume qualification only; never 42/1337/2026
+QUALIFICATION_SEEDS = (QUALIFICATION_SEED, RESUME_QUALIFICATION_SEED)
 EXPERIMENT_SEEDS = (42, 1337, 2026)
 SCIENTIFIC_PARTS = ('runs', 'm6', 'E07c', 'aux_encoder')
 QUALIFICATION_PARTS = ('qualification', 'm6d6e', 'E07c_aux')
+RESUME_QUALIFICATION_PARTS = ('qualification', 'm6d6f', 'E07c_aux')
+RESUME_QUALIFICATION_LABELS = ('reference', 'interrupted', 'e0interrupted')   # one fresh root per M6D6f process role
 SPLIT_MANIFEST = 'manifests/split_v1.parquet'
 SPLIT_MANIFEST_SHA256 = 'fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d'
 CLASS_MAP = 'manifests/artifact_probe_classes_v1.json'
@@ -119,7 +125,8 @@ def validate_mode_seed(mode, seed):
     if mode == SCIENTIFIC:
         require(seed == SCIENTIFIC_SEED, f'the auxiliary encoder has exactly one scientific seed ({SCIENTIFIC_SEED}); got {seed}')
     elif mode == QUALIFICATION:
-        require(seed == QUALIFICATION_SEED and seed not in EXPERIMENT_SEEDS, f'qualification seed must be {QUALIFICATION_SEED}')
+        require(seed in QUALIFICATION_SEEDS and seed not in EXPERIMENT_SEEDS and seed != SCIENTIFIC_SEED,
+                f'qualification seed must be one of {QUALIFICATION_SEEDS}')
     else:
         raise PreparationError('unknown runner mode ' + repr(mode))
 
@@ -129,15 +136,22 @@ def run_id(seed, config_sha256, commit):
     return sha(f'{RUN_LABEL}|{seed}|{config_sha256}|{commit}'.encode('utf-8'))[:16]
 
 
-def run_root(runtime_root, mode, seed, rid=None):
-    """Scientific: <rt>/runs/m6/E07c/aux_encoder/seed_42. Qualification: <rt>/qualification/m6d6e/E07c_aux/q60605-<run_id>."""
+def run_root(runtime_root, mode, seed, rid=None, label=None):
+    """Scientific: <rt>/runs/m6/E07c/aux_encoder/seed_42. Qualification: <rt>/qualification/m6d6e/E07c_aux/q60605-<run_id>;
+    M6D6f resume qualification: <rt>/qualification/m6d6f/E07c_aux/q60606-<run_id>-<label>."""
     validate_mode_seed(mode, seed)
     rt = Path(runtime_root)
     require(rt.is_absolute() and not rt.resolve().is_relative_to(ROOT), 'absolute runtime root outside the repository')
     if mode == SCIENTIFIC:
+        require(label is None, 'the scientific root carries no label')
         return rt.joinpath(*SCIENTIFIC_PARTS, f'seed_{seed}')
     require(isinstance(rid, str) and re.fullmatch(r'[0-9a-f]{16}', rid) is not None, 'qualification run id')
-    root = rt.joinpath(*QUALIFICATION_PARTS, f'q{seed}-{rid}')
+    if seed == RESUME_QUALIFICATION_SEED:
+        require(label in RESUME_QUALIFICATION_LABELS, 'M6D6f qualification roots need a process-role label')
+        root = rt.joinpath(*RESUME_QUALIFICATION_PARTS, f'q{seed}-{rid}-{label}')
+    else:
+        require(label is None, 'M6D6e qualification roots carry no label')
+        root = rt.joinpath(*QUALIFICATION_PARTS, f'q{seed}-{rid}')
     require(not root.is_relative_to(rt / 'runs'), 'qualification root outside scientific runs')
     return root
 
@@ -339,12 +353,17 @@ REFUSED_OPTIONS = ('--epochs', '--num-epochs', '--num_epochs', '--max-epochs', '
                    '--accumulate', '--grad-accum', '--gradient-accumulation', '--activation-checkpointing',
                    '--checkpointing', '--classes', '--num-classes', '--label-map', '--k', '--train-manifest',
                    '--manifest', '--split', '--data-root', '--faces-root', '--val', '--test', '--select-checkpoint',
-                   '--checkpoint-selection', '--best', '--resume', '--resume-state', '--pretrained',
+                   '--checkpoint-selection', '--best', '--resume', '--resume-latest', '--resume_latest', '--auto-resume',
+                   '--resume-from', '--resume-epoch', '--resume-dir', '--pretrained',
                    '--qualification', '--qualification-seed', '--balance', '--weighted-sampler', '--augment')
 
 
 def refused_arguments(argv):
-    """Tuning/override flags the production CLI refuses before parsing (fail closed, nothing executed)."""
+    """Tuning/override flags the production CLI refuses before parsing (fail closed, nothing executed).
+
+    A8 (M6D6f): --resume-state <EXACT_PATH> is accepted by the CLI; every discovery-style resume
+    flag (--resume, --resume-latest, --auto-resume, ...) stays refused.
+    """
     return sorted({a.split('=', 1)[0] for a in argv if a.split('=', 1)[0] in REFUSED_OPTIONS})
 
 

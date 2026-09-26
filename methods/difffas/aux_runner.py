@@ -17,10 +17,14 @@ source order:
 
 Two modes share this engine and nothing else:
   SCIENTIFIC     auxiliary seed 42, 200 epochs, <runtime_root>/runs/m6/E07c/aux_encoder/seed_42/,
-                 launched only by tools/run_e07c_aux.py from a clean worktree. NOT launched in M6D6e.
-  QUALIFICATION  seed 60605, <runtime_root>/qualification/m6d6e/E07c_aux/q60605-<run_id>/,
-                 launched only by methods/difffas/aux_runner_qualification.py; never scientific.
-There is no resume path (AUX_RESUME_NOT_QUALIFIED). Torch is imported by the caller.
+                 launched only by tools/run_e07c_aux.py from a clean worktree. NOT launched in M6D6e/M6D6f.
+  QUALIFICATION  seed 60605 (M6D6e) under <runtime_root>/qualification/m6d6e/E07c_aux/q60605-<run_id>/, or
+                 seed 60606 (M6D6f) under <runtime_root>/qualification/m6d6f/E07c_aux/q60606-<run_id>-<label>/,
+                 launched only by the qualification harnesses; never scientific.
+Recovery (Amendment A8, M6D6f): ONE_LOGICAL_RUN, exact epoch-boundary continuation only. The
+engineering sidecars, their verified loading and every state restoration live in
+methods/difffas/aux_resume.py; this engine's step, epoch loss and whole-module save are unchanged.
+Torch is imported by the caller.
 """
 from contextlib import contextmanager
 import fcntl
@@ -76,24 +80,25 @@ class E07cAuxRunContext(LearnedRunContext):
     The auxiliary run is not an experiment-seed run, so experiment_seed stays null (with a
     reason) in BOTH modes and the seed is recorded as auxiliary_encoder_training_seed (42) or
     qualification_seed (60605). The run id uses the run_logging_v1 formula with the method
-    label E07c/aux_encoder. A non-empty root is always refused (no auxiliary resume exists).
+    label E07c/aux_encoder. A fresh context refuses an existing root; a continuation context
+    (resume=True, A8) requires the existing root and keeps its run_id / run_uuid / start_utc.
     """
     def __init__(self, *, mode, seed, runtime_root, environment, missing_environment_reasons, identities,
-                 command_line=None):
+                 command_line=None, resume=False, label=None):
         aio.validate_mode_seed(mode, seed)
         config = load_method_config(aio.METHOD_ID)
         self.mode, self.identities = mode, dict(identities)
         require(self.identities['config_sha256'] == config['_runtime']['config_sha256'], 'config identity')
         self.contract = load_logging_contract()
         self.method_id, self.seed, self.aux_seed = aio.METHOD_ID, None, seed
-        self.config, self.runtime_root, self.resume = config, Path(runtime_root), False
+        self.config, self.runtime_root, self.resume, self.label = config, Path(runtime_root), bool(resume), label
         self.source_commits = {config['source']['repository']: config['source']['pinned_commit']}
         self.command_line = command_line if command_line is not None else ' '.join(sys.argv)
         self.config_sha256 = config['_runtime']['config_sha256']
         self.config_path = config['_runtime']['config_path']
         self.git_commit = git_commit()
         self.run_id = aio.run_id(seed, self.config_sha256, self.git_commit)
-        self.run_dir = aio.run_root(runtime_root, mode, seed, self.run_id)
+        self.run_dir = aio.run_root(runtime_root, mode, seed, self.run_id, label)
         self.start_utc = self._metrics_fh = self._generation_fh = self._closed_summary = self._lock_fh = None
         self._records, self.run_uuid, self._started = 0, str(uuid.uuid4()), time.monotonic()
         required = {'host', 'user', 'platform', 'python_version', 'numpy_version', 'gpu_model', 'gpu_count',
@@ -117,9 +122,11 @@ class E07cAuxRunContext(LearnedRunContext):
         self._lock_fh = (self.run_dir.parent / f'.{self.run_dir.name}.lock').open('a')
         try:
             fcntl.flock(self._lock_fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            if self.run_dir.exists():
+            if self.run_dir.exists() and not self.resume:
                 raise RunDirectoryError(f'STOP_AND_REPORT: auxiliary run root already exists: {self.run_dir} '
-                                        '(AUX_RESUME_NOT_QUALIFIED; never overwritten, never resumed)')
+                                        '(never overwritten; A8 continuation requires --resume-state <EXACT_PATH>)')
+            if self.resume and not (self.run_dir.is_dir() and self.path('run_manifest').is_file()):
+                raise RunDirectoryError(f'STOP_AND_REPORT: continuation requires the existing run root: {self.run_dir}')
             return self._open_locked()
         except BaseException:
             for handle in (self._metrics_fh, self._generation_fh, self._lock_fh):
@@ -157,7 +164,9 @@ class E07cAuxRunContext(LearnedRunContext):
                 {'path': 'configs/amendments/e07c_a6_feature_interface_source_correction.yaml',
                  'sha256': ids['a6_overlay_sha256']},
                 {'path': 'configs/amendments/e07c_a7_execution_policy.yaml', 'sha256': ids['a7_overlay_sha256']},
-                {'path': aio.CONTRACT_PATH, 'sha256': ids['m6d6e_contract_sha256'], 'mode': 'PRODUCTION_RUNNER_CONTRACT'}],
+                {'path': aio.CONTRACT_PATH, 'sha256': ids['m6d6e_contract_sha256'], 'mode': 'PRODUCTION_RUNNER_CONTRACT'}]
+            + ([{'path': 'configs/amendments/e07c_a8_aux_resume_policy.yaml', 'sha256': ids['a8_overlay_sha256'],
+                 'mode': 'A8_EXACT_EPOCH_BOUNDARY_RESUME_POLICY'}] if 'a8_overlay_sha256' in ids else []),
             'population': {'split_manifest': aio.SPLIT_MANIFEST, 'sha256': ids['split_manifest_sha256'],
                            'class_map': aio.CLASS_MAP, 'class_map_sha256': ids['class_map_sha256'],
                            'rows': aio.TRAIN_ROWS, 'split': 'TRAIN', 'classes': list(aio.CLASSES),
@@ -174,7 +183,8 @@ class E07cAuxRunContext(LearnedRunContext):
             'checkpoint': {'path': 'checkpoints/' + aio.CHECKPOINT_NAME, 'rule': aio.CHECKPOINT_RULE,
                            'cadence': 'after every epoch, same path overwritten',
                            'format': 'torch.save of the WHOLE nn.Module'},
-            'resume': 'AUX_RESUME_NOT_QUALIFIED',
+            'resume': ('A8: ONE_LOGICAL_RUN; EXACT_EPOCH_BOUNDARY_ONLY from the one committed engineering sidecar '
+                       'authorized by the A8 index (methods/difffas/aux_resume.py); never the scientific checkpoint'),
             'logging_contract': {'version': 'run_logging_v1', 'sha256': ids['logging_contract_sha256'],
                                  'record_per': 'OPTIMIZER_STEP'},
             'run_id_rule': "run_logging_v1 formula with method label 'E07c/aux_encoder'"})
@@ -193,7 +203,8 @@ class E07cAuxRunContext(LearnedRunContext):
                  resolved_config_path='resolved_config.yaml', resolved_config_sha256=self.resolved_config_sha256,
                  fidelity_class='CONTROLLED_ADAPTATION', deviation='DEV-021', identities=self.identities,
                  environment_lock_sha256=self.identities['environment_lock_sha256'],
-                 m6d6e_file_sha256=aio.m6d6e_file_hashes(), val_split_accessed=False)
+                 m6d6e_file_sha256=aio.m6d6e_file_hashes(), val_split_accessed=False,
+                 resume_policy='A8_ONE_LOGICAL_RUN_EXACT_EPOCH_BOUNDARY', continuation_process=self.resume)
         m['missing_field_reasons']['experiment_seed'] = (
             'AUXILIARY_ENCODER run: seeded by auxiliary_encoder_training_seed (A3 5.4b), not by an experiment seed'
             if self.mode == aio.SCIENTIFIC else f'QUALIFICATION_ONLY: seed {self.aux_seed} is not an experiment seed')
@@ -562,16 +573,24 @@ class Trainer:
 
 
 # ================================================================= scientific entry (tools/run_e07c_aux.py)
-def run_scientific(*, runtime_root, faces_root, command_line=None):
-    """The one 200-epoch SCIENTIFIC auxiliary run (seed 42). Never called in M6D6e."""
+def run_scientific(*, runtime_root, faces_root, storage, command_line=None, resume_sidecar=None):
+    """The ONE logical 200-epoch SCIENTIFIC auxiliary run (seed 42). Never called in M6D6e / M6D6f.
+
+    Fresh (resume_sidecar=None): the seed_42 root must not exist; the epoch-0 sidecar is committed
+    before the first iterator. Continuation (A8): resume_sidecar is the exact committed sidecar
+    path; the process seeds and constructs exactly as a fresh run, then aux_resume verifies
+    (SHA256 before torch.load, weights_only=True), reconciles append-only and restores, and the
+    loop continues at completed_epoch + 1. Same run_id / run_uuid / root; one scientific run.
+    """
     import torch
     import torchvision.transforms as transforms
     from methods.common.runlog import git_dirty
     from methods.difffas import DiffFASAdapter
+    from methods.difffas import aux_resume as ar
     mode, seed = aio.SCIENTIFIC, aio.SCIENTIFIC_SEED
     require(not git_dirty(), 'SCIENTIFIC runs require a clean git worktree')
     contract = aio.load_contract()
-    ids = aio.identities(contract)
+    ids = dict(aio.identities(contract), **ar.a8_identities())
     adapter = DiffFASAdapter()
     config = adapter.config
     source = adapter.validate_source()
@@ -579,26 +598,43 @@ def run_scientific(*, runtime_root, faces_root, command_line=None):
     precision = configure_precision(torch, config)
     records, datasets, population = aio.read_train_population()
     env, reasons = environment_record(torch)
+    continuing = resume_sidecar is not None
     ctx = E07cAuxRunContext(mode=mode, seed=seed, runtime_root=runtime_root, environment=env,
-                            missing_environment_reasons=reasons, identities=ids, command_line=command_line)
-    require(not ctx.run_dir.exists(), 'scientific auxiliary root must not exist (AUX_RESUME_NOT_QUALIFIED)')
+                            missing_environment_reasons=reasons, identities=ids, command_line=command_line,
+                            resume=continuing)
+    require(ctx.run_dir.exists() == continuing,
+            'a fresh run requires an absent seed_42 root; a continuation requires the existing root')
     seeding = seed_process(torch, mode, seed, config)                        # before model construction
     with production_components(torch, transforms, config, records, datasets, faces_root, mode, seed) as trainer:
+        run = ar.LogicalRun(torch, trainer, ctx, config, storage=storage, precision=precision)
+        if continuing:
+            run.verify_before_open(resume_sidecar)                          # read-only; SHA256 before torch.load
         with ctx:
             streams = aio.tee_run_logs(ctx.run_dir)
             try:
-                ctx.log_event('e07c_aux_run_start', {'seeding': seeding, 'precision': precision,
-                                                     'population': population, 'components': trainer.evidence})
+                if continuing:
+                    run.begin_resume()                                       # restore; nothing consumes RNG after
+                else:
+                    ctx.log_event('e07c_aux_run_start', {'seeding': seeding, 'precision': precision,
+                                                         'population': population, 'components': trainer.evidence,
+                                                         'resume_policy': 'A8'})
+                    run.begin_fresh()                                        # epoch-0 boundary, before iter(loader)
                 t0 = time.monotonic()
-                last = None
-                for epoch in range(1, aio.EPOCHS + 1):                      # :30
+                for epoch in range(trainer.completed_epoch + 1, aio.EPOCHS + 1):   # :30
                     trainer.run_epoch(epoch, ctx, t0)
-                    last = trainer.checkpoint_event(epoch, ctx, config)     # :45
-                require(last['epoch'] == aio.EPOCHS and last['selected_for_final'], 'epoch-200 final state')
+                    run.commit_boundary(epoch)                               # :45, then the engineering sidecar
+                require(trainer.completed_epoch == aio.EPOCHS and trainer.global_step == aio.EPOCHS * aio.STEPS_PER_EPOCH,
+                        'epoch-200 final state')
                 final = aio.checkpoint_path(ctx.run_dir)
                 digest = sha256_file(final)
-                require(digest == last['sha256'], 'final bytes unchanged after close')
-                ctx.close(completion_status='completed', summary={
+                committed = ar.read_index(ctx.run_dir)['committed']
+                require(committed['completed_epoch'] == aio.EPOCHS and
+                        committed['scientific_checkpoint_file']['sha256'] == digest, 'final bytes = committed epoch 200')
+                steps = run.summary()
+                require(steps['logical_authoritative_optimizer_steps'] == aio.EPOCHS * aio.STEPS_PER_EPOCH,
+                        '11200 logical optimizer steps')
+                ctx.close(completion_status='resumed_completed' if steps['process_sessions'] > 1 else 'completed',
+                          summary={
                     'final_or_selected_checkpoint_path': str(final), 'final_or_selected_checkpoint_sha256': digest,
                     'final_checkpoint_bytes': final.stat().st_size,
                     'final_checkpoint_status': 'SHA256_RECORDED_PENDING_OWNER_FREEZE',
@@ -606,8 +642,10 @@ def run_scientific(*, runtime_root, faces_root, command_line=None):
                     'consumption_rule': 'main DiffFAS may load it only after a later milestone freezes this SHA256 and '
                                         'only through aux_checkpoint.load_frozen_aux_encoder',
                     'training_duration_seconds': time.monotonic() - t0,
+                    'training_duration_semantics': 'this process only',
                     'peak_vram_bytes': trainer.peak_step_gpu_memory_bytes,
                     'optimizer_applications': trainer.optimizer_applications,
+                    'step_accounting': steps, 'scientific_auxiliary_runs': 1, 'logical_run': 'ONE_LOGICAL_RUN',
                     'missing_field_reasons': {'seed_level_evaluation_metrics':
                                               'Auxiliary encoder: no evaluation metric exists in the pinned source'}})
             finally:

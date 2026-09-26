@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 """E07c auxiliary conditioning-encoder SCIENTIFIC training CLI (A3 5.4b; CONTROLLED_ADAPTATION, DEV-021).
 
-NOT launched in M6D6e. Hard-binds: method E07c, auxiliary_encoder_training_seed 42 (the only
+NOT launched in M6D6e or M6D6f. Hard-binds: method E07c, auxiliary_encoder_training_seed 42 (the only
 accepted seed), 200 epochs, batch 256, shuffle, 6 workers, drop_last=True, SGD lr=0.002
 momentum=0.9 weight_decay=5e-3, no scheduler, CrossEntropyLoss on the fourth output, the
 frozen K7 TRAIN population of manifests/split_v1.parquet (14467 rows), A7 FP32 / TF32-off,
 the whole-module epoch-boundary save and <runtime_root>/runs/m6/E07c/aux_encoder/seed_42/.
 There is no option to change any of them; such flags are refused before anything is imported
 or executed. Every identity (git branch/cleanliness, source pin, A3/A6/A7, environment lock
-and interpreter, contract-bound inputs) is verified before Torch is imported. There is no
-resume (AUX_RESUME_NOT_QUALIFIED): an existing seed_42 root is refused.
+and interpreter, contract-bound inputs, Amendment A8) is verified before Torch is imported.
+Without --resume-state an existing seed_42 root is refused.
+
+Recovery after an INFRASTRUCTURE interruption only (Amendment A8, ONE_LOGICAL_RUN): add
+  --resume-state <EXACT_PATH>
+naming exactly the sidecar that <seed_42 root>/resume_state_index.json currently authorizes
+(<seed_42 root>/checkpoints/resume/runner_state_epoch_<EEE>.pth). There is no --resume-latest
+and no discovery. The same commit, branch, clean worktree, environment, interpreter, configs and
+data identities are required. Resume is never a way to rerun a bad loss or change anything.
 
 Launch (from a clean worktree on m6-baselines, gpat-m6-e07c):
   CUDA_VISIBLE_DEVICES=0 PYTHONHASHSEED=42 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 \
@@ -52,6 +59,8 @@ def parse(argv):
     parser.add_argument('--execution-config', required=True,
                         help='infrastructure storage config (faces_256_root via m2b containment)')
     parser.add_argument('--preflight-only', action='store_true', help='verify every gate, import no Torch, train nothing')
+    parser.add_argument('--resume-state', default=None,
+                        help='A8: absolute path of the ONE committed sidecar authorized by resume_state_index.json')
     try:
         return parser.parse_args(argv)
     except SystemExit as exc:
@@ -85,10 +94,11 @@ def preconditions(args, *, environ=None, dirty=None, branch=None, check_interpre
             raise Refused(f'launch with {key}={value}')
     try:
         from methods.difffas import DiffFASAdapter
+        from methods.difffas import aux_resume as ar
         from methods.difffas import execution_policy as ep
         from methods.difffas.aux_training_qualification import upstream_training_semantics
         contract = aio.load_contract()          # config, A1, A3, A6, A7, logging, lock, split, class map, exec config
-        ids = aio.identities(contract)
+        ids = dict(aio.identities(contract), **ar.a8_identities())      # A8 overlay + document re-verified
         adapter = DiffFASAdapter()
         config = adapter.config
         policy = ep.load_policy(config)         # A7 overlay + A3/A6/source binding
@@ -118,12 +128,23 @@ def preconditions(args, *, environ=None, dirty=None, branch=None, check_interpre
     except PreparationError as exc:
         raise Refused(str(exc)) from exc
     run_dir = aio.run_root(storage['runtime_root'], aio.SCIENTIFIC, args.seed)
-    if run_dir.exists():
-        raise Refused(f'{run_dir} already exists; auxiliary resume is NOT qualified and the root is never overwritten')
+    resume = None
+    if args.resume_state is None:
+        if run_dir.exists():
+            raise Refused(f'{run_dir} already exists; it is never overwritten (A8 continuation needs --resume-state '
+                          '<EXACT_PATH> of the committed sidecar)')
+    else:
+        try:
+            path, entry, _ = ar.resolve_committed(run_dir, args.resume_state)     # static: no Torch, no load
+        except PreparationError as exc:
+            raise Refused(str(exc)) from exc
+        resume = {'path': str(path), 'completed_epoch': entry['completed_epoch'], 'global_step': entry['global_step'],
+                  'indexed_sha256': entry['sha256'], 'resumes_at_epoch': entry['completed_epoch'] + 1}
     return {'method_id': aio.METHOD_ID, 'role': 'AUXILIARY_CONDITIONING_ENCODER',
             'auxiliary_encoder_training_seed': args.seed, 'epochs': aio.EPOCHS, 'run_dir': str(run_dir),
             'checkpoint': str(aio.checkpoint_path(run_dir)), 'git_commit': git_commit(), 'identities': ids,
-            'storage': storage, 'resume': 'AUX_RESUME_NOT_QUALIFIED', 'torch_imported': 'torch' in sys.modules}
+            'storage': storage, 'resume_policy': 'A8_ONE_LOGICAL_RUN_EXACT_EPOCH_BOUNDARY', 'resume': resume,
+            'torch_imported': 'torch' in sys.modules}
 
 
 def main(argv=None):
@@ -134,8 +155,9 @@ def main(argv=None):
         return 0
     from methods.difffas import aux_runner
     run_dir = aux_runner.run_scientific(runtime_root=plan['storage']['runtime_root'],
-                                        faces_root=plan['storage']['faces_256_root'],
-                                        command_line=' '.join([sys.executable] + sys.argv))
+                                        faces_root=plan['storage']['faces_256_root'], storage=plan['storage'],
+                                        command_line=' '.join([sys.executable] + sys.argv),
+                                        resume_sidecar=plan['resume']['path'] if plan['resume'] else None)
     print(json.dumps({'status': 'completed', 'run_dir': str(run_dir)}))
     return 0
 

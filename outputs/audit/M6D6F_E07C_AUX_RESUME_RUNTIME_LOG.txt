@@ -1,0 +1,161 @@
+M6D6F E07C RUNTIME LOG — auxiliary scientific-run failure/restart policy (Amendment A8) + exact epoch-boundary resume + bitwise resume qualification
+All times UTC 2026-09-26. Laptop /home/cong/GPAT_TransferBench; GPU student20261@100.121.84.44.
+Log written with a file-writing tool (no shell here-document; no evaluation of prose).
+QUALIFICATION_ONLY · qualification_seed 60606 · AUTHORIZED REAL TRAIN ACCESS · no VAL · no TEST · no scientific run · seed 42 NOT launched
+
+== A1. Authority (explicit git metadata commands)
+laptop: git rev-parse --abbrev-ref HEAD -> m6-baselines; git rev-parse HEAD -> a00aba9f998fb0d91122617012af0dec7794c007;
+        git status --short -> (empty); git fetch origin; git rev-parse origin/m6-baselines -> a00aba9f998fb0d91122617012af0dec7794c007
+GPU before: branch m6-baselines; HEAD 9bfb8dc0fc1e1a4be7ea7f1d4c788b6d2dbbd00f (M6D6d); status lines 0
+GPU sync:   git fetch origin (9bfb8dc..a00aba9); git merge-base --is-ancestor HEAD origin/m6-baselines -> ANCESTOR_OK;
+            git merge --ff-only origin/m6-baselines -> Fast-forward 9bfb8dc..a00aba9 (M6D6e commit)
+GPU after:  HEAD a00aba9f998fb0d91122617012af0dec7794c007; status lines 0. No reset, clean, rebase or forced checkout.
+
+== A2. Authority read (explicit paths only)
+spec docx f7d23716… ; A1 03828716… ; A2 b4fa7bfa… ; A3 b1245153… (5.4 training contract; 5.4b seed 42 / exactly one run);
+A6 doc 759f72d8… / overlay dd3f29aa… ; A7 doc 0a46c3b0… / overlay 3e4c758c… ; method config dba34a92… ; frozen difffas_bin_idfree_v1
+aa9e9841… ; run_logging_v1 d3362294… (trajectory.resume_policy APPEND_OR_EXPLICITLY_RECONCILE, resume_overwrite FORBIDDEN,
+resume_reconciliation_record_required true) ; e07c.lock.json 0c909de1… ; M6D6e contract 09c0af7e… (resume.status
+AUX_RESUME_NOT_QUALIFIED) and addendum ; M6D6a-M6D6e evidence.
+Code read: aux_runner, aux_runner_io, aux_checkpoint, execution_policy, seed_adapter, tools/run_e07c_aux.py,
+aux_runner_qualification, methods/common/runlog + learned_runlog (RunContext resume: identity/environment/resolved-config
+gates, run_uuid preserved, append-only metrics, resume_reconciliation record). E06c methods/dsdg/runner.py + runner_io.py
+resume sidecar/index read as INFRASTRUCTURE PRECEDENT ONLY (E06c refuses partial metrics; A8 reconciles them instead).
+Pinned models/pretrain_classifier.py 3444691f… re-derived: `for epoch in range(0,num_epochs)`; no torch.load, no
+load_state_dict, no optimizer state, no start-epoch -> SOURCE RESUME CAPABILITY: NONE.
+
+== A3. Owner decision recorded (Amendment A8; DETERMINISTIC_IMPLEMENTATION_CLARIFICATION; no new fidelity/deviation)
+docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A8_E07c_Aux_Resume_Policy.md  deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f
+configs/amendments/e07c_a8_aux_resume_policy.yaml                                  a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a
+ONE_LOGICAL_RUN; EXACT_EPOCH_BOUNDARY_ONLY; epoch 0 committed before iter(loader); engineering sidecar (never scientific,
+never selection, never main-DiffFAS input); versioned sidecar + index committed LAST; weights_only=True after SHA256;
+append-only reconciliation (SUPERSEDED_BY_RESUME_ROLLBACK); logical / physical / superseded step counters.
+
+== A4. Pre-run read-only environment / protected-environment / source verification (GPU)
+(existing M6D6a-r verifier r_verify_env.sh 0085caa0dbdfe007dea3a1d3a1903a89c8029cb78fec484f43efc793ef4620ad, read-only)
+conda_explicit 2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864 (= lock)
+pip_freeze_all 42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285 (= lock)
+python_sha256 83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe (= lock identity)
+pip check: No broken requirements found.  protected environments: PROTECTED_UNCHANGED
+pinned source 23f40519ec25a833ebc06842aa6fbab74fad4d15 tree d190a5fb4a94cb9e423215f9a24a7863aa17ea65 status_lines 0;
+26 explicit source-file hashes printed. scientific run root: RUNS_ABSENT. No package installed, updated or removed.
+Each qualification process additionally asserted runtime identity == environments/e07c.lock.json identity.
+
+== A5. Development iterations BEFORE any qualification process (synthetic only; no benchmark data; not qualification)
+GPU live synthetic test (tests/test_m6d6f_e07c_aux_resume.py::TestM6D6fLiveSynthetic, tiny CUDA model, temp dir):
+  D1 ERROR: metrics_boundary refused an EMPTY metrics.jsonl at epoch 0 -> fixed (empty log is a valid boundary).
+  D2 ERROR: torch.load(weights_only=True) refused the sidecar: torch.__version__ (TorchVersion, a str subclass) inside the
+     environment identity is not an allowed global -> fixed by coercing the identity to JSON primitives. weights_only=True
+     was NOT relaxed.
+  D3 OK (27 tests). Then the harness JSON round-trip of probe summaries (comparison hardening). All before process 1.
+Laptop: static M6D6f tests; one static failure (a docstring literally contained the forbidden token 'weights_only=False')
+  -> docstring reworded.
+
+== A6. Staging (uncommitted on the GPU, byte-identical laptop == GPU; executed code identical in all five processes)
+297bc344b51a789a0edab209541a77f7515a53354fe7ca26b4fba7a5530d6351  methods/difffas/aux_runner_io.py (modified)
+ab07c90aba0f25b8e49bdb02ab919f28512d369f7bb3c4c964fb52e9692f1f69  methods/difffas/aux_runner.py (modified)
+a9a7bcb509d36f81e892ef31e74cac446fc93d08b3ab35f007046d9181af56d4  tools/run_e07c_aux.py (modified)
+55626c2596165dbf59845270c1d050f23ddb8e1873d4446083398a12ab8d5fcf  methods/difffas/aux_resume.py (new)
+202021e3a597c530d65d6c6843f52c91091d09a97a05a7315cd01797585e4404  methods/difffas/aux_resume_qualification.py (new)
+a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a  configs/amendments/e07c_a8_aux_resume_policy.yaml (new)
+deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f  docs/spec/amendments/…A8_E07c_Aux_Resume_Policy.md (new)
+cb555f65060e054a7685674171d26f376805f4cf7dc4385f13d5f7eb50d49dc4  <build>/m6d6f/run_m6d6f.sh (outside Git)
+Unchanged committed modules imported: M6D6e contract 09c0af7e…, aux_runner_qualification.py a09749a1… (firewall/audit reused),
+aux_checkpoint.py a794eac2…, execution_policy.py 2a25f68a…, encoder.py 83a5146f…, runtime_qualification.py 1eeb7c03…,
+aux_training_qualification.py 2377dfba….
+Launch env: CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0
+            CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60606 TMPDIR=/tmp/gpat-m6d6f (= lock launch env except seed/TMPDIR).
+The launcher pre-creates <runtime_root>/qualification/m6d6f/E07c_aux outside the audited process; the harness firewall
+allowlists exact argv ['uname', '-p'] (M6D6e lessons applied before the first launch).
+
+== A7. Qualification processes (all first attempts; none superseded; qualification_seed 60606; five fresh OS processes)
+Run id (run_logging_v1 formula, label E07c/aux_encoder, seed 60606, config dba34a92…, commit a00aba9…): b1eeb27a03b31c00
+Roots: <runtime_root>/qualification/m6d6f/E07c_aux/q60606-b1eeb27a03b31c00-{reference,interrupted,e0interrupted}
+
+== reference start 2026-09-26T14:59:17Z   (pid 1640055)
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+epoch-0 sidecar committed (runner_state_epoch_000.pth 185129143 B 1578a87e…) -> Epoch: 1/200  Training: Loss: 1.3738
+-> encoder_final.pkl (whole nn.Module) 8cca4429a92deca6… -> epoch-1 sidecar committed (370095259 B) -> epoch-0 bytes
+pruned explicitly -> Epoch: 2/200 first step (global_step 57) probed -> planned qualification stop
+{"status": "PASS", "output": "<build>/m6d6f/M6D6F_E07C_AUX_RESUME_REFERENCE.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+== reference end 2026-09-26T15:00:44Z
+
+== interrupted start 2026-09-26T15:01:02Z   (pid 1641319)
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+same as reference to the committed epoch-1 sidecar (489c1804… 370095259 B) -> Epoch: 2/200 ONE step logged + fsynced ->
+DELIBERATE QUALIFICATION INTERRUPTION (no epoch-2 sidecar) -> run closed as 'interrupted'
+{"status": "PASS", "output": "<build>/m6d6f/M6D6F_E07C_AUX_RESUME_INTERRUPTED.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+== interrupted end 2026-09-26T15:02:27Z
+
+== restore start 2026-09-26T15:02:34Z   (pid 1642420)
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+fresh context on the existing root REFUSED ('never overwritten'); explicit --resume-state equivalent:
+<root>-interrupted/checkpoints/resume/runner_state_epoch_001.pth; index SHA256 well-formed; bytes SHA256 489c1804… verified
+BEFORE torch.load(weights_only=True, map_location='cpu'); 30 identity fields equal; step 57 (epoch 2, loss 0x1.26b12p+0)
+classified SUPERSEDED_BY_RESUME_ROLLBACK, retained; resume_reconciliation + e07c_aux_resume_reconciliation appended;
+restore order model -> SGD -> tensors/devices -> python+numpy RNG -> torch CPU RNG -> torch CUDA RNG -> A7 -> iterator;
+Epoch: 2/200 first step replayed -> BITWISE equal to reference AND to the superseded step
+{"status": "PASS", "output": "<build>/m6d6f/M6D6F_E07C_AUX_RESUME_RESTORE.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+== restore end 2026-09-26T15:02:45Z
+
+== e0interrupted start 2026-09-26T15:03:04Z   (pid 1643082)
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+epoch-0 sidecar committed (285d08b2…) -> Epoch: 1/200 ONE step logged -> DELIBERATE QUALIFICATION INTERRUPTION
+{"status": "PASS", "output": "<build>/m6d6f/M6D6F_E07C_AUX_RESUME_E0INTERRUPTED.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+== e0interrupted end 2026-09-26T15:03:12Z
+
+== e0restore start 2026-09-26T15:03:14Z   (pid 1643529)
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+resume from the epoch-0 sidecar (SHA256 before weights_only load); step 1 superseded + retained; first B256 step replayed ->
+BITWISE equal to the reference epoch-1 first step (loss 0x1.11d5fe0000000p+1) and to the superseded step
+{"status": "PASS", "output": "<build>/m6d6f/M6D6F_E07C_AUX_RESUME_E0RESTORE.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+== e0restore end 2026-09-26T15:03:24Z
+
+Every process: gpu_repo_status = exactly the 3 modified + 5 new staged M6D6f files; GPU memory used before/after 254 MiB;
+source_cache_status []; firewall denials 0; warnings [].
+Evidence SHA256 (GPU == laptop copy; RESTORE -> RESTORED, E0INTERRUPTED -> EPOCH0_INTERRUPTED, E0RESTORE -> EPOCH0_RESTORED
+renamed on the laptop, bytes unchanged):
+18b763c3e67c7af835656bf2f8e409e94f67ccf8774a5eb0f764a96f6c58a565  M6D6F_E07C_AUX_RESUME_REFERENCE.json
+2cc770f16934e0e552a2b9d3e4a01170195b3b18d95a0e2707be7028cc088b7e  M6D6F_E07C_AUX_RESUME_INTERRUPTED.json
+957a4a35b3819580fe005156cec46a2070ada467dc988a1f4020b5f5cbc2e8e0  M6D6F_E07C_AUX_RESUME_RESTORED.json
+88c0964a7d81249aa616546a1e23b007b0f02abfde672159fa4cfb01463a5c92  M6D6F_E07C_AUX_RESUME_EPOCH0_INTERRUPTED.json
+b4df84272f31f48efdd16eb22386ffc84307b2bb9f97f192b20e8a477c0b3212  M6D6F_E07C_AUX_RESUME_EPOCH0_RESTORED.json
+Access logs (retained on the GPU; SHA256 also inside each JSON):
+2175b7830f8a2939697b7a5e1d64fadec73fdd1d06ebef1e25c779ecfa0ea9ec  M6D6F_E07C_AUX_ACCESS_reference.tsv (17668 lines)
+908045c53dbff1114f90f43dd5b316e01f09abb2fdaeb093b8020ce5217242b9  M6D6F_E07C_AUX_ACCESS_interrupted.tsv (17668 lines)
+63328f46d542d300a312b4c1d833e575a95dfe4fca73ec4ec9473362d9796841  M6D6F_E07C_AUX_ACCESS_restore.tsv (3332 lines)
+7a5a3b5b5ec81e9eedbc4db2d4368e9a461367227fc4a36453926867a1b67de6  M6D6F_E07C_AUX_ACCESS_e0interrupted.tsv (3332 lines)
+c2718c79b392723734c2d16cc3bb7439d8d68f59128128041a538b4ef9451006  M6D6F_E07C_AUX_ACCESS_e0restore.tsv (3332 lines)
+Bitwise probes (QUALIFICATION_ONLY tensors, weights_only-loadable; retained in <build>/m6d6f, 3.3 GB):
+4ce2579212dac6d6… reference (1110091275 B) · 2d0bbd4940ff2d32… interrupted · a04efff876e3eec1… restore ·
+a107b3c4b171d5cf… e0interrupted · 9a75e7de87547118… e0restore
+Qualification roots retained (1.3 GB): reference and interrupted each hold encoder_final.pkl (QUALIFICATION_ONLY whole-module,
+8cca4429…) + the committed epoch-1 sidecar; e0interrupted holds the committed epoch-0 sidecar. NOT scientific, NOT consumable,
+never under runs/. Nothing was deleted except the explicit, index-recorded prune of each root's superseded epoch-0 sidecar.
+
+== A8. Session TRAIN access per process (never combined)
+process          TRAIN faces  distinct  split SHA opens  pyarrow calls  class map  VAL/TEST img  raw  denied
+reference        17664        14362     2                3              2          0 / 0         0    0
+interrupted      17664        14362     2                3              2          0 / 0         0    0
+restore          3328         3328      2                3              2          0 / 0         0    0
+e0interrupted    3328         3328      2                3              2          0 / 0         0    0
+e0restore        3328         3328      2                3              2          0 / 0         0    0
+17664 = 14336 consumed in epoch 1 + 3328 prefetched for epoch 2 (13 batches x 256 by 6 workers, prefetch_factor 2) before the
+interrupted iterator was shut down; 3328 = the same 13-batch prefetch in the single-step processes. TRAIN rows exposed
+14467 per process; VAL/TEST rows exposed 0. Main 8838-row DiffFAS relation opened: 0 in every process.
+
+== A9. Step accounting (qualification; NOT scientific steps)
+physical optimizer steps per process: reference 57, interrupted 57, restore 1, e0interrupted 1, e0restore 1 (total 117).
+interrupted root after restore: logical 57 (56 committed + 1 in progress), physical 58, superseded 1, sessions 2.
+e0interrupted root after e0restore: logical 1, physical 2, superseded 1, sessions 2.
+Scientific auxiliary runs: 0. Main scientific runs: 0. Seed 42 / 1337 / 2026: not used.

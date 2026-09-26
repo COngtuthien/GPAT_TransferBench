@@ -1,0 +1,1122 @@
+{
+  "amendment": {
+    "classification": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+    "document": {
+      "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A8_E07c_Aux_Resume_Policy.md",
+      "sha256": "deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f"
+    },
+    "id": "A8_E07C_AUX_RESUME_POLICY",
+    "overlay": {
+      "path": "configs/amendments/e07c_a8_aux_resume_policy.yaml",
+      "sha256": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a"
+    },
+    "owner_decisions": [
+      "AUXILIARY_SCIENTIFIC_RUN_IDENTITY = ONE_LOGICAL_RUN",
+      "EXACT_EPOCH_BOUNDARY_ONLY",
+      "EPOCH_0_IS_A_COMMITTED_BOUNDARY",
+      "APPEND_ONLY_RECONCILIATION (SUPERSEDED_BY_RESUME_ROLLBACK)",
+      "RESUME_ONLY_FOR_INFRASTRUCTURE_INTERRUPTION"
+    ]
+  },
+  "artifacts_sha256": {
+    "configs/amendments/e07c_a8_aux_resume_policy.yaml": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A8_E07c_Aux_Resume_Policy.md": "deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f",
+    "methods/difffas/aux_resume.py": "55626c2596165dbf59845270c1d050f23ddb8e1873d4446083398a12ab8d5fcf",
+    "methods/difffas/aux_resume_qualification.py": "202021e3a597c530d65d6c6843f52c91091d09a97a05a7315cd01797585e4404",
+    "methods/difffas/aux_runner.py": "ab07c90aba0f25b8e49bdb02ab919f28512d369f7bb3c4c964fb52e9692f1f69",
+    "methods/difffas/aux_runner_io.py": "297bc344b51a789a0edab209541a77f7515a53354fe7ca26b4fba7a5530d6351",
+    "outputs/audit/M6D6F_E07C_AUX_RESUME_EPOCH0_INTERRUPTED.json": "88c0964a7d81249aa616546a1e23b007b0f02abfde672159fa4cfb01463a5c92",
+    "outputs/audit/M6D6F_E07C_AUX_RESUME_EPOCH0_RESTORED.json": "b4df84272f31f48efdd16eb22386ffc84307b2bb9f97f192b20e8a477c0b3212",
+    "outputs/audit/M6D6F_E07C_AUX_RESUME_INTERRUPTED.json": "2cc770f16934e0e552a2b9d3e4a01170195b3b18d95a0e2707be7028cc088b7e",
+    "outputs/audit/M6D6F_E07C_AUX_RESUME_POLICY.md": "c1b003400cc7da05d1afc7b72b3fc780be83106cb7e20e8793ac97313b95ddf7",
+    "outputs/audit/M6D6F_E07C_AUX_RESUME_REFERENCE.json": "18b763c3e67c7af835656bf2f8e409e94f67ccf8774a5eb0f764a96f6c58a565",
+    "outputs/audit/M6D6F_E07C_AUX_RESUME_RESTORED.json": "957a4a35b3819580fe005156cec46a2070ada467dc988a1f4020b5f5cbc2e8e0",
+    "outputs/audit/M6D6F_E07C_AUX_RESUME_RUNTIME_LOG.txt": "5dbfa0484cf7a3012dc0a67b41398b67c2039deff511c0d55639468b61ddf430",
+    "tests/test_m6d6f_e07c_aux_resume.py": "b9a4becf25a160876e40dc25cbcd86725c7c9bd0a0cf89cf90d746901c6c2e76",
+    "tools/m6d6f_e07c_aux_resume_preflight.py": "25cf773a26fb340f24baedb783a22bafc599cdef8fd1d3b487f55d9600f9d3de",
+    "tools/run_e07c_aux.py": "a9a7bcb509d36f81e892ef31e74cac446fc93d08b3ab35f007046d9181af56d4"
+  },
+  "authority_commit": "a00aba9f998fb0d91122617012af0dec7794c007",
+  "aux_resume_removed_from_not_qualified": true,
+  "bitwise_resume": true,
+  "bitwise_verdicts": {
+    "step_1_vs_e0interrupted": "BITWISE",
+    "step_1_vs_reference": "BITWISE",
+    "step_57_vs_interrupted": "BITWISE",
+    "step_57_vs_reference": "BITWISE"
+  },
+  "classification": "M6D6F_E07C_AUX_RESUME_POLICY_QUALIFICATION",
+  "development_iterations": [
+    "D1 live synthetic: empty metrics.jsonl boundary refused -> fixed",
+    "D2 live synthetic: TorchVersion refused by weights_only=True -> identity coerced to primitives",
+    "harness probe-summary JSON round trip",
+    "all before the first qualification process; no qualification process superseded"
+  ],
+  "deviation": "DEV-021",
+  "environment_lock_sha256": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+  "environment_reverification": {
+    "conda_explicit": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "environment_rebuilt_or_mutated": false,
+    "pip_freeze_all": "42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285",
+    "protected_environments": "PROTECTED_UNCHANGED",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "verifier": "r_verify_env.sh 0085caa0…"
+  },
+  "epoch0_rule": "epoch-0 sidecar committed after seed, model(.cuda), optimizer, criterion, DataLoader and A7; before iter(loader)",
+  "epoch_boundary_rule": "resume only from the latest committed completed_epoch E; resume starts at E+1; partial epoch E+1 rolled back and replayed from its beginning; no mid-batch / arbitrary-step continuation",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "final_status": "PASS",
+  "first_step_hashes": {
+    "epoch0_interrupted": {
+      "gradients_sha256": "c3f5564314bd62dfe4492e88ca447867e3f3feaac381e093f60ee74c25bc0b1f",
+      "input_sha256": "a55cf50debf625d152721756d192debffac7a26cdd1c50f76ab4e96997dd9f68",
+      "labels_sha256": "d116d508c82759a42030c3d573f3bfab11663002dec60245a7fd73e62efa7008",
+      "loss_hex": "0x1.11d5fe0000000p+1",
+      "momentum_after_sha256": "587eab73bfc6f53ff615c9834920fdd1471a653dd1054bb6c596cdaad564c374",
+      "parameters_after_sha256": "2c1a4338f6eb2845e16e698b37179636441d740bc972163734c76b8fb97bb883",
+      "rng_after": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "sample_ids_sha256": "763cb0dc03cf8e7ca345c485c6baf477d39fab30d8e8a569696a302d51a7f69a"
+    },
+    "epoch0_resumed": {
+      "gradients_sha256": "c3f5564314bd62dfe4492e88ca447867e3f3feaac381e093f60ee74c25bc0b1f",
+      "input_sha256": "a55cf50debf625d152721756d192debffac7a26cdd1c50f76ab4e96997dd9f68",
+      "labels_sha256": "d116d508c82759a42030c3d573f3bfab11663002dec60245a7fd73e62efa7008",
+      "loss_hex": "0x1.11d5fe0000000p+1",
+      "momentum_after_sha256": "587eab73bfc6f53ff615c9834920fdd1471a653dd1054bb6c596cdaad564c374",
+      "parameters_after_sha256": "2c1a4338f6eb2845e16e698b37179636441d740bc972163734c76b8fb97bb883",
+      "rng_after": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "sample_ids_sha256": "763cb0dc03cf8e7ca345c485c6baf477d39fab30d8e8a569696a302d51a7f69a"
+    },
+    "interrupted_epoch2": {
+      "gradients_sha256": "b6621f1f5c9b8eb35400670c978504a727e28c8dde9d1492c0868212f14434aa",
+      "input_sha256": "3f0abb400eda4cd6f6c0a08613589bfe8a94683d4829975f8195eb24164a9825",
+      "labels_sha256": "7878e0bd63e1b0bdd7a6400feb35edccb16b066f82182a1c9e1b937fc6a44e6e",
+      "loss_hex": "0x1.26b1200000000p+0",
+      "momentum_after_sha256": "5d1754fe536382568170b2da47076e3d6a4d5988f67f3d9fb0746b2611084c53",
+      "parameters_after_sha256": "a7c8419c7da5c2f9740be354559abee5a8b7742685079a44f7645fba3e3f3869",
+      "rng_after": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "b0d838e4acde4a9ba7986bf5b5ad96c372c53f9dba83c6f373cf63f4c597aab4",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "sample_ids_sha256": "504ffe4b2eea2ddb67af3d178c764a55fc794a35e63e2936509cf76401df62ee"
+    },
+    "reference_epoch1": {
+      "gradients_sha256": "c3f5564314bd62dfe4492e88ca447867e3f3feaac381e093f60ee74c25bc0b1f",
+      "input_sha256": "a55cf50debf625d152721756d192debffac7a26cdd1c50f76ab4e96997dd9f68",
+      "labels_sha256": "d116d508c82759a42030c3d573f3bfab11663002dec60245a7fd73e62efa7008",
+      "loss_hex": "0x1.11d5fe0000000p+1",
+      "momentum_after_sha256": "587eab73bfc6f53ff615c9834920fdd1471a653dd1054bb6c596cdaad564c374",
+      "parameters_after_sha256": "2c1a4338f6eb2845e16e698b37179636441d740bc972163734c76b8fb97bb883",
+      "rng_after": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "sample_ids_sha256": "763cb0dc03cf8e7ca345c485c6baf477d39fab30d8e8a569696a302d51a7f69a"
+    },
+    "reference_epoch2": {
+      "gradients_sha256": "b6621f1f5c9b8eb35400670c978504a727e28c8dde9d1492c0868212f14434aa",
+      "input_sha256": "3f0abb400eda4cd6f6c0a08613589bfe8a94683d4829975f8195eb24164a9825",
+      "labels_sha256": "7878e0bd63e1b0bdd7a6400feb35edccb16b066f82182a1c9e1b937fc6a44e6e",
+      "loss_hex": "0x1.26b1200000000p+0",
+      "momentum_after_sha256": "5d1754fe536382568170b2da47076e3d6a4d5988f67f3d9fb0746b2611084c53",
+      "parameters_after_sha256": "a7c8419c7da5c2f9740be354559abee5a8b7742685079a44f7645fba3e3f3869",
+      "rng_after": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "b0d838e4acde4a9ba7986bf5b5ad96c372c53f9dba83c6f373cf63f4c597aab4",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "sample_ids_sha256": "504ffe4b2eea2ddb67af3d178c764a55fc794a35e63e2936509cf76401df62ee"
+    },
+    "resumed_epoch2": {
+      "gradients_sha256": "b6621f1f5c9b8eb35400670c978504a727e28c8dde9d1492c0868212f14434aa",
+      "input_sha256": "3f0abb400eda4cd6f6c0a08613589bfe8a94683d4829975f8195eb24164a9825",
+      "labels_sha256": "7878e0bd63e1b0bdd7a6400feb35edccb16b066f82182a1c9e1b937fc6a44e6e",
+      "loss_hex": "0x1.26b1200000000p+0",
+      "momentum_after_sha256": "5d1754fe536382568170b2da47076e3d6a4d5988f67f3d9fb0746b2611084c53",
+      "parameters_after_sha256": "a7c8419c7da5c2f9740be354559abee5a8b7742685079a44f7645fba3e3f3869",
+      "rng_after": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "b0d838e4acde4a9ba7986bf5b5ad96c372c53f9dba83c6f373cf63f4c597aab4",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "sample_ids_sha256": "504ffe4b2eea2ddb67af3d178c764a55fc794a35e63e2936509cf76401df62ee"
+    }
+  },
+  "logical_run_definition": "ONE_LOGICAL_RUN: processes caused only by interruption continue the same run_id / run_uuid / start_utc / seed_42 root; scientific auxiliary runs = 1; process-session ids are audit-only",
+  "method_id": "E07c",
+  "method_name": "DiffFAS-BIN-IDFREE",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D6f",
+  "new_deviation": false,
+  "new_fidelity_class": false,
+  "next_recommended_milestone": "M6D6g — launch the ONE scientific E07c auxiliary seed-42 run for 200 epochs using the qualified resume policy if interruption occurs (not executed)",
+  "not_qualified": [
+    "AUXILIARY_ENCODER_200_EPOCH_TRAINING",
+    "AUXILIARY_ENCODER_SCIENTIFIC_CHECKPOINT",
+    "AUXILIARY_ENCODER_SHA_FROZEN_FOR_MAIN",
+    "MAIN_DIFFFAS_TRAINING_GRAPH",
+    "MAIN_CHECKPOINT_RESUME",
+    "MAIN_RUNNER_ENCODER_LOAD_INTEGRATION",
+    "MAIN_PRODUCTION_RUNNER",
+    "SCIENTIFIC_TRAINING",
+    "M8_BANK"
+  ],
+  "processes": {
+    "epoch0_interrupted": {
+      "access": {
+        "TEST_image_reads": 0,
+        "TEST_rows_exposed": 0,
+        "TRAIN_face_opens": 3328,
+        "TRAIN_faces_distinct": 3328,
+        "TRAIN_rows_exposed": 14467,
+        "VAL_image_reads": 0,
+        "VAL_rows_exposed": 0,
+        "access_log_sha256": "7a5a3b5b5ec81e9eedbc4db2d4368e9a461367227fc4a36453926867a1b67de6",
+        "class_map_reads": 2,
+        "firewall_denials": 0,
+        "main_8838_relation_opened": false,
+        "pyarrow_calls": 3,
+        "raw_image_reads": 0,
+        "scientific_run_root_accesses": 0,
+        "split_manifest_python_sha_opens": 2,
+        "unauthorized_manifest_reads": 0
+      },
+      "continuation_process": false,
+      "ended_utc": "2026-09-26T15:03:12Z",
+      "evidence": "outputs/audit/M6D6F_E07C_AUX_RESUME_EPOCH0_INTERRUPTED.json",
+      "kind": "QUALIFICATION_PROCESS",
+      "physical_optimizer_steps": 1,
+      "pid": 1643082,
+      "probe": {
+        "bytes": 555049339,
+        "path": "m6d6f_probe_e0interrupted.pt",
+        "sha256": "a107b3c4b171d5cf79d4098e6aea6246fc397038f7552d369ce8eef023b47e77"
+      },
+      "role": "deliberate interruption after one logged epoch-1 step",
+      "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/qualification/m6d6f/E07c_aux/q60606-b1eeb27a03b31c00-e0interrupted",
+      "scientific_attempt": false,
+      "sha256": "88c0964a7d81249aa616546a1e23b007b0f02abfde672159fa4cfb01463a5c92",
+      "started_utc": "2026-09-26T15:03:04Z",
+      "status": "PASS",
+      "torch_load_calls": 0,
+      "torch_load_weights_only": [],
+      "torch_save_calls": 2
+    },
+    "epoch0_restored": {
+      "access": {
+        "TEST_image_reads": 0,
+        "TEST_rows_exposed": 0,
+        "TRAIN_face_opens": 3328,
+        "TRAIN_faces_distinct": 3328,
+        "TRAIN_rows_exposed": 14467,
+        "VAL_image_reads": 0,
+        "VAL_rows_exposed": 0,
+        "access_log_sha256": "c2718c79b392723734c2d16cc3bb7439d8d68f59128128041a538b4ef9451006",
+        "class_map_reads": 2,
+        "firewall_denials": 0,
+        "main_8838_relation_opened": false,
+        "pyarrow_calls": 3,
+        "raw_image_reads": 0,
+        "scientific_run_root_accesses": 0,
+        "split_manifest_python_sha_opens": 2,
+        "unauthorized_manifest_reads": 0
+      },
+      "continuation_process": true,
+      "ended_utc": "2026-09-26T15:03:24Z",
+      "evidence": "outputs/audit/M6D6F_E07C_AUX_RESUME_EPOCH0_RESTORED.json",
+      "kind": "QUALIFICATION_PROCESS",
+      "physical_optimizer_steps": 1,
+      "pid": 1643529,
+      "probe": {
+        "bytes": 555047471,
+        "path": "m6d6f_probe_e0restore.pt",
+        "sha256": "9a75e7de87547118a4eaa91a7516763fcfeedbeddff095644fef85df558952b3"
+      },
+      "role": "fresh-process restore from the epoch-0 sidecar + replay",
+      "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/qualification/m6d6f/E07c_aux/q60606-b1eeb27a03b31c00-e0interrupted",
+      "scientific_attempt": false,
+      "sha256": "b4df84272f31f48efdd16eb22386ffc84307b2bb9f97f192b20e8a477c0b3212",
+      "started_utc": "2026-09-26T15:03:14Z",
+      "status": "PASS",
+      "torch_load_calls": 3,
+      "torch_load_weights_only": [
+        true,
+        true,
+        true
+      ],
+      "torch_save_calls": 1
+    },
+    "interrupted": {
+      "access": {
+        "TEST_image_reads": 0,
+        "TEST_rows_exposed": 0,
+        "TRAIN_face_opens": 17664,
+        "TRAIN_faces_distinct": 14362,
+        "TRAIN_rows_exposed": 14467,
+        "VAL_image_reads": 0,
+        "VAL_rows_exposed": 0,
+        "access_log_sha256": "908045c53dbff1114f90f43dd5b316e01f09abb2fdaeb093b8020ce5217242b9",
+        "class_map_reads": 2,
+        "firewall_denials": 0,
+        "main_8838_relation_opened": false,
+        "pyarrow_calls": 3,
+        "raw_image_reads": 0,
+        "scientific_run_root_accesses": 0,
+        "split_manifest_python_sha_opens": 2,
+        "unauthorized_manifest_reads": 0
+      },
+      "continuation_process": false,
+      "ended_utc": "2026-09-26T15:02:26Z",
+      "evidence": "outputs/audit/M6D6F_E07C_AUX_RESUME_INTERRUPTED.json",
+      "kind": "QUALIFICATION_PROCESS",
+      "physical_optimizer_steps": 57,
+      "pid": 1641319,
+      "probe": {
+        "bytes": 555048437,
+        "path": "m6d6f_probe_interrupted.pt",
+        "sha256": "2d0bbd4940ff2d32be61cb31311b9e69bbcf669d22db879c20d1148618c819aa"
+      },
+      "role": "deliberate interruption after one logged epoch-2 step",
+      "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/qualification/m6d6f/E07c_aux/q60606-b1eeb27a03b31c00-interrupted",
+      "scientific_attempt": false,
+      "sha256": "2cc770f16934e0e552a2b9d3e4a01170195b3b18d95a0e2707be7028cc088b7e",
+      "started_utc": "2026-09-26T15:01:02Z",
+      "status": "PASS",
+      "torch_load_calls": 0,
+      "torch_load_weights_only": [],
+      "torch_save_calls": 4
+    },
+    "reference": {
+      "access": {
+        "TEST_image_reads": 0,
+        "TEST_rows_exposed": 0,
+        "TRAIN_face_opens": 17664,
+        "TRAIN_faces_distinct": 14362,
+        "TRAIN_rows_exposed": 14467,
+        "VAL_image_reads": 0,
+        "VAL_rows_exposed": 0,
+        "access_log_sha256": "2175b7830f8a2939697b7a5e1d64fadec73fdd1d06ebef1e25c779ecfa0ea9ec",
+        "class_map_reads": 2,
+        "firewall_denials": 0,
+        "main_8838_relation_opened": false,
+        "pyarrow_calls": 3,
+        "raw_image_reads": 0,
+        "scientific_run_root_accesses": 0,
+        "split_manifest_python_sha_opens": 2,
+        "unauthorized_manifest_reads": 0
+      },
+      "continuation_process": false,
+      "ended_utc": "2026-09-26T15:00:43Z",
+      "evidence": "outputs/audit/M6D6F_E07C_AUX_RESUME_REFERENCE.json",
+      "kind": "QUALIFICATION_PROCESS",
+      "physical_optimizer_steps": 57,
+      "pid": 1640055,
+      "probe": {
+        "bytes": 1110091275,
+        "path": "m6d6f_probe_reference.pt",
+        "sha256": "4ce2579212dac6d61ebcb71b8c68882752258adde60fe181ee5174073d6394a5"
+      },
+      "role": "uninterrupted reference (epoch 1 + first epoch-2 step)",
+      "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/qualification/m6d6f/E07c_aux/q60606-b1eeb27a03b31c00-reference",
+      "scientific_attempt": false,
+      "sha256": "18b763c3e67c7af835656bf2f8e409e94f67ccf8774a5eb0f764a96f6c58a565",
+      "started_utc": "2026-09-26T14:59:17Z",
+      "status": "PASS",
+      "torch_load_calls": 0,
+      "torch_load_weights_only": [],
+      "torch_save_calls": 4
+    },
+    "restored": {
+      "access": {
+        "TEST_image_reads": 0,
+        "TEST_rows_exposed": 0,
+        "TRAIN_face_opens": 3328,
+        "TRAIN_faces_distinct": 3328,
+        "TRAIN_rows_exposed": 14467,
+        "VAL_image_reads": 0,
+        "VAL_rows_exposed": 0,
+        "access_log_sha256": "63328f46d542d300a312b4c1d833e575a95dfe4fca73ec4ec9473362d9796841",
+        "class_map_reads": 2,
+        "firewall_denials": 0,
+        "main_8838_relation_opened": false,
+        "pyarrow_calls": 3,
+        "raw_image_reads": 0,
+        "scientific_run_root_accesses": 0,
+        "split_manifest_python_sha_opens": 2,
+        "unauthorized_manifest_reads": 0
+      },
+      "continuation_process": true,
+      "ended_utc": "2026-09-26T15:02:45Z",
+      "evidence": "outputs/audit/M6D6F_E07C_AUX_RESUME_RESTORED.json",
+      "kind": "QUALIFICATION_PROCESS",
+      "physical_optimizer_steps": 1,
+      "pid": 1642420,
+      "probe": {
+        "bytes": 555046569,
+        "path": "m6d6f_probe_restore.pt",
+        "sha256": "a04efff876e3eec16d05e0c53b5205fa2b77a48460d24008c63166cd5c49455a"
+      },
+      "role": "fresh-process restore from the epoch-1 sidecar + replay",
+      "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/qualification/m6d6f/E07c_aux/q60606-b1eeb27a03b31c00-interrupted",
+      "scientific_attempt": false,
+      "sha256": "957a4a35b3819580fe005156cec46a2070ada467dc988a1f4020b5f5cbc2e8e0",
+      "started_utc": "2026-09-26T15:02:34Z",
+      "status": "PASS",
+      "torch_load_calls": 3,
+      "torch_load_weights_only": [
+        true,
+        true,
+        true
+      ],
+      "torch_save_calls": 1
+    }
+  },
+  "qualification_seed": 60606,
+  "qualified_statuses": [
+    "E07c_AUX_FAILURE_RECOVERY_POLICY_FROZEN",
+    "E07c_AUX_EPOCH_BOUNDARY_RESUME_QUALIFIED",
+    "E07c_AUX_APPEND_ONLY_RECONCILIATION_QUALIFIED",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "reconciliation": {
+    "epoch0_restored": {
+      "checkpoint_events": [],
+      "classification": "SUPERSEDED_BY_RESUME_ROLLBACK",
+      "epoch_complete_events": [],
+      "epochs": [
+        1
+      ],
+      "global_step_range": [
+        1,
+        1
+      ],
+      "loss_hex": [
+        "0x1.11d5fe0000000p+1"
+      ],
+      "previous_reconciliations_after_boundary": 0,
+      "step_records": 1
+    },
+    "metrics_append_only": {
+      "epoch0_restored": {
+        "grew_by_bytes": 12215,
+        "prefix_bytes": 5094,
+        "prefix_sha256_unchanged": true
+      },
+      "restored": {
+        "grew_by_bytes": 12315,
+        "prefix_bytes": 95454,
+        "prefix_sha256_unchanged": true
+      }
+    },
+    "restored": {
+      "checkpoint_events": [],
+      "classification": "SUPERSEDED_BY_RESUME_ROLLBACK",
+      "epoch_complete_events": [],
+      "epochs": [
+        2
+      ],
+      "global_step_range": [
+        57,
+        57
+      ],
+      "loss_hex": [
+        "0x1.26b1200000000p+0"
+      ],
+      "previous_reconciliations_after_boundary": 0,
+      "step_records": 1
+    },
+    "roots": {
+      "e0interrupted": {
+        "metrics_jsonl_bytes": 17309,
+        "metrics_jsonl_sha256": "660a033e11473f60306fd7bb61bf019557af5604b8b1bda383bac7c7e71bdc95",
+        "note": "step records 2..55 omitted from this extract (all epoch 1, logical and physical)",
+        "records_in_file_order": [
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_run_start"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_resume_state_committed"
+          },
+          {
+            "epoch": 1,
+            "global_step": 1,
+            "loss_hex": "0x1.11d5fe0000000p+1",
+            "record": "step"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "resume_reconciliation"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_resume_reconciliation"
+          },
+          {
+            "epoch": 1,
+            "global_step": 1,
+            "loss_hex": "0x1.11d5fe0000000p+1",
+            "record": "step"
+          }
+        ],
+        "records_total": 6,
+        "resume_state_index": {
+          "entries": [
+            {
+              "bytes_pruned": false,
+              "completed_epoch": 0,
+              "global_step": 0,
+              "path": "checkpoints/resume/runner_state_epoch_000.pth",
+              "sha256": "285d08b21533ab7bbfee96e05ed4210338c06bbce5441acfa86c026ea830bf36",
+              "size_bytes": 185129143,
+              "status": "COMMITTED_CURRENT"
+            }
+          ],
+          "pruning_log": [],
+          "sessions": [
+            {
+              "kind": "FRESH",
+              "pid": 1643082,
+              "process_session_id": "dc9b7420-9cdd-4e92-bb02-182bd7d1dfb4",
+              "restored_from": null
+            },
+            {
+              "kind": "RESUME",
+              "pid": 1643529,
+              "process_session_id": "9899e393-2d6f-4c7c-9e7f-71a59df89df6",
+              "restored_from": "checkpoints/resume/runner_state_epoch_000.pth"
+            }
+          ],
+          "stale_file_log": []
+        }
+      },
+      "interrupted": {
+        "metrics_jsonl_bytes": 107769,
+        "metrics_jsonl_sha256": "7fe04749d54d3dc03ea628673cd2a3bf5eb510e8b069c0e08c6c03257d754fcd",
+        "note": "step records 2..55 omitted from this extract (all epoch 1, logical and physical)",
+        "records_in_file_order": [
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_run_start"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_resume_state_committed"
+          },
+          {
+            "epoch": 1,
+            "global_step": 1,
+            "loss_hex": "0x1.11d5fe0000000p+1",
+            "record": "step"
+          },
+          {
+            "epoch": 1,
+            "global_step": 56,
+            "loss_hex": "0x1.504d4a0000000p+0",
+            "record": "step"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_epoch_complete"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_checkpoint_event"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_resume_state_committed"
+          },
+          {
+            "epoch": 2,
+            "global_step": 57,
+            "loss_hex": "0x1.26b1200000000p+0",
+            "record": "step"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "resume_reconciliation"
+          },
+          {
+            "epoch": null,
+            "global_step": null,
+            "loss_hex": null,
+            "record": "e07c_aux_resume_reconciliation"
+          },
+          {
+            "epoch": 2,
+            "global_step": 57,
+            "loss_hex": "0x1.26b1200000000p+0",
+            "record": "step"
+          }
+        ],
+        "records_total": 65,
+        "resume_state_index": {
+          "entries": [
+            {
+              "bytes_pruned": true,
+              "completed_epoch": 0,
+              "global_step": 0,
+              "path": "checkpoints/resume/runner_state_epoch_000.pth",
+              "sha256": "53c7069c579b65411dca3710578e726a7e070393bcb13ddb9cb64fb1e02192a3",
+              "size_bytes": 185129143,
+              "status": "SUPERSEDED_BY_NEWER_BOUNDARY"
+            },
+            {
+              "bytes_pruned": false,
+              "completed_epoch": 1,
+              "global_step": 56,
+              "path": "checkpoints/resume/runner_state_epoch_001.pth",
+              "sha256": "489c18043ebaf046b079fe48fb59e6f4264de5ae453532ba4eea3c19a6384806",
+              "size_bytes": 370095259,
+              "status": "COMMITTED_CURRENT"
+            }
+          ],
+          "pruning_log": [
+            {
+              "path": "checkpoints/resume/runner_state_epoch_000.pth",
+              "reason": "explicit prune after commit of checkpoints/resume/runner_state_epoch_001.pth",
+              "sha256": "53c7069c579b65411dca3710578e726a7e070393bcb13ddb9cb64fb1e02192a3",
+              "size_bytes": 185129143,
+              "utc": "2026-09-26T15:02:22Z"
+            }
+          ],
+          "sessions": [
+            {
+              "kind": "FRESH",
+              "pid": 1641319,
+              "process_session_id": "86c849d9-d0c8-4848-8479-b4fed8d0ca49",
+              "restored_from": null
+            },
+            {
+              "kind": "RESUME",
+              "pid": 1642420,
+              "process_session_id": "6f7f21f5-4c21-4599-ab1c-cc0c3091ecd9",
+              "restored_from": "checkpoints/resume/runner_state_epoch_001.pth"
+            }
+          ],
+          "stale_file_log": []
+        }
+      }
+    }
+  },
+  "restore_order": [
+    "model",
+    "optimizer",
+    "optimizer tensors/devices",
+    "python+numpy RNG",
+    "torch CPU RNG",
+    "torch CUDA RNG",
+    "A7 state"
+  ],
+  "resume_cli": {
+    "discovery": "NONE",
+    "existing_root_without_resume_state": "REFUSED",
+    "initial": "tools/run_e07c_aux.py --seed 42 --execution-config configs/execution/m5_gpu_3090.yaml",
+    "missing_root_with_resume_state": "REFUSED",
+    "resume": "tools/run_e07c_aux.py --seed 42 --execution-config configs/execution/m5_gpu_3090.yaml --resume-state <EXACT_PATH>",
+    "resume_latest": "NOT_SUPPORTED (refused)"
+  },
+  "retained_statuses": [
+    "E07c_EXECUTION_ENVIRONMENT_QUALIFIED",
+    "E07c_CONDITIONING_ENCODER_RUNTIME_QUALIFIED",
+    "E07c_MAIN_ARCHITECTURE_RUNTIME_QUALIFIED",
+    "E07c_SYNTHETIC_FORWARD_RUNTIME_QUALIFIED",
+    "E07c_AUX_ENCODER_TRAINING_GRAPH_QUALIFIED",
+    "E07c_AUX_ENCODER_OPTIMIZER_STEP_QUALIFIED",
+    "E07c_AUX_CHECKPOINT_WHOLE_MODULE_SERIALIZATION_QUALIFIED",
+    "E07c_AUX_CHECKPOINT_LOADER_COMPATIBILITY_QUALIFIED",
+    "E07c_AUX_CHECKPOINT_SHA_BEFORE_DESERIALIZE_QUALIFIED",
+    "E07c_PRODUCTION_PRECISION_POLICY_FROZEN",
+    "E07c_MAIN_ENCODER_LOADER_RNG_POLICY_FROZEN",
+    "E07c_THROWAWAY_ENCODER_RNG_COMPATIBILITY_QUALIFIED",
+    "E07c_EXECUTION_POLICY_RUNTIME_QUALIFIED",
+    "E07c_AUX_REAL_TRAIN_PATH_QUALIFIED",
+    "E07c_AUX_B256_TRAINING_MEMORY_QUALIFIED",
+    "E07c_AUX_PRODUCTION_RUNNER_QUALIFIED",
+    "E07c_AUX_EPOCH_CHECKPOINT_INTEGRATION_QUALIFIED"
+  ],
+  "retention": {
+    "deleted": "NONE except the explicit, index-recorded prune of superseded epoch-0 sidecars",
+    "labels": [
+      "QUALIFICATION_ONLY",
+      "NOT_A_SCIENTIFIC_CHECKPOINT",
+      "NOT_ELIGIBLE_FOR_BANK",
+      "NOT_ELIGIBLE_FOR_DOWNSTREAM",
+      "NOT_ELIGIBLE_FOR_REPORTING"
+    ],
+    "probes_gpu_bytes_approx": "3.3G",
+    "qualification_roots_gpu_bytes_approx": "1.3G"
+  },
+  "run_logging_v1_requirements": {
+    "resume_overwrite": "FORBIDDEN",
+    "resume_policy": "APPEND_OR_EXPLICITLY_RECONCILE",
+    "resume_reconciliation_record_required": true
+  },
+  "scientific_checkpoint_semantics_unchanged": {
+    "cadence": "after every completed epoch, same path overwritten",
+    "format": "torch.save of the WHOLE nn.Module",
+    "path": "checkpoints/encoder_final.pkl",
+    "rule": "FINAL_STATE_AFTER_EPOCH_200",
+    "sidecar_is_not_the_scientific_checkpoint": true
+  },
+  "scientific_counters": {
+    "experiment_seeds_used": [],
+    "scientific_auxiliary_runs": 0,
+    "scientific_checkpoints_created": 0,
+    "scientific_main_runs": 0,
+    "scientific_run_root_writes": 0,
+    "scientific_seed_used": false,
+    "seed_42_launched": false
+  },
+  "sha_before_load_proof": {
+    "live": {
+      "e0restore": "285d08b21533ab7bbfee96e05ed4210338c06bbce5441acfa86c026ea830bf36",
+      "restore": "489c18043ebaf046b079fe48fb59e6f4264de5ae453532ba4eea3c19a6384806",
+      "torch_load_calls_at_verification": 1,
+      "weights_only": true
+    },
+    "static": "aux_resume.resolve_committed validates the indexed SHA256 before any open; read_verified hashes the bytes that are then deserialized (no re-read); tests 13/13b/14 prove torch.load is never called on a wrong or malformed SHA256"
+  },
+  "sidecar_schema": [
+    "kind",
+    "schema_version",
+    "amendment",
+    "method_id",
+    "role",
+    "scientific_checkpoint",
+    "official_difffas_checkpoint",
+    "selection_candidate",
+    "consumable_by_main_difffas",
+    "reportable_as_trained_model",
+    "runner_mode",
+    "seed",
+    "seed_field",
+    "logical_run",
+    "completed_epoch",
+    "global_step",
+    "identities",
+    "model",
+    "model_sha256",
+    "optimizer",
+    "optimizer_digest",
+    "rng",
+    "rng_digest",
+    "scientific_checkpoint_file",
+    "metrics_boundary",
+    "counters",
+    "process_session",
+    "written_utc"
+  ],
+  "sidecar_serialization": {
+    "epoch0_sidecar_bytes": 185129143,
+    "epoch1_sidecar_bytes": 370095259,
+    "load": "torch.load(io.BytesIO(sha256-verified bytes), map_location='cpu', weights_only=True)",
+    "unsafe_load": "NEVER",
+    "write": "torch.save(dict of tensors + primitives) -> .partial (fsync) -> os.replace -> index LAST"
+  },
+  "source_resume_capability": "NONE (pinned models/pretrain_classifier.py 3444691f…: no torch.load / load_state_dict / start epoch)",
+  "step_accounting": {
+    "e0interrupted_root_after_restore": {
+      "committed_boundary": {
+        "completed_epoch": 0,
+        "global_step": 0,
+        "sidecar": "checkpoints/resume/runner_state_epoch_000.pth"
+      },
+      "logical_authoritative_optimizer_steps": 1,
+      "physical_counting": "optimizer steps executed by every process of this logical run (A8 section 10)",
+      "physical_optimizer_steps_executed": 2,
+      "process_sessions": 2,
+      "superseded_optimizer_steps": 1,
+      "uncommitted_in_progress_steps": 1
+    },
+    "interrupted_root_after_restore": {
+      "committed_boundary": {
+        "completed_epoch": 1,
+        "global_step": 56,
+        "sidecar": "checkpoints/resume/runner_state_epoch_001.pth"
+      },
+      "logical_authoritative_optimizer_steps": 57,
+      "physical_counting": "optimizer steps executed by every process of this logical run (A8 section 10)",
+      "physical_optimizer_steps_executed": 58,
+      "process_sessions": 2,
+      "superseded_optimizer_steps": 1,
+      "uncommitted_in_progress_steps": 1
+    },
+    "physical_optimizer_steps_per_process": {
+      "epoch0_interrupted": 1,
+      "epoch0_restored": 1,
+      "interrupted": 57,
+      "reference": 57,
+      "restored": 1
+    },
+    "qualification_steps_are_scientific": false,
+    "scientific_logical_steps_on_completion": 11200
+  },
+  "tensor_comparisons": {
+    "epoch0_restored": {
+      "e0interrupted": {
+        "fields": {
+          "all_bitwise_equal": true,
+          "fields": {
+            "buffers_after_sha256": true,
+            "class_histogram": true,
+            "gradients_sha256": true,
+            "indices_sha256": true,
+            "input_dtype": true,
+            "input_sha256": true,
+            "input_shape": true,
+            "labels": true,
+            "labels_sha256": true,
+            "loss_hex": true,
+            "momentum_after_sha256": true,
+            "parameters_after_sha256": true,
+            "rng_after": true,
+            "sample_ids": true,
+            "sample_ids_sha256": true,
+            "without_grad": true
+          },
+          "tolerance": "NONE (bitwise)"
+        },
+        "global_step": 1,
+        "tensors": {
+          "all_bitwise_equal": true,
+          "buffers_after": {
+            "bitwise_equal_tensors": 111,
+            "max_abs_diff": 0.0,
+            "tensors": 111
+          },
+          "gradients": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "momentum_after": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "parameters_after": {
+            "bitwise_equal_tensors": 112,
+            "max_abs_diff": 0.0,
+            "tensors": 112
+          },
+          "rng_after": {
+            "torch_cpu": true,
+            "torch_cuda_device": true
+          }
+        }
+      },
+      "reference": {
+        "fields": {
+          "all_bitwise_equal": true,
+          "fields": {
+            "buffers_after_sha256": true,
+            "class_histogram": true,
+            "gradients_sha256": true,
+            "indices_sha256": true,
+            "input_dtype": true,
+            "input_sha256": true,
+            "input_shape": true,
+            "labels": true,
+            "labels_sha256": true,
+            "loss_hex": true,
+            "momentum_after_sha256": true,
+            "parameters_after_sha256": true,
+            "rng_after": true,
+            "sample_ids": true,
+            "sample_ids_sha256": true,
+            "without_grad": true
+          },
+          "tolerance": "NONE (bitwise)"
+        },
+        "global_step": 1,
+        "tensors": {
+          "all_bitwise_equal": true,
+          "buffers_after": {
+            "bitwise_equal_tensors": 111,
+            "max_abs_diff": 0.0,
+            "tensors": 111
+          },
+          "gradients": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "momentum_after": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "parameters_after": {
+            "bitwise_equal_tensors": 112,
+            "max_abs_diff": 0.0,
+            "tensors": 112
+          },
+          "rng_after": {
+            "torch_cpu": true,
+            "torch_cuda_device": true
+          }
+        }
+      }
+    },
+    "restored": {
+      "interrupted": {
+        "fields": {
+          "all_bitwise_equal": true,
+          "fields": {
+            "buffers_after_sha256": true,
+            "class_histogram": true,
+            "gradients_sha256": true,
+            "indices_sha256": true,
+            "input_dtype": true,
+            "input_sha256": true,
+            "input_shape": true,
+            "labels": true,
+            "labels_sha256": true,
+            "loss_hex": true,
+            "momentum_after_sha256": true,
+            "parameters_after_sha256": true,
+            "rng_after": true,
+            "sample_ids": true,
+            "sample_ids_sha256": true,
+            "without_grad": true
+          },
+          "tolerance": "NONE (bitwise)"
+        },
+        "global_step": 57,
+        "tensors": {
+          "all_bitwise_equal": true,
+          "buffers_after": {
+            "bitwise_equal_tensors": 111,
+            "max_abs_diff": 0.0,
+            "tensors": 111
+          },
+          "gradients": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "momentum_after": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "parameters_after": {
+            "bitwise_equal_tensors": 112,
+            "max_abs_diff": 0.0,
+            "tensors": 112
+          },
+          "rng_after": {
+            "torch_cpu": true,
+            "torch_cuda_device": true
+          }
+        }
+      },
+      "reference": {
+        "fields": {
+          "all_bitwise_equal": true,
+          "fields": {
+            "buffers_after_sha256": true,
+            "class_histogram": true,
+            "gradients_sha256": true,
+            "indices_sha256": true,
+            "input_dtype": true,
+            "input_sha256": true,
+            "input_shape": true,
+            "labels": true,
+            "labels_sha256": true,
+            "loss_hex": true,
+            "momentum_after_sha256": true,
+            "parameters_after_sha256": true,
+            "rng_after": true,
+            "sample_ids": true,
+            "sample_ids_sha256": true,
+            "without_grad": true
+          },
+          "tolerance": "NONE (bitwise)"
+        },
+        "global_step": 57,
+        "tensors": {
+          "all_bitwise_equal": true,
+          "buffers_after": {
+            "bitwise_equal_tensors": 111,
+            "max_abs_diff": 0.0,
+            "tensors": 111
+          },
+          "gradients": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "momentum_after": {
+            "bitwise_equal_tensors": 110,
+            "max_abs_diff": 0.0,
+            "tensors": 110
+          },
+          "parameters_after": {
+            "bitwise_equal_tensors": 112,
+            "max_abs_diff": 0.0,
+            "tensors": 112
+          },
+          "rng_after": {
+            "torch_cpu": true,
+            "torch_cuda_device": true
+          }
+        }
+      }
+    }
+  },
+  "tests": [
+    {
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "gpu",
+      "modules": "m6d6f+m6d6e+m6d6d+m6d6c+m6d6b+m6d6a+m6c2b3 (9 modules)",
+      "note": "includes the live CUDA synthetic A8 test",
+      "python": "gpat-m6-e07c",
+      "ran": 204,
+      "skipped": 0
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "final": true,
+      "host": "laptop",
+      "modules": "m6d6f+m6d6e+m6d6d+m6d6c+m6d6b+m6d6a+m6c2b3 (9 modules)",
+      "note": "skips are torch-live tests only",
+      "per_module": {
+        "m6c2b3_contract": [
+          19,
+          0
+        ],
+        "m6c2b3_encoder": [
+          11,
+          1
+        ],
+        "m6c2b3_runtime": [
+          16,
+          0
+        ],
+        "m6d6a": [
+          16,
+          1
+        ],
+        "m6d6b": [
+          17,
+          1
+        ],
+        "m6d6c": [
+          21,
+          1
+        ],
+        "m6d6d": [
+          25,
+          2
+        ],
+        "m6d6e": [
+          39,
+          5
+        ],
+        "m6d6f": [
+          40,
+          1
+        ]
+      },
+      "python": ".venv (no torch)",
+      "ran": 204,
+      "skipped": 12
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "final": false,
+      "host": "laptop",
+      "modules": "baseline before any edit (8 regression modules)",
+      "ran": 164,
+      "skipped": 11
+    },
+    {
+      "errors": 1,
+      "failures": 0,
+      "final": false,
+      "host": "gpu",
+      "modules": "m6d6f development D1",
+      "note": "empty metrics.jsonl at epoch 0 refused -> fixed before any qualification process",
+      "ran": 27,
+      "skipped": 0
+    },
+    {
+      "errors": 1,
+      "failures": 0,
+      "final": false,
+      "host": "gpu",
+      "modules": "m6d6f development D2",
+      "note": "TorchVersion in identity refused by weights_only=True -> identity coerced to primitives (load NOT relaxed)",
+      "ran": 27,
+      "skipped": 0
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "final": false,
+      "host": "gpu",
+      "modules": "pre-launch all 9 modules",
+      "ran": 191,
+      "skipped": 0
+    }
+  ],
+  "tolerance": "NONE (bitwise; max |diff| = 0)",
+  "uninterrupted_determinism": {
+    "encoder_final_pkl_bytes": 185136819,
+    "encoder_final_pkl_sha256": "8cca4429a92deca69d219391d4c0713fb2700fb91b9dc9a9ea47ad88b8688d45",
+    "epoch1_equal_reference_vs_interrupted": true,
+    "epoch1_order_sha256": "8561dd1d38a4d45e26c06ccd291647dfac6cc5a6ae289ea295b43f6b17dfa076",
+    "epoch1_source_loss": 1.3738414479363326
+  }
+}

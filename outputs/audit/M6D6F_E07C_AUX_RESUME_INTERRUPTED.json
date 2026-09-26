@@ -1,0 +1,2715 @@
+{
+  "TEST_access": false,
+  "VAL_access": false,
+  "a7": {
+    "document": {
+      "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A7_E07c_Execution_Policy.md",
+      "sha256": "0a46c3b06e277ad38b17a6e85fe2924441d8d13b1de887bf54903dda9aa292ba"
+    },
+    "overlay_sha256": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3"
+  },
+  "a8": {
+    "document_sha256": "deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f",
+    "overlay_sha256": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a"
+  },
+  "access_summary": {
+    "TEST_image_reads": 0,
+    "TEST_rows_exposed_to_dataset": 0,
+    "TRAIN_canonical_image_reads": 17664,
+    "TRAIN_canonical_images_distinct": 14362,
+    "TRAIN_rows_exposed_to_dataset": 14467,
+    "VAL_image_reads": 0,
+    "VAL_rows_exposed_to_dataset": 0,
+    "class_map_reads": 2,
+    "class_map_reads_note": "one read by aux_runner_io.load_contract (bound SHA256), one by read_class_map",
+    "firewall_denials": 0,
+    "raw_dataset_image_reads": 0,
+    "split_manifest_physical_reads": {
+      "pyarrow_api_calls": 3,
+      "pyarrow_note": "native opens (footer + allowlisted column chunks of the single all-split row group); filtered in C++",
+      "python_sha256_open": 2
+    },
+    "split_manifest_python_opens_note": "SHA256 only: one by aux_runner_io.load_contract (bound input), one by read_train_population before parsing",
+    "unauthorized_manifest_reads": 0
+  },
+  "authorized_TRAIN_access": true,
+  "auxiliary_encoder_training_seed": null,
+  "benchmark_access_audit": {
+    "TEST_image_reads": 0,
+    "VAL_image_reads": 0,
+    "class_map_python_opens": 2,
+    "counts_by_category": {
+      "CLASS_MAP": 2,
+      "FACES_ENUMERATION_OR_WRITE": 0,
+      "FOREIGN_WEIGHT": 0,
+      "NON_TRAIN_FACE": 0,
+      "OTHER_BENCHMARK_DATA": 0,
+      "OTHER_MANIFEST": 0,
+      "SCIENTIFIC_RUN_ROOT": 0,
+      "SPLIT_MANIFEST": 2,
+      "TRAIN_FACE": 17664
+    },
+    "denied_events": 0,
+    "events_logged": 17668,
+    "faces_enumeration_or_write": 0,
+    "foreign_weight_accesses": 0,
+    "image_access_note": "Every canonical face path is classified against the 14467-row TRAIN population. VAL/TEST image reads are bounded above by the non-TRAIN face accesses, which must be 0; raw benchmark images live under <runtime_root>/data (OTHER_BENCHMARK_DATA), which must be 0.",
+    "log": "M6D6F_E07C_AUX_ACCESS_interrupted.tsv",
+    "log_sha256": "908045c53dbff1114f90f43dd5b316e01f09abb2fdaeb093b8020ce5217242b9",
+    "non_train_face_accesses": 0,
+    "processes_logged": 13,
+    "raw_or_other_benchmark_data_accesses": 0,
+    "scientific_run_root_accesses": 0,
+    "split_manifest_python_opens": 2,
+    "train_face_opens": 17664,
+    "train_faces_all_in_population": true,
+    "train_faces_distinct": 14362,
+    "train_faces_max_opens_per_face": 2,
+    "unauthorized_manifest_accesses": 0
+  },
+  "code_sha256": {
+    "configs/amendments/e07c_a8_aux_resume_policy.yaml": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a",
+    "configs/amendments/e07c_m6d6e_aux_production_runner_contract.yaml": "09c0af7e79aeb3acda3e188f7a2a9d94f6d0401485a061d46767ab1c71069ae6",
+    "methods/difffas/aux_resume.py": "55626c2596165dbf59845270c1d050f23ddb8e1873d4446083398a12ab8d5fcf",
+    "methods/difffas/aux_runner.py": "ab07c90aba0f25b8e49bdb02ab919f28512d369f7bb3c4c964fb52e9692f1f69",
+    "methods/difffas/aux_runner_io.py": "297bc344b51a789a0edab209541a77f7515a53354fe7ca26b4fba7a5530d6351",
+    "tools/run_e07c_aux.py": "a9a7bcb509d36f81e892ef31e74cac446fc93d08b3ab35f007046d9181af56d4"
+  },
+  "components": {
+    "criterion": {
+      "class": "torch.nn.CrossEntropyLoss",
+      "label_smoothing": 0.0,
+      "reduction": "mean",
+      "weight": null
+    },
+    "loader": {
+      "batch_sampler": "BatchSampler(256, drop_last=True)",
+      "batch_size": 256,
+      "class_balancing": false,
+      "consumed_per_epoch": 14336,
+      "drop_last": true,
+      "dropped_per_epoch": 131,
+      "generator": null,
+      "len_batches": 56,
+      "num_workers": 6,
+      "persistent_workers": false,
+      "pin_memory": false,
+      "prefetch_factor": 2,
+      "replacement": false,
+      "rows": 14467,
+      "sampler": "RandomSampler(replacement=False, generator=None)",
+      "shuffle": true,
+      "weighted_sampling": false,
+      "worker_init_fn": null
+    },
+    "model": {
+      "class": "custom_rn.ResNet",
+      "device": "cuda:0",
+      "disconnected_parameters": [
+        "norm.bias",
+        "norm.weight"
+      ],
+      "fc": [
+        512,
+        7
+      ],
+      "parameter_tensors": 112,
+      "parameters": 46233707,
+      "training": true
+    },
+    "optimizer": {
+      "class": "torch.optim.SGD",
+      "dampening": 0,
+      "lr": 0.002,
+      "momentum": 0.9,
+      "nesterov": false,
+      "param_groups": 1,
+      "parameter_tensors": 112,
+      "parameters": 46233707,
+      "scheduler": "NONE",
+      "weight_decay": 0.005
+    },
+    "transform": {
+      "augmentation": "NONE",
+      "random_transforms": 0,
+      "resize_antialias": true,
+      "resize_interpolation": "InterpolationMode.BILINEAR",
+      "steps": [
+        "Resize(size=(256, 256), interpolation=bilinear, max_size=None, antialias=True)",
+        "ToTensor()",
+        "Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])"
+      ]
+    }
+  },
+  "constructed_state": {
+    "parameters_sha256": "1c1eab17d3c7ec6bf29659a0683835b554c79a445959e08ac0d69b7b3857f892",
+    "rng": {
+      "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+      "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+      "torch_cpu_sha256": "8c8911fdfb334a65d245f14ee1254921280f47fee690553640e7d42bf605745b",
+      "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+      "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+    }
+  },
+  "continuation_process": false,
+  "counters": {
+    "activation_checkpoint_calls": 0,
+    "autocast_entries": 0,
+    "autograd_backward_calls": 57,
+    "autograd_grad_calls": 0,
+    "backward_calls": 57,
+    "grad_clipping_calls": 0,
+    "grad_scaler_constructions": 0,
+    "other_optimizer_step_calls": 0,
+    "scheduler_constructions": 0,
+    "sgd_step_calls": 57,
+    "torch_load_calls": 0,
+    "torch_save_calls": 4,
+    "zero_grad_calls": 57,
+    "zero_grad_set_to_none_values": [
+      true
+    ]
+  },
+  "downstream_evaluation": false,
+  "ended_utc": "2026-09-26T15:02:26Z",
+  "environment_after": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60606",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/tmp/gpat-m6d6f"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_before": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60606",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/tmp/gpat-m6d6f"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "epoch0_sidecar": {
+    "bytes_pruned": false,
+    "committed_utc": "2026-09-26T15:01:06Z",
+    "completed_epoch": 0,
+    "counters": {
+      "logical_authoritative_optimizer_steps": 0,
+      "physical_optimizer_steps_executed": 0,
+      "process_sessions": 1,
+      "superseded_optimizer_steps": 0
+    },
+    "global_step": 0,
+    "metrics_boundary": {
+      "bytes": 2726,
+      "last_physical_global_step": 0,
+      "lines": 1,
+      "prefix_sha256": "b13411893502977e3998fb2523b52cf547a011266535ead224c6e7351f8cc072",
+      "step_records_physical": 0
+    },
+    "model_sha256": "303dc661777c4f82e4a6b1fe17b2541e7ec01dab49e03589bf2a5375a86c41d5",
+    "optimizer_digest": {
+      "momentum_buffers": 0,
+      "momentum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "param_groups_sha256": "b3bf1b5f64b3924fb92212b69e0ce7288b997dd8e33d6b6d130182e62226a671"
+    },
+    "path": "checkpoints/resume/runner_state_epoch_000.pth",
+    "process_session_id": "86c849d9-d0c8-4848-8479-b4fed8d0ca49",
+    "rng_digest": {
+      "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+      "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+      "torch_cpu_sha256": "8c8911fdfb334a65d245f14ee1254921280f47fee690553640e7d42bf605745b",
+      "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+      "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+    },
+    "scientific_checkpoint_file": null,
+    "sha256": "53c7069c579b65411dca3710578e726a7e070393bcb13ddb9cb64fb1e02192a3",
+    "size_bytes": 185129143,
+    "status": "COMMITTED_CURRENT"
+  },
+  "epoch1": {
+    "batch_sizes_distinct": [
+      256
+    ],
+    "consumed_examples": 14336,
+    "dropped_class_histogram": [
+      54,
+      4,
+      1,
+      11,
+      22,
+      22,
+      17
+    ],
+    "dropped_examples": 131,
+    "dropped_sample_ids_sha256": "b3db07b9b9ddc9c941f819216624abd8af5ac1805c2c18fef855cee1e91fdd3e",
+    "epoch": 1,
+    "epoch_loss_denominator": 14467,
+    "epoch_loss_denominator_semantics": "len(train_dataset) = 14467 (source; NOT the 14336 consumed)",
+    "epoch_sample_order_sha256": "8561dd1d38a4d45e26c06ccd291647dfac6cc5a6ae289ea295b43f6b17dfa076",
+    "global_step_end": 56,
+    "optimizer_steps": 56,
+    "peak_step_gpu_memory_bytes": 17383809024,
+    "running_loss": 19875.364227294922,
+    "source_epoch_loss": 1.3738414479363326,
+    "source_epoch_loss_hex": "0x1.5fb412b8c69d2p+0",
+    "unique_consumed": 14336
+  },
+  "epoch1_checkpoint_event": {
+    "checkpoint_type": "periodic",
+    "epoch": 1,
+    "file_size_bytes": 185136819,
+    "format": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+    "global_step": 56,
+    "identity": {
+      "block": "BasicBlock",
+      "class": "ResNet",
+      "fc": {
+        "bias": true,
+        "in_features": 512,
+        "out_features": 7
+      },
+      "module": "custom_rn",
+      "module_file_sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "topology": [
+        3,
+        4,
+        6,
+        3
+      ]
+    },
+    "path": "checkpoints/encoder_final.pkl",
+    "selected_for_final": false,
+    "selection_reason": "QUALIFICATION_ONLY: epoch-boundary whole-module save; NOT_A_SCIENTIFIC_CHECKPOINT; never consumable",
+    "serialization_api": "torch.save(model, path)",
+    "sha256": "8cca4429a92deca69d219391d4c0713fb2700fb91b9dc9a9ea47ad88b8688d45"
+  },
+  "epoch1_losses_hex": [
+    "0x1.11d5fe0000000p+1",
+    "0x1.ed9a080000000p+0",
+    "0x1.dfeab40000000p+0",
+    "0x1.c22c300000000p+0",
+    "0x1.a8e1f00000000p+0",
+    "0x1.9b0dc00000000p+0",
+    "0x1.8b9e1c0000000p+0",
+    "0x1.9342160000000p+0",
+    "0x1.99c0360000000p+0",
+    "0x1.6a18480000000p+0",
+    "0x1.90af580000000p+0",
+    "0x1.77e0e80000000p+0",
+    "0x1.82d8600000000p+0",
+    "0x1.7655fe0000000p+0",
+    "0x1.715da80000000p+0",
+    "0x1.8256620000000p+0",
+    "0x1.63b9040000000p+0",
+    "0x1.7611d80000000p+0",
+    "0x1.7d2c5c0000000p+0",
+    "0x1.6517d40000000p+0",
+    "0x1.756a620000000p+0",
+    "0x1.629ec40000000p+0",
+    "0x1.5e6a4c0000000p+0",
+    "0x1.6ee4f40000000p+0",
+    "0x1.5774000000000p+0",
+    "0x1.5862e80000000p+0",
+    "0x1.5429ba0000000p+0",
+    "0x1.64c4140000000p+0",
+    "0x1.4f87e00000000p+0",
+    "0x1.4e57380000000p+0",
+    "0x1.61b3ea0000000p+0",
+    "0x1.499c340000000p+0",
+    "0x1.49400c0000000p+0",
+    "0x1.2c458a0000000p+0",
+    "0x1.2661b80000000p+0",
+    "0x1.542fe40000000p+0",
+    "0x1.52845a0000000p+0",
+    "0x1.3b6c440000000p+0",
+    "0x1.5110cc0000000p+0",
+    "0x1.4109080000000p+0",
+    "0x1.35ab440000000p+0",
+    "0x1.3093bc0000000p+0",
+    "0x1.3a53ee0000000p+0",
+    "0x1.3d636c0000000p+0",
+    "0x1.4490260000000p+0",
+    "0x1.347c4c0000000p+0",
+    "0x1.4406e80000000p+0",
+    "0x1.370cca0000000p+0",
+    "0x1.302cec0000000p+0",
+    "0x1.1e77140000000p+0",
+    "0x1.26f8f40000000p+0",
+    "0x1.2f3a240000000p+0",
+    "0x1.3b20e80000000p+0",
+    "0x1.36d5340000000p+0",
+    "0x1.3737500000000p+0",
+    "0x1.504d4a0000000p+0"
+  ],
+  "epoch1_sidecar": {
+    "bytes_pruned": false,
+    "committed_utc": "2026-09-26T15:02:22Z",
+    "completed_epoch": 1,
+    "counters": {
+      "logical_authoritative_optimizer_steps": 56,
+      "physical_optimizer_steps_executed": 56,
+      "process_sessions": 1,
+      "superseded_optimizer_steps": 0
+    },
+    "global_step": 56,
+    "metrics_boundary": {
+      "bytes": 93042,
+      "last_physical_global_step": 56,
+      "lines": 60,
+      "prefix_sha256": "e1a64b15b90659af8e4284496982866205852e5b0cc6be5da9332853c1c4e1be",
+      "step_records_physical": 56
+    },
+    "model_sha256": "da8851e82effda5bac69ab8528c973456a1954d15ee27007d41461e7825cb1bd",
+    "optimizer_digest": {
+      "momentum_buffers": 110,
+      "momentum_sha256": "df640f06df76468a65c20b19bae4c01348632c2bea20f29576fc8ec8f1dd34d5",
+      "param_groups_sha256": "b3bf1b5f64b3924fb92212b69e0ce7288b997dd8e33d6b6d130182e62226a671"
+    },
+    "path": "checkpoints/resume/runner_state_epoch_001.pth",
+    "process_session_id": "86c849d9-d0c8-4848-8479-b4fed8d0ca49",
+    "rng_digest": {
+      "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+      "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+      "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+      "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+      "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+    },
+    "scientific_checkpoint_file": {
+      "epoch": 1,
+      "format": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+      "path": "checkpoints/encoder_final.pkl",
+      "sha256": "8cca4429a92deca69d219391d4c0713fb2700fb91b9dc9a9ea47ad88b8688d45",
+      "size_bytes": 185136819
+    },
+    "sha256": "489c18043ebaf046b079fe48fb59e6f4264de5ae453532ba4eea3c19a6384806",
+    "size_bytes": 370095259,
+    "status": "COMMITTED_CURRENT"
+  },
+  "executable_semantics": {
+    "block": "BasicBlock",
+    "fourth_output_discarded": true,
+    "sampler_tensor_set": "model",
+    "symbols": [
+      {
+        "file": "FAS_train.py",
+        "line": 167,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "seed_torch"
+      },
+      {
+        "file": "FAS_train.py",
+        "line": 28,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "train"
+      },
+      {
+        "file": "FAS_sample.py",
+        "line": 32,
+        "sha256": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+        "symbol": "main"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 797,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "GaussianDiffusion.training_losses"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 977,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "create_gaussian_diffusion"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 47,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "ddim_steps"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 367,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "resnet18"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 329,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "ResNet._forward_impl"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 138,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.forward"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 73,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.encoder"
+      }
+    ],
+    "topology": [
+      3,
+      4,
+      6,
+      3
+    ],
+    "training_content_inert": true
+  },
+  "experiment_seed": null,
+  "fidelity": "CONTROLLED_ADAPTATION",
+  "firewall": {
+    "denied": [],
+    "event_counts": {
+      "open": 2887,
+      "os.listdir": 310,
+      "os.mkdir": 17,
+      "os.remove": 2,
+      "os.rename": 14,
+      "os.rmdir": 0,
+      "os.scandir": 465,
+      "shutil.rmtree": 0,
+      "subprocess.Popen": 137
+    },
+    "face_opens_in_main_process": 0,
+    "manifest_opens_python": {
+      "CLASS_MAP": 2,
+      "SPLIT_MANIFEST": 2
+    },
+    "note": "DataLoader worker processes inherit this hook (fork); their face opens are in the access log. pyarrow opens the split manifest natively after the audited Python SHA256 open; its API calls are recorded separately (pyarrow_calls).",
+    "subprocesses": [
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=memory.used,memory.total",
+        "--format=csv,noheader,nounits"
+      ],
+      [
+        "nvidia-smi",
+        "--query-compute-apps=pid,used_memory",
+        "--format=csv,noheader,nounits"
+      ],
+      [
+        "/sbin/ldconfig",
+        "-p"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ],
+      [
+        "uname",
+        "-p"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "branch"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=memory.used,memory.total",
+        "--format=csv,noheader,nounits"
+      ],
+      [
+        "nvidia-smi",
+        "--query-compute-apps=pid,used_memory",
+        "--format=csv,noheader,nounits"
+      ]
+    ]
+  },
+  "gpu_after": {
+    "compute_processes": [
+      {
+        "pid": "1641319",
+        "used_mib": "19662"
+      }
+    ],
+    "total_mib": 24576,
+    "used_mib": 19921
+  },
+  "gpu_before": {
+    "compute_processes": [],
+    "total_mib": 24576,
+    "used_mib": 254
+  },
+  "harness_sha256": "202021e3a597c530d65d6c6843f52c91091d09a97a05a7315cd01797585e4404",
+  "identities": {
+    "a1_adaptation_sha256": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "a3_sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "a7_overlay_sha256": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3",
+    "a8_document_sha256": "deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f",
+    "a8_overlay_sha256": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a",
+    "class_map_sha256": "c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812",
+    "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "environment_lock_sha256": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+    "logging_contract_sha256": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "m6d6e_contract_sha256": "09c0af7e79aeb3acda3e188f7a2a9d94f6d0401485a061d46767ab1c71069ae6",
+    "source_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "source_tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+  },
+  "index_after": {
+    "a8_overlay_sha256": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a",
+    "amendment": "A8",
+    "committed": {
+      "bytes_pruned": false,
+      "committed_utc": "2026-09-26T15:02:22Z",
+      "completed_epoch": 1,
+      "counters": {
+        "logical_authoritative_optimizer_steps": 56,
+        "physical_optimizer_steps_executed": 56,
+        "process_sessions": 1,
+        "superseded_optimizer_steps": 0
+      },
+      "global_step": 56,
+      "metrics_boundary": {
+        "bytes": 93042,
+        "last_physical_global_step": 56,
+        "lines": 60,
+        "prefix_sha256": "e1a64b15b90659af8e4284496982866205852e5b0cc6be5da9332853c1c4e1be",
+        "step_records_physical": 56
+      },
+      "model_sha256": "da8851e82effda5bac69ab8528c973456a1954d15ee27007d41461e7825cb1bd",
+      "optimizer_digest": {
+        "momentum_buffers": 110,
+        "momentum_sha256": "df640f06df76468a65c20b19bae4c01348632c2bea20f29576fc8ec8f1dd34d5",
+        "param_groups_sha256": "b3bf1b5f64b3924fb92212b69e0ce7288b997dd8e33d6b6d130182e62226a671"
+      },
+      "path": "checkpoints/resume/runner_state_epoch_001.pth",
+      "process_session_id": "86c849d9-d0c8-4848-8479-b4fed8d0ca49",
+      "rng_digest": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "scientific_checkpoint_file": {
+        "epoch": 1,
+        "format": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+        "path": "checkpoints/encoder_final.pkl",
+        "sha256": "8cca4429a92deca69d219391d4c0713fb2700fb91b9dc9a9ea47ad88b8688d45",
+        "size_bytes": 185136819
+      },
+      "sha256": "489c18043ebaf046b079fe48fb59e6f4264de5ae453532ba4eea3c19a6384806",
+      "size_bytes": 370095259,
+      "status": "COMMITTED_CURRENT"
+    },
+    "consumable_by_main_difffas": false,
+    "entries": [
+      {
+        "bytes_pruned": true,
+        "committed_utc": "2026-09-26T15:01:06Z",
+        "completed_epoch": 0,
+        "counters": {
+          "logical_authoritative_optimizer_steps": 0,
+          "physical_optimizer_steps_executed": 0,
+          "process_sessions": 1,
+          "superseded_optimizer_steps": 0
+        },
+        "global_step": 0,
+        "metrics_boundary": {
+          "bytes": 2726,
+          "last_physical_global_step": 0,
+          "lines": 1,
+          "prefix_sha256": "b13411893502977e3998fb2523b52cf547a011266535ead224c6e7351f8cc072",
+          "step_records_physical": 0
+        },
+        "model_sha256": "303dc661777c4f82e4a6b1fe17b2541e7ec01dab49e03589bf2a5375a86c41d5",
+        "optimizer_digest": {
+          "momentum_buffers": 0,
+          "momentum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "param_groups_sha256": "b3bf1b5f64b3924fb92212b69e0ce7288b997dd8e33d6b6d130182e62226a671"
+        },
+        "path": "checkpoints/resume/runner_state_epoch_000.pth",
+        "process_session_id": "86c849d9-d0c8-4848-8479-b4fed8d0ca49",
+        "pruned_after_commit_of": "checkpoints/resume/runner_state_epoch_001.pth",
+        "pruned_utc": "2026-09-26T15:02:22Z",
+        "rng_digest": {
+          "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+          "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+          "torch_cpu_sha256": "8c8911fdfb334a65d245f14ee1254921280f47fee690553640e7d42bf605745b",
+          "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+          "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+        },
+        "scientific_checkpoint_file": null,
+        "sha256": "53c7069c579b65411dca3710578e726a7e070393bcb13ddb9cb64fb1e02192a3",
+        "size_bytes": 185129143,
+        "status": "SUPERSEDED_BY_NEWER_BOUNDARY"
+      },
+      {
+        "bytes_pruned": false,
+        "committed_utc": "2026-09-26T15:02:22Z",
+        "completed_epoch": 1,
+        "counters": {
+          "logical_authoritative_optimizer_steps": 56,
+          "physical_optimizer_steps_executed": 56,
+          "process_sessions": 1,
+          "superseded_optimizer_steps": 0
+        },
+        "global_step": 56,
+        "metrics_boundary": {
+          "bytes": 93042,
+          "last_physical_global_step": 56,
+          "lines": 60,
+          "prefix_sha256": "e1a64b15b90659af8e4284496982866205852e5b0cc6be5da9332853c1c4e1be",
+          "step_records_physical": 56
+        },
+        "model_sha256": "da8851e82effda5bac69ab8528c973456a1954d15ee27007d41461e7825cb1bd",
+        "optimizer_digest": {
+          "momentum_buffers": 110,
+          "momentum_sha256": "df640f06df76468a65c20b19bae4c01348632c2bea20f29576fc8ec8f1dd34d5",
+          "param_groups_sha256": "b3bf1b5f64b3924fb92212b69e0ce7288b997dd8e33d6b6d130182e62226a671"
+        },
+        "path": "checkpoints/resume/runner_state_epoch_001.pth",
+        "process_session_id": "86c849d9-d0c8-4848-8479-b4fed8d0ca49",
+        "rng_digest": {
+          "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+          "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+          "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+          "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+          "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+        },
+        "scientific_checkpoint_file": {
+          "epoch": 1,
+          "format": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+          "path": "checkpoints/encoder_final.pkl",
+          "sha256": "8cca4429a92deca69d219391d4c0713fb2700fb91b9dc9a9ea47ad88b8688d45",
+          "size_bytes": 185136819
+        },
+        "sha256": "489c18043ebaf046b079fe48fb59e6f4264de5ae453532ba4eea3c19a6384806",
+        "size_bytes": 370095259,
+        "status": "COMMITTED_CURRENT"
+      }
+    ],
+    "kind": "E07C_AUX_ENGINEERING_RESUME_STATE",
+    "method_id": "E07c",
+    "note": "A8 engineering resume sidecars only. Exactly ONE entry is COMMITTED_CURRENT; it is the only file --resume-state may name. Never a scientific checkpoint, selection candidate or main-DiffFAS input; checkpoints/encoder_final.pkl (whole nn.Module) is the scientific checkpoint.",
+    "official_difffas_checkpoint": false,
+    "pruning_log": [
+      {
+        "path": "checkpoints/resume/runner_state_epoch_000.pth",
+        "reason": "explicit prune after commit of checkpoints/resume/runner_state_epoch_001.pth",
+        "sha256": "53c7069c579b65411dca3710578e726a7e070393bcb13ddb9cb64fb1e02192a3",
+        "size_bytes": 185129143,
+        "utc": "2026-09-26T15:02:22Z"
+      }
+    ],
+    "qualification_seed": 60606,
+    "reportable_as_trained_model": false,
+    "retention": "COMMITTED_CURRENT only; previous bytes pruned explicitly after the next index commit",
+    "run_id": "b1eeb27a03b31c00",
+    "run_uuid": "c55c19a5-f495-452c-b811-0e61a0f429de",
+    "runner_mode": "QUALIFICATION",
+    "schema_version": 1,
+    "scientific_checkpoint": false,
+    "selection_candidate": false,
+    "sessions": [
+      {
+        "kind": "FRESH",
+        "pid": 1641319,
+        "process_session_id": "86c849d9-d0c8-4848-8479-b4fed8d0ca49",
+        "started_utc": "2026-09-26T15:01:05Z"
+      }
+    ],
+    "stale_file_log": []
+  },
+  "interruption": {
+    "after_logged_global_step": 57,
+    "epoch": 2,
+    "epoch_completed": false,
+    "kind": "DELIBERATE_QUALIFICATION_INTERRUPTION",
+    "message": "deliberate qualification interruption after logged step 57",
+    "sidecar_written_for_epoch": false,
+    "utc": "2026-09-26T15:02:25Z"
+  },
+  "label": "QUALIFICATION_ONLY",
+  "labels": [
+    "QUALIFICATION_ONLY",
+    "NOT_A_SCIENTIFIC_CHECKPOINT",
+    "NOT_ELIGIBLE_FOR_BANK",
+    "NOT_ELIGIBLE_FOR_DOWNSTREAM",
+    "NOT_ELIGIBLE_FOR_REPORTING"
+  ],
+  "launch_environment": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "CUDA_VISIBLE_DEVICES": "0",
+    "NVIDIA_TF32_OVERRIDE": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONHASHSEED": "60606",
+    "PYTHONNOUSERSITE": "1",
+    "TMPDIR": "/tmp/gpat-m6d6f"
+  },
+  "load_calls": [],
+  "main_difffas_training": false,
+  "metrics_after": {
+    "bytes": 95454,
+    "events": [
+      "e07c_aux_run_start",
+      "e07c_aux_resume_state_committed",
+      "e07c_aux_epoch_complete",
+      "e07c_aux_checkpoint_event",
+      "e07c_aux_resume_state_committed"
+    ],
+    "logical_global_steps_tail": [
+      55,
+      56,
+      57
+    ],
+    "logical_step_records": 57,
+    "physical_global_steps_tail": [
+      55,
+      56,
+      57
+    ],
+    "physical_step_records": 57,
+    "records": 62,
+    "sha256": "1127f7a0c458db66946825397ea4063888dc99f2f50d9dd892139536665f0c16"
+  },
+  "milestone": "M6D6f",
+  "physical_optimizer_steps_this_process": 57,
+  "pid": 1641319,
+  "population": {
+    "class_counts": {
+      "live": 5629,
+      "makeup": 759,
+      "mask_2d": 96,
+      "mask_3d": 1056,
+      "partial": 1911,
+      "print": 2838,
+      "replay": 2178
+    },
+    "class_map": "manifests/artifact_probe_classes_v1.json",
+    "class_map_sha256": "c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812",
+    "columns_never_read": [
+      "subject_id_global",
+      "video_id",
+      "frame_index",
+      "label_binary",
+      "attack_raw",
+      "sha256",
+      "sha256_kind",
+      "content_group_id",
+      "allocation_group_id"
+    ],
+    "columns_read": [
+      "sample_id",
+      "dataset",
+      "attack_macro",
+      "split",
+      "m2_status"
+    ],
+    "file_rows_total_from_footer": 20615,
+    "filter": "split == TRAIN (pyarrow, native)",
+    "labels_sha256": "df0577a3c0c2a9ccda3df7fb8896a150dd5fb875f1d0e3b67475f834e549cecd",
+    "main_relation_opened": false,
+    "order": "IMAGEFOLDER_EQUIVALENT (class index, sample_id)",
+    "other_spoof_rows": 0,
+    "path": "manifests/split_v1.parquet",
+    "physical_read_disclosure": "pyarrow read the footer and decoded the allowlisted column chunks of the single row group (all splits) natively, then filtered; only TRAIN rows were materialized in Python",
+    "population_order_sha256": "c890ed8d1287f58113405632a2350162660e06a563aa332e17660caf7cc50c76",
+    "row_groups": 1,
+    "rows_by_dataset": {
+      "casia_fasd": 3360,
+      "msu_mfsd": 1600,
+      "siwmv2": 9507
+    },
+    "schema_columns": 14,
+    "sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "sha256_checked_before_parse": true,
+    "test_rows_materialized": 0,
+    "train_rows_materialized": 14467,
+    "val_rows_materialized": 0
+  },
+  "precision": {
+    "activation_checkpointing": false,
+    "amp": false,
+    "api": "methods/difffas/execution_policy.py::apply_e07c_precision_policy",
+    "autocast_cpu": false,
+    "autocast_cuda": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "cudnn_tf32": false,
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms_forced": false,
+    "float32_matmul_precision": "highest",
+    "grad_scaler": false,
+    "matmul_tf32": false
+  },
+  "precision_state_after": {
+    "autocast_cpu": false,
+    "autocast_cuda": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "cudnn_tf32": false,
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms_forced": false,
+    "float32_matmul_precision": "highest",
+    "matmul_tf32": false
+  },
+  "probe": {
+    "bytes": 555048437,
+    "path": "m6d6f_probe_interrupted.pt",
+    "sha256": "2d0bbd4940ff2d32be61cb31311b9e69bbcf669d22db879c20d1148618c819aa"
+  },
+  "process": "interrupted",
+  "pyarrow_calls": [
+    {
+      "api": "pyarrow.parquet.read_metadata",
+      "columns": null,
+      "filters": null,
+      "path": "manifests/split_v1.parquet"
+    },
+    {
+      "api": "pyarrow.parquet.read_schema",
+      "columns": null,
+      "filters": null,
+      "path": "manifests/split_v1.parquet"
+    },
+    {
+      "api": "pyarrow.parquet.read_table",
+      "columns": [
+        "sample_id",
+        "dataset",
+        "attack_macro",
+        "split",
+        "m2_status"
+      ],
+      "filters": "[('split', '==', 'TRAIN')]",
+      "path": "manifests/split_v1.parquet"
+    }
+  ],
+  "qualification_seed": 60606,
+  "resource_clean": true,
+  "rng_after_epoch0_sidecar": {
+    "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+    "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+    "torch_cpu_sha256": "8c8911fdfb334a65d245f14ee1254921280f47fee690553640e7d42bf605745b",
+    "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+    "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+  },
+  "rng_after_seeding": {
+    "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+    "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+    "torch_cpu_sha256": "2e5b439ebe72b5a5eea34dc9ab846a70765284657d1b0a582736072f055b94a4",
+    "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+    "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+  },
+  "rng_at_epoch1_boundary": {
+    "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+    "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+    "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+    "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+    "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+  },
+  "rng_before_epoch0_sidecar": {
+    "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+    "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+    "torch_cpu_sha256": "8c8911fdfb334a65d245f14ee1254921280f47fee690553640e7d42bf605745b",
+    "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+    "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+  },
+  "rng_before_iterator": {
+    "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+    "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+    "torch_cpu_sha256": "f57be0bf0dae4bee4a1f22a1a46373be078f868bf15de661756e6b6bb1f698ea",
+    "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+    "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+  },
+  "root_label": "interrupted",
+  "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/qualification/m6d6f/E07c_aux/q60606-b1eeb27a03b31c00-interrupted",
+  "run_files": {
+    "checkpoint_index.json": {
+      "bytes": 1230,
+      "sha256": "069a1bebd2870492bb6296b8e70b1421d88ada87d49a0075963406e8a1364dc7"
+    },
+    "checkpoints/encoder_final.pkl": {
+      "bytes": 185136819,
+      "sha256": "8cca4429a92deca69d219391d4c0713fb2700fb91b9dc9a9ea47ad88b8688d45"
+    },
+    "checkpoints/resume/runner_state_epoch_001.pth": {
+      "bytes": 370095259,
+      "sha256": "489c18043ebaf046b079fe48fb59e6f4264de5ae453532ba4eea3c19a6384806"
+    },
+    "generation_log.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "metrics.jsonl": {
+      "bytes": 95454,
+      "sha256": "1127f7a0c458db66946825397ea4063888dc99f2f50d9dd892139536665f0c16"
+    },
+    "resolved_config.yaml": {
+      "bytes": 15811,
+      "sha256": "0273bd43d6553fc674a7ee2693292ed1c509cf76158c5db863216fb9981f8f7a"
+    },
+    "resume_state_index.json": {
+      "bytes": 7493,
+      "sha256": "0025d601a898c0843d9904f34491d05797621b535f2760bac046d3f32bbc5aba"
+    },
+    "run_manifest.json": {
+      "bytes": 5483,
+      "sha256": "2c9f5968a643d50b29976003f8fa2f82a76f578aece26f39d4f4bfb2bba395f3"
+    },
+    "run_summary.json": {
+      "bytes": 2195,
+      "sha256": "53625c985c38f60a68416eb8f4b9bb2c11927f6419282a095f330cae2f226f4e"
+    },
+    "stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.log": {
+      "bytes": 51,
+      "sha256": "81beec2868b2eaebf29bd400139e5e84694ddfd49f40320e084eef5ccb1bfa91"
+    }
+  },
+  "run_id": "b1eeb27a03b31c00",
+  "runner_mode": "QUALIFICATION",
+  "scientific_attempt": false,
+  "scientific_checkpoint_created": false,
+  "scientific_run_root_written": false,
+  "scientific_seed_consumed": false,
+  "scientific_training": false,
+  "seed_note": "60606 seeds this qualification only; auxiliary 42 and main 42/1337/2026 are not used",
+  "seeding": {
+    "calls": [
+      "random.seed",
+      "numpy.random.seed",
+      "torch.manual_seed",
+      "cudnn.benchmark=False",
+      "cudnn.deterministic=True",
+      "torch.cuda.manual_seed_all",
+      "torch.cuda.manual_seed"
+    ],
+    "hook": "aux_runner.seed_process (same calls as seed_adapter.apply_seed; scientific API not called)",
+    "pythonhashseed": "60606",
+    "role": "QUALIFICATION_SEED_NOT_AUXILIARY_SEED",
+    "seed": 60606,
+    "torch_cpu_rng_sha256": "2e5b439ebe72b5a5eea34dc9ab846a70765284657d1b0a582736072f055b94a4",
+    "torch_cuda_rng_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+  },
+  "source_after": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "source_before": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "source_patch": "NONE",
+  "started_utc": "2026-09-26T15:01:02Z",
+  "status": "PASS",
+  "step_accounting": {
+    "committed_boundary": {
+      "completed_epoch": 1,
+      "global_step": 56,
+      "sidecar": "checkpoints/resume/runner_state_epoch_001.pth"
+    },
+    "logical_authoritative_optimizer_steps": 57,
+    "physical_counting": "optimizer steps executed by every process of this logical run (A8 section 10)",
+    "physical_optimizer_steps_executed": 57,
+    "process_sessions": 1,
+    "superseded_optimizer_steps": 0,
+    "uncommitted_in_progress_steps": 1
+  },
+  "steps": {
+    "57": {
+      "batch_size": 256,
+      "buffers_after_sha256": "3f32f6dc864af45485902c5c0cef06cf6430006e1d63375998476ee986a90ff9",
+      "class_histogram": [
+        101,
+        11,
+        3,
+        18,
+        28,
+        50,
+        45
+      ],
+      "epoch": 2,
+      "global_step": 57,
+      "gradient_tensors": 110,
+      "gradients_sha256": "b6621f1f5c9b8eb35400670c978504a727e28c8dde9d1492c0868212f14434aa",
+      "indices_sha256": "855e40b7038fd58523f71ddd8ac80a50190e2cc672341e5b51c204777574aec4",
+      "input_dtype": "torch.float32",
+      "input_sha256": "3f0abb400eda4cd6f6c0a08613589bfe8a94683d4829975f8195eb24164a9825",
+      "input_shape": [
+        256,
+        3,
+        256,
+        256
+      ],
+      "iteration": 0,
+      "labels": [
+        1,
+        3,
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        4,
+        0,
+        5,
+        5,
+        0,
+        0,
+        6,
+        6,
+        4,
+        1,
+        5,
+        0,
+        0,
+        0,
+        6,
+        5,
+        0,
+        5,
+        5,
+        0,
+        5,
+        0,
+        5,
+        1,
+        3,
+        0,
+        0,
+        5,
+        3,
+        0,
+        0,
+        0,
+        5,
+        6,
+        6,
+        0,
+        4,
+        5,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        0,
+        0,
+        5,
+        0,
+        5,
+        3,
+        6,
+        0,
+        5,
+        6,
+        0,
+        6,
+        0,
+        5,
+        5,
+        0,
+        5,
+        3,
+        0,
+        0,
+        5,
+        0,
+        6,
+        4,
+        0,
+        2,
+        5,
+        0,
+        0,
+        0,
+        4,
+        5,
+        0,
+        0,
+        6,
+        0,
+        6,
+        6,
+        4,
+        0,
+        0,
+        0,
+        6,
+        6,
+        6,
+        0,
+        3,
+        3,
+        0,
+        5,
+        6,
+        0,
+        0,
+        0,
+        0,
+        5,
+        4,
+        0,
+        4,
+        5,
+        3,
+        6,
+        5,
+        6,
+        6,
+        0,
+        6,
+        5,
+        0,
+        0,
+        3,
+        0,
+        5,
+        4,
+        0,
+        6,
+        3,
+        0,
+        4,
+        6,
+        6,
+        0,
+        0,
+        2,
+        0,
+        3,
+        6,
+        5,
+        0,
+        0,
+        5,
+        4,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        1,
+        3,
+        0,
+        6,
+        0,
+        5,
+        4,
+        5,
+        0,
+        4,
+        6,
+        5,
+        1,
+        0,
+        5,
+        4,
+        0,
+        5,
+        6,
+        6,
+        1,
+        6,
+        4,
+        5,
+        5,
+        6,
+        5,
+        6,
+        0,
+        0,
+        2,
+        0,
+        6,
+        6,
+        0,
+        0,
+        0,
+        4,
+        0,
+        4,
+        4,
+        5,
+        3,
+        0,
+        0,
+        0,
+        5,
+        4,
+        6,
+        0,
+        1,
+        6,
+        6,
+        0,
+        3,
+        5,
+        6,
+        1,
+        4,
+        3,
+        1,
+        5,
+        6,
+        0,
+        4,
+        0,
+        4,
+        5,
+        1,
+        5,
+        6,
+        6,
+        6,
+        6,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        3,
+        4,
+        3,
+        6,
+        0,
+        4,
+        0,
+        0,
+        5,
+        1,
+        6,
+        5,
+        5,
+        0,
+        3,
+        4,
+        5,
+        5,
+        5,
+        0
+      ],
+      "labels_sha256": "7878e0bd63e1b0bdd7a6400feb35edccb16b066f82182a1c9e1b937fc6a44e6e",
+      "loss": 1.1511402130126953,
+      "loss_hex": "0x1.26b1200000000p+0",
+      "momentum_after_sha256": "5d1754fe536382568170b2da47076e3d6a4d5988f67f3d9fb0746b2611084c53",
+      "momentum_buffers": 110,
+      "parameter_tensors": 112,
+      "parameters_after_sha256": "a7c8419c7da5c2f9740be354559abee5a8b7742685079a44f7645fba3e3f3869",
+      "rng_after": {
+        "numpy_sha256": "93ed3dccef4f33d33e12696fbf7fc4827a5663c155935c52768a6129be4fe887",
+        "python_sha256": "1d5cbcc3d1e2259a487c15269314e470e37742a0ff1375d3e1dd3c49c03b0ac2",
+        "torch_cpu_sha256": "b0d838e4acde4a9ba7986bf5b5ad96c372c53f9dba83c6f373cf63f4c597aab4",
+        "torch_cuda_all_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc",
+        "torch_cuda_device_sha256": "15aaf26a47699822d401c16b7b96610c20277cc34c064e90f063f0a22db13bbc"
+      },
+      "sample_ids": [
+        "0fa4cc221cdc2a0039d969e7faad4a80e8e7fb97de1ea9946808ab0d72df4793",
+        "d87ddefa7dff607aa77c5429f0be419a493eb10455d17b92fbe0efbdccbe77b6",
+        "cdd0249d978a72f950826f43f049491271619d5c45b4d14e3d01b6486e279dbb",
+        "16b91ba324fc5f2dc18d113145cb60331ec41da0f10d86b8e1579d7681344320",
+        "d314b5b931ee6f38d9e785bcc794a86c20b874d2699320a00a67fad21e65a75c",
+        "95d7876ebfa4859910a281188f78eb0d526a50bd31a7cdfa73689d222b7373e3",
+        "5b2eba5d2a1cccf9c6dc620f1c2df05cace33d267f7417397e0d62ea91264b3b",
+        "7d6ed42a9c02aaa0251aa55252394dee8e156a3688a0798b7b4a42a58166dc29",
+        "60c6f1202e9858958319eb4bf521d0990d1666241ea2ffa3e7a2ab39f0094b5e",
+        "d59d38f8c20524abf45c0b7e3e69c9e7408e7bf2c7d358b2190610272140fdc4",
+        "ad2928a21e224b0aaee0164c6e6e4588365e53c7b467454116345930291c9b63",
+        "e2080ef742fda1eb4b47e026fe0ae816313c323978eb794d2dab704678ded82a",
+        "8574b9056b16a61a75f59ca3b7ea3afdafc5c132f139a874a5345857561e3d65",
+        "5281370d3cef2ab3e28d8d63cb148053ea9c4ecd39596ea28ab67751cfef2704",
+        "08418594015f98e904fb500fd39e9537f0d56a53a79d8bdb97084b48f9ed8e3e",
+        "963cea827541481a1d711b7789842f49058a14e674901811666ee932fae3da68",
+        "be78b6ac254ec55788e20389a4b19010a378b89a83bad48b3bcda9120da20da0",
+        "95e8196987b6855224eaf62b6ea51388bdd26186630a364ad644269f7a317522",
+        "9c8082aa02593a7841de5abab6aa41aa7c24ba4b7f4f2375e99fe8d5c1bff6a6",
+        "09280bc08c2624fe6968bf65fd3276b08b30d0e7f23a2a239692a26fd48eba20",
+        "c88dfbf8308de280d9454ec6edfbeca446b8785c613eca3f5c75126ed612cd43",
+        "44d635b6d3495007ad794fc9f94b261057de07c94f69f193e0356cd01056b2af",
+        "7e2212c7579a7d7e9783cb708458026d2f4d74f54955941b344371d7d5d954d0",
+        "a8d53ce2aad62edf042395a3d8c56da0720d7bb59bbcd3f13f3b89deceb180b0",
+        "c66c06277e4861520979713880b3f8651782ffe281000e1ce8d0484cecf096b9",
+        "836745ff008a2d01ece2935e86a5cf57b1e955789bff36cf10cb7df174b9a562",
+        "ae1cc6f4a066155f57199c75058dc27e0db09ab8c4202a2d8823f6a45eae91ff",
+        "ce05498e606d7b29125bae60abf94b7500f3f3229c45b9b37ee5dfb242579860",
+        "0af76d88a650808bb6d84e9d1dbb2fef3bcc8473d31ce0f9383f0ab17c411d88",
+        "258fd73f7fa3f8f0eaa74042e916e4a8501f929982e78d2fc89be157b13f3654",
+        "abd34624e0623ce58985ca69414aadd8996a96020ff1b0f27b58c1fa48cdd5af",
+        "f4004c4de5b2d8ff5c88616dab141bcad5271818b9095bba88d6e0d4d9243e59",
+        "0df6e6d8f30b041334dae8225ed5a790ce71ef54b267fed4e730631c11fd4fe1",
+        "1423ac17f4a65310c4e92abda980d57526fe886fe56bf2e22c96060466126381",
+        "633b6258bd0c80bd9dd10ba5da9e5eb017e61e4548b6dc853ef1e6b106393863",
+        "f7d132f9017dc19a82a38f563d6f80cbee70548e7574c3452f7eadac3bc44249",
+        "711fc39903e41c04a3b94f95d968f2761c67716c92c853172bd0dea129d31073",
+        "f4b9e3850a292e7dff45ee77ec7dabcc5c29b8cb4a2f17ba4f76ba805339fbf1",
+        "18daca2c4ded1b056c16b48e79aebf759f5c7a34b5870e5ba3c0e6715f15c769",
+        "57000b8a985acb52322599120ae97177d88a500c5ee7b86c247838125fe1b851",
+        "3221ea85a57b84dc9d5d417af81ec514f0dda568350d6d4ce7cef8b466d9e866",
+        "323293fe2f2802e5cd560dfbdf4459abe0e1522b73aaa62de7458f9ed4aae556",
+        "6c1fc8b4287317dcc1610fe4fddd68826454a200a608dc64deb9e333c5433996",
+        "aca9f513740e297d545d809e7c76ac80e3cf6bc786703215ebe7d8e3482444a4",
+        "7a67119f98e596580c0925ad8a135e87d1826b545ba136ea1d841e0bebea7208",
+        "7c81f51a5dfa36887cabf881d80d9471e1399e1a3c92b8ab5387a8be7505e297",
+        "f05d34a0b67a64c4820c8ca9e38859e7fcea4aecaf3331bb1f8f90f16f899511",
+        "0b8cba20874c1c3532e75f555aeaf423b055ef3f832ab9f1287c06cda13872f0",
+        "af9417b2a82abaee8720e90e473b217b89184835e5881f2c815e04dcdb491c19",
+        "22b0b184735ff101053d16b96062a897ac85dcef46d5ef0524d771698f411953",
+        "6e2da83bb302a9e7f6c2fd4c52b0b6f29784f9ebe55301e73f32920d195f9556",
+        "e8c88687e8e842c9ff9c37e8459af625e19e3cee2189fb649700163dbf34779b",
+        "b723c4e33df5869c8f2128649344fa6a545ce55a2113350a822991155053cd92",
+        "9c2789da98f770ac3d1684205e631af53fca6af83a905556771756f32f071ee1",
+        "af0fee3cc7de08a349b832416b27942afb2d84fe8f123fa3f7b181545a4765ca",
+        "d0ae22aa88f377bf1e845152c968a6b920ece3e3fae67321bf53c30d81dc7511",
+        "92b73fbbb6eb5b047e8a63c1fddd1fb8998a34a47c79b604cf36075bb037778f",
+        "54d0dab7e2fb08c95dd21b4e6323ac4dc4f84f459ea77e5241f99717f2112e3f",
+        "d0a91e8e7eb607f0dd11cb551a4c06278f4ce2d4090d0327d755240e06deb411",
+        "b8ea379ed0cce93f6d66e46238d6696b7c0178e13a0e0d0e79a4ff9e6e15f934",
+        "f07efd4b7428931476bbf0b21097f8afbc548cddab564bd8f5b77dac84825ecb",
+        "2eb350441b40c29741efadda9e70cc5fabcb9133377951aa0cc4c8adaa72280f",
+        "d461755a3ded565e2a9f3d19a21f56cd3d29e295968802c6e24e44050cda403b",
+        "00cf09a9ac13d3cc2055cb4a9bf763a219f008dd1beafeea8c900dc1cb7a7a43",
+        "13062909159c3f5d6f2363f605add59cc85851e86b5e1cc7e24e704c83c2547a",
+        "72e07624b309f5fc2aaf82d9cfa4c34be642ed3d32e3c72b52ff2de9f3745997",
+        "b361570df20f5ba40eb6383cfe0c9ac61e7ff34b0561d40f54143e993550cd47",
+        "bc1e650bb9f8ccd9360122f3f9489dbc2c3ce52e23c9a0cc4fab439e6be712e5",
+        "8392d344ea2bf71fb284a4c8283e94e245faef9de0e0cdd511c6e2d2275c0144",
+        "9a3a6338b082bfc94e400a06348344dce4089bb28e84326c6ee78d0302e63212",
+        "358b46e19b36431a34e26019e0837bc8ca114e80fec01360ea911173221287f6",
+        "812b07c7fe41fc8ccbde62da44da7b6c5877bd3e6f093008407b5aa49db2b73d",
+        "78388c242374fbf7bcc39b98ad9c593d0fc63edd1dfbadbd19ed9035b682dba3",
+        "235deb20a0c8bfa3421796670fed7b3128a626006f729637a31ba9cddbf60de3",
+        "03fcb3d6c580e42866be3c3fe9236d22d2a6b421933a09c8e0de6b6113d39126",
+        "21925875e8fa03e618dfadbe4b157574d941f6309382ea89057acbeff1a92160",
+        "edad125af9aca896517c3d5d350592764572b35c9ad6b0eadccef8761881b6e1",
+        "aef4402c7c7072e3d1b3260f52931169f80c250b0d9e32d7432d7843dd79eba2",
+        "cf3ec9f0fdbe42c88cd21f0b35a8a911e9db5d927bfb8611768f5bc9e4db48a7",
+        "ac09ac5a28a9cb5df175a55909706c5084429188b224c806bec38fc6a47035ea",
+        "3eed742cb6784928dc3956eeba42283ca5565ae36d0f4e4a768ab95bec669845",
+        "7270924ca12966848fbdb47e559102d9492cf8f4338b577c6b0c771e24860fb2",
+        "519dd51af8d0b4caa16991fe87168d87804c1706c3e6b38663edb752b87a9e73",
+        "aa0f7abc4696c114613fce8a4bdf7b59f8a270f62be3239438d2ee49dee27938",
+        "5c0440cff5888e27580b415d3387a9df510744cfc3b7fb4f10ae2555f89b190a",
+        "40574686e9b1d45e334386fe6f20185fc5ccb21b38af4d571ff0a7aedd3d497d",
+        "587a970b3cef3fdf61ab0c26e77b2a45ccbe142afbe70f58a7a04f0e7be82372",
+        "4692b0832bb2c1ea0594a59a6593c1ec03fa41da3bda3a1bca49284756dcc0d6",
+        "d5b82259722c2feaddc4986f8ee00c1a691ca4c676d6d5469f118e4932145a7b",
+        "6b37bf9f1f965075bcb93021d096d8ba0eaa2ee2f2fe795ae617950f2a70f065",
+        "fc9b9526f085db4471e3056d424169280e0acfeed3111016c0e3220fd0d9b7ad",
+        "bdf875d4a05bd1a807ebababd6c378531c3d942c662937bf4248579955acc6a0",
+        "7133fba95e89fa3fe123bf7606e460b63da4e83c435fa505f4314efe5735177b",
+        "7da951ab7b568693a67d1a19efac235908667ba66e6d45e3f9ffc0a0ba74a86a",
+        "0d35c775c0f46f808569ca8aa43f96a8b261607f492e36dc73b68a6b0c5d4040",
+        "98b4c4e98d10d29d1461678a05f6b17519f4a142cb0bfad9f57a9ed07b9b1ba1",
+        "48d336643406514148ce6db07a96428615e8ff78a5ab8eb7490787182922188a",
+        "973a712c507751dfb6de9d80a52463682a471640a0dcc3f4e9279f9f0ab5a125",
+        "c75917dddaf670270cd8be58eb7e57a82aaac104946e4f2166eb30fc8d32ffdf",
+        "0d809022d753af6179f5446c3511779745a44cae8069dd24d58985408292552a",
+        "fed6b6e3dbf74724c4c26ee2ceaa082d5585371d1f5586c3f10ed96db3b1793f",
+        "e4da46b122ca4257debfe1a18b942f76dd9b3d2f511a640c6c7c712bb219c87f",
+        "ad99db04de82c891964a2ce5fa4c291c6dff55ba4586993b8601dc13da69cf85",
+        "a9b6fc2c1282b7cc5645a07d9c3b080f77ddcadb258b569ead8c36b718c830a1",
+        "e0636b66611c8dfbac72b75f4c210cf82f4e5b8f80c5097f200d6327677d5798",
+        "8f7d3dd7a73299c683cd3275e127242e6c33c9a37d5190236f21f9f421853216",
+        "eab4f9dc1df247f3d68a1a2b391556ed00ebf402259d7be81dc1571000685bb5",
+        "68a8f5d3f6440a8950e60dca972d0299fbf01ca63142df0f4b72249d3217e9d0",
+        "d89cb4ceebd5966f5745970803f6927a16c24c6fa562a811ac7f6d706ba7d5d1",
+        "2dccd0f2274dad9dab9140e31a2ac64700c389517465f9312e7788b840b2a428",
+        "f066ac0711c700a1fae168858e168678de89fd07af6b61cb084072e4b28e98ae",
+        "7b0570d04bebd9e101e86abd1a9cce8c4c48e336ce1ed41a9b26d41eaa000339",
+        "26b0efa4add77ee57f651d6298349b8d2cdd4cf5d235ed692a6e157c4c566b10",
+        "87c6080d4e2d76e2f351824450421478135420d2cc5c93003f4837efe07da824",
+        "6acece73f118c6b220f373f80b45139389b6f75383d18dfbd6ed7c53d7a1cfd5",
+        "2044a3b1e0ae66d22a64df0778918fc0ffce130cfd22e62f9c7292b958f08d5f",
+        "55f0d9041dc647e97b4d4b5ac6142d00890bb961e28977697fc17ae5e6b303ef",
+        "5c70475406047d97bde917b82b40efea63485730b2b54583d4d16c99c544eeea",
+        "340f9ffcaa08eef3100fb1f03b326bcf7a49969d148fb7667ca2db26bf57672f",
+        "6bd3650eb62a3ff32628490933896478c9a24e6ccd2cdc7e447bf7a4af789110",
+        "4bfa13a79da103ff58dace6cbbf8dec5b31ea187ed5d975d2893d8fdf9bde625",
+        "159c498f5822a37afaba08668a5a30aae4e8cd59ef9d38df88ab9c8d167d342d",
+        "2fe6f0cecaad26b832be7d6af4aebeaf239af313c5a244fc593c7cc362f2dd0c",
+        "602ecc5c4f7afb61c93f43ab09d7e9134f1bfdb06973480ae4a238b87938924c",
+        "0e0ec230cd3578f81969d271043f20151421acef4bf46475bd4d568d7fc08816",
+        "21039e7235f271b68d08c7652e0d1e63d1c30d0b01384aa5547f042ba7af156a",
+        "ae7138c29d4fcdce7588b1be8d3b0748e8d2a69306b9327dfdf721d4344ce490",
+        "6aaf63595e75da3337128b5889e1399e7b3cd803d66312538e97b0b4403d0124",
+        "92a23806a5c27f982cf77c993a59a0f9040be5ff281344f499fa4542e3d23f0d",
+        "be23ef9a4d34e1a0629c7672936741fda6ba5c5f9ef497fe23d121678af5169b",
+        "3e9b3438e4638a01302ee00c29f4c7d9c49554f1d36ae477fc708de3589a710b",
+        "5d0ccce86b2be09269adc85c0c59bb1ba30dc251778f0e2ed26495000b053210",
+        "4a2ba45b7964a5ae07faca48e8dc3350e2ec166bd90a67fddde8074d29e0cd61",
+        "e3f2219f495ebe2de7d64befe6b1f8874c30021b6939b133efde972a3a8728da",
+        "ce785b3f3365fb1435299194b24771742593dbb68d9e4ef25db2034a238204bd",
+        "5ae1eafa2d24690343ec0b3a3c83129a73e3d8a7d76a5de763bb7b1c6b5f041d",
+        "4a8bde2c9b2dd830cbf141cc5bf4a0c31675c72e340aebd42a2899f303294829",
+        "63bc27772b925aba28a8d575d4f544524455d9a4a2cffd84180cd301d5795daf",
+        "ab864405bd58ff4a711944dd0341545e63130a71aab6f316e3e26271a55c5c13",
+        "00fa5ddee27bb9435d0d47966c3a5146ef2883c328879628435a8f19dae4a6cb",
+        "51ac299d9d6e756b926b1890ffee9682c3448dde8b74160d721aab50eb32dc4d",
+        "dedcb412e30961aaae3aa61a1d2785cfcbf256e6b29d9211461e1bb7604503d3",
+        "03a9279513f3e205ac1153a50bb0218289d1ff2480c6bbad24099bd5479ad326",
+        "66cc89674e89708495e40a01af2bc1ba9d83448e9886bac8f6a9e169eb7c2916",
+        "387e4e64779ae50285932152db7bf135bc6277cc558479797f6959e686095b6b",
+        "5bdad2af3e616b7ce62ccf007a8c72f897e53db41a9e363f92254aa7b410f176",
+        "26171ab264a0ed30b1dd963fb603df217f6125f589d0a54f78a1ffc279005945",
+        "f4b1223ed7eb0f60e02c6e1e7a70e551789414127114344e02e721581220a42a",
+        "2a7c097fe0e5286dcf2cca6626e80c2773d23b5d1f888cd6ebcfac4e4407dfae",
+        "ec534162a195b95b4e030fcd984b73d15844c71d826bccd5ce089e41a70bab9a",
+        "2972ebff9df89f61b7d3e9388e4676d0ecc6394933e70ce668b1f50b10377054",
+        "31bc13351717dd00b812aaabb2f3bfd703dcfa5eacbb93d9f9c50ca4ab10a23a",
+        "8e6152654b02a9dd713b30bc8fee81abb9e9c470e8b728358acb803653f7e24f",
+        "aa595b1d1d1c98e6baeedace0a02e427609a09e0c20d6ed079ac958fd29716f8",
+        "f945e5d1faf79641d49a9b4bf6f631812691eeb867da14ab05c066fd272b782e",
+        "50de60b775c323ddfb12425e83d09f8791a37a3cc42d1973776325f7e94b4b84",
+        "753b14b48755a5fdb46a61c34b41c6f6d759d73be643c63b6fdeb66af14cab63",
+        "245a3a8f4301507d059d21e17b112a788aa5ffad93a11834845fdcd76943b938",
+        "8f799112f50ce9d94edc0ff45bb0b8c43536dbf00d06a31e1baceeb7774b4caa",
+        "8986e06bc8d4615774a661bb33b32a8db5be6bd6e567b2b2b0a180935b0f1160",
+        "a48f3ae64bb8ed1756f4c6b525d86d54f994938fe4c3114e7c379692340cd463",
+        "5fcefa85296a11e2ebf96c4893fa1100433e0b439b178fab12dc71e4289c8e90",
+        "822c78a3f8d2d74cf3ee9dbfaf1998eee1a5b87fa49d0bba86f972073c29fe46",
+        "6f4a0feee5b615abe293fd2d1b1b9c9f1e62d7e94cd3ebd867e3e7ab3138e9e1",
+        "85378c1a70bf912f4752c3c0fc3d6f05623c868f8ed2b436c50cf9277e258ff1",
+        "79b992ec77432b7fe352abcfb25e0e414a4ed21d437c4ccbe1686174cc48ddcc",
+        "13d39000e1d44f4d264f0a34bf34da1e1389a7a6ffa72e7f2e45bd371ebbd310",
+        "b392b918325147cacae7b9fe94c59945100b2a7cfa31c25acf7817472bff95c1",
+        "719b7821572118225c75cf3d83adc6c13563e1139bbc2645ad5c9eeecdf675f6",
+        "e4726a3a7ddf68772c7627caf55754134d3f5859b3978b5f746c85709e9d70f0",
+        "f6497e6b7f173949818cc679147022510691b334593db8f0428f0244facd6a80",
+        "82fc2dfc523ff402cb3a123ae8d0690fbe749a86357d7c6975b72d99fd950b59",
+        "5aca86ff3a6d824f158d148bcdd4fd22ad4f14e6d8f38d7a4647df30391c68f9",
+        "2298a33b389fd2390c13ef4f70a6ab308619a9b2a361143aa0df3a4918fbc518",
+        "3c877961ec13195299430660373b2c64afba1b2064416359782f6295abdf5eb9",
+        "fe112e24b886b4c14a0d5d57bd20ed8736a17a11c58def174d40f93a27000d3b",
+        "a21dab9aaa2d39105053fc1fa631d29940954c617fa70a279db0f8d4b544113d",
+        "007fb1add9fd263f704c455105a31526ac2bdfd1ef0278cd9eb9f2c7c2200867",
+        "eb4475db36ac6bb9e99bc741c2509be4746ece7223301a3c4957ba73a95bbcd2",
+        "8bfb58a025edf962ee6090324fd4539143f913f15a2720e67bd31f661c5069ef",
+        "ac71fa317958c0cfa48d8547e04a0ad11c0cd208e8d4dbd1267fdf5ce230f752",
+        "bae84889c8ba5958aebfd4a1a6edfddf4a4d612898f6b4dc2bcfe5031643fbfc",
+        "77334110646db7c4b994516d714a33c5811deacdf213acbed8795047387d2077",
+        "b910ab12da6c00bea90ccec441800f505ece6128d1236b5fd87ecfcafa8a6667",
+        "97ce040e272db10d688f0c75494a67abf8bd49cfd9ac7e08711ced702f311d4e",
+        "c69fe062a053fc60ef7a820d95f103c6c1a78ea2d2dc4a82ff65117d926526c3",
+        "4be3bc5b375696e0875c66c211606d9d270b5e3a4285b37050b0434608710dda",
+        "f2ade41149eadea85d3888ea62b15d11112dbad5eaa6194385ef0efe576464ae",
+        "acfd728a46742e1bce054f859bef64cd957960860280f166a385e3ab2b39de8e",
+        "1e0a674e3bc8e01421eb2ca651f6539f9e56fb6b755f90173dbe84fc8f8425ab",
+        "14eb3973747c8a653bd1e3485e4621d1237d63081c9a60a6e580faafcedf0afd",
+        "288a2bdae3641fd4a665651b99c0661843f685d2cc3b79bfa397ef8a8803dd25",
+        "c7b7ead1f987d2d84eb902480233e2ec00cdcae9f41ca235ef1cdb68f4668a11",
+        "f1a39c5f116bf3d2764717e3d4781d9175226c46843df7da1bf7e55ef33d2af7",
+        "f476520da3830f2c891f28ef06917c95103853234a73dc4fb8b28488bda68dac",
+        "3e1bb1149aced64fc06041631591850baf8879d699780ebb7af5117fd723c356",
+        "b3fe1098b4fbf3bc1a9050cda6e1da55e2c08ae8551164e7b21102c0e9e35761",
+        "1e69d39cc15db3349dcffe3a1c88c3cdd0e7eb22bd3df1a26cfaaa3843fe48a0",
+        "d42868e5af8daf01786c585e1e64c3a772ae602ccad9e8787c81e66c8ca2a2ef",
+        "720ed7c23c9bcccd449722841cdc4136e4d74038b7d19afd04a18ae866e61902",
+        "29f1b6d0a72e46692a22cc4b3a988772365a0869256bf236edfb86c3eb8b0508",
+        "f312af772437c7ea54cf3949ef65c546d1f405266bdb520199416eb5b0722be1",
+        "fb93d48a3f6f34afe789a8fa82e7ff1232a6f78335d685bbe90d5e8948e00e98",
+        "ba146b06de6aea24550f596f666ff578d011af04d98c76b7837fc55a80d6b811",
+        "dccb5c222808f4ab0200596ac030cb88f7f15491110b9d7c637ba4e5b48760dd",
+        "54036ddbc2e35414ed4c3b160096434d84005ce345a9225da5f53fa8a755bf6f",
+        "288f3e5f531b9017934a587f5ea41f633912cac8cf05fb88cd44510e4a496ac8",
+        "ae7eb040992de45a841f7851c3b0050791eaaaf36cb95f003349fe4a0aa52f59",
+        "2eda5cbb00bf0fd2b218e7ab211c2a3e5581c62a761d5a99273deafd6c084c0e",
+        "439d7e1bfb35cf09ea5a1a3e0d75ad33cb3cf89b31a33e883a62fce80e9f4f3d",
+        "b8e372d889330d0b31fa587954df50c1f0db284f022e1cc28141284aa344d189",
+        "b054a671ae313bd352266256b8113b4d1be9f508301a3443b0bbe19c3bcf678d",
+        "bb9b4be4266c22477ce5d67f3398878cec038ade60ee5ced0fe80b84fbc85f7d",
+        "28335c52c232815d67079e9ed156d8fd2fb5d8da874524f52cec8b164eaa7b29",
+        "31db9ee277e2382b53abd284cd288aa1f101bebfa509ec20b1e7e2f519bcaf60",
+        "e092bd756a4eeefd598d89de3ad97dc584a11c24f8cd1e7f338dce371765c82f",
+        "3c24a65f965bc9e2a1cb82907d7b6988a81bfa6b6ed3d0be7ad3ccc2a9433d06",
+        "39dc245d59f567ce497f0fe7fcdf13a8ede25c7772210e6bafb91ca903017845",
+        "82d06d8e3614d52bff013afd86978ef5ddd7c0b12acd9258b9d1d2f855e3936f",
+        "3b5f8e4201a7c55f53483ceb61b8aa705cf4b09a951928879eaa5201510c64b7",
+        "8e84c8089a3e1ad8f83723297dd508ce77f7380bdc1b90248ad96ee39f28f015",
+        "13e24d9f96d7f6c444e9c7e36bd56b45412197027cc8d424676736c6ac3c4766",
+        "ceac1f799efcb8c3fde58efd2a054057b1608c78b240109d0b99e643e317666b",
+        "0ee90c3f87b00a36b36040779cf62fbe6dced2feefe4c1e56463a51fbf8a76cc",
+        "73befc10e9fded30ee73f9be788e12d9ec226a028f38fe462f4976f11daa3f71",
+        "3678b1793b9f9de97e101c9bd6efd1963beccad00114d38206077e3dd9dc6169",
+        "8dd8140d7c80e93c2bac90589a94fa04da26cffdc1c079dd9eb5df038356a781",
+        "71588748d1fa997da44e697ccb18416c63c0e261ddbcc5ed21ae379021f8d734",
+        "fe1df2ae95681944f1b2a2ba6f2167c1dd5a1caad4e5343edee79ff28b36604f",
+        "5a4c2b7b10220a8557a60925f6d84a0a7756b2cf5ec1c575e75f29fed0fd1c9b",
+        "ca31eeb74c4e6fffa6bb17b1e80bd9d143605f7481b8148f36e2587df691dbe8",
+        "dacca80fce4f1faf13677f6a1ad86294f9086538bc25c69212e696491d73ba76",
+        "049476c87d3706d2fc77392f023d51e41c46baa677ff8715afc5b0e56d83cc6e",
+        "cda442aab8428140f0eef21108294df0c108ce98da6ad661de8b3d19a3b5387b",
+        "3efbf5a438eecc3b5ff5d850b89c135c686cd53b1bc543760df5d088c02127fc",
+        "c57de25bc488ae315ccdb975b1e695191b6ba7a97ed98090df723eb60151e395",
+        "412b28fe89665d3c47e2e04ebcc7727b55e5a7115765f7a08711b8999a47ab9d",
+        "35be8187dcf0aaae98f21eb4a3ef8179429f9ac0e69f5382759a20bbfbfe7fde",
+        "68f40f6b7d6fb2b87275f00da8dfe0fe176d6a0c8080355f92fe97624bd8bcc6",
+        "4bf28d4936a7b526b8a3eba1c8816f68941639d697d211d48021515bea6509fd",
+        "8c2a41496c14fcbefe1b1a73b4dc7cee6f8d42ead9d19d6f4962949c2d59c456",
+        "d31f02ab353d3bc86be2db2889ac5a07fe3f30ebe050be29a29a549629c82b5c",
+        "164524ac6510c6469463b7531c0385693a97cf033f89f44223b8daa22420426d",
+        "dc5cdf800acf669680ca34663f4894219221708914a0c21c0360c0e74de73a95",
+        "a4d4d9ce67eee1774232dfc6ce03d282b9d85437481f95f7bc5b9cce70884bfa",
+        "583806fb0192f6bdce05a81745617d5163c858d2241ddc71818f26588aeb1d9c",
+        "81f3a81132d7d38c4e3519611d359439e1e7f8f9777d422a8197e2c7a58edc58",
+        "064f2a39b8820925ee0b1dba4e6e8435e73d69fbb30272e3f6143527252fcf1f",
+        "6253cf075c13d6f29b312447675f72d9c95283fe814e2469d1602161824effa6",
+        "7b7ead0c74f6ce0afc289cc7a3b6934bc5736803b82d0064a6ffcd844520988f",
+        "46e2da6e940e3513daac9f88c5cf0725f17666a251cf94ae455d240abe4e2a2c",
+        "9b855b89d0e0ef798d1d0b79e755030ce9a05c8a32c4c9c4bcef8637325527e2",
+        "ac7a97a9f0ec3068dfb9cf4772486f7221e79990dc147973d9d8163f31f4e0e5",
+        "13f6b8957081de21f776d532cba41baa00548804647b8342754190418fd8973d",
+        "94ee8b0b6fdd8667750715c2730a3d951ceb81993140f7b8714af6fbf17bb576",
+        "738abcdbc05fb774b9bb5c296623e9e33f674ad1b925b34b0d171f355a1fc6a0"
+      ],
+      "sample_ids_sha256": "504ffe4b2eea2ddb67af3d178c764a55fc794a35e63e2936509cf76401df62ee",
+      "without_grad": [
+        "norm.bias",
+        "norm.weight"
+      ]
+    }
+  },
+  "storage": {
+    "exec_config": "configs/execution/m5_gpu_3090.yaml",
+    "exec_config_sha256": "c9d22abf1b5e284593bfed21500e8113df7f14ff564b7434e3eda43cb7e7eb70",
+    "faces_256_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256",
+    "runtime_root": "/home/student20261/workdir/GPAT_TransferBench_runtime"
+  },
+  "synthetic_bank": false,
+  "upstream_training_semantics": {
+    "construction": {
+      "resnet18 = resnet18()": 15,
+      "resnet18 = resnet18.cuda()": 17,
+      "resnet18.fc = nn.Linear(512, 17)": 16
+    },
+    "criterion": {
+      "arguments": "NONE (mean reduction, no weight, no label smoothing)",
+      "line": 28,
+      "statement": "nn.CrossEntropyLoss()"
+    },
+    "epochs": 200,
+    "file": "models/pretrain_classifier.py",
+    "gradient_clipping": "NONE",
+    "imported_or_executed": false,
+    "loader": {
+      "batch_size": 256,
+      "drop_last": true,
+      "line": 26,
+      "num_workers": 6,
+      "shuffle": true
+    },
+    "mode_calls": [],
+    "mode_semantics": "no .train()/.eval() anywhere; torch.nn.Module defaults to training=True, so BatchNorm2d uses batch statistics and updates running stats",
+    "optimizer": {
+      "class": "optim.SGD",
+      "constructed_after_fc_replacement_and_cuda": true,
+      "hyperparameters": {
+        "lr": 0.002,
+        "momentum": 0.9,
+        "weight_decay": 0.005
+      },
+      "line": 27,
+      "params": "resnet18.parameters()",
+      "statement": "optimizer = optim.SGD(resnet18.parameters(), lr=0.002, momentum=0.9, weight_decay=0.005)"
+    },
+    "precision_controls": [],
+    "precision_semantics": "NONE_EXPLICIT: no autocast, GradScaler, TF32 flag, dtype cast or cudnn flag; FP32 parameters under library defaults",
+    "scheduler": "NONE",
+    "sha256": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+    "step_order": {
+      "_, _, _, outputs = resnet18(inputs)": 37,
+      "loss = loss_asym": 39,
+      "loss.backward()": 40,
+      "loss_asym = criteria(outputs, labels)": 38,
+      "optimizer.step()": 41,
+      "optimizer.zero_grad()": 36
+    },
+    "torch_save_calls_in_script": 1
+  },
+  "warnings": []
+}
