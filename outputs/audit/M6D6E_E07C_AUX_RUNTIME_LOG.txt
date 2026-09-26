@@ -1,0 +1,140 @@
+M6D6E E07C RUNTIME LOG — auxiliary-encoder production runner + real TRAIN path + exact B=256 bounded qualification
+All times UTC 2026-09-26. Laptop /home/cong/GPAT_TransferBench; GPU student20261@100.121.84.44.
+Log written with a file-writing tool (no shell here-document; no evaluation of prose).
+QUALIFICATION_ONLY · qualification_seed 60605 · AUTHORIZED REAL TRAIN ACCESS · no VAL · no TEST · no scientific run
+
+== A1. Authority (explicit git metadata commands)
+laptop: git branch --show-current -> m6-baselines; git rev-parse HEAD -> 9bfb8dc0fc1e1a4be7ea7f1d4c788b6d2dbbd00f;
+        git status --short -> (empty); git ls-remote origin refs/heads/m6-baselines -> 9bfb8dc0fc1e1a4be7ea7f1d4c788b6d2dbbd00f
+GPU before: branch m6-baselines; HEAD e70c221464b4a2db4ea3d45176a0cee52a7747cf (M6D6d parent); status lines 0
+GPU sync:   git fetch origin (e70c221..9bfb8dc); git merge-base --is-ancestor HEAD origin/m6-baselines -> ANCESTOR_OK;
+            git merge --ff-only origin/m6-baselines -> Fast-forward e70c221..9bfb8dc (M6D6d commit)
+GPU after:  HEAD 9bfb8dc0fc1e1a4be7ea7f1d4c788b6d2dbbd00f; status lines 0. No reset, clean, rebase or forced checkout.
+
+== A2. Authority read (explicit paths only)
+spec docx f7d23716… (8.7: repository is the architecture/config source of truth); method config dba34a92…;
+frozen difffas_bin_idfree_v1 aa9e9841…; A1 03828716…; A2 b4fa7bfa…; A3 b1245153… (5.3 K7 substitute, 5.4 training
+contract, 5.4b seed 42 / one run); A6 doc 759f72d8… / overlay dd3f29aa…; A7 doc 0a46c3b0… / overlay 3e4c758c…;
+run_logging_v1 d3362294…; e07c.lock.json 0c909de1…; e07c.runtime.json 0855943b…; exec config m5_gpu_3090 c9d22abf….
+Code read: encoder, contract, source, seed_adapter, runtime_qualification, aux_training_qualification, aux_checkpoint,
+aux_checkpoint_qualification, execution_policy, execution_policy_qualification; E06c M6D5e runner/runner_io/
+runner_qualification/run_e06c (infrastructure precedent only).
+Pinned models/pretrain_classifier.py 3444691f… re-derived: resnet18(); fc=Linear(512,17); .cuda(); Resize((256,256))
+-> ToTensor -> Normalize(0.5,0.5); ImageFolder; DataLoader(batch_size=256, shuffle=True, num_workers=6, drop_last=True);
+SGD(lr=0.002, momentum=0.9, weight_decay=5e-3); CrossEntropyLoss(); 200 epochs; zero_grad -> 4th output -> CE ->
+backward -> step; running_loss += loss.item()*inputs.size(0); rus = running_loss/len(train_dataset);
+torch.save(resnet18, './PADISI.pkl') after every epoch. A3 changes only K=7 / TRAIN source / seed 42 / one run.
+
+== A3. Split schema and population (DISCLOSED AUTHORIZED TRAIN METADATA READS)
+laptop: pyarrow.parquet.ParquetFile(manifests/split_v1.parquet) footer read once for the schema (14 columns:
+        sample_id dataset subject_id_global video_id frame_index label_binary attack_raw attack_macro split sha256
+        sha256_kind content_group_id allocation_group_id m2_status; 20615 rows in 1 row group). No row payload.
+laptop: aux_runner_io.read_train_population() run once during development (TRAIN filter, allowlisted columns) ->
+        14467 TRAIN rows; live 5629 makeup 759 mask_2d 96 mask_3d 1056 partial 1911 print 2838 replay 2178; other_spoof 0;
+        casia_fasd 3360 msu_mfsd 1600 siwmv2 9507; population_order_sha256 c890ed8d1287f581….
+        The same reader is exercised by the focused tests (section A8, counted there).
+Canonical face path convention re-derived: gpatbench/probe/data.py ProbeDataset.face_path and
+methods/dsdg/runner_io.py CanonicalFaceReader -> <faces_256_root>/<dataset>/<sample_id>.png, stored by
+gpatbench/preprocess/contracts.py::encode_png_rgb as RGB PNG. faces_256_root via configs/execution/m5_gpu_3090.yaml
+through m2b.resolve_roots (containment). GPU faces: casia_fasd 4800, msu_mfsd 2240, siwmv2 13575 files (ls count only).
+manifests/difffas_bin_idfree_train_v1.parquet (8838-row MAIN relation): never opened.
+No VAL or TEST row was materialized in Python on either host; no canonical face was opened on the laptop.
+
+== A4. Pre-run read-only environment / protected-environment / source verification (GPU)
+(existing M6D6a-r verifier r_verify_env.sh 0085caa0dbdfe007dea3a1d3a1903a89c8029cb78fec484f43efc793ef4620ad)
+conda_explicit 2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864 (= lock)
+pip_freeze_all 42cebd80a0df9986b33fb09486f6dc619dd3695b1cbe0978cc67062cba9ea285 (= lock)
+python_sha256 83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe (= lock identity)
+pip check: No broken requirements found.  protected environments: PROTECTED_UNCHANGED
+pinned source 23f40519ec25a833ebc06842aa6fbab74fad4d15 tree d190a5fb4a94cb9e423215f9a24a7863aa17ea65 status_lines 0;
+26 explicit source-file hashes printed. runs root: RUNS_ABSENT. m6d6e build: ABSENT. qualification/m6d6e: ABSENT.
+No package installed, updated or removed.
+
+== A5. Staging (untracked on the GPU, byte-identical laptop == GPU; removed after the session)
+a8a28439c0ff88de5cd2cb2d6da32424dc723aac44908fe95cc2d87b9a342943  methods/difffas/aux_runner_io.py
+49635cb83bd3fb264f295d7444b6080f992110d4cbf16bc244b38e95496e0eb5  methods/difffas/aux_runner.py
+a09749a11172ce8310700653605d5402efbe28346c0449280e52a61819d7d814  methods/difffas/aux_runner_qualification.py (final)
+d4aaf2785c2a48bf16c2fefaf7768be0d540f6ad9c600b76e11cf2c6c81bce61  tools/run_e07c_aux.py
+09c0af7e79aeb3acda3e188f7a2a9d94f6d0401485a061d46767ab1c71069ae6  configs/amendments/e07c_m6d6e_aux_production_runner_contract.yaml
+6d614aaa60cffa53b2157818ddc943b3e5591c8f7e857b13cfbe2d72416a6b55  <build>/m6d6e/run_m6d6e.sh (outside Git; final)
+Unchanged committed modules imported: aux_checkpoint.py a794eac2…, execution_policy.py 2a25f68a…, encoder.py 83a5146f…,
+runtime_qualification.py 1eeb7c03…, aux_training_qualification.py 2377dfba….
+Launch env: CUDA_VISIBLE_DEVICES=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 NVIDIA_TF32_OVERRIDE=0
+            CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONHASHSEED=60605 TMPDIR=/tmp/gpat-m6d6e (= lock launch env except seed/TMPDIR;
+            short TMPDIR for DataLoader AF_UNIX sockets, as M6D5e-r)
+
+== A6. Development attempts (SUPERSEDED, retained, not deleted; every process reported separately)
+Harness 0f801d29747c5f6269b901494cedc72e279b9309f51a0a6127767c137504d2e0 (initial), launcher 313fe2c3… then 6d614aaa….
+S1 b256 process 1   08:47:31-08:47:39  PASS. loss 0x1.27fb600000000p+1; params-after 0131ccb2ba3db839…; first batch
+                    37b59ee59a93df7a…; TRAIN face opens 3329 (13 prefetched batches x 256 + 1 transform check); denied 0.
+S2 b256 process 2   08:48:03-08:48:11  PASS, bitwise equal to S1; TRAIN face opens 3329; denied 0; probe removed.
+S3 epoch attempt 1  08:48:21-08:48:24  ABORTED BEFORE ANY STEP. Firewall denied os.mkdir of the approved parent
+                    <runtime_root>/qualification/m6d6e (write root is its child .../E07c_aux). TRAIN face opens 0;
+                    split manifest 2 SHA opens + class map 2; optimizer steps 0; no qualification directory created.
+                    Fix: the launcher pre-creates qualification/m6d6e/E07c_aux outside the audited process (harness unchanged).
+S4 epoch attempt 2  08:49:02-08:50:22  FULL EPOCH EXECUTED (56 steps, source epoch loss 1.4209, order 76e887fe…, checkpoint
+                    185136819 B ad124c5246ae220a…, reloaded, removed) but the final gate failed: fw.denied held one
+                    subprocess denial swallowed by the stdlib — platform.platform() (aux_runner.environment_record, run
+                    manifest) spawns `uname -p` (platform._Processor), which the subprocess allowlist did not include.
+                    Confirmed by a data-free probe: platform.platform() -> subprocess.Popen ['uname', '-p'].
+                    Benchmark access of S4: TRAIN face opens 14336 (= consumed), split 2, class map 2, benchmark denials 0.
+                    Fix: exact argv ['uname', '-p'] added to the harness allowlist (analogous to M6D6a's ['/sbin/ldconfig','-p']);
+                    harness -> a09749a1…. No other change.
+Retention: <build>/m6d6e/superseded_attempts/ (10 files: 4 logs, 4 access logs, 2 B256 JSON);
+           <runtime_root>/qualification/m6d6e/E07c_aux_superseded/attempt2-q60605-8473ee804f8bc698 (+ its lock file),
+           moved aside because seed 60605 + commit 9bfb8dc reproduce the same run id. Its checkpoint bytes were already removed.
+All three authoritative processes below were re-run with the single final harness.
+
+== A7. Authoritative processes (final harness a09749a1…; qualification_seed 60605)
+== b256_1 start 2026-09-26T08:52:17Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+weight_suffix_files_m6d6e_before: build=0 qualification=0
+254 MiB, 24576 MiB
+{"status": "PASS", "output": "<build>/m6d6e/M6D6E_E07C_AUX_B256_PROCESS_1.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+weight_suffix_files_m6d6e_after: build=1 qualification=0     (the repeatability probe, removed by process 2)
+source_cache_status: []
+== b256_1 end 2026-09-26T08:52:24Z
+== b256_2 start 2026-09-26T08:52:26Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+{"status": "PASS", "output": "<build>/m6d6e/M6D6E_E07C_AUX_B256_PROCESS_2.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+weight_suffix_files_m6d6e_after: build=0 qualification=0
+source_cache_status: []
+== b256_2 end 2026-09-26T08:52:34Z
+== epoch start 2026-09-26T08:52:35Z
+scientific_paths_before: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+Epoch: 1/200
+	 Training: Loss: 1.4209
+{"status": "PASS", "output": "<build>/m6d6e/M6D6E_E07C_AUX_ONE_EPOCH.json"}
+exit=0
+scientific_paths_after: runs=ABSENT e07c_root=ABSENT aux_seed_42=ABSENT encoder_final=ABSENT
+weight_suffix_files_m6d6e_after: build=0 qualification=0
+source_cache_status: []
+== epoch end 2026-09-26T08:53:55Z
+Every process: gpu_repo_status = exactly the 5 staged untracked M6D6e files; GPU memory used before/after 254 MiB.
+Evidence SHA256 (GPU == laptop copy):
+a653055a241c6025e5955f2390e6cfde956580a9001e26a70ee24a62cfa166d5  M6D6E_E07C_AUX_B256_PROCESS_1.json
+391406984821818fac08597d89ee634c49bd97a965dde6929385c93cf6093b9f  M6D6E_E07C_AUX_B256_PROCESS_2.json
+fb7adaa5bebf2d62828dbb95a2af375dcf0de43cb1c649a02809f299e023d7a6  M6D6E_E07C_AUX_ONE_EPOCH.json
+Access logs (retained on the GPU; SHA256 also inside each JSON):
+abad186d23e81cde2dc746e524021d909e6364c803f897a4857e80823db51e22  M6D6E_E07C_AUX_ACCESS_b256_1.tsv (3333 lines)
+7b584d2f3d9efb2a443f8da0751e022064f256074012eda359bab457faba3e6f  M6D6E_E07C_AUX_ACCESS_b256_2.tsv (3333 lines)
+5f8d3d9bf035638efb35f1512b4b4bc8d628127d87aeee19215de165574aa105  M6D6E_E07C_AUX_ACCESS_epoch.tsv (14340 lines)
+Qualification run root: <runtime_root>/qualification/m6d6e/E07c_aux/q60605-8473ee804f8bc698 (run_logging_v1 files,
+metrics.jsonl 56 step records + 3 events; checkpoints/ empty after the checkpoint bytes were removed).
+
+== A8. Session TRAIN access per process (never combined)
+process                    TRAIN faces  distinct  split SHA opens  pyarrow calls  class map  VAL/TEST img  denied
+S1 b256_1 (superseded)     3329         3328      2                3              2          0 / 0         0
+S2 b256_2 (superseded)     3329         3328      2                3              2          0 / 0         0
+S3 epoch att.1 (aborted)   0            0         2                3              2          0 / 0         1 (mkdir, non-data)
+S4 epoch att.2 (supers.)   14336        14336     2                3              2          0 / 0         1 (uname -p, non-data)
+A1 b256_1                  3329         3328      2                3              2          0 / 0         0
+A2 b256_2                  3329         3328      2                3              2          0 / 0         0
+A3 epoch                   14336        14336     2                3              2          0 / 0         0
+B256 processes: 3328 = 13 batches x 256 prefetched by 6 workers (prefetch_factor 2) before the iterator was shut down,
+only batch 1 consumed; +1 = main-process transform check of batch row 0 (the only face read twice).
+Epoch process: faces opened == the 14336 consumed samples exactly; 131 dropped samples never opened.

@@ -1,0 +1,2256 @@
+{
+  "TEST_access": false,
+  "VAL_access": false,
+  "a7": {
+    "document": {
+      "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A7_E07c_Execution_Policy.md",
+      "sha256": "0a46c3b06e277ad38b17a6e85fe2924441d8d13b1de887bf54903dda9aa292ba"
+    },
+    "overlay_sha256": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3"
+  },
+  "access_summary": {
+    "TEST_image_reads": 0,
+    "TEST_rows_exposed_to_dataset": 0,
+    "TRAIN_canonical_image_reads": 3329,
+    "TRAIN_canonical_images_distinct": 3328,
+    "TRAIN_rows_exposed_to_dataset": 14467,
+    "VAL_image_reads": 0,
+    "VAL_rows_exposed_to_dataset": 0,
+    "class_map_reads": 2,
+    "class_map_reads_note": "one read by aux_runner_io.load_contract (bound SHA256), one by read_class_map",
+    "firewall_denials": 0,
+    "raw_dataset_image_reads": 0,
+    "split_manifest_physical_reads": {
+      "pyarrow_api_calls": 3,
+      "pyarrow_note": "native opens (footer + allowlisted column chunks of the single all-split row group); filtered in C++",
+      "python_sha256_open": 2
+    },
+    "split_manifest_python_opens_note": "SHA256 only: one by aux_runner_io.load_contract (bound input), one by read_train_population before parsing",
+    "unauthorized_manifest_reads": 0
+  },
+  "authorized_TRAIN_access": true,
+  "auxiliary_encoder_training_seed": null,
+  "benchmark_access_audit": {
+    "TEST_image_reads": 0,
+    "VAL_image_reads": 0,
+    "class_map_python_opens": 2,
+    "counts_by_category": {
+      "CLASS_MAP": 2,
+      "FACES_ENUMERATION_OR_WRITE": 0,
+      "FOREIGN_WEIGHT": 0,
+      "NON_TRAIN_FACE": 0,
+      "OTHER_BENCHMARK_DATA": 0,
+      "OTHER_MANIFEST": 0,
+      "SCIENTIFIC_RUN_ROOT": 0,
+      "SPLIT_MANIFEST": 2,
+      "TRAIN_FACE": 3329
+    },
+    "denied_events": 0,
+    "events_logged": 3333,
+    "faces_enumeration_or_write": 0,
+    "foreign_weight_accesses": 0,
+    "image_access_note": "Every canonical face path is classified against the 14467-row TRAIN population. VAL/TEST image reads are bounded above by the non-TRAIN face accesses, which must be 0; raw benchmark images live under <runtime_root>/data (OTHER_BENCHMARK_DATA), which must be 0.",
+    "log": "M6D6E_E07C_AUX_ACCESS_b256_1.tsv",
+    "log_sha256": "abad186d23e81cde2dc746e524021d909e6364c803f897a4857e80823db51e22",
+    "non_train_face_accesses": 0,
+    "processes_logged": 7,
+    "raw_or_other_benchmark_data_accesses": 0,
+    "scientific_run_root_accesses": 0,
+    "split_manifest_python_opens": 2,
+    "train_face_opens": 3329,
+    "train_faces_all_in_population": true,
+    "train_faces_distinct": 3328,
+    "train_faces_max_opens_per_face": 2,
+    "unauthorized_manifest_accesses": 0
+  },
+  "components": {
+    "criterion": {
+      "class": "torch.nn.CrossEntropyLoss",
+      "label_smoothing": 0.0,
+      "reduction": "mean",
+      "weight": null
+    },
+    "loader": {
+      "batch_sampler": "BatchSampler(256, drop_last=True)",
+      "batch_size": 256,
+      "class_balancing": false,
+      "consumed_per_epoch": 14336,
+      "drop_last": true,
+      "dropped_per_epoch": 131,
+      "generator": null,
+      "len_batches": 56,
+      "num_workers": 6,
+      "persistent_workers": false,
+      "pin_memory": false,
+      "prefetch_factor": 2,
+      "replacement": false,
+      "rows": 14467,
+      "sampler": "RandomSampler(replacement=False, generator=None)",
+      "shuffle": true,
+      "weighted_sampling": false,
+      "worker_init_fn": null
+    },
+    "model": {
+      "class": "custom_rn.ResNet",
+      "device": "cuda:0",
+      "disconnected_parameters": [
+        "norm.bias",
+        "norm.weight"
+      ],
+      "fc": [
+        512,
+        7
+      ],
+      "parameter_tensors": 112,
+      "parameters": 46233707,
+      "training": true
+    },
+    "optimizer": {
+      "class": "torch.optim.SGD",
+      "dampening": 0,
+      "lr": 0.002,
+      "momentum": 0.9,
+      "nesterov": false,
+      "param_groups": 1,
+      "parameter_tensors": 112,
+      "parameters": 46233707,
+      "scheduler": "NONE",
+      "weight_decay": 0.005
+    },
+    "transform": {
+      "augmentation": "NONE",
+      "random_transforms": 0,
+      "resize_antialias": true,
+      "resize_interpolation": "InterpolationMode.BILINEAR",
+      "steps": [
+        "Resize(size=(256, 256), interpolation=bilinear, max_size=None, antialias=True)",
+        "ToTensor()",
+        "Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])"
+      ]
+    }
+  },
+  "contract": {
+    "authoritative_generation_tensor_set": "model",
+    "auxiliary_objective_classes": [
+      "live",
+      "makeup",
+      "mask_2d",
+      "mask_3d",
+      "partial",
+      "print",
+      "replay"
+    ],
+    "auxiliary_runs": 1,
+    "auxiliary_seed": 42,
+    "auxiliary_training_contract": {
+      "augmentation": "NONE",
+      "batch_size": 256,
+      "benchmark_defined_additions": [
+        "K7_label_space",
+        "TRAIN_data_source",
+        "auxiliary_encoder_training_seed",
+        "auxiliary_encoder_training_runs"
+      ],
+      "checkpoint_rule": "FINAL_STATE_AFTER_EPOCH_200",
+      "checkpoint_rule_source": "OFFICIAL \u2014 torch.save overwrites in-loop, so the surviving file IS the final epoch's",
+      "class_balancing": "NONE",
+      "class_balancing_note": "official code has none; adding it would be a benchmark invention",
+      "drop_last": true,
+      "epochs": 200,
+      "head": "fc = nn.Linear(512, 7)",
+      "input_resolution": 256,
+      "learning_rate": 0.002,
+      "loss": "CrossEntropyLoss_on_fourth_forward_output",
+      "momentum": 0.9,
+      "optimizer": "SGD",
+      "preprocessing": "Resize((256,256)) -> ToTensor -> Normalize([0.5]*3, [0.5]*3)",
+      "scheduler": "NONE",
+      "shuffle": true,
+      "weight_decay": 0.005,
+      "workers": 6
+    },
+    "checkpoint_rule": "BASELINE_FINAL_STATE_V1",
+    "contract_inspection": "STATIC_ONLY_NOT_EXECUTED",
+    "deviation": "DEV-021",
+    "diffusion": {
+      "linear_end": 0.02,
+      "linear_start": 0.0001,
+      "model_mean_type": "EPSILON",
+      "n_timestep": 1000,
+      "schedule": "linear",
+      "variance": "LEARNED_RANGE"
+    },
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "feature_interface_effective_A6_HWC": {
+      "embg": [
+        "B",
+        7
+      ],
+      "x16x16": [
+        16,
+        16,
+        512
+      ],
+      "x32x32": [
+        32,
+        32,
+        256
+      ],
+      "x8x8": [
+        8,
+        8,
+        512
+      ]
+    },
+    "feature_interface_historical_frozen_HWC": {
+      "embg": [
+        "B",
+        "K"
+      ],
+      "x16x16": [
+        16,
+        16,
+        256
+      ],
+      "x32x32": [
+        32,
+        32,
+        128
+      ],
+      "x8x8": [
+        8,
+        8,
+        512
+      ]
+    },
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "main_training": {
+      "batch_size": 4,
+      "guidance_prob": 0.2,
+      "input_resolution": 256,
+      "max_epochs": 400,
+      "means_size": 5,
+      "model_in_channels": 3,
+      "use_pair": false,
+      "var_size": 3
+    },
+    "optimizer": {
+      "ema": {
+        "before_warmup": 0.0,
+        "decay": 0.9999
+      },
+      "learning_rate": 1e-05,
+      "name": "AdamW",
+      "scheduler": {
+        "decay": [
+          "linear",
+          "flat"
+        ],
+        "lr": 1e-05,
+        "n_iter": 2400000,
+        "type": "cycle",
+        "warmup": 5000
+      }
+    },
+    "reused_for_main_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "sampler": {
+      "DDIM_skip": 10,
+      "algorithm": "ddim",
+      "cond_scale": 2.0,
+      "effective_steps": 25,
+      "entrypoint": "FAS_sample.py",
+      "sample_initial_noise": 250,
+      "tensor_set_loaded": "model"
+    },
+    "sampler_timesteps_ascending": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240
+    ]
+  },
+  "contract_path": "configs/amendments/e07c_m6d6e_aux_production_runner_contract.yaml",
+  "counters": {
+    "activation_checkpoint_calls": 0,
+    "autocast_entries": 0,
+    "autograd_backward_calls": 1,
+    "autograd_grad_calls": 0,
+    "backward_calls": 1,
+    "grad_clipping_calls": 0,
+    "grad_scaler_constructions": 0,
+    "other_optimizer_step_calls": 0,
+    "scheduler_constructions": 0,
+    "sgd_step_calls": 1,
+    "torch_load_calls": 0,
+    "torch_save_calls": 1,
+    "zero_grad_calls": 1,
+    "zero_grad_set_to_none_values": [
+      true
+    ]
+  },
+  "cuda_mem_get_info_before": {
+    "free_bytes": 24755306496,
+    "total_bytes": 25294995456
+  },
+  "downstream_evaluation": false,
+  "ended_utc": "2026-09-26T08:52:24Z",
+  "environment_after": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60605",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/tmp/gpat-m6d6e"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "environment_before": {
+    "compiler": "NOT_USED: no extension build; pinned DiffFAS uses standard torch.nn/functional operators only",
+    "cuda": "13.0",
+    "cuda_device_count": 1,
+    "cudnn": 92000,
+    "executable": "/home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_name": "NVIDIA GeForce RTX 3090",
+    "launch_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0",
+      "NVIDIA_TF32_OVERRIDE": "0",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "60605",
+      "PYTHONNOUSERSITE": "1",
+      "TMPDIR": "/tmp/gpat-m6d6e"
+    },
+    "numpy": "2.4.6",
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.3",
+      "PyYAML": "6.0.3",
+      "Pygments": "2.21.0",
+      "boto3": "1.23.10",
+      "botocore": "1.26.10",
+      "commonmark": "0.9.1",
+      "cuda-bindings": "13.3.1",
+      "cuda-pathfinder": "1.6.0",
+      "cuda-toolkit": "13.0.2",
+      "filelock": "3.32.3",
+      "fsspec": "2026.7.0",
+      "iniconfig": "2.3.0",
+      "jmespath": "0.10.0",
+      "mpmath": "1.3.0",
+      "networkx": "3.6.1",
+      "numpy": "2.4.6",
+      "nvidia-cublas": "13.1.1.3",
+      "nvidia-cuda-cupti": "13.0.85",
+      "nvidia-cuda-nvrtc": "13.0.88",
+      "nvidia-cuda-runtime": "13.0.96",
+      "nvidia-cudnn-cu13": "9.20.0.48",
+      "nvidia-cufft": "12.0.0.61",
+      "nvidia-cufile": "1.15.1.6",
+      "nvidia-curand": "10.4.0.35",
+      "nvidia-cusolver": "12.0.4.66",
+      "nvidia-cusparse": "12.6.3.3",
+      "nvidia-cusparselt-cu13": "0.8.1",
+      "nvidia-nccl-cu13": "2.29.7",
+      "nvidia-nvjitlink": "13.0.88",
+      "nvidia-nvshmem-cu13": "3.4.5",
+      "nvidia-nvtx": "13.0.85",
+      "opencv-python-headless": "5.0.0.93",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pillow": "12.3.0",
+      "pip": "26.2.1",
+      "pluggy": "1.6.0",
+      "pyarrow": "25.0.1",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "rich": "12.6.0",
+      "s3transfer": "0.5.2",
+      "setuptools": "78.1.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "tqdm": "4.62.3",
+      "triton": "3.7.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "1.26.16",
+      "wheel": "0.48.0"
+    },
+    "precision": {
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "deterministic_algorithms_forced": false,
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    },
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "python_sha256": "83c01e86263e15b17fc5c526795d593784f7c20036b63b3c8c31f3b608028afe",
+    "runtime_packages": {
+      "boto3": "1.23.10",
+      "opencv-python-headless": "5.0.0.93",
+      "pillow": "12.3.0",
+      "pydantic": "1.9.2",
+      "pyhocon": "0.3.60",
+      "pyparsing": "3.1.0",
+      "rich": "12.6.0",
+      "scipy": null,
+      "tabulate": "0.8.10",
+      "tensorfn": "0.1.28",
+      "termcolor": "1.1.0",
+      "tqdm": "4.62.3"
+    },
+    "scipy_note": "not installed: absent from the pinned source import closure (no scipy import in any DiffFAS file)",
+    "torch": "2.12.1+cu130",
+    "torch_load_weights_only_default": "None",
+    "torchvision": "0.27.1+cu130"
+  },
+  "executable_semantics": {
+    "block": "BasicBlock",
+    "fourth_output_discarded": true,
+    "sampler_tensor_set": "model",
+    "symbols": [
+      {
+        "file": "FAS_train.py",
+        "line": 167,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "seed_torch"
+      },
+      {
+        "file": "FAS_train.py",
+        "line": 28,
+        "sha256": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+        "symbol": "train"
+      },
+      {
+        "file": "FAS_sample.py",
+        "line": 32,
+        "sha256": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+        "symbol": "main"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 797,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "GaussianDiffusion.training_losses"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 977,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "create_gaussian_diffusion"
+      },
+      {
+        "file": "diffusion.py",
+        "line": 47,
+        "sha256": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+        "symbol": "ddim_steps"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 367,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "resnet18"
+      },
+      {
+        "file": "models/custom_rn.py",
+        "line": 329,
+        "sha256": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+        "symbol": "ResNet._forward_impl"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 138,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.forward"
+      },
+      {
+        "file": "models/unet_autoenc.py",
+        "line": 73,
+        "sha256": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963",
+        "symbol": "BeatGANsAutoencModel.encoder"
+      }
+    ],
+    "topology": [
+      3,
+      4,
+      6,
+      3
+    ],
+    "training_content_inert": true
+  },
+  "experiment_seed": null,
+  "fidelity": "CONTROLLED_ADAPTATION",
+  "firewall": {
+    "denied": [],
+    "event_counts": {
+      "open": 2793,
+      "os.listdir": 310,
+      "os.mkdir": 1,
+      "os.remove": 1,
+      "os.rename": 0,
+      "os.rmdir": 0,
+      "os.scandir": 408,
+      "shutil.rmtree": 0,
+      "subprocess.Popen": 123
+    },
+    "face_opens_in_main_process": 1,
+    "manifest_opens_python": {
+      "CLASS_MAP": 2,
+      "SPLIT_MANIFEST": 2
+    },
+    "note": "DataLoader worker processes inherit this hook (fork); their face opens are in the access log. pyarrow opens the split manifest natively after the audited Python SHA256 open; its API calls are recorded separately (pyarrow_calls).",
+    "subprocesses": [
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=memory.used,memory.total",
+        "--format=csv,noheader,nounits"
+      ],
+      [
+        "nvidia-smi",
+        "--query-compute-apps=pid,used_memory",
+        "--format=csv,noheader,nounits"
+      ],
+      [
+        "/sbin/ldconfig",
+        "-p"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench",
+        "show"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "remote"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "ls-tree"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "status"
+      ],
+      [
+        "git",
+        "-C",
+        "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+        "rev-parse"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,uuid",
+        "--format=csv,noheader"
+      ],
+      [
+        "nvidia-smi",
+        "--query-gpu=memory.used,memory.total",
+        "--format=csv,noheader,nounits"
+      ],
+      [
+        "nvidia-smi",
+        "--query-compute-apps=pid,used_memory",
+        "--format=csv,noheader,nounits"
+      ]
+    ]
+  },
+  "first_batch": {
+    "class_histogram": [
+      113,
+      12,
+      3,
+      25,
+      22,
+      50,
+      31
+    ],
+    "class_histogram_named": {
+      "live": 113,
+      "makeup": 12,
+      "mask_2d": 3,
+      "mask_3d": 25,
+      "partial": 22,
+      "print": 50,
+      "replay": 31
+    },
+    "indices_sha256": "c565d7b74fd20c87c567b4fbb0f9807e43c5e0c84d07b4ee118820dc0af22718",
+    "input": {
+      "dtype": "torch.float32",
+      "max": 1.0,
+      "mean": -0.18720744634504052,
+      "min": -1.0,
+      "sha256": "41e9ed7288c31509d08826a1837bac52059e08be16c379e8d4aeea7112ac0830",
+      "shape": [
+        256,
+        3,
+        256,
+        256
+      ],
+      "within_minus1_plus1": true
+    },
+    "sample_ids": [
+      "8a3a999a74453aa151ff50d4d25bfe6bd104e749f4e234bbe3efdaf5a6227fb4",
+      "93b9560f54099947257036a6213cf6909e09ca1ac1315e2c84431ee313737d6f",
+      "2017f94c10facfa7902c4d6fc90e59abfbe1b0f41aac5ab1715c58fb69711b4d",
+      "8cde79691a3eb25c0bae1e3a3175c95ec3cf2bb7a1e1c56b4a06de42fe34fe5c",
+      "ba93bcf7420e49a846127382c918b22ec3718df91e1c322895ed85d28f299d52",
+      "8dfc81bb717f679ed7807e0dee9b25eb361d7f7d152c500c5b8771569f15e7ea",
+      "761ee778f7f539b7d06232c98b10b0dc48140fd180b9a0408bd31cc2d30e87cd",
+      "aabbc8513f8e9e633fc4f2c9ba6b0943849424117d5469ac5b1795e92b3e5937",
+      "00dbc7d022cd647865add4f6b0f1e72810082b49ec30ebcaab9997adbfa4517a",
+      "697023d17e792ade1c85ef21520651f533b04fb9c99cde8bd8a58efee9caec18",
+      "908a32753b8dc07ecd999fc5a36e048e1612a427602749cb6343209169d97fd2",
+      "04c4e78cf4edc2973e8d6c9d924d60d734c5f85b50b32489dd983365d198904f",
+      "b09f28dce4f3f66a2823b8ede1ea2776d207fc3640b59f4a53346197f8bb0223",
+      "0f1d106026bb52692a2e2b7e99d0b534b44200fda981b7a6924b7c984ce2a792",
+      "e2ba93b81f5b0713919802f1ba5982a16a7ccdc8ab02be685ea9c50af1f2646b",
+      "a4c7f8a9ea5ed443eb4281da3929a3fae6802e52a82b1db31123c90c5433ff34",
+      "6064d3f59369bd5675804fe9fded2530992478c015940f84a60c6e8845cb464b",
+      "70dd042d2595ede1bd08be3be3413bbb9be321f0052c271e114f55aeffc470e9",
+      "0b68927a647ee626d2fd7d133cca8fef16bddcbdca60c626bca57a8b8f2f6c18",
+      "0f943088ac64570792d70263fe7ac59e7a9e9dc674a0b00799befb0489d7daa5",
+      "7b2d017d6c19be86b011ff237aca67f3d22ff8f57a318a0140558c4de549eae2",
+      "04ff4ac486841fce2a3dbc097333287833e40c68370bf2596e39d6ea3c63ceb3",
+      "3ed0b2c4c80f30a75ce797fb4cb531194917d79b8803ec53c23072df9a767562",
+      "16715b3df78a5e7848da3e718f3f806f554fa6f53ad4c1b0cc0d6f3225210f27",
+      "2c8b1c86558bf5ebde90103296901b3c690dbadbfaee8ae55c8daf5ef60a4313",
+      "b1df1d2ecc171d3ddb7da0ac24f48abfa385f6b5f563ed075afdc67561fedc6c",
+      "17865c242da220d3ca30b2de6c93ff7bca7121fe71220deb36573093dcb31e55",
+      "22c0d5ef39a22e85d9e408b2d6beb021f49ed136c4f9f260af0c854b7ea9eca5",
+      "1b3522a7febc5c1123306315ea1ff1e45b57a0822787ae6b3e2c933ae95a6556",
+      "8e4bc396680332fb0b9f6753fe97c221ffd4ba2e1e9334ba94f86b0254721f93",
+      "769dc4dad995e269625d3cb7c631250eacaf1bf0499e42c7266a0e6ca1abdf53",
+      "3a7fdacab019d671e9fbc64b860cb47f07b18515c5583e556acc04def733b638",
+      "a9999d60a049cf15fed3f5487967c81ae01962736f8fade7a8ce9f0593d76643",
+      "a700f1fcac4fd2ac04ce6646f8b89b73478e213b9bd2bd90f89498c9f54ad8ee",
+      "1ed45f545680be3d263a7f08b373aa21618fe237c2f7c6ae07358b883f7c2b81",
+      "f140125bf9efd8e27fe50868618e578c3f9a67211d4460713e0a593ba687aec7",
+      "cc9ef7501ef0cd3f0c20b555c1f2f4075134efa28920c3ec0be7cbf047d80bb8",
+      "0303dc189dc1702cee667e6ef51bc1b03ecaab185ccc69d9aa5ad586e7c37c06",
+      "c6bc41e0eb37eac4d1e61d217ffb6d55958f656ef33cceb8ab21aec1f904461f",
+      "90f9e47bc44ea9e3021c0725ff1898889f635e5f8c19d48191ecc287d89d20d7",
+      "fac552eecf44d3c2ca4973aa2d889c250522ca2bded16c2727b001107212f719",
+      "5b476ed57f96b9faf6604703e8a8b7a32c6c154ec3e764949fcc7ed934e57534",
+      "31d2d5ef1f58ebf32df6bca36669a467275b879222a42c837866c4291310b002",
+      "9bb43e551705ded09dbb63d10af3399428ce5b3d6cae81022bfdcf184dcaf347",
+      "cc295235f900a4550a787fe1b8e154ac53ef630ab73b14b72b3ccb7078aba7a5",
+      "d715f73825c5f8784d8afe8d7425f8a29fa27f0d0ec5ed62303f5e727147f0ac",
+      "6f4a0feee5b615abe293fd2d1b1b9c9f1e62d7e94cd3ebd867e3e7ab3138e9e1",
+      "9a5cc32047cd2083fff60cb668c378ae59a1ed5fdf36cf0cb25140e8ce26460c",
+      "99b681bba70696713fd53cc814d382393a6ab3d0b10de19eec7a1dc5fe6ec894",
+      "b5ff8d9889f8d5c209e93c1ee6da83fe186277524723acb43914452ada2cb19a",
+      "c67f48cefdb65a8e342c781c2f9b446628c20ca1ef96949efccd761ddd76ed14",
+      "4bc783ab4af3e4b44ea28fd3dbc547382fce849731777cc79210494e8df6028d",
+      "8ce37e9357be9d5aa0e25ffaf8747feaf9d630a826b8a872cebbd1266e9e56f3",
+      "0374037acefe313c7c3509be87488e72887bb5d05afa9ffd07c8b88d1759a33f",
+      "dcef2b25cea0d85584a71306a291401f7e12abbe831d518de4b511813638fc40",
+      "5811cc6c369733badec2b719b07db58bb455be0a4e5ad288a4dcf35595f41118",
+      "65a4bbf5b1ad0293ae0d1450f2464fe6fdc2154fa01e6824f63fb999e94c4a1d",
+      "a13177c92a1ad0ad3698993a8bec0b7c618b5c985b202bb438a2954786a3259c",
+      "f431cd06833dc88ad91087163417cf14cbae5dc4bb6ce77ab580501b58366352",
+      "889f7addc57ee6cff539bb0a52419413517363388d1c586716ff57282240303e",
+      "5b96aac3a1089e88b75ea1ac418ea1ff0dbdddd3c593e79ee1f19e13c30167f7",
+      "765f88128472b55b13b7691a3f79376467b5880c1e8bfb8181adff760372cf4f",
+      "18b7c4f159dc5060e052416e862173f34fbbb6a1423804f51f17e4c9cb9151ef",
+      "480da69baa5c3cbead3344179395948f4dc3fa4abbc2ac3f05d7690d40d4552a",
+      "ab6bb669dda175918bf5e0bd9678da5c91fbe1b842609d7af406409277448d1a",
+      "79d02d682ec972081e6f9e74f835cb592e922209cc2e8fe2e25d371728979b8d",
+      "d2f34a191e53f5763a296a0c39e75a882aa5aad61626a428f6e05edb8b240a5d",
+      "c0bece8e2126ef255e8c941412229f25120f05cb120552074736d7aefceb941b",
+      "00bd952182df7dc79c8163c415f6ee18e91d452ff0e48cee774758edf43853e8",
+      "dfb3a961d3634951f5c5ac36e65886c2494bf0099862c7767be48a4ba835f378",
+      "397ee447e68c79173bc628088f26c16b092637e69fbfa26f30467ba7abbf47a1",
+      "7afbbe02b4ecb2a4fc1e5e4e639ddfc97d1f6973ffa04f2c6242047c50de71e9",
+      "6a4f526207af869434bb1b44b82c84c7340bcb6b9d4cd42f26b3e30db224bf6a",
+      "d80182ceafe0704506902701e6040c6ef115b0cc8bfaec0a49cd120b9a7a25b6",
+      "6cd0340c93f5a3a187028a55a598c1a3a5475271978219a6a308caa5d37243d8",
+      "01c0e6ae95605aad0e961b46998a445e28669c6b85c1b73368cd145b630aab35",
+      "82efd83d8de3cced8a0c7e7bd677438f2cf2a3bf70f64a17d95591af8452c5f2",
+      "dfcada59903480525370b3ae5c59bf95cfcb1eb4f8c428604263da0e1fa05a71",
+      "1873006c7824bff4e52594c9d9baf6d06ddff6e434ee4a64345c8d34517038d7",
+      "d2909670dbce270fea7a6108a9bcad2b72d1b67256218dede861f1270845746e",
+      "704756ee0172b73dc8b117ad4d290a2c1abff1e78741c549b639a395340b7a10",
+      "62cf599b1697744ba7b777e9a6a9a8bcc4b02f7d82f6cd13f1ef33c25b2b1264",
+      "93ab86913dcaef3e42b6187e8ab675187acf93b29974c1f16bd7e3b328902238",
+      "0adf2e5bdd25743c2ef3d93c340955e5fdaa0201b4364ecb12125e17585f3ede",
+      "9e4a5b36e60c13541eefec4ecac3f570ad7f7cf4741dd6fd7599fd5bccf96382",
+      "05c8fc4c3e4d074d9421479719215424b6bf0822d6f988e539405d405fd062d0",
+      "c0b11a31b5136f14b14abdb18d51e19fea0c45f592406d7d89a8d5657324a400",
+      "a57bf031f907eec3ba28a6904ac10801f8caa55e0c932848ac9f7458bd7d4bf0",
+      "b4a3c905a629ad75af768c7bb0698a40f019851d836b4acad7d49379d2e505a2",
+      "8027887cdbd5e47076be6e89a2f63d0d1cbc4802fa00a59267470f289901bc2f",
+      "d81bcb8ac3c56d9c06758e4bb84d2802a04780090ef924bbdd32346e77a593bb",
+      "b5947dba4d27d721874cce709888b8dabc5ad9864e05ada22c05574d86db0181",
+      "46771b88f68f5d983d5fbcdbf3164825273936a30f162cca43ebff7779df4fe6",
+      "bb0428a3d112f6285c6822c196fabd5a77269d48f3d484a5afac0dcd45f2f30d",
+      "4e8618f881b6dad513d5d894388f861018e978f2bddd3c46e1c257c9c94cfb12",
+      "a38c002329edf4cae2ab44a6bce0a1b6093fc4ad37dfc963f81bbdc44277a9d4",
+      "92901c0bac1ffc452cf81c5ce8385bd780e997686356f76177fd28d9dc682faa",
+      "96a7d738ed5c75ffb5094adf7927ce6cf7d5c52e47a76d85a1f22c683766ce1b",
+      "7a7ef5d4c1c9d7e11f05ae7ee0a1645b27a0a7edc95167276cd69e1645f9f938",
+      "f9a904d718a49f8da99c7a33e5c8b0c2a2e34d59cfa81acb5b6e296df3d0a268",
+      "79b992ec77432b7fe352abcfb25e0e414a4ed21d437c4ccbe1686174cc48ddcc",
+      "a5a46d1c280693c521eae94391032b5ca6bb91e146fa9e83259ed0840f05bf6e",
+      "eeffb21c7ed4430963cd5fb43078c4bafcde8328212295aea023e8adcf6d13de",
+      "ca069f14a596b20e40cd592a82302523caf9884fe80843168f66b2ae60a50b3c",
+      "fd89d43a0a511f208cb6194b21dcbaf1a4461621ccc1f3d50ee7e1503b898ffd",
+      "3de9b9d9565eb54c8917cdaa44fcb04442cc222fbef63891fe8c49ccc11e49a2",
+      "ed9680ec9da5d296e5841ef3594e5f0da8c4b6cfa18fbaa67c6d1e08f530b3ef",
+      "c3a728ab67873b7360a3fcee468bd524a90e09e9a90042562bfb04d5531b12a1",
+      "641bdc737be78293e19b05f81b3677d5cbdab77deb4e45d060c13ef2bb957d63",
+      "aae9f7fea906998c73ff068d9772ecf6329a980a3aa78f5f94b5931c6dfdf9da",
+      "6378511c27b54cb58747b937bc179d0043474ff92bf73a0f08acfd48167c9484",
+      "145df034bd0af88579c8f606eea1c8c539c3003af792dfa850e13a9456a513fe",
+      "d7c04ca2b7cb378c30948495830061c93ad8ffb39dfa25cca6a9ab05127079f0",
+      "65f8a892c52cdffc1ea97b0eb8ab570bf090f25e2d62dcb362d3521d73ff502a",
+      "ca353c60f59f3da634682a269176a4757acb04f72ba87dcd2d114b6ce7648d0e",
+      "0e06c1f04b5e581b442d2cb75c4983af3b8517b3cb507960f2876c9f9ffec83e",
+      "1b2a43d42e21f3be38e653116d19c4de6c202ed605fe56967776a9992ba393d8",
+      "a324a813d8a51d3d00fc859449871cac2bee9237984021c3dce53b54ba6ed786",
+      "a82db9d2299c298ffcf040b5eb6ae9d8918f05761317aa1a746134a84a1c09d0",
+      "9ea7ea9fd2ced71ca27fcc317fde5a17c3d9807962b7e8f620c4289ebc8ed30c",
+      "5ebe60bdb26192c89a04f982287c6529de23205cab6993cdbd37d36129f73d2d",
+      "8f0134365627bccce4a2af3eb0986aa76d03864da2d70f4390035479ffca0446",
+      "be2d88bd556d30468b6df6971dcdee35115fe1fe1b7182e6bc3f99c3d8a42090",
+      "c85c4290325236386a3cfa7eb5f44366ba322bb17bb4a032fb013008d0d7e978",
+      "6466bc85e6b53f8a1449ad603fc67f6b2a696034c227a52c328b26122110ee6a",
+      "7b83779f5754c781508362203e3fd13bf17ad2519236a4e8ec6d391bfa5c9bbb",
+      "8503af9eec727875dc81b4eea2deabfaa7284941926d4fd96aad5a810ae8db92",
+      "ebfe5b30304accc0b88babd04a98866918401167724f3b481f48a82a86b9c21e",
+      "e8ba1158c0f53e2eb1081700e0b6ba83dd4485e033d5edb7541213bec6708718",
+      "c0450eff8402a5e9c3efbf36fbb45dd5669efa7a6deed85cdf36671fb44fc8bd",
+      "6eb6ddc48909b5cf9706b99e590b6df194048f7feffcffd893bf9f6010d34d30",
+      "b6b24f5344560b3c5c4a3482d831b545879c904e9bc10ea88cc58eaebc858c0b",
+      "d622fd765fadf437f1b9d3a5cdf52ab229fe775a578e024f392d55874c2a9ac0",
+      "35e861b8897c84e8230440855168aeca3e3de9b9c1bcdfd92c9d797ccadf224d",
+      "ebeca065aa375a0d448f7183c196de979b1a5637f00c8f6e4e94e70e4c6c5217",
+      "e867e2b5c19cba0d8c6aa2c6ef18e097439efdf05ec4b221b4a5c49470e089bc",
+      "3b36477056924306f82083313b8d95138dcefac9e9ba6b88c135a9b4acfeaed6",
+      "630e9ac9df089e454778d24845b7529ba37e412dbe23019761245032be5c4674",
+      "0b2bd2d0517fc9b27c49b69b01f7aea153cb5e764fa03c817f969679e6b1902e",
+      "be5e9d3d1864798c4a1919b37d745b54a4a0081e5a419590bac4db44c4648cd1",
+      "03618d40739c127bf835552100cb4f3afd6b9e930294b1bde97de8b1fee8fdfb",
+      "ec28d3e5316a6d0da141f56aa42929df0ef8e2cd57f81f91987ca19c9e372795",
+      "87e5ffd332ee7e10a65d5cd8229ab9ebb130c503d0060d4d0a09d43c256e7fa0",
+      "c7f6c442969715617373f7b34d770039fc128fda08a50b56cc1045a6b5352195",
+      "dc32af051f8ae880f7f119f6d953a3e23aa67e92fdcef571e40715f29a162607",
+      "9e2a9f2b0d81383c269af4f24442baa26dc6d8beb6805d2ec6f5ad9478dab063",
+      "c5ad6e1724973ffe68043c7c6089449eb379b536e34137cb7a0a897588278a88",
+      "7309c74a6375711342f1bd7fe8187a901d33433e5d6dec3cf0905bf6c3e9e1b7",
+      "e11d64acf7c7dc8a3243fb3374db90756e25f701583ea6b2985fa15e6ae4a53e",
+      "c912ad843735561900d72bbdc470fc2029f8e5bda683ef52d547f8ee00fd2b89",
+      "f358b030687b7c4877d0596a9778497ff41742c5ff51d263f3247aacc4d8982c",
+      "b723c4e33df5869c8f2128649344fa6a545ce55a2113350a822991155053cd92",
+      "cbb7249b96b3a21577afba6ac087268af10f912622043a279fbd244b0779d328",
+      "5da8fc424f0cbf39d7a9e7603649a463e1815976af4e4513806e8034914a7483",
+      "18febd6731023029f95978b26fe596af0dba87966dc90e8996834646a277535d",
+      "32063a01f551555b1d04ea6b6673c4ff53b38c2493dff44a09b24b5561c0da72",
+      "905bde0cf0502c7168b1c2e67b0f6c2d2670c5ffee5c4ff3018618ceba0a7204",
+      "1a8f9c4a5cecbb896c69154ee2085a9a5eaf4b649c705042d862f8ab31b396cd",
+      "896e6d0fff76b4a0c18e1f7acd96004f8e87c56f4f05d4971b1016227efa9be2",
+      "5db43c53f53f7986fb00d3e8e9a3a20f82ad897b1b829f7510e61b16710d7916",
+      "1da7bf4810e1f557751c612225bf591f16a35cef106f5000ba8a69ed2261292b",
+      "6d6c063af507c3b911fd609c65012c86e1a3cc87eaaa183da134ae0a0a0c5920",
+      "c8c6a1c854711fd4d1b12a5c4eddb22895fd0387dfd2c0e2abb56f887e0d7c94",
+      "575efbab59ba5f15d7d1f9e64d9f0245a768874c7b572e3bd7762b6ce6cf552a",
+      "dae0e4b9af7832a40b2c887ae1430757b260aeb3db40df89b953e38874b48976",
+      "e0374e877d9ac6da861337b0bda695d83fdf065cf5237f25fe78b5e7ee483a91",
+      "22e30fdeab75cc649c80381e14290e5df20e40d737d11f0b653adad80f7a661f",
+      "da77f1ce8b80a8fb143e9c0942cbda41e642bbc347ace0079abae1d0d81f2798",
+      "cfce30e95c3b5305ef497eddfd7b34562c51a4f5b18a986a54c321d57795b416",
+      "e8c08099832e986140bbf861b213d04a6528edfeda2c07c98b538a8e4c3ef3ef",
+      "f2ade41149eadea85d3888ea62b15d11112dbad5eaa6194385ef0efe576464ae",
+      "9ada54905a81db3f35a493e656360421d32f4c5d9d7e6724cdb8f0a662f032cd",
+      "fc72b72fa026204e4136411115834f14903e4418736a3ba52a4e9be8865774cf",
+      "1db9a735e0cf169342c12bee4bc30ae122e901db76be06b7758e6791e768f94c",
+      "e6a4fbe1e9d2afaf6493b1e43fb7be428029e43f368600d7230b95822914668c",
+      "ed63efcda7b1bb46eefeea4333a7c784453f606a94a1d84f55bbd3cba6a28897",
+      "7e6f3d05ea4f9810af76c69e0c738ba4c8f90eeba8a0e096c37a4f6351bffaac",
+      "484daecf90c1a8722d909fe1922cd65451f72e67b918cdfafd11897eb5c8838c",
+      "86cd67d5532f33df914d7f712d78dce1852a032f230cfacc237beeb909366644",
+      "7210e99f59af155877760f5a06e1abbcc3d4dde16d844a81aa009842b9d260c1",
+      "8d81efaa67d98ebe98d0bffe90beb2880f05e3933d063129b72a22a7bb243ee1",
+      "2a263bc82ee92f35d5bbb6f244a9a37ae97df7e18c75b33e48337209f6c8fa18",
+      "9b2689dbbe4cdac19321b5f7937b4edceeb237f22250e6764f44a4f281a0adf4",
+      "15d0b4f0d6a40ca6667f899f34422b7fa4250a6551af731348a151835dfb789c",
+      "128a060eb415fd15b21ba763f06273696b38c6e5143333fb3ffd2a95c0b2321c",
+      "5cc7491850a90b6a9b733e3482217806d5ac6534a36aa849045a502dc0be5fdf",
+      "3cd50f068b8738f0f4a4e40e7122eb3903fc8cf1043bcefec077915b373d3e7d",
+      "be66e102fa3a6d3487a92d6a3f8c3e950bc2b383eaf875c1443c2700daac0b5d",
+      "642482eeb77e7be4fe9fc43020ceaef5d34c441a85e8ac4ede448fa7758bfbf5",
+      "6f1bd4fabd8abd6c19b4c9b124d52527c77e2d450ce638aac72a018d4d4909be",
+      "f7cac630322f5becab953f90b0b9a9878e21dac1cba207cf27d399de78b9d5b8",
+      "2e31666144502c9270ac02ee53c3cb2f902352dad319ad1a579935551856506e",
+      "cb31e0e9550ea9ad4d49f38707f77e2bf05f91a570ecb699465b01400d3fab91",
+      "a258143bb2e0f6f5eaf269587a1a7a176eff8189791487953eabd2f1045faecd",
+      "b77defb8f7c1e1767e22f7b04adeac4b439681b73ebedfdcf20a16eca459fde4",
+      "e8bccec78ad5090590a4dbe02cb813f6d5ffe20104595221055a0d1811c0d369",
+      "90090378d17d2074cc9184c13c42738ac6a6320153bfe0cffc6e0eeb5083e944",
+      "d8e081e152feab37cb1edd078c1121471799f24cd98fef1e34590f7023a0c2ea",
+      "35fe61e1b9f898b269833669755637089d888d64aece5da4acd4b9c985f4ead0",
+      "8f2a1d3dddcdd3914fb7928b4a720536baea0815747699c167bedba0c1111f87",
+      "2437e3505a3e10634b045cd1aeec71099ec7bf49dc0907adaf480f080fb73d43",
+      "f06ce68c12dc02e73364cbb444dc1e041c672dbdb6e442677a3a9bcd4431f248",
+      "117d558d0f788bbc7f08e46ff72870bde416cea9f4c18d3f522d31ea27074b6e",
+      "93a630ae283f6a2d430144ec900c074207f8adfec094f0999a2bcb1f0186979b",
+      "4748016aa15c247ee1b1460faa7888561e4a2a672addf4c7b5e4b8e6661f8025",
+      "feab16f7e1df53c0d9b7a143fef6199e50224badc868a31c9b9d985efad649e9",
+      "11f612ec51f106ea4d6981e5956377cee88fb957ac5068c5e6e50bd153ddd305",
+      "804dd08bce48dec463f25ce97d0432853749ca254fb405044c52923506139212",
+      "ed056b84f78252c634ac455d08745368d8a3a09fc2897703e9e0f1738a5dfb82",
+      "ad4f43a1d3d9fd81d874638074931be599b24198bc6b4c3cc782908e4962d1f0",
+      "e0a25bb6e2d89bff85a29ab76ecb8ec99d91fcc33758b0c00cb3fad498c74b50",
+      "db3e37175fb5e28816c89d4bf24e2baee434b074fb923b371597fd7b43146cad",
+      "a8f37d6e7eec278be8afb6e39a4ff7cc791706275fa6a54de9390306e23324ff",
+      "6a213cbe96bfec8178614eef9a941bca5033ae25b395e431813040f3e397ea4a",
+      "943ece3ef6633d46bba2e06af408f3fdc6bcde52972800313c1b5ccbad3c6793",
+      "ef7740226e4be8fb31b4bbbb7eb765f6c8aff0bcbd93b8133a248dcba253855a",
+      "0f3855e698efebce172493a71d9682c47c93e8f367df58e1a0692999682d1dcd",
+      "b2dd98ce79d85cfda948075c2ba7e8271f9b69c79743bbe39f8539dee76eaac2",
+      "0e6ef489ae0402d7217b2c9afefba6adc390d88b21483d7c65ecc9273294b5e2",
+      "b4084308376121870ce59b427613ef57ac58c1afe0d8c95ccdad43bee0e0e7e6",
+      "d11ad7bde274bd0db9667b69714a5828983689e58c0cdabe8020897aa1eb3aed",
+      "6a1c33a12b0b7b11fc0242d6285bc498c6f68ba0c984424a3a4131eccff7d0d5",
+      "acb91ac0e5a99e345ea2379c90b1a73d48da9ad013f3658997880b7cf5556044",
+      "75dba2c3a3101931f4c7c28b98fe2a813a98d669ea7d5ac728a437795bc36ba1",
+      "8ac2c5713fab00f695ee111ae7f69dd5021ebc44a928afe9c5d7f24e022defdc",
+      "b005a1ef483682a78a80d5550bd32fe5bad88b0d73d632e4640050ccfbb1a5b1",
+      "3a6d2176ddf972f731fc5830ad3a52016a01b0f2572f5a533376c59a6405078e",
+      "ef33c863bfc33bf81639e2e32c6b8f943d484f7d2a9cfa36447d20c5f021fd7d",
+      "5e93faff93e626ade707d6c7db8eed1812222eddb577e5de2b2ff59faaf5c56d",
+      "4207cdb252cf6d1fee7779ba7dc46cbeb4a7001d50333b2b392d7ad6931a7a5c",
+      "4f906a79116e573e7f98fcad1216346d08e0a25a0f03628006fb5e2d72af64a8",
+      "f765354c7e01688ddbab6409f4626f5cacf850801b373b8d340153f565802ed9",
+      "5cb5e3e99705fd475474bd1bd36bcf4841133e329e11e793626008753f49383b",
+      "2aec2c9ae53c92fd6dbb0d02db4e9cdb40430f3f5ad3999288e83edc5ecd81f4",
+      "87d4da07818392431e9ba7adc9a0c5f120c9d206e6ecab22226f98a91d7d9191",
+      "0c555a90dfdca3c70742fb4162784185e0c4db9dc50985b0b7cd6b97d25e9f73",
+      "12ff10490b63d0594c7e2de61b79ce1cb8a224891d0a7e1060078a03ba9aee23",
+      "57b717f914672f38d4a078c539bb941908abbdf4a35a37418c3c53e8434de05e",
+      "c667f21b2fa0852068da954298e0af21475f251f2cce0b9eb4fbcff066a05a5b",
+      "e25724c07217c868bc545c564af5c61bf42693d3a78ca9c89541df5ba6a9648b",
+      "36037e3f399ae094bc8d7d043e4c0f93912a7d93267cb6cccda2a64ff1bb3183",
+      "fce4b6e596109bc99efdbede2aa6bc9ae9b091f27e257fe1d5160d20e750543e",
+      "aef0a8524d8afc6929de5a62fd6767ee717366f3ec29802240d145363ca5f9d2",
+      "3018c70b3d56f14a0da4b75b568147f780ecc568f24fda465758d8dabd7f78dc",
+      "4347b9c2fbddaf786b92499753bc8a214673f50c8c7b118f4e2eddcb5bfd5027",
+      "a4dadf2b30e399ccbb4e5a400e8ba48781fe1228ea2887885ca1a9d2f8783511",
+      "911a021e60badb3268c07714e7fb900645fdc907982325133214d51f55e8f23c",
+      "0c8041e28d3608b3181f3bc48a88ac844366ec9616c43648766645236af2a25d",
+      "4644b765f009ce9f276cc451cee3b20ca8c9b8b69fabe87b2adb31c316ba5ce6",
+      "6da9a1016f8c9003ddaafe4b6311f99500739f2355145b4195c5077e0fdb8643",
+      "b1dbe073804cd97cfa391bb6da0ab649f27b50bdb853546dafb8ca95ac7eebb8",
+      "57f59f15a8c02e2320647397b1c7205fb005b2a3aa7b9df9fece60e707c28145",
+      "6f00005b0c7bfb698f40b4198a0058542729f0335baa0709820a2704346adbaf",
+      "047ad5897c2289e3d0d5d1137ab69dcedbe9e2240a6eec7d6b3b63b6171ba238",
+      "3fba198ff1a2fbf7706f20ed32f85ff0a6ee1303e21fa2f25eb24a4f1cb5cb5f",
+      "3309c430046347c74b1779d4dae44e11e494f81f2f77ed54db701255289396d3"
+    ],
+    "sample_ids_sha256": "37b59ee59a93df7a79db924e71a63ce06eba142a3993334cbee73495b6308187",
+    "target": {
+      "dtype": "torch.int64",
+      "max": 6,
+      "min": 0,
+      "sha256": "b48a1a515124357b3b79d006b6fee5ab5b9ee7fdf5634277fa5fdbbd49f7fccd",
+      "shape": [
+        256
+      ]
+    }
+  },
+  "gpu_after": {
+    "compute_processes": [
+      {
+        "pid": "1447794",
+        "used_mib": "19662"
+      }
+    ],
+    "total_mib": 24576,
+    "used_mib": 19921
+  },
+  "gpu_before": {
+    "compute_processes": [],
+    "total_mib": 24576,
+    "used_mib": 254
+  },
+  "identities": {
+    "a1_adaptation_sha256": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "a3_sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "a7_overlay_sha256": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3",
+    "class_map_sha256": "c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812",
+    "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "environment_lock_sha256": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+    "logging_contract_sha256": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "m6d6e_contract_sha256": "09c0af7e79aeb3acda3e188f7a2a9d94f6d0401485a061d46767ab1c71069ae6",
+    "source_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "source_tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+  },
+  "initial_state": {
+    "buffers_aggregate_sha256": "a50c6e185beebf42a1cd717511b7a7e7bfd6e7371acc013dbd20e4753118c5cc",
+    "parameters_aggregate_sha256": "441f58bcddb726fde000ad14d2d864ff91aa47f222a67994cf3fed2be9400022"
+  },
+  "label": "QUALIFICATION_ONLY",
+  "labels": [
+    "QUALIFICATION_ONLY",
+    "NOT_A_SCIENTIFIC_CHECKPOINT",
+    "NOT_ELIGIBLE_FOR_BANK",
+    "NOT_ELIGIBLE_FOR_DOWNSTREAM",
+    "NOT_ELIGIBLE_FOR_REPORTING"
+  ],
+  "launch_environment": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "CUDA_VISIBLE_DEVICES": "0",
+    "NVIDIA_TF32_OVERRIDE": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONHASHSEED": "60605",
+    "PYTHONNOUSERSITE": "1",
+    "TMPDIR": "/tmp/gpat-m6d6e"
+  },
+  "m6d6e_file_sha256": {
+    "configs/amendments/e07c_m6d6e_aux_production_runner_contract.yaml": "09c0af7e79aeb3acda3e188f7a2a9d94f6d0401485a061d46767ab1c71069ae6",
+    "methods/difffas/aux_runner.py": "49635cb83bd3fb264f295d7444b6080f992110d4cbf16bc244b38e95496e0eb5",
+    "methods/difffas/aux_runner_io.py": "a8a28439c0ff88de5cd2cb2d6da32424dc723aac44908fe95cc2d87b9a342943",
+    "methods/difffas/aux_runner_qualification.py": "a09749a11172ce8310700653605d5402efbe28346c0449280e52a61819d7d814",
+    "tools/run_e07c_aux.py": "d4aaf2785c2a48bf16c2fefaf7768be0d540f6ad9c600b76e11cf2c6c81bce61"
+  },
+  "main_difffas_training": false,
+  "memory": {
+    "after_backward": {
+      "allocated_bytes": 674103296,
+      "max_allocated_bytes": 17197297152,
+      "max_reserved_bytes": 20224933888,
+      "reserved_bytes": 20224933888
+    },
+    "after_forward": {
+      "allocated_bytes": 14949658624,
+      "max_allocated_bytes": 14949658624,
+      "max_reserved_bytes": 15044968448,
+      "reserved_bytes": 15044968448
+    },
+    "after_model_construction": {
+      "allocated_bytes": 185067520,
+      "max_allocated_bytes": 185067520,
+      "max_reserved_bytes": 213909504,
+      "reserved_bytes": 213909504
+    },
+    "after_optimizer_step": {
+      "allocated_bytes": 860615168,
+      "max_allocated_bytes": 17197297152,
+      "max_reserved_bytes": 20231225344,
+      "reserved_bytes": 20231225344
+    },
+    "after_transfer": {
+      "allocated_bytes": 386396160,
+      "max_allocated_bytes": 386396160,
+      "max_reserved_bytes": 415236096,
+      "reserved_bytes": 415236096
+    },
+    "peak_during_step": {
+      "max_allocated_bytes": 17197297152,
+      "max_reserved_bytes": 20231225344
+    }
+  },
+  "milestone": "M6D6e",
+  "mode": "b256_1",
+  "pid": 1447794,
+  "population": {
+    "class_counts": {
+      "live": 5629,
+      "makeup": 759,
+      "mask_2d": 96,
+      "mask_3d": 1056,
+      "partial": 1911,
+      "print": 2838,
+      "replay": 2178
+    },
+    "class_map": "manifests/artifact_probe_classes_v1.json",
+    "class_map_sha256": "c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812",
+    "columns_never_read": [
+      "subject_id_global",
+      "video_id",
+      "frame_index",
+      "label_binary",
+      "attack_raw",
+      "sha256",
+      "sha256_kind",
+      "content_group_id",
+      "allocation_group_id"
+    ],
+    "columns_read": [
+      "sample_id",
+      "dataset",
+      "attack_macro",
+      "split",
+      "m2_status"
+    ],
+    "file_rows_total_from_footer": 20615,
+    "filter": "split == TRAIN (pyarrow, native)",
+    "labels_sha256": "df0577a3c0c2a9ccda3df7fb8896a150dd5fb875f1d0e3b67475f834e549cecd",
+    "main_relation_opened": false,
+    "order": "IMAGEFOLDER_EQUIVALENT (class index, sample_id)",
+    "other_spoof_rows": 0,
+    "path": "manifests/split_v1.parquet",
+    "physical_read_disclosure": "pyarrow read the footer and decoded the allowlisted column chunks of the single row group (all splits) natively, then filtered; only TRAIN rows were materialized in Python",
+    "population_order_sha256": "c890ed8d1287f58113405632a2350162660e06a563aa332e17660caf7cc50c76",
+    "row_groups": 1,
+    "rows_by_dataset": {
+      "casia_fasd": 3360,
+      "msu_mfsd": 1600,
+      "siwmv2": 9507
+    },
+    "schema_columns": 14,
+    "sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "sha256_checked_before_parse": true,
+    "test_rows_materialized": 0,
+    "train_rows_materialized": 14467,
+    "val_rows_materialized": 0
+  },
+  "precision": {
+    "activation_checkpointing": false,
+    "amp": false,
+    "api": "methods/difffas/execution_policy.py::apply_e07c_precision_policy",
+    "autocast_cpu": false,
+    "autocast_cuda": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "cudnn_tf32": false,
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms_forced": false,
+    "float32_matmul_precision": "highest",
+    "grad_scaler": false,
+    "matmul_tf32": false
+  },
+  "precision_state_after": {
+    "autocast_cpu": false,
+    "autocast_cuda": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "cudnn_tf32": false,
+    "default_dtype": "torch.float32",
+    "deterministic_algorithms_forced": false,
+    "float32_matmul_precision": "highest",
+    "matmul_tf32": false
+  },
+  "probe": {
+    "bytes": 369938031,
+    "path": "m6d6e_b256_process_1_probe.pt",
+    "removed_by": "process 2 after comparison",
+    "sha256": "10e062ecd258bd98fb5589864b7dcc181a818f77d5eee4bd201e205ba5ae1c3d"
+  },
+  "pyarrow_calls": [
+    {
+      "api": "pyarrow.parquet.read_metadata",
+      "columns": null,
+      "filters": null,
+      "path": "manifests/split_v1.parquet"
+    },
+    {
+      "api": "pyarrow.parquet.read_schema",
+      "columns": null,
+      "filters": null,
+      "path": "manifests/split_v1.parquet"
+    },
+    {
+      "api": "pyarrow.parquet.read_table",
+      "columns": [
+        "sample_id",
+        "dataset",
+        "attack_macro",
+        "split",
+        "m2_status"
+      ],
+      "filters": "[('split', '==', 'TRAIN')]",
+      "path": "manifests/split_v1.parquet"
+    }
+  ],
+  "qualification_seed": 60605,
+  "resource_clean": true,
+  "rng_after_seeding": {
+    "numpy_sha256": "13bf272ee4d21cff39a2fce87366971984a2ea0e342540b3acb721b45c00160f",
+    "python_sha256": "1de2ef4d0ca53091d8a9bd386a7b22a2996d4f67d21cfa288e023d7c62b82a4e",
+    "torch_cpu_sha256": "92277fad85271e380d49860a3b93f18f8a1f513782bb14cab28e4cb6ec994fb1",
+    "torch_cuda_sha256": "ff1d776ca1b880dfa4dc189c3bcde1e4b7ac8d93bf162ba8369ad77c7eabc61e"
+  },
+  "rng_after_step": {
+    "numpy_sha256": "13bf272ee4d21cff39a2fce87366971984a2ea0e342540b3acb721b45c00160f",
+    "python_sha256": "1de2ef4d0ca53091d8a9bd386a7b22a2996d4f67d21cfa288e023d7c62b82a4e",
+    "torch_cpu_sha256": "25df166f5931d104b322b3ccba56d5059c219fd4db4b9d3cd3655ec13b4eb73c",
+    "torch_cuda_sha256": "ff1d776ca1b880dfa4dc189c3bcde1e4b7ac8d93bf162ba8369ad77c7eabc61e"
+  },
+  "rng_before_iterator": {
+    "numpy_sha256": "13bf272ee4d21cff39a2fce87366971984a2ea0e342540b3acb721b45c00160f",
+    "python_sha256": "1de2ef4d0ca53091d8a9bd386a7b22a2996d4f67d21cfa288e023d7c62b82a4e",
+    "torch_cpu_sha256": "dde781dec5578a24897eac450d1c8ac85a9698a363e4d27f5fb253815d1ce22e",
+    "torch_cuda_sha256": "ff1d776ca1b880dfa4dc189c3bcde1e4b7ac8d93bf162ba8369ad77c7eabc61e"
+  },
+  "runner_mode": "QUALIFICATION",
+  "scientific_checkpoint_created": false,
+  "scientific_run_root_written": false,
+  "scientific_seed_consumed": false,
+  "scientific_training": false,
+  "seed_note": "60605 seeds this qualification only; auxiliary 42 and main 42/1337/2026 are not used",
+  "seeding": {
+    "calls": [
+      "random.seed",
+      "numpy.random.seed",
+      "torch.manual_seed",
+      "cudnn.benchmark=False",
+      "cudnn.deterministic=True",
+      "torch.cuda.manual_seed_all",
+      "torch.cuda.manual_seed"
+    ],
+    "hook": "aux_runner.seed_process (same calls as seed_adapter.apply_seed; scientific API not called)",
+    "pythonhashseed": "60605",
+    "role": "QUALIFICATION_SEED_NOT_AUXILIARY_SEED",
+    "seed": 60605,
+    "torch_cpu_rng_sha256": "92277fad85271e380d49860a3b93f18f8a1f513782bb14cab28e4cb6ec994fb1",
+    "torch_cuda_rng_sha256": "ff1d776ca1b880dfa4dc189c3bcde1e4b7ac8d93bf162ba8369ad77c7eabc61e"
+  },
+  "source_after": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "source_before": {
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "documents": {
+      "A1": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md",
+        "sha256": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472"
+      },
+      "A2": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md",
+        "sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d"
+      },
+      "A3": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md",
+        "sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a"
+      },
+      "A6": {
+        "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md",
+        "sha256": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81"
+      }
+    },
+    "files_sha256": {
+      "FAS_dataset.py": "0a709bb9adff2754e85015d9c6fb787469212540e86b1281532feb84f532847f",
+      "FAS_sample.py": "8b9787a6e3ed7d539ebd845605f8a4299c5795eaffde38066b00d79bb03060f0",
+      "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+      "config/diffconfig.py": "20b03aa8dcf3e8055e20655845225114060d177d485b33585bdfa550ab324987",
+      "config/diffusion.conf": "41472666447fd263c31cf480190362424dbba953fb6a4fd1aec1646031e9aa37",
+      "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+      "models/__init__.py": "dec8b8f23da5bd14bd642ea5bce4afbd10b7447caeb72f10eb05903966419dd5",
+      "models/blocks.py": "8a46b88c32f20829cb6a4fe4b8a9b8b1f44cdec7fd189c22c0cb94efd2aa74e5",
+      "models/choices.py": "4e3a69d18e9e3a68d623e32697ae378b8b3d958884382cc06f2660aa7d953c04",
+      "models/config_base.py": "dd963a93d406fb55f56ce58c621ae37942d9259ee47621a2548a18672b2ff705",
+      "models/custom_rn.py": "fa788c4d2453b40585b295a8292eaf1afce7a0c622eb8ecc2adec5453a9a64c3",
+      "models/latentnet.py": "bede76bda741c09349f37adebdd7f3923377515fdd67d03d7f7b60168e8ad466",
+      "models/losses.py": "68ae7dd288828b07d20db127ab322c46215737c3e9070139b1b9e9e58521102f",
+      "models/nn.py": "175d7122bd02cec58bf6c632ac80794fab545fd69f5e22007af04dec8edd0843",
+      "models/pretrain_classifier.py": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+      "models/unet.py": "76d02a165630a88575807d95feced6f7a279467402a750369f000279ad053401",
+      "models/unet_autoenc.py": "127ecd59fbbbd0d191a713aae62b11ea3de7058d42c2889100ff6a44199d2963"
+    },
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/difffas",
+    "shallow": "true",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "verification": "PASS",
+    "worktree_status": ""
+  },
+  "source_patch": "NONE",
+  "started_utc": "2026-09-26T08:52:17Z",
+  "status": "PASS",
+  "step": {
+    "backward_calls": 1,
+    "batch_sample_sha256": "37b59ee59a93df7a79db924e71a63ce06eba142a3993334cbee73495b6308187",
+    "batch_size": 256,
+    "buffers_after_aggregate_sha256": "4b4d6e86f1dd7743788cbadb09b514dba68f4b145b9115fbdab3643752725d91",
+    "buffers_changed": 108,
+    "class_histogram": [
+      113,
+      12,
+      3,
+      25,
+      22,
+      50,
+      31
+    ],
+    "epoch": 1,
+    "global_step": 1,
+    "gradient_aggregate_sha256": "f4e006a47ef20947556b014ca37e1d951dceaa6f7cf216367f86efec5db7c42a",
+    "gradient_sha256": {
+      "bn1.bias": "320dfe53766d0b2955e189f8f69739def7e96c02ec312b7af12f996916442357",
+      "bn1.weight": "f9e5b315912d694590bbf9cb1d66bc1984386ccc87e18b8610f4f29a175be070",
+      "conv1.weight": "32349c7251718fbc1fe33405851326f2928e753891e2f0fdebe41cf05d21dd0a",
+      "fc.bias": "2eb4b22ce21630b371e0c718b3786450f9d3a9cacbe66224877916659707e2e4",
+      "fc.weight": "320a290cfc9686d81e6606deaa8bb67709e734fb412382ce5c82aeeb77fb85b5",
+      "layer1.0.bn1.bias": "f1284f1652f3f441da3dab875aad6f930a938ff0189fe0cdd7be2c6b399a1384",
+      "layer1.0.bn1.weight": "c4a8b9e901d1e7806cafa004b6f3d95cf4600aa70bde8967f46c1cbd8f11e0f8",
+      "layer1.0.bn2.bias": "702dfc5741cd8943b96cf8f3485b3622d2274d53a72318cb3bc82b54dee3aba3",
+      "layer1.0.bn2.weight": "23c45531659d7c9f434da4b6950f5dcdc2625fc1c22b3a1d7a8f3c3f7ec0950b",
+      "layer1.0.conv1.weight": "09eb1e74b954747f49746ee8add16dbce4fb12128ad9f0dcc06045a80493c8e6",
+      "layer1.0.conv2.weight": "564cc77e28f064c93acef7ac433d0deac0ffa72938584fc6a4b46376047cc9fc",
+      "layer1.1.bn1.bias": "7c9eb420ec496c33567bea378c91a6d3461b5352118c15ee3c7218f5672dc6a2",
+      "layer1.1.bn1.weight": "e4ce29ccdb314e8760aaff8d4aaf1c5156ea1d1f0b77c8126bfa37324e27e0e1",
+      "layer1.1.bn2.bias": "db278732d192a06ac0324ef4bc05399e4c3dde24dfcef16c6fc93d08eb6d1051",
+      "layer1.1.bn2.weight": "6d2a07b64d8058e010d1c11f5d3035dfcce60cfc62c9419e26e041366f417672",
+      "layer1.1.conv1.weight": "e01a4ca3db8f22c1faec57a9176e34a67717ebb73cd79770569842bd1e07b779",
+      "layer1.1.conv2.weight": "c93521228edbbbe545800f96cb88700871e495b65596d9edc7c0bdfb60b4c2bd",
+      "layer1.2.bn1.bias": "cb67b88b4d7ef3614c60577baa10b94014bb5fde4d6651af1656d7894ba5f136",
+      "layer1.2.bn1.weight": "916e53562c4455670eec3c7dd0ef8f3dafe91422f27eba36c620755ea40793fb",
+      "layer1.2.bn2.bias": "18e14898b09f491df342c06d64ab6fb011f3fee5e428b2f01e57103017721c61",
+      "layer1.2.bn2.weight": "dda055b22c19f8f48bd8558a7c8cd02de037ee413cc46974b1b44bf58ec3ea62",
+      "layer1.2.conv1.weight": "6d67681cb09824b04d8410fc776a565107d3c08d32ca9144d95f888aab8e0e4c",
+      "layer1.2.conv2.weight": "8ec869564ae1091082a0cea0e6771e51f77fbee245fd7f7b231157da817aa24d",
+      "layer2.0.bn1.bias": "8ce67911eb2ba94d0a6996a442d6db32ee22c95ad0824021c5049f3ce71cd0b1",
+      "layer2.0.bn1.weight": "9a0b2a845cdba69ccdbb9cadd638fee193c851b4ca64684180af1810d396433e",
+      "layer2.0.bn2.bias": "fdd37b0f452b13ddbb977e9fef36cd9ccfc15789096e002ad757a231ff08d946",
+      "layer2.0.bn2.weight": "9c3a51c373d3bbaaed52897ed1a788cda4db9bd981464f71d16d8a79883eefaa",
+      "layer2.0.conv1.weight": "ede5c163b20b3da0c469b7346ab29cc56b2d60a3c2daca8dd2ff7e6214dee3b5",
+      "layer2.0.conv2.weight": "36bf11825f8e28689739d19d41676f59af6485885207aa0cdcbb0e9afd607436",
+      "layer2.0.downsample.0.weight": "86f9772cfed851653d98e53239c8254a5b293c167936026dc061c58f56b00429",
+      "layer2.0.downsample.1.bias": "fdd37b0f452b13ddbb977e9fef36cd9ccfc15789096e002ad757a231ff08d946",
+      "layer2.0.downsample.1.weight": "1d36d66006faffad3ff52944b3586c0e140a66d9a72f3939ba67a37395e7a1c1",
+      "layer2.1.bn1.bias": "0c8d9fd78a848e8afe7598bf414b2966daae496eaa66dcc4216b3538b3818f25",
+      "layer2.1.bn1.weight": "260811744f778bbc09d80d29a4852afbb792a0aa16f34595f2375d39e735d9b5",
+      "layer2.1.bn2.bias": "1c967a22904d51eb1a6c47ace71f7f1f7a212bd8ed7b05d007495d7fee5d250c",
+      "layer2.1.bn2.weight": "8413dc8d78527a78c81c8b399230dc46e129d72a650a24c3d2e01b6714106d60",
+      "layer2.1.conv1.weight": "bd3cba898fdd7570b3ac489522d5766ba27d26cd2a72e1b3c241b9a65780edd2",
+      "layer2.1.conv2.weight": "4e80e4e3a654993e7094b35df48e12703dfefb93f21d5e8fef937323b8dd4764",
+      "layer2.2.bn1.bias": "58c258861570bc74709510b5a1dbb813cca2d8f5710a67b8103bbd4f36589e46",
+      "layer2.2.bn1.weight": "2411a2d1f91b2296a03bb5c9e6556b11b7ec100508915a6a0a9c404bb089c2dd",
+      "layer2.2.bn2.bias": "142077024c095e5b0b923cd4957b2beda80e40fc554afdc85e732b8bdc8c0243",
+      "layer2.2.bn2.weight": "2d7c631fc1eda6cfa99ce6d6e76536fb85d716642b78c8284b8d11de2e3546c1",
+      "layer2.2.conv1.weight": "a453e0d87dad9668aa57e0650a8f7bb7fdcdd88cce61feb2f42b7ef6733d6264",
+      "layer2.2.conv2.weight": "500da81b3aba1ad1644ae70d1929ad3720ac6264505c60eb620cf528606f23d1",
+      "layer2.3.bn1.bias": "9af88816f6e875ed0f1ae01033c76c06c4a769e340f652779be08a13150bbfbb",
+      "layer2.3.bn1.weight": "93650524cd37bfbafe69a8a7f973004c8b2f8a5573d77a84d5395ca154613237",
+      "layer2.3.bn2.bias": "978946cd14396eca030e8bd7428bc80432d7b93b484f6055a02345ce97a2ac9b",
+      "layer2.3.bn2.weight": "3d86d19791c0cf1d4395518f65ed6d1213fa1c0b6abf19f77883aff043c2bf04",
+      "layer2.3.conv1.weight": "3c540e626abafe53e65af5f6349dac63e4e2b4ec41c30c88a75c04810b1da4e8",
+      "layer2.3.conv2.weight": "635016611b019c05c3c9264d8087841c989c2f9205dbe373502d8b62a5abfd75",
+      "layer3.0.bn1.bias": "3c2612b0a46354e699fa0ca6aae053698c0bff03a91a12b5cf33d05aaa37d6af",
+      "layer3.0.bn1.weight": "5680471bfa3a3f8e88152ec557d8296920a8691fccf418223acd2b61c603f583",
+      "layer3.0.bn2.bias": "6d3329d41c2f06b4fb807533973e58b5f4d811a7143a689795a99a985a11fe47",
+      "layer3.0.bn2.weight": "1f193c1c5509b8ed506b5433e84196c9f3d7ba9b9f1e1e374c54cda52d91698a",
+      "layer3.0.conv1.weight": "52b30714c463524fb14302dd87bc7669cf755e04e3806b36a2e2d6ee4e6e3af2",
+      "layer3.0.conv2.weight": "7e87eb15a4a9bd2d619d4c6b97a66657456258251d96b6932a1574830763a310",
+      "layer3.0.downsample.0.weight": "d6e80d4e8bd8c02b29e5b347f77e93084e4eefc3087cd9a2afd0a3704973fb2c",
+      "layer3.0.downsample.1.bias": "6d3329d41c2f06b4fb807533973e58b5f4d811a7143a689795a99a985a11fe47",
+      "layer3.0.downsample.1.weight": "40dc04628872b1e98429a05067e5547e0f5bbdeb693bf42c7905b7c004f1041c",
+      "layer3.1.bn1.bias": "6d0dacf531cd08c8c8c693016a166702039fadbc03f8cb87792fb242c468068b",
+      "layer3.1.bn1.weight": "04db50fbcc50f896a94ae4fb8e99a7faebd56f77efa16608dec0f0ad0582d47e",
+      "layer3.1.bn2.bias": "420ec291ad94a9fddf04d01ddefa74ede6e80aa1663d786e4cc6648a24c7b373",
+      "layer3.1.bn2.weight": "64ef644179c77e49b2b31412b87b30be195ee23ee310ab95c306addea160e63e",
+      "layer3.1.conv1.weight": "361d9dd05735221b45f6d80f15b144b9ef79e6d5b2d5ded63495277be80dd7a1",
+      "layer3.1.conv2.weight": "17c61adcffb156c94ea6b297b9dab35f00aca1dfccb31e0be92a62e7cee08a3b",
+      "layer3.2.bn1.bias": "c199456521cd50b582d5c286623b1262ed11b596c5e987e4913746decf8c7d88",
+      "layer3.2.bn1.weight": "59fd735e2847acb5579cb723416d84487bbf8125ca7a5c1af5fcd394fd81adc0",
+      "layer3.2.bn2.bias": "8e1a1f3c5069102b62522bb8cc38beed9d34e80466553daf6fdcc2b595aec511",
+      "layer3.2.bn2.weight": "8d53ef1e2d08383387b10a0dd5ec434f4b78b080a935f7e525c751707335bc06",
+      "layer3.2.conv1.weight": "10884fff850dace17893d9dbc0fcfa6b29e30d52085b48a25ed80fe9e36718b3",
+      "layer3.2.conv2.weight": "9a799f028248c1a9a23c99e7c8b73863fe1c75ebb1f4a5f0d6f8d43fb947c1e6",
+      "layer3.3.bn1.bias": "a82620e93261fe0c8a3c1b90e7fe116b1b33562e65521837c0cbbc644aa39c47",
+      "layer3.3.bn1.weight": "f61253bc49c292044d4b929e78259f467d375f433f954a8cf4490c856e6a1a80",
+      "layer3.3.bn2.bias": "42be70a01246e6ed652e4724fbb60431602701823d329728f283f55079f719f5",
+      "layer3.3.bn2.weight": "cb507cfbc59bed639ff5dc90ba522ad8edea371a5a8bee1f9a6e35746283bddb",
+      "layer3.3.conv1.weight": "306eda8fd3c44484aa451c9384f034f0541fb65c93edecd1fd4ff13648a86205",
+      "layer3.3.conv2.weight": "b032fc4073168d885db44920c0d65187009f7867b4344a0d5ad0a0c65929ea96",
+      "layer3.4.bn1.bias": "fd3e594d5adec57df7ee865997a2789d486c2efb5dcfeecc861e5bf5da825b28",
+      "layer3.4.bn1.weight": "cce3ab8379ee1988c63104981069caa37c4aa137b31442990821b6b2b306d8f5",
+      "layer3.4.bn2.bias": "c3768fafc68c6846614333998a3742353577395fba7c0f3e117cad2fa7c71d08",
+      "layer3.4.bn2.weight": "0152272e4d3c5628d0a33063225eebd5ea464478171e0bd4f2806433fe870a79",
+      "layer3.4.conv1.weight": "4625dfd09a8f4f6a42dfe3a763a8e851df26b2dbe4dddad99e0b300ca6b5bd34",
+      "layer3.4.conv2.weight": "5ed4170bc334a0d728a40fb6c5998953b734c504fbee9241efa0cf0e7beaa888",
+      "layer3.5.bn1.bias": "f63208d7238b977b4844985e7ddfaf0401b143c03c5ee8e6123e7cfcb69c74c2",
+      "layer3.5.bn1.weight": "eeca872f13d0aa122e7a051bf9af0bcf88561832f679070472f06699a009aefd",
+      "layer3.5.bn2.bias": "68a6d0fbe0ad00852afd92daf954e081d00d0f0c09c2d72ed1875a4ff0c72b35",
+      "layer3.5.bn2.weight": "bfc8b3eacc25133504896b17e0dbcded789b467e7a68f6f888c5af3e73028f05",
+      "layer3.5.conv1.weight": "5e657becc3abed2aaa6467d10cdc4b874daba7a6298bd1e44b2b7da9f2fc4ea5",
+      "layer3.5.conv2.weight": "665ae09acab49b2cb59923fd3c72eef18b2c74f6e1a0a341c54b0eb9cfc7131c",
+      "layer4.0.bn1.bias": "caf2835a1c57c12573316d62948e9919f3c4ee5e8e217900b39d67e4082e04f9",
+      "layer4.0.bn1.weight": "5ade9e1e51833800669aa3d1fb2c7787d5cb0da4236866cb605e93b13f9e6e23",
+      "layer4.0.bn2.bias": "ec7ab62e53716d1dd490ace04c0a3204280593cfc090d221be7a5570eacf9be7",
+      "layer4.0.bn2.weight": "9edb62c48d9d02acdc24371f3f7bb8c6dc5103302094973081f451a3d0faebc9",
+      "layer4.0.conv1.weight": "c6a9c16e4f283b815b15f35e5f2791e142f1b05fd65ddde9de21067d490b79fc",
+      "layer4.0.conv2.weight": "bcbbc61fa9c168f73ea3e58a58cc39ed26b1ecdf0e5b3656d4d785526e51e268",
+      "layer4.0.downsample.0.weight": "300415b63f981d7032d40e2557bf9ee8a7f600a225df0dd37b9e2751640d4176",
+      "layer4.0.downsample.1.bias": "ec7ab62e53716d1dd490ace04c0a3204280593cfc090d221be7a5570eacf9be7",
+      "layer4.0.downsample.1.weight": "973789dae51ba18cc473b9e52f3f23e3ef3e96923d8886eb73397a1ff2827f44",
+      "layer4.1.bn1.bias": "cb2952fab6a8f4ba380d216afd01a192b783e31eb52765b221322f0d2114dc2c",
+      "layer4.1.bn1.weight": "e155aee9af2a84d85f76205e3cb75f1abd617d8bc92eceed436f29495655ef8b",
+      "layer4.1.bn2.bias": "abe4e560432fc175235fb746f46d1c7a4b45cab94f513d724a9a9f7512350f69",
+      "layer4.1.bn2.weight": "86754784fadf990f7fff430e18bdd126272d0e5e659d04bc79f5703dea23f2f0",
+      "layer4.1.conv1.weight": "ea55ff93ebf249dd8a29f617d47f1441dc8869b9a208d83b12892f7900363398",
+      "layer4.1.conv2.weight": "879b6ec3ad098a0fb25ffdd816a45ffd7a48364afc5dea6a925279a590b03a08",
+      "layer4.2.bn1.bias": "daac140e507c745a1696b3f66af45ecdd649f85e5e938e83559f15b66120cadc",
+      "layer4.2.bn1.weight": "4e788112302bf3a5935e0bc327e127899947a00503db574f89557adc27e4cc76",
+      "layer4.2.bn2.bias": "0bf970e3a1e7646d96321990c0a650e84ffafb91b012b9816d9d5b798a0073b5",
+      "layer4.2.bn2.weight": "73b25429c047962d61e1d90fd56e7048e1216bc2a6d8f633ef50b827411db59c",
+      "layer4.2.conv1.weight": "9f6ef2806de24affdbc6ff9115bbe1cd422a87d523a833287eea566c096d14d5",
+      "layer4.2.conv2.weight": "8b51d0eb88a35d643afe83cc84494a2d8b9aaba85dcd3d608cf397d3f742a1b1"
+    },
+    "gradients": {
+      "finite": true,
+      "with_grad": 110,
+      "without_grad": [
+        "norm.bias",
+        "norm.weight"
+      ]
+    },
+    "gradients_all_finite": true,
+    "learning_rate": 0.002,
+    "loss": 2.312358856201172,
+    "loss_hex": "0x1.27fb600000000p+1",
+    "momentum_aggregate_sha256": "befb0135dd0d104b3795ffc3311e294b23b4ea960c3c4442d3fc1b4e44c36535",
+    "momentum_buffers": 110,
+    "optimizer_applications": 1,
+    "parameter_tensors_changed": 110,
+    "parameter_tensors_unchanged": [
+      "norm.bias",
+      "norm.weight"
+    ],
+    "parameters_after_aggregate_sha256": "0131ccb2ba3db839a2d09ee37125fdf0abd1ed4f7fa3169edd5bcb7087827e97",
+    "step_seconds": 1.606478672940284
+  },
+  "storage": {
+    "exec_config": "configs/execution/m5_gpu_3090.yaml",
+    "exec_config_sha256": "c9d22abf1b5e284593bfed21500e8113df7f14ff564b7434e3eda43cb7e7eb70",
+    "faces_256_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256",
+    "runtime_root": "/home/student20261/workdir/GPAT_TransferBench_runtime"
+  },
+  "synthetic_bank": false,
+  "transform_check": {
+    "loader_row_equals_transform": true,
+    "main_process_face_reads": 1,
+    "manual_formula_bitwise": true,
+    "pil_mode": "RGB",
+    "pil_size": [
+      256,
+      256
+    ],
+    "resize_identity_bytes": true,
+    "rgb_channel_order": "PIL RGB -> ToTensor channel 0 = R",
+    "sample_id": "8a3a999a74453aa151ff50d4d25bfe6bd104e749f4e234bbe3efdaf5a6227fb4"
+  },
+  "upstream_training_semantics": {
+    "construction": {
+      "resnet18 = resnet18()": 15,
+      "resnet18 = resnet18.cuda()": 17,
+      "resnet18.fc = nn.Linear(512, 17)": 16
+    },
+    "criterion": {
+      "arguments": "NONE (mean reduction, no weight, no label smoothing)",
+      "line": 28,
+      "statement": "nn.CrossEntropyLoss()"
+    },
+    "epochs": 200,
+    "file": "models/pretrain_classifier.py",
+    "gradient_clipping": "NONE",
+    "imported_or_executed": false,
+    "loader": {
+      "batch_size": 256,
+      "drop_last": true,
+      "line": 26,
+      "num_workers": 6,
+      "shuffle": true
+    },
+    "mode_calls": [],
+    "mode_semantics": "no .train()/.eval() anywhere; torch.nn.Module defaults to training=True, so BatchNorm2d uses batch statistics and updates running stats",
+    "optimizer": {
+      "class": "optim.SGD",
+      "constructed_after_fc_replacement_and_cuda": true,
+      "hyperparameters": {
+        "lr": 0.002,
+        "momentum": 0.9,
+        "weight_decay": 0.005
+      },
+      "line": 27,
+      "params": "resnet18.parameters()",
+      "statement": "optimizer = optim.SGD(resnet18.parameters(), lr=0.002, momentum=0.9, weight_decay=0.005)"
+    },
+    "precision_controls": [],
+    "precision_semantics": "NONE_EXPLICIT: no autocast, GradScaler, TF32 flag, dtype cast or cudnn flag; FP32 parameters under library defaults",
+    "scheduler": "NONE",
+    "sha256": "3444691f6f2c59b41a07f06db9388b134e849bb889c5f6b03489d47c7e037b16",
+    "step_order": {
+      "_, _, _, outputs = resnet18(inputs)": 37,
+      "loss = loss_asym": 39,
+      "loss.backward()": 40,
+      "loss_asym = criteria(outputs, labels)": 38,
+      "optimizer.step()": 41,
+      "optimizer.zero_grad()": 36
+    },
+    "torch_save_calls_in_script": 1
+  },
+  "warnings": []
+}
