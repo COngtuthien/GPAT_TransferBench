@@ -1,0 +1,340 @@
+{
+  "schema": "gpat.e07c.main_checkpoint_retention",
+  "schema_version": 1,
+  "record_id": "M6D6IR_E07C_MAIN_CHECKPOINT_RETENTION_OWNER_DECISION",
+  "milestone": "M6D6iR",
+  "method_id": "E07c",
+  "method_name": "DiffFAS-BIN-IDFREE",
+  "reporting_label": "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)",
+  "record_kind": "OWNER_DECISION / CHECKPOINT_RETENTION",
+  "classification": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+  "status": [
+    "OWNER_APPROVED",
+    "ADDITIVE",
+    "NON_DESTRUCTIVE",
+    "PROSPECTIVE"
+  ],
+  "not_classified_as": [
+    "SCIENTIFIC_ADAPTATION",
+    "NEW_DEVIATION",
+    "CHECKPOINT_SELECTION_CHANGE",
+    "TRAINING_BUDGET_CHANGE",
+    "AMENDMENT_A9"
+  ],
+  "amendment_created": false,
+  "a9_created": false,
+  "fidelity": {
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "deviation": "DEV-021",
+    "new_deviation": false,
+    "new_fidelity_class": false
+  },
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "deviation": "DEV-021",
+  "new_deviation": false,
+  "new_fidelity_class": false,
+  "historical_configs_rewritten": false,
+  "authority_commit": "a433b28f861631b1e7828ff247c32f3e3d37bcca",
+  "record_document": {
+    "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_E07c_Checkpoint_Retention_Decision_M6D6iR.md",
+    "sha256": "92ec38fe555c12f4bd68382b110d49cb397e1d7a5f84e6415a20c4e71abf7819"
+  },
+  "bound_authority_sha256": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A1_Fair_IDFree_Main_Track.md": "03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+    "configs/amendments/e07c_a7_execution_policy.yaml": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3",
+    "configs/amendments/e07c_m6d6h_aux_encoder_freeze.yaml": "6230e0b9531d47664f9eb14a7f87b24f67b0bf231a995adaba1294f944ec7693",
+    "outputs/audit/M4_IDFREE_MANIFEST_AUDIT.json": "5c0ff0c94504efc54c903ebf6159157e589767f6ae0b1b836d7c8543bb9fd0a5",
+    "methods/difffas/main_graph.py": "cd85bf2e28ca88cf48c9a745f84cb1d66d5271e17a4a2bd5b083f1a1863c3411",
+    "methods/difffas/main_graph_qualification.py": "be0df3098c76c83f770957267cccffa5f03ab977164c9fbb4e4a6d4d3a5f2ebd",
+    "outputs/audit/M6D6I_E07C_MAIN_GRAPH_QUALIFICATION.json": "089af4d51f9c1cd9592a81686115dfcd7683ec4fc04291db790515e66f79c1b8",
+    "outputs/audit/M6D6I_E07C_MAIN_GRAPH_QUALIFICATION.md": "827e4d6145a7b6c15ecb20c7a969fc6762e5a43e9c3a48a96db32bc8876526a9",
+    "outputs/audit/M6D6I_E07C_PROCESS_1.json": "d6d15ec734938c3862c324aec73c4f39958ea999770e5813b22a57f8b5d2cf5a",
+    "outputs/audit/M6D6I_E07C_PROCESS_2.json": "7bc909635f19be5f564c4fafd5194e82cd7b1ca7340c8a55277753c18fb75384",
+    "third_party/source_cache/difffas/FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84"
+  },
+  "source": {
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "train_script": "FAS_train.py",
+    "official_source_modified": false
+  },
+  "clarifies": {
+    "config_clause": "configs/methods/e07c_difffas_bin_idfree.yaml checkpoint_retention (RETAIN_PER_OFFICIAL_CADENCE; never_delete; pruning_in_m6b: false; if_pruned_later: metadata_and_sha256_records_must_remain)",
+    "logging_clause": "configs/run_logging_v1.yaml retention (if_pruned_later; silent_pruning: FORBIDDEN) and checkpoint_history.required_fields",
+    "spec_basis": "frozen specification requires each run to save the model checkpoint hash; no clause requires retaining every periodic checkpoint's bytes",
+    "ambiguity_resolved": "who may prune non-protected periodic checkpoint bytes of E07c main scientific runs, and when",
+    "historical_statements_remain_correct": true
+  },
+  "scope": {
+    "applies_to": "E07c main scientific runs",
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "run_root_template": "<runtime_root>/runs/m6/E07c/seed_<seed>/",
+    "excludes": [
+      "M6D6g auxiliary encoder run",
+      "encoder_final.pkl",
+      "auxiliary resume sidecars",
+      "qualification artifacts",
+      "E01",
+      "E02",
+      "E03",
+      "E04",
+      "E05",
+      "E06c",
+      "M7",
+      "M8",
+      "any other method"
+    ]
+  },
+  "checkpoint_creation": {
+    "unchanged": true,
+    "train_rows": 8838,
+    "train_rows_authority": [
+      "configs/frozen/difffas_bin_idfree_v1.yaml training_manifest.rows",
+      "outputs/audit/M4_IDFREE_MANIFEST_AUDIT.json difffas.rows"
+    ],
+    "batch_size": 4,
+    "drop_last": false,
+    "iterations_per_epoch": 2210,
+    "last_batch_size": 2,
+    "epochs": 400,
+    "total_iterations": 884000,
+    "cadence_iterations": 10000,
+    "source_trigger": "iters = iters + 1 (FAS_train.py:42) precedes if iters % args.save_checkpoints_every_iters == 0 (:102); iters = 0 (:30) before the epoch loop; never reset",
+    "save_at_global_step_0": false,
+    "periodic_global_steps": {
+      "first": 10000,
+      "last": 880000,
+      "step": 10000
+    },
+    "periodic_checkpoint_count": 88,
+    "terminal_global_step": 884000,
+    "terminal_checkpoint_count": 1,
+    "terminal_rule": "A2-06 BASELINE_FINAL_STATE_V1 clause 3 (884000 % 10000 = 4000; zero additional optimizer steps)",
+    "created_checkpoint_count": 89,
+    "skip_save_authorized": false,
+    "cadence_change_authorized": false
+  },
+  "payload": {
+    "unchanged": true,
+    "keys": [
+      "model",
+      "ema",
+      "scheduler",
+      "optimizer",
+      "conf"
+    ],
+    "serialization": "torch.save({model, ema, scheduler, optimizer, conf}, path) (FAS_train.py:105-114)",
+    "weights_only_authorized": false,
+    "optimizer_strip_authorized": false,
+    "dtype_change_authorized": false,
+    "compression_authorized": false,
+    "serialization_api_change_authorized": false,
+    "payload_reduction_authorized": false,
+    "payload_rewrite_authorized": false
+  },
+  "selection": {
+    "rule": "BASELINE_FINAL_STATE_V1",
+    "state": "terminal state after the full 400-epoch budget",
+    "final_checkpoint": "terminal",
+    "selected_checkpoint": "terminal",
+    "val_selects": false,
+    "test_selects": false,
+    "loss_selects": false,
+    "early_stopping": false,
+    "changed": false
+  },
+  "pruning": {
+    "authorized": true,
+    "eligible": "bytes of periodic, non-selected, non-final, non-protected checkpoints of E07c main scientific runs",
+    "successor_gate": [
+      "checkpoint file creation completed",
+      "file closed successfully",
+      "path recorded",
+      "epoch recorded",
+      "global_step recorded",
+      "file_size_bytes recorded",
+      "SHA256 computed from the completed file",
+      "checkpoint_index.json entry durably written",
+      "SHA256/index verification passed"
+    ],
+    "successor_gate_all_required": true,
+    "gated_on": "direct successor C_{k+1}",
+    "prune_before_successor_verification": "FORBIDDEN",
+    "prune_immediately_after_own_save": "FORBIDDEN",
+    "terminal_transition": {
+      "last_periodic_global_step": 880000,
+      "retained_until": "terminal 884000 created, closed, hashed, indexed and verified"
+    },
+    "method": "explicit removal of the exact recorded path of an already-indexed non-protected periodic checkpoint",
+    "forbidden": [
+      "background deletion",
+      "unlogged cleanup",
+      "glob deletion",
+      "automatic keep-latest-N without per-checkpoint provenance",
+      "removal of unknown paths",
+      "early predecessor deletion to make room"
+    ],
+    "failure_policy": {
+      "successor_write_failure": "KEEP_PREDECESSOR",
+      "successor_hash_failure": "KEEP_PREDECESSOR",
+      "successor_index_failure": "KEEP_PREDECESSOR",
+      "successor_verification_failure": "KEEP_PREDECESSOR",
+      "prune_failure": "STOP_AND_REPORT (scientific state unchanged; index history never rewritten to pretend success)",
+      "insufficient_space_for_successor": "STOP_AND_REPORT (predecessor never deleted early)"
+    }
+  },
+  "protected": {
+    "roles": [
+      "authoritative_final_checkpoint",
+      "selected_checkpoint",
+      "officially_required_checkpoint",
+      "terminal"
+    ],
+    "resolve_to": "terminal checkpoint at global_step 884000 of a successfully completed seed",
+    "pruning": "FORBIDDEN",
+    "one_physical_file_may_satisfy_all_roles": true,
+    "duplicate_byte_copies_required": false,
+    "deduplication_kind": "storage deduplication of identical logical roles; not deduplication of different scientific states"
+  },
+  "metadata_retention": {
+    "index_file": "checkpoint_index.json",
+    "records_never_removed": true,
+    "required_fields_unchanged": [
+      "path",
+      "epoch",
+      "global_step",
+      "file_size_bytes",
+      "sha256",
+      "checkpoint_type",
+      "selected_for_final",
+      "selection_reason"
+    ],
+    "retained_fields": {
+      "bytes_present": true,
+      "bytes_pruned": false
+    },
+    "pruned_fields": {
+      "bytes_present": false,
+      "bytes_pruned": true,
+      "pruned_utc": "<timestamp>",
+      "prune_reason": "EXPLICIT_E07C_PERIODIC_RETENTION_POLICY",
+      "successor_checkpoint_global_step": "<verified successor global_step>",
+      "successor_checkpoint_sha256": "<verified successor sha256>"
+    }
+  },
+  "silent_pruning": "FORBIDDEN",
+  "crash_semantics": {
+    "retained_at_any_instant": [
+      "previous verified periodic checkpoint, if one exists",
+      "checkpoint being created/verified"
+    ],
+    "kind": "STORAGE_RETENTION_RULE",
+    "qualifies_resume": false
+  },
+  "science_unchanged": {
+    "dataset": false,
+    "batch_size": false,
+    "tail_batch": false,
+    "epochs": false,
+    "optimizer": false,
+    "scheduler": false,
+    "ema": false,
+    "precision": false,
+    "rng": false,
+    "model": false,
+    "encoder": false,
+    "training_trajectory": false,
+    "checkpoint_cadence": false,
+    "checkpoint_contents": false,
+    "checkpoint_selection": false,
+    "final_state": false,
+    "evaluation": false,
+    "scientific_seeds": false
+  },
+  "science_unchanged_semantics": "each key is 'changed' (all false)",
+  "resume": {
+    "MAIN_CHECKPOINT_RESUME": "UNQUALIFIED",
+    "pruning_proves_resume": false,
+    "future_resume_may_rely_only_on_present_bytes": true,
+    "conflict_policy": "STOP_AND_RESOLVE_PROSPECTIVELY"
+  },
+  "future_implementation": {
+    "milestone": "M6D6j",
+    "obligations": [
+      "create every official periodic checkpoint",
+      "close it",
+      "hash it",
+      "write/index its full metadata",
+      "verify the index against the bytes",
+      "identify the predecessor as periodic, non-selected, non-final and non-protected",
+      "explicitly prune that predecessor",
+      "update only its retention metadata",
+      "preserve SHA256/path/size/epoch/global_step forever",
+      "record the prune in logs/evidence"
+    ],
+    "required_tests": [
+      "no prune before successor verification",
+      "no prune on failed save",
+      "no prune on hash failure",
+      "no prune on index failure",
+      "protected final refusal",
+      "exact-path pruning only",
+      "no glob cleanup",
+      "no silent cleanup",
+      "no modification of scientific payload",
+      "checkpoint count/cadence unchanged"
+    ]
+  },
+  "storage_rationale": {
+    "label": "RESOURCE_PLANNING_ESTIMATE",
+    "binding": false,
+    "previous_feasibility_verdict": "GO_IF_OWNER_APPROVES_RETENTION_CHANGE",
+    "mature_checkpoint_best_estimate_gb": 2.476,
+    "strict_retain_all_per_seed_gb": 220,
+    "strict_retain_all_three_seeds_gb": 661,
+    "audit_time_available_primary_gb": 443.5,
+    "secondary_mounted_data_filesystem": false,
+    "approved_policy_peak_gb": 12.4,
+    "approved_policy_terminal_retained_gb": 7.4
+  },
+  "statuses": {
+    "qualified": [
+      "E07c_MAIN_CHECKPOINT_RETENTION_POLICY_FROZEN",
+      "MAIN_CHECKPOINT_RETENTION_POLICY_FROZEN"
+    ],
+    "not_qualified": [
+      "MAIN_PRODUCTION_RUNNER",
+      "MAIN_CHECKPOINT_RESUME",
+      "MAIN_DIFFFAS_SCIENTIFIC_TRAINING",
+      "M8_BANK"
+    ],
+    "m6d6i_statuses_requalified": false,
+    "method_status": "IMPLEMENTED_NOT_EXECUTED"
+  },
+  "decision_operation": {
+    "training_runs": 0,
+    "scientific_runs": 0,
+    "qualification_optimizer_steps": 0,
+    "optimizer_steps": 0,
+    "backward_calls": 0,
+    "checkpoint_creations": 0,
+    "checkpoint_deletions": 0,
+    "checkpoint_moves": 0,
+    "checkpoint_deserializations": 0,
+    "TRAIN_access": false,
+    "VAL_access": false,
+    "TEST_access": false,
+    "M8_outputs": 0,
+    "gpu_contacted": false
+  }
+}
