@@ -1,0 +1,41 @@
+M6D6h E07c auxiliary conditioning-encoder OWNER FREEZE: read-only GPU revalidation log
+==================================================================================
+Laptop authority: branch m6-baselines; HEAD = origin/m6-baselines = ee0a9b9166577cac606c142af5bc2e338d75eea1 (M6D6g); worktree clean before M6D6h; nothing staged.
+GPU: student20261@100.121.84.44; single SSH session; commands used: hostname, date, git rev-parse/branch/status, stat, sha256sum, find (names only), python3 stdlib json read of run_summary.json (2489 B), pgrep, nvidia-smi --query-compute-apps, tmux ls.
+NOT used: torch.load / any Python import of the checkpoint (NO_TORCH_LOAD); chmod (NO_CHMOD); rename, copy, move, delete, prune, rewrite; any training launch; any git fetch/merge on the GPU repo.
+Disclosure: the GPU repo is at 7642b23 (M6D6f; the M6D6g commit added laptop evidence only); it was NOT synced or modified here, and no repository code was executed on the GPU.
+Disclosure: the engineering sidecar runner_state_epoch_200.pth was stat-ed only (never read).
+
+----- raw GPU output (verbatim) -----
+host nd-System-Product-Name; utc 2026-09-27T11:39:10Z
+gpu_repo branch m6-baselines; HEAD 7642b23e60a1d89fcd481b03d4c9cb361f4c6e20; status_lines 0
+stat_before: SIZE=185136819 MODE=664/-rw-rw-r-- UID=student20261 MTIME=2026-09-27 03:02:38.381151031 +0700 INODE=7216659 LINKS=1
+49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl
+stat_after: SIZE=185136819 MODE=664/-rw-rw-r-- UID=student20261 MTIME=2026-09-27 03:02:38.381151031 +0700 INODE=7216659 LINKS=1
+a389357eb8b979ee37bed82930be93b3f3333a7cb05050d3d1052119f0a24c78  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/resolved_config.yaml
+c0bd3a89e47a52905d49eb307f4ba72b7ee89680f4e8439f7ea9023ed92d0891  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/run_manifest.json
+efb37d1fc683959056d6773527bfe35b6d4f6e96d8450d79c96036609b37ef56  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/metrics.jsonl
+d93a793681e9bfc93a64b541664ac2256f7e7add4d92ed32e07555396f850793  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoint_index.json
+652742dafa4900648b6d276e2b650b6d1a7ea8e7bdefc73e503f40b1808325b2  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/resume_state_index.json
+3fc24a55547c6f78e1a61591fbe937e69989fb84bf9541450733974f1b2e30c9  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/run_summary.json
+04cc649915688bfa53b90d6006862adf5aadafd132edc143a828e37805bc7b58  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/stderr.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/generation_log.jsonl
+sidecar_stat: SIZE=370095195 MTIME=2026-09-27 03:02:39.416162963 +0700
+tree: ./checkpoint_index.json ./checkpoints ./checkpoints/encoder_final.pkl ./checkpoints/resume ./checkpoints/resume/runner_state_epoch_200.pth ./generation_log.jsonl ./metrics.jsonl ./resolved_config.yaml ./resume_state_index.json ./run_manifest.json ./run_summary.json ./stderr.log ./stdout.log
+run_summary: completion_status=completed final_checkpoint_status=SHA256_RECORDED_PENDING_OWNER_FREEZE final_or_selected_checkpoint_sha256=49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c authoritative_for_main_difffas=False
+procs_e07c_aux: NONE
+procs_difffas: NONE
+procs_python_gpu: (none)
+tmux: jupyter: 1 windows (created Sat Sep 19 15:20:12 2026);llm-movielens-3: 1 windows (created Sat Sep  5 18:43:24 2026) (group llm-movielens);stdn_full_train: 1 windows (created Tue Sep 15 14:19:39 2026);train: 1 windows (created Wed Aug 19 16:07:42 2026);train_session: 1 windows (created Wed Aug 19 12:19:43 2026);
+M6D6H_GPU_EXIT=0
+
+----- verdict -----
+SIZE=185136819 == frozen bytes; sha256sum == frozen SHA256 49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c.
+stat before == stat after hashing (size, mode 664, mtime, inode, links): checkpoint bytes and metadata unchanged; file mode disclosed, not changed.
+All 9 small runtime files byte-identical to the M6D6g recorded runtime_files SHA256 (resolved_config.yaml, run_manifest.json, metrics.jsonl, checkpoint_index.json, resume_state_index.json, run_summary.json, stdout.log, stderr.log, generation_log.jsonl): RUNTIME_METADATA_UNCHANGED.
+Runtime tree identical to the M6D6g recorded tree (13 entries).
+run_summary.json: completion_status=completed; final_checkpoint_status=SHA256_RECORDED_PENDING_OWNER_FREEZE (historical M6D6g status, not rewritten).
+pgrep run_e07c_aux|aux_runner -> NONE: NO_AUX_TRAINING_PROCESS. pgrep difffas|DiffFAS|run_e07c_main|train_main -> NONE: NO_MAIN_DIFFFAS_PROCESS. nvidia-smi compute apps: none.
+tmux sessions listed are pre-existing, unrelated to GPAT (jupyter, llm-movielens-3, stdn_full_train, train, train_session; oldest 2026-08-19); none runs E07c.
+Checkpoint deserializations 0; TRAIN/VAL/TEST image reads 0; optimizer steps 0; backward calls 0.

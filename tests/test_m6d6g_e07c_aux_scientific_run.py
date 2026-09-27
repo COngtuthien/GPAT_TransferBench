@@ -13,6 +13,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY = '7642b23e60a1d89fcd481b03d4c9cb361f4c6e20'
+M6D6G_COMMIT = 'ee0a9b9166577cac606c142af5bc2e338d75eea1'
 FINAL_SHA = '49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c'
 PENDING = 'SHA256_RECORDED_PENDING_OWNER_FREEZE'
 RUN = ROOT / 'outputs/audit/M6D6G_E07C_AUX_SCIENTIFIC_RUN.json'
@@ -124,7 +125,17 @@ class TestM6D6gScientificRun(unittest.TestCase):
         self.assertIn('M8_BANK', self.ev['not_qualified'])
 
     def test_17_scientific_files_byte_identical_to_authority(self):
-        self.pf.scientific_files_unchanged()
+        # B1 (M6D6h, PROSPECTIVE_REGRESSION_HARNESS_SCOPE_CORRECTION): the historical claim is that M6D6g itself left
+        # the scientific trees unchanged, i.e. over the commit range AUTHORITY..M6D6G_COMMIT; it does not lock HEAD.
+        self.assertEqual(git('merge-base', '--is-ancestor', M6D6G_COMMIT, 'HEAD').returncode, 0)
+        self.assertEqual(git('rev-parse', M6D6G_COMMIT + '^').stdout.decode().strip(), AUTHORITY)
+        diff = git('diff', '--name-only', AUTHORITY, M6D6G_COMMIT, '--', *self.pf.FROZEN_TREES)
+        self.assertEqual((diff.returncode, diff.stdout.decode().strip()), (0, ''))
+        for rel, digest in self.pf.EXECUTED.items():
+            blob = git('show', f'{M6D6G_COMMIT}:{rel}').stdout
+            self.assertEqual((self.pf.sha(blob), blob), (digest, git('show', f'{AUTHORITY}:{rel}').stdout), rel)
+        spec = 'docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx'
+        self.assertEqual(self.pf.sha(git('show', f'{M6D6G_COMMIT}:{spec}').stdout), self.pf.SPEC_SHA)
 
     def test_18_runtime_manifest_git_commit(self):
         self.assertEqual((self.ev['runtime_git_commit'], self.ev['runtime_git_dirty']), (AUTHORITY, False))

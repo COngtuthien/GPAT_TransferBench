@@ -1,0 +1,153 @@
+{
+  "schema": "gpat.e07c.aux_encoder_freeze",
+  "schema_version": 1,
+  "record_id": "M6D6H_E07C_AUX_ENCODER_OWNER_FREEZE",
+  "milestone": "M6D6h",
+  "method_id": "E07c",
+  "method_name": "DiffFAS-BIN-IDFREE",
+  "role": "AUXILIARY_CONDITIONING_ENCODER",
+  "record_kind": "OWNER_DECISION / ASSET_FREEZE",
+  "status": [
+    "OWNER_FROZEN",
+    "ADDITIVE",
+    "NON_DESTRUCTIVE"
+  ],
+  "classification": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+  "amendment_created": false,
+  "fidelity": {
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "deviation": "DEV-021",
+    "new_deviation": false,
+    "new_fidelity_class": false
+  },
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "deviation": "DEV-021",
+  "new_deviation": false,
+  "new_fidelity_class": false,
+  "new_scientific_rule": false,
+  "historical_configs_rewritten": false,
+  "authority_commit": "ee0a9b9166577cac606c142af5bc2e338d75eea1",
+  "freeze_basis": "A3 5.4b already requires the ONE auxiliary encoder to be trained once, selected by the final-state rule, SHA256-recorded, frozen, and reused for all E07c main seeds; M6D6g produced and recorded the final SHA256 (SHA256_RECORDED_PENDING_OWNER_FREEZE); M6D6h performs the owner freeze of exactly that identity",
+  "record_document": {
+    "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_E07c_Aux_Encoder_Freeze_Record_M6D6h.md",
+    "sha256": "dffc0fbfb0da455c8b8bcb89980cbee71d50e33754bacc6b3a2e6b22e02fbd70"
+  },
+  "frozen_asset": {
+    "name": "controlled_conditioning_encoder",
+    "path_template": "<runtime_root>/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+    "path_contract_source": "configs/methods/e07c_difffas_bin_idfree.yaml external_assets[0].external_runtime_path",
+    "observed_gpu_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+    "observed_gpu_path_role": "PROVENANCE_ONLY; never replaces the portable <runtime_root> path contract",
+    "sha256": "49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c",
+    "bytes": 185136819,
+    "format": "torch.save of the WHOLE nn.Module (matches torch.load(path).cuda())",
+    "weight_bytes_in_git": false
+  },
+  "producer": {
+    "milestone": "M6D6g",
+    "auxiliary_seed": 42,
+    "logical_run": "ONE_LOGICAL_RUN",
+    "run_id": "7014cdb366da52e4",
+    "run_uuid": "7031fd2f-92d7-465a-94d1-ab99bf8a3960",
+    "completed_epoch": 200,
+    "global_step": 11200,
+    "logical_optimizer_steps": 11200,
+    "physical_optimizer_steps": 11200,
+    "superseded_optimizer_steps": 0,
+    "interruptions": 0,
+    "resumes": 0,
+    "val_or_test_selection": false,
+    "selection_rule": "FINAL_STATE_AFTER_EPOCH_200",
+    "runtime_git_commit": "7642b23e60a1d89fcd481b03d4c9cb361f4c6e20",
+    "producer_commit": "ee0a9b9166577cac606c142af5bc2e338d75eea1",
+    "historical_status": "SHA256_RECORDED_PENDING_OWNER_FREEZE",
+    "historical_status_preserved": true
+  },
+  "source": {
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65"
+  },
+  "bound_authority_sha256": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A3_Controlled_Reconstruction_E04_E07c.md": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A6_E07c_Feature_Interface_Source_Correction.md": "759f72d860ccf49927c214bb4ce84e87bcedd98eb8f06ef5fe7361a758d6bc81",
+    "configs/amendments/e07c_a6_feature_interface_source_correction.yaml": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A7_E07c_Execution_Policy.md": "0a46c3b06e277ad38b17a6e85fe2924441d8d13b1de887bf54903dda9aa292ba",
+    "configs/amendments/e07c_a7_execution_policy.yaml": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A8_E07c_Aux_Resume_Policy.md": "deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f",
+    "configs/amendments/e07c_a8_aux_resume_policy.yaml": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a",
+    "environments/e07c.lock.json": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+    "outputs/audit/M6D6G_E07C_AUX_FINAL_CHECKPOINT.json": "5e79da92f165f8af472f8e32f14f52100d0263378e9b461aec3d37976ba73498",
+    "outputs/audit/M6D6G_E07C_AUX_SCIENTIFIC_RUN.json": "4dc547fd4e31ab929a9c1c44c33c7781b8cc2da5a0cde8aa736e8539ceca581f"
+  },
+  "owner_freeze": {
+    "owner_freeze_performed": true,
+    "authoritative_for_main_difffas": true,
+    "frozen_for_main_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "all_main_seeds_share_one_checkpoint": true,
+    "alternative_checkpoints_authorized": 0,
+    "supersedes_prospectively": "SHA256_RECORDED_PENDING_OWNER_FREEZE (M6D6g status remains historically correct)"
+  },
+  "owner_freeze_performed": true,
+  "authoritative_for_main_difffas": true,
+  "frozen_for_main_seeds": [
+    42,
+    1337,
+    2026
+  ],
+  "consumption": {
+    "secure_loader": "methods.difffas.aux_checkpoint.load_frozen_aux_encoder",
+    "loader_signature": "load_frozen_aux_encoder(runtime_root, recorded_sha256, config=None)",
+    "recorded_sha256_must_equal_frozen": true,
+    "size_verified_before_deserialization": true,
+    "sha256_verified_on_exact_in_memory_bytes_before_deserialization": true,
+    "unsafe_load": "torch.load(io.BytesIO(raw), weights_only=False) ONLY after the SHA256 gate (M6D6c RUNTIME_COMPATIBILITY_ADAPTATION)",
+    "forbidden": [
+      "state_dict_conversion",
+      "safetensors",
+      "torchscript",
+      "safe_globals_substitution",
+      "alternate_checkpoint",
+      "fallback_checkpoint",
+      "latest_checkpoint_discovery",
+      "cli_checkpoint_override",
+      "environment_variable_checkpoint_override",
+      "global_torch_load_patch"
+    ],
+    "currently_qualified_consumer_scope": "MAIN_DIFFFAS",
+    "future_e07c_consumers_must_reference_this_identity": true,
+    "M8_integration_qualified": false,
+    "M8_BANK": "UNQUALIFIED",
+    "A7_M8_rng_policy_question": "UNRESOLVED"
+  },
+  "failure_policy": {
+    "missing_checkpoint": "STOP_AND_REPORT",
+    "size_mismatch": "STOP_AND_REPORT",
+    "sha256_mismatch": "STOP_AND_REPORT",
+    "caller_sha256_differs_from_frozen": "STOP_AND_REPORT",
+    "automatic_refreeze": "FORBIDDEN",
+    "automatic_retraining": "FORBIDDEN"
+  },
+  "file_protection": {
+    "chmod_performed": false,
+    "rename_move_copy_delete_prune_rewrite": false,
+    "basis": "canonical path + frozen size + frozen SHA256 + fail-closed verification before deserialization"
+  },
+  "freeze_operation": {
+    "training_runs": 0,
+    "optimizer_steps": 0,
+    "backward_calls": 0,
+    "checkpoint_deserializations": 0,
+    "TRAIN_access": false,
+    "VAL_access": false,
+    "TEST_access": false,
+    "M8_outputs": 0,
+    "main_difffas_scientific_runs": 0
+  }
+}

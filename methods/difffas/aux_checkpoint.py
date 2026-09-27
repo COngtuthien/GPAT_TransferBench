@@ -19,6 +19,7 @@ that are then deserialized (no re-read between check and load).
 from contextlib import contextmanager
 import hashlib
 import io
+import json
 from pathlib import Path
 import sys
 
@@ -41,6 +42,11 @@ LOAD_COMPATIBILITY = {
 # Custom audit events; order proof for SHA-before-deserialize (no effect without an audit hook).
 EVENT_VERIFIED = 'gpat.e07c.aux_checkpoint.sha256_verified'
 EVENT_REJECTED = 'gpat.e07c.aux_checkpoint.sha256_rejected'
+# M6D6h owner freeze (OWNER_DECISION / ASSET_FREEZE; not an amendment): the ONE authorized auxiliary encoder.
+FREEZE_RECORD = 'configs/amendments/e07c_m6d6h_aux_encoder_freeze.yaml'
+FREEZE_RECORD_SHA256 = '6230e0b9531d47664f9eb14a7f87b24f67b0bf231a995adaba1294f944ec7693'
+OWNER_FROZEN_SHA256 = '49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c'
+OWNER_FROZEN_BYTES = 185136819
 
 
 def _config(config):
@@ -135,9 +141,61 @@ def load_verified_whole_module(path, expected_sha256, config=None, *, device='cu
         yield model
 
 
+def load_freeze_record(config=None):
+    """M6D6h freeze record (JSON subset of YAML): pinned SHA256, bound authorities and frozen identity re-verified."""
+    cfg = _config(config)
+    raw = (ROOT / FREEZE_RECORD).read_bytes()
+    if hashlib.sha256(raw).hexdigest() != FREEZE_RECORD_SHA256:
+        raise PreparationError('M6D6h freeze record SHA256 differs from the pinned value')
+    record = json.loads(raw)
+    doc = record['record_document']
+    if sha256_file(ROOT / doc['path']) != doc['sha256']:
+        raise PreparationError('M6D6h freeze record document SHA256')
+    for rel, digest in record['bound_authority_sha256'].items():
+        if sha256_file(ROOT / rel) != digest:
+            raise PreparationError('M6D6h-bound authority SHA256 ' + rel)
+    asset, owner = record['frozen_asset'], record['owner_freeze']
+    if ((record['milestone'], record['method_id'], record['role'], record['classification'], record['fidelity']) !=
+            ('M6D6h', 'E07c', 'AUXILIARY_CONDITIONING_ENCODER', 'DETERMINISTIC_IMPLEMENTATION_CLARIFICATION',
+             {'fidelity_class': 'CONTROLLED_ADAPTATION', 'deviation': 'DEV-021', 'new_deviation': False,
+              'new_fidelity_class': False}) or
+            (asset['sha256'], asset['bytes'], asset['format']) != (OWNER_FROZEN_SHA256, OWNER_FROZEN_BYTES, FROZEN_FORMAT) or
+            asset['path_template'] != cfg['external_assets'][0]['external_runtime_path'] or
+            (owner['owner_freeze_performed'], owner['authoritative_for_main_difffas']) != (True, True) or
+            owner['frozen_for_main_seeds'] != cfg['seeds']['experiment_seeds'] or
+            record['consumption']['secure_loader'] != __name__ + '.load_frozen_aux_encoder' or
+            record['consumption']['M8_integration_qualified'] is not False):
+        raise PreparationError('M6D6h freeze record semantics')
+    return {'sha256': FREEZE_RECORD_SHA256, 'record': record, 'frozen_asset': asset}
+
+
+def frozen_checkpoint_path(runtime_root, config=None):
+    """The configured seed-42 auxiliary path under an absolute, repository-external runtime root; no discovery."""
+    cfg = _config(config)
+    root = Path(runtime_root)
+    if not root.is_absolute() or root.resolve().is_relative_to(ROOT):
+        raise PreparationError('auxiliary checkpoint must remain in external runtime storage')
+    return _external(cfg['external_assets'][0]['external_runtime_path'].replace('<runtime_root>', str(root)))
+
+
 @contextmanager
 def load_frozen_aux_encoder(runtime_root, recorded_sha256, config=None):
-    """Future main-run entry: the frozen external path and recorded SHA256 only."""
+    """Main-run entry: ONLY the M6D6h owner-frozen asset (canonical path, frozen size, frozen SHA256).
+
+    The caller SHA256 must equal the frozen value before the checkpoint file is opened; the size is
+    required before hashing; the M6D6c exact-byte SHA256-before-torch.load order is unchanged.
+    Any mismatch or missing file is STOP_AND_REPORT: no fallback, re-freeze or retraining.
+    """
+    frozen = load_freeze_record(config)['frozen_asset']
+    if recorded_sha256 != frozen['sha256']:
+        raise PreparationError('recorded SHA256 is not the M6D6h owner-frozen auxiliary encoder; STOP_AND_REPORT')
+    path = frozen_checkpoint_path(runtime_root, config)
+    if not path.is_file():
+        raise PreparationError(f'required external asset unavailable: {path}')
+    if path.stat().st_size != frozen['bytes']:
+        raise PreparationError('auxiliary checkpoint size differs from the frozen size; STOP_AND_REPORT')
     asset = verify_future_checkpoint(runtime_root, recorded_sha256, config)
+    if (Path(asset['path']), asset['size_bytes']) != (path, frozen['bytes']):
+        raise PreparationError('auxiliary checkpoint is not the frozen canonical asset; STOP_AND_REPORT')
     with load_verified_whole_module(asset['path'], recorded_sha256, config) as model:
         yield model
