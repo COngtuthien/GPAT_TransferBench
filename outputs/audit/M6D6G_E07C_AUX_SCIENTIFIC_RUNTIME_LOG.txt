@@ -1,0 +1,117 @@
+M6D6G E07C RUNTIME LOG — ONE scientific auxiliary-encoder run (seed 42 x 200 epochs) + final checkpoint SHA256 recording
+All times UTC. Laptop /home/cong/GPAT_TransferBench; GPU student20261@100.121.84.44 (RTX 3090, GPU 0).
+SCIENTIFIC · auxiliary_encoder_training_seed 42 · ONE_LOGICAL_RUN · TRAIN only · no VAL · no TEST · no main DiffFAS · no M8
+
+== 1. Laptop authority
+branch m6-baselines; HEAD 7642b23e60a1d89fcd481b03d4c9cb361f4c6e20; git fetch origin; origin/m6-baselines 7642b23e60a1d89fcd481b03d4c9cb361f4c6e20;
+git status --porcelain -> (empty)
+
+== 2. GPU sync (inspect first)
+before: branch m6-baselines; HEAD a00aba9f998fb0d91122617012af0dec7794c007 (M6D6e); status lines 0
+git fetch origin (a00aba9..7642b23); git merge-base --is-ancestor HEAD origin/m6-baselines -> ANCESTOR_OK;
+git merge --ff-only origin/m6-baselines -> fast-forward to 7642b23e60a1d89fcd481b03d4c9cb361f4c6e20; status lines 0.
+No reset, clean, rebase or forced checkout.
+
+== 3. Authority read
+Frozen spec f7d23716…; A1 03828716…; A2 b4fa7bfa…; A3 b1245153…; A6 overlay dd3f29aa…; A7 overlay 3e4c758c…;
+A8 doc deb11b5c… / overlay a098ce50…; method config dba34a92…; frozen difffas_bin_idfree_v1 aa9e9841…; run_logging_v1 d3362294…;
+e07c.lock.json 0c909de1…; M6D6e contract 09c0af7e…; M6D6e + M6D6f evidence.
+Code read: tools/run_e07c_aux.py, methods/difffas/{aux_runner,aux_runner_io,aux_resume,aux_checkpoint,execution_policy,seed_adapter}.py.
+No scientific implementation/config mutation after M6D6f: HEAD = M6D6f commit, worktree clean on both hosts.
+
+== 4. Resources before any scientific root (GPU)
+nvidia-smi 2026-09-26T15:43:40Z: GPU 0 RTX 3090, 264MiB / 24576MiB, 0% util; compute apps: none (graphics processes only).
+df -h runtime filesystem: /dev/nvme0n1p3 916G size, 456G used, 414G avail (53%).
+Qualification roots retained, not scientific: m6d3a 1.1M, m6d5e 2.1G, m6d6e 292K, m6d6f 1.3G (not deleted).
+<runtime_root>/runs -> absent (seed_42 root ABSENT). tmux m6d6g_e07c_aux: none. run_e07c_aux process: none.
+
+== 5. Static scientific preflight (CUDA_VISIBLE_DEVICES=0 PYTHONHASHSEED=42 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8
+   PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 /home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python tools/run_e07c_aux.py
+   --seed 42 --execution-config configs/execution/m5_gpu_3090.yaml --preflight-only) — complete output:
+{
+  "auxiliary_encoder_training_seed": 42,
+  "checkpoint": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl",
+  "epochs": 200,
+  "git_commit": "7642b23e60a1d89fcd481b03d4c9cb361f4c6e20",
+  "identities": {
+    "a1_adaptation_sha256": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "a3_sha256": "b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a",
+    "a6_overlay_sha256": "dd3f29aa8ff96de9c0e2d504e6d07f4788d8fb8d030ffa26ef51443104ca971b",
+    "a7_overlay_sha256": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3",
+    "a8_document_sha256": "deb11b5cd80fa873bde1ef9e87160fed3a8065903cd8c81c9463b087fbf73b2f",
+    "a8_overlay_sha256": "a098ce509156151ee6ce7ead1e9afa5711264b676a597e2514b1058ed46f471a",
+    "class_map_sha256": "c7d23e3e3e6a526ae412a50125d0d56379ce98bca99d4133ead3fda7139a3812",
+    "config_sha256": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "environment_lock_sha256": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+    "logging_contract_sha256": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "m6d6e_contract_sha256": "09c0af7e79aeb3acda3e188f7a2a9d94f6d0401485a061d46767ab1c71069ae6",
+    "source_commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "source_tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+  },
+  "method_id": "E07c",
+  "resume": null,
+  "resume_policy": "A8_ONE_LOGICAL_RUN_EXACT_EPOCH_BOUNDARY",
+  "role": "AUXILIARY_CONDITIONING_ENCODER",
+  "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42",
+  "storage": {
+    "exec_config": "configs/execution/m5_gpu_3090.yaml",
+    "exec_config_sha256": "c9d22abf1b5e284593bfed21500e8113df7f14ff564b7434e3eda43cb7e7eb70",
+    "faces_256_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256",
+    "runtime_root": "/home/student20261/workdir/GPAT_TransferBench_runtime"
+  },
+  "torch_imported": false
+}
+EXIT=0
+ls: cannot access '/home/student20261/workdir/GPAT_TransferBench_runtime/runs': No such file or directory
+7642b23e60a1d89fcd481b03d4c9cb361f4c6e20
+(EXIT=0 PASS; torch_imported false; resume null; runs/ still absent; git status empty; HEAD 7642b23.)
+
+== 6. Final pre-launch check
+HEAD 7642b23e60a1d89fcd481b03d4c9cb361f4c6e20; status CLEAN; seed_42 ROOT_ABSENT; NO_TMUX; NO_PROC;
+sha256: A8 overlay a098ce50…; method config dba34a92…; run_e07c_aux.py a9a7bcb5…; aux_runner.py ab07c90a…; aux_resume.py 55626c25…
+GPU 0: 264 MiB, 0 %; compute apps: none.
+
+== 7. Launch (exactly once)
+2026-09-26T15:45:07Z tmux new-session -d -s m6d6g_e07c_aux (cwd GPU repo); pipe-pane -> <runtime_root>/launch_logs/m6d6g_e07c_aux_tmux.log (outside Git)
+env CUDA_VISIBLE_DEVICES=0 PYTHONHASHSEED=42 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 \
+  /home/student20261/miniconda3/envs/gpat-m6-e07c/bin/python tools/run_e07c_aux.py --seed 42 --execution-config configs/execution/m5_gpu_3090.yaml
+(no --resume-state). No shell script created in Git.
+
+== 8. Epoch-0 boundary (before the first iterator)
+run_id 7014cdb366da52e4; run_uuid 7031fd2f-92d7-465a-94d1-ab99bf8a3960; start_utc 2026-09-26T15:45:10Z
+session FRESH fd7ad0ac-b769-445b-b33e-1426176ec5db pid 1666763
+committed checkpoints/resume/runner_state_epoch_000.pth completed_epoch 0 global_step 0 sha256 488572b50e84fc114acf844d6d85d5d9b1c7a9ec931039cb401b0e4e3005c17d size 185129079
+stdout at that moment: "Epoch: 1/200" only; metrics.jsonl: run_start + resume_state_committed(epoch 0) events, then step records.
+
+== 9. Read-only monitoring
+epoch 1: 56 steps x 256; consumed 14336; dropped 131; denominator 14467; source loss 1.3918735332492969; peak 17383809024 B;
+epoch-0 sidecar pruned after epoch-1 index commit. GPU 19932 MiB, 100 %. stderr.log empty.
+The laptop-side background SSH wait loop exited 255 (SSH connection loss on the monitoring side only). The tmux session and the
+training process were unaffected: ONE process session (FRESH), 0 resumes, no second launch. Not a training interruption.
+
+== 10. Completion
+tmux: {"status": "completed", ...}; M6D6G_EXIT=0; end_utc 2026-09-26T20:02:40Z; completion_status completed
+training_duration_seconds 15449.816305673681; peak_vram_bytes 17383809024
+logical 11200; physical 11200; superseded 0; sessions 1
+final source-native epoch loss (epoch 200): 0.001461103847973281 (0x1.7f0504f8f0844p-10) — training telemetry only
+
+== 11. Final checkpoint (never deserialized for evidence)
+sha256sum (independent, closed file): 49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl
+size 185136819 bytes; = run_summary.json final_or_selected_checkpoint_sha256; = checkpoint_index.json final entry (epoch 200, selected, FINAL_STATE_AFTER_EPOCH_200)
+status SHA256_RECORDED_PENDING_OWNER_FREEZE; authoritative_for_main_difffas false.
+
+== 12. Runtime files (read-only stdlib collector, no torch)
+d93a793681e9bfc93a64b541664ac2256f7e7add4d92ed32e07555396f850793       89666  checkpoint_index.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855           0  generation_log.jsonl
+efb37d1fc683959056d6773527bfe35b6d4f6e96d8450d79c96036609b37ef56    16584323  metrics.jsonl
+a389357eb8b979ee37bed82930be93b3f3333a7cb05050d3d1052119f0a24c78       15647  resolved_config.yaml
+652742dafa4900648b6d276e2b650b6d1a7ea8e7bdefc73e503f40b1808325b2      514082  resume_state_index.json
+c0bd3a89e47a52905d49eb307f4ba72b7ee89680f4e8439f7ea9023ed92d0891        5284  run_manifest.json
+3fc24a55547c6f78e1a61591fbe937e69989fb84bf9541450733974f1b2e30c9        2489  run_summary.json
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855           0  stderr.log
+04cc649915688bfa53b90d6006862adf5aadafd132edc143a828e37805bc7b58        7892  stdout.log
+374d4e52964e78d54f61c3112d66032827828aab5b7b173be664ecd05273e19e   370095195  checkpoints/resume/runner_state_epoch_200.pth (engineering, COMMITTED_CURRENT)
+49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c   185136819  checkpoints/encoder_final.pkl
+tree: checkpoint_index.json, checkpoints, checkpoints/encoder_final.pkl, checkpoints/resume, checkpoints/resume/runner_state_epoch_200.pth, generation_log.jsonl, metrics.jsonl, resolved_config.yaml, resume_state_index.json, run_manifest.json, run_summary.json, stderr.log, stdout.log
+GPU repo after run: HEAD 7642b23e60a1d89fcd481b03d4c9cb361f4c6e20; status lines 0. No training process remaining.
