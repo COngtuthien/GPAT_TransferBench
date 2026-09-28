@@ -1,0 +1,171 @@
+{
+  "schema": "gpat.e07c.main_science_launch_decision",
+  "schema_version": 1,
+  "record_id": "M6D6JR_E07C_SCIENCE_LAUNCH_OWNER_DECISION",
+  "milestone": "M6D6jR",
+  "method_id": "E07c",
+  "method_name": "DiffFAS-BIN-IDFREE",
+  "reporting_label": "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)",
+  "record_kind": "OWNER_DECISION / SCIENCE_LAUNCH_POLICY",
+  "classification": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+  "status": [
+    "OWNER_APPROVED",
+    "ADDITIVE",
+    "NON_DESTRUCTIVE",
+    "PROSPECTIVE"
+  ],
+  "not_classified_as": [
+    "SCIENTIFIC_ADAPTATION",
+    "NEW_DEVIATION",
+    "DATA_CHANGE",
+    "MODEL_CHANGE",
+    "METRIC_CHANGE",
+    "AMENDMENT_A9"
+  ],
+  "amendment_created": false,
+  "a9_created": false,
+  "fidelity": {
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "deviation": "DEV-021",
+    "new_deviation": false,
+    "new_fidelity_class": false
+  },
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "deviation": "DEV-021",
+  "new_deviation": false,
+  "new_fidelity_class": false,
+  "historical_configs_rewritten": false,
+  "authority_commit": "ade5900db1dbff73917a2eb2280f8f2fe7afc418",
+  "record_document": {
+    "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_E07c_Science_Launch_Decision_M6D6jR.md",
+    "sha256": "4707d1350ceecf651c1f5121a4b9b4795a85c667b308ce711a8e2b1ba9cfae2c"
+  },
+  "bound_authority_sha256": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "configs/amendments/e07c_m6d6h_aux_encoder_freeze.yaml": "6230e0b9531d47664f9eb14a7f87b24f67b0bf231a995adaba1294f944ec7693",
+    "configs/amendments/e07c_m6d6ir_checkpoint_retention.yaml": "94ccaad963dded8ebf903c3e07671463d51b44488074b8e7d121d074937845c6",
+    "configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml": "9528d53e536e3e6002db30d9d5300c4abb72ef1e653b1d53ba81dc3af5c7c422",
+    "outputs/audit/M6D6J_E07C_MAIN_RUNNER_QUALIFICATION.json": "d8a3ae9c6aa6876006606b6b89fcbca02d56e60ebb35d19f8d151e2b0c3d668f",
+    "tools/run_e07c_main.py": "7defa308b166a9aa09effb97f424c1ae625ca0fc69f73f12740a2e7d9ca75569",
+    "methods/difffas/main_runner.py": "cb2f17f9b3c6d4b86215e2846a26ac968f8806c57996277fe815f20d71fdc708",
+    "methods/difffas/main_runner_io.py": "3bf0239e3809a3cf2f82223e02db6f5aad1a613e708afc31c018f0394379bc20",
+    "methods/difffas/main_checkpoint.py": "416dcbeecf041af253f0ab598fed02784d1b47077ba86cf5d2b5c6e1ff915d31"
+  },
+  "frozen_encoder": {
+    "sha256": "49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c",
+    "bytes": 185136819
+  },
+  "source": {
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "official_source_modified": false
+  },
+  "O3_smoke_test": {
+    "decision": "STAGED_MILESTONE_PRECEDENCE_CLARIFICATION",
+    "resolution": "RESOLVED_STAGED_MILESTONE_PRECEDENCE",
+    "kind": "EXECUTION_ORDER_CLARIFICATION_ONLY",
+    "spec_milestone_order": [
+      "M6 Baselines",
+      "M7 GPAT",
+      "M8 Banks",
+      "M9 Generator eval",
+      "M10 ResNet downstream",
+      "M11 DINOv3 downstream"
+    ],
+    "spec_smoke_clause": "A full deterministic smoke test on a 2-subject-per-class toy subset must finish before full runs.",
+    "spec_checklist_item": "smoke test passes for generator → bank → evaluator → metrics → plots.",
+    "smoke_test_required": true,
+    "smoke_test_completed": false,
+    "smoke_test_waived": false,
+    "smoke_test_deleted": false,
+    "blocks_E07c_M6_training": false,
+    "blocks_M6_M7_generator_training": false,
+    "blocks_full_M8_plus_execution_until_completed": true,
+    "hard_gate_before": "the first FULL M8+ end-to-end bank / evaluator / metrics / plots execution",
+    "must_exercise": [
+      "generator",
+      "bank",
+      "evaluator",
+      "metrics",
+      "plots"
+    ],
+    "subset": "deterministic 2-subject-per-class toy subset (as specified)",
+    "m6_m7_training_condition": "the generator's production runner, data, checkpoint and firewall contracts are qualified",
+    "m6d6j_is_the_smoke_test": false,
+    "scientific_results_from_smoke": "FORBIDDEN"
+  },
+  "O4_resume": {
+    "decision": "RESUME_NOT_REQUIRED_BEFORE_SCIENCE",
+    "resolution": "RESOLVED_NOT_REQUIRED",
+    "resume_required_before_science": false,
+    "resume_qualified": false,
+    "MAIN_CHECKPOINT_RESUME": "UNQUALIFIED",
+    "m6d6k_prerequisite_for_science": false,
+    "scientific_runs": "FRESH_ONLY",
+    "resume_flag_or_path_allowed": false,
+    "recovery_policy": "FRESH_RERUN_SAME_SEED_AFTER_TECHNICAL_FIX",
+    "on_failure": [
+      "do not resume through an unqualified path",
+      "preserve the failed/interrupted run evidence",
+      "diagnose the technical cause",
+      "after an authorized technical fix, rerun the SAME experiment seed from the beginning under the same frozen scientific settings"
+    ],
+    "forbidden": [
+      "substitute another seed",
+      "rerun to obtain a better result",
+      "resume via an unqualified path"
+    ],
+    "spec_failure_policy": "One seed fails: rerun same seed after technical fix; never replace with a different seed"
+  },
+  "launch": {
+    "FULL_SCIENCE_BLOCKED_PENDING_SMOKE_TEST_DECISION": false,
+    "E07c_main_scientific_training": "AUTHORIZED_TO_LAUNCH_AFTER_THIS_DECISION_IS_COMMITTED",
+    "scientific_training_completed": false
+  },
+  "scientific_run_contract_unchanged": {
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "epochs": 400,
+    "batch_size": 4,
+    "drop_last": false,
+    "iterations_per_epoch": 2210,
+    "total_iterations": 884000,
+    "entrypoint": "tools/run_e07c_main.py",
+    "visualization": "exact source every 1000 steps (M6D6j D1)",
+    "periodic_checkpoint_every": 10000,
+    "terminal_checkpoint": "884000 after the final visualization (M6D6j D2)",
+    "retention": "M6D6iR successor-gated pruning",
+    "changed": false
+  },
+  "statuses": {
+    "qualified": [
+      "E07c_MAIN_SCIENTIFIC_LAUNCH_POLICY_RESOLVED",
+      "E07c_MAIN_SCIENTIFIC_RUNS_AUTHORIZED_TO_LAUNCH"
+    ],
+    "remains_qualified": [
+      "MAIN_PRODUCTION_RUNNER"
+    ],
+    "not_qualified": [
+      "MAIN_CHECKPOINT_RESUME",
+      "MAIN_DIFFFAS_SCIENTIFIC_TRAINING",
+      "M8_BANK"
+    ],
+    "method_status": "IMPLEMENTED_NOT_EXECUTED"
+  },
+  "decision_operation": {
+    "training_runs": 0,
+    "scientific_runs": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "TRAIN_image_reads": 0,
+    "VAL_image_reads": 0,
+    "TEST_image_reads": 0,
+    "GPU_contacted": false
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "O3": "RESOLVED_STAGED_MILESTONE_PRECEDENCE",
+  "O4": "RESOLVED_NOT_REQUIRED",
+  "amendment_created": false,
+  "authority_commit": "ade5900db1dbff73917a2eb2280f8f2fe7afc418",
+  "bound_authority_sha256": {
+    "configs/amendments/e07c_m6d6h_aux_encoder_freeze.yaml": "6230e0b9531d47664f9eb14a7f87b24f67b0bf231a995adaba1294f944ec7693",
+    "configs/amendments/e07c_m6d6ir_checkpoint_retention.yaml": "94ccaad963dded8ebf903c3e07671463d51b44488074b8e7d121d074937845c6",
+    "configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml": "9528d53e536e3e6002db30d9d5300c4abb72ef1e653b1d53ba81dc3af5c7c422",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "methods/difffas/main_checkpoint.py": "416dcbeecf041af253f0ab598fed02784d1b47077ba86cf5d2b5c6e1ff915d31",
+    "methods/difffas/main_runner.py": "cb2f17f9b3c6d4b86215e2846a26ac968f8806c57996277fe815f20d71fdc708",
+    "methods/difffas/main_runner_io.py": "3bf0239e3809a3cf2f82223e02db6f5aad1a613e708afc31c018f0394379bc20",
+    "outputs/audit/M6D6J_E07C_MAIN_RUNNER_QUALIFICATION.json": "d8a3ae9c6aa6876006606b6b89fcbca02d56e60ebb35d19f8d151e2b0c3d668f",
+    "tools/run_e07c_main.py": "7defa308b166a9aa09effb97f424c1ae625ca0fc69f73f12740a2e7d9ca75569"
+  },
+  "classification": "M6D6JR_E07C_SCIENCE_LAUNCH_OWNER_DECISION",
+  "decision_classification": "DETERMINISTIC_IMPLEMENTATION_CLARIFICATION",
+  "decision_operation": {
+    "GPU_contacted": false,
+    "TEST_image_reads": 0,
+    "TRAIN_image_reads": 0,
+    "VAL_image_reads": 0,
+    "checkpoint_writes": 0,
+    "optimizer_steps": 0,
+    "scientific_runs": 0,
+    "training_runs": 0
+  },
+  "launch": {
+    "E07c_main_scientific_training": "AUTHORIZED_TO_LAUNCH_AFTER_THIS_DECISION_IS_COMMITTED",
+    "FULL_SCIENCE_BLOCKED_PENDING_SMOKE_TEST_DECISION": false,
+    "scientific_training_completed": false
+  },
+  "method_id": "E07c",
+  "method_status": "IMPLEMENTED_NOT_EXECUTED",
+  "milestone": "M6D6jR",
+  "new_deviation": false,
+  "new_fidelity_class": false,
+  "not_qualified": [
+    "MAIN_CHECKPOINT_RESUME",
+    "MAIN_DIFFFAS_SCIENTIFIC_TRAINING",
+    "M8_BANK"
+  ],
+  "qualified_statuses": [
+    "E07c_MAIN_SCIENTIFIC_LAUNCH_POLICY_RESOLVED",
+    "E07c_MAIN_SCIENTIFIC_RUNS_AUTHORIZED_TO_LAUNCH"
+  ],
+  "record_document_sha256": "4707d1350ceecf651c1f5121a4b9b4795a85c667b308ce711a8e2b1ba9cfae2c",
+  "record_kind": "OWNER_DECISION / SCIENCE_LAUNCH_POLICY",
+  "record_path": "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml",
+  "record_sha256": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+  "static_derivation": {
+    "cli_fresh_only": true,
+    "cli_options": [
+      "--seed",
+      "--execution-config",
+      "--preflight-only"
+    ],
+    "cli_refused_resume_flags": [
+      "--auto-resume",
+      "--pretrain-classifier",
+      "--pretrain-path",
+      "--pretrain_classifier",
+      "--pretrain_path",
+      "--resume",
+      "--resume-from",
+      "--resume-latest",
+      "--resume-state"
+    ],
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "failure_policy_same_seed_rerun": true,
+    "m6d6j_pending_blockers": {
+      "FULL_SCIENCE_BLOCKED_PENDING_SMOKE_TEST_DECISION": true,
+      "O3_smoke_test": "PENDING",
+      "O4_resume_before_science": "PENDING"
+    },
+    "m6d6j_production_runner_qualified": true,
+    "m6d6j_resume": "UNQUALIFIED",
+    "milestone_order_verified": true,
+    "run_contract": {
+      "batch_size": 4,
+      "checkpoint_cadence": 10000,
+      "drop_last": false,
+      "epochs": 400,
+      "iterations_per_epoch": 2210,
+      "terminal_step": 884000,
+      "total_iterations": 884000,
+      "visualization_cadence": 1000
+    },
+    "smoke_checklist_present": true,
+    "smoke_clause_present": true,
+    "spec_failure_policy_paragraph": 1315,
+    "spec_milestone_paragraphs": {
+      "M10 ResNet downstream": 1270,
+      "M11 DINOv3 downstream": 1273,
+      "M6 Baselines": 1258,
+      "M7 GPAT": 1261,
+      "M8 Banks": 1264,
+      "M9 Generator eval": 1267
+    },
+    "spec_smoke_checklist_paragraph": 1426,
+    "spec_smoke_clause_paragraph": 1295
+  },
+  "status": "PASS"
+}
