@@ -302,6 +302,13 @@ class E07cMainRunContext(LearnedRunContext):
     def seed_field(self):
         return 'experiment_seed' if self.mode == mio.SCIENTIFIC else 'qualification_seed'
 
+    def _seed_metadata(self):
+        """M6D6jF: the one seed-metadata construction. SCIENTIFIC {experiment_seed: seed}; QUALIFICATION
+        {experiment_seed: null, qualification_seed: 60608}. Never splice seed_field next to experiment_seed."""
+        metadata = {'experiment_seed': self.seed}
+        metadata[self.seed_field] = self.run_seed
+        return metadata
+
     def open(self):
         if self._metrics_fh is not None or self._closed_summary is not None:
             raise RunDirectoryError('RunContext objects may be opened only once')
@@ -326,7 +333,7 @@ class E07cMainRunContext(LearnedRunContext):
         index = json.loads(self.path('checkpoint_index').read_text())
         index.update(note=('Every checkpoint actually written. Periodic bytes may be pruned only under M6D6iR '
                            '(successor-gated, explicit, logged); records are never removed.'),
-                     experiment_seed=self.seed, runner_mode=self.mode, **{self.seed_field: self.run_seed},
+                     runner_mode=self.mode, **self._seed_metadata(),
                      checkpoint_rule='BASELINE_FINAL_STATE_V1', retention_policy=
                      'configs/amendments/e07c_m6d6ir_checkpoint_retention.yaml',
                      retention_policy_sha256=self.identities['m6d6ir_retention_record_sha256'])
@@ -339,7 +346,7 @@ class E07cMainRunContext(LearnedRunContext):
         resolved = RunContext._resolved_config(self)
         ids = self.identities
         resolved['_resolved'].update({
-            'experiment_seed': self.seed, self.seed_field: self.run_seed, 'runner_mode': self.mode,
+            **self._seed_metadata(), 'runner_mode': self.mode,
             'scientific_run': self.mode == mio.SCIENTIFIC, 'qualification_only': self.mode == mio.QUALIFICATION,
             'labels': list(mio.QUALIFICATION_LABELS) if self.mode == mio.QUALIFICATION else [],
             'identities': ids,
@@ -364,7 +371,7 @@ class E07cMainRunContext(LearnedRunContext):
 
     def _manifest(self, **kwargs):
         m = LearnedRunContext._manifest(self, **kwargs)
-        m.update(experiment_seed=self.seed, runner_mode=self.mode, **{self.seed_field: self.run_seed},
+        m.update(runner_mode=self.mode, **self._seed_metadata(),
                  scientific_run=self.mode == mio.SCIENTIFIC, qualification_only=self.mode == mio.QUALIFICATION,
                  fidelity_class='CONTROLLED_ADAPTATION', deviation='DEV-021', identities=self.identities,
                  environment_lock_sha256=self.identities['environment_lock_sha256'],
@@ -376,7 +383,7 @@ class E07cMainRunContext(LearnedRunContext):
 
     def log_event(self, event, payload=None):
         self._append({'record_type': 'event', 'event': event, 'utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-                      'method_id': self.method_id, 'experiment_seed': self.seed, self.seed_field: self.run_seed,
+                      'method_id': self.method_id, **self._seed_metadata(),
                       'payload': payload or {}})
 
     def log_step(self, record):
@@ -399,7 +406,9 @@ class E07cMainRunContext(LearnedRunContext):
                     'output_manifest_path'):
             if supplied.get(key) is None:
                 reasons.setdefault(key, 'Not supplied by caller; no execution/evaluation result inferred')
-        supplied.update(missing_field_reasons=reasons, runner_mode=self.mode, **{self.seed_field: self.run_seed})
+        # RunContext.close owns experiment_seed and refuses it in a summary: pass only the qualification seed.
+        seeds = {k: v for k, v in self._seed_metadata().items() if k != 'experiment_seed'}
+        supplied.update(missing_field_reasons=reasons, runner_mode=self.mode, **seeds)
         supplied.setdefault('peak_vram_reason', reasons.get('peak_vram_bytes'))
         self._validate_metadata(supplied)
         return RunContext.close(self, completion_status=completion_status, summary=supplied,

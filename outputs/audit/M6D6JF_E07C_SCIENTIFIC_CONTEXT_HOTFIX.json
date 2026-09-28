@@ -1,0 +1,170 @@
+{
+  "a9_created": false,
+  "amendment_created": false,
+  "authority_commit": "8358d8b6fe468478ad86a715616becb81bb9b339",
+  "classification": "M6D6JF_E07C_SCIENTIFIC_CONTEXT_HOTFIX",
+  "decision_classification": "DETERMINISTIC_IMPLEMENTATION_CORRECTION",
+  "defect_sites": [
+    {
+      "kind": "DUPLICATE_KWARG_TYPEERROR",
+      "method": "_manifest",
+      "mode": "SCIENTIFIC",
+      "observed_in_launch": true
+    },
+    {
+      "kind": "DUPLICATE_KWARG_TYPEERROR",
+      "method": "_open_locked",
+      "mode": "SCIENTIFIC",
+      "note": "checkpoint_index update; latent (unreached: RunContext._open_locked raised first)",
+      "observed_in_launch": false
+    },
+    {
+      "kind": "SUMMARY_IDENTITY_REFUSAL",
+      "method": "close",
+      "mode": "SCIENTIFIC",
+      "note": "summary carried experiment_seed; RunContext.close raises 'summary may not overwrite run identity' (also on the failure __exit__ path)",
+      "observed_in_launch": false
+    },
+    {
+      "kind": "DUPLICATE_DICT_KEY_SILENT_OVERWRITE",
+      "method": "_resolved_config",
+      "mode": "SCIENTIFIC",
+      "note": "same value; ambiguity removed",
+      "observed_in_launch": false
+    },
+    {
+      "kind": "DUPLICATE_DICT_KEY_SILENT_OVERWRITE",
+      "method": "log_event",
+      "mode": "SCIENTIFIC",
+      "note": "same value; ambiguity removed",
+      "observed_in_launch": false
+    }
+  ],
+  "failed_attempt": {
+    "attempt": 1,
+    "authority": "8358d8b6fe468478ad86a715616becb81bb9b339",
+    "exception": "TypeError: dict.update() got multiple values for keyword argument 'experiment_seed'",
+    "exit_status": 1,
+    "experiment_seed_consumed_as_completed_run": false,
+    "failed_runtime_root": "PRESERVED_UNDER_RECOVERY_NAMESPACE_NOT_A_SCIENTIFIC_RESULT",
+    "failure_phase": "RUN_CONTEXT_OPEN",
+    "other_runtime_facts": "NOT_RECORDED (none supplied; none inferred)",
+    "reached": {
+      "TRAIN_image_reads": false,
+      "build_production": false,
+      "model_construction": false,
+      "training_loop": false
+    },
+    "recovery": "FRESH_RERUN_SAME_SEED_AFTER_TECHNICAL_FIX",
+    "scientific_checkpoint_writes": 0,
+    "scientific_optimizer_steps": 0,
+    "scientific_result": false,
+    "seed": 42,
+    "stack": [
+      "E07cMainRunContext.open",
+      "E07cMainRunContext._open_locked",
+      "RunContext._open_locked",
+      "self._manifest(status=\"running\")",
+      "E07cMainRunContext._manifest"
+    ]
+  },
+  "fidelity": {
+    "deviation": "DEV-021",
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "new_deviation": false,
+    "new_fidelity_class": false
+  },
+  "fix": {
+    "QUALIFICATION": {
+      "experiment_seed": null,
+      "qualification_seed": 60608
+    },
+    "SCIENTIFIC": {
+      "experiment_seed": "<seed>"
+    },
+    "canonical_helper": "E07cMainRunContext._seed_metadata",
+    "close": "passes only non-experiment_seed seed keys; RunContext.close owns experiment_seed",
+    "key_order_preserved": true,
+    "qualification_output_changed": false,
+    "used_by": [
+      "_open_locked",
+      "_resolved_config",
+      "_manifest",
+      "log_event",
+      "close"
+    ]
+  },
+  "historical_bytes_unchanged": {
+    "configs/amendments/e07c_m6d6ir_checkpoint_retention.yaml": "94ccaad963dded8ebf903c3e07671463d51b44488074b8e7d121d074937845c6",
+    "configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml": "9528d53e536e3e6002db30d9d5300c4abb72ef1e653b1d53ba81dc3af5c7c422",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "methods/difffas/main_checkpoint.py": "416dcbeecf041af253f0ab598fed02784d1b47077ba86cf5d2b5c6e1ff915d31",
+    "methods/difffas/main_runner_io.py": "3bf0239e3809a3cf2f82223e02db6f5aad1a613e708afc31c018f0394379bc20",
+    "outputs/audit/M6D6JR_E07C_SCIENCE_LAUNCH_DECISION.json": "bfd3320f4d1f4a335706f288f81eb79faa7bae3afeabf776e8097fc3ccb2a15e",
+    "outputs/audit/M6D6J_E07C_MAIN_RUNNER_QUALIFICATION.json": "d8a3ae9c6aa6876006606b6b89fcbca02d56e60ebb35d19f8d151e2b0c3d668f",
+    "tools/run_e07c_main.py": "7defa308b166a9aa09effb97f424c1ae625ca0fc69f73f12740a2e7d9ca75569"
+  },
+  "hotfix_operation": {
+    "GPU_contacted": false,
+    "TEST_image_reads": 0,
+    "TRAIN_image_reads": 0,
+    "VAL_image_reads": 0,
+    "checkpoint_writes": 0,
+    "optimizer_steps": 0,
+    "scientific_runs": 0,
+    "training_runs": 0
+  },
+  "method_id": "E07c",
+  "milestone": "M6D6jF",
+  "record_kind": "TECHNICAL_HOTFIX / IMPLEMENTATION_BUGFIX",
+  "record_path": "configs/amendments/e07c_m6d6jf_scientific_context_hotfix.yaml",
+  "record_sha256": "946ca134ef514650002f368a8d87715f16a80855d10725587d9e6e855747af13",
+  "runner_scope": {
+    "authority_runner_sha256": "cb2f17f9b3c6d4b86215e2846a26ac968f8806c57996277fe815f20d71fdc708",
+    "candidate_runner_sha256": "7deb9774920e2a5667626d9b659920d98c6e558e6c272309e68ef51fb7d0ca40",
+    "canonical_helper": "_seed_metadata",
+    "changed_methods": [
+      "_manifest",
+      "_open_locked",
+      "_resolved_config",
+      "_seed_metadata",
+      "close",
+      "log_event"
+    ],
+    "unchanged_outside_context": true
+  },
+  "scientific_run_contract_unchanged": {
+    "batch_size": 4,
+    "changed": false,
+    "checkpoint_every": 10000,
+    "cli_fresh_only": true,
+    "drop_last": false,
+    "epochs": 400,
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "firewall_changed": false,
+    "iterations_per_epoch": 2210,
+    "optimizer_scheduler_ema_rng_ddpm_encoder_changed": false,
+    "resume": "UNQUALIFIED",
+    "retention": "M6D6iR",
+    "total_iterations": 884000,
+    "train_manifest_changed": false,
+    "visualize_every": 1000
+  },
+  "status": "PASS",
+  "statuses": {
+    "E07c_main_scientific_training": "AUTHORIZED_BY_M6D6jR; FRESH_RERUN_SEED_42_AFTER_THIS_HOTFIX_IS_COMMITTED",
+    "MAIN_CHECKPOINT_RESUME": "UNQUALIFIED",
+    "method_status": "IMPLEMENTED_NOT_EXECUTED",
+    "not_qualified": [
+      "MAIN_CHECKPOINT_RESUME",
+      "MAIN_DIFFFAS_SCIENTIFIC_TRAINING",
+      "M8_BANK"
+    ],
+    "scientific_training_completed": false
+  }
+}

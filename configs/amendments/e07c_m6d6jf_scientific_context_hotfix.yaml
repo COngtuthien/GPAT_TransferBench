@@ -1,0 +1,173 @@
+{
+  "schema": "gpat.e07c.main_scientific_context_hotfix",
+  "schema_version": 1,
+  "record_id": "M6D6JF_E07C_SCIENTIFIC_CONTEXT_HOTFIX",
+  "milestone": "M6D6jF",
+  "method_id": "E07c",
+  "method_name": "DiffFAS-BIN-IDFREE",
+  "record_kind": "TECHNICAL_HOTFIX / IMPLEMENTATION_BUGFIX",
+  "classification": "DETERMINISTIC_IMPLEMENTATION_CORRECTION",
+  "status": [
+    "ADDITIVE",
+    "NON_DESTRUCTIVE",
+    "PROSPECTIVE",
+    "CANDIDATE_AWAITING_OWNER_REVIEW"
+  ],
+  "not_classified_as": [
+    "SCIENTIFIC_ADAPTATION",
+    "NEW_DEVIATION",
+    "DATA_CHANGE",
+    "MODEL_CHANGE",
+    "METRIC_CHANGE",
+    "TRAINING_CHANGE",
+    "CHECKPOINT_CHANGE",
+    "RNG_CHANGE",
+    "AMENDMENT_A9"
+  ],
+  "amendment_created": false,
+  "a9_created": false,
+  "fidelity": {
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "deviation": "DEV-021",
+    "new_deviation": false,
+    "new_fidelity_class": false
+  },
+  "historical_records_rewritten": false,
+  "m6d6jr_remains_historically_correct_at_its_commit": true,
+  "authority_commit": "8358d8b6fe468478ad86a715616becb81bb9b339",
+  "supersedes_prospectively": {
+    "path": "methods/difffas/main_runner.py",
+    "sha256_at_authority": "cb2f17f9b3c6d4b86215e2846a26ac968f8806c57996277fe815f20d71fdc708",
+    "scope": "E07cMainRunContext seed metadata only",
+    "other_implementation_files_changed": false
+  },
+  "failed_attempt": {
+    "seed": 42,
+    "attempt": 1,
+    "authority": "8358d8b6fe468478ad86a715616becb81bb9b339",
+    "exit_status": 1,
+    "failure_phase": "RUN_CONTEXT_OPEN",
+    "exception": "TypeError: dict.update() got multiple values for keyword argument 'experiment_seed'",
+    "stack": [
+      "E07cMainRunContext.open",
+      "E07cMainRunContext._open_locked",
+      "RunContext._open_locked",
+      "self._manifest(status=\"running\")",
+      "E07cMainRunContext._manifest"
+    ],
+    "reached": {
+      "build_production": false,
+      "TRAIN_image_reads": false,
+      "model_construction": false,
+      "training_loop": false
+    },
+    "scientific_optimizer_steps": 0,
+    "scientific_checkpoint_writes": 0,
+    "scientific_result": false,
+    "experiment_seed_consumed_as_completed_run": false,
+    "failed_runtime_root": "PRESERVED_UNDER_RECOVERY_NAMESPACE_NOT_A_SCIENTIFIC_RESULT",
+    "recovery": "FRESH_RERUN_SAME_SEED_AFTER_TECHNICAL_FIX",
+    "other_runtime_facts": "NOT_RECORDED (none supplied; none inferred)"
+  },
+  "root_cause": "SCIENTIFIC seed_field == 'experiment_seed'; seed metadata spliced **{seed_field: run_seed} beside an explicit experiment_seed",
+  "defect_sites": [
+    {
+      "method": "_manifest",
+      "kind": "DUPLICATE_KWARG_TYPEERROR",
+      "mode": "SCIENTIFIC",
+      "observed_in_launch": true
+    },
+    {
+      "method": "_open_locked",
+      "kind": "DUPLICATE_KWARG_TYPEERROR",
+      "mode": "SCIENTIFIC",
+      "observed_in_launch": false,
+      "note": "checkpoint_index update; latent (unreached: RunContext._open_locked raised first)"
+    },
+    {
+      "method": "close",
+      "kind": "SUMMARY_IDENTITY_REFUSAL",
+      "mode": "SCIENTIFIC",
+      "observed_in_launch": false,
+      "note": "summary carried experiment_seed; RunContext.close raises 'summary may not overwrite run identity' (also on the failure __exit__ path)"
+    },
+    {
+      "method": "_resolved_config",
+      "kind": "DUPLICATE_DICT_KEY_SILENT_OVERWRITE",
+      "mode": "SCIENTIFIC",
+      "observed_in_launch": false,
+      "note": "same value; ambiguity removed"
+    },
+    {
+      "method": "log_event",
+      "kind": "DUPLICATE_DICT_KEY_SILENT_OVERWRITE",
+      "mode": "SCIENTIFIC",
+      "observed_in_launch": false,
+      "note": "same value; ambiguity removed"
+    }
+  ],
+  "fix": {
+    "canonical_helper": "E07cMainRunContext._seed_metadata",
+    "SCIENTIFIC": {
+      "experiment_seed": "<seed>"
+    },
+    "QUALIFICATION": {
+      "experiment_seed": null,
+      "qualification_seed": 60608
+    },
+    "used_by": [
+      "_open_locked",
+      "_resolved_config",
+      "_manifest",
+      "log_event",
+      "close"
+    ],
+    "close": "passes only non-experiment_seed seed keys; RunContext.close owns experiment_seed",
+    "qualification_output_changed": false,
+    "key_order_preserved": true
+  },
+  "scientific_run_contract_unchanged": {
+    "experiment_seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "epochs": 400,
+    "batch_size": 4,
+    "drop_last": false,
+    "iterations_per_epoch": 2210,
+    "total_iterations": 884000,
+    "visualize_every": 1000,
+    "checkpoint_every": 10000,
+    "retention": "M6D6iR",
+    "optimizer_scheduler_ema_rng_ddpm_encoder_changed": false,
+    "train_manifest_changed": false,
+    "firewall_changed": false,
+    "cli_fresh_only": true,
+    "resume": "UNQUALIFIED",
+    "changed": false
+  },
+  "statuses": {
+    "MAIN_CHECKPOINT_RESUME": "UNQUALIFIED",
+    "not_qualified": [
+      "MAIN_CHECKPOINT_RESUME",
+      "MAIN_DIFFFAS_SCIENTIFIC_TRAINING",
+      "M8_BANK"
+    ],
+    "E07c_main_scientific_training": "AUTHORIZED_BY_M6D6jR; FRESH_RERUN_SEED_42_AFTER_THIS_HOTFIX_IS_COMMITTED",
+    "scientific_training_completed": false,
+    "method_status": "IMPLEMENTED_NOT_EXECUTED"
+  },
+  "hotfix_operation": {
+    "training_runs": 0,
+    "scientific_runs": 0,
+    "optimizer_steps": 0,
+    "checkpoint_writes": 0,
+    "TRAIN_image_reads": 0,
+    "VAL_image_reads": 0,
+    "TEST_image_reads": 0,
+    "GPU_contacted": false
+  },
+  "regression_test": "tests/test_m6d6jf_e07c_scientific_context_hotfix.py",
+  "preflight": "tools/m6d6jf_e07c_scientific_context_preflight.py"
+}
