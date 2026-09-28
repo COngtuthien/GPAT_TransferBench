@@ -208,3 +208,25 @@ A4 conversion/optimizer mapping and three static seed plans are implemented.
 Official-kernel tests use synthetic meshes only; no PhySTD model, training or
 benchmark input has executed. E05 and E07c remain CONFIG_FROZEN. Details:
 `outputs/audit/M6C2B1_IMPLEMENTATION.md` / `.json`.
+
+**M6A9 (2026-09-29) — Amendment A9: DiffFAS family discontinued; M6 stays OPEN.** This note is additive and describes
+the current state. The table rows and paragraphs above are historical and unchanged; per-method qualification
+history after M6C2b1 is in `outputs/audit/EXECUTION_LEDGER.jsonl`.
+
+Amendment A9 (`docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A9_DiffFAS_Family_Resource_Constrained_Scope_Exclusion.md`,
+`configs/amendments/difffas_a9_resource_constrained_scope_exclusion.yaml`) is an
+`OWNER_RESOURCE_CONSTRAINED_SCOPE_EXCLUSION` covering **only the DiffFAS family**.
+
+- **E07c** DiffFAS-BIN-IDFREE is `blocked` (`OWNER_EXCLUDED_RESOURCE_CONSTRAINT`). Its fidelity stays
+  `CONTROLLED_ADAPTATION` / DEV-021. Seed-42 attempts 1 and 2 are preserved; attempt 2 was owner-interrupted at global
+  step 54,836. 0 of 3 seeds completed, and 1337/2026 were never started. `model_050000.pt` is retained but never
+  selected or final, and is not eligible for an M8 bank, downstream evaluation or numeric reporting.
+- **E07b** DiffFAS-NATIVE is excluded with the DiffFAS family (`NOT_ASSESSED_NOT_IMPLEMENTED`). It has no bank and no
+  downstream result.
+- **E06b** DSDG-NATIVE is out of A9's scope. It is not owner-excluded and not resource-blocked, and it remains
+  **ACTIVE M6 WORK** under A1 §3. E06c and every other non-DiffFAS method are unchanged.
+
+**M6_CLOSED = false.** `outputs/audit/method_status.csv` is not created yet; it will be created at the M6 closure
+after the E06b M6 work is resolved. `outputs/audit/STAGE_STATE.json` is a stale historical fixture and is not the
+current milestone authority after M5; it is left byte-unchanged. **M7 HAS NOT STARTED.** Evidence:
+`outputs/audit/M6A9_DIFFFAS_FAMILY_SCOPE_EXCLUSION.md` / `.json`.
