@@ -1,0 +1,133 @@
+=== M6D6j GPU runtime log (QUALIFICATION ONLY; qualification_seed 60608) ===
+M6D6J_UTC_START=2026-09-27T19:37:17Z
+M6D6J_GPU_HEAD_BEFORE=84023aed3959d7ffda380b7612b860652579b443 BRANCH=m6-baselines STATUS=[]
+   84023ae..3950871  m6-baselines -> origin/m6-baselines
+ create mode 100644 tools/m6d6ir_e07c_checkpoint_retention_preflight.py
+M6D6J_FF_ONLY=84023aed3959d7ffda380b7612b860652579b443..39508719a57e5afde0a8c71bf7db0f9f09ec25e0
+M6D6J_GPU_HEAD=39508719a57e5afde0a8c71bf7db0f9f09ec25e0
+M6D6J_GPU_STATUS_AFTER_FF=[]
+M6D6J_SOURCE_COMMIT=23f40519ec25a833ebc06842aa6fbab74fad4d15 TREE=d190a5fb4a94cb9e423215f9a24a7863aa17ea65 STATUS=[]
+M6D6J_LAUNCH_UTC=2026-09-27T19:38:24Z
+M6D6J_GPU_HEAD=39508719a57e5afde0a8c71bf7db0f9f09ec25e0
+M6D6J_CANDIDATE_STATUS=[?? configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml;?? methods/difffas/main_checkpoint.py;?? methods/difffas/main_runner.py;?? methods/difffas/main_runner_io.py;?? methods/difffas/main_runner_qualification.py;?? tests/test_m6d6j_e07c_main_runner.py;?? tools/m6d6j_e07c_main_runner_preflight.py;?? tools/run_e07c_main.py;]
+9528d53e536e3e6002db30d9d5300c4abb72ef1e653b1d53ba81dc3af5c7c422  configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml
+3bf0239e3809a3cf2f82223e02db6f5aad1a613e708afc31c018f0394379bc20  methods/difffas/main_runner_io.py
+416dcbeecf041af253f0ab598fed02784d1b47077ba86cf5d2b5c6e1ff915d31  methods/difffas/main_checkpoint.py
+cb2f17f9b3c6d4b86215e2846a26ac968f8806c57996277fe815f20d71fdc708  methods/difffas/main_runner.py
+5e12fa2eccac2294a48825f4f13f4746ff03ec50ff356b6be6dd2d065b2e21a2  methods/difffas/main_runner_qualification.py
+7defa308b166a9aa09effb97f424c1ae625ca0fc69f73f12740a2e7d9ca75569  tools/run_e07c_main.py
+2cb7f3f19ea957d42275c89ceb8e3a44ce20524454101d8bd4438a714e4b6c96  tests/test_m6d6j_e07c_main_runner.py
+54554c081505f43a027d513b63b2481e5490f1ea2e851290a3e337a130e1b48b  tools/m6d6j_e07c_main_runner_preflight.py
+M6D6J_PRE_ENCODER stat=185136819 7216659 66306 664 1 1002 1002 1790452958 1790452958
+49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl
+M6D6J_PRE_GPU NVIDIA GeForce RTX 3090, 24576 MiB, 253 MiB APPS=[]
+M6D6J_PRE_DISK_AVAIL=443470786560
+M6D6J_SCIENTIFIC_ROOTS_BEFORE=[]
+/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/torch/nn/functional.py:3959: UserWarning: reduction='elementwise_mean' is deprecated. Please use reduction='mean' instead.
+  _Reduction.get_enum(reduction),
+Generating samples at iters number 2
+Sampling algorithm used: DDPM
+
+Traceback (most recent call last):
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/main_runner_qualification.py", line 548, in <module>
+    main()
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/main_runner_qualification.py", line 538, in main
+    result = qualify(build)
+             ^^^^^^^^^^^^^^
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/main_runner_qualification.py", line 411, in qualify
+    require(dict(calls) == {k: EXPECTED_VIS[k] for k in ('model_forwards', 'encoder_calls')},
+  File "/home/student20261/workdir/GPAT_TransferBench/methods/difffas/main_runner_qualification.py", line 58, in require
+    raise RuntimeError('M6D6j gate: ' + message)
+RuntimeError: M6D6j gate: pinned DDPM: 500 model forwards (250 steps x cond/null), 2 encoder calls {"model_forwards": 0, "encoder_calls": 2}
+M6D6J_QUALIFICATION_EXIT=1
+M6D6J_NVSMI_PEAK_MIB= 15206
+M6D6J_CLI seed60608=2 [NTIFIC RUN REFUSED: E07c main runner: scientific E07c main runs use experiment seeds (42, 1337, 2026); got 60608 (qualification seed 60608 is never scientific) ]
+M6D6J_CLI seed42_dirty=2 [E07c MAIN SCIENTIFIC RUN REFUSED: git worktree is dirty; scientific runs require a clean committed worktree ]
+M6D6J_CLI disable_visualization=2 resume=2
+M6D6J_CLI_REFUSALS_OK
+M6D6J_POST_ENCODER stat=185136819 7216659 66306 664 1 1002 1002 1790452958 1790452958
+49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl
+M6D6J_SCIENTIFIC_ROOTS_AFTER=[]
+M6D6J_QUAL_ROOT_FILES:
+762 E07c/q60608-c463e33ac6940f3c/checkpoint_index.json
+1553506 E07c/q60608-c463e33ac6940f3c/diagnostics/visualization/2_output.png
+0 E07c/q60608-c463e33ac6940f3c/generation_log.jsonl
+0 E07c/.q60608-c463e33ac6940f3c.lock
+8181 E07c/q60608-c463e33ac6940f3c/metrics.jsonl
+14675 E07c/q60608-c463e33ac6940f3c/resolved_config.yaml
+5190 E07c/q60608-c463e33ac6940f3c/run_manifest.json
+1924 E07c/q60608-c463e33ac6940f3c/run_summary.json
+12717 E07c/q60608-c463e33ac6940f3c/stderr.log
+67 E07c/q60608-c463e33ac6940f3c/stdout.log
+M6D6J_POST_STATUS=[?? configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml;?? methods/difffas/main_checkpoint.py;?? methods/difffas/main_runner.py;?? methods/difffas/main_runner_io.py;?? methods/difffas/main_runner_qualification.py;?? tests/test_m6d6j_e07c_main_runner.py;?? tools/m6d6j_e07c_main_runner_preflight.py;?? tools/run_e07c_main.py;]
+M6D6J_UTC_END=2026-09-27T19:40:01Z
+M6D6J_GPU_EXIT=1
+M6D6J_ATTEMPT_1=ABORTED_BY_HARNESS_INSTRUMENTATION_GATE (model forwards counted with nn.Module forward hooks, which the pinned forward_with_cond_scale bypasses via self.forward; B=4 and B=2 steps had passed; no checkpoint written; root retained as q60608-c463e33ac6940f3c.aborted-attempt-1)
+M6D6J_ATTEMPT_2=harness counts model forwards with an instance-level pass-through forward wrapper
+M6D6J_LAUNCH_UTC=2026-09-27T19:41:56Z
+M6D6J_GPU_HEAD=39508719a57e5afde0a8c71bf7db0f9f09ec25e0
+M6D6J_CANDIDATE_STATUS=[?? configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml;?? methods/difffas/main_checkpoint.py;?? methods/difffas/main_runner.py;?? methods/difffas/main_runner_io.py;?? methods/difffas/main_runner_qualification.py;?? tests/test_m6d6j_e07c_main_runner.py;?? tools/m6d6j_e07c_main_runner_preflight.py;?? tools/run_e07c_main.py;]
+9528d53e536e3e6002db30d9d5300c4abb72ef1e653b1d53ba81dc3af5c7c422  configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml
+3bf0239e3809a3cf2f82223e02db6f5aad1a613e708afc31c018f0394379bc20  methods/difffas/main_runner_io.py
+416dcbeecf041af253f0ab598fed02784d1b47077ba86cf5d2b5c6e1ff915d31  methods/difffas/main_checkpoint.py
+cb2f17f9b3c6d4b86215e2846a26ac968f8806c57996277fe815f20d71fdc708  methods/difffas/main_runner.py
+99908dc24c335adc4a410e95d10df55d6a32b707c55eaf14c584cdea9e156c86  methods/difffas/main_runner_qualification.py
+7defa308b166a9aa09effb97f424c1ae625ca0fc69f73f12740a2e7d9ca75569  tools/run_e07c_main.py
+2cb7f3f19ea957d42275c89ceb8e3a44ce20524454101d8bd4438a714e4b6c96  tests/test_m6d6j_e07c_main_runner.py
+54554c081505f43a027d513b63b2481e5490f1ea2e851290a3e337a130e1b48b  tools/m6d6j_e07c_main_runner_preflight.py
+M6D6J_PRE_ENCODER stat=185136819 7216659 66306 664 1 1002 1002 1790452958 1790452958
+49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl
+M6D6J_PRE_GPU NVIDIA GeForce RTX 3090, 24576 MiB, 253 MiB APPS=[]
+M6D6J_PRE_DISK_AVAIL=443469086720
+M6D6J_SCIENTIFIC_ROOTS_BEFORE=[]
+/home/student20261/miniconda3/envs/gpat-m6-e07c/lib/python3.11/site-packages/torch/nn/functional.py:3959: UserWarning: reduction='elementwise_mean' is deprecated. Please use reduction='mean' instead.
+  _Reduction.get_enum(reduction),
+Generating samples at iters number 2
+Sampling algorithm used: DDPM
+
+{"status": "PASS", "output": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e07c_difffas/m6d6j/qualification.json"}
+M6D6J_QUALIFICATION_EXIT=0
+M6D6J_NVSMI_PEAK_MIB= 15206
+M6D6J_CLI seed60608=2 [NTIFIC RUN REFUSED: E07c main runner: scientific E07c main runs use experiment seeds (42, 1337, 2026); got 60608 (qualification seed 60608 is never scientific) ]
+M6D6J_CLI seed42_dirty=2 [E07c MAIN SCIENTIFIC RUN REFUSED: git worktree is dirty; scientific runs require a clean committed worktree ]
+M6D6J_CLI disable_visualization=2 resume=2
+M6D6J_CLI_REFUSALS_OK
+M6D6J_POST_ENCODER stat=185136819 7216659 66306 664 1 1002 1002 1790452958 1790452958
+49a24a3a7288782c144eaf4f58e83c76c37c1feeceea6de8a04b96a8fcfe107c  /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E07c/aux_encoder/seed_42/checkpoints/encoder_final.pkl
+M6D6J_SCIENTIFIC_ROOTS_AFTER=[]
+M6D6J_QUAL_ROOT_FILES:
+762 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/checkpoint_index.json
+1553506 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/diagnostics/visualization/2_output.png
+0 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/generation_log.jsonl
+8181 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/metrics.jsonl
+14675 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/resolved_config.yaml
+5190 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/run_manifest.json
+1924 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/run_summary.json
+12717 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/stderr.log
+67 E07c/q60608-c463e33ac6940f3c.aborted-attempt-1/stdout.log
+4961 E07c/q60608-c463e33ac6940f3c/checkpoint_index.json
+1553506 E07c/q60608-c463e33ac6940f3c/diagnostics/visualization/2_output.png
+0 E07c/q60608-c463e33ac6940f3c/generation_log.jsonl
+0 E07c/.q60608-c463e33ac6940f3c.lock
+11237 E07c/q60608-c463e33ac6940f3c/metrics.jsonl
+14675 E07c/q60608-c463e33ac6940f3c/resolved_config.yaml
+5193 E07c/q60608-c463e33ac6940f3c/run_manifest.json
+1561 E07c/q60608-c463e33ac6940f3c/run_summary.json
+12717 E07c/q60608-c463e33ac6940f3c/stderr.log
+67 E07c/q60608-c463e33ac6940f3c/stdout.log
+M6D6J_POST_STATUS=[?? configs/amendments/e07c_m6d6j_main_production_runner_contract.yaml;?? methods/difffas/main_checkpoint.py;?? methods/difffas/main_runner.py;?? methods/difffas/main_runner_io.py;?? methods/difffas/main_runner_qualification.py;?? tests/test_m6d6j_e07c_main_runner.py;?? tools/m6d6j_e07c_main_runner_preflight.py;?? tools/run_e07c_main.py;]
+M6D6J_UTC_END=2026-09-27T19:44:05Z
+M6D6J_GPU_EXIT=0
+M6D6J_GPU_REGRESSION_UTC=2026-09-27T19:44:55Z
+ERROR: test_24_cli_accepts_only_seed42 (tests.test_m6d6e_e07c_aux_runner.TestM6D6eStatic.test_24_cli_accepts_only_seed42)
+FAIL: test_23_cli_refuses_overrides_and_non_scientific_seeds (tests.test_m6d6j_e07c_main_runner.TestM6D6jStatic.test_23_cli_refuses_overrides_and_non_scientific_seeds)
+Ran 372 tests in 14.467s
+FAILED (failures=1, errors=1, skipped=2)
+M6D6J_GPU_REGRESSION_NOTE=the only expected error is the known host-environmental historical test_m6d6e_e07c_aux_runner::test_24_cli_accepts_only_seed42 (M6D6g run root exists on this host); historical test not modified
+M6D6J_GPU_REGRESSION_RERUN_UTC=2026-09-27T19:46:10Z (test_m6d6j::test_23 compared torch_imported absolutely; corrected to compare with sys.modules before the call)
+ERROR: test_24_cli_accepts_only_seed42 (tests.test_m6d6e_e07c_aux_runner.TestM6D6eStatic.test_24_cli_accepts_only_seed42)
+Ran 372 tests in 14.143s
+FAILED (errors=1, skipped=2)
+M6D6J_GPU_REGRESSION_KNOWN=only test_m6d6e_e07c_aux_runner::test_24_cli_accepts_only_seed42 (host-environmental; historical test unchanged)
+M6D6J_GPU_STAGING_REMOVED head=39508719a57e5afde0a8c71bf7db0f9f09ec25e0 status=[]
+M6D6J_GPU_TMUX=[0] APPS=[0]

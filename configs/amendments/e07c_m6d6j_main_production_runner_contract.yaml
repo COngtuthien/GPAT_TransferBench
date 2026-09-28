@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "milestone": "M6D6j",
+  "status": "PRODUCTION_RUNNER_CONTRACT_ADDITIVE",
+  "authority_commit": "39508719a57e5afde0a8c71bf7db0f9f09ec25e0",
+  "method_id": "E07c",
+  "role": "MAIN_DIFFFAS",
+  "method_name": "DiffFAS-BIN-IDFREE",
+  "reporting_label": "DiffFAS-BIN-IDFREE (controlled encoder reconstruction)",
+  "classification": "PRODUCTION_RUNNER_IMPLEMENTATION_CONTRACT",
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "deviation": "DEV-021",
+  "new_deviation": false,
+  "new_fidelity_class": false,
+  "amendment_created": false,
+  "forbidden_wording": [
+    "native",
+    "faithful",
+    "official reproduction"
+  ],
+  "bound_inputs_sha256": {
+    "configs/methods/e07c_difffas_bin_idfree.yaml": "dba34a9222b80ed66a73b8662c10cd348ab46e4f00c2e8166d0a4fe6d552bc1c",
+    "configs/frozen/difffas_bin_idfree_v1.yaml": "aa9e984166db3854bba4221098afaef1898474e2e3f1f08a3f80cab0035cf3eb",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+    "configs/amendments/e07c_a7_execution_policy.yaml": "3e4c758c1421aac6e993724a8a80b99e8b0754e75b983cec5ffca41479f492a3",
+    "configs/amendments/e07c_m6d6h_aux_encoder_freeze.yaml": "6230e0b9531d47664f9eb14a7f87b24f67b0bf231a995adaba1294f944ec7693",
+    "configs/amendments/e07c_m6d6ir_checkpoint_retention.yaml": "94ccaad963dded8ebf903c3e07671463d51b44488074b8e7d121d074937845c6",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "environments/e07c.lock.json": "0c909de1e3e3e8c129e0d9f4aab6386cee8e4eac0ca45d79423f795cced5f450",
+    "manifests/difffas_bin_idfree_train_v1.parquet": "0d4c0ab435a258be51577aec17d9ecea27785354c900d0f7ab863d2bb2924fd6",
+    "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "configs/execution/m5_gpu_3090.yaml": "c9d22abf1b5e284593bfed21500e8113df7f14ff564b7434e3eda43cb7e7eb70",
+    "methods/difffas/main_graph.py": "cd85bf2e28ca88cf48c9a745f84cb1d66d5271e17a4a2bd5b083f1a1863c3411",
+    "outputs/audit/M6D6I_E07C_MAIN_GRAPH_QUALIFICATION.json": "089af4d51f9c1cd9592a81686115dfcd7683ec4fc04291db790515e66f79c1b8"
+  },
+  "source_pin": {
+    "repository": "https://github.com/murphytju/DiffFAS",
+    "commit": "23f40519ec25a833ebc06842aa6fbab74fad4d15",
+    "tree": "d190a5fb4a94cb9e423215f9a24a7863aa17ea65",
+    "FAS_train.py": "c5eb42a1193f7708b9e972db0faac602c82ffe2dc10578b6c9013d81e26e4f84",
+    "diffusion.py": "71557fba8e4e3e8d3124e62a423b69200627e57601773b6ea435aff95ec159e5",
+    "official_source_modified": false,
+    "training_script_imported": false
+  },
+  "owner_decisions": {
+    "D1_visualization": {
+      "decision": "EXECUTE_EXACT_SOURCE",
+      "source": "FAS_train.py:117-163",
+      "trigger": "iters % save_images_every_iters == 0",
+      "cadence": 1000,
+      "loader": "the TRAIN loader (source val_loader alias)",
+      "sampling": "GaussianDiffusion.p_sample_loop (ddpm), sample_initial_noise 250, cond_scale 2, progress=True",
+      "mode": "model in TRAIN mode (source never calls .eval()); BatchNorm running-buffer updates preserved",
+      "rng": "second TRAIN iterator (CPU), torch.randperm (CPU), q_sample + per-step randn_like + dropout (CUDA); never isolated or restored",
+      "forbidden": [
+        "omit",
+        "rng_isolate",
+        "reduce_frequency",
+        "replace_ddpm_by_ddim",
+        "no_op",
+        "restore_rng_afterwards",
+        "cli_override"
+      ],
+      "artifacts": "<run_root>/diagnostics/visualization/<iters>_output.png (diagnostic)",
+      "scientifically_inert": false,
+      "precedent": "E06c M6D5e-r executed its upstream visualization block"
+    },
+    "D2_terminal_position": {
+      "decision": "AFTER_FINAL_VISUALIZATION_BEFORE_RUN_COMPLETION",
+      "order": [
+        "final training step",
+        "report slot",
+        "periodic-save test (false: 884000 % 10000 = 4000)",
+        "visualization (true: 884000 % 1000 = 0)",
+        "terminal checkpoint write",
+        "close",
+        "stat",
+        "SHA256",
+        "durable checkpoint_index update",
+        "verify bytes against index",
+        "prune model_880000.pt",
+        "run completion"
+      ],
+      "reason": "the visualization branch mutates BatchNorm running buffers of the model tensors used by FAS_sample.py (eval)",
+      "extra_optimizer_steps": 0,
+      "not": [
+        "training-budget change",
+        "checkpoint-selection change",
+        "cadence change",
+        "new scientific deviation"
+      ]
+    }
+  },
+  "data": {
+    "relation": "manifests/difffas_bin_idfree_train_v1.parquet",
+    "rows": 8838,
+    "split": "TRAIN",
+    "columns": [
+      "track_pair_id",
+      "dataset",
+      "gt_spoof_id",
+      "guide_spoof_id",
+      "content_live_id",
+      "style_id",
+      "split",
+      "use_pair",
+      "selection_policy",
+      "gt_sha256",
+      "guide_sha256"
+    ],
+    "never_consumed": [
+      "subject_id_global",
+      "attack_raw",
+      "attack_macro"
+    ],
+    "train_membership": "every GT / guide / content id in split_v1 TRAIN (allowlisted columns, TRAIN filter), M2 COMPLETE; GT and guide in the relation dataset",
+    "canonical_face": "<faces_256_root>/<dataset>/<sample_id>.png via methods/difffas/aux_runner_io.CanonicalFaceReader (O_NOFOLLOW, no enumeration, PIL RGB 256x256)",
+    "item": {
+      "content": "content_live_id",
+      "style_spoof": "guide_spoof_id",
+      "GT": "gt_spoof_id"
+    },
+    "guide": "frozen guide_spoof_id (M4 SHA-ranking); no resampling, no random.choice, no Python RNG",
+    "gt_guide_sha256_semantics": "split_v1 frame-lineage hashes, not canonical-face PNG hashes; recorded only"
+  },
+  "loop": {
+    "batch_size": 4,
+    "shuffle": true,
+    "drop_last": false,
+    "num_workers": 0,
+    "generator": null,
+    "iterations_per_epoch": 2210,
+    "tail_batch": 2,
+    "epochs": 400,
+    "total_iterations": 884000,
+    "order": [
+      "train (main_graph.train_iteration)",
+      "report slot (:86-98)",
+      "metrics record",
+      "periodic save slot (:102)",
+      "retention transition",
+      "visualization slot (:117)",
+      "terminal (884000 only)"
+    ]
+  },
+  "checkpoint": {
+    "payload": [
+      "model",
+      "ema",
+      "scheduler",
+      "optimizer",
+      "conf"
+    ],
+    "serializer": "torch.save",
+    "filename": "model_<str(iters).zfill(6)>.pt",
+    "cadence": 10000,
+    "periodic_count": 88,
+    "terminal_step": 884000,
+    "created_per_seed": 89,
+    "write_protocol": [
+      "free-space gate (predecessor retained)",
+      "<path>.partial (O_EXCL)",
+      "flush + fsync",
+      "os.replace",
+      "fsync directory",
+      "stat",
+      "SHA256",
+      "durable index append",
+      "re-read index + re-hash",
+      "index_verified",
+      "successor-gated prune of the direct predecessor"
+    ],
+    "terminal_index": {
+      "checkpoint_type": "terminal",
+      "selected_for_final": true,
+      "selection_reason": "BASELINE_FINAL_STATE_V1",
+      "logical_roles": [
+        "terminal",
+        "selected",
+        "authoritative_final",
+        "officially_required"
+      ]
+    },
+    "retention_policy": "configs/amendments/e07c_m6d6ir_checkpoint_retention.yaml"
+  },
+  "logging": {
+    "contract": "run_logging_v1",
+    "record_per": "GLOBAL_OPTIMIZER_STEP",
+    "rows_per_seed": 884000,
+    "precedent": "E06c M6D5e addendum; pinned print_loss_every_iters = 1",
+    "stdout_handling": "NON_SCIENTIFIC_IO: FAS_train.py:40 tqdm wrapper constructed with disable=True (iteration identical, no RNG); the report slot runs verbatim; the per-step metrics.jsonl retains the trajectory"
+  },
+  "modes": {
+    "SCIENTIFIC": {
+      "seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "run_root": "<runtime_root>/runs/m6/E07c/seed_<seed>/",
+      "entrypoint": "tools/run_e07c_main.py",
+      "fresh_only": true,
+      "launched_in_m6d6j": false
+    },
+    "QUALIFICATION": {
+      "seed": 60608,
+      "experiment_seed": null,
+      "run_root": "<runtime_root>/qualification/m6d6j/E07c/q60608-<id>/",
+      "entrypoint": "methods/difffas/main_runner_qualification.py",
+      "labels": [
+        "QUALIFICATION_ONLY",
+        "NOT_A_SCIENTIFIC_CHECKPOINT",
+        "NOT_ELIGIBLE_FOR_BANK",
+        "NOT_ELIGIBLE_FOR_DOWNSTREAM",
+        "NOT_ELIGIBLE_FOR_REPORTING",
+        "NOT_A_SCIENTIFIC_RUN"
+      ],
+      "checkpoint_bytes_after_evidence": "REMOVED under the qualification cleanup policy (size, SHA256 retained)"
+    }
+  },
+  "resume": {
+    "MAIN_CHECKPOINT_RESUME": "UNQUALIFIED",
+    "pretrain_path": null,
+    "cli": "refused"
+  },
+  "full_science_blockers": {
+    "FULL_SCIENCE_BLOCKED_PENDING_SMOKE_TEST_DECISION": true,
+    "O3_smoke_test": "PENDING",
+    "O4_resume_before_science": "PENDING"
+  },
+  "statuses": {
+    "qualified_by_m6d6j": [
+      "MAIN_PRODUCTION_RUNNER",
+      "A1_TRAIN_DATASET_INTEGRATION",
+      "CANONICAL_FACE_READER",
+      "GUIDE_MAPPING",
+      "RUN_LOGGING_V1_MAIN_RUN",
+      "MAIN_CHECKPOINT_CADENCE",
+      "MAIN_TERMINAL_CHECKPOINT_CREATION",
+      "MAIN_CHECKPOINT_RETENTION_RUNTIME_INTEGRATION"
+    ],
+    "not_qualified": [
+      "MAIN_CHECKPOINT_RESUME",
+      "MAIN_DIFFFAS_SCIENTIFIC_TRAINING",
+      "M8_BANK"
+    ],
+    "method_status": "IMPLEMENTED_NOT_EXECUTED"
+  },
+  "scientific_seeds_consumed": false
+}
