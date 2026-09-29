@@ -230,3 +230,18 @@ Amendment A9 (`docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A9_DiffFAS
 after the E06b M6 work is resolved. `outputs/audit/STAGE_STATE.json` is a stale historical fixture and is not the
 current milestone authority after M5; it is left byte-unchanged. **M7 HAS NOT STARTED.** Evidence:
 `outputs/audit/M6A9_DIFFFAS_FAMILY_SCOPE_EXCLUSION.md` / `.json`.
+
+**M6FA (2026-09-29) — E06b DSDG-NATIVE contract resolved from authority; not frozen, not implemented.** This note is
+additive and describes the current state.
+
+- **Scope:** CASIA + MSU, native same-subject, 3,720 TRAIN spoof frames. SiW is `NOT_INSTANTIABLE_MISSING_SUBJECT_ID`.
+- **Spoof-type target:** attack_macro, K = 2 {print, replay}, data-derived.
+- **lambda_pair = 5** (`train_generator.sh:17`).
+- **Official values:** 200 epochs, effective batch 240, lr 2e-4, epoch-200 generator checkpoint.
+- **Relation:** online same-subject `random.choice`. No native pair manifest.
+- **Execution:** M6D5c microbatch 20 reused as execution compatibility; epoch plan 15 × 240 + 120.
+- **Loader:** workers frozen at 8.
+- **Unresolved scientific fields:** none. N_syn is deferred to M8.
+
+Contract candidate: `outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json` / `.md`. `configs/methods/e06b_dsdg_native.yaml`
+is not created yet. **M6_CLOSED = false. M7 HAS NOT STARTED.**
