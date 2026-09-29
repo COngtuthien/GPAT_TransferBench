@@ -1,0 +1,992 @@
+{
+  "TEST_access": false,
+  "VAL_access": false,
+  "authority_commit": "4b54280c53f87c391151a5436b18e5fc51db88fe",
+  "classification": "M6FD_E06B_PRODUCTION_QUALIFICATION",
+  "code_sha256": {
+    "methods/dsdg/native_runner.py": "ecbef580f71c02eca26ccae2a47ae6ca201eaccb332995db0f47003093dc28cd",
+    "methods/dsdg/native_runner_qualification.py": "e88bd32fbc8a558596f80286d31a742345a577c2dbd5ecb0da91dfd5fb9eceb6",
+    "tools/m6fd_e06b_cli_preflight_capture.py": "c0ac00c0511795b7c0cdf1ad8a720986a8bafd4a5741396c63055113b4012199",
+    "tools/run_e06b.py": "7c797c47f45641f2919780463e67d3ae15933e736c74cdd331802b568e62c4ef"
+  },
+  "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+  "config_unchanged": true,
+  "derived": {
+    "cases": {
+      "b240": {
+        "backward_calls": 12,
+        "batch_load_seconds": 1.3210142268799245,
+        "chunks": 12,
+        "environment_torch": "2.12.1+cu130",
+        "epoch_branch": 1,
+        "gates": {
+          "both_classes": true,
+          "inputs_in_unit_range": true,
+          "logical_batch_and_chunks": true,
+          "loss_cls_positive_active": true,
+          "loss_pair_positive": true,
+          "losses_finite": true,
+          "netCls_netIP_unchanged": true,
+          "one_optimizer_step": true,
+          "owned_gradients_55_finite": true,
+          "owned_parameters_changed": true,
+          "same_subject_pairs": true
+        },
+        "group_slice": [
+          0,
+          60
+        ],
+        "independent_case": true,
+        "input_range": [
+          0.0,
+          1.0
+        ],
+        "labels_count": {
+          "print_0": 120,
+          "replay_1": 120
+        },
+        "lightcnn_load": {
+          "matched": 60,
+          "missing": [],
+          "shape_mismatches": []
+        },
+        "logical_batch_size": 240,
+        "losses": {
+          "loss_cls": {
+            "raw": 0.7892043272654214,
+            "weighted": 7.892043272654215
+          },
+          "loss_ip": {
+            "raw": 0.00753675142923991,
+            "weighted": 7.53675142923991
+          },
+          "loss_kl": {
+            "raw": 18.579789320627846,
+            "weighted": 18.579789320627846
+          },
+          "loss_mmd": {
+            "raw": 0.31930721282958985,
+            "weighted": 15.965360641479492
+          },
+          "loss_ort": {
+            "raw": 1.9636118412017822,
+            "weighted": 1.9636118412017822
+          },
+          "loss_pair": {
+            "raw": 0.001744854364854594,
+            "weighted": 0.00872427182427297
+          },
+          "loss_rec": {
+            "raw": 14518.537760416668,
+            "weighted": 14518.537760416668
+          }
+        },
+        "netCls_grad_nonzero": 258,
+        "optimizer_applications": 1,
+        "owned_gradients": {
+          "finite": 55,
+          "non_none": 55,
+          "tensors": 55
+        },
+        "pairs_count": 240,
+        "pairs_first_5": [
+          {
+            "label": 1,
+            "live_id": "0324d32595ba655f4c20906e2b42da96fc64f4085a4cabe2d383e592552a5a04",
+            "spoof_id": "1140b92ddf33c5100b00fa289372e170dba64d612992dcbf25a5a16548dc0323"
+          },
+          {
+            "label": 0,
+            "live_id": "682a6e066d5082988360a0a9036bff15000f4604e8f853c4e52e344367fd2cca",
+            "spoof_id": "0419fa2cf3563b63d3ed11be4946ad55910297b5834dcff0265221672ab3869c"
+          },
+          {
+            "label": 1,
+            "live_id": "eb769107d0fccf4d4e1ffe8ee1a27a11f42bc76df84b1471fab5fdb715d1d840",
+            "spoof_id": "098aca3203faf4259b11088fcab29dd0846ba563f8013afdd3f294834d955e4a"
+          },
+          {
+            "label": 1,
+            "live_id": "8eeaad7a0b26ee04a2d754e2675aff74313121bba380f2c3bd8e57313b8e38ae",
+            "spoof_id": "01c0e6ae95605aad0e961b46998a445e28669c6b85c1b73368cd145b630aab35"
+          },
+          {
+            "label": 1,
+            "live_id": "7c81f51a5dfa36887cabf881d80d9471e1399e1a3c92b8ab5387a8be7505e297",
+            "spoof_id": "0918bd55bf33606e4e574b5569d0a75af735b082ecfa8053351e2cf937288605"
+          }
+        ],
+        "peak_allocated_bytes": 6014771200,
+        "peak_reserved_bytes": 7226785792,
+        "physical_microbatch": 20,
+        "pre_execution_row_assertions": 240,
+        "processes_logged": 2,
+        "step_seconds": 3.999952595680952,
+        "subjects": 58,
+        "total_loss": 14519.05722322444,
+        "train_face_opens": 480,
+        "train_faces_distinct": 454,
+        "workers_configured": 8
+      },
+      "tail120": {
+        "backward_calls": 6,
+        "batch_load_seconds": 0.7313103978522122,
+        "chunks": 6,
+        "environment_torch": "2.12.1+cu130",
+        "epoch_branch": 2,
+        "gates": {
+          "both_classes": true,
+          "inputs_in_unit_range": true,
+          "logical_batch_and_chunks": true,
+          "loss_cls_positive_active": true,
+          "loss_pair_positive": true,
+          "losses_finite": true,
+          "netCls_netIP_unchanged": true,
+          "one_optimizer_step": true,
+          "owned_gradients_55_finite": true,
+          "owned_parameters_changed": true,
+          "same_subject_pairs": true
+        },
+        "group_slice": [
+          60,
+          90
+        ],
+        "independent_case": true,
+        "input_range": [
+          0.0,
+          1.0
+        ],
+        "labels_count": {
+          "print_0": 60,
+          "replay_1": 60
+        },
+        "lightcnn_load": {
+          "matched": 60,
+          "missing": [],
+          "shape_mismatches": []
+        },
+        "logical_batch_size": 120,
+        "losses": {
+          "loss_cls": {
+            "raw": 0.7925047079722086,
+            "weighted": 7.925047079722086
+          },
+          "loss_ip": {
+            "raw": 0.007598584095637003,
+            "weighted": 7.598584095637003
+          },
+          "loss_kl": {
+            "raw": 18.75908374786377,
+            "weighted": 18.75908374786377
+          },
+          "loss_mmd": {
+            "raw": 0.3234067153930664,
+            "weighted": 16.17033576965332
+          },
+          "loss_ort": {
+            "raw": 3.604271650314331,
+            "weighted": 3.604271650314331
+          },
+          "loss_pair": {
+            "raw": 0.0017128906367967524,
+            "weighted": 0.008564453183983762
+          },
+          "loss_rec": {
+            "raw": 14707.360188802082,
+            "weighted": 14707.360188802082
+          }
+        },
+        "netCls_grad_nonzero": 258,
+        "optimizer_applications": 1,
+        "owned_gradients": {
+          "finite": 55,
+          "non_none": 55,
+          "tensors": 55
+        },
+        "pairs_count": 120,
+        "pairs_first_5": [
+          {
+            "label": 1,
+            "live_id": "033204ed67c56b805d8f5c756f1b0f61ddb0cfe72a3e706fc7987645cf4a9971",
+            "spoof_id": "181ae889b5d72da38352380de054278600078dbbfd35dd2d7e89c974d941b1be"
+          },
+          {
+            "label": 0,
+            "live_id": "bb1a2729f4aab2341cd8928f0c618fc8c8ed8db7337ae46c445b1303cebd3098",
+            "spoof_id": "264fa6f299a0853f9df93d7c49f7a3e71952ae5a55fe938d9eee460701cb0f24"
+          },
+          {
+            "label": 1,
+            "live_id": "defaa85cde6287d72f0cbc626178329a88df80b7843b7752ec8c6eb720717ff9",
+            "spoof_id": "162a6ade945f8aa8835b51288f4ca6ba2e5be4dc05d02ed6c83805e696a14198"
+          },
+          {
+            "label": 1,
+            "live_id": "8e77b674c60d7bea5e7385e03d7ebbeaaa63bc6e3147c683b418c87fa5795d58",
+            "spoof_id": "166b77ba338336defe2711d63d6f00924037563599b61bf3c95beb16b31348ba"
+          },
+          {
+            "label": 1,
+            "live_id": "a2a7ab53f145120955fc7c565c303dfcba97cf8bacdb5831a711fa600c9636e3",
+            "spoof_id": "17ee58a7a80e4310a203ba020a8fcf71f3a25be7ec9bb929d37758832514b603"
+          }
+        ],
+        "peak_allocated_bytes": 5825842176,
+        "peak_reserved_bytes": 7038042112,
+        "physical_microbatch": 20,
+        "pre_execution_row_assertions": 120,
+        "processes_logged": 2,
+        "step_seconds": 2.1352609819732606,
+        "subjects": 54,
+        "total_loss": 14761.426075598456,
+        "train_face_opens": 240,
+        "train_faces_distinct": 234,
+        "workers_configured": 8
+      }
+    },
+    "cli": {
+      "all_refused": true,
+      "dirty_injected_false_reason": "the uncommitted M6F-D runner files are staged for qualification; the real clean-worktree gate is exercised by the dirty_worktree refusal below",
+      "refusals": {
+        "dirty_worktree": "REFUSED_EXIT_2",
+        "include_siw_flag": "REFUSED_EXIT_2",
+        "lambda_pair_override": "REFUSED_EXIT_2",
+        "qualification_limit_flag": "REFUSED_EXIT_2",
+        "qualification_seed_60801": "REFUSED_EXIT_2",
+        "resume_state_flag": "REFUSED_EXIT_2",
+        "tf32_not_disabled": "REFUSED_EXIT_2",
+        "wrong_pythonhashseed": "REFUSED_EXIT_2"
+      },
+      "resume": "NOT_QUALIFIED_FRESH_ONLY",
+      "run_dir": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_42",
+      "run_dir_exists": false,
+      "torch_imported": false
+    },
+    "environment": {
+      "cuda": "13.0",
+      "cudnn": 92000,
+      "environment_lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+      "executable": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+      "gpu": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+      "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+      "torch": "2.12.1+cu130"
+    },
+    "lightcnn": {
+      "bytes": 123844849,
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar",
+      "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964"
+    },
+    "loader": {
+      "access": {
+        "counts_by_category": {
+          "FACES_ENUMERATION_OR_WRITE": 0,
+          "NON_TRAIN_FACE": 0,
+          "OTHER_BENCHMARK_DATA": 0,
+          "OTHER_MANIFEST": 0,
+          "SCIENTIFIC_RUN_ROOT": 0,
+          "SPLIT_METADATA_TRAIN_FILTERED": 1,
+          "TEST_METADATA": 0,
+          "TRAIN_FACE": 34,
+          "VAL_METADATA": 0
+        },
+        "denied_events": 0,
+        "processes_logged": 1,
+        "train_faces_opened_distinct": 32
+      },
+      "batch_sizes": [
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        120
+      ],
+      "distinct_worker_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "gates": {
+        "batch_b_served_by_worker_b_mod_8": true,
+        "batch_plan_15x240_plus_120": true,
+        "every_spoof_row_once": true,
+        "image_pairs_16_both_classes_both_datasets": true,
+        "image_pairs_same_subject": true,
+        "image_tensor_contract": true,
+        "indices_match_model": true,
+        "real_draws_match_pure_python_model": true,
+        "same_subject_every_draw": true,
+        "worker_seed_base_plus_id": true,
+        "workers_8_observed": true
+      },
+      "image_pairs": [
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "casia_fasd",
+          "live_id": "ab4050b8a6f7957fc45464fc35a70ef90c09a5447d9be8b1fdc14f752a11e8ac",
+          "same_subject": true,
+          "spoof_id": "000e9a74690619f1650ede35f89534b157ef685aa31414614bee51d9f650c747",
+          "subject_id_global": "casia_fasd::5",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 0.5843137502670288,
+              "min": 0.0470588244497776,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 0.9529411792755127,
+              "min": 0.1411764770746231,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "casia_fasd",
+          "live_id": "c847e0ef68c79cd753ea3ff83406c3bbe7d994d3ab7e2244373d7cce2312e093",
+          "same_subject": true,
+          "spoof_id": "000fea1ca98f74e5881b013e8385ad504872cc15247d3c48109c423692e392c6",
+          "subject_id_global": "casia_fasd::42",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.10980392247438431,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.054901961237192154,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "casia_fasd",
+          "live_id": "fd2283679e13b0ed255b4127e5e9051be1f29a7fdf5fb9120d5ae2480ecb3677",
+          "same_subject": true,
+          "spoof_id": "001e46a5413eca93345db00ad1ff89d75e18ad49d9f1c6345ea975b5f97aa91e",
+          "subject_id_global": "casia_fasd::5",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.003921568859368563,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 0.9529411792755127,
+              "min": 0.13333334028720856,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "casia_fasd",
+          "live_id": "ad99db04de82c891964a2ce5fa4c291c6dff55ba4586993b8601dc13da69cf85",
+          "same_subject": true,
+          "spoof_id": "002ea4630facf0705f700778025f7df01f05b2e1cbbf4cac6a082d9a05f9f264",
+          "subject_id_global": "casia_fasd::31",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.054901961237192154,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.13725490868091583,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "casia_fasd",
+          "live_id": "31ab29e719d6d63eb0c668df30e93dcab75ee406400a5dda8b005ff853fd382d",
+          "same_subject": true,
+          "spoof_id": "001f67100ce7cd06ec85c9f7670617f4bf14f54db42d14e9d75d8d55b29f7082",
+          "subject_id_global": "casia_fasd::31",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 0.7137255072593689,
+              "min": 0.10980392247438431,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.07450980693101883,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "casia_fasd",
+          "live_id": "940d7b59e9a27bdb452c90d3f814f9431c68adfde1ca6f459ba93b6077278f7c",
+          "same_subject": true,
+          "spoof_id": "004db106e40968067c5619b888c189e646fde7f0cb6200847ee367eb5c384069",
+          "subject_id_global": "casia_fasd::2",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.1725490242242813,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 0.9921568632125854,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "casia_fasd",
+          "live_id": "253b7d7b044ccddbd43735f31de0113bbefad8d2c8a5e367efafa7daad7583e1",
+          "same_subject": true,
+          "spoof_id": "00d0a7151c048b9a54086d5235730bae7247ba8e3df1855e9f4e48470bdb35ec",
+          "subject_id_global": "casia_fasd::25",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 0.8549019694328308,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 0.8156862854957581,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "casia_fasd",
+          "live_id": "c0d43e6867714a7928c8cd56b1db77441dfc4b4fd736536bfcd067eef2a4ea51",
+          "same_subject": true,
+          "spoof_id": "01530cd7c15b9dd2e4a86f606a83edde6ff2bda55af53432185359eb475a9ba9",
+          "subject_id_global": "casia_fasd::26",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 0.8666666746139526,
+              "min": 0.15294118225574493,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 0.658823549747467,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "msu_mfsd",
+          "live_id": "a12b54ddd1e78699d5db13b22cc505fe1e543d71938b58b5f8628943947eceef",
+          "same_subject": true,
+          "spoof_id": "005c5a14f9215eb8a2f50b74025825ee45a2db318accfbc4a321990566a28afe",
+          "subject_id_global": "msu_mfsd::023",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "msu_mfsd",
+          "live_id": "1ba4a7d89cc396ee3c7ce5b07c747e3067fae709745d9095da52b4689e3399c6",
+          "same_subject": true,
+          "spoof_id": "013a2bc49838316dd81e2b960e38f0d750fca2a3ff200f1662b95f0bb4764214",
+          "subject_id_global": "msu_mfsd::042",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 0.8039215803146362,
+              "min": 0.0117647061124444,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "msu_mfsd",
+          "live_id": "49bcbe223c846c54e6b316b312a082ff79691b23aa3a53bd770593be5096bb30",
+          "same_subject": true,
+          "spoof_id": "030f6c823858eaa801b211e42dab6d948ff4c847f5d21ff9dc9caac79a775e05",
+          "subject_id_global": "msu_mfsd::037",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "print",
+          "class_index": 0,
+          "dataset": "msu_mfsd",
+          "live_id": "b2285cfeb7418e2b9b0114a75dd02fbdd102c3ce7b2fe57a86956674d23f3133",
+          "same_subject": true,
+          "spoof_id": "0384dd3d51c97392ce4101725c5b3aeee41c9411cd50c1b94fc92070b134fd5f",
+          "subject_id_global": "msu_mfsd::006",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0235294122248888,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "msu_mfsd",
+          "live_id": "514c22dd0636f556090749ae6f9ea27f0a3ee50bfec0c623ce80e096f503b781",
+          "same_subject": true,
+          "spoof_id": "0019b9b90143c103d8ffed5c5305a8beebbb3a206754d2af0b508dafbf644dc9",
+          "subject_id_global": "msu_mfsd::009",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "msu_mfsd",
+          "live_id": "dc71375660c2e791e2cf7afb2a37d2734e9266ee55c0b02c6b2ca3fe0bc58093",
+          "same_subject": true,
+          "spoof_id": "00516aeb050cb515c4ec15f17d619a6b04d6e255d188404dd945d5e892e56a3a",
+          "subject_id_global": "msu_mfsd::003",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "msu_mfsd",
+          "live_id": "50d6e15c90159d7d4bcddc0c1ac109d9dfe993348d8b8a35ddfbd5f9caad6206",
+          "same_subject": true,
+          "spoof_id": "009c99d55fcab27c22131cd146ac3a8b5a92d604f146d3bf3e410e09276def92",
+          "subject_id_global": "msu_mfsd::042",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        },
+        {
+          "attack_macro": "replay",
+          "class_index": 1,
+          "dataset": "msu_mfsd",
+          "live_id": "7415cdc1977bf134b525bba6d3e5e9efa2cfd2162732ee0b24f6d486509847fe",
+          "same_subject": true,
+          "spoof_id": "0115ac12204dacc92db76f5c302693f3a40f3a03790a7b65f0a06313cae6fad4",
+          "subject_id_global": "msu_mfsd::008",
+          "tensors": [
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "spoof",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            },
+            {
+              "dtype": "float32",
+              "max": 1.0,
+              "min": 0.0,
+              "role": "live",
+              "shape": [
+                3,
+                256,
+                256
+              ]
+            }
+          ]
+        }
+      ],
+      "pre_execution_row_assertions": 3720,
+      "production_dataset_item": {
+        "dtype_0": "float32",
+        "keys": [
+          "0",
+          "1",
+          "index",
+          "live_id",
+          "spoof_id",
+          "type"
+        ],
+        "live_same_subject": true,
+        "shape_0": [
+          3,
+          256,
+          256
+        ],
+        "type": 0
+      },
+      "seconds": 0.4516588062979281
+    },
+    "population": {
+      "casia_fasd": {
+        "live": 840,
+        "print": 1680,
+        "replay": 840,
+        "spoof": 2520,
+        "subjects": 35
+      },
+      "msu_mfsd": {
+        "live": 400,
+        "print": 400,
+        "replay": 800,
+        "spoof": 1200,
+        "subjects": 25
+      },
+      "total": {
+        "live": 1240,
+        "print": 2080,
+        "replay": 1640,
+        "spoof": 3720,
+        "subjects": 60
+      }
+    },
+    "source": {
+      "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+      "files_verified": 13,
+      "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d"
+    },
+    "started_utc": {
+      "b240": "2026-09-29T06:27:06Z",
+      "loader": "2026-09-29T06:26:43Z",
+      "tail120": "2026-09-29T06:27:15Z"
+    }
+  },
+  "environment_of_record": "gpat-m6-e06c",
+  "fidelity": {
+    "basis": [
+      "real CASIA+MSU TRAIN native relation, K = 2, lambda_pair = 5 and every frozen value used unchanged",
+      "the production batch function is the M6F-C-qualified run_global_batch_v2 (240 = 12 x 20, 120 = 6 x 20) with finite losses/gradients and one Adam step",
+      "real worker draws equal the pure-Python model on the full real relation"
+    ],
+    "controlled_adaptation": false,
+    "disclosures_not_scientific_deviations": [
+      "input = frozen canonical faces_256 (preprocess_v1) instead of the official scene bbox crop: the benchmark dataset adapter shared by every method (spec 8: dataset adapters may change)",
+      "scientific runs are FRESH ONLY: resume is not qualified for E06b (a failed seed reruns the same seed from the start, spec 27); the engineering resume sidecar of E06c is not written",
+      "the run-log (RunContext) and official checkpoint writers are reused E06c-qualified functions but are not runtime-exercised by M6F-D for E06b (no checkpoint may be written in qualification)",
+      "split_v1 is opened once and read with a TRAIN + CASIA/MSU pyarrow filter on allowlisted columns; no TEST/VAL row is materialized"
+    ],
+    "final_method_fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "final_method_fidelity_decision": "OWNER_DECISION_AT_M6F_D_REVIEW",
+    "frozen_config_field": "final_execution_fidelity stays PENDING_M6F_C_RUNTIME_QUALIFICATION in the frozen YAML (historical; never rewritten); the final current fidelity lives here and in the later method_status.csv",
+    "lifecycle_disclosure_not_fidelity": "the inherited E06c checkpoint/run-log writers were not exercised at runtime for E06b and no scientific run lifecycle was executed; this is an implementation/lifecycle disclosure, not a fidelity downgrade",
+    "new_scientific_deviation_found": false,
+    "owner_rationale": [
+      "real CASIA/MSU TRAIN production data path passed",
+      "native same-subject pairing passed on real data",
+      "K = 2 and lambda_pair = 5 unchanged",
+      "all official losses unchanged and active",
+      "qualified effective batch remains 240",
+      "physical microbatch 20 is only runtime compatibility",
+      "logical 240 and tail 120 paths passed on real images",
+      "worker = 8 native pairing determinism passed",
+      "no scientific configuration, loss, architecture or optimization semantics changed",
+      "no new scientific deviation introduced"
+    ],
+    "runtime_fidelity_assessment": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "target_source_fidelity": "FAITHFUL_OFFICIAL"
+  },
+  "gpu_authority_commit": "4b54280c53f87c391151a5436b18e5fc51db88fe",
+  "gpu_evidence_sha256": {
+    "outputs/audit/M6FD_E06B_B240.json": "04271cca88055223580bab04b60b57200e993d90e860e88219cd7b5fcee7b64c",
+    "outputs/audit/M6FD_E06B_CLI_PREFLIGHT.json": "638c637fd84a26d78ebe82353c8c3c6dacdb7082d424dbe3d93dc9fd74e6bc76",
+    "outputs/audit/M6FD_E06B_LOADER.json": "dcc2fdd847ede8ac878e98aeddd8abe04b0d4a81aa1edce424a79d1e33844a8f",
+    "outputs/audit/M6FD_E06B_TAIL120.json": "5f78d8796f34f4c18702b53a4b397b292631bfa053113e78c47884b39c26fb26"
+  },
+  "label": "PRODUCTION_PATH_QUALIFICATION_ONLY",
+  "m6": {
+    "M6_CLOSED": false,
+    "M7_started": false
+  },
+  "method_id": "E06b",
+  "milestone": "M6FD",
+  "native_manifest_created": false,
+  "qualification_seed": 60801,
+  "scientific_bank_created": false,
+  "scientific_checkpoints_created": 0,
+  "scientific_seeds_completed": 0,
+  "scientific_training_completed": false,
+  "siw_access": false,
+  "status": "PASS",
+  "statuses": [
+    "CONFIG_FROZEN",
+    "STATIC_ADAPTER_IMPLEMENTED",
+    "GPU_GRAPH_QUALIFIED",
+    "EXECUTION_MAPPING_QUALIFIED",
+    "WORKER_DETERMINISM_QUALIFIED",
+    "PRODUCTION_DATA_PATH_QUALIFIED",
+    "PRODUCTION_BATCH_PATH_QUALIFIED",
+    "SCIENTIFIC_CLI_PREFLIGHT_QUALIFIED",
+    "SCIENTIFIC_RUN_LIFECYCLE_NOT_EXECUTED",
+    "CHECKPOINT_WRITER_NOT_E06B_RUNTIME_EXERCISED",
+    "RESUME_UNQUALIFIED_FRESH_ONLY",
+    "SCIENTIFIC_TRAINING_NOT_EXECUTED"
+  ]
+}

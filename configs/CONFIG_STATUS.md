@@ -280,3 +280,24 @@ current state. It is QUALIFICATION_ONLY_SYNTHETIC and NON_SCIENTIFIC.
 - **Not done:** no training, checkpoint, bank, image read or TEST access.
 
 **M6_CLOSED = false. M7 HAS NOT STARTED.** Evidence: `outputs/audit/M6FC_E06B_GPU_QUALIFICATION.md` / `.json`.
+
+**M6FD (2026-09-29) — E06b DSDG-NATIVE production runner qualified on real TRAIN data.** This note is additive and
+describes the current state. It is PRODUCTION_PATH_QUALIFICATION_ONLY, not scientific training.
+
+- **Runner:** `methods/dsdg/native_runner.py`, with the fresh-only scientific CLI `tools/run_e06b.py`.
+- **Real data used:** CASIA + MSU TRAIN only (split_v1 TRAIN filter), with no VAL, TEST or SiW.
+- **Loader:** 8 workers over the full real relation (15 × 240 + 120); every live-partner draw equals the model, and
+  16 real pairs were decoded.
+- **Batch path:** independent real cases of 240 (12 × 20) and 120 (6 × 20) ran through the production batch function,
+  each taking one Adam step with its weights discarded. loss_cls and loss_pair are both > 0 and active.
+- **CLI:** the preconditions pass, and all 8 refusals hold.
+- **Fidelity (owner decision):** no new scientific deviation.
+  final_method_fidelity = FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY, the final M6 method-level fidelity, and not
+  CONTROLLED_ADAPTATION. The frozen YAML's pending field is historical and is not rewritten.
+- **E06b status:** CONFIG_FROZEN, STATIC_ADAPTER_IMPLEMENTED, GPU_GRAPH_QUALIFIED, EXECUTION_MAPPING_QUALIFIED,
+  WORKER_DETERMINISM_QUALIFIED, PRODUCTION_DATA_PATH_QUALIFIED, PRODUCTION_BATCH_PATH_QUALIFIED,
+  SCIENTIFIC_CLI_PREFLIGHT_QUALIFIED, SCIENTIFIC_RUN_LIFECYCLE_NOT_EXECUTED,
+  CHECKPOINT_WRITER_NOT_E06B_RUNTIME_EXERCISED, RESUME_UNQUALIFIED_FRESH_ONLY, SCIENTIFIC_TRAINING_NOT_EXECUTED.
+
+scientific_training_completed = false; there are 0 scientific seeds, checkpoints and banks. **M6_CLOSED = false.
+M7 HAS NOT STARTED.** Evidence: `outputs/audit/M6FD_E06B_PRODUCTION_QUALIFICATION.md` / `.json`.
