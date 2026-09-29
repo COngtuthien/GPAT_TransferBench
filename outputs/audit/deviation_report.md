@@ -861,3 +861,64 @@ additive only: no earlier entry, status or wording above is changed.
 - **Affected experiments:** E01, E02, E03, E04, E05, E06a, E06b, E06c, E07a, E07b, E07c (as tabulated).
 - **Status:** APPROVED — each row's own authority is owner-approved or owner-frozen, as cited. No GPAT (E08–E11)
   deviation is created or resolved here. **DEV-003 (`lambda_dir`) remains UNAPPROVED and must be resolved before M7.**
+
+## M7A — GPAT contract resolution, Amendment A10 (2026-09-29)
+
+Authority: `docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md` and
+`configs/amendments/gpat_a10_m7_contract_resolution.yaml` (owner decisions D01–D17). This section is additive: no earlier
+entry, status or wording above is changed. The effective-status summary table at the top of this file is left
+byte-unchanged; the updates below supersede it for DEV-003, Q-05 and Q-21 (latest update wins).
+
+### DEV-003 — status update (M7A, A10/D01)
+
+- **Resolution:** `lambda_dir = 0.5` is the coefficient of the S_orient term inside L_spec:
+  `L_spec = ||S_radial(x_hat) − S_radial(x_s)||_1 + lambda_dir · ||S_orient(x_hat) − S_orient(x_s)||_1`. It is not a
+  standalone directional loss and not an inert key. With the frozen value 0.5 the §10.2 formula is numerically unchanged.
+- **Class:** OWNER_SCIENTIFIC_CLARIFICATION (spec internal inconsistency resolved by the owner).
+- **Affected experiments:** E08–E11 and the GPAT ablations.
+- **Status:** APPROVED
+- Owner classification: RESOLVED_BY_A10_D01. Supersedes the 2026-09-18 UNRESOLVED classification above (kept for history).
+
+### Q-05 — resolved (M7A, A10/D02)
+
+`GRL(alpha = 1.0)` is kept and the objective uses `+ lambda_idadv · CE(identity_head(GRL(z_a)), source_subject)`: the
+identity head minimizes CE and the GRL gives the encoder the single intended reversal. `GRL + (− lambda_idadv · CE)` is
+forbidden (double reversal). OWNER_SCIENTIFIC_CLARIFICATION; not a deviation.
+
+### Q-21 — resolved for M7 (M7A, A10/D09)
+
+Q-21 was deferred to M9 at M2A. It is pulled forward to M7 because the M7 VAL checkpoint selection (Dice over
+non-background classes), L_parse and M_face_dilated need the background class. FaceXFormer parser: class 0 = background, classes 1..10 = non-background, no semantic names assigned, no void/ignore
+class. This is sufficient for the M7 VAL Dice, L_parse and M_face_dilated. Any later use that needs class names (for
+example M9 region crops) still needs its own owner decision. OWNER_SCIENTIFIC_CLARIFICATION; not a deviation.
+
+### DEV-022 — GPAT_B2_B3_SIW_MASKED_IDENTITY_SUPERVISION (CONTROLLED_ADAPTATION)
+
+- **Number:** verified as the next unused deviation id (the highest id in this register and in every tracked file is
+  DEV-021; DEV-022 appears nowhere before this entry).
+- **Spec says (§5.3, §9.2):** the GPAT-B2/B3 identity adversary is `Linear(512, number_of_train_subjects)` behind a GRL,
+  trained with subject identity labels.
+- **Problem:** SiW-Mv2 has no subject identity in this project (Q-14; 5,118 of the 8,838 TRAIN pairs have a null
+  `source_subject`), and Amendment A1 forbids fabricating one.
+- **Adaptation (A10/D03):** B2/B3 keep the full CASIA-FASD + MSU-MFSD + SiW-Mv2 TRAIN pair population. The identity label
+  is `source_subject`; the identity CE is active on CASIA/MSU rows (60 source subjects) and masked on SiW rows. The CE of
+  an optimizer step is normalized by the labelled rows contributing to that step; a step with zero labelled rows has
+  `L_idadv = 0` exactly. Pseudo ids, clustering ids, `video_id`/`content_group_id` as identity, AdaFace pseudo-identity
+  and filename-derived identity remain forbidden.
+- **Why not CASIA+MSU only:** it would change the B2/B3 dataset population relative to B0/B1 (confounding the supervision
+  ablation) and would reduce the B3 attack-type vocabulary from 6 classes to 2.
+- **Scientific impact:** the identity adversary sees identity labels on 42 % of TRAIN pairs; its effective strength varies
+  per optimizer step. Must be disclosed with every E10/E11 result.
+- **Affected experiments:** E10 (GPAT-B2), E11 (GPAT-B3). Not E08/E09.
+- **Status:** APPROVED
+- Owner classification: CONTROLLED_ADAPTATION (owner decision D03, M7A instruction 2026-09-29).
+
+### Track-B instantiability clarification (A10 §7)
+
+A1 and `configs/frozen/fair_track_v1.yaml` are unchanged. Track-B dataset instantiability is evaluated per method from the
+metadata the variant actually requires: E09/B1 includes SiW-Mv2 (attack_macro only); E10/B2 and E11/B3 include SiW-Mv2 with
+the identity CE masked (DEV-022). The blanket `siwmv2: NOT_INSTANTIABLE_MISSING_SUBJECT_ID` continues to apply to E06b and
+E07b. OWNER_SCIENTIFIC_CLARIFICATION; not a new deviation beyond DEV-022.
+
+No other deviation id is created by M7A. The remaining A10 decisions are in-house GPAT clarifications, runtime
+compatibility or execution/storage policy (classified in the A10 record), not deviations.

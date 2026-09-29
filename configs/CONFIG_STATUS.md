@@ -343,3 +343,25 @@ closure evidence records why.
 
 **M6_CLOSED = true. M7 HAS NOT STARTED.** Entry blockers for M7: DEV-003 `lambda_dir`, Q-05 and the missing GPAT
 B1/B2/B3 configs. Evidence: `outputs/audit/M6E_FINAL_M6_CLOSURE.md` / `.json`, `outputs/audit/method_status.csv`.
+
+**M7A (2026-09-29) — GPAT contract resolution (Amendment A10).** The owner resolved every M7 entry blocker in decisions
+D01–D17, encoded additively in
+`docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md` and
+`configs/amendments/gpat_a10_m7_contract_resolution.yaml`. DEV-003 is resolved (D01: `lambda_dir` = S_orient coefficient
+inside L_spec), Q-05 is resolved (D02: GRL(1.0) with `+ lambda_idadv · CE`), Q-21 is resolved for M7 (D09: class 0
+background, 1..10 non-background, no names), and DEV-022 registers the one controlled adaptation (D03: B2/B3 keep SiW-Mv2
+with the identity CE masked on rows without `source_subject`). B1 keeps SiW-Mv2 (D04). The NAFNet architecture source is
+pinned to `megvii-research/NAFNet@2b4af71ebe098a92a75910c233a3965a3e93ede4` (architecture only, not vendored). The
+historical project `/home/cong/PRISM_FAS_C_LLM_Project` was reconciled as a Level-3 reference only; no historical scientific
+choice was imported.
+
+| Config | Status after M7A |
+|---|---|
+| `configs/methods/gpat_b0.yaml` | unchanged (spec §23.2 verbatim); its `lambda_dir` is now defined by A10/D01 |
+| `configs/methods/gpat_b1.yaml` | NOT CREATED — contract complete (A10 D04–D06); creation is M7B |
+| `configs/methods/gpat_b2.yaml` | NOT CREATED — contract complete (A10 D02, D03/DEV-022); creation is M7B |
+| `configs/methods/gpat_b3.yaml` | NOT CREATED — contract complete (A10 D02–D06, DEV-022); creation is M7B |
+
+Open non-scientific items R-01…R-07 are listed in A10 §11 for M7B/M7C. No GPAT code, environment, checkpoint or bank
+exists. **M6_CLOSED = true. M7 contract resolved (M7A); M7 scientific training HAS NOT STARTED.** Evidence:
+`outputs/audit/M7A_GPAT_CONTRACT_RESOLUTION.md` / `.json`.
