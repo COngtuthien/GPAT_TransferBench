@@ -194,9 +194,12 @@ methods:
     target_implementation_status: FAITHFUL_OFFICIAL
     environment_status: NOT_CREATED
     implementation_status: NOT_STARTED
-    config_file: configs/methods/dsdg_native.yaml (not yet created)
+    config_file: configs/methods/e06b_dsdg_native.yaml
     track: B_NATIVE_FULL_SECONDARY
     track_b_status: DEFERRED_TO_M6_SECONDARY_TRACK
+    m6_status: [CONFIG_FROZEN, STATIC_ADAPTER_IMPLEMENTED, GPU_GRAPH_NOT_YET_QUALIFIED, PRODUCTION_RUNNER_NOT_YET_QUALIFIED, SCIENTIFIC_TRAINING_NOT_EXECUTED]
+    m6_status_milestone: M6FB
+    m6_status_note: "M6FA resolved the contract and M6FB froze configs/methods/e06b_dsdg_native.yaml and implemented methods/dsdg/native.py (static). The M0-era implementation_status field above stays NOT_STARTED because a historical M0 test pins it for every method (same as E06c). Source pin shared with E06a/E06c (third_party/source_pins.json dsdg.method_ids); no new pin. Target fidelity FAITHFUL_OFFICIAL; final execution fidelity PENDING_M6F_C_RUNTIME_QUALIFICATION. A9 does not cover E06b."
     notes: "Spoof-type target = attack_macro. Identity pairing only from TRAIN identities with both live and spoof. Amendment A1 moved this to the SECONDARY native track: CASIA + MSU only, SiW NOT_INSTANTIABLE_MISSING_SUBJECT_ID. It no longer gates the main comparison or M5."
 
   - method_id: E07a

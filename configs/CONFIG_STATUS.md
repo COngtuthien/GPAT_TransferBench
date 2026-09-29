@@ -245,3 +245,21 @@ additive and describes the current state.
 
 Contract candidate: `outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json` / `.md`. `configs/methods/e06b_dsdg_native.yaml`
 is not created yet. **M6_CLOSED = false. M7 HAS NOT STARTED.**
+
+**M6FB (2026-09-29) — E06b DSDG-NATIVE config FROZEN; static adapter implemented.** This note is additive and
+describes the current state.
+
+- **Config:** `configs/methods/e06b_dsdg_native.yaml`, SHA256 `9d665dc2…`, with a byte-identical snapshot. It is
+  loaded through `LATER_FROZEN_METHOD_FILES`; the M6B set is unchanged.
+- **Adapter:** `methods/dsdg/native.py`:
+  - CASIA + MSU native same-subject online relation, with no native manifest;
+  - attack_macro {print: 0, replay: 1};
+  - lambda_pair = 5;
+  - 8 workers;
+  - batch plan 15 × 240 + 120, microbatch 20 as 12 / 6 (candidate).
+- **Status:** CONFIG_FROZEN, STATIC_ADAPTER_IMPLEMENTED, GPU_GRAPH_NOT_YET_QUALIFIED,
+  PRODUCTION_RUNNER_NOT_YET_QUALIFIED, SCIENTIFIC_TRAINING_NOT_EXECUTED.
+- **Fidelity:** target FAITHFUL_OFFICIAL; final execution fidelity PENDING_M6F_C_RUNTIME_QUALIFICATION.
+- **Bank budget:** N_syn DEFERRED_TO_M8.
+
+**M6_CLOSED = false. M7 HAS NOT STARTED.** Evidence: `outputs/audit/M6FB_E06B_STATIC_IMPLEMENTATION.md` / `.json`.

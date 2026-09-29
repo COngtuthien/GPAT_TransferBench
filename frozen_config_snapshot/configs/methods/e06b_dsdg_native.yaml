@@ -1,0 +1,329 @@
+# E06b — DSDG-NATIVE · M6F-B EXECUTION CONFIG — FROZEN 2026-09-29.
+#
+# Frozen from the M6F-A authority-derived contract (outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json,
+# commit e936ec25). Every execution-affecting value is copied from the frozen specification, Amendment A1,
+# the pinned official FaceX-Zoo/DSDG launch path, the frozen dataset population, or an existing benchmark
+# execution record (field_provenance below). NOTHING was retuned. No value depends on cwd, os.listdir
+# ordering, hostname, shell environment, PYTHONHASHSEED, automatic checkpoint choice, TEST performance or a
+# "best seed". The M6B loader (methods/common/config.py) verifies this file against its byte-identical
+# snapshot and the M6FB freeze record.
+version: e06b_m6fb_v1
+status: CONFIG_FROZEN
+frozen_utc: "2026-09-29"
+milestone: M6FB
+milestone_status: NOT_TRAINED              # no authoritative training has run
+spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+amendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472
+contract_resolution: outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json
+contract_resolution_sha256: fe287ebe1ec9c19e5f63a40f1498e41f5b7044014c2cc7eb6279a32604555058
+logging_contract: run_logging_v1
+logging_contract_path: configs/run_logging_v1.yaml
+
+method_id: E06b
+method_name: DSDG-NATIVE
+display_name: DSDG-NATIVE (Track B secondary native/full supervision)
+track: B_NATIVE_FULL_SECONDARY
+spec_section: "5.2 + 8.6 + 17"
+target_fidelity: FAITHFUL_OFFICIAL          # spec 8.6 'Status: FAITHFUL_OFFICIAL for DSDG-NATIVE'
+final_execution_fidelity: PENDING_M6F_C_RUNTIME_QUALIFICATION
+fidelity_class: PENDING_M6F_C_RUNTIME_QUALIFICATION
+fidelity_provenance: [SPEC_8_6_TARGET_FAITHFUL_OFFICIAL, M6FA_CONTRACT_RESOLUTION]
+fidelity_note: >-
+  The final execution fidelity is NOT claimed here. It is assessed after the M6F-C runtime qualification
+  of the candidate microbatch execution mapping; this frozen field is never rewritten (E03 precedent).
+reporting_label: "DSDG-NATIVE (Track B, CASIA + MSU native same-subject)"
+forbidden_wording: [primary fair comparison, Track A, identity-free]
+deviation: null
+learned_method: true
+source:
+  repository: https://github.com/JDAI-CV/FaceX-Zoo
+  pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a
+  relevant_path: addition_module/DSDG
+  provenance: third_party/source_pins.json
+  local_source_path: third_party/source_cache/facexzoo
+  execution_entrypoint: "README -> train_generator.sh -> argparse"
+  train_generator_sh_git_blob: 7fcb3f8648137ea16f53e290dba2668ec540a35d
+  weight_bytes_from_source_cache: NONE
+  shared_pin_with: [E06a, E06c]
+  new_source_pin: false
+
+# ---------------------------------------------------------------- data firewall (spec §3.5)
+data:
+  split_manifest: manifests/split_v1.parquet
+  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d
+  canonical_face_root: "<runtime_root>/data/processed/faces_256"
+  canonical_face_size: 256
+  preprocess_contract: configs/frozen/preprocess_v1.yaml
+  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e
+  splits:
+    TRAIN: {used_for: [method_training], allowed: true}
+    VAL:
+      used_for: [diagnostics_only]
+      allowed: true
+      may_select_checkpoint: false
+      note: "VAL never selects a checkpoint; the official source has no validation."
+    TEST:
+      used_for: []
+      allowed: false
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_reconstruction_choice: true
+      never_seed_selection: true
+      code_path_present: false
+  split_read: "TRAIN filter at read; allowlisted columns only; no TEST row materialized"
+  columns_consumed: [sample_id, dataset, subject_id_global, label_binary, attack_macro, split, m2_status]
+  required_m2_status: COMPLETE
+
+# ---------------------------------------------------------------- native TRAIN population
+native_population:
+  train_datasets: [casia_fasd, msu_mfsd]
+  non_instantiable:
+    siwmv2:
+      status: NOT_INSTANTIABLE_MISSING_SUBJECT_ID
+      rows_used: 0
+      reason: "0 of 9507 SiW TRAIN rows carry subject_id_global (Q-14); identity is never fabricated"
+      dev_013_same_person_evidence: FORBIDDEN
+      pseudo_identity: FORBIDDEN
+  expected:
+    casia_fasd: {spoof: 2520, live: 840, subjects: 35, print: 1680, replay: 840}
+    msu_mfsd: {spoof: 1200, live: 400, subjects: 25, print: 400, replay: 800}
+    total: {spoof: 3720, live: 1240, subjects: 60, print: 2080, replay: 1640}
+  every_spoof_has_same_subject_live_pool: true
+
+# ---------------------------------------------------------------- native relation (official GenDataset_s)
+native_relation:
+  semantics: SAME_SUBJECT_ONLINE_RANDOM
+  indexed_by: SPOOF_SAMPLES
+  identity_key: subject_id_global
+  identity_key_use: SAMPLING_ONLY
+  live_partner: "random.choice over the SAME subject's TRAIN live pool, drawn on every item load (every epoch)"
+  official_source: "addition_module/DSDG/data/generation_dataset.py:48,87,93"
+  rng: python_random_module_in_dataloader_worker
+  materialized_pair_list: false
+  native_manifest: NOT_CREATED               # manifests/dsdg_identity_pairs_v1.parquet must not exist
+  built_at: runtime_in_memory_from_split_v1_train_rows
+  spoof_index_order: ASCENDING_SAMPLE_ID_BYTEWISE
+  live_pool_order: ASCENDING_SAMPLE_ID_BYTEWISE_WITHIN_SUBJECT
+  input: canonical_faces_256_rgb_uint8_to_float32_div_255   # official transforms.ToTensor; no normalisation
+
+# ---------------------------------------------------------------- experiment seeds
+seeds:
+  experiment_seeds: [42, 1337, 2026]
+  runs_per_method: 3
+  all_three_are_primary_evidence: true
+  best_seed: FORBIDDEN
+  preferred_seed: FORBIDDEN
+  presentation_seed: FORBIDDEN
+  seed_selection_using_test: FORBIDDEN
+  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS
+  per_seed_values_reported: true
+  max_over_seeds_as_primary: FORBIDDEN
+  dropping_a_poor_seed: FORBIDDEN
+  rerunning_only_a_poor_seed: FORBIDDEN
+  failure_policy: "one seed fails: rerun same seed after technical fix; never replace (spec 27)"
+  seed_scope: "seeds the main training run; checkpoint selection happens INSIDE each seed"
+
+# ---------------------------------------------------------------- training (OFFICIAL execution path)
+training:
+  input_resolution: 256
+  effective_batch_size: 240
+  effective_batch_is_native_hyperparameter: true
+  physical_batch_reduction_allowed: true
+  physical_batch_reduction_requires: "global-statistic-preserving microbatch execution qualified in M6F-C"
+  all_epochs: 200
+  pre_epoch: 0
+  hdim: 128
+  attack_type: 2
+  attack_type_official: 4
+  attack_type_note: "K = 2 is the data-derived attack_macro cardinality of the CASIA+MSU TRAIN spoof population; OULU's 4 is not a benchmark class space"
+  test_epoch: 10
+  workers: 8
+  workers_policy: FROZEN_AFFECTS_LIVE_PARTNER_DRAWS
+  shuffle: true
+  drop_last: false
+  scheduler: null
+optimizer:
+  name: Adam
+  learning_rate: 2.0e-4
+  learning_rate_source: "argparse fall-through (train_generator.py:22); train_generator.sh does not pass --lr"
+  scope: "netE_nir + netE_vis + netG"
+  netCls_in_optimizer: false
+  netCls_note: "official behaviour: the classifier head stays at initialisation while loss_cls backpropagates into the encoder"
+losses:
+  lambda_mmd: 50
+  lambda_ip: 1000
+  lambda_type: 10
+  lambda_ort: 1
+  lambda_pair: 5
+  lambda_pair_source: "train_generator.sh:17 (passed via --lambda_pair at :29); argparse default 0.5 is not executed"
+  retained: [loss_rec, loss_kl, loss_mmd, loss_ip, loss_pair, loss_cls, loss_ort]
+  removed: []
+  loss_cls_active: true
+  loss_pair_active: true
+  assembly: "unweighted sum: rec + kl + mmd + ip + pair + cls + ort"
+  warmup: "epochs < 2 scale every term except loss_rec by 0.01"
+  coefficients_retuned: false
+spoof_type_supervision:
+  target: attack_macro
+  vocabulary: [print, replay]
+  class_index: {print: 0, replay: 1}
+  num_spoof_classes: 2
+  unexpected_macro: REJECT_NO_REMAP
+  attack_raw_as_target: FORBIDDEN
+identity_preserving_net:
+  architecture: LightCNN-29 v2
+  frozen: true
+  eval_mode: true
+  input: 128x128_grayscale
+  loaded_via: define_IP()
+  loader_is_non_strict: true
+external_assets:
+  - name: lightcnn_29_v2_checkpoint
+    official_path_in_source: ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar
+    external_runtime_path: "/media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar"
+    sha256: d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964
+    bytes: 123844849
+    provenance: outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json
+    weight_bytes_from_source_cache: false
+    weight_bytes_in_git: false
+    compatibility: "60/60 define_IP() parameters matched with exact shapes; 0 missing; 0 shape mismatches"
+    fixed_across_experiment_seeds: true
+supervision: native_attack_macro_spoof_type_plus_same_subject_identity_pairing
+subject_id_global_consumed: SAMPLING_ONLY
+
+# ---------------------------------------------------------------- loader / randomness contract
+loader:
+  batch_size: 240
+  shuffle: true
+  sampler: "RandomSampler(replacement=False) created by DataLoader(shuffle=True, generator=G)"
+  generator: "torch.Generator().manual_seed(experiment_seed)"
+  num_workers: 8
+  worker_init_fn: methods.common.learned.seed_torch_worker
+  worker_python_random_seed: "torch.initial_seed() mod 2**32 in each worker = (per-epoch loader base seed + worker_id) mod 2**32"
+  worker_batch_assignment: "worker w serves global batches w, w + 8, w + 16, ... of each epoch, items in index order"
+  persistent_workers: false
+  pin_memory: true
+  drop_last: false
+  chunking: after_loading_on_device
+  forbidden: [weighted sampling, class balancing, padding, wraparound, sampler replacement, drop_last=True,
+              changing num_workers, persistent_workers=True]
+
+# ---------------------------------------------------------------- epoch plan / execution candidate
+epoch_plan:
+  rows: 3720
+  global_batches: "15 x 240 + 120"
+  optimizer_steps_per_epoch: 16
+  total_optimizer_steps: 3200
+execution_candidate:
+  status: CANDIDATE_NOT_YET_QUALIFIED
+  mode: GLOBAL_STATISTIC_PRESERVING_MICROBATCH
+  reused_from: [M6D5c, M6D5d]
+  classification: EXECUTION_RUNTIME_COMPATIBILITY
+  scientific_method_change: false
+  microbatch: 20
+  microbatches_full_batch: 12
+  microbatches_tail_batch: 6
+  global_statistic_terms: [loss_mmd, loss_ort]
+  chunk_weighted_mean_terms: [loss_rec, loss_kl, loss_ip, loss_cls, loss_pair]
+  precision: FP32
+  amp: false
+  tf32: false
+  physical_batch_240: OOM_ON_RTX3090_E06C_M6D5B
+  qualification_milestone: M6F-C
+
+# ---------------------------------------------------------------- checkpoint
+checkpoint:
+  cadence: save_epoch_10
+  cadence_note: "official: epoch 1 and every 10 epochs (train_generator.py:214)"
+  rule: OFFICIAL_GENERATOR_EPOCH_200
+  rule_source: SOURCE_RESOLVED
+  official_default_file: netG_model_epoch_200_iter_0.pth
+  baseline_final_state_v1_overrides_this: false
+  selection_scope: WITHIN_SEED
+  selection_uses_val: false
+  selection_uses_test: false
+  periodic_test_block_note: "the official periodic 'test' block only writes sample images; it is NOT validation"
+
+checkpoint_retention:
+  metric_history: RETAIN_COMPLETE
+  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE
+  never_delete: [authoritative_final_checkpoint, selected_checkpoint, officially_required_checkpoint]
+  pruning: NOT_AUTHORIZED
+  if_pruned_later: metadata_and_sha256_records_must_remain
+
+# ---------------------------------------------------------------- generation budget (M8)
+generation:
+  n_syn_intended: DEFERRED_TO_M8
+  n_syn_status: GENUINELY_AMBIGUOUS_DEFERRED_TO_M8_TRACK_B_GENERATION_DECISION
+  n_syn_candidates_not_chosen: ["pooled 8838 (spec 7)", "native coverage 3720"]
+  blocks_m6: false
+
+# ---------------------------------------------------------------- run layout
+run_layout:
+  root_template: "<runtime_root>/runs/m6/E06b/seed_<seed>/"
+  files:
+    resolved_config: resolved_config.yaml
+    run_manifest: run_manifest.json
+    metrics: metrics.jsonl
+    checkpoint_dir: checkpoints/
+    checkpoint_index: checkpoint_index.json
+    run_summary: run_summary.json
+    stdout: stdout.log
+    stderr: stderr.log
+  outputs_in_git: false
+  checkpoint_bytes_in_git: false
+
+# ---------------------------------------------------------------- logging (learned method)
+logging:
+  contract: run_logging_v1
+  full_trajectory_retained: true
+  keep_only_final_epoch: FORBIDDEN
+  metrics_format: metrics.jsonl
+  metrics_append_only: true
+  one_record_per: configured_reporting_interval
+  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE
+  per_record_required:
+    - epoch
+    - global_step
+    - learning_rate
+    - all_available_train_losses
+    - all_available_train_metrics
+    - all_available_val_losses
+    - all_available_val_metrics
+    - wall_clock_seconds
+    - gpu_memory_bytes_where_practical
+  missing_fields_must_be_explicit: true
+  fabricating_unexposed_metrics: FORBIDDEN
+  checkpoint_history_required: true
+  run_summary_required: true
+
+# ---------------------------------------------------------------- synthetic bank accounting
+synthetic_bank_accounting:
+  generated_in_m6fb: false
+  per_sample_record_required:
+    - source_pair_or_sample_id
+    - method_id
+    - experiment_seed
+    - generator_checkpoint_sha256
+    - recipe_or_operator_metadata
+    - synthetic_output_path
+    - output_sha256
+    - success_or_failure_reason
+  merged_into_test: FORBIDDEN
+
+field_provenance:
+  SPEC: [data.splits, seeds.experiment_seeds, target_fidelity, spoof_type_supervision.target]
+  AMENDMENT_A1: [track, native_population.train_datasets, native_population.non_instantiable]
+  OFFICIAL_CODE: [training.all_epochs, training.effective_batch_size, training.hdim, training.workers,
+                  training.test_epoch, training.pre_epoch, optimizer, losses.lambda_mmd, losses.lambda_ip,
+                  losses.lambda_pair, losses.lambda_type, losses.lambda_ort, losses.warmup, native_relation.semantics,
+                  checkpoint.cadence, checkpoint.rule, identity_preserving_net]
+  DATA_DERIVED: [native_population.expected, spoof_type_supervision.vocabulary, training.attack_type]
+  OFFICIAL_CODE_AND_FROZEN_TAXONOMY: [spoof_type_supervision.class_index]
+  M6B_POLICY_AND_A2_01_PRECEDENT: [native_relation.spoof_index_order, native_relation.live_pool_order]
+  M6D5E_EXECUTION_RECORD: [loader]
+  M6D5C_M6D5D_EXECUTION_RECORDS: [execution_candidate]
+  M6A4: [external_assets]
+  M6B: [run_layout, logging, checkpoint_retention, synthetic_bank_accounting]
+  M6FA_DEFERRAL: [generation]

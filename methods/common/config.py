@@ -30,6 +30,12 @@ METHOD_FILES = {
     "E07c": "e07c_difffas_bin_idfree.yaml",
 }
 
+#: Methods frozen AFTER M6B: method_id -> (config filename, freeze record whose `config_sha256` pins the
+#: bytes). Kept separate so METHOD_FILES and the M6B freeze record stay exactly as M6B froze them.
+LATER_FROZEN_METHOD_FILES = {
+    "E06b": ("e06b_dsdg_native.yaml", "outputs/audit/M6FB_E06B_STATIC_IMPLEMENTATION.json"),
+}
+
 REQUIRED_TOP_LEVEL = (
     "method_id", "status", "milestone_status", "fidelity_class", "fidelity_provenance",
     "seeds", "data", "checkpoint", "run_layout", "logging", "logging_contract",
@@ -87,10 +93,13 @@ def load_method_config(method_id: str, *, config_path: str | Path | None = None,
     parsed config with `_config_path`, `_config_sha256` and `_snapshot_path` attached under the
     reserved `_runtime` key (never a scientific field).
     """
-    if method_id not in METHOD_FILES:
+    if method_id in METHOD_FILES:
+        fn, freeze_record = METHOD_FILES[method_id], None
+    elif method_id in LATER_FROZEN_METHOD_FILES:
+        fn, freeze_record = LATER_FROZEN_METHOD_FILES[method_id]
+    else:
         raise FrozenConfigError(f"unknown method_id {method_id!r}; expected one of "
-                                f"{sorted(METHOD_FILES)}")
-    fn = METHOD_FILES[method_id]
+                                f"{sorted(METHOD_FILES) + sorted(LATER_FROZEN_METHOD_FILES)}")
     cfg_p = Path(config_path) if config_path else CONFIG_DIR / fn
     snap_p = Path(snapshot_path) if snapshot_path else SNAPSHOT_DIR / fn
     ctx = f"{method_id} ({cfg_p})"
@@ -123,8 +132,17 @@ def load_method_config(method_id: str, *, config_path: str | Path | None = None,
     if seeds != [42, 1337, 2026]:
         raise FrozenConfigError(f"{ctx}: experiment_seeds must be [42, 1337, 2026], got {seeds}.")
 
-    frozen = json.loads((ROOT / "outputs/audit/M6B_CONFIG_FREEZE.json").read_text())
-    expected = next(m["config_sha256"] for m in frozen["methods"] if m["method_id"] == method_id)
+    if freeze_record is None:
+        frozen = json.loads((ROOT / "outputs/audit/M6B_CONFIG_FREEZE.json").read_text())
+        expected = next(m["config_sha256"] for m in frozen["methods"] if m["method_id"] == method_id)
+    else:
+        record_path = ROOT / freeze_record
+        if not record_path.is_file():
+            raise FrozenConfigError(f"{ctx}: freeze record {freeze_record} not found")
+        record = json.loads(record_path.read_text())
+        if record.get("method_id") != method_id:
+            raise FrozenConfigError(f"{ctx}: freeze record names another method")
+        expected = record["config_sha256"]
     if sha256_bytes(raw) != expected:
         raise FrozenConfigError(f"{ctx}: SHA256 differs from M6B freeze record")
     cfg["_runtime"] = {

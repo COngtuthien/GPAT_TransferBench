@@ -259,7 +259,7 @@ def checkpoint_plan(config: dict, seed: int, *, selection_split=None) -> dict:
         final = f'ckpt-{epoch}'
         if policy['rule'] != f'OFFICIAL_LATEST_FINAL_CKPT_{epoch}':
             raise PreparationError('STDN final checkpoint rule mismatch')
-    elif cfg['method_id'] == 'E06c':
+    elif cfg['method_id'] in ('E06c', 'E06b'):   # both follow the pinned DSDG official epoch-200 generator rule
         epoch = cfg['training']['all_epochs']
         final = policy['official_default_file']
         if policy['rule'] != f'OFFICIAL_GENERATOR_EPOCH_{epoch}':

@@ -1,0 +1,183 @@
+{
+  "authority_commit": "4ee7ac29ca16687aa4eb2a492d2a25554ce29253",
+  "batch_plan": {
+    "batch_sizes": [
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      240,
+      120
+    ],
+    "chunks_full_batch": 12,
+    "chunks_tail_batch": 6,
+    "execution_status": "CANDIDATE_NOT_YET_QUALIFIED",
+    "microbatch": 20,
+    "optimizer_steps_per_epoch": 16,
+    "rows": 3720,
+    "total_optimizer_steps": 3200
+  },
+  "classification": "M6FB_E06B_STATIC_IMPLEMENTATION",
+  "config_path": "configs/methods/e06b_dsdg_native.yaml",
+  "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+  "decision_operation": {
+    "GPU_contacted": false,
+    "TEST_rows_materialized": 0,
+    "banks_generated": 0,
+    "checkpoint_writes": 0,
+    "image_reads": 0,
+    "model_executions": 0,
+    "optimizer_steps": 0,
+    "training_runs": 0
+  },
+  "final_execution_fidelity": "PENDING_M6F_C_RUNTIME_QUALIFICATION",
+  "freeze_record_role": "methods/common/config.py LATER_FROZEN_METHOD_FILES anchors E06b to config_sha256 here",
+  "generation": {
+    "blocks_m6": false,
+    "n_syn_intended": "DEFERRED_TO_M8"
+  },
+  "loader": {
+    "batch_assignment": "batch b is served by worker b % 8",
+    "batch_size": 240,
+    "drop_last": false,
+    "num_workers": 8,
+    "persistent_workers": false,
+    "shuffle": true,
+    "worker_init_fn": "methods.common.learned.seed_torch_worker",
+    "worker_seed": "(per-epoch loader base seed + worker_id) mod 2**32"
+  },
+  "losses": {
+    "lambda_ip": 1000,
+    "lambda_mmd": 50,
+    "lambda_ort": 1,
+    "lambda_pair": 5,
+    "lambda_type": 10,
+    "loss_cls_active": true,
+    "loss_pair_active": true
+  },
+  "m6": {
+    "M6_CLOSED": false,
+    "M7_started": false
+  },
+  "method_id": "E06b",
+  "method_name": "DSDG-NATIVE",
+  "milestone": "M6FB",
+  "native_population": {
+    "casia_fasd": {
+      "live": 840,
+      "print": 1680,
+      "replay": 840,
+      "spoof": 2520,
+      "subjects": 35
+    },
+    "msu_mfsd": {
+      "live": 400,
+      "print": 400,
+      "replay": 800,
+      "spoof": 1200,
+      "subjects": 25
+    },
+    "siwmv2": "NOT_INSTANTIABLE_MISSING_SUBJECT_ID",
+    "total": {
+      "live": 1240,
+      "print": 2080,
+      "replay": 1640,
+      "spoof": 3720,
+      "subjects": 60
+    },
+    "train_datasets": [
+      "casia_fasd",
+      "msu_mfsd"
+    ],
+    "verified_by": "tests/test_m6fb_e06b_static.py (TRAIN-filtered allowlisted split_v1 read)"
+  },
+  "native_relation": {
+    "materialized": false,
+    "native_manifest_created": false,
+    "order": "ascending sample_id bytewise (spoof index and per-subject live pools)",
+    "rng": "module random in the seeded worker",
+    "semantics": "SAME_SUBJECT_ONLINE_RANDOM"
+  },
+  "registry": {
+    "change": "E06b config_file + m6_status fields; no new source pin",
+    "implementation_status_m0_field": "NOT_STARTED (pinned by historical test_m0_bootstrap)",
+    "path": "third_party/registry.yaml"
+  },
+  "reuse": {
+    "from_e06c_unchanged": [
+      "methods/dsdg/adapter.py DSDGAdapter.prepare/validate_source/verify_lightcnn/official_components (inherited)",
+      "methods/dsdg/source.py",
+      "methods/dsdg/microbatch_execution.py (LOCAL/GLOBAL terms)",
+      "methods/dsdg/microbatch_execution_v2.py epoch_batch_plan/chunk_slices_v2",
+      "methods/common/learned.py seed_plan/seed_torch_worker/verify_source/mapping"
+    ],
+    "not_reused": [
+      "E06c A1 guards (lambda_pair == 0, attack_type == 1)",
+      "training_graph.FROZEN_LAMBDAS",
+      "IDFreePairDataset / pairs_train_v1 relation",
+      "M6D5d execution_guard (8838 rows)"
+    ]
+  },
+  "shared_module_changes": {
+    "methods/common/config.py": "additive LATER_FROZEN_METHOD_FILES (E06b) + freeze-record anchor",
+    "methods/common/learned.py": "checkpoint_plan official-epoch branch accepts 'E06b'"
+  },
+  "snapshot_byte_identical": true,
+  "snapshot_path": "frozen_config_snapshot/configs/methods/e06b_dsdg_native.yaml",
+  "spoof_type": {
+    "K": 2,
+    "class_index": {
+      "print": 0,
+      "replay": 1
+    },
+    "unexpected_macro": "REJECT_NO_REMAP",
+    "vocabulary": [
+      "print",
+      "replay"
+    ]
+  },
+  "static_derivation": {
+    "common_config_additive_only": true,
+    "common_learned_additive_only": true,
+    "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+    "contract_sha256": "fe287ebe1ec9c19e5f63a40f1498e41f5b7044014c2cc7eb6279a32604555058",
+    "native_sha256": "133edb17fe8175f2c7cc75902bb875f0eb25dec05053924056c6ef7d90114d65",
+    "registry_change_confined_to_e06b": true,
+    "snapshot_byte_identical": true,
+    "unchanged_files": [
+      "configs/amendments/difffas_a9_resource_constrained_scope_exclusion.yaml",
+      "configs/frozen/dsdg_bin_idfree_v1.yaml",
+      "configs/methods/e06c_dsdg_bin_idfree.yaml",
+      "frozen_config_snapshot/configs/methods/e06c_dsdg_bin_idfree.yaml",
+      "methods/dsdg/adapter.py",
+      "methods/dsdg/microbatch_execution.py",
+      "methods/dsdg/microbatch_execution_v2.py",
+      "methods/dsdg/runner.py",
+      "methods/dsdg/runner_io.py",
+      "methods/dsdg/training_graph.py",
+      "outputs/audit/M6B_CONFIG_FREEZE.json",
+      "outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json",
+      "tools/m6b_validate_configs.py"
+    ]
+  },
+  "status": "PASS",
+  "statuses": [
+    "CONFIG_FROZEN",
+    "STATIC_ADAPTER_IMPLEMENTED",
+    "GPU_GRAPH_NOT_YET_QUALIFIED",
+    "PRODUCTION_RUNNER_NOT_YET_QUALIFIED",
+    "SCIENTIFIC_TRAINING_NOT_EXECUTED"
+  ],
+  "target_fidelity": "FAITHFUL_OFFICIAL",
+  "track": "B_NATIVE_FULL_SECONDARY"
+}
