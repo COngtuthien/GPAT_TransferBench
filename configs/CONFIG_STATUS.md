@@ -263,3 +263,20 @@ describes the current state.
 - **Bank budget:** N_syn DEFERRED_TO_M8.
 
 **M6_CLOSED = false. M7 HAS NOT STARTED.** Evidence: `outputs/audit/M6FB_E06B_STATIC_IMPLEMENTATION.md` / `.json`.
+
+**M6FC (2026-09-29) — E06b DSDG-NATIVE GPU synthetic qualification PASSED.** This note is additive and describes the
+current state. It is QUALIFICATION_ONLY_SYNTHETIC and NON_SCIENTIFIC.
+
+- **Setup:** one RTX 3090 in `gpat-m6-e06c`, which the owner chose as E06b's DSDG environment of record.
+- **Graph:** built live as Cls(128, 2), with lambda_pair = 5; loss_cls and loss_pair are both active.
+- **Equivalence:** direct vs microbatch passes the pre-registered M6D5c gates in 3 reference cases.
+- **Execution:** logical 240 (12 × 20) and tail 120 (6 × 20) each complete one Adam step, with no OOM.
+- **Worker draws:** real 8-worker torch draws equal the pure-Python model.
+- **Fidelity (owner decision):** runtime_fidelity_assessment = FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY, which is
+  not CONTROLLED_ADAPTATION. final_method_fidelity = PENDING_M6F_D_PRODUCTION_QUALIFICATION. The frozen config field is
+  unchanged.
+- **E06b status:** CONFIG_FROZEN, STATIC_ADAPTER_IMPLEMENTED, GPU_GRAPH_QUALIFIED, EXECUTION_MAPPING_QUALIFIED,
+  WORKER_DETERMINISM_QUALIFIED, PRODUCTION_RUNNER_NOT_YET_QUALIFIED, SCIENTIFIC_TRAINING_NOT_EXECUTED.
+- **Not done:** no training, checkpoint, bank, image read or TEST access.
+
+**M6_CLOSED = false. M7 HAS NOT STARTED.** Evidence: `outputs/audit/M6FC_E06B_GPU_QUALIFICATION.md` / `.json`.

@@ -1,0 +1,260 @@
+{
+  "TEST_access": false,
+  "VAL_access": false,
+  "benchmark_data_access": false,
+  "benchmark_image_reads": 0,
+  "checkpoint_created": false,
+  "compatibility_patch": "NONE",
+  "contract": {
+    "attack_type": 2,
+    "class_index": {
+      "print": 0,
+      "replay": 1
+    },
+    "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+    "e06c_guards_used": false,
+    "effective_batch_size": 240,
+    "final_execution_fidelity_before": "PENDING_M6F_C_RUNTIME_QUALIFICATION",
+    "hdim": 128,
+    "lambdas": {
+      "lambda_ip": 1000,
+      "lambda_mmd": 50,
+      "lambda_ort": 1,
+      "lambda_pair": 5,
+      "lambda_type": 10
+    },
+    "optimizer": {
+      "learning_rate": 0.0002,
+      "name": "Adam",
+      "netCls_in_optimizer": false,
+      "scope": "netE_nir + netE_vis + netG"
+    },
+    "target_fidelity": "FAITHFUL_OFFICIAL",
+    "vocabulary": [
+      "print",
+      "replay"
+    ],
+    "workers": 8
+  },
+  "counters": {
+    "activation_checkpoint_calls": 0,
+    "autograd_backward_calls": 0,
+    "autograd_grad_calls": 0,
+    "backward_calls": 0,
+    "checkpoint_saves": 0,
+    "optimizer_applications": 0,
+    "optimizer_constructions": 0,
+    "optimizer_step_entries": 0,
+    "zero_grad_calls": []
+  },
+  "different_seed_differs": true,
+  "ended_utc": "2026-09-29T03:18:52Z",
+  "environment_lock": "environments/e06c.lock.json",
+  "environment_lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+  "epoch_1_vs_2_differ": true,
+  "epochs": [
+    {
+      "batch_sizes": [
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        120
+      ],
+      "batches": 16,
+      "distinct_worker_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "draw_sequence_sha256": "722fe6cef125d8c7bed9dc2a90b80ea3d909fecccc0ca32691dd4b89fb8acc17",
+      "draws_within_same_subject": true,
+      "indices_match_model": true,
+      "live_draws_match_pure_python_model": true,
+      "worker_ids_match_b_mod_8": true,
+      "worker_seed_eq_base_plus_id": true
+    },
+    {
+      "batch_sizes": [
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        240,
+        120
+      ],
+      "batches": 16,
+      "distinct_worker_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "draw_sequence_sha256": "a0420da2f3ff2ccde07886402cf14a66023728a46c27bc6768915ca8aca2e167",
+      "draws_within_same_subject": true,
+      "indices_match_model": true,
+      "live_draws_match_pure_python_model": true,
+      "worker_ids_match_b_mod_8": true,
+      "worker_seed_eq_base_plus_id": true
+    }
+  ],
+  "execution_mode": "GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V2",
+  "firewall": {
+    "denied": [],
+    "event_counts": {
+      "open": 934,
+      "os.listdir": 139,
+      "os.scandir": 459
+    },
+    "lightcnn_read_opens": 0
+  },
+  "gates": {
+    "batch_plan_15x240_plus_120": true,
+    "deterministic_replay": true,
+    "indices_match_model": true,
+    "live_draws_match_model": true,
+    "mock_cardinalities": true,
+    "order_invariant_relation": true,
+    "redraw_every_epoch": true,
+    "same_subject": true,
+    "seed_sensitive": true,
+    "worker_assignment_b_mod_8": true,
+    "worker_seed_contract": true,
+    "workers_8_honored": true
+  },
+  "label": "QUALIFICATION_ONLY_SYNTHETIC",
+  "loader_contract": {
+    "batch_size": 240,
+    "drop_last": false,
+    "generator": "torch.Generator().manual_seed(experiment_seed)",
+    "num_workers": 8,
+    "num_workers_affects_live_draws": true,
+    "persistent_workers": false,
+    "pin_memory": true,
+    "shuffle": true,
+    "worker_batch_assignment": "batch b is served by worker b % 8",
+    "worker_init_fn": "methods.common.learned.seed_torch_worker",
+    "worker_python_random_seed": "(per-epoch loader base seed + worker_id) mod 2**32"
+  },
+  "method_id": "E06b",
+  "milestone": "M6F-C",
+  "mode": "workers",
+  "native_manifest_created": false,
+  "per_term_relative_error_max": 0.0001,
+  "pinned_statements_verified": 46,
+  "pre_registered_gates": {
+    "aggregate_gradient_cosine_min": 0.999,
+    "aggregate_gradient_relative_l2_max": 0.01,
+    "post_step_parameter_delta_cosine_min": 0.99,
+    "scalar_losses_finite": true,
+    "total_loss_relative_error_max": 0.0001
+  },
+  "qualification_seed": 60701,
+  "relation": {
+    "mock_identifiers_only": true,
+    "order_invariant_to_input_order": true,
+    "summary": {
+      "casia_fasd": {
+        "live": 840,
+        "print": 1680,
+        "replay": 840,
+        "spoof": 2520,
+        "subjects": 35
+      },
+      "msu_mfsd": {
+        "live": 400,
+        "print": 400,
+        "replay": 800,
+        "spoof": 1200,
+        "subjects": 25
+      },
+      "total": {
+        "live": 1240,
+        "print": 2080,
+        "replay": 1640,
+        "spoof": 3720,
+        "subjects": 60
+      }
+    }
+  },
+  "replay_identical": true,
+  "scientific": "NON_SCIENTIFIC",
+  "scientific_training_completed": false,
+  "source_after": {
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "files_sha256": {
+      "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+      "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+      "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+      "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+      "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+      "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+      "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+      "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+      "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+      "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+      "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+    },
+    "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/facexzoo",
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "verification": "PASS"
+  },
+  "source_before": {
+    "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "files_sha256": {
+      "addition_module/DSDG/README.md": "8bc2801493889f5cdd756cdb3e34dfd47b5b4d6bfa2f14ec41b27fbb50c5d532",
+      "addition_module/DSDG/data/__init__.py": "b76dab7535709395d8d31065b159c80de3da0b8d6bc8366aeac04efe1d571aba",
+      "addition_module/DSDG/data/generation_dataset.py": "0ac299c177a2cf9966212aa31709a28a62dab2ecf0ddd60aa1c36e97c4171dc1",
+      "addition_module/DSDG/data/make_train_list.py": "a9cce4a5a4c3b3c0f6459fe7975dcd88dd4a71e38becd88b41fa488b4bdc7816",
+      "addition_module/DSDG/data/recognition_dataset.py": "0b112c2a6acb2039d392b2f517022a68497e66237142c65e2b9fda346afa245d",
+      "addition_module/DSDG/generated.py": "77a7ba32c9b4a4c19798f62cb81327f36761dac79e3bb561ba4927f6961a71c1",
+      "addition_module/DSDG/misc/__init__.py": "fd6e5a4e1da02f9a8621fdc178004ec73d46dbae3610b99e224cfc880f2fd6b5",
+      "addition_module/DSDG/misc/util.py": "64aa2d0983988a37d160920275a317b886442a601908e5b3669e487cefe941c7",
+      "addition_module/DSDG/networks/__init__.py": "989737735aa0e0e0e36e1c8c7b0f56008f017f42626e3ca5b2519c6e845680c8",
+      "addition_module/DSDG/networks/generator.py": "c8516e2a3a33c609c605378a50b31ed9a77c483f2acbbc85d4846c1b607cd303",
+      "addition_module/DSDG/networks/light_cnn.py": "a66539b53cd9d8a081fd0a4e523b61aa39d9d0a42b2f68ad1146cfdd3e8eddba",
+      "addition_module/DSDG/train_generator.py": "5b7bf426f812a67aca67fd635acbb249b2d58680f988bb1288b4c7c21ebfb370",
+      "addition_module/DSDG/train_generator.sh": "bdb08394532fce03314a42f69d17f04fa1f4da8bb1b6743528ce4a21bda827bc"
+    },
+    "repository": "https://github.com/JDAI-CV/FaceX-Zoo",
+    "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/facexzoo",
+    "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+    "verification": "PASS"
+  },
+  "started_utc": "2026-09-29T03:18:51Z",
+  "status": "PASS",
+  "synthetic_bank": false
+}

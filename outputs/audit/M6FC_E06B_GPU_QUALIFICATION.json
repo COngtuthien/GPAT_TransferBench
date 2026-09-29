@@ -1,0 +1,811 @@
+{
+  "TEST_access": false,
+  "VAL_access": false,
+  "aborted_attempt": {
+    "cause": "harness expected-sequence builder omitted torch RandomSampler's second randperm(n)[:n % n] drawn at sampler exhaustion; epoch 1 matched exactly, epoch 2 mispredicted",
+    "classification": "QUALIFICATION_HARNESS_ISSUE_ONLY",
+    "e06b_model_or_loader_failure": false,
+    "fix": "predictor consumes the remainder draw (verified in torch 2.12.1 source); the E06b model (native.simulate_live_draws) and the loader contract were NOT changed",
+    "mode": "workers",
+    "retained_on_gpu_host": true,
+    "root": "<runtime_root>/builds/e06b_dsdg_m6fc/workers.aborted-attempt-1",
+    "scientific_impact": "none (mock CPU relation, no GPU, no data)",
+    "status": "STOP_WORKER_GATE"
+  },
+  "authority_commit": "91d28a72f78d8f424da23cf07a015782e532ba0e",
+  "bank_created": false,
+  "benchmark_image_reads": 0,
+  "checkpoint_created": false,
+  "classification": "M6FC_E06B_GPU_QUALIFICATION",
+  "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+  "config_unchanged": true,
+  "derived": {
+    "environment": {
+      "cuda": "13.0",
+      "cudnn": 92000,
+      "environment_lock": "environments/e06c.lock.json",
+      "environment_lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+      "executable": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+      "gpu": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+      "numpy": "2.4.6",
+      "precision": {
+        "autocast_cuda": false,
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "cudnn_tf32": false,
+        "default_dtype": "torch.float32",
+        "matmul_precision": "highest",
+        "matmul_tf32": false
+      },
+      "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130"
+    },
+    "graph": {
+      "batch_coupling": {
+        "batchnorm_modules": 0,
+        "instancenorm_modules": 36
+      },
+      "lambdas": {
+        "lambda_ip": 1000,
+        "lambda_mmd": 50,
+        "lambda_ort": 1,
+        "lambda_pair": 5,
+        "lambda_type": 10
+      },
+      "netCls_live": {
+        "bias_shape": [
+          2
+        ],
+        "in_features": 128,
+        "out_features": 2,
+        "weight_shape": [
+          2,
+          128
+        ]
+      },
+      "parameters_initial": {
+        "netCls": {
+          "parameter_tensors": 2,
+          "parameters": 258
+        },
+        "netE_nir": {
+          "parameter_tensors": 17,
+          "parameters": 13790048
+        },
+        "netE_vis": {
+          "parameter_tensors": 17,
+          "parameters": 11692640
+        },
+        "netG": {
+          "parameter_tensors": 21,
+          "parameters": 19887494
+        },
+        "netIP": {
+          "parameter_tensors": 60,
+          "parameters": 10475872
+        }
+      },
+      "pinned_statements_verified": 46
+    },
+    "lightcnn": {
+      "bytes": 123844849,
+      "matched_tensors": 60,
+      "sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964"
+    },
+    "logical": {
+      "b240": {
+        "backward_calls": 12,
+        "chunk_sizes": [
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20
+        ],
+        "chunks": 12,
+        "epoch_branch": 2,
+        "gates": {
+          "both_classes": true,
+          "chunks": true,
+          "loss_cls_and_pair_nonzero": true,
+          "losses_finite": true,
+          "netCls_gradient_nonzero_and_finite": true,
+          "netCls_netIP_unchanged": true,
+          "optimizer_step_applied_once": true,
+          "owned_gradients_finite_and_present": true,
+          "owned_parameters_changed": true
+        },
+        "gradients": {
+          "netCls": {
+            "finite": 2,
+            "non_none": 2,
+            "nonzero_elements": 258,
+            "tensors": 2
+          },
+          "netE_nir": {
+            "finite": 17,
+            "non_none": 17,
+            "nonzero_elements": 13790047,
+            "tensors": 17
+          },
+          "netE_vis": {
+            "finite": 17,
+            "non_none": 17,
+            "nonzero_elements": 11692640,
+            "tensors": 17
+          },
+          "netG": {
+            "finite": 21,
+            "non_none": 21,
+            "nonzero_elements": 19887494,
+            "tensors": 21
+          }
+        },
+        "labels_count": {
+          "print_0": 120,
+          "replay_1": 120
+        },
+        "logical_batch_size": 240,
+        "losses": {
+          "loss_cls": {
+            "lambda": 10,
+            "raw": 0.828562049070994,
+            "weighted": 8.28562049070994
+          },
+          "loss_ip": {
+            "lambda": 1000,
+            "raw": 0.006339551885922751,
+            "weighted": 6.33955188592275
+          },
+          "loss_kl": {
+            "lambda": 1,
+            "raw": 17.69465414683024,
+            "weighted": 17.69465414683024
+          },
+          "loss_mmd": {
+            "lambda": 50,
+            "raw": 0.2911892509460449,
+            "weighted": 14.559462547302246
+          },
+          "loss_ort": {
+            "lambda": 1,
+            "raw": 0.5595059394836426,
+            "weighted": 0.5595059394836426
+          },
+          "loss_pair": {
+            "lambda": 5,
+            "raw": 0.002119720463330547,
+            "weighted": 0.010598602316652736
+          },
+          "loss_rec": {
+            "lambda": 1,
+            "raw": 14991.544921874998,
+            "weighted": 14991.544921874998
+          }
+        },
+        "memory_after_step": {
+          "allocated_bytes": 1183559168,
+          "device_free_bytes": 17472749568,
+          "device_total_bytes": 25294995456,
+          "peak_allocated_bytes": 5967847424,
+          "peak_reserved_bytes": 7210008576,
+          "phase": "after_step",
+          "reserved_bytes": 7210008576
+        },
+        "memory_before": {
+          "allocated_bytes": 607259648,
+          "device_free_bytes": 23967629312,
+          "device_total_bytes": 25294995456,
+          "peak_allocated_bytes": 607259648,
+          "peak_reserved_bytes": 744488960,
+          "phase": "before_global_batch",
+          "reserved_bytes": 744488960
+        },
+        "oom": false,
+        "optimizer_applications": 1,
+        "peak_allocated_bytes": 5967847424,
+        "peak_reserved_bytes": 7210008576,
+        "physical_microbatch": 20,
+        "total_loss": 15038.994315487564,
+        "wall_clock_seconds": 4.059178458061069
+      },
+      "tail120": {
+        "backward_calls": 6,
+        "chunk_sizes": [
+          20,
+          20,
+          20,
+          20,
+          20,
+          20
+        ],
+        "chunks": 6,
+        "epoch_branch": 2,
+        "gates": {
+          "both_classes": true,
+          "chunks": true,
+          "loss_cls_and_pair_nonzero": true,
+          "losses_finite": true,
+          "netCls_gradient_nonzero_and_finite": true,
+          "netCls_netIP_unchanged": true,
+          "optimizer_step_applied_once": true,
+          "owned_gradients_finite_and_present": true,
+          "owned_parameters_changed": true
+        },
+        "gradients": {
+          "netCls": {
+            "finite": 2,
+            "non_none": 2,
+            "nonzero_elements": 258,
+            "tensors": 2
+          },
+          "netE_nir": {
+            "finite": 17,
+            "non_none": 17,
+            "nonzero_elements": 13790048,
+            "tensors": 17
+          },
+          "netE_vis": {
+            "finite": 17,
+            "non_none": 17,
+            "nonzero_elements": 11692640,
+            "tensors": 17
+          },
+          "netG": {
+            "finite": 21,
+            "non_none": 21,
+            "nonzero_elements": 19887494,
+            "tensors": 21
+          }
+        },
+        "labels_count": {
+          "print_0": 60,
+          "replay_1": 60
+        },
+        "logical_batch_size": 120,
+        "losses": {
+          "loss_cls": {
+            "lambda": 10,
+            "raw": 0.8744138002395629,
+            "weighted": 8.74413800239563
+          },
+          "loss_ip": {
+            "lambda": 1000,
+            "raw": 0.0063295618693033845,
+            "weighted": 6.329561869303385
+          },
+          "loss_kl": {
+            "lambda": 1,
+            "raw": 17.544941902160645,
+            "weighted": 17.544941902160645
+          },
+          "loss_mmd": {
+            "lambda": 50,
+            "raw": 0.2820562171936035,
+            "weighted": 14.102810859680176
+          },
+          "loss_ort": {
+            "lambda": 1,
+            "raw": 0.1907387524843216,
+            "weighted": 0.1907387524843216
+          },
+          "loss_pair": {
+            "lambda": 5,
+            "raw": 0.0020872770808637144,
+            "weighted": 0.010436385404318571
+          },
+          "loss_rec": {
+            "lambda": 1,
+            "raw": 14981.413411458332,
+            "weighted": 14981.413411458332
+          }
+        },
+        "memory_after_step": {
+          "allocated_bytes": 994630144,
+          "device_free_bytes": 17661493248,
+          "device_total_bytes": 25294995456,
+          "peak_allocated_bytes": 5778918400,
+          "peak_reserved_bytes": 7021264896,
+          "phase": "after_step",
+          "reserved_bytes": 7021264896
+        },
+        "memory_before": {
+          "allocated_bytes": 418330624,
+          "device_free_bytes": 24156372992,
+          "device_total_bytes": 25294995456,
+          "peak_allocated_bytes": 418330624,
+          "peak_reserved_bytes": 555745280,
+          "phase": "before_global_batch",
+          "reserved_bytes": 555745280
+        },
+        "oom": false,
+        "optimizer_applications": 1,
+        "peak_allocated_bytes": 5778918400,
+        "peak_reserved_bytes": 7021264896,
+        "physical_microbatch": 20,
+        "total_loss": 15028.33603922976,
+        "wall_clock_seconds": 2.178065170068294
+      }
+    },
+    "reference_cases": [
+      {
+        "chunk_sizes": [
+          2,
+          2
+        ],
+        "epoch": 2,
+        "gates": {
+          "aggregate_gradient_cosine": true,
+          "aggregate_gradient_relative_l2": true,
+          "both_classes_in_batch": true,
+          "loss_cls_nonzero": true,
+          "loss_pair_nonzero": true,
+          "owned_gradient_coverage": true,
+          "per_term_relative_error": true,
+          "post_step_parameter_direction": true,
+          "scalar_losses_finite": true,
+          "total_loss_relative_error": true
+        },
+        "global_batch": 4,
+        "gradient_cosine": 0.9999999472493294,
+        "gradient_l2_full_batch": 105380.58112768308,
+        "gradient_max_abs_diff": 0.4027824401855469,
+        "gradient_relative_l2": 0.000324827285007539,
+        "labels": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "max_microbatch": 2,
+        "max_term_relative_error": 6.321371244493098e-07,
+        "path_a_losses_raw_and_weighted": {
+          "loss_cls": {
+            "lambda": 10,
+            "raw": 0.8913541793823242,
+            "weighted": 8.913541793823242
+          },
+          "loss_ip": {
+            "lambda": 1000,
+            "raw": 0.00631831693649292,
+            "weighted": 6.31831693649292
+          },
+          "loss_kl": {
+            "lambda": 1,
+            "raw": 18.027318954467773,
+            "weighted": 18.027318954467773
+          },
+          "loss_mmd": {
+            "lambda": 50,
+            "raw": 0.6305132675170898,
+            "weighted": 31.525663375854492
+          },
+          "loss_ort": {
+            "lambda": 1,
+            "raw": 11.609960556030273,
+            "weighted": 11.609960556030273
+          },
+          "loss_pair": {
+            "lambda": 5,
+            "raw": 0.002357267215847969,
+            "weighted": 0.011786336079239845
+          },
+          "loss_rec": {
+            "lambda": 1,
+            "raw": 14676.783203125,
+            "weighted": 14676.783203125
+          }
+        },
+        "path_a_total": 14753.189453125,
+        "path_b_total": 14753.189784647897,
+        "total_relative_error": 2.247126954745702e-08,
+        "update_cosine": 0.9997835605508802,
+        "update_max_abs_diff": 0.0004000067710876465,
+        "update_relative_l2": 0.020805742045601778
+      },
+      {
+        "chunk_sizes": [
+          4,
+          2
+        ],
+        "epoch": 2,
+        "gates": {
+          "aggregate_gradient_cosine": true,
+          "aggregate_gradient_relative_l2": true,
+          "both_classes_in_batch": true,
+          "loss_cls_nonzero": true,
+          "loss_pair_nonzero": true,
+          "owned_gradient_coverage": true,
+          "per_term_relative_error": true,
+          "post_step_parameter_direction": true,
+          "scalar_losses_finite": true,
+          "total_loss_relative_error": true
+        },
+        "global_batch": 6,
+        "gradient_cosine": 0.9999997540982017,
+        "gradient_l2_full_batch": 92917.97167887556,
+        "gradient_max_abs_diff": 2.564059019088745,
+        "gradient_relative_l2": 0.0007014203347328741,
+        "labels": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "max_microbatch": 4,
+        "max_term_relative_error": 1.2079465974862228e-06,
+        "path_a_losses_raw_and_weighted": {
+          "loss_cls": {
+            "lambda": 10,
+            "raw": 0.48023552894592286,
+            "weighted": 4.8023552894592285
+          },
+          "loss_ip": {
+            "lambda": 1000,
+            "raw": 0.006322799682617187,
+            "weighted": 6.3227996826171875
+          },
+          "loss_kl": {
+            "lambda": 1,
+            "raw": 17.55341339111328,
+            "weighted": 17.55341339111328
+          },
+          "loss_mmd": {
+            "lambda": 50,
+            "raw": 0.6300196838378906,
+            "weighted": 31.50098419189453
+          },
+          "loss_ort": {
+            "lambda": 1,
+            "raw": 1.1842505931854248,
+            "weighted": 1.1842505931854248
+          },
+          "loss_pair": {
+            "lambda": 5,
+            "raw": 0.0016729220747947692,
+            "weighted": 0.008364610373973846
+          },
+          "loss_rec": {
+            "lambda": 1,
+            "raw": 14632.7724609375,
+            "weighted": 14632.7724609375
+          }
+        },
+        "path_a_total": 14694.146484375,
+        "path_b_total": 14694.144627742156,
+        "total_relative_error": 1.2635186708732384e-07,
+        "update_cosine": 0.9996200579692226,
+        "update_max_abs_diff": 0.0004000067710876465,
+        "update_relative_l2": 0.027565994571386476
+      },
+      {
+        "chunk_sizes": [
+          2,
+          2
+        ],
+        "epoch": 1,
+        "gates": {
+          "aggregate_gradient_cosine": true,
+          "aggregate_gradient_relative_l2": true,
+          "both_classes_in_batch": true,
+          "loss_cls_nonzero": true,
+          "loss_pair_nonzero": true,
+          "owned_gradient_coverage": true,
+          "per_term_relative_error": true,
+          "post_step_parameter_direction": true,
+          "scalar_losses_finite": true,
+          "total_loss_relative_error": true
+        },
+        "global_batch": 4,
+        "gradient_cosine": 0.999999949267968,
+        "gradient_l2_full_batch": 108304.9043823071,
+        "gradient_max_abs_diff": 0.3100541830062866,
+        "gradient_relative_l2": 0.00031855859840396135,
+        "labels": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "max_microbatch": 2,
+        "max_term_relative_error": 1.4184314169792979e-06,
+        "path_a_losses_raw_and_weighted": {
+          "loss_cls": {
+            "lambda": 10,
+            "raw": 0.6919598579406738,
+            "weighted": 6.919598579406738
+          },
+          "loss_ip": {
+            "lambda": 1000,
+            "raw": 0.006252223491668701,
+            "weighted": 6.252223491668701
+          },
+          "loss_kl": {
+            "lambda": 1,
+            "raw": 18.027318954467773,
+            "weighted": 18.027318954467773
+          },
+          "loss_mmd": {
+            "lambda": 50,
+            "raw": 0.6649176788330078,
+            "weighted": 33.24588394165039
+          },
+          "loss_ort": {
+            "lambda": 1,
+            "raw": 5.378754615783691,
+            "weighted": 5.378754615783691
+          },
+          "loss_pair": {
+            "lambda": 5,
+            "raw": 0.002456377260386944,
+            "weighted": 0.012281886301934719
+          },
+          "loss_rec": {
+            "lambda": 1,
+            "raw": 14955.322265625,
+            "weighted": 14955.322265625
+          }
+        },
+        "path_a_total": 14956.0205078125,
+        "path_b_total": 14956.020626333853,
+        "total_relative_error": 7.924658377769476e-09,
+        "update_cosine": 0.9997878883845073,
+        "update_max_abs_diff": 0.0004000002518296242,
+        "update_relative_l2": 0.020596680001946352
+      }
+    ],
+    "reference_peak_allocated_bytes": 1915971584,
+    "source": {
+      "commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+      "files_verified": 13,
+      "tree": "0d2216bdbdd9977130db1100641abf336f46ac9d"
+    },
+    "started_utc": {
+      "b240": "2026-09-29T03:19:38Z",
+      "reference": "2026-09-29T03:19:02Z",
+      "tail120": "2026-09-29T03:19:48Z",
+      "workers": "2026-09-29T03:18:51Z"
+    },
+    "term_isolation": {
+      "gates": {
+        "finite": true,
+        "loss_cls_active": true,
+        "loss_pair_active": true
+      },
+      "note": "separate forward+backward per term; no optimizer step; counts appear in counters.backward_calls",
+      "terms": {
+        "loss_cls": {
+          "netCls_grad_nonzero_elements": 258,
+          "owned_grad_finite": true,
+          "owned_gradient_l2": 293.9458667923135,
+          "raw": 0.663420295715332,
+          "value": 6.63420295715332
+        },
+        "loss_pair": {
+          "netCls_grad_nonzero_elements": 0,
+          "owned_grad_finite": true,
+          "owned_gradient_l2": 3.3712307902011664,
+          "raw": 0.002168894186615944,
+          "value": 0.01084447093307972
+        }
+      }
+    },
+    "workers": {
+      "epochs": [
+        {
+          "batch_sizes": [
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            120
+          ],
+          "batches": 16,
+          "distinct_worker_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "draw_sequence_sha256": "722fe6cef125d8c7bed9dc2a90b80ea3d909fecccc0ca32691dd4b89fb8acc17",
+          "draws_within_same_subject": true,
+          "indices_match_model": true,
+          "live_draws_match_pure_python_model": true,
+          "worker_ids_match_b_mod_8": true,
+          "worker_seed_eq_base_plus_id": true
+        },
+        {
+          "batch_sizes": [
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            240,
+            120
+          ],
+          "batches": 16,
+          "distinct_worker_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "draw_sequence_sha256": "a0420da2f3ff2ccde07886402cf14a66023728a46c27bc6768915ca8aca2e167",
+          "draws_within_same_subject": true,
+          "indices_match_model": true,
+          "live_draws_match_pure_python_model": true,
+          "worker_ids_match_b_mod_8": true,
+          "worker_seed_eq_base_plus_id": true
+        }
+      ],
+      "gates": {
+        "batch_plan_15x240_plus_120": true,
+        "deterministic_replay": true,
+        "indices_match_model": true,
+        "live_draws_match_model": true,
+        "mock_cardinalities": true,
+        "order_invariant_relation": true,
+        "redraw_every_epoch": true,
+        "same_subject": true,
+        "seed_sensitive": true,
+        "worker_assignment_b_mod_8": true,
+        "worker_seed_contract": true,
+        "workers_8_honored": true
+      },
+      "loader_contract": {
+        "batch_size": 240,
+        "drop_last": false,
+        "generator": "torch.Generator().manual_seed(experiment_seed)",
+        "num_workers": 8,
+        "num_workers_affects_live_draws": true,
+        "persistent_workers": false,
+        "pin_memory": true,
+        "shuffle": true,
+        "worker_batch_assignment": "batch b is served by worker b % 8",
+        "worker_init_fn": "methods.common.learned.seed_torch_worker",
+        "worker_python_random_seed": "(per-epoch loader base seed + worker_id) mod 2**32"
+      },
+      "relation_summary": {
+        "casia_fasd": {
+          "live": 840,
+          "print": 1680,
+          "replay": 840,
+          "spoof": 2520,
+          "subjects": 35
+        },
+        "msu_mfsd": {
+          "live": 400,
+          "print": 400,
+          "replay": 800,
+          "spoof": 1200,
+          "subjects": 25
+        },
+        "total": {
+          "live": 1240,
+          "print": 2080,
+          "replay": 1640,
+          "spoof": 3720,
+          "subjects": 60
+        }
+      }
+    }
+  },
+  "environment_decision": "owner (M6F-C): E06b binds the qualified DSDG environment gpat-m6-e06c (environments/e06c.lock.json)",
+  "fidelity": {
+    "controlled_adaptation": false,
+    "execution_classification": "EXECUTION_RUNTIME_COMPATIBILITY",
+    "final_method_fidelity": "PENDING_M6F_D_PRODUCTION_QUALIFICATION",
+    "final_method_fidelity_rule": "if M6F-D passes without a new scientific deviation, the final E06b row may use FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "frozen_config_field": "final_execution_fidelity stays PENDING_M6F_C_RUNTIME_QUALIFICATION in the frozen YAML (never rewritten; E03 precedent)",
+    "not_claimed": "final method-level fidelity (production runner unqualified); plain FAITHFUL_OFFICIAL; bitwise reproduction of a physical-240 step",
+    "observable_deviations": [
+      "not bitwise: FP32 accumulation order differs (term rel <= worst_case_reference)",
+      "first Adam step normalizes g/sqrt(v): near-zero gradient elements can flip sign under FP32 noise, bounded by 2 x lr = 4e-4 per element; update cosine stays >= the registered 0.99",
+      "single RTX 3090 instead of upstream 4-GPU DataParallel (both see the global batch of 240)"
+    ],
+    "owner_rationale": [
+      "effective batch remains exactly 240",
+      "architecture unchanged",
+      "all seven official DSDG losses and coefficients unchanged",
+      "lambda_pair remains 5",
+      "K remains 2",
+      "optimizer semantics unchanged",
+      "direct vs microbatch equivalence passes all pre-declared gates",
+      "full logical batch 240 and tail 120 execute successfully",
+      "microbatching only changes floating-point accumulation order",
+      "single-RTX3090 execution replaces upstream multi-GPU execution without changing the scientific method"
+    ],
+    "runtime_fidelity_assessment": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "runtime_fidelity_decision": "OWNER_DECISION_AT_M6F_C_REVIEW",
+    "target_source_fidelity": "FAITHFUL_OFFICIAL"
+  },
+  "gate_provenance": "owner-approved M6D5c reference gates (verified equal at runtime) + per-term bound equal to the registered total bound; fixed in code before the first E06b GPU run",
+  "gpu_authority_commit": "91d28a72f78d8f424da23cf07a015782e532ba0e",
+  "gpu_evidence_sha256": {
+    "outputs/audit/M6FC_E06B_LOGICAL_B240.json": "a3cc3a88ce541631d62c0d9445c3d6e2235488a4d65744931685c8ae70a5c38a",
+    "outputs/audit/M6FC_E06B_LOGICAL_TAIL120.json": "265714bc28fe2fc59b28d4cc1fc050605cac1f8b2011d1036325177bc59ea494",
+    "outputs/audit/M6FC_E06B_REFERENCE_EQUIVALENCE.json": "9162fff449e6b1b7afc155edeb5500ba2f7945e62eccfdfeccab612931c8b394",
+    "outputs/audit/M6FC_E06B_WORKER_DETERMINISM.json": "01978a0d34b37bcd4031e4b4e4a9af758055f209c13d3125cedb4b8902e3e08d"
+  },
+  "harness": {
+    "path": "methods/dsdg/native_qualification.py",
+    "sha256": "2c16a247199a735232c845f0bbe93b6b551909948967c9cd34bd7f6d2b07c718"
+  },
+  "label": "QUALIFICATION_ONLY_SYNTHETIC",
+  "m6": {
+    "M6_CLOSED": false,
+    "M7_started": false
+  },
+  "method_id": "E06b",
+  "milestone": "M6FC",
+  "per_term_relative_error_max": 0.0001,
+  "pre_registered_gates": {
+    "aggregate_gradient_cosine_min": 0.999,
+    "aggregate_gradient_relative_l2_max": 0.01,
+    "post_step_parameter_delta_cosine_min": 0.99,
+    "scalar_losses_finite": true,
+    "total_loss_relative_error_max": 0.0001
+  },
+  "qualification_seed": 60701,
+  "scientific": "NON_SCIENTIFIC",
+  "scientific_training_completed": false,
+  "status": "PASS",
+  "statuses": [
+    "CONFIG_FROZEN",
+    "STATIC_ADAPTER_IMPLEMENTED",
+    "GPU_GRAPH_QUALIFIED",
+    "EXECUTION_MAPPING_QUALIFIED",
+    "WORKER_DETERMINISM_QUALIFIED",
+    "PRODUCTION_RUNNER_NOT_YET_QUALIFIED",
+    "SCIENTIFIC_TRAINING_NOT_EXECUTED"
+  ],
+  "worst_case_reference": {
+    "gradient_cosine": 0.9999997540982017,
+    "gradient_max_abs_diff": 2.564059019088745,
+    "gradient_relative_l2": 0.0007014203347328741,
+    "max_term_relative_error": 1.4184314169792979e-06,
+    "total_relative_error": 1.2635186708732384e-07,
+    "update_cosine": 0.9996200579692226,
+    "update_max_abs_diff": 0.0004000067710876465,
+    "update_relative_l2": 0.027565994571386476
+  }
+}
