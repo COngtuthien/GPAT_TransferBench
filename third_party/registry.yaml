@@ -20,6 +20,12 @@
 # pending owner decisions; no method config created. Seeds: the frozen spec mandates [42,1337,2026]
 # and marks training seeds not changeable, which takes precedence over official hard-coded/missing
 # seeds (E03, E06c, E07c); the propagating adapter is NOT implemented in M6A1.
+#
+# 2026-09-29 (M6E final M6 baseline closure): the current M6 state of every baseline is
+# outputs/audit/method_status.csv. Fields named m6a1_* are historical M6A1 snapshots. The M0-era
+# implementation_status field stays NOT_STARTED for every method because a historical M0 test pins it;
+# it is not the current state. Only the E06b, E07b and E07c current-state fields were updated at M6E;
+# no source pin changed.
 schema_version: m0-initial
 spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
 methods:
@@ -196,10 +202,13 @@ methods:
     implementation_status: NOT_STARTED
     config_file: configs/methods/e06b_dsdg_native.yaml
     track: B_NATIVE_FULL_SECONDARY
-    track_b_status: DEFERRED_TO_M6_SECONDARY_TRACK
-    m6_status: [CONFIG_FROZEN, STATIC_ADAPTER_IMPLEMENTED, GPU_GRAPH_NOT_YET_QUALIFIED, PRODUCTION_RUNNER_NOT_YET_QUALIFIED, SCIENTIFIC_TRAINING_NOT_EXECUTED]
-    m6_status_milestone: M6FB
-    m6_status_note: "M6FA resolved the contract and M6FB froze configs/methods/e06b_dsdg_native.yaml and implemented methods/dsdg/native.py (static). The M0-era implementation_status field above stays NOT_STARTED because a historical M0 test pins it for every method (same as E06c). Source pin shared with E06a/E06c (third_party/source_pins.json dsdg.method_ids); no new pin. Target fidelity FAITHFUL_OFFICIAL; final execution fidelity PENDING_M6F_C_RUNTIME_QUALIFICATION. A9 does not cover E06b."
+    track_b_status: M6_IMPLEMENTED_AND_QUALIFIED_SCIENTIFIC_TRAINING_NOT_EXECUTED
+    m6_gate: faithful
+    m6_final_fidelity: FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY
+    m6_environment_of_record: "gpat-m6-e06c (environments/e06c.lock.json)"
+    m6_status: [CONFIG_FROZEN, STATIC_ADAPTER_IMPLEMENTED, GPU_GRAPH_QUALIFIED, EXECUTION_MAPPING_QUALIFIED, WORKER_DETERMINISM_QUALIFIED, PRODUCTION_DATA_PATH_QUALIFIED, PRODUCTION_BATCH_PATH_QUALIFIED, SCIENTIFIC_CLI_PREFLIGHT_QUALIFIED, SCIENTIFIC_RUN_LIFECYCLE_NOT_EXECUTED, CHECKPOINT_WRITER_NOT_E06B_RUNTIME_EXERCISED, RESUME_UNQUALIFIED_FRESH_ONLY, SCIENTIFIC_TRAINING_NOT_EXECUTED]
+    m6_status_milestone: M6FD
+    m6_status_note: "M6FA resolved the contract, M6FB froze configs/methods/e06b_dsdg_native.yaml (sha256 9d665dc2...) and implemented methods/dsdg/native.py, M6FC qualified the GPU graph, microbatch mapping and 8-worker determinism, and M6FD qualified the production data/batch path on real CASIA+MSU TRAIN and the fresh-only CLI. Final M6 fidelity FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY (owner decision, M6FD); the frozen YAML pending field is historical. 0 scientific seeds, checkpoints or banks; N_syn DEFERRED_TO_M8. track_b_status read DEFERRED_TO_M6_SECONDARY_TRACK (A1) until M6E. The M0-era implementation_status field above stays NOT_STARTED because a historical M0 test pins it for every method. Source pin shared with E06a/E06c; no new pin. A9 does not cover E06b; it is not owner-excluded."
     notes: "Spoof-type target = attack_macro. Identity pairing only from TRAIN identities with both live and spoof. Amendment A1 moved this to the SECONDARY native track: CASIA + MSU only, SiW NOT_INSTANTIABLE_MISSING_SUBJECT_ID. It no longer gates the main comparison or M5."
 
   - method_id: E07a
@@ -236,7 +245,11 @@ methods:
     implementation_status: NOT_STARTED
     config_file: configs/methods/difffas_native.yaml (not yet created)
     track: B_NATIVE_FULL_SECONDARY
-    track_b_status: DEFERRED_TO_M6_SECONDARY_TRACK
+    track_b_status: OWNER_EXCLUDED_A9_RESOURCE_CONSTRAINT
+    m6_gate: blocked
+    m6_final_fidelity: NOT_ASSESSED_NOT_IMPLEMENTED
+    m6_status_milestone: M6A9
+    m6_status_note: "Amendment A9 (M6A9) excluded the DiffFAS family (E07c, E07b) for owner resource constraints (OWNER_EXCLUDED_RESOURCE_CONSTRAINT). E07b was never implemented and its fidelity never assessed; it is not a source gap. No config, manifest, bank or downstream result; future bank ineligible. track_b_status read DEFERRED_TO_M6_SECONDARY_TRACK (A1) until M6E. Source pin unchanged."
     notes: "style_id = dataset::attack_raw. Guide spoof from same style_id, different subject when possible. Amendment A1 moved this to the SECONDARY native track: CASIA + MSU only, SiW NOT_INSTANTIABLE_MISSING_SUBJECT_ID. It no longer gates the main comparison or M5."
 
   - method_id: E06c
@@ -283,6 +296,10 @@ methods:
     implementation_status: NOT_STARTED
     config_file: configs/frozen/difffas_bin_idfree_v1.yaml
     deviation: DEV-021
+    m6_gate: blocked
+    m6_final_fidelity: CONTROLLED_ADAPTATION
+    m6_status_milestone: M6A9
+    m6_status_note: "Implemented and qualified through M6D6jF (execution config configs/methods/e07c_difffas_bin_idfree.yaml). Amendment A9 (M6A9) excluded it for owner resource constraints (OWNER_EXCLUDED_RESOURCE_CONSTRAINT); it is not a source gap. Seed-42 attempt 1 failed before optimization, attempt 2 was owner-interrupted at step 54836; 0 of 3 seeds completed; 1337/2026 never started; model_050000.pt is retained as non-scientific evidence only (not selected, not final). Future bank ineligible. Fidelity CONTROLLED_ADAPTATION / DEV-021 unchanged. Source pin unchanged."
     m6a1_status: BLOCKED
     m6a1_gaps: ["E07c-3 generation sampler undecided: FAS_sample.py defaults to ddim while FAS_train.py defaults to ddpm; the two give different images from the same weights",
                 "E07c-4 a PADISI-trained conditioning encoder (--pretrain_classifier) is required on every training step regardless of use_pair, is absent from the repository, and must not be downloaded",

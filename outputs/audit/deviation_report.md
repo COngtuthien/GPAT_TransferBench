@@ -821,3 +821,43 @@ optimizer, scheduler, DataLoader, macro-F1, tie-break and embedding. The CPU-saf
 Record: `M5_VALIDATION_EPOCH_CONTRACT_CORRECTION.md`. M5 remains **NOT_STARTED** /
 `READY_FOR_GPU_EXECUTION_PREFLIGHT`.
 
+## M6E — M6 baseline deviation-authority reconciliation (2026-09-29)
+
+**Why this section exists.** Spec §0.1 rule 9 makes this file the canonical deviation register: every deviation from
+the frozen specification is written here with its reason, the affected experiments and an explicit APPROVED/UNAPPROVED
+status. Between M5 and the M6 closure, the owner adopted additive amendments and addenda (A2–A9 and the per-method
+addenda under `docs/spec/amendments/`), but none of them was registered here. This section registers them. It is
+additive only: no earlier entry, status or wording above is changed.
+
+**Rules for this section.**
+- The amendment or addendum stays the **authoritative text**. This register indexes it and records its status; it
+  does not restate or alter any contract value.
+- **No new DEV number is invented.** A row keeps the identifier its authority actually assigned (DEV-019/020/021, or
+  the amendment/decision id such as `A2-07`). Rows that no authority numbered are identified by their amendment id.
+- APPROVED below means only that the cited record is itself owner-approved or owner-frozen (see its status line); this
+  closure does **not** approve anything new.
+- A DETERMINISTIC_IMPLEMENTATION_CLARIFICATION, SCIENTIFIC_CLARIFICATION or runtime-compatibility record is listed so
+  that nothing is silent, but it is **not a scientific deviation**. Only CONTROLLED_ADAPTATION and scope changes are.
+- `outputs/audit/method_status.csv` (M6E) cites the same identifiers in its `deviation_or_authority` column. The two
+  files must never disagree.
+
+| Method | Authority (identifier) | Spec section departed from / completed | Class (from the authority itself) | Scientific deviation? | Affected experiments | Status |
+|---|---|---|---|---|---|---|
+| E01 FAS-Aug | A2-01 (E01-3), A2-05 (OBS-1) | §8.1 (host-dependent asset order; seed byte layout) | DETERMINISTIC_IMPLEMENTATION_CLARIFICATION | no — fidelity FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION | E01 | APPROVED (A2 `OWNER-APPROVED`) |
+| E02 FreqSub | A2-02, A2-04 (SCIENTIFIC_CLARIFICATION); A2-03 (DETERMINISTIC_IMPLEMENTATION_CLARIFICATION); M6A5b label normalization | §8.2 (spec-silent execution details) | clarifications; the method itself is §8.2's own `CONTROLLED_ADAPTATION` | no new deviation beyond §8.2 itself | E02 | APPROVED (A2 `OWNER-APPROVED`) |
+| E03 STDN | E03 runtime compatibility addendum (M6D2b) | §8.3 runtime/environment only | runtime compatibility; fidelity FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY | no — scientific method frozen | E03 | APPROVED (owner-approved addendum) |
+| E04 Physics-STD | A3 §4, A4, A2-06 (`BASELINE_FINAL_STATE_V1`), M6D3d owner resolution addendum | §8.4 (target FAITHFUL_PAPER; missing detail would otherwise be BLOCKED_BY_SOURCE_GAP) | CONTROLLED_ADAPTATION (A3 controlled reconstruction) | **yes** | E04 | APPROVED (A3/A4 `OWNER-APPROVED`) |
+| E05 PCGAN | A2-07 (E05-2), A5, A2-06, M6D4c owner resolution addendum | §8.5 | CONTROLLED_ADAPTATION | **yes** | E05 | APPROVED (A2/A5 `OWNER-APPROVED`) |
+| E06c DSDG-BIN-IDFREE | DEV-020 (A1); M6D5c/M6D5d controlled execution adaptation (microbatch 20, tail batch) | §8.6, §5.1 | CONTROLLED_ADAPTATION | **yes** (DEV-020, already registered above) | E06c | APPROVED (DEV-020 above; M6D5c/d `OWNER-APPROVED`) |
+| E06b DSDG-NATIVE | M6FC/M6FD owner fidelity decision | §8.6 execution only (effective batch 240 run as 12 × 20 / 6 × 20 microbatches) | EXECUTION_RUNTIME_COMPATIBILITY; final fidelity FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY; `new_scientific_deviation_found = false` | no | E06b | APPROVED (owner decision recorded in M6FD) |
+| E07c DiffFAS-BIN-IDFREE | DEV-021 (A1); A3 §5 encoder reconstruction; A6; A7/A8/M6D6iR/M6D6jR clarifications; A9 scope exclusion | §8.7, §5.1, §17 | CONTROLLED_ADAPTATION (DEV-021 + A3 §5); A9 = OWNER_RESOURCE_CONSTRAINED_SCOPE_EXCLUSION | **yes** (fidelity) and **scope** (A9: not executed) | E07c | APPROVED (DEV-021 above; A3/A6/A9 `OWNER-APPROVED`; A7/A8 `OWNER-FROZEN`) |
+| E07b DiffFAS-NATIVE | A9 | §17 (row not executed) | OWNER_RESOURCE_CONSTRAINED_SCOPE_EXCLUSION | **scope** | E07b | APPROVED (A9 `OWNER-APPROVED`) |
+| E06a DSDG-BIN, E07a DiffFAS-BIN | DEV-019 (A1) | §17 / §5.1 (identity-dependent pairing forbidden in the adopted Track A; neither row placed in Track B) | superseded by E06c / E07c | **scope** (already DEV-019) | E06a, E07a | APPROVED (DEV-019 above) |
+
+### A2–A9 M6 amendment set — registration entry
+
+- **Reason:** owner-approved resolution of baseline source gaps, deterministic-execution gaps and one resource-constrained
+  scope decision, recorded in the amendments cited in the table above.
+- **Affected experiments:** E01, E02, E03, E04, E05, E06a, E06b, E06c, E07a, E07b, E07c (as tabulated).
+- **Status:** APPROVED — each row's own authority is owner-approved or owner-frozen, as cited. No GPAT (E08–E11)
+  deviation is created or resolved here. **DEV-003 (`lambda_dir`) remains UNAPPROVED and must be resolved before M7.**

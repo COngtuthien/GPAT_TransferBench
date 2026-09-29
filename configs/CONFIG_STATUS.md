@@ -301,3 +301,45 @@ describes the current state. It is PRODUCTION_PATH_QUALIFICATION_ONLY, not scien
 
 scientific_training_completed = false; there are 0 scientific seeds, checkpoints and banks. **M6_CLOSED = false.
 M7 HAS NOT STARTED.** Evidence: `outputs/audit/M6FD_E06B_PRODUCTION_QUALIFICATION.md` / `.json`.
+
+**M6E (2026-09-29) — FINAL M6 BASELINE CLOSURE: M6_CLOSED = true (implementation/qualification level).** This note is
+additive and is the **current state**. It supersedes every current-state reading of the table and notes above, which
+stay as history. In particular, the top-table rows `configs/methods/dsdg_native.yaml — NOT CREATED (M6)` and
+`configs/methods/difffas_native.yaml — NOT CREATED (M6)`, and the per-row "IMPLEMENTED_NOT_EXECUTED / environment still
+required" notes, are historical.
+
+The frozen M6 gate (spec §25) is "method adapters + method_status.csv; each row tagged faithful/adapted/blocked; no
+silent simplification". It is met. It is **not** a scientific-execution gate:
+`baseline_full_scientific_execution_complete = false` and `scientific_baseline_training_required_for_M6_gate = false`.
+No method has completed a scientific seed, and no scientific checkpoint, bank or evaluation exists.
+
+Canonical row universe: 11 rows, derived from spec §17 + §8 + Amendment A1 + Amendment A9. The universe is the §17
+third-party baseline rows (E01–E05, E06a, E06b, E07a, E07b) plus A1's Track-A additions (E06c, E07c). E00 (real-only,
+no synthetic method) and E08–E11 (GPAT, the proposed method, M7) are not M6 baselines and have no row; the
+closure evidence records why.
+
+| Row | Track | Gate | Current fidelity | Authority | Current state |
+|---|---|---|---|---|---|
+| E01 FAS-Aug | A | faithful | FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION | A2-01/A2-05 | implemented (M6C1); core environment qualified (M6D1, synthetic); real-TRAIN bank path not qualified |
+| E02 FreqSub | A | adapted | SPEC_DEFINED (spec §8.2 status tag: CONTROLLED_ADAPTATION) | §8.2 + A2-02/03/04 | implemented (M6C1); core environment qualified (M6D1, synthetic); real-TRAIN bank path not qualified |
+| E03 STDN | A | faithful | FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY | E03 runtime addendum | implemented (M6C2a); runtime qualified (M6D2b, synthetic); real-TRAIN production path not qualified |
+| E04 Physics-STD | A | adapted | CONTROLLED_ADAPTATION | A3 §4, A4 | implemented (M6C2b1); training graph qualified (M6D3e, synthetic); real-TRAIN production path not qualified |
+| E05 PCGAN | A | adapted | CONTROLLED_ADAPTATION | A2-07, A5 | implemented (M6C2b2); training runner qualified (M6D4e, synthetic); real-TRAIN production path not qualified |
+| E06c DSDG-BIN-IDFREE | A | adapted | CONTROLLED_ADAPTATION | DEV-020 | **unchanged**: production runner qualified on real TRAIN (M6D5e) |
+| E06b DSDG-NATIVE | B | faithful | FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY | M6FD | **dsdg_native is now implemented and qualified through M6F-D** (`configs/methods/e06b_dsdg_native.yaml`); scientific lifecycle, checkpoint writer and resume not exercised (fresh only); N_syn DEFERRED_TO_M8 |
+| E07c DiffFAS-BIN-IDFREE | A | blocked | CONTROLLED_ADAPTATION | DEV-021, A9 | **will not continue scientific training** (A9 OWNER_EXCLUDED_RESOURCE_CONSTRAINT); seed-42 history and model_050000.pt kept as non-scientific evidence only |
+| E07b DiffFAS-NATIVE | B | blocked | NOT_ASSESSED_NOT_IMPLEMENTED | A9 | **A9 owner-excluded**; never implemented |
+| E06a DSDG-BIN | — | blocked | NOT_ASSESSED_NOT_IMPLEMENTED | DEV-019 (A1) | superseded by E06c (identity-dependent pairing forbidden in Track A) |
+| E07a DiffFAS-BIN | — | blocked | NOT_ASSESSED_NOT_IMPLEMENTED | DEV-019 (A1) | superseded by E07c (identity-dependent pairing forbidden in Track A) |
+
+- A9 covers **only E07c and E07b**. E06b is not owner-excluded.
+- Deviation authority is reconciled in `outputs/audit/deviation_report.md` (M6E section, additive; no new DEV number).
+- `third_party/registry.yaml` current-state fields for E06b, E07b and E07c are reconciled; pins unchanged.
+- The deterministic end-to-end smoke test is REQUIRED and NOT COMPLETED. It is a hard gate before the first full M8+
+  execution, and does not block M6 closure or M7 generator training.
+- `outputs/audit/STAGE_STATE.json` is left byte-unchanged as a stale historical fixture. Current milestone authority
+  is the execution ledger, the adopted amendments, the milestone evidence and `outputs/audit/method_status.csv`.
+- **Full scientific experiment execution remains pending** (3 seeds per active baseline, final checkpoints, M8 banks).
+
+**M6_CLOSED = true. M7 HAS NOT STARTED.** Entry blockers for M7: DEV-003 `lambda_dir`, Q-05 and the missing GPAT
+B1/B2/B3 configs. Evidence: `outputs/audit/M6E_FINAL_M6_CLOSURE.md` / `.json`, `outputs/audit/method_status.csv`.
