@@ -1,0 +1,74 @@
+{
+  "a9_changed": false,
+  "authority_commit": "e936ec252de20ac9dd28bcc8bff0282b5b65d2da",
+  "classification": "M6H_HISTORICAL_TEST_SCOPE_HOTFIX",
+  "correction": "CURRENT_HEAD_TREE -> OWN_HISTORICAL_MILESTONE_TREE",
+  "decision_operation": {
+    "GPU_contacted": false,
+    "TEST_access": false,
+    "checkpoint_writes": 0,
+    "data_reads": 0,
+    "image_reads": 0,
+    "model_executions": 0,
+    "optimizer_steps": 0,
+    "training_runs": 0
+  },
+  "defect": {
+    "failing_tests": [
+      "tests/test_m6d6ir_e07c_checkpoint_retention.py::TestM6D6iRDecision::test_06_no_a9",
+      "tests/test_m6d6jr_e07c_science_launch_decision.py::TestM6D6jRDecision::test_14_no_a9"
+    ],
+    "introduced_by": "M6A9 legitimately tracked the Amendment A9 document (later milestone)",
+    "introduced_by_commit": "8e9ccc371f6c53b75ec6b473d2306aefa9aa672b",
+    "pre_existed_before_m6fb": true,
+    "reproduced_at_authority": "e936ec252de20ac9dd28bcc8bff0282b5b65d2da",
+    "reproduction": "clean detached worktree at e936ec2",
+    "root_cause": "the historical no-A9 assertions listed the CURRENT HEAD index (git ls-files) instead of their own milestone tree"
+  },
+  "e06b_state_changed": false,
+  "e07c_state_changed": false,
+  "historical_facts_retained": [
+    "record amendment_created = false",
+    "record a9_created = false",
+    "M6D6iR / M6D6jR did not create A9",
+    "their own milestone trees contain no A9 path",
+    "authority bindings unchanged"
+  ],
+  "is_scientific_amendment": false,
+  "m6": {
+    "M6_CLOSED": false,
+    "M7_started": false
+  },
+  "m6fb_candidate_mixed_in": false,
+  "milestone": "M6H",
+  "record_kind": "HISTORICAL_TEST_SCOPING_HOTFIX",
+  "scientific_state_changed": false,
+  "static_derivation": {
+    "a9_document_unchanged": true,
+    "fixed_assertions": {
+      "tests/test_m6d6ir_e07c_checkpoint_retention.py": {
+        "after": "tracked_at_m6d6ir('docs', 'configs')  # git ls-tree -r --name-only <m6d6ir_commit()>",
+        "before": "git('ls-files', 'docs', 'configs')  # CURRENT HEAD index",
+        "historical_commit_prefix": "39508719",
+        "milestone": "M6D6iR",
+        "test": "test_06_no_a9"
+      },
+      "tests/test_m6d6jr_e07c_science_launch_decision.py": {
+        "after": "tracked_at_m6d6jr('docs', 'configs')  # git ls-tree -r --name-only <m6d6jr_commit()>",
+        "before": "git('ls-files', 'docs', 'configs')  # CURRENT HEAD index",
+        "historical_commit_prefix": "8358d8b6",
+        "milestone": "M6D6jR",
+        "test": "test_14_no_a9"
+      }
+    },
+    "unchanged_records": [
+      "configs/amendments/difffas_a9_resource_constrained_scope_exclusion.yaml",
+      "configs/amendments/e07c_m6d6ir_checkpoint_retention.yaml",
+      "configs/amendments/e07c_m6d6jf_scientific_context_hotfix.yaml",
+      "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml",
+      "configs/methods/e07c_difffas_bin_idfree.yaml",
+      "outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json"
+    ]
+  },
+  "status": "PASS"
+}

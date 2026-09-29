@@ -44,6 +44,13 @@ def at_m6d6ir(rel):
     return git('show', f'{commit}:{rel}').stdout if commit else (ROOT / rel).read_bytes()
 
 
+def tracked_at_m6d6ir(*paths):
+    """Tracked paths at the M6D6iR state: the tree of the commit that added this test, else the (candidate) index."""
+    commit = m6d6ir_commit()
+    args = ('ls-tree', '-r', '--name-only', commit, *paths) if commit else ('ls-files', *paths)
+    return git(*args).stdout.decode().split()
+
+
 def at_authority(rel):
     return git('show', f'{AUTHORITY}:{rel}').stdout
 
@@ -98,7 +105,7 @@ class TestM6D6iRDecision(unittest.TestCase):
     def test_06_no_a9(self):
         self.assertEqual((self.r['amendment_created'], self.r['a9_created']), (False, False))
         self.assertIn('AMENDMENT_A9', self.r['not_classified_as'])
-        self.assertFalse([p for p in git('ls-files', 'docs', 'configs').stdout.decode().split() if 'A9' in p])
+        self.assertFalse([p for p in tracked_at_m6d6ir('docs', 'configs') if 'A9' in p])
 
     def test_07_classification(self):
         self.assertEqual((self.r['classification'], self.r['record_kind'], self.r['milestone']),
