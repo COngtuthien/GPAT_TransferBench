@@ -1,0 +1,364 @@
+# E09 / GPAT-B1 · M7B CONFIG FREEZE · 2026-09-29 · Track B.
+#
+# B1 = B0 + attack-type supervision. The first block repeats every field of configs/methods/gpat_b0.yaml
+# (spec §23.2 verbatim, sha256 0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a). Only
+# method, supervision, artifact_encoder.attack_type_head and loss.lambda_type differ from B0 (spec §5.3, A10 D05).
+# Authority: frozen spec > A1-A9 > M6E > A10 (+ its resolution record) > gpat_b0.yaml > M7B owner clarifications
+# R-01/R-02/R-03/R-06/R-07 (configs/amendments/gpat_m7b_owner_clarifications.yaml).
+# Config freeze only: no GPAT code, environment, training, checkpoint or bank exists.
+method: GPAT-B1
+supervision: binary_plus_attack_macro
+input_resolution: 256
+wavelet: {library: ptwt, family: haar, level: 1, boundary_mode: reflect}
+gamma: 0.0
+artifact_encoder:
+  backbone: torchvision_resnet18_imagenet1k_v1
+  input_channels: 12
+  highpass: {kernel: 9, sigma: 1.5}
+  attack_type_head: true
+  identity_adversary: false
+residual_generator:
+  name: NAFResidualUNet
+  width: 32
+  enc_blocks: [2, 2, 4, 8]
+  middle_blocks: 12
+  dec_blocks: [2, 2, 2, 2]
+  delta_scale_hf: 0.15
+  delta_scale_ll: 0.05
+  output_channels: 13
+training:
+  epochs: 60
+  physical_batch: 4
+  grad_accum: 2
+  effective_batch: 8
+  optimizer: Adam
+  lr: 2.0e-4
+  betas: [0.5, 0.999]
+  weight_decay: 0.0
+  warmup_epochs: 5
+  min_lr: 2.0e-6
+  amp: true
+  grad_clip_norm: 1.0
+  ema_decay: 0.999
+  seeds: [42, 1337, 2026]
+loss:
+  lambda_id: 1.0
+  lambda_lm: 1.0
+  lambda_parse: 0.5
+  lambda_kl: 0.1
+  lambda_low: 2.0
+  lambda_con: 1.0
+  triplet_margin: 0.2
+  lambda_spec: 0.5
+  lambda_dir: 0.5
+  lambda_adv: 0.1
+  lambda_type: 0.2
+  lambda_idadv: 0.0
+  lambda_budget: 0.5
+  artifact_min: 0.01
+  artifact_max: 0.25
+  lambda_tv: 0.05
+  tv_delta_scale: 0.25
+  lambda_bg: 1.0
+
+# ---------------------------------------------------------------- variant identity, status, provenance
+variant:
+  experiment_id: E09
+  variant_id: B1
+  method_name: GPAT-B1
+  track: B
+  spec_sections: ["5.3", "9.2", "10.3", "10.5", "17"]
+  derived_from: {config: configs/methods/gpat_b0.yaml, sha256: 0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a}
+  delta_from_b0: [attack_type_supervision, attack_warmup]
+status:
+  config: CONFIG_FROZEN
+  milestone: M7B
+  frozen_utc: "2026-09-29"
+  implementation: NOT_STARTED
+  environment: NOT_CREATED_M7B
+  scientific_training: NOT_STARTED
+  checkpoints: 0
+  banks: 0
+provenance:
+  authority_commit: d59b9a302c61ed440e711abf6ffab9560458f779
+  spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e
+  a10_document: docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md
+  a10_document_sha256: 7baf7888394c4cdd57db09e604bd910153a612e1765b8dc57de3c1d5d833d337
+  a10_record: configs/amendments/gpat_a10_m7_contract_resolution.yaml
+  a10_record_sha256: 57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203
+  m7b_clarifications: configs/amendments/gpat_m7b_owner_clarifications.yaml
+  variant_decisions: [A10_D04, A10_D05, A10_D06, M7B_R-06, M7B_R-07]
+  shared_decisions: [A10_D01, A10_D07, A10_D08, A10_D09, A10_D10, A10_D11, A10_D12, A10_D13, A10_D14, A10_D15, A10_D16, A10_D17, M7B_R-01, M7B_R-02, M7B_R-03, M7B_R-06, M7B_R-07]
+  deviations: []
+  r_items_are_frozen_spec_facts: false
+  r_items_class: OWNER_APPROVED_M7B_CLARIFICATION_LAYERED_ON_A10
+
+# ---------------------------------------------------------------- data firewall
+data:
+  pair_manifest: manifests/pairs_train_v1.parquet
+  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+  train_pairs: 8838
+  datasets: [casia_fasd, msu_mfsd, siwmv2]
+  dataset_scope_authority: A10_D04
+  label_fields_used: [attack_macro]
+  pseudo_identity: FORBIDDEN
+  splits:
+    TRAIN: {allowed: true, used_for: [generator_training, attack_head_warmup]}
+    VAL:
+      allowed: true
+      used_for: [post_training_checkpoint_selection]
+      read_by_training_process: false
+      val_pairs: manifests/val_pairs_v1.parquet
+      val_pairs_sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872
+    TEST:
+      allowed: false
+      used_for: []
+      never_training: true
+      never_checkpoint_selection: true
+      never_hyperparameter_selection: true
+      never_seed_selection: true
+      code_path_present: false
+
+# ---------------------------------------------------------------- attack-type supervision (B1 delta; A10 D05)
+attack_type_supervision:
+  enabled: true
+  authority: [spec_5_3, spec_9_2, A10_D05]
+  input: "z_a = L2-normalized GAP(layer4) of E_art(x_s), 512-D (global artifact code)"
+  head: {type: Linear, in_features: 512, out_features: 6, bias: true}
+  class_order: [makeup, mask_2d, mask_3d, partial, print, replay]
+  class_index: {makeup: 0, mask_2d: 1, mask_3d: 2, partial: 3, print: 4, replay: 5}
+  live_class: false
+  label: attack_macro_of_x_s
+  samples: spoof_sources_only
+  loss: CrossEntropy
+  class_weights: null
+  reduction: mean
+  applied_to: x_s_only
+  applied_to_x_hat: false
+  lambda_type: 0.2
+  active_in: [attack_warmup, generator_stage]
+  warmup_head_reused_in_generator_stage: true
+  optimizer: G_OPT
+  precision: {forward: autocast_fp16, ce_logits_and_reduction: float32}
+
+# ---------------------------------------------------------------- attack-head / E_art warmup (B1 delta; A10 D06)
+attack_warmup:
+  enabled: true
+  authority: [spec_10_5, A10_D06, M7B_R-06, M7B_R-07]
+  epochs: 10
+  counted_in_generator_epochs: false
+  reduces_generator_epochs: false
+  data: "TRAIN spoof-source frames only (x_s of the 8838 TRAIN pairs); no synthetic images"
+  input: same_12_channel_E_art_input
+  classes: attack_type_supervision.class_order
+  trainable: [E_art, attack_type_head]
+  identity_adversary_head_participates: false
+  optimizer: {name: WARMUP_OPT, type: AdamW, params: [E_art, attack_type_head], lr: 1.0e-4, weight_decay: 1.0e-4}
+  schedule: cosine_per_optimizer_step_to_0
+  batch: 64
+  drop_last: false
+  steps_per_epoch: 139
+  final_batch_samples: 6
+  total_steps: 1390
+  amp: {autocast: cuda_fp16, autocast_modules: [E_art, attack_type_head], ce_dtype: float32, grad_scaler: true, scaler: WARMUP_SCALER, scaler_state_carried_to_generator_stage: false}
+  grad_clip: {max_norm: 1.0, after: "GradScaler.unscale_(WARMUP_OPT)", exemption_in_authority: false}
+  seed: same_experiment_seed
+  val_selection: false
+  state_used: after_warmup_epoch_10
+  carry_into_generator_stage: [E_art_weights, attack_head_weights]
+  carry_optimizer_state: false
+  after_warmup: "discard WARMUP_OPT state; create a fresh generator-stage Adam G_OPT"
+
+# ---------------------------------------------------------------- identity adversary (not in this variant)
+identity_adversary:
+  enabled: false
+  lambda_idadv: 0.0
+  dev_022_masking: NOT_APPLICABLE
+
+# ---------------------------------------------------------------- shared GPAT contract (byte-identical in B1/B2/B3)
+# Restates A10 and the M7B owner clarifications for the whole GPAT family. It applies to B0 as well; B0's own
+# file (spec §23.2 verbatim) is not edited. The R-* items are owner-approved M7B clarifications layered on A10,
+# not frozen-spec facts (configs/amendments/gpat_m7b_owner_clarifications.yaml).
+shared_contract:
+  applies_to: [B0, B1, B2, B3]
+  image: {resolution: 256, range: [-1.0, 1.0]}
+  wavelet_bands:
+    authority: [spec_9_1, A10_D10_12, A10_D11, M7B_R-01]
+    class: IMPLEMENTATION_CLARIFICATION
+    transform: "ptwt.wavedec2 / ptwt.waverec2, haar, level 1, mode reflect, per RGB channel, fp32"
+    axes: [-2, -1]
+    coefficient_order: "(cA, (cH, cV, cD))"
+    mapping: {LL: cA, LH: cH, HL: cV, HH: cD}
+    canonical_level1: "LL, (LH, HL, HH)"
+    display_convention_swap: FORBIDDEN
+    used_consistently_by: [E_art_source_bands, G_res_input, G_res_output, A_freq, L_low, L_TV]
+    band_order: [LL_rgb, LH_rgb, HL_rgb, HH_rgb]
+    output_channels: {delta_LL: [0, 1, 2], delta_LH: [3, 4, 5], delta_HL: [6, 7, 8], delta_HH: [9, 10, 11], mask_logit: [12]}
+    m7c_tests_required: [known_directional_synthetic_patterns, exact_coefficient_ordering, dwt_idwt_reconstruction]
+  mask:
+    authority: [spec_9_3, A10_D10_05, M7B_R-02]
+    class: IMPLEMENTATION_CLARIFICATION
+    definition: "M = sigmoid(mask_logit), shared across RGB"
+    soft: true
+    threshold: none
+    native_resolution: [128, 128]
+    wavelet_domain_use: "M at 128x128 directly"
+    wavelet_domain_resize: FORBIDDEN
+    tv_resolution: [128, 128]
+    artifact_map_resize: "M_256 = bilinear_interpolate(M, size=(256, 256), align_corners=False)"
+  artifact_map:
+    authority: [spec_9_4, A10_D10_04, A10_D10_05, M7B_R-02]
+    class: OWNER_SCIENTIFIC_CLARIFICATION
+    A_rgb: "mean_channel(abs(x_hat - x_t))"
+    A_freq_128: "mean_channel(abs(delta_LH) + abs(delta_HL) + abs(delta_HH) + gamma * abs(delta_LL))"
+    A_freq_256: "bilinear_x2(A_freq_128, align_corners=False)"
+    M_256: "bilinear_x2(M, align_corners=False)"
+    u: "M_256 * (0.5 * A_rgb + 0.5 * A_freq_256)"
+    A: "clip(u / 2.0, 0.0, 1.0)"
+    denominator_applies_to: u
+    per_image_min_max: false
+    forbidden_readings: ["clip(A_rgb / 2, 0, 1)", "A without A_freq", "A without M", "hard-thresholded M"]
+  operators:
+    authority: [A10_D01, A10_D08, A10_D09, A10_D10]
+    lambda_dir: "coefficient of S_orient inside L_spec (A10 D01)"
+    S_orient_angular_bins: 8
+    face_mask_dilation_kernel: [15, 15]
+    film: "(1 + gamma) * h + beta"
+    patchgan: "pix2pix; LeakyReLU(0.2) except final; InstanceNorm on layers 2..4; padding 1; output 30x30 (A10 D10.13)"
+    landmarks: "FaceXFormer native normalized 68x2 coordinates; no heatmaps (A10 D08)"
+    parser: {background: [0], foreground: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], semantic_names: null}
+    x_hat_clamp_during_training: false
+  curriculum:
+    authority: [spec_10_5, A10_D10_23]
+    stages:
+      - {epochs: [1, 5], residual_scale: [0.02, 0.05], adv_weight: 0.0, lambda_con: 0.5, lambda_spec: 0.25}
+      - {epochs: [6, 15], residual_scale: 0.1, adv_weight: 0.05, lambda_con: 1.0, lambda_spec: 0.5}
+      - {epochs: [16, 60], residual_scale: 0.15, adv_weight: 0.1, lambda_con: 1.0, lambda_spec: 0.5}
+    interpolation: per_optimizer_step
+  precision:
+    authority: [spec_10_5, A10_D07, M7B_R-06]
+    class: RUNTIME_COMPATIBILITY
+    autocast: {device: cuda, dtype: float16}
+    bf16: FORBIDDEN
+    autocast_fp16_modules: [E_art, G_res, PatchGAN_D, attack_type_head_when_enabled, identity_adversary_head_when_enabled]
+    fp32_outside_autocast:
+      - DWT
+      - IDWT
+      - LL_HF_residual_composition
+      - x_hat_reconstruction
+      - artifact_map_A
+      - FFT
+      - S_radial
+      - S_orient
+      - TV_and_budget_scalars
+      - numerically_sensitive_final_loss_reductions
+      - CE_logits_and_loss_reduction
+      - Dice
+      - KL
+      - frozen_teacher_loss_cosines
+      - frozen_teacher_and_evaluator_forwards
+    fp32_frozen_modules: [AdaFace_F_id, FaceXFormer, F_art, ArtifactProbe_v1_val_selection]
+    teacher_weights_frozen: true
+    x_hat_to_teachers: differentiable
+    x_hat_detach: FORBIDDEN
+    detached: [x_t_teacher_targets]
+    grad_scaler: true
+    grad_scalers:
+      authority: [spec_10_5, M7B_GRADSCALER_TOPOLOGY]
+      class: IMPLEMENTATION_CLARIFICATION
+      G_SCALER: {owns: G_OPT, stage: generator}
+      D_SCALER: {owns: D_OPT, stage: generator}
+      WARMUP_SCALER: {owns: WARMUP_OPT, stage: attack_warmup, variants: [B1, B3]}
+      independent_state_machines: true
+      shared_scaler_state: FORBIDDEN
+      warmup_state_reused_by_G_SCALER: false
+      type: torch.cuda.amp.GradScaler
+      per_optimizer_sequence: ["scaler.scale(loss).backward()", "scaler.unscale_(optimizer)", "clip_grad_norm_(that optimizer's trainable parameters, 1.0)", "scaler.step(optimizer)", "scaler.update()"]
+      accumulation_boundary: "backward per microbatch; unscale_/clip/step/update once per optimizer update (A10 D15)"
+    grad_clip: {max_norm: 1.0, scope: per_optimizer_trainable_parameters, order: ["GradScaler.unscale_(optimizer)", "clip trainable gradients to max_norm 1.0"], applies_to: [G_OPT, D_OPT, WARMUP_OPT]}
+  optimizer_ownership:
+    authority: [spec_10_4, spec_10_5, A10_D02, A10_D06, M7B_R-07]
+    class: IMPLEMENTATION_CLARIFICATION
+    G_OPT_rule: "Adam(G_res + E_art + every ENABLED auxiliary supervision head)"
+    G_OPT_membership:
+      B0: [G_res, E_art]
+      B1: [G_res, E_art, attack_type_head]
+      B2: [G_res, E_art, identity_adversary_head]
+      B3: [G_res, E_art, attack_type_head, identity_adversary_head]
+    G_OPT: {name: Adam, lr: 2.0e-4, betas: [0.5, 0.999], weight_decay: 0.0}
+    D_OPT: {name: Adam, lr: 2.0e-4, betas: [0.5, 0.999], weight_decay: 0.0, params: [PatchGAN_D], separate: true}
+    D_execution:
+      authority: [spec_10_5, M7B-OBS-01]
+      class: FROZEN_SPEC_DERIVED_EXECUTION_POLICY
+      status: RESOLVED_FROM_FROZEN_SPEC
+      lr_schedule: {granularity: per_optimizer_step, warmup: linear_from_0, warmup_epochs: 5, warmup_updates: 5525, peak_lr: 2.0e-4, decay: cosine, min_lr: 2.0e-6, end: final_generator_update, same_as: G_OPT}
+      amp: {autocast: cuda_fp16, modules: [PatchGAN_D]}
+      grad_scaler: D_SCALER
+      grad_clip: {max_norm: 1.0, params: PatchGAN_D_trainable_only, after: "D_SCALER.unscale_(D_OPT)"}
+      same_for: [B0, B1, B2, B3]
+    WARMUP_OPT: {variants: [B1, B3], name: AdamW, params: [E_art, attack_type_head], discarded_after_warmup_epoch: 10}
+    fresh_G_OPT_after_warmup: true
+    identity_head_in_G_OPT: true
+    forbidden: [negated_identity_ce, second_adversarial_optimizer, detached_z_a, identity_head_excluded_from_optimizer]
+    frozen_modules_in_any_optimizer: never
+  training_budget:
+    authority: [spec_10_5, A10_D15, A10_D10_21, A10_D10_22]
+    generator_epochs: 60
+    train_pairs: 8838
+    physical_batch: 4
+    grad_accum: 2
+    drop_last: false
+    microbatches_per_epoch: 2210
+    optimizer_updates_per_epoch: 1105
+    generator_updates_per_run: 66300
+    tail_group_samples: 6
+    loss_weighting: sample_weighted_by_actual_samples_in_optimizer_group
+    lr_schedule: {granularity: per_optimizer_step, warmup: linear_from_0, warmup_updates: 5525, decay: cosine, min_lr: 2.0e-6}
+    ema: {decay: 0.999, start: end_of_epoch_5, start_update: 5525, scope: [E_art, G_res]}
+    seeds: [42, 1337, 2026]
+    attack_warmup_reduces_generator_epochs: false
+  checkpoint_selection:
+    authority: [spec_10_6, A10_D13, A10_D14, A10_D16, M7B_R-03]
+    candidates: {kind: EMA, epochs: [10, 60], inclusive: true, N: 51}
+    training_process_reads_val: false
+    process: separate_deterministic_post_training_val_selection
+    evaluate_all_before_selecting: true
+    data: VAL_only
+    val_pairs: manifests/val_pairs_v1.parquet
+    metrics: [ID, Dice, ArtSim, NME, LFErr]
+    artsim: "M5 ArtifactProbe v1 embedding cosine (models/artifact_probe/artifact_probe_v1.pt, sha256 b5ace6c263d8473215ff2ab825b98541bdcf332251512216cbd93546f32e54ff)"
+    ranking: {ties: average_rank, percentile: "p = (rank - 1) / (51 - 1)", oriented: [ID, Dice, ArtSim, neg_NME, neg_LFErr]}
+    weights: {ID: 0.25, Dice: 0.15, ArtSim: 0.25, neg_NME: 0.2, neg_LFErr: 0.15}
+    tie_break: [higher_raw_ArtSim, earlier_epoch]
+    nme_normalizer: bounding_box_of_target_68_landmarks
+    val_representation:
+      class: SCIENTIFIC_EVALUATION_CLARIFICATION
+      source: x_hat_float
+      range: [-1.0, 1.0]
+      stage: "native float EMA generator output, before uint8 conversion, image encoding or disk export"
+      uint8_roundtrip: FORBIDDEN
+      encoded_image_roundtrip: FORBIDDEN
+      policy: VAL_PRE_EXPORT_FLOAT_NO_CLAMP
+      policy_class: OWNER_EVALUATION_CLARIFICATION
+      clamp_for_val_scoring: false
+      export_clamp_roundtrip: FORBIDDEN
+      clamp_basis: "A10 D10.20: clamping occurs only at the uint8/export boundary"
+      evaluator_input: "each frozen evaluator through its own frozen / differentiable (A10 D07) input adapter"
+      applies_to_metrics: [ID, Dice, ArtSim, NME, LFErr]
+      artifact_probe_input: evaluator_compatible_float_preprocessing
+      exported_uint8_images_role: "later generation / bank workflows only; never the checkpoint-selection source"
+    test_participates: false
+  sanity_references:
+    authority: [A10_D11, A10_D12]
+    executed_in_m7b: false
+    dwt_idwt: {input: "uniform[-1,1]", shape: [100, 3, 256, 256], generator: cpu, seed: 42, dtype: float32, metric: max_abs, pass_if_less_than: 1.0e-5}
+    zero_residual: {disables: [delta_HF, delta_LL], x_hat_equals: "IDWT(DWT(x_t))", max_abs_x_hat_minus_x_t_lt: 1.0e-5, same_x_t_different_x_s_max_abs_lt: 1.0e-5}
+  environment:
+    authority: [A10_D17]
+    status: NOT_CREATED_M7B
+    future_base: "offline clone of gpat-m5 / m6_core_gpu"
+    future_additions: [ptwt, PyWavelets, NAFNet architecture source]
+    nafnet: {repository: "https://github.com/megvii-research/NAFNet", commit: 2b4af71ebe098a92a75910c233a3965a3e93ede4, weights: none, architecture_source_only: true}
+    deferred_to_m7c:
+      R-04: "teacher-parity tolerance (A10 D07), frozen at M7C from the measured rounding bound"
+      R-05: ["basicsr.utils import (arch_util.py get_root_logger)", "ctx.saved_variables compatibility (LayerNormFunction.backward)"]

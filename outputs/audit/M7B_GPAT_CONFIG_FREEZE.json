@@ -1,0 +1,4723 @@
+{
+  "GPU_contacted": false,
+  "M6_closed": true,
+  "M7_configs_frozen": true,
+  "M7_implementation_started": false,
+  "M7_scientific_training_started": false,
+  "TEST_access": false,
+  "TRAIN_access": false,
+  "VAL_access": false,
+  "a10": {
+    "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md",
+    "document_sha256": "7baf7888394c4cdd57db09e604bd910153a612e1765b8dc57de3c1d5d833d337",
+    "record": "configs/amendments/gpat_a10_m7_contract_resolution.yaml",
+    "record_sha256": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203"
+  },
+  "arithmetic": {
+    "generator_updates_per_run": 66300,
+    "lr_warmup_updates": 5525,
+    "microbatches_per_epoch": 2210,
+    "optimizer_updates_per_epoch": 1105,
+    "tail_group_samples": 6,
+    "val_candidates": 51,
+    "warmup_final_batch_samples": 6,
+    "warmup_steps_per_epoch": 139,
+    "warmup_total_steps": 1390
+  },
+  "authority_commit": "d59b9a302c61ed440e711abf6ffab9560458f779",
+  "b0": {
+    "config": "configs/methods/gpat_b0.yaml",
+    "modified": false,
+    "sha256": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "snapshot_sha256": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a"
+  },
+  "bank_writes": 0,
+  "checkpoint_writes": 0,
+  "clarifications": {
+    "deferred_to_m7c": [
+      "R-04",
+      "R-05"
+    ],
+    "observations": {
+      "M7B-OBS-01": "RESOLVED_FROM_FROZEN_SPEC"
+    },
+    "record": "configs/amendments/gpat_m7b_owner_clarifications.yaml",
+    "resolved": [
+      "R-01",
+      "R-02",
+      "R-03",
+      "R-06",
+      "R-07"
+    ],
+    "sha256": "db13b2c0b17771bf62bcac1ee25e0a51bab60ff649846a186799310b6d8f4825"
+  },
+  "classification": "M7B_GPAT_CONFIG_FREEZE",
+  "comparison_matrix": [
+    {
+      "B0": "GPAT-B0",
+      "B1": "GPAT-B1",
+      "B2": "GPAT-B2",
+      "B3": "GPAT-B3",
+      "class": "PROVENANCE_ONLY",
+      "path": "method"
+    },
+    {
+      "B0": "binary_only",
+      "B1": "binary_plus_attack_macro",
+      "B2": "binary_plus_identity_adversary",
+      "B3": "binary_plus_attack_macro_plus_identity_adversary",
+      "class": "PROVENANCE_ONLY",
+      "path": "supervision"
+    },
+    {
+      "B0": 256,
+      "B1": 256,
+      "B2": 256,
+      "B3": 256,
+      "class": "SAME",
+      "path": "input_resolution"
+    },
+    {
+      "B0": "ptwt",
+      "B1": "ptwt",
+      "B2": "ptwt",
+      "B3": "ptwt",
+      "class": "SAME",
+      "path": "wavelet.library"
+    },
+    {
+      "B0": "haar",
+      "B1": "haar",
+      "B2": "haar",
+      "B3": "haar",
+      "class": "SAME",
+      "path": "wavelet.family"
+    },
+    {
+      "B0": 1,
+      "B1": 1,
+      "B2": 1,
+      "B3": 1,
+      "class": "SAME",
+      "path": "wavelet.level"
+    },
+    {
+      "B0": "reflect",
+      "B1": "reflect",
+      "B2": "reflect",
+      "B3": "reflect",
+      "class": "SAME",
+      "path": "wavelet.boundary_mode"
+    },
+    {
+      "B0": 0.0,
+      "B1": 0.0,
+      "B2": 0.0,
+      "B3": 0.0,
+      "class": "SAME",
+      "path": "gamma"
+    },
+    {
+      "B0": "torchvision_resnet18_imagenet1k_v1",
+      "B1": "torchvision_resnet18_imagenet1k_v1",
+      "B2": "torchvision_resnet18_imagenet1k_v1",
+      "B3": "torchvision_resnet18_imagenet1k_v1",
+      "class": "SAME",
+      "path": "artifact_encoder.backbone"
+    },
+    {
+      "B0": 12,
+      "B1": 12,
+      "B2": 12,
+      "B3": 12,
+      "class": "SAME",
+      "path": "artifact_encoder.input_channels"
+    },
+    {
+      "B0": 9,
+      "B1": 9,
+      "B2": 9,
+      "B3": 9,
+      "class": "SAME",
+      "path": "artifact_encoder.highpass.kernel"
+    },
+    {
+      "B0": 1.5,
+      "B1": 1.5,
+      "B2": 1.5,
+      "B3": 1.5,
+      "class": "SAME",
+      "path": "artifact_encoder.highpass.sigma"
+    },
+    {
+      "B0": false,
+      "B1": true,
+      "B2": false,
+      "B3": true,
+      "class": "B1_DELTA",
+      "path": "artifact_encoder.attack_type_head"
+    },
+    {
+      "B0": false,
+      "B1": false,
+      "B2": true,
+      "B3": true,
+      "class": "B2_DELTA",
+      "path": "artifact_encoder.identity_adversary"
+    },
+    {
+      "B0": "NAFResidualUNet",
+      "B1": "NAFResidualUNet",
+      "B2": "NAFResidualUNet",
+      "B3": "NAFResidualUNet",
+      "class": "SAME",
+      "path": "residual_generator.name"
+    },
+    {
+      "B0": 32,
+      "B1": 32,
+      "B2": 32,
+      "B3": 32,
+      "class": "SAME",
+      "path": "residual_generator.width"
+    },
+    {
+      "B0": [
+        2,
+        2,
+        4,
+        8
+      ],
+      "B1": [
+        2,
+        2,
+        4,
+        8
+      ],
+      "B2": [
+        2,
+        2,
+        4,
+        8
+      ],
+      "B3": [
+        2,
+        2,
+        4,
+        8
+      ],
+      "class": "SAME",
+      "path": "residual_generator.enc_blocks"
+    },
+    {
+      "B0": 12,
+      "B1": 12,
+      "B2": 12,
+      "B3": 12,
+      "class": "SAME",
+      "path": "residual_generator.middle_blocks"
+    },
+    {
+      "B0": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "B1": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "B2": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "B3": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "class": "SAME",
+      "path": "residual_generator.dec_blocks"
+    },
+    {
+      "B0": 0.15,
+      "B1": 0.15,
+      "B2": 0.15,
+      "B3": 0.15,
+      "class": "SAME",
+      "path": "residual_generator.delta_scale_hf"
+    },
+    {
+      "B0": 0.05,
+      "B1": 0.05,
+      "B2": 0.05,
+      "B3": 0.05,
+      "class": "SAME",
+      "path": "residual_generator.delta_scale_ll"
+    },
+    {
+      "B0": 13,
+      "B1": 13,
+      "B2": 13,
+      "B3": 13,
+      "class": "SAME",
+      "path": "residual_generator.output_channels"
+    },
+    {
+      "B0": 60,
+      "B1": 60,
+      "B2": 60,
+      "B3": 60,
+      "class": "SAME",
+      "path": "training.epochs"
+    },
+    {
+      "B0": 4,
+      "B1": 4,
+      "B2": 4,
+      "B3": 4,
+      "class": "SAME",
+      "path": "training.physical_batch"
+    },
+    {
+      "B0": 2,
+      "B1": 2,
+      "B2": 2,
+      "B3": 2,
+      "class": "SAME",
+      "path": "training.grad_accum"
+    },
+    {
+      "B0": 8,
+      "B1": 8,
+      "B2": 8,
+      "B3": 8,
+      "class": "SAME",
+      "path": "training.effective_batch"
+    },
+    {
+      "B0": "Adam",
+      "B1": "Adam",
+      "B2": "Adam",
+      "B3": "Adam",
+      "class": "SAME",
+      "path": "training.optimizer"
+    },
+    {
+      "B0": 0.0002,
+      "B1": 0.0002,
+      "B2": 0.0002,
+      "B3": 0.0002,
+      "class": "SAME",
+      "path": "training.lr"
+    },
+    {
+      "B0": [
+        0.5,
+        0.999
+      ],
+      "B1": [
+        0.5,
+        0.999
+      ],
+      "B2": [
+        0.5,
+        0.999
+      ],
+      "B3": [
+        0.5,
+        0.999
+      ],
+      "class": "SAME",
+      "path": "training.betas"
+    },
+    {
+      "B0": 0.0,
+      "B1": 0.0,
+      "B2": 0.0,
+      "B3": 0.0,
+      "class": "SAME",
+      "path": "training.weight_decay"
+    },
+    {
+      "B0": 5,
+      "B1": 5,
+      "B2": 5,
+      "B3": 5,
+      "class": "SAME",
+      "path": "training.warmup_epochs"
+    },
+    {
+      "B0": 2e-06,
+      "B1": 2e-06,
+      "B2": 2e-06,
+      "B3": 2e-06,
+      "class": "SAME",
+      "path": "training.min_lr"
+    },
+    {
+      "B0": true,
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "SAME",
+      "path": "training.amp"
+    },
+    {
+      "B0": 1.0,
+      "B1": 1.0,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "SAME",
+      "path": "training.grad_clip_norm"
+    },
+    {
+      "B0": 0.999,
+      "B1": 0.999,
+      "B2": 0.999,
+      "B3": 0.999,
+      "class": "SAME",
+      "path": "training.ema_decay"
+    },
+    {
+      "B0": [
+        42,
+        1337,
+        2026
+      ],
+      "B1": [
+        42,
+        1337,
+        2026
+      ],
+      "B2": [
+        42,
+        1337,
+        2026
+      ],
+      "B3": [
+        42,
+        1337,
+        2026
+      ],
+      "class": "SAME",
+      "path": "training.seeds"
+    },
+    {
+      "B0": 1.0,
+      "B1": 1.0,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "SAME",
+      "path": "loss.lambda_id"
+    },
+    {
+      "B0": 1.0,
+      "B1": 1.0,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "SAME",
+      "path": "loss.lambda_lm"
+    },
+    {
+      "B0": 0.5,
+      "B1": 0.5,
+      "B2": 0.5,
+      "B3": 0.5,
+      "class": "SAME",
+      "path": "loss.lambda_parse"
+    },
+    {
+      "B0": 0.1,
+      "B1": 0.1,
+      "B2": 0.1,
+      "B3": 0.1,
+      "class": "SAME",
+      "path": "loss.lambda_kl"
+    },
+    {
+      "B0": 2.0,
+      "B1": 2.0,
+      "B2": 2.0,
+      "B3": 2.0,
+      "class": "SAME",
+      "path": "loss.lambda_low"
+    },
+    {
+      "B0": 1.0,
+      "B1": 1.0,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "SAME",
+      "path": "loss.lambda_con"
+    },
+    {
+      "B0": 0.2,
+      "B1": 0.2,
+      "B2": 0.2,
+      "B3": 0.2,
+      "class": "SAME",
+      "path": "loss.triplet_margin"
+    },
+    {
+      "B0": 0.5,
+      "B1": 0.5,
+      "B2": 0.5,
+      "B3": 0.5,
+      "class": "SAME",
+      "path": "loss.lambda_spec"
+    },
+    {
+      "B0": 0.5,
+      "B1": 0.5,
+      "B2": 0.5,
+      "B3": 0.5,
+      "class": "SAME",
+      "path": "loss.lambda_dir"
+    },
+    {
+      "B0": 0.1,
+      "B1": 0.1,
+      "B2": 0.1,
+      "B3": 0.1,
+      "class": "SAME",
+      "path": "loss.lambda_adv"
+    },
+    {
+      "B0": 0.0,
+      "B1": 0.2,
+      "B2": 0.0,
+      "B3": 0.2,
+      "class": "B1_DELTA",
+      "path": "loss.lambda_type"
+    },
+    {
+      "B0": 0.0,
+      "B1": 0.0,
+      "B2": 0.1,
+      "B3": 0.1,
+      "class": "B2_DELTA",
+      "path": "loss.lambda_idadv"
+    },
+    {
+      "B0": 0.5,
+      "B1": 0.5,
+      "B2": 0.5,
+      "B3": 0.5,
+      "class": "SAME",
+      "path": "loss.lambda_budget"
+    },
+    {
+      "B0": 0.01,
+      "B1": 0.01,
+      "B2": 0.01,
+      "B3": 0.01,
+      "class": "SAME",
+      "path": "loss.artifact_min"
+    },
+    {
+      "B0": 0.25,
+      "B1": 0.25,
+      "B2": 0.25,
+      "B3": 0.25,
+      "class": "SAME",
+      "path": "loss.artifact_max"
+    },
+    {
+      "B0": 0.05,
+      "B1": 0.05,
+      "B2": 0.05,
+      "B3": 0.05,
+      "class": "SAME",
+      "path": "loss.lambda_tv"
+    },
+    {
+      "B0": 0.25,
+      "B1": 0.25,
+      "B2": 0.25,
+      "B3": 0.25,
+      "class": "SAME",
+      "path": "loss.tv_delta_scale"
+    },
+    {
+      "B0": 1.0,
+      "B1": 1.0,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "SAME",
+      "path": "loss.lambda_bg"
+    },
+    {
+      "B0": "n/a",
+      "B1": "E09",
+      "B2": "E10",
+      "B3": "E11",
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.experiment_id"
+    },
+    {
+      "B0": "n/a",
+      "B1": "B1",
+      "B2": "B2",
+      "B3": "B3",
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.variant_id"
+    },
+    {
+      "B0": "n/a",
+      "B1": "GPAT-B1",
+      "B2": "GPAT-B2",
+      "B3": "GPAT-B3",
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.method_name"
+    },
+    {
+      "B0": "n/a",
+      "B1": "B",
+      "B2": "B",
+      "B3": "B",
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.track"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "5.3",
+        "9.2",
+        "10.3",
+        "10.5",
+        "17"
+      ],
+      "B2": [
+        "5.3",
+        "9.2",
+        "10.3",
+        "10.5",
+        "17"
+      ],
+      "B3": [
+        "5.3",
+        "9.2",
+        "10.3",
+        "10.5",
+        "17"
+      ],
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.spec_sections"
+    },
+    {
+      "B0": "n/a",
+      "B1": "configs/methods/gpat_b0.yaml",
+      "B2": "configs/methods/gpat_b0.yaml",
+      "B3": "configs/methods/gpat_b0.yaml",
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.derived_from.config"
+    },
+    {
+      "B0": "n/a",
+      "B1": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+      "B2": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+      "B3": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.derived_from.sha256"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "attack_type_supervision",
+        "attack_warmup"
+      ],
+      "B2": [
+        "identity_adversary"
+      ],
+      "B3": [
+        "attack_type_supervision",
+        "attack_warmup",
+        "identity_adversary"
+      ],
+      "class": "PROVENANCE_ONLY",
+      "path": "variant.delta_from_b0"
+    },
+    {
+      "B0": "n/a",
+      "B1": "CONFIG_FROZEN",
+      "B2": "CONFIG_FROZEN",
+      "B3": "CONFIG_FROZEN",
+      "class": "PROVENANCE_ONLY",
+      "path": "status.config"
+    },
+    {
+      "B0": "n/a",
+      "B1": "M7B",
+      "B2": "M7B",
+      "B3": "M7B",
+      "class": "PROVENANCE_ONLY",
+      "path": "status.milestone"
+    },
+    {
+      "B0": "n/a",
+      "B1": "2026-09-29",
+      "B2": "2026-09-29",
+      "B3": "2026-09-29",
+      "class": "PROVENANCE_ONLY",
+      "path": "status.frozen_utc"
+    },
+    {
+      "B0": "n/a",
+      "B1": "NOT_STARTED",
+      "B2": "NOT_STARTED",
+      "B3": "NOT_STARTED",
+      "class": "PROVENANCE_ONLY",
+      "path": "status.implementation"
+    },
+    {
+      "B0": "n/a",
+      "B1": "NOT_CREATED_M7B",
+      "B2": "NOT_CREATED_M7B",
+      "B3": "NOT_CREATED_M7B",
+      "class": "PROVENANCE_ONLY",
+      "path": "status.environment"
+    },
+    {
+      "B0": "n/a",
+      "B1": "NOT_STARTED",
+      "B2": "NOT_STARTED",
+      "B3": "NOT_STARTED",
+      "class": "PROVENANCE_ONLY",
+      "path": "status.scientific_training"
+    },
+    {
+      "B0": "n/a",
+      "B1": 0,
+      "B2": 0,
+      "B3": 0,
+      "class": "PROVENANCE_ONLY",
+      "path": "status.checkpoints"
+    },
+    {
+      "B0": "n/a",
+      "B1": 0,
+      "B2": 0,
+      "B3": 0,
+      "class": "PROVENANCE_ONLY",
+      "path": "status.banks"
+    },
+    {
+      "B0": "n/a",
+      "B1": "d59b9a302c61ed440e711abf6ffab9560458f779",
+      "B2": "d59b9a302c61ed440e711abf6ffab9560458f779",
+      "B3": "d59b9a302c61ed440e711abf6ffab9560458f779",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.authority_commit"
+    },
+    {
+      "B0": "n/a",
+      "B1": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+      "B2": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+      "B3": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.spec_sha256"
+    },
+    {
+      "B0": "n/a",
+      "B1": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md",
+      "B2": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md",
+      "B3": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.a10_document"
+    },
+    {
+      "B0": "n/a",
+      "B1": "7baf7888394c4cdd57db09e604bd910153a612e1765b8dc57de3c1d5d833d337",
+      "B2": "7baf7888394c4cdd57db09e604bd910153a612e1765b8dc57de3c1d5d833d337",
+      "B3": "7baf7888394c4cdd57db09e604bd910153a612e1765b8dc57de3c1d5d833d337",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.a10_document_sha256"
+    },
+    {
+      "B0": "n/a",
+      "B1": "configs/amendments/gpat_a10_m7_contract_resolution.yaml",
+      "B2": "configs/amendments/gpat_a10_m7_contract_resolution.yaml",
+      "B3": "configs/amendments/gpat_a10_m7_contract_resolution.yaml",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.a10_record"
+    },
+    {
+      "B0": "n/a",
+      "B1": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203",
+      "B2": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203",
+      "B3": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.a10_record_sha256"
+    },
+    {
+      "B0": "n/a",
+      "B1": "configs/amendments/gpat_m7b_owner_clarifications.yaml",
+      "B2": "configs/amendments/gpat_m7b_owner_clarifications.yaml",
+      "B3": "configs/amendments/gpat_m7b_owner_clarifications.yaml",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.m7b_clarifications"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "A10_D04",
+        "A10_D05",
+        "A10_D06",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "B2": [
+        "A10_D02",
+        "A10_D03",
+        "DEV-022",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "B3": [
+        "A10_D02",
+        "A10_D03",
+        "A10_D04",
+        "A10_D05",
+        "A10_D06",
+        "DEV-022",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.variant_decisions"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "A10_D01",
+        "A10_D07",
+        "A10_D08",
+        "A10_D09",
+        "A10_D10",
+        "A10_D11",
+        "A10_D12",
+        "A10_D13",
+        "A10_D14",
+        "A10_D15",
+        "A10_D16",
+        "A10_D17",
+        "M7B_R-01",
+        "M7B_R-02",
+        "M7B_R-03",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "B2": [
+        "A10_D01",
+        "A10_D07",
+        "A10_D08",
+        "A10_D09",
+        "A10_D10",
+        "A10_D11",
+        "A10_D12",
+        "A10_D13",
+        "A10_D14",
+        "A10_D15",
+        "A10_D16",
+        "A10_D17",
+        "M7B_R-01",
+        "M7B_R-02",
+        "M7B_R-03",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "B3": [
+        "A10_D01",
+        "A10_D07",
+        "A10_D08",
+        "A10_D09",
+        "A10_D10",
+        "A10_D11",
+        "A10_D12",
+        "A10_D13",
+        "A10_D14",
+        "A10_D15",
+        "A10_D16",
+        "A10_D17",
+        "M7B_R-01",
+        "M7B_R-02",
+        "M7B_R-03",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.shared_decisions"
+    },
+    {
+      "B0": "n/a",
+      "B1": [],
+      "B2": [
+        "DEV-022"
+      ],
+      "B3": [
+        "DEV-022"
+      ],
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.deviations"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.r_items_are_frozen_spec_facts"
+    },
+    {
+      "B0": "n/a",
+      "B1": "OWNER_APPROVED_M7B_CLARIFICATION_LAYERED_ON_A10",
+      "B2": "OWNER_APPROVED_M7B_CLARIFICATION_LAYERED_ON_A10",
+      "B3": "OWNER_APPROVED_M7B_CLARIFICATION_LAYERED_ON_A10",
+      "class": "PROVENANCE_ONLY",
+      "path": "provenance.r_items_class"
+    },
+    {
+      "B0": "n/a",
+      "B1": "manifests/pairs_train_v1.parquet",
+      "B2": "manifests/pairs_train_v1.parquet",
+      "B3": "manifests/pairs_train_v1.parquet",
+      "class": "SAME",
+      "path": "data.pair_manifest"
+    },
+    {
+      "B0": "n/a",
+      "B1": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "B2": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "B3": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "class": "SAME",
+      "path": "data.pair_manifest_sha256"
+    },
+    {
+      "B0": "n/a",
+      "B1": 8838,
+      "B2": 8838,
+      "B3": 8838,
+      "class": "SAME",
+      "path": "data.train_pairs"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "casia_fasd",
+        "msu_mfsd",
+        "siwmv2"
+      ],
+      "B2": [
+        "casia_fasd",
+        "msu_mfsd",
+        "siwmv2"
+      ],
+      "B3": [
+        "casia_fasd",
+        "msu_mfsd",
+        "siwmv2"
+      ],
+      "class": "SAME",
+      "path": "data.datasets"
+    },
+    {
+      "B0": "n/a",
+      "B1": "A10_D04",
+      "B2": "A10_D03",
+      "B3": [
+        "A10_D03",
+        "A10_D04"
+      ],
+      "class": "PROVENANCE_ONLY",
+      "path": "data.dataset_scope_authority"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "attack_macro"
+      ],
+      "B2": [
+        "source_subject"
+      ],
+      "B3": [
+        "attack_macro",
+        "source_subject"
+      ],
+      "class": "B3_UNION",
+      "path": "data.label_fields_used"
+    },
+    {
+      "B0": "n/a",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "SAME",
+      "path": "data.pseudo_identity"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "SAME",
+      "path": "data.splits.TRAIN.allowed"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "generator_training",
+        "attack_head_warmup"
+      ],
+      "B2": [
+        "generator_training"
+      ],
+      "B3": [
+        "generator_training",
+        "attack_head_warmup"
+      ],
+      "class": "B1_DELTA",
+      "path": "data.splits.TRAIN.used_for"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "SAME",
+      "path": "data.splits.VAL.allowed"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "post_training_checkpoint_selection"
+      ],
+      "B2": [
+        "post_training_checkpoint_selection"
+      ],
+      "B3": [
+        "post_training_checkpoint_selection"
+      ],
+      "class": "SAME",
+      "path": "data.splits.VAL.used_for"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "SAME",
+      "path": "data.splits.VAL.read_by_training_process"
+    },
+    {
+      "B0": "n/a",
+      "B1": "manifests/val_pairs_v1.parquet",
+      "B2": "manifests/val_pairs_v1.parquet",
+      "B3": "manifests/val_pairs_v1.parquet",
+      "class": "SAME",
+      "path": "data.splits.VAL.val_pairs"
+    },
+    {
+      "B0": "n/a",
+      "B1": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872",
+      "B2": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872",
+      "B3": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872",
+      "class": "SAME",
+      "path": "data.splits.VAL.val_pairs_sha256"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "SAME",
+      "path": "data.splits.TEST.allowed"
+    },
+    {
+      "B0": "n/a",
+      "B1": [],
+      "B2": [],
+      "B3": [],
+      "class": "SAME",
+      "path": "data.splits.TEST.used_for"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "SAME",
+      "path": "data.splits.TEST.never_training"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "SAME",
+      "path": "data.splits.TEST.never_checkpoint_selection"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "SAME",
+      "path": "data.splits.TEST.never_hyperparameter_selection"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "SAME",
+      "path": "data.splits.TEST.never_seed_selection"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "SAME",
+      "path": "data.splits.TEST.code_path_present"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": false,
+      "B3": true,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.enabled"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "spec_5_3",
+        "spec_9_2",
+        "A10_D05"
+      ],
+      "B2": null,
+      "B3": [
+        "spec_5_3",
+        "spec_9_2",
+        "A10_D05"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.authority"
+    },
+    {
+      "B0": "n/a",
+      "B1": "z_a = L2-normalized GAP(layer4) of E_art(x_s), 512-D (global artifact code)",
+      "B2": null,
+      "B3": "z_a = L2-normalized GAP(layer4) of E_art(x_s), 512-D (global artifact code)",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.input"
+    },
+    {
+      "B0": "n/a",
+      "B1": "Linear",
+      "B2": null,
+      "B3": "Linear",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.head.type"
+    },
+    {
+      "B0": "n/a",
+      "B1": 512,
+      "B2": null,
+      "B3": 512,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.head.in_features"
+    },
+    {
+      "B0": "n/a",
+      "B1": 6,
+      "B2": null,
+      "B3": 6,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.head.out_features"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": null,
+      "B3": true,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.head.bias"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "makeup",
+        "mask_2d",
+        "mask_3d",
+        "partial",
+        "print",
+        "replay"
+      ],
+      "B2": null,
+      "B3": [
+        "makeup",
+        "mask_2d",
+        "mask_3d",
+        "partial",
+        "print",
+        "replay"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.class_order"
+    },
+    {
+      "B0": "n/a",
+      "B1": 0,
+      "B2": null,
+      "B3": 0,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.class_index.makeup"
+    },
+    {
+      "B0": "n/a",
+      "B1": 1,
+      "B2": null,
+      "B3": 1,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.class_index.mask_2d"
+    },
+    {
+      "B0": "n/a",
+      "B1": 2,
+      "B2": null,
+      "B3": 2,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.class_index.mask_3d"
+    },
+    {
+      "B0": "n/a",
+      "B1": 3,
+      "B2": null,
+      "B3": 3,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.class_index.partial"
+    },
+    {
+      "B0": "n/a",
+      "B1": 4,
+      "B2": null,
+      "B3": 4,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.class_index.print"
+    },
+    {
+      "B0": "n/a",
+      "B1": 5,
+      "B2": null,
+      "B3": 5,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.class_index.replay"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.live_class"
+    },
+    {
+      "B0": "n/a",
+      "B1": "attack_macro_of_x_s",
+      "B2": null,
+      "B3": "attack_macro_of_x_s",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.label"
+    },
+    {
+      "B0": "n/a",
+      "B1": "spoof_sources_only",
+      "B2": null,
+      "B3": "spoof_sources_only",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.samples"
+    },
+    {
+      "B0": "n/a",
+      "B1": "CrossEntropy",
+      "B2": null,
+      "B3": "CrossEntropy",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.loss"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": null,
+      "B3": null,
+      "class": "SAME",
+      "path": "attack_type_supervision.class_weights"
+    },
+    {
+      "B0": "n/a",
+      "B1": "mean",
+      "B2": null,
+      "B3": "mean",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.reduction"
+    },
+    {
+      "B0": "n/a",
+      "B1": "x_s_only",
+      "B2": null,
+      "B3": "x_s_only",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.applied_to"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.applied_to_x_hat"
+    },
+    {
+      "B0": "n/a",
+      "B1": 0.2,
+      "B2": 0.0,
+      "B3": 0.2,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.lambda_type"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "attack_warmup",
+        "generator_stage"
+      ],
+      "B2": null,
+      "B3": [
+        "attack_warmup",
+        "generator_stage"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.active_in"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": null,
+      "B3": true,
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.warmup_head_reused_in_generator_stage"
+    },
+    {
+      "B0": "n/a",
+      "B1": "G_OPT",
+      "B2": null,
+      "B3": "G_OPT",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.optimizer"
+    },
+    {
+      "B0": "n/a",
+      "B1": "autocast_fp16",
+      "B2": null,
+      "B3": "autocast_fp16",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.precision.forward"
+    },
+    {
+      "B0": "n/a",
+      "B1": "float32",
+      "B2": null,
+      "B3": "float32",
+      "class": "B1_DELTA",
+      "path": "attack_type_supervision.precision.ce_logits_and_reduction"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": false,
+      "B3": true,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.enabled"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "spec_10_5",
+        "A10_D06",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "B2": [
+        "spec_10_5"
+      ],
+      "B3": [
+        "spec_10_5",
+        "A10_D06",
+        "M7B_R-06",
+        "M7B_R-07"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_warmup.authority"
+    },
+    {
+      "B0": "n/a",
+      "B1": 10,
+      "B2": null,
+      "B3": 10,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.epochs"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.counted_in_generator_epochs"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.reduces_generator_epochs"
+    },
+    {
+      "B0": "n/a",
+      "B1": "TRAIN spoof-source frames only (x_s of the 8838 TRAIN pairs); no synthetic images",
+      "B2": null,
+      "B3": "TRAIN spoof-source frames only (x_s of the 8838 TRAIN pairs); no synthetic images",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.data"
+    },
+    {
+      "B0": "n/a",
+      "B1": "same_12_channel_E_art_input",
+      "B2": null,
+      "B3": "same_12_channel_E_art_input",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.input"
+    },
+    {
+      "B0": "n/a",
+      "B1": "attack_type_supervision.class_order",
+      "B2": null,
+      "B3": "attack_type_supervision.class_order",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.classes"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "B2": null,
+      "B3": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_warmup.trainable"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.identity_adversary_head_participates"
+    },
+    {
+      "B0": "n/a",
+      "B1": "WARMUP_OPT",
+      "B2": null,
+      "B3": "WARMUP_OPT",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.optimizer.name"
+    },
+    {
+      "B0": "n/a",
+      "B1": "AdamW",
+      "B2": null,
+      "B3": "AdamW",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.optimizer.type"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "B2": null,
+      "B3": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_warmup.optimizer.params"
+    },
+    {
+      "B0": "n/a",
+      "B1": 0.0001,
+      "B2": null,
+      "B3": 0.0001,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.optimizer.lr"
+    },
+    {
+      "B0": "n/a",
+      "B1": 0.0001,
+      "B2": null,
+      "B3": 0.0001,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.optimizer.weight_decay"
+    },
+    {
+      "B0": "n/a",
+      "B1": "cosine_per_optimizer_step_to_0",
+      "B2": null,
+      "B3": "cosine_per_optimizer_step_to_0",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.schedule"
+    },
+    {
+      "B0": "n/a",
+      "B1": 64,
+      "B2": null,
+      "B3": 64,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.batch"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.drop_last"
+    },
+    {
+      "B0": "n/a",
+      "B1": 139,
+      "B2": null,
+      "B3": 139,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.steps_per_epoch"
+    },
+    {
+      "B0": "n/a",
+      "B1": 6,
+      "B2": null,
+      "B3": 6,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.final_batch_samples"
+    },
+    {
+      "B0": "n/a",
+      "B1": 1390,
+      "B2": null,
+      "B3": 1390,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.total_steps"
+    },
+    {
+      "B0": "n/a",
+      "B1": "cuda_fp16",
+      "B2": null,
+      "B3": "cuda_fp16",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.amp.autocast"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "B2": null,
+      "B3": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_warmup.amp.autocast_modules"
+    },
+    {
+      "B0": "n/a",
+      "B1": "float32",
+      "B2": null,
+      "B3": "float32",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.amp.ce_dtype"
+    },
+    {
+      "B0": "n/a",
+      "B1": true,
+      "B2": null,
+      "B3": true,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.amp.grad_scaler"
+    },
+    {
+      "B0": "n/a",
+      "B1": "WARMUP_SCALER",
+      "B2": null,
+      "B3": "WARMUP_SCALER",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.amp.scaler"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.amp.scaler_state_carried_to_generator_stage"
+    },
+    {
+      "B0": "n/a",
+      "B1": 1.0,
+      "B2": null,
+      "B3": 1.0,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.grad_clip.max_norm"
+    },
+    {
+      "B0": "n/a",
+      "B1": "GradScaler.unscale_(WARMUP_OPT)",
+      "B2": null,
+      "B3": "GradScaler.unscale_(WARMUP_OPT)",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.grad_clip.after"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.grad_clip.exemption_in_authority"
+    },
+    {
+      "B0": "n/a",
+      "B1": "same_experiment_seed",
+      "B2": null,
+      "B3": "same_experiment_seed",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.seed"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.val_selection"
+    },
+    {
+      "B0": "n/a",
+      "B1": "after_warmup_epoch_10",
+      "B2": null,
+      "B3": "after_warmup_epoch_10",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.state_used"
+    },
+    {
+      "B0": "n/a",
+      "B1": [
+        "E_art_weights",
+        "attack_head_weights"
+      ],
+      "B2": null,
+      "B3": [
+        "E_art_weights",
+        "attack_head_weights"
+      ],
+      "class": "B1_DELTA",
+      "path": "attack_warmup.carry_into_generator_stage"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": null,
+      "B3": false,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.carry_optimizer_state"
+    },
+    {
+      "B0": "n/a",
+      "B1": "discard WARMUP_OPT state; create a fresh generator-stage Adam G_OPT",
+      "B2": null,
+      "B3": "discard WARMUP_OPT state; create a fresh generator-stage Adam G_OPT",
+      "class": "B1_DELTA",
+      "path": "attack_warmup.after_warmup"
+    },
+    {
+      "B0": "n/a",
+      "B1": false,
+      "B2": true,
+      "B3": true,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.enabled"
+    },
+    {
+      "B0": "n/a",
+      "B1": 0.0,
+      "B2": 0.1,
+      "B3": 0.1,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.lambda_idadv"
+    },
+    {
+      "B0": "n/a",
+      "B1": "NOT_APPLICABLE",
+      "B2": null,
+      "B3": null,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "B0",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "B2": [
+        "B0",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "B3": [
+        "B0",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.applies_to"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 256,
+      "B2": 256,
+      "B3": 256,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.image.resolution"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        -1.0,
+        1.0
+      ],
+      "B2": [
+        -1.0,
+        1.0
+      ],
+      "B3": [
+        -1.0,
+        1.0
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.image.range"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_9_1",
+        "A10_D10_12",
+        "A10_D11",
+        "M7B_R-01"
+      ],
+      "B2": [
+        "spec_9_1",
+        "A10_D10_12",
+        "A10_D11",
+        "M7B_R-01"
+      ],
+      "B3": [
+        "spec_9_1",
+        "A10_D10_12",
+        "A10_D11",
+        "M7B_R-01"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "IMPLEMENTATION_CLARIFICATION",
+      "B2": "IMPLEMENTATION_CLARIFICATION",
+      "B3": "IMPLEMENTATION_CLARIFICATION",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "ptwt.wavedec2 / ptwt.waverec2, haar, level 1, mode reflect, per RGB channel, fp32",
+      "B2": "ptwt.wavedec2 / ptwt.waverec2, haar, level 1, mode reflect, per RGB channel, fp32",
+      "B3": "ptwt.wavedec2 / ptwt.waverec2, haar, level 1, mode reflect, per RGB channel, fp32",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.transform"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        -2,
+        -1
+      ],
+      "B2": [
+        -2,
+        -1
+      ],
+      "B3": [
+        -2,
+        -1
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.axes"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "(cA, (cH, cV, cD))",
+      "B2": "(cA, (cH, cV, cD))",
+      "B3": "(cA, (cH, cV, cD))",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.coefficient_order"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cA",
+      "B2": "cA",
+      "B3": "cA",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.mapping.LL"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cH",
+      "B2": "cH",
+      "B3": "cH",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.mapping.LH"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cV",
+      "B2": "cV",
+      "B3": "cV",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.mapping.HL"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cD",
+      "B2": "cD",
+      "B3": "cD",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.mapping.HH"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "LL, (LH, HL, HH)",
+      "B2": "LL, (LH, HL, HH)",
+      "B3": "LL, (LH, HL, HH)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.canonical_level1"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.display_convention_swap"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "E_art_source_bands",
+        "G_res_input",
+        "G_res_output",
+        "A_freq",
+        "L_low",
+        "L_TV"
+      ],
+      "B2": [
+        "E_art_source_bands",
+        "G_res_input",
+        "G_res_output",
+        "A_freq",
+        "L_low",
+        "L_TV"
+      ],
+      "B3": [
+        "E_art_source_bands",
+        "G_res_input",
+        "G_res_output",
+        "A_freq",
+        "L_low",
+        "L_TV"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.used_consistently_by"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "LL_rgb",
+        "LH_rgb",
+        "HL_rgb",
+        "HH_rgb"
+      ],
+      "B2": [
+        "LL_rgb",
+        "LH_rgb",
+        "HL_rgb",
+        "HH_rgb"
+      ],
+      "B3": [
+        "LL_rgb",
+        "LH_rgb",
+        "HL_rgb",
+        "HH_rgb"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.band_order"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        0,
+        1,
+        2
+      ],
+      "B2": [
+        0,
+        1,
+        2
+      ],
+      "B3": [
+        0,
+        1,
+        2
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.output_channels.delta_LL"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        3,
+        4,
+        5
+      ],
+      "B2": [
+        3,
+        4,
+        5
+      ],
+      "B3": [
+        3,
+        4,
+        5
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.output_channels.delta_LH"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        6,
+        7,
+        8
+      ],
+      "B2": [
+        6,
+        7,
+        8
+      ],
+      "B3": [
+        6,
+        7,
+        8
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.output_channels.delta_HL"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        9,
+        10,
+        11
+      ],
+      "B2": [
+        9,
+        10,
+        11
+      ],
+      "B3": [
+        9,
+        10,
+        11
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.output_channels.delta_HH"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        12
+      ],
+      "B2": [
+        12
+      ],
+      "B3": [
+        12
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.output_channels.mask_logit"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "known_directional_synthetic_patterns",
+        "exact_coefficient_ordering",
+        "dwt_idwt_reconstruction"
+      ],
+      "B2": [
+        "known_directional_synthetic_patterns",
+        "exact_coefficient_ordering",
+        "dwt_idwt_reconstruction"
+      ],
+      "B3": [
+        "known_directional_synthetic_patterns",
+        "exact_coefficient_ordering",
+        "dwt_idwt_reconstruction"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.wavelet_bands.m7c_tests_required"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_9_3",
+        "A10_D10_05",
+        "M7B_R-02"
+      ],
+      "B2": [
+        "spec_9_3",
+        "A10_D10_05",
+        "M7B_R-02"
+      ],
+      "B3": [
+        "spec_9_3",
+        "A10_D10_05",
+        "M7B_R-02"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "IMPLEMENTATION_CLARIFICATION",
+      "B2": "IMPLEMENTATION_CLARIFICATION",
+      "B3": "IMPLEMENTATION_CLARIFICATION",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "M = sigmoid(mask_logit), shared across RGB",
+      "B2": "M = sigmoid(mask_logit), shared across RGB",
+      "B3": "M = sigmoid(mask_logit), shared across RGB",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.definition"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.soft"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "none",
+      "B2": "none",
+      "B3": "none",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.threshold"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        128,
+        128
+      ],
+      "B2": [
+        128,
+        128
+      ],
+      "B3": [
+        128,
+        128
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.native_resolution"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "M at 128x128 directly",
+      "B2": "M at 128x128 directly",
+      "B3": "M at 128x128 directly",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.wavelet_domain_use"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.wavelet_domain_resize"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        128,
+        128
+      ],
+      "B2": [
+        128,
+        128
+      ],
+      "B3": [
+        128,
+        128
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.tv_resolution"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "M_256 = bilinear_interpolate(M, size=(256, 256), align_corners=False)",
+      "B2": "M_256 = bilinear_interpolate(M, size=(256, 256), align_corners=False)",
+      "B3": "M_256 = bilinear_interpolate(M, size=(256, 256), align_corners=False)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.mask.artifact_map_resize"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_9_4",
+        "A10_D10_04",
+        "A10_D10_05",
+        "M7B_R-02"
+      ],
+      "B2": [
+        "spec_9_4",
+        "A10_D10_04",
+        "A10_D10_05",
+        "M7B_R-02"
+      ],
+      "B3": [
+        "spec_9_4",
+        "A10_D10_04",
+        "A10_D10_05",
+        "M7B_R-02"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "OWNER_SCIENTIFIC_CLARIFICATION",
+      "B2": "OWNER_SCIENTIFIC_CLARIFICATION",
+      "B3": "OWNER_SCIENTIFIC_CLARIFICATION",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "mean_channel(abs(x_hat - x_t))",
+      "B2": "mean_channel(abs(x_hat - x_t))",
+      "B3": "mean_channel(abs(x_hat - x_t))",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.A_rgb"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "mean_channel(abs(delta_LH) + abs(delta_HL) + abs(delta_HH) + gamma * abs(delta_LL))",
+      "B2": "mean_channel(abs(delta_LH) + abs(delta_HL) + abs(delta_HH) + gamma * abs(delta_LL))",
+      "B3": "mean_channel(abs(delta_LH) + abs(delta_HL) + abs(delta_HH) + gamma * abs(delta_LL))",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.A_freq_128"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "bilinear_x2(A_freq_128, align_corners=False)",
+      "B2": "bilinear_x2(A_freq_128, align_corners=False)",
+      "B3": "bilinear_x2(A_freq_128, align_corners=False)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.A_freq_256"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "bilinear_x2(M, align_corners=False)",
+      "B2": "bilinear_x2(M, align_corners=False)",
+      "B3": "bilinear_x2(M, align_corners=False)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.M_256"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "M_256 * (0.5 * A_rgb + 0.5 * A_freq_256)",
+      "B2": "M_256 * (0.5 * A_rgb + 0.5 * A_freq_256)",
+      "B3": "M_256 * (0.5 * A_rgb + 0.5 * A_freq_256)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.u"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "clip(u / 2.0, 0.0, 1.0)",
+      "B2": "clip(u / 2.0, 0.0, 1.0)",
+      "B3": "clip(u / 2.0, 0.0, 1.0)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.A"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "u",
+      "B2": "u",
+      "B3": "u",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.denominator_applies_to"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.per_image_min_max"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "clip(A_rgb / 2, 0, 1)",
+        "A without A_freq",
+        "A without M",
+        "hard-thresholded M"
+      ],
+      "B2": [
+        "clip(A_rgb / 2, 0, 1)",
+        "A without A_freq",
+        "A without M",
+        "hard-thresholded M"
+      ],
+      "B3": [
+        "clip(A_rgb / 2, 0, 1)",
+        "A without A_freq",
+        "A without M",
+        "hard-thresholded M"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.artifact_map.forbidden_readings"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "A10_D01",
+        "A10_D08",
+        "A10_D09",
+        "A10_D10"
+      ],
+      "B2": [
+        "A10_D01",
+        "A10_D08",
+        "A10_D09",
+        "A10_D10"
+      ],
+      "B3": [
+        "A10_D01",
+        "A10_D08",
+        "A10_D09",
+        "A10_D10"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "coefficient of S_orient inside L_spec (A10 D01)",
+      "B2": "coefficient of S_orient inside L_spec (A10 D01)",
+      "B3": "coefficient of S_orient inside L_spec (A10 D01)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.lambda_dir"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 8,
+      "B2": 8,
+      "B3": 8,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.S_orient_angular_bins"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        15,
+        15
+      ],
+      "B2": [
+        15,
+        15
+      ],
+      "B3": [
+        15,
+        15
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.face_mask_dilation_kernel"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "(1 + gamma) * h + beta",
+      "B2": "(1 + gamma) * h + beta",
+      "B3": "(1 + gamma) * h + beta",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.film"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "pix2pix; LeakyReLU(0.2) except final; InstanceNorm on layers 2..4; padding 1; output 30x30 (A10 D10.13)",
+      "B2": "pix2pix; LeakyReLU(0.2) except final; InstanceNorm on layers 2..4; padding 1; output 30x30 (A10 D10.13)",
+      "B3": "pix2pix; LeakyReLU(0.2) except final; InstanceNorm on layers 2..4; padding 1; output 30x30 (A10 D10.13)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.patchgan"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FaceXFormer native normalized 68x2 coordinates; no heatmaps (A10 D08)",
+      "B2": "FaceXFormer native normalized 68x2 coordinates; no heatmaps (A10 D08)",
+      "B3": "FaceXFormer native normalized 68x2 coordinates; no heatmaps (A10 D08)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.landmarks"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        0
+      ],
+      "B2": [
+        0
+      ],
+      "B3": [
+        0
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.parser.background"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "B2": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "B3": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.parser.foreground"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": null,
+      "B2": null,
+      "B3": null,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.parser.semantic_names"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.operators.x_hat_clamp_during_training"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_10_5",
+        "A10_D10_23"
+      ],
+      "B2": [
+        "spec_10_5",
+        "A10_D10_23"
+      ],
+      "B3": [
+        "spec_10_5",
+        "A10_D10_23"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.curriculum.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        {
+          "adv_weight": 0.0,
+          "epochs": [
+            1,
+            5
+          ],
+          "lambda_con": 0.5,
+          "lambda_spec": 0.25,
+          "residual_scale": [
+            0.02,
+            0.05
+          ]
+        },
+        {
+          "adv_weight": 0.05,
+          "epochs": [
+            6,
+            15
+          ],
+          "lambda_con": 1.0,
+          "lambda_spec": 0.5,
+          "residual_scale": 0.1
+        },
+        {
+          "adv_weight": 0.1,
+          "epochs": [
+            16,
+            60
+          ],
+          "lambda_con": 1.0,
+          "lambda_spec": 0.5,
+          "residual_scale": 0.15
+        }
+      ],
+      "B2": [
+        {
+          "adv_weight": 0.0,
+          "epochs": [
+            1,
+            5
+          ],
+          "lambda_con": 0.5,
+          "lambda_spec": 0.25,
+          "residual_scale": [
+            0.02,
+            0.05
+          ]
+        },
+        {
+          "adv_weight": 0.05,
+          "epochs": [
+            6,
+            15
+          ],
+          "lambda_con": 1.0,
+          "lambda_spec": 0.5,
+          "residual_scale": 0.1
+        },
+        {
+          "adv_weight": 0.1,
+          "epochs": [
+            16,
+            60
+          ],
+          "lambda_con": 1.0,
+          "lambda_spec": 0.5,
+          "residual_scale": 0.15
+        }
+      ],
+      "B3": [
+        {
+          "adv_weight": 0.0,
+          "epochs": [
+            1,
+            5
+          ],
+          "lambda_con": 0.5,
+          "lambda_spec": 0.25,
+          "residual_scale": [
+            0.02,
+            0.05
+          ]
+        },
+        {
+          "adv_weight": 0.05,
+          "epochs": [
+            6,
+            15
+          ],
+          "lambda_con": 1.0,
+          "lambda_spec": 0.5,
+          "residual_scale": 0.1
+        },
+        {
+          "adv_weight": 0.1,
+          "epochs": [
+            16,
+            60
+          ],
+          "lambda_con": 1.0,
+          "lambda_spec": 0.5,
+          "residual_scale": 0.15
+        }
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.curriculum.stages"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "per_optimizer_step",
+      "B2": "per_optimizer_step",
+      "B3": "per_optimizer_step",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.curriculum.interpolation"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_10_5",
+        "A10_D07",
+        "M7B_R-06"
+      ],
+      "B2": [
+        "spec_10_5",
+        "A10_D07",
+        "M7B_R-06"
+      ],
+      "B3": [
+        "spec_10_5",
+        "A10_D07",
+        "M7B_R-06"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "RUNTIME_COMPATIBILITY",
+      "B2": "RUNTIME_COMPATIBILITY",
+      "B3": "RUNTIME_COMPATIBILITY",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cuda",
+      "B2": "cuda",
+      "B3": "cuda",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.autocast.device"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "float16",
+      "B2": "float16",
+      "B3": "float16",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.autocast.dtype"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.bf16"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "E_art",
+        "G_res",
+        "PatchGAN_D",
+        "attack_type_head_when_enabled",
+        "identity_adversary_head_when_enabled"
+      ],
+      "B2": [
+        "E_art",
+        "G_res",
+        "PatchGAN_D",
+        "attack_type_head_when_enabled",
+        "identity_adversary_head_when_enabled"
+      ],
+      "B3": [
+        "E_art",
+        "G_res",
+        "PatchGAN_D",
+        "attack_type_head_when_enabled",
+        "identity_adversary_head_when_enabled"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.autocast_fp16_modules"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "DWT",
+        "IDWT",
+        "LL_HF_residual_composition",
+        "x_hat_reconstruction",
+        "artifact_map_A",
+        "FFT",
+        "S_radial",
+        "S_orient",
+        "TV_and_budget_scalars",
+        "numerically_sensitive_final_loss_reductions",
+        "CE_logits_and_loss_reduction",
+        "Dice",
+        "KL",
+        "frozen_teacher_loss_cosines",
+        "frozen_teacher_and_evaluator_forwards"
+      ],
+      "B2": [
+        "DWT",
+        "IDWT",
+        "LL_HF_residual_composition",
+        "x_hat_reconstruction",
+        "artifact_map_A",
+        "FFT",
+        "S_radial",
+        "S_orient",
+        "TV_and_budget_scalars",
+        "numerically_sensitive_final_loss_reductions",
+        "CE_logits_and_loss_reduction",
+        "Dice",
+        "KL",
+        "frozen_teacher_loss_cosines",
+        "frozen_teacher_and_evaluator_forwards"
+      ],
+      "B3": [
+        "DWT",
+        "IDWT",
+        "LL_HF_residual_composition",
+        "x_hat_reconstruction",
+        "artifact_map_A",
+        "FFT",
+        "S_radial",
+        "S_orient",
+        "TV_and_budget_scalars",
+        "numerically_sensitive_final_loss_reductions",
+        "CE_logits_and_loss_reduction",
+        "Dice",
+        "KL",
+        "frozen_teacher_loss_cosines",
+        "frozen_teacher_and_evaluator_forwards"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.fp32_outside_autocast"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "AdaFace_F_id",
+        "FaceXFormer",
+        "F_art",
+        "ArtifactProbe_v1_val_selection"
+      ],
+      "B2": [
+        "AdaFace_F_id",
+        "FaceXFormer",
+        "F_art",
+        "ArtifactProbe_v1_val_selection"
+      ],
+      "B3": [
+        "AdaFace_F_id",
+        "FaceXFormer",
+        "F_art",
+        "ArtifactProbe_v1_val_selection"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.fp32_frozen_modules"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.teacher_weights_frozen"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "differentiable",
+      "B2": "differentiable",
+      "B3": "differentiable",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.x_hat_to_teachers"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.x_hat_detach"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "x_t_teacher_targets"
+      ],
+      "B2": [
+        "x_t_teacher_targets"
+      ],
+      "B3": [
+        "x_t_teacher_targets"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.detached"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scaler"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_10_5",
+        "M7B_GRADSCALER_TOPOLOGY"
+      ],
+      "B2": [
+        "spec_10_5",
+        "M7B_GRADSCALER_TOPOLOGY"
+      ],
+      "B3": [
+        "spec_10_5",
+        "M7B_GRADSCALER_TOPOLOGY"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "IMPLEMENTATION_CLARIFICATION",
+      "B2": "IMPLEMENTATION_CLARIFICATION",
+      "B3": "IMPLEMENTATION_CLARIFICATION",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "G_OPT",
+      "B2": "G_OPT",
+      "B3": "G_OPT",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.G_SCALER.owns"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "generator",
+      "B2": "generator",
+      "B3": "generator",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.G_SCALER.stage"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "D_OPT",
+      "B2": "D_OPT",
+      "B3": "D_OPT",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.D_SCALER.owns"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "generator",
+      "B2": "generator",
+      "B3": "generator",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.D_SCALER.stage"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "WARMUP_OPT",
+      "B2": "WARMUP_OPT",
+      "B3": "WARMUP_OPT",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.WARMUP_SCALER.owns"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "attack_warmup",
+      "B2": "attack_warmup",
+      "B3": "attack_warmup",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.WARMUP_SCALER.stage"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "B1",
+        "B3"
+      ],
+      "B2": [
+        "B1",
+        "B3"
+      ],
+      "B3": [
+        "B1",
+        "B3"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.WARMUP_SCALER.variants"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.independent_state_machines"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.shared_scaler_state"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.warmup_state_reused_by_G_SCALER"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "torch.cuda.amp.GradScaler",
+      "B2": "torch.cuda.amp.GradScaler",
+      "B3": "torch.cuda.amp.GradScaler",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.type"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "scaler.scale(loss).backward()",
+        "scaler.unscale_(optimizer)",
+        "clip_grad_norm_(that optimizer's trainable parameters, 1.0)",
+        "scaler.step(optimizer)",
+        "scaler.update()"
+      ],
+      "B2": [
+        "scaler.scale(loss).backward()",
+        "scaler.unscale_(optimizer)",
+        "clip_grad_norm_(that optimizer's trainable parameters, 1.0)",
+        "scaler.step(optimizer)",
+        "scaler.update()"
+      ],
+      "B3": [
+        "scaler.scale(loss).backward()",
+        "scaler.unscale_(optimizer)",
+        "clip_grad_norm_(that optimizer's trainable parameters, 1.0)",
+        "scaler.step(optimizer)",
+        "scaler.update()"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.per_optimizer_sequence"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "backward per microbatch; unscale_/clip/step/update once per optimizer update (A10 D15)",
+      "B2": "backward per microbatch; unscale_/clip/step/update once per optimizer update (A10 D15)",
+      "B3": "backward per microbatch; unscale_/clip/step/update once per optimizer update (A10 D15)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_scalers.accumulation_boundary"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 1.0,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_clip.max_norm"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "per_optimizer_trainable_parameters",
+      "B2": "per_optimizer_trainable_parameters",
+      "B3": "per_optimizer_trainable_parameters",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_clip.scope"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "GradScaler.unscale_(optimizer)",
+        "clip trainable gradients to max_norm 1.0"
+      ],
+      "B2": [
+        "GradScaler.unscale_(optimizer)",
+        "clip trainable gradients to max_norm 1.0"
+      ],
+      "B3": [
+        "GradScaler.unscale_(optimizer)",
+        "clip trainable gradients to max_norm 1.0"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_clip.order"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "G_OPT",
+        "D_OPT",
+        "WARMUP_OPT"
+      ],
+      "B2": [
+        "G_OPT",
+        "D_OPT",
+        "WARMUP_OPT"
+      ],
+      "B3": [
+        "G_OPT",
+        "D_OPT",
+        "WARMUP_OPT"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.precision.grad_clip.applies_to"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_10_4",
+        "spec_10_5",
+        "A10_D02",
+        "A10_D06",
+        "M7B_R-07"
+      ],
+      "B2": [
+        "spec_10_4",
+        "spec_10_5",
+        "A10_D02",
+        "A10_D06",
+        "M7B_R-07"
+      ],
+      "B3": [
+        "spec_10_4",
+        "spec_10_5",
+        "A10_D02",
+        "A10_D06",
+        "M7B_R-07"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "IMPLEMENTATION_CLARIFICATION",
+      "B2": "IMPLEMENTATION_CLARIFICATION",
+      "B3": "IMPLEMENTATION_CLARIFICATION",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "Adam(G_res + E_art + every ENABLED auxiliary supervision head)",
+      "B2": "Adam(G_res + E_art + every ENABLED auxiliary supervision head)",
+      "B3": "Adam(G_res + E_art + every ENABLED auxiliary supervision head)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT_rule"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "G_res",
+        "E_art"
+      ],
+      "B2": [
+        "G_res",
+        "E_art"
+      ],
+      "B3": [
+        "G_res",
+        "E_art"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT_membership.B0"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "G_res",
+        "E_art",
+        "attack_type_head"
+      ],
+      "B2": [
+        "G_res",
+        "E_art",
+        "attack_type_head"
+      ],
+      "B3": [
+        "G_res",
+        "E_art",
+        "attack_type_head"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT_membership.B1"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "G_res",
+        "E_art",
+        "identity_adversary_head"
+      ],
+      "B2": [
+        "G_res",
+        "E_art",
+        "identity_adversary_head"
+      ],
+      "B3": [
+        "G_res",
+        "E_art",
+        "identity_adversary_head"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT_membership.B2"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "G_res",
+        "E_art",
+        "attack_type_head",
+        "identity_adversary_head"
+      ],
+      "B2": [
+        "G_res",
+        "E_art",
+        "attack_type_head",
+        "identity_adversary_head"
+      ],
+      "B3": [
+        "G_res",
+        "E_art",
+        "attack_type_head",
+        "identity_adversary_head"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT_membership.B3"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "Adam",
+      "B2": "Adam",
+      "B3": "Adam",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT.name"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.0002,
+      "B2": 0.0002,
+      "B3": 0.0002,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT.lr"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        0.5,
+        0.999
+      ],
+      "B2": [
+        0.5,
+        0.999
+      ],
+      "B3": [
+        0.5,
+        0.999
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT.betas"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.0,
+      "B2": 0.0,
+      "B3": 0.0,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.G_OPT.weight_decay"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "Adam",
+      "B2": "Adam",
+      "B3": "Adam",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_OPT.name"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.0002,
+      "B2": 0.0002,
+      "B3": 0.0002,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_OPT.lr"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        0.5,
+        0.999
+      ],
+      "B2": [
+        0.5,
+        0.999
+      ],
+      "B3": [
+        0.5,
+        0.999
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_OPT.betas"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.0,
+      "B2": 0.0,
+      "B3": 0.0,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_OPT.weight_decay"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "PatchGAN_D"
+      ],
+      "B2": [
+        "PatchGAN_D"
+      ],
+      "B3": [
+        "PatchGAN_D"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_OPT.params"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_OPT.separate"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_10_5",
+        "M7B-OBS-01"
+      ],
+      "B2": [
+        "spec_10_5",
+        "M7B-OBS-01"
+      ],
+      "B3": [
+        "spec_10_5",
+        "M7B-OBS-01"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FROZEN_SPEC_DERIVED_EXECUTION_POLICY",
+      "B2": "FROZEN_SPEC_DERIVED_EXECUTION_POLICY",
+      "B3": "FROZEN_SPEC_DERIVED_EXECUTION_POLICY",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "RESOLVED_FROM_FROZEN_SPEC",
+      "B2": "RESOLVED_FROM_FROZEN_SPEC",
+      "B3": "RESOLVED_FROM_FROZEN_SPEC",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.status"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "per_optimizer_step",
+      "B2": "per_optimizer_step",
+      "B3": "per_optimizer_step",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.granularity"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "linear_from_0",
+      "B2": "linear_from_0",
+      "B3": "linear_from_0",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.warmup"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 5,
+      "B2": 5,
+      "B3": 5,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.warmup_epochs"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 5525,
+      "B2": 5525,
+      "B3": 5525,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.warmup_updates"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.0002,
+      "B2": 0.0002,
+      "B3": 0.0002,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.peak_lr"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cosine",
+      "B2": "cosine",
+      "B3": "cosine",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.decay"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 2e-06,
+      "B2": 2e-06,
+      "B3": 2e-06,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.min_lr"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "final_generator_update",
+      "B2": "final_generator_update",
+      "B3": "final_generator_update",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.end"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "G_OPT",
+      "B2": "G_OPT",
+      "B3": "G_OPT",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.lr_schedule.same_as"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cuda_fp16",
+      "B2": "cuda_fp16",
+      "B3": "cuda_fp16",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.amp.autocast"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "PatchGAN_D"
+      ],
+      "B2": [
+        "PatchGAN_D"
+      ],
+      "B3": [
+        "PatchGAN_D"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.amp.modules"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "D_SCALER",
+      "B2": "D_SCALER",
+      "B3": "D_SCALER",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.grad_scaler"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 1.0,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.grad_clip.max_norm"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "PatchGAN_D_trainable_only",
+      "B2": "PatchGAN_D_trainable_only",
+      "B3": "PatchGAN_D_trainable_only",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.grad_clip.params"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "D_SCALER.unscale_(D_OPT)",
+      "B2": "D_SCALER.unscale_(D_OPT)",
+      "B3": "D_SCALER.unscale_(D_OPT)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.grad_clip.after"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "B0",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "B2": [
+        "B0",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "B3": [
+        "B0",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.D_execution.same_for"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "B1",
+        "B3"
+      ],
+      "B2": [
+        "B1",
+        "B3"
+      ],
+      "B3": [
+        "B1",
+        "B3"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.WARMUP_OPT.variants"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "AdamW",
+      "B2": "AdamW",
+      "B3": "AdamW",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.WARMUP_OPT.name"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "B2": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "B3": [
+        "E_art",
+        "attack_type_head"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.WARMUP_OPT.params"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 10,
+      "B2": 10,
+      "B3": 10,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.WARMUP_OPT.discarded_after_warmup_epoch"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.fresh_G_OPT_after_warmup"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.identity_head_in_G_OPT"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "negated_identity_ce",
+        "second_adversarial_optimizer",
+        "detached_z_a",
+        "identity_head_excluded_from_optimizer"
+      ],
+      "B2": [
+        "negated_identity_ce",
+        "second_adversarial_optimizer",
+        "detached_z_a",
+        "identity_head_excluded_from_optimizer"
+      ],
+      "B3": [
+        "negated_identity_ce",
+        "second_adversarial_optimizer",
+        "detached_z_a",
+        "identity_head_excluded_from_optimizer"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.forbidden"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "never",
+      "B2": "never",
+      "B3": "never",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.optimizer_ownership.frozen_modules_in_any_optimizer"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_10_5",
+        "A10_D15",
+        "A10_D10_21",
+        "A10_D10_22"
+      ],
+      "B2": [
+        "spec_10_5",
+        "A10_D15",
+        "A10_D10_21",
+        "A10_D10_22"
+      ],
+      "B3": [
+        "spec_10_5",
+        "A10_D15",
+        "A10_D10_21",
+        "A10_D10_22"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 60,
+      "B2": 60,
+      "B3": 60,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.generator_epochs"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 8838,
+      "B2": 8838,
+      "B3": 8838,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.train_pairs"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 4,
+      "B2": 4,
+      "B3": 4,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.physical_batch"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 2,
+      "B2": 2,
+      "B3": 2,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.grad_accum"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.drop_last"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 2210,
+      "B2": 2210,
+      "B3": 2210,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.microbatches_per_epoch"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 1105,
+      "B2": 1105,
+      "B3": 1105,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.optimizer_updates_per_epoch"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 66300,
+      "B2": 66300,
+      "B3": 66300,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.generator_updates_per_run"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 6,
+      "B2": 6,
+      "B3": 6,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.tail_group_samples"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "sample_weighted_by_actual_samples_in_optimizer_group",
+      "B2": "sample_weighted_by_actual_samples_in_optimizer_group",
+      "B3": "sample_weighted_by_actual_samples_in_optimizer_group",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.loss_weighting"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "per_optimizer_step",
+      "B2": "per_optimizer_step",
+      "B3": "per_optimizer_step",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.lr_schedule.granularity"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "linear_from_0",
+      "B2": "linear_from_0",
+      "B3": "linear_from_0",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.lr_schedule.warmup"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 5525,
+      "B2": 5525,
+      "B3": 5525,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.lr_schedule.warmup_updates"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cosine",
+      "B2": "cosine",
+      "B3": "cosine",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.lr_schedule.decay"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 2e-06,
+      "B2": 2e-06,
+      "B3": 2e-06,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.lr_schedule.min_lr"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.999,
+      "B2": 0.999,
+      "B3": 0.999,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.ema.decay"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "end_of_epoch_5",
+      "B2": "end_of_epoch_5",
+      "B3": "end_of_epoch_5",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.ema.start"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 5525,
+      "B2": 5525,
+      "B3": 5525,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.ema.start_update"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "E_art",
+        "G_res"
+      ],
+      "B2": [
+        "E_art",
+        "G_res"
+      ],
+      "B3": [
+        "E_art",
+        "G_res"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.ema.scope"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        42,
+        1337,
+        2026
+      ],
+      "B2": [
+        42,
+        1337,
+        2026
+      ],
+      "B3": [
+        42,
+        1337,
+        2026
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.seeds"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.training_budget.attack_warmup_reduces_generator_epochs"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "spec_10_6",
+        "A10_D13",
+        "A10_D14",
+        "A10_D16",
+        "M7B_R-03"
+      ],
+      "B2": [
+        "spec_10_6",
+        "A10_D13",
+        "A10_D14",
+        "A10_D16",
+        "M7B_R-03"
+      ],
+      "B3": [
+        "spec_10_6",
+        "A10_D13",
+        "A10_D14",
+        "A10_D16",
+        "M7B_R-03"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "EMA",
+      "B2": "EMA",
+      "B3": "EMA",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.candidates.kind"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        10,
+        60
+      ],
+      "B2": [
+        10,
+        60
+      ],
+      "B3": [
+        10,
+        60
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.candidates.epochs"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.candidates.inclusive"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 51,
+      "B2": 51,
+      "B3": 51,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.candidates.N"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.training_process_reads_val"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "separate_deterministic_post_training_val_selection",
+      "B2": "separate_deterministic_post_training_val_selection",
+      "B3": "separate_deterministic_post_training_val_selection",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.process"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.evaluate_all_before_selecting"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "VAL_only",
+      "B2": "VAL_only",
+      "B3": "VAL_only",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.data"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "manifests/val_pairs_v1.parquet",
+      "B2": "manifests/val_pairs_v1.parquet",
+      "B3": "manifests/val_pairs_v1.parquet",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_pairs"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "NME",
+        "LFErr"
+      ],
+      "B2": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "NME",
+        "LFErr"
+      ],
+      "B3": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "NME",
+        "LFErr"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.metrics"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "M5 ArtifactProbe v1 embedding cosine (models/artifact_probe/artifact_probe_v1.pt, sha256 b5ace6c263d8473215ff2ab825b98541bdcf332251512216cbd93546f32e54ff)",
+      "B2": "M5 ArtifactProbe v1 embedding cosine (models/artifact_probe/artifact_probe_v1.pt, sha256 b5ace6c263d8473215ff2ab825b98541bdcf332251512216cbd93546f32e54ff)",
+      "B3": "M5 ArtifactProbe v1 embedding cosine (models/artifact_probe/artifact_probe_v1.pt, sha256 b5ace6c263d8473215ff2ab825b98541bdcf332251512216cbd93546f32e54ff)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.artsim"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "average_rank",
+      "B2": "average_rank",
+      "B3": "average_rank",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.ranking.ties"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "p = (rank - 1) / (51 - 1)",
+      "B2": "p = (rank - 1) / (51 - 1)",
+      "B3": "p = (rank - 1) / (51 - 1)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.ranking.percentile"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "neg_NME",
+        "neg_LFErr"
+      ],
+      "B2": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "neg_NME",
+        "neg_LFErr"
+      ],
+      "B3": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "neg_NME",
+        "neg_LFErr"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.ranking.oriented"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.25,
+      "B2": 0.25,
+      "B3": 0.25,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.weights.ID"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.15,
+      "B2": 0.15,
+      "B3": 0.15,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.weights.Dice"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.25,
+      "B2": 0.25,
+      "B3": 0.25,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.weights.ArtSim"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.2,
+      "B2": 0.2,
+      "B3": 0.2,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.weights.neg_NME"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 0.15,
+      "B2": 0.15,
+      "B3": 0.15,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.weights.neg_LFErr"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "higher_raw_ArtSim",
+        "earlier_epoch"
+      ],
+      "B2": [
+        "higher_raw_ArtSim",
+        "earlier_epoch"
+      ],
+      "B3": [
+        "higher_raw_ArtSim",
+        "earlier_epoch"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.tie_break"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "bounding_box_of_target_68_landmarks",
+      "B2": "bounding_box_of_target_68_landmarks",
+      "B3": "bounding_box_of_target_68_landmarks",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.nme_normalizer"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "SCIENTIFIC_EVALUATION_CLARIFICATION",
+      "B2": "SCIENTIFIC_EVALUATION_CLARIFICATION",
+      "B3": "SCIENTIFIC_EVALUATION_CLARIFICATION",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "x_hat_float",
+      "B2": "x_hat_float",
+      "B3": "x_hat_float",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.source"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        -1.0,
+        1.0
+      ],
+      "B2": [
+        -1.0,
+        1.0
+      ],
+      "B3": [
+        -1.0,
+        1.0
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.range"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "native float EMA generator output, before uint8 conversion, image encoding or disk export",
+      "B2": "native float EMA generator output, before uint8 conversion, image encoding or disk export",
+      "B3": "native float EMA generator output, before uint8 conversion, image encoding or disk export",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.stage"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.uint8_roundtrip"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.encoded_image_roundtrip"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "VAL_PRE_EXPORT_FLOAT_NO_CLAMP",
+      "B2": "VAL_PRE_EXPORT_FLOAT_NO_CLAMP",
+      "B3": "VAL_PRE_EXPORT_FLOAT_NO_CLAMP",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.policy"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "OWNER_EVALUATION_CLARIFICATION",
+      "B2": "OWNER_EVALUATION_CLARIFICATION",
+      "B3": "OWNER_EVALUATION_CLARIFICATION",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.policy_class"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.clamp_for_val_scoring"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "FORBIDDEN",
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.export_clamp_roundtrip"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "A10 D10.20: clamping occurs only at the uint8/export boundary",
+      "B2": "A10 D10.20: clamping occurs only at the uint8/export boundary",
+      "B3": "A10 D10.20: clamping occurs only at the uint8/export boundary",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.clamp_basis"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "each frozen evaluator through its own frozen / differentiable (A10 D07) input adapter",
+      "B2": "each frozen evaluator through its own frozen / differentiable (A10 D07) input adapter",
+      "B3": "each frozen evaluator through its own frozen / differentiable (A10 D07) input adapter",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.evaluator_input"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "NME",
+        "LFErr"
+      ],
+      "B2": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "NME",
+        "LFErr"
+      ],
+      "B3": [
+        "ID",
+        "Dice",
+        "ArtSim",
+        "NME",
+        "LFErr"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.applies_to_metrics"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "evaluator_compatible_float_preprocessing",
+      "B2": "evaluator_compatible_float_preprocessing",
+      "B3": "evaluator_compatible_float_preprocessing",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.artifact_probe_input"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "later generation / bank workflows only; never the checkpoint-selection source",
+      "B2": "later generation / bank workflows only; never the checkpoint-selection source",
+      "B3": "later generation / bank workflows only; never the checkpoint-selection source",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.val_representation.exported_uint8_images_role"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.checkpoint_selection.test_participates"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "A10_D11",
+        "A10_D12"
+      ],
+      "B2": [
+        "A10_D11",
+        "A10_D12"
+      ],
+      "B3": [
+        "A10_D11",
+        "A10_D12"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": false,
+      "B2": false,
+      "B3": false,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.executed_in_m7b"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "uniform[-1,1]",
+      "B2": "uniform[-1,1]",
+      "B3": "uniform[-1,1]",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.dwt_idwt.input"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        100,
+        3,
+        256,
+        256
+      ],
+      "B2": [
+        100,
+        3,
+        256,
+        256
+      ],
+      "B3": [
+        100,
+        3,
+        256,
+        256
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.dwt_idwt.shape"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "cpu",
+      "B2": "cpu",
+      "B3": "cpu",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.dwt_idwt.generator"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 42,
+      "B2": 42,
+      "B3": 42,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.dwt_idwt.seed"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "float32",
+      "B2": "float32",
+      "B3": "float32",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.dwt_idwt.dtype"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "max_abs",
+      "B2": "max_abs",
+      "B3": "max_abs",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.dwt_idwt.metric"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 1e-05,
+      "B2": 1e-05,
+      "B3": 1e-05,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.dwt_idwt.pass_if_less_than"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "delta_HF",
+        "delta_LL"
+      ],
+      "B2": [
+        "delta_HF",
+        "delta_LL"
+      ],
+      "B3": [
+        "delta_HF",
+        "delta_LL"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.zero_residual.disables"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "IDWT(DWT(x_t))",
+      "B2": "IDWT(DWT(x_t))",
+      "B3": "IDWT(DWT(x_t))",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.zero_residual.x_hat_equals"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 1e-05,
+      "B2": 1e-05,
+      "B3": 1e-05,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.zero_residual.max_abs_x_hat_minus_x_t_lt"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": 1e-05,
+      "B2": 1e-05,
+      "B3": 1e-05,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.sanity_references.zero_residual.same_x_t_different_x_s_max_abs_lt"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "A10_D17"
+      ],
+      "B2": [
+        "A10_D17"
+      ],
+      "B3": [
+        "A10_D17"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.authority"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "NOT_CREATED_M7B",
+      "B2": "NOT_CREATED_M7B",
+      "B3": "NOT_CREATED_M7B",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.status"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "offline clone of gpat-m5 / m6_core_gpu",
+      "B2": "offline clone of gpat-m5 / m6_core_gpu",
+      "B3": "offline clone of gpat-m5 / m6_core_gpu",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.future_base"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "ptwt",
+        "PyWavelets",
+        "NAFNet architecture source"
+      ],
+      "B2": [
+        "ptwt",
+        "PyWavelets",
+        "NAFNet architecture source"
+      ],
+      "B3": [
+        "ptwt",
+        "PyWavelets",
+        "NAFNet architecture source"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.future_additions"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "https://github.com/megvii-research/NAFNet",
+      "B2": "https://github.com/megvii-research/NAFNet",
+      "B3": "https://github.com/megvii-research/NAFNet",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.nafnet.repository"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "2b4af71ebe098a92a75910c233a3965a3e93ede4",
+      "B2": "2b4af71ebe098a92a75910c233a3965a3e93ede4",
+      "B3": "2b4af71ebe098a92a75910c233a3965a3e93ede4",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.nafnet.commit"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "none",
+      "B2": "none",
+      "B3": "none",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.nafnet.weights"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": true,
+      "B2": true,
+      "B3": true,
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.nafnet.architecture_source_only"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": "teacher-parity tolerance (A10 D07), frozen at M7C from the measured rounding bound",
+      "B2": "teacher-parity tolerance (A10 D07), frozen at M7C from the measured rounding bound",
+      "B3": "teacher-parity tolerance (A10 D07), frozen at M7C from the measured rounding bound",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.deferred_to_m7c.R-04"
+    },
+    {
+      "B0": "same (A10/M7B shared)",
+      "B1": [
+        "basicsr.utils import (arch_util.py get_root_logger)",
+        "ctx.saved_variables compatibility (LayerNormFunction.backward)"
+      ],
+      "B2": [
+        "basicsr.utils import (arch_util.py get_root_logger)",
+        "ctx.saved_variables compatibility (LayerNormFunction.backward)"
+      ],
+      "B3": [
+        "basicsr.utils import (arch_util.py get_root_logger)",
+        "ctx.saved_variables compatibility (LayerNormFunction.backward)"
+      ],
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "path": "shared_contract.environment.deferred_to_m7c.R-05"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "spec §10.5: B0/B2 skip the attack-type warmup",
+      "B3": null,
+      "class": "B1_DELTA",
+      "path": "attack_warmup.note"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": [
+        "spec_5_3",
+        "spec_9_2",
+        "A10_D02",
+        "A10_D03",
+        "DEV-022",
+        "M7B_R-07"
+      ],
+      "B3": [
+        "spec_5_3",
+        "spec_9_2",
+        "A10_D02",
+        "A10_D03",
+        "DEV-022",
+        "M7B_R-07"
+      ],
+      "class": "B2_DELTA",
+      "path": "identity_adversary.authority"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "z_a = L2-normalized GAP(layer4) of E_art(x_s), 512-D (global artifact code)",
+      "B3": "z_a = L2-normalized GAP(layer4) of E_art(x_s), 512-D (global artifact code)",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.input"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": 1.0,
+      "B3": 1.0,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.grl.alpha"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "between z_a and identity_head",
+      "B3": "between z_a and identity_head",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.grl.position"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "E_art_path_only",
+      "B3": "E_art_path_only",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.grl.reverses"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "Linear",
+      "B3": "Linear",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.head.type"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": 512,
+      "B3": 512,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.head.in_features"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": 60,
+      "B3": 60,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.head.out_features"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": true,
+      "B3": true,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.head.bias"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "OWNER_IMPLEMENTATION_CLARIFICATION",
+      "B3": "OWNER_IMPLEMENTATION_CLARIFICATION",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.head_bias_class"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "owner-confirmed at M7B review: Linear(512, n_subjects, bias=True); torch.nn.Linear default, attack-head convention, no contrary frozen authority; no DEV",
+      "B3": "owner-confirmed at M7B review: Linear(512, n_subjects, bias=True); torch.nn.Linear default, attack-head convention, no contrary frozen authority; no DEV",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.head_bias_basis"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "source_subject",
+      "B3": "source_subject",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.label"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": 60,
+      "B3": 60,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.classes"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": 35,
+      "B3": 35,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.classes_by_dataset.casia_fasd"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": 25,
+      "B3": 25,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.classes_by_dataset.msu_mfsd"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": 0,
+      "B3": 0,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.classes_by_dataset.siwmv2"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "DEFERRED_TO_M7C: deterministic, TRAIN-only, recorded in the run; never from VAL/TEST",
+      "B3": "DEFERRED_TO_M7C: deterministic, TRAIN-only, recorded in the run; never from VAL/TEST",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.class_index_order"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "+ lambda_idadv * CE(identity_head(GRL(z_a)), source_subject)",
+      "B3": "+ lambda_idadv * CE(identity_head(GRL(z_a)), source_subject)",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.objective_term"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "+",
+      "B3": "+",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.idadv_term_sign"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": true,
+      "B3": true,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.identity_head_minimizes_ce"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": true,
+      "B3": true,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.single_reversal_via_grl"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": [
+        "GRL + (- lambda_idadv * CE)",
+        "negated_identity_ce",
+        "second_adversarial_optimizer",
+        "detached_z_a",
+        "identity_head_excluded_from_optimizer"
+      ],
+      "B3": [
+        "GRL + (- lambda_idadv * CE)",
+        "negated_identity_ce",
+        "second_adversarial_optimizer",
+        "detached_z_a",
+        "identity_head_excluded_from_optimizer"
+      ],
+      "class": "B2_DELTA",
+      "path": "identity_adversary.forbidden"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "G_OPT",
+      "B3": "G_OPT",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.optimizer"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": false,
+      "B3": false,
+      "class": "B2_DELTA",
+      "path": "identity_adversary.takes_part_in_attack_warmup"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "generator_stage",
+      "B3": "generator_stage",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.initialized_for"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": [
+        "generator_stage"
+      ],
+      "B3": [
+        "generator_stage"
+      ],
+      "class": "B2_DELTA",
+      "path": "identity_adversary.active_in"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "autocast_fp16",
+      "B3": "autocast_fp16",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.precision.forward"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "float32",
+      "B3": "float32",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.precision.ce_logits_and_reduction"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "DEV-022",
+      "B3": "DEV-022",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.deviation"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "CONTROLLED_ADAPTATION",
+      "B3": "CONTROLLED_ADAPTATION",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.class"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "casia_fasd and msu_mfsd rows with a valid source_subject",
+      "B3": "casia_fasd and msu_mfsd rows with a valid source_subject",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.active_rows"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "siwmv2 rows (source_subject missing)",
+      "B3": "siwmv2 rows (source_subject missing)",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.masked_rows"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "sum of per-row identity CE over the labelled rows in the optimizer update / number of those labelled rows",
+      "B3": "sum of per-row identity CE over the labelled rows in the optimizer update / number of those labelled rows",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.normalization"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "L_idadv = 0 exactly",
+      "B3": "L_idadv = 0 exactly",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.zero_labelled_rows"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": "FORBIDDEN",
+      "B3": "FORBIDDEN",
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.pseudo_identity"
+    },
+    {
+      "B0": "n/a",
+      "B1": null,
+      "B2": [
+        "pseudo_subject_id",
+        "clustering_id",
+        "video_id_as_identity",
+        "content_group_id_as_identity",
+        "adaface_pseudo_identity",
+        "filename_derived_identity",
+        "DEV-013_as_same_person_guarantee"
+      ],
+      "B3": [
+        "pseudo_subject_id",
+        "clustering_id",
+        "video_id_as_identity",
+        "content_group_id_as_identity",
+        "adaface_pseudo_identity",
+        "filename_derived_identity",
+        "DEV-013_as_same_person_guarantee"
+      ],
+      "class": "B2_DELTA",
+      "path": "identity_adversary.dev_022_masking.fabrication_forbidden"
+    }
+  ],
+  "configs": {
+    "B1": {
+      "b0_deltas": [
+        "artifact_encoder.attack_type_head",
+        "loss.lambda_type",
+        "method",
+        "supervision"
+      ],
+      "config": "configs/methods/gpat_b1.yaml",
+      "config_sha256": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+      "experiment_id": "E09",
+      "labels": [
+        "attack_macro"
+      ],
+      "snapshot": "frozen_config_snapshot/configs/methods/gpat_b1.yaml",
+      "snapshot_sha256": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc"
+    },
+    "B2": {
+      "b0_deltas": [
+        "artifact_encoder.identity_adversary",
+        "loss.lambda_idadv",
+        "method",
+        "supervision"
+      ],
+      "config": "configs/methods/gpat_b2.yaml",
+      "config_sha256": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+      "experiment_id": "E10",
+      "labels": [
+        "source_subject"
+      ],
+      "snapshot": "frozen_config_snapshot/configs/methods/gpat_b2.yaml",
+      "snapshot_sha256": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9"
+    },
+    "B3": {
+      "b0_deltas": [
+        "artifact_encoder.attack_type_head",
+        "artifact_encoder.identity_adversary",
+        "loss.lambda_idadv",
+        "loss.lambda_type",
+        "method",
+        "supervision"
+      ],
+      "config": "configs/methods/gpat_b3.yaml",
+      "config_sha256": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca",
+      "experiment_id": "E11",
+      "labels": [
+        "attack_macro",
+        "source_subject"
+      ],
+      "snapshot": "frozen_config_snapshot/configs/methods/gpat_b3.yaml",
+      "snapshot_sha256": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca"
+    }
+  },
+  "environment_created": false,
+  "evidence_markdown": {
+    "path": "outputs/audit/M7B_GPAT_CONFIG_FREEZE.md",
+    "sha256": "c9f0f1ee4d9640a9fd0df4c67b4ea7f299e2a11558300a34f3f04066bdf85a2f"
+  },
+  "loader_or_validator_changes": [],
+  "matrix_counts": {
+    "B1_DELTA": 67,
+    "B2_DELTA": 41,
+    "B3_UNION": 1,
+    "IMPLEMENTATION_CLARIFICATION": 216,
+    "PROVENANCE_ONLY": 31,
+    "SAME": 67
+  },
+  "milestone": "M7B",
+  "nafnet_commit": "2b4af71ebe098a92a75910c233a3965a3e93ede4",
+  "packages_installed": false,
+  "record_kind": "CONFIG_FREEZE / OWNER_CLARIFICATIONS_LAYERED_ON_A10",
+  "schema": "gpat.m7b.gpat_config_freeze_evidence",
+  "schema_version": 1,
+  "training_runs": 0
+}

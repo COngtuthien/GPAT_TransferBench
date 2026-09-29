@@ -1,0 +1,319 @@
+{
+  "schema": "gpat.m7b.owner_clarifications",
+  "schema_version": 1,
+  "milestone": "M7B",
+  "record_kind": "OWNER_DECISION_RECORD / M7B_CONFIG_FREEZE_CLARIFICATIONS",
+  "status": [
+    "OWNER_APPROVED_IN_M7B_INSTRUCTION",
+    "ADDITIVE",
+    "LAYERED_ON_A10",
+    "NOT_AN_AMENDMENT",
+    "NOT_FROZEN_SPEC_FACTS"
+  ],
+  "adoption_gate": "owner review, then owner commit; an uncommitted candidate is not authority",
+  "authority_commit": "d59b9a302c61ed440e711abf6ffab9560458f779",
+  "decision_date": "2026-09-29",
+  "a10_document": {
+    "path": "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md",
+    "sha256": "7baf7888394c4cdd57db09e604bd910153a612e1765b8dc57de3c1d5d833d337"
+  },
+  "a10_record": {
+    "path": "configs/amendments/gpat_a10_m7_contract_resolution.yaml",
+    "sha256": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203"
+  },
+  "a10_edited": false,
+  "frozen_spec_edited": false,
+  "gpat_b0_edited": false,
+  "authority_order": [
+    "frozen specification",
+    "A1-A9",
+    "M6E",
+    "A10",
+    "configs/amendments/gpat_a10_m7_contract_resolution.yaml",
+    "configs/methods/gpat_b0.yaml",
+    "M7B owner clarifications R-01/R-02/R-03/R-06/R-07 (this record)"
+  ],
+  "residual_items": {
+    "R-01": {
+      "topic": "ptwt level-1 detail tuple -> LH/HL/HH names",
+      "required_by": "M7B",
+      "status": "RESOLVED_M7B",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "blocks_m7b": false,
+      "blocks_m7c": false,
+      "decision": {
+        "coefficient_order": "(cA, (cH, cV, cD))",
+        "mapping": {
+          "LL": "cA",
+          "LH": "cH",
+          "HL": "cV",
+          "HH": "cD"
+        },
+        "canonical_level1": "LL, (LH, HL, HH)",
+        "display_convention_swap": "FORBIDDEN",
+        "axes": [
+          -2,
+          -1
+        ],
+        "m7c_tests_required": [
+          "known_directional_synthetic_patterns",
+          "exact_coefficient_ordering",
+          "dwt_idwt_reconstruction"
+        ]
+      }
+    },
+    "R-02": {
+      "topic": "resampling of the 128x128 mask M inside the section 9.4 artifact map",
+      "required_by": "M7B",
+      "status": "RESOLVED_M7B",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "blocks_m7b": false,
+      "blocks_m7c": false,
+      "decision": {
+        "wavelet_domain": "M used directly at 128x128; no resize",
+        "artifact_map": "M_256 = bilinear_interpolate(M, size=(256, 256), align_corners=False)",
+        "soft_mask": true,
+        "threshold": "none",
+        "A_rgb": "mean_channel(abs(x_hat - x_t))",
+        "A_freq_128": "mean_channel(abs(delta_LH) + abs(delta_HL) + abs(delta_HH) + gamma * abs(delta_LL))",
+        "A_freq_256": "bilinear_x2(A_freq_128, align_corners=False)",
+        "u": "M_256 * (0.5 * A_rgb + 0.5 * A_freq_256)",
+        "A": "clip(u / 2.0, 0.0, 1.0)",
+        "channel_mean_basis": "A10 D10.5 (channel mean, then bilinear x2)",
+        "consistent_with": "A10 D10.4 (owner-confirmed whole-u normalization)"
+      }
+    },
+    "R-03": {
+      "topic": "image representation used by VAL checkpoint-selection metrics",
+      "required_by": "M7B",
+      "status": "RESOLVED_M7B",
+      "class": "SCIENTIFIC_EVALUATION_CLARIFICATION",
+      "blocks_m7b": false,
+      "blocks_m7c": false,
+      "decision": {
+        "source": "x_hat_float",
+        "range": [
+          -1.0,
+          1.0
+        ],
+        "stage": "native float EMA generator output before uint8 conversion, image encoding or disk export",
+        "uint8_roundtrip": "FORBIDDEN",
+        "encoded_image_roundtrip": "FORBIDDEN",
+        "evaluator_input": "each frozen evaluator through its own frozen / differentiable (A10 D07) input adapter",
+        "metrics": [
+          "ID",
+          "Dice",
+          "ArtSim",
+          "NME",
+          "LFErr"
+        ],
+        "artifact_probe_input": "evaluator_compatible_float_preprocessing",
+        "exported_uint8_role": "later generation / bank workflows only",
+        "clamp_basis": "A10 D10.20 (clamp only at the output/export conversion boundary)",
+        "test": "FORBIDDEN",
+        "clamp_for_val_scoring": false,
+        "policy": "VAL_PRE_EXPORT_FLOAT_NO_CLAMP"
+      }
+    },
+    "R-04": {
+      "topic": "teacher-parity tolerance (A10 D07)",
+      "required_by": "M7C",
+      "status": "DEFERRED_TO_M7C",
+      "class": "RUNTIME_COMPATIBILITY",
+      "blocks_m7b": false,
+      "blocks_m7c": true,
+      "decision": null,
+      "note": "frozen at the M7C parity qualification from the measured rounding bound (A10 D07)"
+    },
+    "R-05": {
+      "topic": "NAFNet import caveats on the pinned torch (A10 section 6)",
+      "required_by": "M7C",
+      "status": "DEFERRED_TO_M7C",
+      "class": "RUNTIME_COMPATIBILITY",
+      "blocks_m7b": false,
+      "blocks_m7c": true,
+      "decision": null,
+      "items": [
+        "arch_util.py imports basicsr.utils.get_root_logger",
+        "LayerNormFunction.backward reads ctx.saved_variables"
+      ]
+    },
+    "R-06": {
+      "topic": "AMP autocast scope and fp32 boundaries",
+      "required_by": "M7B",
+      "status": "RESOLVED_M7B",
+      "class": "RUNTIME_COMPATIBILITY / NUMERICAL_EXECUTION_CLARIFICATION",
+      "blocks_m7b": false,
+      "blocks_m7c": false,
+      "decision": {
+        "autocast": "cuda float16",
+        "bf16": "FORBIDDEN",
+        "autocast_fp16_modules": [
+          "E_art",
+          "G_res",
+          "PatchGAN_D",
+          "attack_type_head_when_enabled",
+          "identity_adversary_head_when_enabled"
+        ],
+        "fp32_outside_autocast": [
+          "DWT",
+          "IDWT",
+          "LL_HF_residual_composition",
+          "x_hat_reconstruction",
+          "artifact_map_A",
+          "FFT",
+          "S_radial",
+          "S_orient",
+          "TV_and_budget_scalars",
+          "numerically_sensitive_final_loss_reductions",
+          "CE_logits_and_loss_reduction",
+          "Dice",
+          "KL",
+          "frozen_teacher_loss_cosines",
+          "frozen_teacher_and_evaluator_forwards"
+        ],
+        "fp32_frozen_modules": [
+          "AdaFace_F_id",
+          "FaceXFormer",
+          "F_art",
+          "ArtifactProbe_v1_val_selection"
+        ],
+        "grad_scaler": true,
+        "grad_clip": "GradScaler.unscale_(optimizer), then clip trainable gradients to max_norm 1.0",
+        "x_hat_detach": "FORBIDDEN",
+        "detached": [
+          "x_t_teacher_targets"
+        ],
+        "warmup": "E_art + attack head under fp16 autocast; CE in fp32; GradScaler; grad clip 1.0 (no committed exemption)",
+        "grad_scalers": "G_SCALER / D_SCALER / WARMUP_SCALER (see implementation_clarifications.GRADSCALER_TOPOLOGY)"
+      }
+    },
+    "R-07": {
+      "topic": "optimizer membership of the auxiliary heads",
+      "required_by": "M7B",
+      "status": "RESOLVED_M7B",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "blocks_m7b": false,
+      "blocks_m7c": false,
+      "decision": {
+        "G_OPT_rule": "Adam(G_res + E_art + every ENABLED auxiliary supervision head)",
+        "G_OPT_membership": {
+          "B0": [
+            "G_res",
+            "E_art"
+          ],
+          "B1": [
+            "G_res",
+            "E_art",
+            "attack_type_head"
+          ],
+          "B2": [
+            "G_res",
+            "E_art",
+            "identity_adversary_head"
+          ],
+          "B3": [
+            "G_res",
+            "E_art",
+            "attack_type_head",
+            "identity_adversary_head"
+          ]
+        },
+        "identity_head_in_G_OPT": true,
+        "reason": "with + lambda_idadv * CE(identity_head(GRL(z_a)), source_subject) the head receives the ordinary CE gradient; the GRL reverses it only on the E_art path",
+        "forbidden": [
+          "negated_identity_ce",
+          "second_adversarial_optimizer",
+          "detached_z_a",
+          "identity_head_excluded_from_optimizer"
+        ],
+        "D_OPT": "separate Adam containing only PatchGAN_D parameters",
+        "frozen_modules_in_any_optimizer": "never",
+        "WARMUP_OPT": "AdamW(E_art + attack_type_head), B1/B3 only; state discarded after warmup epoch 10; fresh G_OPT created",
+        "identity_head_in_warmup": false,
+        "consistent_with": [
+          "A10 D02",
+          "A10 D06"
+        ]
+      }
+    }
+  },
+  "r_items_in_a10_section_11": [
+    "R-01",
+    "R-02",
+    "R-03",
+    "R-04",
+    "R-05",
+    "R-06",
+    "R-07"
+  ],
+  "observations": {
+    "M7B-OBS-01": {
+      "topic": "discriminator optimizer: LR schedule, AMP, GradScaler and gradient clipping",
+      "status": "RESOLVED_FROM_FROZEN_SPEC",
+      "class": "FROZEN_SPEC_DERIVED_EXECUTION_POLICY",
+      "authority": "frozen spec section 10.5 training table (not a new owner decision; not an A10 amendment)",
+      "same_for": [
+        "B0",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "blocks_m7b": false,
+      "blocks_m7c": false,
+      "decision": {
+        "D_OPT": "Adam(D.parameters()), lr 2e-4, betas (0.5, 0.999), weight_decay 0",
+        "lr_schedule": "same 60-generator-epoch schedule: per optimizer step, linear warmup from 0 over epochs 1-5 (5525 updates) to 2e-4, cosine decay to 2e-6 at the final update",
+        "amp": "fp16 autocast for the discriminator neural forward on CUDA (R-06)",
+        "grad_scaler": "D_SCALER",
+        "grad_clip": "global norm 1.0 over D trainable parameters only, after D_SCALER.unscale_(D_OPT)"
+      }
+    }
+  },
+  "implementation_clarifications": {
+    "GRADSCALER_TOPOLOGY": {
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "scientific_deviation": false,
+      "basis": "spec 10.5 requires GradScaler but does not define scaler ownership",
+      "G_SCALER": "owns the G_OPT update path only",
+      "D_SCALER": "owns the D_OPT update path only",
+      "WARMUP_SCALER": "owns WARMUP_OPT (B1/B3 attack warmup); its state is never reused by G_SCALER",
+      "independent_state_machines": true,
+      "per_optimizer_sequence": [
+        "scaler.scale(loss).backward()",
+        "scaler.unscale_(optimizer)",
+        "clip_grad_norm_(that optimizer's trainable parameters, 1.0)",
+        "scaler.step(optimizer)",
+        "scaler.update()"
+      ],
+      "accumulation_boundary": "respects the frozen A10 D15 accumulation boundary",
+      "reason": "overflow/skip state of one optimizer never couples to another; the objective is unchanged"
+    }
+  },
+  "owner_confirmed_at_m7b_review": {
+    "identity_head_bias": {
+      "class": "OWNER_IMPLEMENTATION_CLARIFICATION",
+      "decision": "identity_adversary_head = Linear(512, n_subjects, bias=True); n_subjects = 60 for B2/B3",
+      "variants": [
+        "B2",
+        "B3"
+      ],
+      "new_deviation": null
+    },
+    "val_clamp_policy": {
+      "class": "OWNER_EVALUATION_CLARIFICATION",
+      "decision": "VAL_PRE_EXPORT_FLOAT_NO_CLAMP",
+      "detail": "VAL checkpoint-selection metrics consume x_hat_float before export; no clamp for VAL scoring; no uint8 conversion, image encode/decode or export-clamp round trip; each frozen evaluator applies only its own adapter; A10 D10.20 clamp only at the uint8/export boundary",
+      "new_deviation": null
+    },
+    "band_channel_mapping": {
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "decision": "channels 0..2 delta_LL, 3..5 delta_LH, 6..8 delta_HL, 9..11 delta_HH, 12 mask_logit (A10 D10.12 band-major); cA->LL, cH->LH, cV->HL, cD->HH (R-01)"
+    },
+    "a_freq_channel_mean": {
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "decision": "A_freq_128 = mean over RGB of the detail-magnitude combination (A10 D10.5)"
+    },
+    "identity_class_index_order": "DEFERRED_TO_M7C: deterministic, TRAIN-only, recorded in the run"
+  }
+}

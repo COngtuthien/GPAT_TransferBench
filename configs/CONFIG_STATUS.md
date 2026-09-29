@@ -365,3 +365,33 @@ choice was imported.
 Open non-scientific items R-01…R-07 are listed in A10 §11 for M7B/M7C. No GPAT code, environment, checkpoint or bank
 exists. **M6_CLOSED = true. M7 contract resolved (M7A); M7 scientific training HAS NOT STARTED.** Evidence:
 `outputs/audit/M7A_GPAT_CONTRACT_RESOLUTION.md` / `.json`.
+
+**M7B (2026-09-29) — GPAT B1/B2/B3 config freeze.** This note is additive and is the **current state** for the GPAT
+rows; the M7A table above stays as history. The three configs are derived from `configs/methods/gpat_b0.yaml` (unchanged,
+spec §23.2 verbatim) + Amendment A10 + the owner-approved M7B clarifications R-01/R-02/R-03/R-06/R-07, recorded additively in
+`configs/amendments/gpat_m7b_owner_clarifications.yaml` (not an amendment and not frozen-spec facts; A10 is not edited).
+
+| Config | Experiment | Status after M7B | Delta from B0 |
+|---|---|---|---|
+| `configs/methods/gpat_b0.yaml` | E08 (Track A) | unchanged (spec §23.2 verbatim) | — |
+| `configs/methods/gpat_b1.yaml` | E09 (Track B) | **CONFIG_FROZEN (M7B)**; snapshotted | attack head `Linear(512, 6)`, `lambda_type = 0.2`, 10-epoch E_art warmup (A10 D04–D06) |
+| `configs/methods/gpat_b2.yaml` | E10 (Track B) | **CONFIG_FROZEN (M7B)**; snapshotted | GRL(1.0) identity head `Linear(512, 60)`, `+ 0.1 · CE`, DEV-022 SiW masking (A10 D02/D03) |
+| `configs/methods/gpat_b3.yaml` | E11 (Track B) | **CONFIG_FROZEN (M7B)**; snapshotted | exact union of the B1 and B2 deltas |
+
+- Shared clarifications (all variants): R-01 ptwt `(cA, (cH, cV, cD))` = `LL, (LH, HL, HH)`, axes `(-2, -1)`; R-02 mask M used at
+  128×128 in the wavelet domain, bilinear `M_256` (`align_corners = False`) only for the artifact map, whole-`u` normalization
+  per D10.4; R-03 VAL selection on the float `x_hat` with no uint8 round trip; R-06 fp16 autocast for the trainable networks,
+  fp32 wavelet/FFT/loss/teacher boundaries, GradScaler, unscale then clip 1.0; R-07 enabled heads belong to the generator
+  Adam, D has its own Adam.
+- Deferred to M7C: R-04 (teacher-parity tolerance) and R-05 (NAFNet import caveats); both block the relevant M7C runtime
+  qualification. M7B-OBS-01 is **RESOLVED_FROM_FROZEN_SPEC** (§10.5; FROZEN_SPEC_DERIVED_EXECUTION_POLICY, not an amendment):
+  D_OPT = Adam(D) lr 2e-4, β (0.5, 0.999), wd 0, the same 5-epoch linear warmup + cosine-to-2e-6 schedule, fp16 autocast,
+  its own GradScaler, clip 1.0 on D parameters only after unscale. Separate G_SCALER / D_SCALER / WARMUP_SCALER
+  (IMPLEMENTATION_CLARIFICATION). Owner-confirmed: identity head `Linear(512, 60, bias=True)` for B2/B3, and VAL selection
+  on the pre-export float `x_hat` with no clamp (VAL_PRE_EXPORT_FLOAT_NO_CLAMP). No new DEV id.
+- No config loader or validator was changed (`methods/common/config.py` and `tools/m6b_validate_configs.py` are M6
+  baseline-only); the M7B validator is `tools/m7b_gpat_config_freeze_preflight.py`.
+
+**M7 status: CONFIGS_FROZEN · IMPLEMENTATION_NOT_STARTED · ENVIRONMENT_NOT_CREATED · SCIENTIFIC_TRAINING_NOT_STARTED.**
+**M6_CLOSED = true.** No GPAT code, environment, checkpoint or bank exists. Evidence:
+`outputs/audit/M7B_GPAT_CONFIG_FREEZE.md` / `.json`.
