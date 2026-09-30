@@ -321,6 +321,65 @@
    "spec_code_link_note": "Spec section 30 R4 points at a one-file redirect stub (commit 2ae330a6fe5d63abb2bf65fdcc8252e1353f4d18) whose README names two candidates. Both were cloned; they share commit 0da1dd79... and tree 462fb958... and diff -rq is empty, so the choice cannot change any scientific value. Stub retained at third_party/source_cache/fas_aug_spec_stub/.",
    "weight_scan_note": "Zero files match any weight extension (.pt .pth .pkl .ckpt .tar .h5 .onnx .npy .pb .bin .safetensors .caffemodel, ckpt*, checkpoint*). The 32 files over 1 MB are method assets: 90 backgrounds, 190 moire textures, 48 noise textures, 19 RGB + 7 CMYK ICC profiles."
   },
+  "nafnet": {
+   "added_by": "M7C2a (2026-09-30): R-05 option D, owner-approved; architecture source only",
+   "binary_weight_files_present_now": [],
+   "binary_weights_removed_after_checkout": [],
+   "checkout_mode": "full tree, depth 1 (git fetch --depth 1 origin <pinned_commit>)",
+   "cited_files": {
+    "LICENSE": {
+     "git_blob": "50927b3b1ae927035dc0528569f40810c19132a0",
+     "lines": 228,
+     "sha256": "a29ecef3456149898f08e4c71b11b33e7d333664e087bc212e84e18ddd6599ad",
+     "size_bytes": 12466
+    },
+    "basicsr/models/archs/NAFNet_arch.py": {
+     "git_blob": "5735e0963b4b1db46f34807e6607c04e70702e91",
+     "lines": 203,
+     "sha256": "01b22270cc93f1bb90c0e3e4490e98b023fcf73f8552860b4a9ee880ce5c6967",
+     "size_bytes": 6396
+    },
+    "basicsr/models/archs/arch_util.py": {
+     "git_blob": "09beabfb4fb14e5323dc2a6a4234bddbd43138c2",
+     "lines": 350,
+     "sha256": "5a11af2e7c2d7a7b57c1fbd7e19cf0a50b4b4e8c7ae7dd203a915d7a707e7005",
+     "size_bytes": 12046
+    },
+    "basicsr/models/archs/local_arch.py": {
+     "git_blob": "bc459c64a200b9af2870cc1f405fc1df17c6a83a",
+     "lines": 105,
+     "sha256": "c4df2ba4d896442a0f6ec984accd6e68f31edce3afdf066add202c25a0d1af26",
+     "size_bytes": 4399
+    }
+   },
+   "code_license": "LICENSE: MIT (Copyright (c) 2022 megvii-model) followed by Apache-2.0 for BasicSR-derived portions (Copyright 2018-2020 BasicSR Authors); not redistributed (source_cache is git-ignored)",
+   "commit_date_utc": "2024-03-29T00:52:42+08:00",
+   "commit_subject": "Merge pull request #96 from OliverGrace/patch-1",
+   "commit_tree": "8a8508a34a23261ea97af0e369ff6dcd6bc11c73",
+   "commit_verified_from_remote": "https://github.com/megvii-research/NAFNet",
+   "fetched_utc": "2026-09-30",
+   "line_count_convention": "len(data.split(b\"\\n\")) — repository convention; a terminal newline contributes one extra element",
+   "method_ids": [
+    "E08",
+    "E09",
+    "E10",
+    "E11"
+   ],
+   "model_weights_downloaded": false,
+   "paper": "C. Chen et al., Simple Baselines for Image Restoration / NAFNet, ECCV 2022",
+   "pinned_commit": "2b4af71ebe098a92a75910c233a3965a3e93ede4",
+   "relevant_path": "basicsr/models/archs",
+   "repository": "https://github.com/megvii-research/NAFNet",
+   "required_symbols": {
+    "LayerNorm2d": "basicsr/models/archs/arch_util.py",
+    "LayerNormFunction": "basicsr/models/archs/arch_util.py",
+    "NAFBlock": "basicsr/models/archs/NAFNet_arch.py",
+    "SimpleGate": "basicsr/models/archs/NAFNet_arch.py"
+   },
+   "role": "GPAT G_res NAFBlock architecture source (A10 section 6); loaded by AST selection in methods/gpat/naf_source.py; local_arch.py is hash-verified provenance only and never executed",
+   "spec_code_link": "https://github.com/megvii-research/NAFNet",
+   "weight_scan_note": "Zero files match any weight extension (.pt .pth .pkl .ckpt .onnx .safetensors .bin .h5 .tar .npy) in the checkout."
+  },
   "stdn": {
    "binary_weight_files_present_now": [],
    "binary_weights_removed_after_checkout": [

@@ -395,3 +395,33 @@ spec §23.2 verbatim) + Amendment A10 + the owner-approved M7B clarifications R-
 **M7 status: CONFIGS_FROZEN · IMPLEMENTATION_NOT_STARTED · ENVIRONMENT_NOT_CREATED · SCIENTIFIC_TRAINING_NOT_STARTED.**
 **M6_CLOSED = true.** No GPAT code, environment, checkpoint or bank exists. Evidence:
 `outputs/audit/M7B_GPAT_CONFIG_FREEZE.md` / `.json`.
+
+**M7C2a (2026-09-30) — GPAT implementation/runtime contract freeze, CPU environment, pinned NAFNet source.** This note
+is additive and is the **current state** for the GPAT rows; the M7B note above stays as history. The owner resolutions
+of the M7C1 audit are recorded in `configs/amendments/gpat_m7c2a_implementation_resolution.yaml` (layered on A10 and the
+M7B record; not an amendment, not a new scientific variant, no new DEV id). A10, the M7B record, the frozen spec and the
+B0/B1/B2/B3 configs are unchanged.
+
+- R-04: FaceXFormer adapter CLIP_EMULATING_DIFFERENTIABLE_COMPATIBILITY (a RUNTIME_COMPATIBILITY refinement of A10 D07:
+  piecewise-linear PIL-bicubic replica with clamp(0, 1) after each pass); AdaFace area-matrix adapter. Level-1 gates frozen
+  and passed on the synthetic corpus; the Level-2 contract is frozen and runs on the GPU host (TRAIN only) before training.
+- R-05: option D. The four NAFNet symbols are AST-selected from the hash-verified pin
+  `megvii-research/NAFNet@2b4af71ebe098a92a75910c233a3965a3e93ede4` (additive `nafnet` entry in
+  `third_party/source_pins.json`; checkout git-ignored under `third_party/source_cache/`); `ctx.saved_variables` verbatim.
+- N-01 HP on the [-1, 1] tensor for E_art/F_art/D (ArtifactProbe unchanged); N-03 nearest-exact mask resize; N-04
+  pre-update joint-gradient D/G order; N-05 D trains from update 1; N-06 E_art BN in train mode, EMA over floating state;
+  N-07 closed-form LR/warmup/curriculum, parsing and spectrum definitions; identity class order algorithm; N-08 LFErr on
+  the internal LL coefficients; N-09 determinism policy; shape-trace clarifications. M7C2A-OBS-01 resolved by the owner:
+  `L_D = 0.5 · (L_D_real + L_D_fake)` (mean BCEWithLogits, fake detached; equal to the balanced concatenated mean BCE),
+  `L_Gadv = mean BCE(D(x_hat), 1)` with x_hat not detached. M7C2A-OBS-02 is a recorded PACKAGING_METADATA_ANOMALY
+  (PyWavelets distribution 1.9.0, `pywt.__version__` = 1.8.0; wheel hash pinned). Level-2 replicas dither before the
+  teacher's uint8 quantization. Only R-04 Level 2 remains deferred; it blocks GPU/scientific training, not static code.
+- Environment `gpat-m7-cpu` (laptop, CPU only): exact replication of the committed gpat-m5 capture plus ptwt 1.0.1 and
+  PyWavelets 1.9.0 (`environments/gpat_m7_cpu.*`). No GPU environment was created.
+- `methods/gpat/` holds only runtime/source qualification infrastructure (`naf_source.py`, `teacher_preprocess.py`,
+  `runtime_contract.py`); the GPAT architecture, losses and training loop are not implemented.
+
+**M7 status: IMPLEMENTATION_RUNTIME_CONTRACT_FROZEN · CPU_ENVIRONMENT_QUALIFIED · STATIC_CORE_IMPLEMENTATION_ALLOWED ·
+STATIC_CORE_NOT_STARTED · GPU_RUNTIME_NOT_QUALIFIED · GPU_RUNTIME_NOT_STARTED · SCIENTIFIC_TRAINING_NOT_ALLOWED ·
+SCIENTIFIC_TRAINING_NOT_STARTED.** **M6_CLOSED = true.** No GPAT checkpoint, run or bank exists.
+Evidence: `outputs/audit/M7C2A_GPAT_RUNTIME_CONTRACT.md` / `outputs/audit/M7C2A_GPAT_CPU_QUALIFICATION.json`.

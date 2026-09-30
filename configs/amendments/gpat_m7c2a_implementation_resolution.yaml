@@ -1,0 +1,462 @@
+{
+  "schema": "gpat.m7c2a.implementation_runtime_resolution",
+  "schema_version": 1,
+  "milestone": "M7C2a",
+  "record_kind": "OWNER_DECISION_RECORD / IMPLEMENTATION_AND_RUNTIME_CONTRACT_FREEZE",
+  "status": [
+    "OWNER_APPROVED_IN_M7C2A_INSTRUCTION",
+    "ADDITIVE",
+    "LAYERED_ON_A10_AND_M7B",
+    "NOT_AN_AMENDMENT",
+    "NOT_A_NEW_SCIENTIFIC_VARIANT",
+    "NO_NEW_DEVIATION"
+  ],
+  "adoption_gate": "owner review, then owner commit; an uncommitted candidate is not authority",
+  "authority_commit": "5f04912b652ae93f72ef6fc2dcdaa41dea55760d",
+  "decision_date": "2026-09-30",
+  "basis": "M7C1 read-only audit (2026-09-30) findings R-04, R-05, N-01..N-09 and the owner resolutions of the M7C2a instruction",
+  "authority_order": [
+    "frozen specification",
+    "A1-A9",
+    "M6E",
+    "A10",
+    "configs/amendments/gpat_a10_m7_contract_resolution.yaml",
+    "M7B owner clarifications (configs/amendments/gpat_m7b_owner_clarifications.yaml)",
+    "frozen B0/B1/B2/B3 configs",
+    "M7C2a implementation/runtime resolution (this record)"
+  ],
+  "bound_authority_sha256": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A10_GPAT_M7_Contract_Resolution.md": "7baf7888394c4cdd57db09e604bd910153a612e1765b8dc57de3c1d5d833d337",
+    "configs/amendments/gpat_a10_m7_contract_resolution.yaml": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203",
+    "configs/amendments/gpat_m7b_owner_clarifications.yaml": "db13b2c0b17771bf62bcac1ee25e0a51bab60ff649846a186799310b6d8f4825",
+    "configs/methods/gpat_b0.yaml": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "configs/methods/gpat_b1.yaml": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+    "configs/methods/gpat_b2.yaml": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+    "configs/methods/gpat_b3.yaml": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca",
+    "environments/m6_core_gpu.conda-explicit.txt": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "environments/m6_core_gpu.pip-freeze.txt": "527a5ec89fc9fb951130b7cc2a9a9b0bbf77c653a93b8aee35ff2c01cd27fec2",
+    "gpatbench/preprocess/aux_models.py": "3f4666074fac49691c3fca804b61f6c25ab33cf0aa5af25c078d07b24a590a7f",
+    "gpatbench/probe/preprocess.py": "bcf899e16764b221df8cfdc6762969b253a14fedd737874c2f890c2f4cdf3ddd"
+  },
+  "a10_edited": false,
+  "m7b_record_edited": false,
+  "frozen_spec_edited": false,
+  "gpat_configs_edited": false,
+  "new_deviation": null,
+  "resolutions": {
+    "R-04": {
+      "topic": "teacher-parity contract (A10 D07)",
+      "class": "RUNTIME_COMPATIBILITY",
+      "refines": "A10 D07",
+      "status": "RESOLVED_M7C2A_LEVEL1_FROZEN_LEVEL2_CONTRACT_FROZEN_THRESHOLDS_DEFERRED_TO_GPU_QUALIFICATION",
+      "d07_refinement": "the FaceXFormer adapter is piecewise-linear (clip-emulating), differentiable almost everywhere and frozen-preprocess-compatible; it is no longer described as a pure global linear operator. PIL BICUBIC clips (clip8) after each separable pass; the adapter reproduces that saturation with clamp(0, 1).",
+      "facexformer_adapter": {
+        "name": "CLIP_EMULATING_DIFFERENTIABLE_COMPATIBILITY",
+        "frozen_reference": "uint8 RGB -> PIL BICUBIC 256->224 -> ToTensor -> ImageNet normalize (gpatbench/preprocess/aux_models.py FaceXFormerAdapter.preprocess)",
+        "steps": [
+          "receive x in the native GPAT float range",
+          "v = (x + 1) / 2",
+          "v = clamp(v, 0, 1) inside the adapter only (legal uint8 input-domain semantics); x_hat itself is never modified",
+          "horizontal pass: v @ W^T with the fixed 224x256 PIL bicubic coefficient matrix W",
+          "clamp(0, 1) (PIL clip8 emulation)",
+          "vertical pass: W @ h",
+          "clamp(0, 1) (PIL clip8 emulation)",
+          "no integer rounding, no uint8 conversion",
+          "(o - ImageNet mean) / ImageNet std",
+          "FaceXFormer forward in fp32, eval mode, parameters requires_grad False",
+          "gradient flows from the teacher output back to x_hat"
+        ],
+        "pass_order": "horizontal_then_vertical",
+        "coefficient_matrix": "PIL Resample.c precompute_coeffs, BICUBIC a=-0.5, support 2*scale (antialiased downscale), center (i+0.5)*scale, rows normalized to sum 1; built in float64, applied in float32",
+        "imagenet_mean": [0.485, 0.456, 0.406],
+        "imagenet_std": [0.229, 0.224, 0.225],
+        "properties": ["piecewise-linear", "differentiable almost everywhere", "frozen-preprocess-compatible"]
+      },
+      "adaface_adapter": {
+        "name": "AREA_MATRIX_DIFFERENTIABLE_COMPATIBILITY",
+        "frozen_reference": "uint8 RGB -> cv2 INTER_AREA 256->112 -> RGB->BGR -> ((x/255) - 0.5)/0.5 (gpatbench/preprocess/aux_models.py AdaFaceAdapter.preprocess)",
+        "steps": [
+          "x_c = clamp(x, -1, 1) inside the adapter only (legal teacher domain); x_hat itself is never modified",
+          "W_a @ x_c @ W_a^T with the fixed 112x256 INTER_AREA area matrix W_a (exact overlap / cell width), operated directly in [-1, 1] (equivalent to the frozen ((u8/255) - 0.5)/0.5 affine because rows sum to 1)",
+          "BGR flip after resize (channel reversal)",
+          "no integer quantization",
+          "AdaFace forward in fp32, eval mode, parameters requires_grad False",
+          "x_hat gradient retained; x_t outputs detached"
+        ]
+      },
+      "x_t_targets": "computed through the same adapter and detached",
+      "teacher_precision": "fp32",
+      "level1": {
+        "status": "FROZEN_M7C2A",
+        "corpus": "deterministic synthetic corpus (seed 20260930; constants, ramps, checkerboards, impulses, edges, uniform, smooth), 44 images of 256x256x3 uint8; no dataset image",
+        "gates": {
+          "facexformer_matrix_vs_library_float_operator_max_abs": {"threshold": 1e-06, "class": "EXACT_EQUIVALENCE_EXPECTED"},
+          "facexformer_clip_emulating_vs_frozen_pil_uint8_max_lsb": {"threshold": 1.13, "class": "EXACT_EQUIVALENCE_EXPECTED", "basis": "0.5 + 0.5*max_row_abs_sum(W)=1.2577 + fixed-point coefficient term = 1.1291 LSB analytic bound"},
+          "facexformer_clip_emulating_vs_frozen_normalized_max_abs": {"threshold": 0.0198, "class": "EXACT_EQUIVALENCE_EXPECTED", "basis": "1.13 / 255 / min(ImageNet std)"},
+          "adaface_matrix_vs_library_float_operator_max_abs": {"threshold": 1e-06, "class": "EXACT_EQUIVALENCE_EXPECTED"},
+          "adaface_adapter_vs_frozen_cv2_uint8_max_abs": {"threshold": 0.0039225686274509805, "expression": "0.5/127.5 + 1e-6", "class": "EXACT_EQUIVALENCE_EXPECTED"},
+          "highpass_float_path_max_abs": {"threshold": 1e-06, "class": "NUMERICAL_COMPATIBILITY_TOLERANCE", "reference": "cv2.GaussianBlur(float32, (9, 9), 1.5, BORDER_REFLECT_101)"},
+          "artifact_probe_float_preprocessing_max_abs": {"threshold": 1e-06, "class": "NUMERICAL_COMPATIBILITY_TOLERANCE", "reference": "gpatbench/probe/preprocess.py frozen_probe_input"}
+        },
+        "gradient_structure": [
+          "input gradient finite",
+          "input gradient non-zero on non-saturated test cases",
+          "teacher parameter .grad is None",
+          "x_t targets detached (requires_grad False)"
+        ],
+        "diagnostics_not_thresholds": ["mean_abs", "rmse", "p99_abs"]
+      },
+      "level2": {
+        "status": "CONTRACT_FROZEN_NOT_EXECUTED",
+        "executed_in_m7c2a": false,
+        "execute_on": "GPU host, before any scientific training",
+        "splits": {"TRAIN": true, "VAL": false, "TEST": false},
+        "subset": {
+          "images": "target/live canonical faces",
+          "per_dataset_max": 64,
+          "datasets": ["casia_fasd", "msu_mfsd", "siwmv2"],
+          "total_target": 192,
+          "unique_canonical_sample_ids": true,
+          "rule": "per dataset, the up-to-64 unique canonical sample ids with the smallest SHA256(UTF-8 sample_id) hex digests",
+          "recorded": ["exact sample ids", "sha256 of the canonical JSON id list"]
+        },
+        "requantization_replicas": {
+          "count_per_image": 8,
+          "interpretation_status": "OWNER_CONFIRMED_M7C2A (authoritative)",
+          "meaning": "deterministic dither BEFORE the teacher's uint8 quantization operation; NOT +/-0.5 added to already-quantized integer pixels (which would trivially recover the same integer image)",
+          "procedure": [
+            "work in the teacher's pre-quantization 0..255 domain (255 * A(v), A = the adapter resampler before normalization)",
+            "add deterministic seeded noise bounded to [-0.5, +0.5] LSB",
+            "apply the exact frozen quantization/clipping operation (round, clip to 0..255)",
+            "run the frozen reference teacher (after its frozen normalization)",
+            "use the resulting output dispersion as the semantic noise floor"
+          ],
+          "definition": "replica_k = clip(round(255 * A(v) + u_k), 0, 255) / 255 at the teacher's own uint8 quantization point (A = the adapter resampler before normalization; u_k i.i.d. uniform in [-0.5, 0.5) per element), then the teacher's frozen normalization",
+          "seed": "int(SHA256('M7C2A-R04-L2|' + dataset + '|' + sample_id + '|' + str(k)).hexdigest()[:16], 16) % 2**63, torch.Generator on CPU",
+          "k": [0, 1, 2, 3, 4, 5, 6, 7]
+        },
+        "comparison": "frozen reference path (aux_models PIL/cv2 uint8) vs candidate adapter; teachers in fp32 on the same device",
+        "envelope_rules": {
+          "adaface": "candidate cosine >= minimum reference-vs-requantization cosine",
+          "facexformer_landmarks": "candidate mean and max coordinate error <= the worst requantization mean and max errors",
+          "facexformer_parsing": "candidate argmax agreement >= worst requantization agreement; candidate D09 macro Dice >= worst requantization Dice"
+        },
+        "thresholds": "FROZEN_IN_THE_GPU_QUALIFICATION_RECORD_BEFORE_TRAINING",
+        "thresholds_invented_now": false
+      }
+    },
+    "R-05": {
+      "topic": "NAFNet integration",
+      "class": "RUNTIME_COMPATIBILITY",
+      "status": "RESOLVED_M7C2A_OPTION_D",
+      "option": "D",
+      "strategy": "hash-verified pinned source cache (third_party/source_cache/nafnet, git-ignored, repository convention of methods/fas_aug/official.py); AST-select the required definitions; compile them unchanged; execute in a controlled namespace holding only torch, nn and F",
+      "repository": "https://github.com/megvii-research/NAFNet",
+      "pinned_commit": "2b4af71ebe098a92a75910c233a3965a3e93ede4",
+      "commit_tree": "8a8508a34a23261ea97af0e369ff6dcd6bc11c73",
+      "source_pins": "third_party/source_pins.json (sources.nafnet)",
+      "files_sha256": {
+        "basicsr/models/archs/NAFNet_arch.py": "01b22270cc93f1bb90c0e3e4490e98b023fcf73f8552860b4a9ee880ce5c6967",
+        "basicsr/models/archs/arch_util.py": "5a11af2e7c2d7a7b57c1fbd7e19cf0a50b4b4e8c7ae7dd203a915d7a707e7005",
+        "basicsr/models/archs/local_arch.py": "c4df2ba4d896442a0f6ec984accd6e68f31edce3afdf066add202c25a0d1af26",
+        "LICENSE": "a29ecef3456149898f08e4c71b11b33e7d333664e087bc212e84e18ddd6599ad"
+      },
+      "required_symbols": {
+        "SimpleGate": "basicsr/models/archs/NAFNet_arch.py",
+        "NAFBlock": "basicsr/models/archs/NAFNet_arch.py",
+        "LayerNormFunction": "basicsr/models/archs/arch_util.py",
+        "LayerNorm2d": "basicsr/models/archs/arch_util.py"
+      },
+      "namespace": ["torch", "nn", "F"],
+      "not_required": ["basicsr package import", "lmdb", "local_arch.Local_Base", "NAFNet class", "get_root_logger", "model/arch registry side effects"],
+      "local_arch_role": "hash-verified provenance only (import-time dependency of NAFNet_arch.py line 20); never executed",
+      "ctx_saved_variables": "preserved verbatim (pinned-source fidelity); a DeprecationWarning is expected",
+      "hand_transcription": "FORBIDDEN",
+      "vendoring_into_methods_gpat": "FORBIDDEN",
+      "license": "LICENSE = MIT (Copyright (c) 2022 megvii-model) followed by Apache-2.0 for BasicSR-derived portions (Copyright 2018-2020 BasicSR Authors); source is not redistributed (cache is git-ignored)",
+      "compatibility_reference": "native-autograd LayerNorm over the channel axis (forward and gradient parity test)"
+    },
+    "N-01": {
+      "topic": "canonical high-pass input domain",
+      "class": "OWNER_SCIENTIFIC_CLARIFICATION_OF_UNSPECIFIED_INPUT_DOMAIN",
+      "applies_to": ["E_art", "F_art", "PatchGAN_D"],
+      "input": "GPAT normalized RGB x in [-1, 1]",
+      "definition": "HP(x) = x - GaussianBlur(x)",
+      "kernel": 9,
+      "sigma": 1.5,
+      "padding": "reflect-101 equivalent (torch F.pad mode='reflect')",
+      "per_rgb_channel": true,
+      "gaussian_weights": "g_i = exp(-(i-4)^2 / (2*1.5^2)) normalized to sum 1, i = 0..8; separable",
+      "imagenet_normalization": false,
+      "unit_interval_remap_before_hp": false,
+      "reason": ["wavelet details are computed from the same [-1, 1] tensor", "E_art receives HP and wavelet details in the same amplitude convention", "F_art and D use the same fixed GPAT high-pass transform"],
+      "artifact_probe": "UNCHANGED: independent frozen VAL evaluator keeps its own preprocessing (gpatbench/probe/preprocess.py: [0,1], INTER_AREA 224, HP, no ImageNet normalization)",
+      "new_deviation": null
+    },
+    "N-03": {
+      "topic": "face mask resize for M_face_dilated (A10 D10.7)",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "input": "224x224 categorical parsing mask (argmax of the x_t parsing logits)",
+      "resize": "torch F.interpolate(mode='nearest-exact') to 256x256",
+      "antialias": false,
+      "bilinear": false,
+      "class_interpolation": false,
+      "then": "foreground = classes 1..10; binary dilation with the frozen 15x15 square kernel (max_pool2d kernel 15, stride 1, padding 7)"
+    },
+    "N-04": {
+      "topic": "D/G update order within one accumulation group",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "scheme": "PRE_UPDATE_JOINT_GRADIENT",
+      "ratio": "1:1 per optimizer update (A10 D10.15)",
+      "per_microbatch": [
+        "compute x_hat once",
+        "evaluate G losses with D parameters temporarily gradient-disabled",
+        "evaluate the D loss on x_hat.detach() with D trainable",
+        "accumulate both gradient sets"
+      ],
+      "boundary_sequence": [
+        "D_SCALER.unscale_(D_OPT)",
+        "clip_grad_norm_(D parameters, 1.0)",
+        "D_SCALER.step(D_OPT)",
+        "D_SCALER.update()",
+        "G_SCALER.unscale_(G_OPT)",
+        "clip_grad_norm_(G_OPT parameters, 1.0)",
+        "G_SCALER.step(G_OPT)",
+        "G_SCALER.update()",
+        "zero gradients of both optimizers",
+        "EMA update after the G step when EMA is active"
+      ],
+      "no_step_before_group_consumed": true,
+      "g_reforward_through_updated_d": false,
+      "alternating_extra_forward_pix2pix": "FORBIDDEN"
+    },
+    "N-05": {
+      "topic": "discriminator during epochs 1-5",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "d_trains_from_generator_update": 1,
+      "epochs_1_5_lambda_adv_in_G_objective": 0.0,
+      "d_update_in_epochs_1_5": "normal real/fake update",
+      "d_execution": "already-frozen D_OPT, LR warmup, D_SCALER, clip 1.0, accumulation boundary (M7B-OBS-01)"
+    },
+    "N-06": {
+      "topic": "E_art BatchNorm mode and EMA state policy",
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "e_art_batchnorm_mode": "TRAIN during the B1/B3 attack warmup and all 60 generator epochs",
+      "sync_batchnorm": "FORBIDDEN",
+      "running_stats": "updated once per physical forward (microbatch) by normal PyTorch BatchNorm semantics",
+      "warmup_carry": "entire E_art state (parameters and BN buffers) carries from attack warmup into generator training; WARMUP_OPT and WARMUP_SCALER state do not carry",
+      "ema_scope": ["E_art", "G_res"],
+      "ema_floating_tensors": "every floating tensor of the state_dict (trainable parameters and floating buffers such as BN running_mean/running_var): ema = decay * ema + (1 - decay) * live",
+      "ema_non_floating_tensors": "copied from the live model (e.g. num_batches_tracked)",
+      "ema_decay": 0.999,
+      "ema_evaluation_mode": "eval"
+    },
+    "N-07": {
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "main_lr": {
+        "applies_to": ["G_OPT", "D_OPT"],
+        "total_updates": 66300,
+        "warmup_updates": 5525,
+        "peak_lr": 0.0002,
+        "min_lr": 2e-06,
+        "warmup": "u = 1..5525: lr(u) = 2e-4 * (u - 1) / (5525 - 1)",
+        "cosine": "u = 5526..66300: t = (u - 5526) / (66300 - 5526); lr(u) = 2e-6 + 0.5 * (2e-4 - 2e-6) * (1 + cos(pi * t))",
+        "endpoints": {"1": 0.0, "5525": 0.0002, "5526": 0.0002, "66300": 2e-06},
+        "assignment": "closed form per update; no LambdaLR off-by-one dependence"
+      },
+      "attack_warmup_lr": {
+        "variants": ["B1", "B3"],
+        "optimizer": "AdamW(E_art + attack_head)",
+        "steps": 1390,
+        "formula": "s = 1..1390: lr(s) = 0.5 * 1e-4 * (1 + cos(pi * (s - 1) / (1390 - 1)))",
+        "endpoints": {"1": 0.0001, "1390": 0.0},
+        "additional_warmup": false,
+        "after_step_1390": "discard WARMUP_OPT and WARMUP_SCALER state"
+      },
+      "curriculum": {
+        "interpolation": "closed form per optimizer update; no hidden epoch-level interpolation",
+        "stages": [
+          {"updates": [1, 5525], "s_hf": "0.02 + 0.03 * (u - 1) / (5525 - 1)", "lambda_adv": 0.0, "lambda_con": 0.5, "lambda_spec": 0.25},
+          {"updates": [5526, 16575], "s_hf": 0.1, "lambda_adv": 0.05, "lambda_con": 1.0, "lambda_spec": 0.5},
+          {"updates": [16576, 66300], "s_hf": 0.15, "lambda_adv": 0.1, "lambda_con": 1.0, "lambda_spec": 0.5}
+        ]
+      },
+      "soft_parsing_losses": {
+        "precision": "fp32",
+        "p_t": "softmax(target FaceXFormer parsing logits, class dim)",
+        "p_h": "softmax(x_hat FaceXFormer parsing logits, class dim)",
+        "dice_classes": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "dice_eps": 1e-06,
+        "dice_nc": "(2 * sum_hw(p_t * p_h) + eps) / (sum_hw(p_t) + sum_hw(p_h) + eps)",
+        "L_dice": "1 - mean over batch and classes 1..10 of dice_nc",
+        "kl_direction": "KL(p_t || p_h)",
+        "kl_classes": "all 11",
+        "kl_probability_floor": 1e-08,
+        "L_KL": "sum over the class dimension of p_t * (log(max(p_t, 1e-8)) - log(max(p_h, 1e-8))), then mean over batch and spatial pixels",
+        "L_parse": "L_dice + 0.1 * L_KL"
+      },
+      "S_radial": {
+        "per_rgb_channel": true,
+        "fft": "256x256 torch.fft.fft2 (default norm)",
+        "power": "P = abs(FFT2(x))^2",
+        "transform": "logP = log1p(P)",
+        "coordinates": "fftshift-centred integer offsets dy, dx in -128..127",
+        "radius": "r = floor(sqrt(dx^2 + dy^2))",
+        "bins": 128,
+        "bin_range": "r = 0..127 (DC bin r = 0 INCLUDED); frequencies with r > 127 ignored",
+        "aggregate": "sum of logP within each bin",
+        "normalize": "per channel, divide by (sum over the 128 bins + 1e-12)",
+        "loss": "mean L1 across RGB channels and radial bins"
+      },
+      "S_orient": {
+        "per_rgb_channel": true,
+        "power": "raw P = abs(FFT2(x))^2 (NOT log power)",
+        "exclude_dc": true,
+        "support": "0 < sqrt(f_x^2 + f_y^2) <= 0.5 cycles/pixel, f = fftshift offset / 256",
+        "axes": "f_y along dim -2 (rows), f_x along dim -1 (columns)",
+        "theta": "atan2(f_y, f_x) mod pi, in [0, pi)",
+        "bins": 8,
+        "bin_index": "min(floor(theta / (pi / 8)), 7)",
+        "aggregate": "raw power summed into each orientation bin",
+        "normalize": "per channel, divide by (sum over the 8 bins + 1e-12)",
+        "loss": "mean L1",
+        "lambda_dir": "0.5 remains the frozen coefficient inside L_spec (A10 D01)"
+      }
+    },
+    "ADVERSARIAL_BCE": {
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "semantics": "BCEWithLogits, mean reduction",
+      "d_real_target": 1.0,
+      "d_fake_target": 0.0,
+      "d_fake_input": "x_hat.detach()",
+      "g_target": 1.0,
+      "g_input": "x_hat (NOT detached)",
+      "d_parameters_during_g_loss": "gradient-disabled",
+      "L_D_real": "BCEWithLogits(D(real), ones, reduction='mean')",
+      "L_D_fake": "BCEWithLogits(D(fake.detach()), zeros, reduction='mean')",
+      "L_D": "0.5 * (L_D_real + L_D_fake)",
+      "L_D_class": "OWNER_IMPLEMENTATION_CLARIFICATION",
+      "L_D_equivalent_form": "BCEWithLogitsLoss(reduction='mean')(cat([real_logits, fake_logits], 0), cat([ones_like(real_logits), zeros_like(fake_logits)], 0)), allowed only when real and fake logits have equal size",
+      "L_D_reason": ["frozen spec requires non-saturating BCE", "real/fake are symmetric D terms", "the average equals a single mean BCE over the combined balanced real/fake batch", "avoids a gratuitous factor-of-two interaction with the frozen clip norm 1.0"],
+      "L_Gadv": "BCEWithLogits(D(x_hat), ones, reduction='mean'); D parameters gradient-disabled; x_hat NOT detached",
+      "resolves": "M7C2A-OBS-01",
+      "new_deviation": null,
+      "a10_amended": false
+    },
+    "IDENTITY_CLASS_ORDER": {
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "resolves": "M7B identity_class_index_order DEFERRED_TO_M7C",
+      "executed_in_m7c2a": false,
+      "train_data_read_in_m7c2a": false,
+      "algorithm": [
+        "at real-TRAIN qualification time read valid TRAIN identity metadata only",
+        "form unique keys (dataset, source_subject)",
+        "preserve each field's canonical manifest string exactly (non-string values STOP)",
+        "encode the sort key as UTF-8 bytes",
+        "sort lexicographically by dataset, then source_subject",
+        "enumerate classes 0..K-1",
+        "require K == 60, otherwise STOP"
+      ],
+      "identity_datasets": ["casia_fasd", "msu_mfsd"],
+      "masked_dataset": "siwmv2 (DEV-022; never enters the map)",
+      "artifact": "identity_class_map.json with index, dataset, source_subject, source manifest SHA256 and mapping SHA256",
+      "never": ["numeric-natural sorting", "pseudo identities", "video ids", "target ids", "embeddings/clustering"],
+      "shared_by": ["B2", "B3"]
+    },
+    "N-08": {
+      "topic": "LFErr for GPAT checkpoint selection",
+      "class": "NUMERICALLY_STABLE_EQUIVALENT_IMPLEMENTATION",
+      "definition": "LFErr = ||LL_syn_internal - LL_target||_1 / (||LL_target||_1 + 1e-8), L1 = sum over the sample's LL coefficients",
+      "LL_syn_internal": "exact LL coefficient tensor used to reconstruct x_hat (LL_t + gamma * delta_LL) before IDWT",
+      "coefficient_convention": "ptwt DWT of the GPAT normalized [-1, 1] tensor",
+      "re_dwt_of_x_hat": "FORBIDDEN (would only measure fp32 reconstruction noise)",
+      "main_run_gamma": 0.0,
+      "main_run_value": "0 exactly for every candidate",
+      "selection_effect": "all 51 candidates tie; A10 D14 average-rank ties give LFErr the same percentile for every candidate, so it cannot alter checkpoint ordering",
+      "lferr_removed": false,
+      "future_gamma_nonzero": "use the actual internal reconstructed LL coefficient"
+    },
+    "N-09": {
+      "topic": "determinism policy",
+      "class": "RUNTIME_DETERMINISM_COMPATIBILITY",
+      "seeds": ["python random", "numpy", "torch CPU", "torch CUDA"],
+      "gpu_qualification": {
+        "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "tf32_matmul": false,
+        "tf32_cudnn": false,
+        "use_deterministic_algorithms": true
+      },
+      "cpu_qualification": {"use_deterministic_algorithms": true},
+      "silent_disable_on_failure": "FORBIDDEN",
+      "known_possible_blockers": ["bilinear upsample backward (CUDA)", "adaptive average pool backward (CUDA)"],
+      "replacement_rule": "only a mathematically equivalent deterministic fixed operator (e.g. fixed separable bilinear x2 interpolation matrices; AvgPool2d(2, 2) instead of adaptive_avg_pool2d(8, 8) when the input is exactly 16x16)",
+      "replacement_acceptance": "forward max_abs <= 1e-6 and gradient parity within a justified numerical tolerance, demonstrated on the qualified CUDA stack before adoption",
+      "no_equivalent_replacement": "STOP for owner review",
+      "adopted_in_m7c2a": false
+    },
+    "SHAPE_TRACE": {
+      "class": "IMPLEMENTATION_CLARIFICATION",
+      "bottleneck_film": false,
+      "encoder_skip": "taken AFTER the stage FiLM",
+      "decoder_skip_addition": "before the decoder NAFBlocks",
+      "decoder_film": "after the decoder NAFBlocks",
+      "upsample": "bilinear x2 (align_corners False) followed by Conv2d 3x3 with bias=True",
+      "other_conv_bias": "pinned/source architectural defaults unless frozen authority says otherwise",
+      "scientific_change": false
+    }
+  },
+  "residual_open_items": {
+    "M7C2A-OBS-01": {
+      "topic": "composition of the two D BCE terms",
+      "status": "RESOLVED_M7C2A_OWNER",
+      "decision": "L_D = 0.5 * (L_D_real + L_D_fake) (resolutions.ADVERSARIAL_BCE)",
+      "class": "OWNER_IMPLEMENTATION_CLARIFICATION",
+      "blocks_m7c2b": false
+    },
+    "M7C2A-OBS-02": {
+      "topic": "PyWavelets packaging metadata anomaly",
+      "status": "RECORDED_NON_BLOCKING",
+      "class": "PACKAGING_METADATA_ANOMALY",
+      "distribution_metadata_version": "1.9.0",
+      "runtime_pywt___version__": "1.8.0",
+      "cause": "the official PyWavelets 1.9.0 wheel ships pywt/version.py with version '1.8.0' (git_revision c7bca20)",
+      "wheel": "pywavelets-1.9.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "wheel_sha256": "d76b7fa8fc500b09201d689b4f15bf5887e30ffbe2e1f338eb8470590eb4521a",
+      "wheel_sha256_equals_pypi_digest": true,
+      "installed_record": "pywavelets-1.9.0.dist-info/RECORD lists pywt/version.py sha256=cohiLYvhrx4qxk8DF68DflbsCEq7ukLkvxWWq0XXAwI",
+      "reproducibility_authority": ["wheel filename / distribution metadata", "exact wheel SHA256", "environment lock", "installed RECORD / dist-info metadata"],
+      "pywt___version___patched": false,
+      "reinterpreted_as_1_8_0": false,
+      "stop_condition": "distribution metadata not reporting 1.9.0",
+      "non_blocking_because": ["exact wheel hash pinned", "pip check passes", "ptwt DWT/IDWT qualification passes", "R-01 mapping passes"]
+    }
+  },
+  "remaining_deferred": {
+    "R-04_LEVEL2": {
+      "blocks": ["GPU runtime qualification", "scientific training"],
+      "blocks_static_core_implementation": false
+    }
+  },
+  "unresolved_blockers_for_m7c2b": [],
+  "environment": {
+    "name": "gpat-m7-cpu",
+    "kind": "CPU-only static-test environment (laptop); no GPU environment created",
+    "base": "exact replication of the committed gpat-m5 / m6_core_gpu capture: conda layer from environments/m6_core_gpu.conda-explicit.txt, pip layer = environments/m6_core_gpu.pip-freeze.txt (same torch 2.12.1+cu130 / torchvision 0.27.1+cu130 wheels; CUDA unused on the laptop)",
+    "approved_additions": {"ptwt": "1.0.1", "PyWavelets": "1.9.0"},
+    "lock": "environments/gpat_m7_cpu.lock.json"
+  },
+  "m7_status_after": [
+    "IMPLEMENTATION_RUNTIME_CONTRACT_FROZEN",
+    "CPU_ENVIRONMENT_QUALIFIED",
+    "STATIC_CORE_IMPLEMENTATION_ALLOWED",
+    "STATIC_CORE_NOT_STARTED",
+    "GPU_RUNTIME_NOT_QUALIFIED",
+    "GPU_RUNTIME_NOT_STARTED",
+    "SCIENTIFIC_TRAINING_NOT_ALLOWED",
+    "SCIENTIFIC_TRAINING_NOT_STARTED"
+  ],
+  "m6_closed": true
+}
