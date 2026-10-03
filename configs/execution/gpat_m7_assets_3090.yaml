@@ -1,0 +1,45 @@
+# M7C4 GPAT execution assets — EXECUTION_ONLY_HOST_BINDING (owner M7C4 review). No scientific value.
+#
+# Where the frozen, M7C3-qualified teacher and backbone assets physically live on the approved RTX 3090 host. It is NOT
+# a frozen scientific config, NOT a method config and NOT a source of truth for checkpoint identity: each entry binds the
+# authority SHA-256 (models/registry.yaml, gpatbench/preprocess/aux_models.py, the M7C3 record
+# configs/amendments/gpat_m7c3_gpu_runtime_resolution.yaml). The runner resolves the path, checks that the file exists,
+# verifies the SHA-256 and only then loads it; a different SHA-256 is a hard failure, while a different path holding the
+# same authoritative bytes is not a scientific change. Nothing is ever downloaded. ArtifactProbe is deliberately absent:
+# the training process never loads it. Host absolute paths never enter the B0-B3 method configs.
+version: gpat_m7_assets_v1
+kind: EXECUTION_INFRASTRUCTURE
+classification: EXECUTION_ONLY_HOST_BINDING
+scientific_values: false
+milestone: M7C4
+execution_host: student20261@100.121.84.44
+runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime
+assets:
+  adaface_weight:
+    path: /home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/m7c3_teachers/adaface/adaface_ir50_webface4m.ckpt
+    sha256: 52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8
+    identity: "AdaFace IR-50 WebFace4M (original mk-minchul/AdaFace release; models/registry.yaml adaface_ir50)"
+    role: "frozen identity teacher F_id (L_id)"
+  adaface_code:
+    path: /home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/m7c3_teachers/adaface/code
+    identity: "mk-minchul/AdaFace net.py @ c60eaa786a42c03444f3df7096dbaf9d57ae010d (file hashes verified by aux_models)"
+    role: "AdaFace architecture source"
+  facexformer_weight:
+    path: /home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/m7c3_teachers/facexformer/ckpts/model.pt
+    sha256: 327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d
+    identity: "hf:kartiknarayan/facexformer@fd12148d0b1949bb98602544d4b257f42eef774d ckpts/model.pt (models/registry.yaml facexformer)"
+    role: "frozen geometry teacher (landmarks L_lm, parsing L_parse, face mask for L_bg)"
+  facexformer_code:
+    path: /home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/m7c3_teachers/facexformer/code
+    identity: "Kartik-3004/facexformer network/ @ 10fe8291f8a64e2ca1daf938e3e0007bd860303b (file hashes verified by aux_models)"
+    role: "FaceXFormer architecture source"
+  f_art_resnet18_imagenet1k_v1:
+    path: /home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth
+    sha256: f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec
+    identity: "torchvision ResNet18_Weights.IMAGENET1K_V1 (models/registry.yaml resnet18_imagenet1k_v1)"
+    role: "frozen F_art high-pass feature extractor (L_artcon)"
+  e_art_resnet18_imagenet1k_v1:
+    path: /home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth
+    sha256: f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec
+    identity: "torchvision ResNet18_Weights.IMAGENET1K_V1 (models/registry.yaml resnet18_imagenet1k_v1)"
+    role: "E_art initialization (spec 9.2, A10 D10.24 conv1 widening)"

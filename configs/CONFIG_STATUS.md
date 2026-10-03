@@ -468,3 +468,34 @@ exists. Evidence: `outputs/audit/M7C2B_GPAT_STATIC_CORE.md` / `outputs/audit/M7C
 R04_LEVEL2_TEACHER_PARITY_QUALIFIED · PRODUCTION_RUNNER_NOT_IMPLEMENTED · REAL_TRAIN_QUALIFICATION_NOT_DONE ·
 SCIENTIFIC_TRAINING_NOT_ALLOWED · SCIENTIFIC_TRAINING_NOT_STARTED.** **M6_CLOSED = true.** No GPAT checkpoint, run or
 bank exists. Evidence: `outputs/audit/M7C3_GPAT_GPU_RUNTIME.md` and the `M7C3_*.json` records.
+
+**M7C4 (2026-10-03) — GPAT production runner + real-TRAIN data-path + checkpoint/resume qualification.** This note is
+additive and is the **current state** for the GPAT rows; earlier M7 notes stay as history.
+- **Runner and CLI.** The production runner is `methods/gpat/runner*.py`: B1/B3 attack warmup, B0-B3 generator stage
+  under the N-04 pre-update joint-gradient scheme, separate G/D/WARMUP scalers, DEV-022 group normalization, EMA
+  (E_art + G_res) from the end of epoch 5, 51 immutable EMA candidates (epochs 10..60), and atomic recovery/resume.
+  Its run directory is `<runtime_root>/runs/m7/<E08..E11>/seed_<s>/`. The frozen CLI
+  `python -m gpatbench.cli train-generator --method GPAT-B<k> --seed <42|1337|2026>` is wired and refuses everything
+  else.
+- **Qualification.** It ran only in isolated qualification roots with seed 70404, on selected real TRAIN rows (no full
+  epoch): B0 and B3 regular groups, the B3 tail group [4, 2], a DEV-022 group, warmup batches 64 and 6, the warmup
+  handoff, generator and warmup fresh-process resume (bitwise identical), and the candidate writer.
+- **Firewall and resources.** VAL/TEST/non-TRAIN access was 0, and peak VRAM was 4.35 GiB at physical batch 4.
+- **Unchanged.** The frozen spec, A1-A10, M7B, M7C2a, M7C3, the static core and B0-B3 are unchanged; there is no new
+  DEV.
+- **Owner M7C4 review clarifications** (additive record `configs/amendments/gpat_m7c4_runner_resolution.yaml`):
+  - the epoch-order preimage `GPAT-M7|{stage}|{MODE}|{seed}|{epoch}` (upper-case MODE, first 16 hex characters of the
+    SHA-256 -> PCG64) is frozen with its recorded hashes;
+  - the asset config is an EXECUTION_ONLY_HOST_BINDING (path, SHA-256, identity and role per asset);
+  - **FAIL_CLOSED_AMP_OVERFLOW**: any non-finite loss, or any non-finite gradient after both unscales, stops the run
+    before either D or G steps, keeping the D/G group atomic. The last safe recovery stays the only resumable
+    authority.
+- **Nothing scientific yet.** No scientific run, no scientific checkpoint candidate, no bank and no downstream
+  training exist.
+
+**M7 status: STATIC_CORE_IMPLEMENTED · CPU_SYNTHETIC_QUALIFIED · GPU_RUNTIME_QUALIFIED ·
+R04_LEVEL2_TEACHER_PARITY_QUALIFIED · PRODUCTION_RUNNER_IMPLEMENTED · REAL_TRAIN_DATA_PATH_QUALIFIED ·
+CHECKPOINT_RESUME_QUALIFIED · WARMUP_RUNNER_QUALIFIED · AMP_OVERFLOW_FAIL_CLOSED ·
+SCIENTIFIC_TRAINING_READY_NOT_STARTED.** **M6_CLOSED = true.**
+The 12 scientific GPAT runs (B0-B3 × seeds 42/1337/2026) have not started. Evidence:
+`outputs/audit/M7C4_GPAT_RUNNER.md` / `outputs/audit/M7C4_GPAT_RUNNER_QUALIFICATION.json`.

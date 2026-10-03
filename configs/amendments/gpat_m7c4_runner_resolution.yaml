@@ -1,0 +1,210 @@
+{
+  "schema": "gpat.m7c4.runner_resolution",
+  "schema_version": 1,
+  "milestone": "M7C4",
+  "record_kind": "ADDITIVE_RUNNER_IMPLEMENTATION_RESOLUTION",
+  "status": [
+    "OWNER_APPROVED_M7C4_REVIEW",
+    "ADDITIVE",
+    "NOT_A_FROZEN_SPEC_AMENDMENT",
+    "NOT_AN_A10_REWRITE",
+    "NO_NEW_DEVIATION"
+  ],
+  "authority_commit": "cff688dd35524bf7f01c39916ef87cd4987b6470",
+  "decision_date": "2026-10-03",
+  "new_deviation": null,
+  "bound_authority_sha256": {
+    "configs/amendments/gpat_m7c3_gpu_runtime_resolution.yaml": "f89a91206ffe1c82a55b600f87fc824c91b1840d4222f2b45346121d6af82717",
+    "configs/amendments/gpat_m7c2a_implementation_resolution.yaml": "b61555a2ca15954bdd8929d92c28d0d957561c595ea38eeef496d06c871e8e70",
+    "environments/gpat_m7_gpu.lock.json": "24c983ebbb308acacd63f32837532e5f9166114962f524e993f243f2ff746114",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "configs/methods/gpat_b0.yaml": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "configs/methods/gpat_b1.yaml": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+    "configs/methods/gpat_b2.yaml": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+    "configs/methods/gpat_b3.yaml": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca"
+  },
+  "resolutions": {
+    "TRAIN_RELATION": {
+      "path": "manifests/pairs_train_v1.parquet",
+      "sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "rows": 8838,
+      "columns": [
+        "pair_id",
+        "dataset",
+        "source_spoof_id",
+        "target_live_id",
+        "attack_macro",
+        "source_subject",
+        "split",
+        "split_manifest_sha256"
+      ],
+      "train_membership": "relation split column + bound split_manifest_sha256; split_v1 / VAL / TEST metadata never opened by training"
+    },
+    "EPOCH_ORDER": {
+      "class": "OWNER_IMPLEMENTATION_CLARIFICATION",
+      "payload": "GPAT-M7|{stage}|{MODE}|{seed}|{epoch}",
+      "stage": [
+        "generator",
+        "warmup"
+      ],
+      "MODE": [
+        "SCIENTIFIC",
+        "QUALIFICATION"
+      ],
+      "mode_token_case": "UPPER CASE, exactly the runner constants SCIENTIFIC / QUALIFICATION (owner-confirmed at M7C4 review; the lower-case reading would change every recorded order)",
+      "seed": "decimal integer",
+      "epoch": "1-based decimal epoch index",
+      "encoding": "UTF-8",
+      "seed64": "int(sha256(payload_bytes).hexdigest()[:16], 16)  (first 16 hex characters = 64 digest bits, not 16 bytes)",
+      "permutation": "numpy.random.Generator(numpy.random.PCG64(seed64)).permutation(8838)",
+      "implementation_authority": "environment-pinned NumPy (gpat-m7-gpu: numpy 2.4.6)",
+      "order_sha256_definition": "SHA-256 of the UTF-8 newline-joined pair_id sequence of the permuted relation rows",
+      "order_sha256": {
+        "generator|QUALIFICATION|70404|1": "118216183a328a9373cd2b66446d9dc567c56ce7428228f45b58f0df7a2304d9",
+        "generator|SCIENTIFIC|1337|1": "4591f8e1c18ab3e4a41cbcdb6a2506b639f31060858d08d87785322a28d1b444",
+        "generator|SCIENTIFIC|2026|1": "11d4b830b4af9badb0f0e4d7758b1d678f33a143666e2e5dc6f8f62cbbc3aad7",
+        "generator|SCIENTIFIC|42|1": "2b8961cea6327719bc7ae7768d1fd6cfa8caf4d0bb25b23ec8a4f6cbc3396fda",
+        "warmup|QUALIFICATION|70404|1": "23df90b9546eccb684620615c90f2f0891dd240ee40187af0ea3337d0be6db84",
+        "warmup|SCIENTIFIC|1337|1": "3075a74cf9209c4483520704dee97f17b2c01ab0b149943af1d1221548770aba",
+        "warmup|SCIENTIFIC|2026|1": "f33dde05e4ff82b606874ffc75c9a02918735bef40e5a602b19a472e96c2636f",
+        "warmup|SCIENTIFIC|42|1": "7f34f5fb1dc2ae7330fc390ccb704ee6a588369f9dda75474abcd3527720986e"
+      }
+    },
+    "ASSET_BINDING": {
+      "path": "configs/execution/gpat_m7_assets_3090.yaml",
+      "classification": "EXECUTION_ONLY_HOST_BINDING",
+      "not": [
+        "frozen scientific config",
+        "method config",
+        "checkpoint identity source of truth"
+      ],
+      "entry_fields": [
+        "path",
+        "sha256 (weights)",
+        "identity",
+        "role"
+      ],
+      "behavior": [
+        "resolve path",
+        "file must exist and not be a symlink",
+        "SHA-256 must equal the authority hash",
+        "only then load"
+      ],
+      "path_change_same_bytes": "not a scientific change",
+      "sha_change": "HARD FAIL",
+      "authority_sha256": {
+        "adaface_weight": "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8",
+        "facexformer_weight": "327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d",
+        "resnet18_imagenet1k_v1 (F_art, E_art init)": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+      }
+    },
+    "AMP_OVERFLOW": {
+      "policy": "FAIL_CLOSED_AMP_OVERFLOW",
+      "rules": [
+        "non-finite optimization loss before backward: HARD FAIL (NON_FINITE_LOSS)",
+        "D_SCALER.unscale_(D_OPT) and G_SCALER.unscale_(G_OPT), then every D-owned and G-owned gradient is scanned BEFORE clipping or stepping; any NaN/Inf: HARD FAIL (FAIL_CLOSED_AMP_OVERFLOW)",
+        "warmup: after WARMUP_SCALER.unscale_(WARMUP_OPT) any NaN/Inf warmup gradient: HARD FAIL",
+        "on failure: no D_OPT / G_OPT / WARMUP_OPT step, no scaler update, no schedule or update-index advance, no EMA update, no recovery checkpoint for the failed group",
+        "recorded: failure type, epoch, attempted group, scaler values, offending optimizer, offending parameter names/count, last safe recovery checkpoint hash; process exits non-zero",
+        "post-step non-finite optimizer-owned parameter: FAILED_NUMERICAL_POST_STEP; no recovery for that group, no EMA, run terminates",
+        "the last safe-boundary recovery checkpoint remains the only resumable authority; the failed group is never retried or skipped automatically (owner intervention)"
+      ],
+      "gradscaler": "REQUIRED and unchanged (initial scale, growth/backoff, fp16 autocast boundaries); an overflow in a scientific run STOPS the run for owner/runtime review"
+    },
+    "DG_ATOMIC_GROUP": {
+      "rule": "one optimizer group = one scientific unit; it completes only when both the D step and the G step succeed with finite gradients; only then: update counter, schedule, EMA, COMPLETE log, recovery at the safe boundary",
+      "structure": "both unscales precede the finiteness scan, which precedes either step: D stepped / G skipped (or the reverse) cannot occur"
+    },
+    "SEEDS": {
+      "scientific": [
+        42,
+        1337,
+        2026
+      ],
+      "qualification": 70404,
+      "qualification_is_never_scientific": true
+    },
+    "QUALIFICATION_EVIDENCE": {
+      "record": "outputs/audit/M7C4_GPAT_RUNNER_QUALIFICATION.json",
+      "sha256": "036ef14c7bd18af5793c3591050d316b81bfd7c4c99ffae5d814797ebd5ee011",
+      "gates": {
+        "all_scenarios_exit_0": true,
+        "b0_regular": true,
+        "b3_regular": true,
+        "b3_tail": true,
+        "candidate_writer": true,
+        "dev022": true,
+        "firewall": true,
+        "no_oom_below_24GiB": true,
+        "orders": true,
+        "resume": true,
+        "warmup_handoff": true,
+        "warmup_regular": true,
+        "warmup_resume": true,
+        "warmup_tail": true
+      },
+      "firewall": {
+        "non_train_images": 0,
+        "test_images": 0,
+        "test_metadata": 0,
+        "train_images": 514,
+        "unique_ids": 177,
+        "unique_ids_sha256": "d03bf3ba115e217a5b53a658b5a779060a69bc50143b11566e397c107997821a",
+        "val_images": 0,
+        "val_metadata": 0
+      },
+      "resume_equivalence": {
+        "after_group2_equal": true,
+        "group1_state_equal": true,
+        "group2_capture_equal": true,
+        "group2_record_equal": true,
+        "loaded_equals_saved": true
+      },
+      "warmup_resume_equivalence": {
+        "after_batch2_equal": true,
+        "batch1_state_equal": true,
+        "batch2_record_equal": true,
+        "loaded_equals_saved": true
+      },
+      "resume_recovery_checkpoint_sha256": "48d15cdc714c73609da1c84dc6b1babf1111c34459f0fe7b91f58ddd1ed8f5b0",
+      "warmup_resume_recovery_checkpoint_sha256": "15898d0e12e7995859818833e7536e4437da83682d2e1fabcd0950127c019d9d",
+      "resume_ref_after_group2_digest": "5d9184c31063a1b3a86f5dbcfd40ae7f815096eb156646d29e27b0eba5c8342f"
+    },
+    "POST_EDIT_FINITE_SMOKE": {
+      "purpose": "after the fail-closed AMP edit, prove finite-gradient execution is unchanged (owner M7C4 review section 11)",
+      "scenarios": [
+        "b0_regular",
+        "resume_ref",
+        "warmup_regular"
+      ],
+      "labels": [
+        "QUALIFICATION_ONLY"
+      ],
+      "roots": "<runtime_root>/qualification/m7/M7C4/*_postedit_q70404 (qualification only)",
+      "compared_to": "outputs/audit/M7C4_GPAT_RUNNER_QUALIFICATION.json",
+      "result": {
+        "resume_ref_after_group1_equal": true,
+        "resume_ref_after_group2_equal": true,
+        "resume_ref_captures_equal": true,
+        "b0_capture_equal": true,
+        "b0_grads_equal": true,
+        "b0_record_equal": true,
+        "warmup_record_equal": true,
+        "firewall_val_test_nontrain_zero": true,
+        "group_status_complete": true
+      }
+    }
+  },
+  "m7_status_after": [
+    "STATIC_CORE_IMPLEMENTED",
+    "CPU_SYNTHETIC_QUALIFIED",
+    "GPU_RUNTIME_QUALIFIED",
+    "R04_LEVEL2_TEACHER_PARITY_QUALIFIED",
+    "PRODUCTION_RUNNER_IMPLEMENTED",
+    "REAL_TRAIN_DATA_PATH_QUALIFIED",
+    "CHECKPOINT_RESUME_QUALIFIED",
+    "WARMUP_RUNNER_QUALIFIED",
+    "AMP_OVERFLOW_FAIL_CLOSED",
+    "SCIENTIFIC_TRAINING_READY_NOT_STARTED"
+  ]
+}

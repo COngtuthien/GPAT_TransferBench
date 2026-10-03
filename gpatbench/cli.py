@@ -1,5 +1,5 @@
 """GPAT-TransferBench CLI (spec §24): `inventory` (M1), `split`/`audit-split` (M3), `build-pairs` (M4),
-`train-probe` (M5)."""
+`train-probe` (M5), `train-generator` (M7, GPAT-B0..B3 scientific runs; methods/gpat/runner_cli.py)."""
 from __future__ import annotations
 
 import argparse
@@ -165,6 +165,8 @@ def main(argv=None) -> int:
     tp.add_argument("--dry-run", action="store_true",
                     help="contract preflight; never optimizes and never writes a checkpoint")
     tp.set_defaults(func=cmd_train_probe)
+    from methods.gpat import runner_cli          # M7C4: frozen train-generator wiring (torch imported only to train)
+    runner_cli.add_parser(sub)
     args = p.parse_args(argv)
     return args.func(args)
 
