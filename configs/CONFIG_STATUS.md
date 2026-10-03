@@ -425,3 +425,20 @@ B0/B1/B2/B3 configs are unchanged.
 STATIC_CORE_NOT_STARTED · GPU_RUNTIME_NOT_QUALIFIED · GPU_RUNTIME_NOT_STARTED · SCIENTIFIC_TRAINING_NOT_ALLOWED ·
 SCIENTIFIC_TRAINING_NOT_STARTED.** **M6_CLOSED = true.** No GPAT checkpoint, run or bank exists.
 Evidence: `outputs/audit/M7C2A_GPAT_RUNTIME_CONTRACT.md` / `outputs/audit/M7C2A_GPAT_CPU_QUALIFICATION.json`.
+
+**M7C2b (2026-10-03) — GPAT static core implementation + synthetic CPU qualification.** This note is additive and is the
+**current state** for the GPAT rows; the M7B and M7C2a notes above stay as history. `methods/gpat/` now holds the static
+GPAT core (config loader, wavelet, high-pass, E_art, attack/identity heads, GRL, NAFResidualUNet G_res with FiLM,
+composition and artifact map, PatchGAN D, spectra, pure losses, EMA utility, schedule/batching/identity-map helpers, the
+GPATCore facade), qualified on synthetic tensors in `gpat-m7-cpu`. Parameter counts: G_res 31,677,421; E_art 11,204,736;
+D 2,767,809; attack head 3,078; identity head 30,780. The frozen spec, A1-A10, the M7B record, the M7C2a resolution and the
+B0/B1/B2/B3 configs are unchanged; no new DEV id. No training loop, optimizer, DataLoader, checkpoint, bank, GPU work or
+TRAIN/VAL/TEST sample access. Owner review clarifications: training `L_low = mean |DWT(x_hat).LL - LL_t|` (frozen spec
+10.1 literal; re-DWT of x_hat) stays separate from the N-08 selection LFErr on the internal LL (exact 0 at gamma 0); the
+PatchGAN pix2pix instance-norm convention is an IMPLEMENTATION_CLARIFICATION; DEV-022 group normalization (sum CE / sum
+labelled count, no extra sample weighting) is RUNNER_CONTRACT_FROZEN_NOT_YET_IMPLEMENTED. R-04 Level 2 remains deferred
+and blocks GPU runtime qualification and scientific training.
+
+**M7 status: STATIC_CORE_IMPLEMENTED · CPU_SYNTHETIC_QUALIFIED · GPU_RUNTIME_NOT_QUALIFIED ·
+SCIENTIFIC_TRAINING_NOT_ALLOWED · SCIENTIFIC_TRAINING_NOT_STARTED.** **M6_CLOSED = true.** No GPAT checkpoint, run or bank
+exists. Evidence: `outputs/audit/M7C2B_GPAT_STATIC_CORE.md` / `outputs/audit/M7C2B_GPAT_STATIC_CORE.json`.

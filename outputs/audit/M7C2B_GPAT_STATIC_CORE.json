@@ -1,0 +1,1721 @@
+{
+ "architecture": {
+  "discriminator": [
+   "Conv2d(6, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))",
+   "LeakyReLU(negative_slope=0.2, inplace=True)",
+   "Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))",
+   "InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, bias=False, track_running_stats=False)",
+   "LeakyReLU(negative_slope=0.2, inplace=True)",
+   "Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))",
+   "InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, bias=False, track_running_stats=False)",
+   "LeakyReLU(negative_slope=0.2, inplace=True)",
+   "Conv2d(256, 512, kernel_size=(4, 4), stride=(1, 1), padding=(1, 1))",
+   "InstanceNorm2d(512, eps=1e-05, momentum=0.1, affine=False, bias=False, track_running_stats=False)",
+   "LeakyReLU(negative_slope=0.2, inplace=True)",
+   "Conv2d(512, 1, kernel_size=(4, 4), stride=(1, 1), padding=(1, 1))"
+  ],
+  "e_art": {
+   "backbone": "torchvision.models.resnet18 body (conv1 12->64 k7 s2 p3 no bias, bn1, relu, maxpool, layer1..layer4); no avgpool/fc",
+   "conv1": [
+    64,
+    12,
+    7,
+    7
+   ],
+   "has_fc": false,
+   "z_a": "F.normalize(GAP(layer4), p=2, dim=1)"
+  },
+  "g_res": {
+   "bottleneck_film": false,
+   "code_pool": "AvgPool2d(kernel_size=2, stride=2, padding=0)",
+   "code_proj": "Conv2d(256, 512, kernel_size=(1, 1), stride=(1, 1))",
+   "decoder_blocks": [
+    2,
+    2,
+    2,
+    2
+   ],
+   "decoder_channels": [
+    256,
+    128,
+    64,
+    32
+   ],
+   "downs": [
+    "Conv2d(32, 64, kernel_size=(2, 2), stride=(2, 2))",
+    "Conv2d(64, 128, kernel_size=(2, 2), stride=(2, 2))",
+    "Conv2d(128, 256, kernel_size=(2, 2), stride=(2, 2))",
+    "Conv2d(256, 512, kernel_size=(2, 2), stride=(2, 2))"
+   ],
+   "encoder_blocks": [
+    2,
+    2,
+    4,
+    8
+   ],
+   "encoder_channels": [
+    32,
+    64,
+    128,
+    256
+   ],
+   "ending": "Conv2d(32, 13, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))",
+   "film": [
+    "Linear(in_features=512, out_features=64, bias=True)",
+    "Linear(in_features=512, out_features=128, bias=True)",
+    "Linear(in_features=512, out_features=256, bias=True)",
+    "Linear(in_features=512, out_features=512, bias=True)",
+    "Linear(in_features=512, out_features=512, bias=True)",
+    "Linear(in_features=512, out_features=256, bias=True)",
+    "Linear(in_features=512, out_features=128, bias=True)",
+    "Linear(in_features=512, out_features=64, bias=True)"
+   ],
+   "fuse": "Conv2d(1024, 512, kernel_size=(1, 1), stride=(1, 1))",
+   "intro": "Conv2d(12, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))",
+   "middle_blocks": 12,
+   "naf_block_type": "gpat_pinned_nafnet.NAFBlock",
+   "ups": [
+    "Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))",
+    "Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))",
+    "Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))",
+    "Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))"
+   ]
+  }
+ },
+ "authority_commit": "c9a12e10eff959a31aaa361cbff98469aae1e7c2",
+ "batching": {
+  "last_group": [
+   4,
+   2
+  ],
+  "last_weights": [
+   0.6666666666666666,
+   0.3333333333333333
+  ],
+  "microbatches": 2210,
+  "optimizer_groups": 1105,
+  "regular_group": [
+   4,
+   4
+  ],
+  "regular_weights": [
+   0.5,
+   0.5
+  ],
+  "samples": 8838
+ },
+ "checkpoint_writes": 0,
+ "config_sha256": {
+  "B0": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+  "B1": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+  "B2": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+  "B3": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca"
+ },
+ "d12": {
+  "gamma0_LL_syn_equals_LL_t_exact": true,
+  "non_vacuous_live_source_dependence_max_abs": 0.002145826816558838,
+  "source_independence_max_abs": 0.0,
+  "threshold": 1e-05,
+  "zero_residual_x_hat_minus_idwt_dwt_x_t_max_abs": 0.0,
+  "zero_residual_x_hat_minus_x_t_max_abs": 2.384185791015625e-07
+ },
+ "dataset_images_read": 0,
+ "environment": {
+  "PyWavelets_distribution": "1.9.0",
+  "cuda_available": false,
+  "determinism": {
+   "CUBLAS_WORKSPACE_CONFIG": null,
+   "cudnn_benchmark": false,
+   "cudnn_deterministic": false,
+   "gpu": false,
+   "seed": 20261003,
+   "tf32_cudnn": true,
+   "tf32_matmul": false,
+   "use_deterministic_algorithms": true
+  },
+  "ptwt": "1.0.1",
+  "python": "3.11.16",
+  "sys_prefix": "/home/cong/.venvs/gpat-m7-cpu",
+  "torch": "2.12.1+cu130",
+  "torchvision": "0.27.1+cu130"
+ },
+ "gates": {
+  "D11": true,
+  "counts": true,
+  "cpu_only": true,
+  "gamma0": true,
+  "highpass": true,
+  "l_low_literal": true,
+  "lferr_gamma0_exact_zero": true,
+  "non_vacuous": true,
+  "patchgan_30x30": true,
+  "source_independence": true,
+  "zero_residual": true
+ },
+ "gpu_used": false,
+ "highpass": {
+  "max_abs_vs_cv2_reflect101": 1.1920928955078125e-07,
+  "threshold": 1e-06
+ },
+ "imagenet_weight_file_read": false,
+ "l_low": {
+  "definition": "mean |DWT(x_hat).LL - LL_t| (fresh fp32 ptwt Haar level-1 reflect DWT of x_hat)",
+  "grad_to_x_hat_abs_sum": 1.792927861213684,
+  "grad_to_x_hat_finite": true,
+  "internal_ll_value_same_x_hat": 0.0,
+  "perturbed_x_hat": 0.12660904228687286,
+  "random_init_residual": 6.657910489593633e-08,
+  "selection_lferr_gamma0_max": 0.0,
+  "zero_residual": 6.615614012162041e-08
+ },
+ "m7c1_approximate": {
+  "discriminator": "~2.77M",
+  "e_art": "~11.2M without FC",
+  "g_res": "~31.68M"
+ },
+ "milestone": "M7C2b",
+ "owner_clarifications": {
+  "LFErr_selection": {
+   "basis": "M7C2a N-08",
+   "definition": "||LL_syn_internal - LL_t||_1 / (||LL_t||_1 + 1e-8)",
+   "gamma0_value": 0.0,
+   "used_as_training_loss": false
+  },
+  "L_low_training": {
+   "basis": "frozen spec 10.1 literal",
+   "definition": "mean |DWT(x_hat).LL - LL_t|",
+   "differentiable_to_x_hat": true,
+   "uses_internal_LL_syn": false
+  },
+  "dev022_group_normalization": {
+   "microbatch_sample_weight_applied_to_idadv": false,
+   "rule": "L_idadv_group = sum_j ce_sum_j / sum_j labelled_count_j; exact differentiable zero if no labelled row",
+   "status": "RUNNER_CONTRACT_FROZEN_NOT_YET_IMPLEMENTED"
+  },
+  "patchgan": {
+   "class": "IMPLEMENTATION_CLARIFICATION",
+   "layers": [
+    {
+     "activation": "LeakyReLU(0.2)",
+     "conv": "Conv4x4 s2 6->64 pad1 bias",
+     "norm": null
+    },
+    {
+     "activation": "LeakyReLU(0.2)",
+     "conv": "Conv4x4 s2 64->128 pad1 bias",
+     "norm": "InstanceNorm2d(affine=False, track_running_stats=False)"
+    },
+    {
+     "activation": "LeakyReLU(0.2)",
+     "conv": "Conv4x4 s2 128->256 pad1 bias",
+     "norm": "InstanceNorm2d(affine=False, track_running_stats=False)"
+    },
+    {
+     "activation": "LeakyReLU(0.2)",
+     "conv": "Conv4x4 s1 256->512 pad1 bias",
+     "norm": "InstanceNorm2d(affine=False, track_running_stats=False)"
+    },
+    {
+     "activation": null,
+     "conv": "Conv4x4 s1 512->1 pad1 bias",
+     "norm": null
+    }
+   ],
+   "new_deviation": null,
+   "output": [
+    null,
+    1,
+    30,
+    30
+   ],
+   "sigmoid": false,
+   "status": "OWNER_APPROVED_M7C2B"
+  }
+ },
+ "parameter_counts": {
+  "attack_head": {
+   "total": 3078,
+   "trainable": 3078
+  },
+  "discriminator": {
+   "total": 2767809,
+   "trainable": 2767809
+  },
+  "e_art": {
+   "total": 11204736,
+   "trainable": 11204736
+  },
+  "g_res": {
+   "total": 31677421,
+   "trainable": 31677421
+  },
+  "identity_head": {
+   "total": 30780,
+   "trainable": 30780
+  }
+ },
+ "parameter_counts_expected": {
+  "attack_head": 3078,
+  "discriminator": 2767809,
+  "e_art": 11204736,
+  "g_res": 31677421,
+  "identity_head": 30780
+ },
+ "schedule": {
+  "attack_warmup_lr": {
+   "1": 0.0001,
+   "1390": 0.0
+  },
+  "curriculum": {
+   "1": {
+    "lambda_adv": 0.0,
+    "lambda_con": 0.5,
+    "lambda_spec": 0.25,
+    "s_hf": 0.02,
+    "stage": 1
+   },
+   "5525": {
+    "lambda_adv": 0.0,
+    "lambda_con": 0.5,
+    "lambda_spec": 0.25,
+    "s_hf": 0.05,
+    "stage": 1
+   },
+   "5526": {
+    "lambda_adv": 0.05,
+    "lambda_con": 1.0,
+    "lambda_spec": 0.5,
+    "s_hf": 0.1,
+    "stage": 2
+   },
+   "16575": {
+    "lambda_adv": 0.05,
+    "lambda_con": 1.0,
+    "lambda_spec": 0.5,
+    "s_hf": 0.1,
+    "stage": 2
+   },
+   "16576": {
+    "lambda_adv": 0.1,
+    "lambda_con": 1.0,
+    "lambda_spec": 0.5,
+    "s_hf": 0.15,
+    "stage": 3
+   },
+   "66300": {
+    "lambda_adv": 0.1,
+    "lambda_con": 1.0,
+    "lambda_spec": 0.5,
+    "s_hf": 0.15,
+    "stage": 3
+   }
+  },
+  "main_lr": {
+   "1": 0.0,
+   "2": 3.620564808110065e-08,
+   "5525": 0.0002,
+   "5526": 0.0002,
+   "66300": 2e-06
+  }
+ },
+ "seed": 20261003,
+ "shape_traces": {
+  "B0": {
+   "A": [
+    1,
+    1,
+    256,
+    256
+   ],
+   "D_logits": [
+    1,
+    1,
+    30,
+    30
+   ],
+   "HH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "HL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "M": [
+    1,
+    1,
+    128,
+    128
+   ],
+   "attack_logits": null,
+   "delta_HH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_HL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "e_art.conv1": [
+    1,
+    64,
+    128,
+    128
+   ],
+   "e_art.layer1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art.layer2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "e_art.layer3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "e_art.layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "e_art.maxpool": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art_input": [
+    1,
+    12,
+    256,
+    256
+   ],
+   "g_res.code_pool": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.code_proj": [
+    1,
+    512,
+    16,
+    16
+   ],
+   "g_res.dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.down2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.down3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.enc1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.enc2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.enc3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.enc4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.ending": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "g_res.fuse": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.intro": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.middle": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.up_dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.up_dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.up_dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.up_dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res_raw": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "identity_logits": null,
+   "layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "source_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "spatial_code": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "target_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "x_hat": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_source": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_target": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "z_a": [
+    1,
+    512
+   ]
+  },
+  "B1": {
+   "A": [
+    1,
+    1,
+    256,
+    256
+   ],
+   "D_logits": [
+    1,
+    1,
+    30,
+    30
+   ],
+   "HH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "HL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "M": [
+    1,
+    1,
+    128,
+    128
+   ],
+   "attack_logits": [
+    1,
+    6
+   ],
+   "delta_HH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_HL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "e_art.conv1": [
+    1,
+    64,
+    128,
+    128
+   ],
+   "e_art.layer1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art.layer2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "e_art.layer3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "e_art.layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "e_art.maxpool": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art_input": [
+    1,
+    12,
+    256,
+    256
+   ],
+   "g_res.code_pool": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.code_proj": [
+    1,
+    512,
+    16,
+    16
+   ],
+   "g_res.dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.down2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.down3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.enc1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.enc2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.enc3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.enc4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.ending": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "g_res.fuse": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.intro": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.middle": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.up_dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.up_dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.up_dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.up_dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res_raw": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "identity_logits": null,
+   "layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "source_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "spatial_code": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "target_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "x_hat": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_source": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_target": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "z_a": [
+    1,
+    512
+   ]
+  },
+  "B2": {
+   "A": [
+    1,
+    1,
+    256,
+    256
+   ],
+   "D_logits": [
+    1,
+    1,
+    30,
+    30
+   ],
+   "HH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "HL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "M": [
+    1,
+    1,
+    128,
+    128
+   ],
+   "attack_logits": null,
+   "delta_HH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_HL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "e_art.conv1": [
+    1,
+    64,
+    128,
+    128
+   ],
+   "e_art.layer1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art.layer2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "e_art.layer3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "e_art.layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "e_art.maxpool": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art_input": [
+    1,
+    12,
+    256,
+    256
+   ],
+   "g_res.code_pool": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.code_proj": [
+    1,
+    512,
+    16,
+    16
+   ],
+   "g_res.dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.down2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.down3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.enc1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.enc2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.enc3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.enc4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.ending": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "g_res.fuse": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.intro": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.middle": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.up_dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.up_dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.up_dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.up_dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res_raw": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "identity_logits": [
+    1,
+    60
+   ],
+   "layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "source_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "spatial_code": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "target_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "x_hat": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_source": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_target": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "z_a": [
+    1,
+    512
+   ]
+  },
+  "B3": {
+   "A": [
+    1,
+    1,
+    256,
+    256
+   ],
+   "D_logits": [
+    1,
+    1,
+    30,
+    30
+   ],
+   "HH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "HL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LH_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "LL_syn": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "M": [
+    1,
+    1,
+    128,
+    128
+   ],
+   "attack_logits": [
+    1,
+    6
+   ],
+   "delta_HH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_HL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LH": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "delta_LL": [
+    1,
+    3,
+    128,
+    128
+   ],
+   "e_art.conv1": [
+    1,
+    64,
+    128,
+    128
+   ],
+   "e_art.layer1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art.layer2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "e_art.layer3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "e_art.layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "e_art.maxpool": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "e_art_input": [
+    1,
+    12,
+    256,
+    256
+   ],
+   "g_res.code_pool": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.code_proj": [
+    1,
+    512,
+    16,
+    16
+   ],
+   "g_res.dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down1": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.down2": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.down3": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.down4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.enc1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.enc2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.enc3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.enc4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res.ending": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "g_res.fuse": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.intro": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.middle": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "g_res.up_dec1": [
+    1,
+    32,
+    128,
+    128
+   ],
+   "g_res.up_dec2": [
+    1,
+    64,
+    64,
+    64
+   ],
+   "g_res.up_dec3": [
+    1,
+    128,
+    32,
+    32
+   ],
+   "g_res.up_dec4": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "g_res_raw": [
+    1,
+    13,
+    128,
+    128
+   ],
+   "identity_logits": [
+    1,
+    60
+   ],
+   "layer4": [
+    1,
+    512,
+    8,
+    8
+   ],
+   "source_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "spatial_code": [
+    1,
+    256,
+    16,
+    16
+   ],
+   "target_bands": [
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ],
+    [
+     1,
+     3,
+     128,
+     128
+    ]
+   ],
+   "x_hat": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_source": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "x_target": [
+    1,
+    3,
+    256,
+    256
+   ],
+   "z_a": [
+    1,
+    512
+   ]
+  }
+ },
+ "spectral": {
+  "cols_pattern_orient_argmax": 0,
+  "orient_shape": [
+   2,
+   3,
+   8
+  ],
+  "orient_sum_max_dev": 1.1920928955078125e-07,
+  "radial_shape": [
+   2,
+   3,
+   128
+  ],
+  "radial_sum_max_dev": 5.960464477539063e-08,
+  "repeat_bitwise_identical": true,
+  "rows_pattern_orient_argmax": 4
+ },
+ "status": "PASS",
+ "synthetic_only": true,
+ "teacher_weights_loaded": false,
+ "training_steps": 0,
+ "wavelet": {
+  "D11_max_abs": 2.980232238769531e-07,
+  "D11_pass_if_less_than": 1e-05,
+  "horizontal_stripes_LH_HL_HH_absmax": [
+   0.9999999403953552,
+   0.0,
+   0.0
+  ],
+  "mapping": {
+   "HH": "cD",
+   "HL": "cV",
+   "LH": "cH",
+   "LL": "cA"
+  },
+  "vertical_stripes_LH_HL_HH_absmax": [
+   0.0,
+   0.9999999403953552,
+   0.0
+  ]
+ }
+}
