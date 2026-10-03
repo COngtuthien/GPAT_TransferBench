@@ -1,0 +1,98 @@
+{
+  "approved_additions": {
+    "PyWavelets": {
+      "sha256": "d76b7fa8fc500b09201d689b4f15bf5887e30ffbe2e1f338eb8470590eb4521a",
+      "version": "1.9.0",
+      "wheel": "pywavelets-1.9.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
+    },
+    "ptwt": {
+      "sha256": "a6f832ee73decd7741ca8a0d1585a18188d773c428107973475e43393707d4af",
+      "version": "1.0.1",
+      "wheel": "ptwt-1.0.1-py3-none-any.whl"
+    }
+  },
+  "base": {
+    "conda_explicit": "environments/m6_core_gpu.conda-explicit.txt",
+    "conda_explicit_sha256": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "live_gpat_m5_verified_identical_to_capture": true,
+    "name": "gpat-m5 (committed m6_core_gpu capture)",
+    "pip_freeze": "environments/m6_core_gpu.pip-freeze.txt",
+    "pip_freeze_sha256": "527a5ec89fc9fb951130b7cc2a9a9b0bbf77c653a93b8aee35ff2c01cd27fec2",
+    "verification": "conda list --explicit and pip freeze --all of the live gpat-m5 hashed to exactly the committed capture SHA-256s before cloning"
+  },
+  "capture_sha256": {
+    "environments/gpat_m7_gpu.conda-explicit.txt": "2c5a2bbcacf767c54eb2f21ce2648a8bd265dbb57f6d0e0cdc01839d8b42b864",
+    "environments/gpat_m7_gpu.pip-freeze.txt": "22186554387b4ca14c95e02bc4d7b94d6c62a3135a0c6d256809608d312614b9",
+    "environments/gpat_m7_gpu.pip-requirements.txt": "8f0e57f4cf19443198529c1317b9584feca282748ad8de68c2956e10ec0771bf",
+    "environments/gpat_m7_gpu.runtime.json": "ddff0ac800d97f309933d2ff99391a2e425d1499e909162620749f852cc16102"
+  },
+  "conda_layer_equals_base": true,
+  "creation": [
+    "conda create --offline -y -n gpat-m7-gpu --clone gpat-m5  (E06c/E07c precedent)",
+    "pip download --no-deps --only-binary=:all: --require-hashes -r environments/gpat_m7_gpu.pip-requirements.txt -d <wheelhouse>",
+    "pip install --no-index --find-links <wheelhouse> --no-deps --require-hashes -r environments/gpat_m7_gpu.pip-requirements.txt",
+    "pip check"
+  ],
+  "environment_absolute_path": "/home/student20261/miniconda3/envs/gpat-m7-gpu",
+  "environment_created_by_m7c3": true,
+  "environment_name": "gpat-m7-gpu",
+  "existing_environments_mutated": false,
+  "freeze_diff_vs_base": {
+    "added": [
+      "PyWavelets==1.9.0",
+      "ptwt==1.0.1"
+    ],
+    "changed": [],
+    "removed": []
+  },
+  "gpu": {
+    "compute_capability": [
+      8,
+      6
+    ],
+    "driver": "580.178.04",
+    "name": "NVIDIA GeForce RTX 3090"
+  },
+  "kind": "GPU_EXECUTION_ENVIRONMENT",
+  "milestone": "M7C3",
+  "not_installed": [
+    "BasicSR",
+    "lmdb",
+    "any other package"
+  ],
+  "observations": {
+    "driver_differs_from_m6_capture": "m6_core_gpu.runtime.json recorded driver 595.84 (2026-09-23); the host now reports 580.178.04. Host-level change outside this repository; CUDA 13.0 runtime works; recorded, not modified.",
+    "pywavelets_metadata_anomaly": "same as M7C2A-OBS-02: distribution 1.9.0, pywt.__version__ 1.8.0 (official wheel; hash pinned)"
+  },
+  "pip_check": "No broken requirements found.",
+  "pip_freeze_equals_gpat_m7_cpu_freeze": true,
+  "protected_environment_fingerprints_identical": true,
+  "protected_environments": [
+    "base",
+    "gpat-m5",
+    "gpat-m6-e03",
+    "gpat-m6-e04-geometry",
+    "gpat-m6-e05",
+    "gpat-m6-e06c",
+    "gpat-m6-e07c",
+    "stdn"
+  ],
+  "protected_fingerprint_method": "conda list --explicit + pip freeze --all + interpreter SHA-256 prefix per environment, before vs after; sha256 of the sorted per-file sha256 list",
+  "protected_fingerprint_set_sha256": "c1ec60b0f7ed9c124e77410cbb1b6f6636565dedbd846e919b6ccaad8372189a",
+  "schema_version": 1,
+  "source_host": "student20261@100.121.84.44",
+  "versions": {
+    "Pillow": "12.3.0",
+    "PyWavelets": "1.9.0",
+    "cuda": "13.0",
+    "cudnn": 92000,
+    "numpy": "2.4.6",
+    "opencv": "5.0.0",
+    "opencv_python_headless": "5.0.0.93",
+    "ptwt": "1.0.1",
+    "python": "3.11.16",
+    "pywt___version__": "1.8.0",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+  }
+}

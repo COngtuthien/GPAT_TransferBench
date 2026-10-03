@@ -1,0 +1,240 @@
+{
+  "schema": "gpat.m7c3.gpu_runtime_resolution",
+  "schema_version": 1,
+  "milestone": "M7C3",
+  "record_kind": "ADDITIVE_RUNTIME_QUALIFICATION_RECORD",
+  "status": [
+    "OWNER_APPROVED_M7C3_REVIEW",
+    "ADDITIVE",
+    "NOT_AN_A10_AMENDMENT",
+    "NOT_A_FROZEN_SPEC_AMENDMENT",
+    "NO_NEW_DEVIATION",
+    "NOT_A_NEW_SCIENTIFIC_VARIANT"
+  ],
+  "authority_commit": "33955b05ff70289c42386c3ac1623bae4a5fae5e",
+  "decision_date": "2026-10-03",
+  "bound_authority_sha256": {
+    "configs/amendments/gpat_m7c2a_implementation_resolution.yaml": "b61555a2ca15954bdd8929d92c28d0d957561c595ea38eeef496d06c871e8e70",
+    "configs/amendments/gpat_a10_m7_contract_resolution.yaml": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203",
+    "configs/amendments/gpat_m7b_owner_clarifications.yaml": "db13b2c0b17771bf62bcac1ee25e0a51bab60ff649846a186799310b6d8f4825",
+    "outputs/audit/M7C2B_GPAT_STATIC_CORE.json": "1d3d67fb454d4c04d7bfb8c7c4b05ce9dcff973936e9223ac9e3c56a10a7ceff",
+    "environments/gpat_m7_cpu.lock.json": "d52b5e7ccc8ee0f6c289db9f31d4521e4b241a5e22664912a6185e073be9c23a",
+    "environments/gpat_m7_gpu.lock.json": "24c983ebbb308acacd63f32837532e5f9166114962f524e993f243f2ff746114",
+    "configs/methods/gpat_b0.yaml": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "configs/methods/gpat_b1.yaml": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+    "configs/methods/gpat_b2.yaml": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+    "configs/methods/gpat_b3.yaml": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca",
+    "gpatbench/preprocess/aux_models.py": "3f4666074fac49691c3fca804b61f6c25ab33cf0aa5af25c078d07b24a590a7f"
+  },
+  "m7c2b_authority_commit": "33955b05ff70289c42386c3ac1623bae4a5fae5e",
+  "frozen_spec_edited": false,
+  "a10_edited": false,
+  "m7b_record_edited": false,
+  "m7c2a_resolution_edited": false,
+  "gpat_configs_edited": false,
+  "new_deviation": null,
+  "teacher_assets": {
+    "facexformer": {
+      "code_commit": "10fe8291f8a64e2ca1daf938e3e0007bd860303b",
+      "code_files_sha256": {
+        "network/__init__.py": "31b03a6fb9c51b9c56d6482604b6e4a97ee4638719f7c3e0c32764e90a6f6c29",
+        "network/models/__init__.py": "d107e7865cd12a2f2d55a2c36a499ec481230066466a478d68ec1088d70aa3fc",
+        "network/models/facexformer.py": "007076ec43c718858d75c755f940776c9f17bac07173b65316b38388db9f8d90",
+        "network/models/transformer.py": "df8ac36e5bd9d367837efc3012b9c2e675b75ab6983a2ea25e2a85dba6d0b237"
+      },
+      "checkpoint_sha256": "327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d"
+    },
+    "adaface": {
+      "code_commit": "c60eaa786a42c03444f3df7096dbaf9d57ae010d",
+      "code_files_sha256": {
+        "adaface_net.py": "b4db4eb0174a385fd29e5f616391b50d443f455990c8b88dcab1f8021af8ba4c"
+      },
+      "checkpoint_sha256": "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8"
+    },
+    "f_art_resnet18_imagenet1k_v1_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+    "artifact_probe_v1_sha256": "b5ace6c263d8473215ff2ab825b98541bdcf332251512216cbd93546f32e54ff",
+    "gpu_location": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/m7c3_teachers (outside git)"
+  },
+  "resolutions": {
+    "FACEXFORMER_TEACHER_INPUT_QUANTIZATION": {
+      "class": "OWNER_RUNTIME_COMPATIBILITY_CLARIFICATION",
+      "rule": "q = 255 * (x + 1) / 2; u8 = clip(round_half_to_even(q), 0, 255); cast to uint8",
+      "implementation": "methods/gpat/teacher_preprocess.teacher_uint8 (torch.round, float64)",
+      "reason": [
+        "frozen specification defines no float-GPAT -> uint8 teacher conversion",
+        "natural inverse of the canonical decode x = u8 / 127.5 - 1",
+        "reproduced the frozen teacher input exactly on 44/44 synthetic, 2000/2000 random stress and 192/192 selected TRAIN images"
+      ],
+      "runner_change_requires_owner_review": true
+    },
+    "FACEXFORMER_TEACHER_ADAPTER": {
+      "class": "RUNTIME_COMPATIBILITY refinement of A10 D07",
+      "name": "EXACT_FORWARD_SURROGATE_BACKWARD_COMPATIBILITY",
+      "implementation": "methods/gpat/teacher_preprocess.facexformer_input_exact (custom autograd.Function)",
+      "forward": {
+        "name": "EXACT_FROZEN_FORWARD",
+        "steps": [
+          "approved float->uint8 quantization",
+          "bicubic a=-0.5; Resample.c precompute_coeffs in float64 with sequential normalization",
+          "22-bit fixed-point coefficients (int)(+-0.5 + k * 2^22)",
+          "horizontal pass first",
+          "accumulator offset 2^21",
+          "clip8 saturation (lookup[ss >> 22], 0..255) after the horizontal pass",
+          "clip8 saturation after the vertical pass",
+          "exact final uint8 224x224 image",
+          "fp32 ToTensor division by 255 (0-dim device tensor divisor)",
+          "ImageNet normalization"
+        ],
+        "reference": "Pillow 12.3.0 libImaging/Resample.c (sha256 808c212d03289b9ab70fad67168da1b14ed8dd74f1607c7a7278c50cbc1ae0ab; sdist sha256 3b8182a766685eaa002637e28b4ec8d6b18819a0c71f579bf0dbaa5830297cce) + torchvision ToTensor/Normalize",
+        "pil_call_in_gpu_forward": false,
+        "cpu_transfer": false,
+        "arithmetic": "float64 integer arithmetic on device (integers < 2^53; exact in any order)"
+      },
+      "backward": {
+        "name": "APPROVED_SURROGATE_BACKWARD",
+        "rule": "VJP of the M7C2a clip-emulating teacher_preprocess.facexformer_input, re-evaluated under enable_grad (torch.autograd.grad); not recursive; deterministic"
+      },
+      "not": [
+        "exact derivative of the quantized forward",
+        "exact-linear",
+        "fully differentiable frozen PIL"
+      ],
+      "previous": "M7C2a CLIP_EMULATING_DIFFERENTIABLE_COMPATIBILITY (forward and backward); remains the surrogate",
+      "why": "R-04 Level-2 worst-case landmark gate exposed a 1.05-1.12 LSB forward mismatch (attempt 1)"
+    },
+    "R04_LEVEL2": {
+      "final_status": "PASS",
+      "selected_list_sha256": "d02a8a96eedd18b067fd4c7bf809368ced68b7aff14c88daac053b999baa855f",
+      "selected_counts": {
+        "casia_fasd": 64,
+        "msu_mfsd": 64,
+        "siwmv2": 64
+      },
+      "replica_seed_list_sha256": "3c902734d01c62f66d351a144b62272d01a1f8ec5fa5f6c22ff77b4305414982",
+      "attempt_1": {
+        "record": "outputs/audit/M7C3_R04_LEVEL2_ATTEMPT1.json",
+        "record_sha256": "146de245d093fdc6af7598e608c4f0604c7d4f99a494406679fb4ac90f1a3391",
+        "adapter": "CLIP_EMULATING_DIFFERENTIABLE_COMPATIBILITY",
+        "result": "FAIL",
+        "failed_gate": "landmark_abs_max",
+        "candidate": {
+          "adaface_cos": 0.9997437000274658,
+          "landmark_abs": 0.01423092931509018,
+          "landmark_mean": 0.0032647729385644197,
+          "parsing_argmax": 0.9796516299247742,
+          "parsing_dice": 0.8968822191707844
+        }
+      },
+      "floors_from_attempt_1": {
+        "adaface_cos": 0.9993640184402466,
+        "landmark_abs": 0.013857558369636536,
+        "landmark_mean": 0.004059360362589359,
+        "parsing_argmax": 0.9574697017669678,
+        "parsing_dice": 0.8415264443192334
+      },
+      "floors_recomputed": false,
+      "attempt_2": {
+        "record": "outputs/audit/M7C3_R04_LEVEL2_TEACHER_PARITY.json",
+        "record_sha256": "489cf58641972a318257520f73e0fa05b0c7ae61965b7216b608ff515c04e081",
+        "adapter": "EXACT_FORWARD_SURROGATE_BACKWARD_COMPATIBILITY",
+        "result": "PASS",
+        "candidate": {
+          "adaface_cos": 0.9997437000274658,
+          "landmark_abs": 0.0,
+          "landmark_mean": 0.0,
+          "parsing_argmax": 1.0,
+          "parsing_dice": 1.0
+        },
+        "gates": {
+          "adaface": true,
+          "landmarks": true,
+          "parsing": true
+        },
+        "input_parity": {
+          "images": 192,
+          "normalized_max_abs": 0.0,
+          "normalized_mean_abs": 0.0,
+          "normalized_p99_abs": 0.0,
+          "pass": true,
+          "uint8_bitwise_equal": 192
+        },
+        "level1_exact": {
+          "images": 44,
+          "normalized_max_abs": 0.0,
+          "pass": true,
+          "uint8_bitwise_equal": 44
+        },
+        "direct_teacher_output_parity": {
+          "landmark_bitwise_all": true,
+          "landmark_max_abs": 0.0,
+          "parsing_bitwise_all": true,
+          "parsing_logit_max_abs": 0.0
+        },
+        "surrogate_backward": {
+          "max_abs": 0.0,
+          "mean_abs": 0.0,
+          "cosine": 0.9999999999999999,
+          "bitwise_equal": true,
+          "finite": true,
+          "nonzero": true
+        },
+        "backward_repeatability_bitwise": true,
+        "teacher_parameter_grads_none": true
+      },
+      "cpu_stress_parity": {
+        "random_images": 2000,
+        "uint8_bitwise_equal": 2000,
+        "normalized_max_abs": 0.0
+      }
+    },
+    "GPU_RUNTIME": {
+      "environment": "gpat-m7-gpu",
+      "environment_lock_sha256": "24c983ebbb308acacd63f32837532e5f9166114962f524e993f243f2ff746114",
+      "gpu_qualification_record_sha256": "5737aa8bb800170fe712fa90d213357187d41030d53c6714e846bdd7ea3cbb27",
+      "repeatability_record_sha256": "3623f7779beb8c5d56dc10ff55f0784e699a58e2968ee22d9a427b5116d74d75",
+      "stack": {
+        "torch": "2.12.1+cu130",
+        "cuda": "13.0",
+        "cudnn": 92000,
+        "gpu": "NVIDIA GeForce RTX 3090"
+      },
+      "driver": "580.178.04",
+      "driver_m6_capture": "595.84",
+      "driver_difference_blocker": false,
+      "status": "QUALIFIED"
+    },
+    "INFORMATIONAL_TIMING": {
+      "A_exact_adapter_only": {
+        "max_ms": 2.419155000097817,
+        "median_ms": 2.3952899991854792,
+        "p90_ms": 2.4109930025588255
+      },
+      "B_teacher_forward_with_exact_adapter": {
+        "max_ms": 38.12912399735069,
+        "median_ms": 37.67754750151653,
+        "p90_ms": 37.981855098405504
+      },
+      "C_old_clip_emulating_adapter_only": {
+        "max_ms": 0.8367200025531929,
+        "median_ms": 0.8153759990818799,
+        "p90_ms": 0.8255566994193941
+      },
+      "batch": 4,
+      "gpu": "NVIDIA GeForce RTX 3090",
+      "informational_only": true,
+      "iterations": 50,
+      "warmup": 10
+    }
+  },
+  "m7_status_after": [
+    "STATIC_CORE_IMPLEMENTED",
+    "CPU_SYNTHETIC_QUALIFIED",
+    "GPU_RUNTIME_QUALIFIED",
+    "R04_LEVEL2_TEACHER_PARITY_QUALIFIED",
+    "PRODUCTION_RUNNER_NOT_IMPLEMENTED",
+    "REAL_TRAIN_QUALIFICATION_NOT_DONE",
+    "SCIENTIFIC_TRAINING_NOT_ALLOWED",
+    "SCIENTIFIC_TRAINING_NOT_STARTED"
+  ],
+  "m6_closed": true
+}

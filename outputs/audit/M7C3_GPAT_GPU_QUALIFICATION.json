@@ -1,0 +1,840 @@
+{
+ "authority_commit": "33955b05ff70289c42386c3ac1623bae4a5fae5e",
+ "bank_writes": 0,
+ "bilinear_matrix_parity": {
+  "adopted": false,
+  "float32": {
+   "forward_max_abs": 1.7881393432617188e-07,
+   "grad_max_abs": 9.5367431640625e-07
+  },
+  "float64": {
+   "forward_max_abs": 0.0,
+   "grad_max_abs": 1.7763568394002505e-15
+  },
+  "forward_gate_1e-6": true,
+  "reason_not_adopted": "F.interpolate bilinear backward runs under use_deterministic_algorithms(True) and is bitwise repeatable"
+ },
+ "checkpoint_writes": 0,
+ "d11_d12": {
+  "D11_max_abs": 2.980232238769531e-07,
+  "D11_pass": true,
+  "D12": {
+   "amp_fp16": {
+    "gamma0_LL_exact": true,
+    "live_source_dependence_max_abs": 0.0021080374717712402,
+    "source_independence_max_abs": 0.0,
+    "zero_residual_vs_idwt_dwt_x_t_max_abs": 0.0,
+    "zero_residual_vs_x_t_max_abs": 2.980232238769531e-07
+   },
+   "fp32": {
+    "gamma0_LL_exact": true,
+    "live_source_dependence_max_abs": 0.002092301845550537,
+    "source_independence_max_abs": 0.0,
+    "zero_residual_vs_idwt_dwt_x_t_max_abs": 0.0,
+    "zero_residual_vs_x_t_max_abs": 2.980232238769531e-07
+   }
+  },
+  "D12_pass": true
+ },
+ "dataset_images_read": 0,
+ "determinism": {
+  "applied": {
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+   "cudnn_benchmark": false,
+   "cudnn_deterministic": true,
+   "gpu": true,
+   "seed": 20261003,
+   "tf32_cudnn": false,
+   "tf32_matmul": false,
+   "use_deterministic_algorithms": true
+  },
+  "observed": {
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+   "cudnn_benchmark": false,
+   "cudnn_deterministic": true,
+   "deterministic_warn_only": false,
+   "float32_matmul_precision": "highest",
+   "tf32_cudnn": false,
+   "tf32_matmul": false,
+   "use_deterministic_algorithms": true
+  }
+ },
+ "determinism_after": {
+  "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+  "cudnn_benchmark": false,
+  "cudnn_deterministic": true,
+  "deterministic_warn_only": false,
+  "float32_matmul_precision": "highest",
+  "tf32_cudnn": false,
+  "tf32_matmul": false,
+  "use_deterministic_algorithms": true
+ },
+ "dev022": {
+  "abs_diff": 0.0,
+  "differs_from_sample_weighted": true,
+  "group": 6.311588287353516,
+  "labelled_counts": [
+   2,
+   1
+  ],
+  "masked_rows_grad_abs_sum": 0.0,
+  "pass": true,
+  "reference_sum_over_labelled": 6.311588287353516,
+  "sample_weighted_microbatch_means": 6.439907073974609,
+  "zero_labelled_grad_all_zero": true,
+  "zero_labelled_requires_grad": true,
+  "zero_labelled_value": 0.0
+ },
+ "environment": {
+  "Pillow": "12.3.0",
+  "PyWavelets_distribution": "1.9.0",
+  "capability": [
+   8,
+   6
+  ],
+  "cuda": "13.0",
+  "cudnn": 92000,
+  "executable": "/home/student20261/miniconda3/envs/gpat-m7-gpu/bin/python",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "host": "nd-System-Product-Name",
+  "numpy": "2.4.6",
+  "nvidia_smi": "NVIDIA GeForce RTX 3090, 580.178.04, 24576 MiB",
+  "opencv": "5.0.0",
+  "opencv_python_headless": "5.0.0.93",
+  "ptwt": "1.0.1",
+  "python": "3.11.16",
+  "pywt___file__": "/home/student20261/miniconda3/envs/gpat-m7-gpu/lib/python3.11/site-packages/pywt/__init__.py",
+  "pywt___version__": "1.8.0",
+  "sys_prefix": "/home/student20261/miniconda3/envs/gpat-m7-gpu",
+  "torch": "2.12.1+cu130",
+  "torchvision": "0.27.1+cu130"
+ },
+ "forward_n4": {
+  "B0": {
+   "A_stats": {
+    "max": 0.02172008901834488,
+    "mean": 0.010518091730773449,
+    "min": 0.002617604099214077
+   },
+   "D_logits_dtype": "float16",
+   "D_logits_shape": [
+    4,
+    1,
+    30,
+    30
+   ],
+   "attack_logits": null,
+   "dtypes": {
+    "A": "float32",
+    "LL_syn": "float32",
+    "M": "float32",
+    "delta_LH": "float32",
+    "raw": "float16",
+    "spatial_code": "float16",
+    "x_hat": "float32",
+    "z_a": "float32"
+   },
+   "finite": true,
+   "identity_logits": null,
+   "mask_range": [
+    0.2914848029613495,
+    0.7244806289672852
+   ],
+   "shapes": {
+    "A": [
+     4,
+     1,
+     256,
+     256
+    ],
+    "LL_syn": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "M": [
+     4,
+     1,
+     128,
+     128
+    ],
+    "delta_HH": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "delta_HL": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "delta_LH": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "delta_LL": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "layer4": [
+     4,
+     512,
+     8,
+     8
+    ],
+    "raw": [
+     4,
+     13,
+     128,
+     128
+    ],
+    "spatial_code": [
+     4,
+     256,
+     16,
+     16
+    ],
+    "x_hat": [
+     4,
+     3,
+     256,
+     256
+    ],
+    "z_a": [
+     4,
+     512
+    ]
+   },
+   "x_hat_range_float": [
+    -1.0410107374191284,
+    1.048423409461975
+   ]
+  },
+  "B3": {
+   "A_stats": {
+    "max": 0.02172008901834488,
+    "mean": 0.010518091730773449,
+    "min": 0.002617604099214077
+   },
+   "D_logits_dtype": "float16",
+   "D_logits_shape": [
+    4,
+    1,
+    30,
+    30
+   ],
+   "attack_logits": {
+    "finite": true,
+    "shape": [
+     4,
+     6
+    ]
+   },
+   "dtypes": {
+    "A": "float32",
+    "LL_syn": "float32",
+    "M": "float32",
+    "delta_LH": "float32",
+    "raw": "float16",
+    "spatial_code": "float16",
+    "x_hat": "float32",
+    "z_a": "float32"
+   },
+   "finite": true,
+   "identity_logits": {
+    "finite": true,
+    "shape": [
+     4,
+     60
+    ]
+   },
+   "mask_range": [
+    0.2914848029613495,
+    0.7244806289672852
+   ],
+   "shapes": {
+    "A": [
+     4,
+     1,
+     256,
+     256
+    ],
+    "LL_syn": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "M": [
+     4,
+     1,
+     128,
+     128
+    ],
+    "delta_HH": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "delta_HL": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "delta_LH": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "delta_LL": [
+     4,
+     3,
+     128,
+     128
+    ],
+    "layer4": [
+     4,
+     512,
+     8,
+     8
+    ],
+    "raw": [
+     4,
+     13,
+     128,
+     128
+    ],
+    "spatial_code": [
+     4,
+     256,
+     16,
+     16
+    ],
+    "x_hat": [
+     4,
+     3,
+     256,
+     256
+    ],
+    "z_a": [
+     4,
+     512
+    ]
+   },
+   "x_hat_range_float": [
+    -1.0410107374191284,
+    1.048423409461975
+   ]
+  }
+ },
+ "gates": {
+  "D11": true,
+  "D12": true,
+  "amp_boundaries": true,
+  "counts": true,
+  "determinism_still_enabled": true,
+  "dev022": true,
+  "forward_n4": true,
+  "grl": true,
+  "naf": true,
+  "no_oom": true,
+  "optimizer_group": true,
+  "scaler_clip": true,
+  "teacher_adapter_fp32_region": true
+ },
+ "grl": {
+  "head_grad_same_sign_max_abs": 0.0,
+  "pass": true,
+  "z_grad_is_negated_max_abs": 0.0
+ },
+ "kind": "gpu_runtime_qualification",
+ "milestone": "M7C3",
+ "naf": {
+  "basicsr_imported": false,
+  "commit": "2b4af71ebe098a92a75910c233a3965a3e93ede4",
+  "files_sha256": {
+   "LICENSE": "a29ecef3456149898f08e4c71b11b33e7d333664e087bc212e84e18ddd6599ad",
+   "basicsr/models/archs/NAFNet_arch.py": "01b22270cc93f1bb90c0e3e4490e98b023fcf73f8552860b4a9ee880ce5c6967",
+   "basicsr/models/archs/arch_util.py": "5a11af2e7c2d7a7b57c1fbd7e19cf0a50b4b4e8c7ae7dd203a915d7a707e7005",
+   "basicsr/models/archs/local_arch.py": "c4df2ba4d896442a0f6ec984accd6e68f31edce3afdf066add202c25a0d1af26"
+  },
+  "layernorm_native_parity": {
+   "float32": {
+    "forward_max_abs": 0.0,
+    "grad_max_rel": 1.7667022038814976e-07,
+    "pass": true,
+    "tolerance": 0.0001
+   },
+   "float64": {
+    "forward_max_abs": 0.0,
+    "grad_max_rel": 3.6151702596724853e-16,
+    "pass": true,
+    "tolerance": 1e-10
+   }
+  },
+  "lmdb_imported": false,
+  "nafblock": {
+   "fp16_autocast": {
+    "finite_backward": true,
+    "finite_forward": true,
+    "max_activation_abs": 1.9394474029541016,
+    "max_grad_abs": 0.006092071533203125,
+    "output_dtype": "float32",
+    "shape_preserved": true
+   },
+   "fp32": {
+    "finite_backward": true,
+    "finite_forward": true,
+    "max_activation_abs": 1.9394731521606445,
+    "max_grad_abs": 0.006090945564210415,
+    "output_dtype": "float32",
+    "shape_preserved": true
+   }
+  },
+  "pass": true,
+  "saved_variables_warnings": [
+   "DeprecationWarning: 'saved_variables' is deprecated; use 'saved_tensors'"
+  ],
+  "saved_variables_works": true,
+  "tree": "8a8508a34a23261ea97af0e369ff6dcd6bc11c73"
+ },
+ "optimizer_group_smoke": {
+  "D": {
+   "clip_after_unscale": true,
+   "clip_returned_total_norm": 0.1907266527414322,
+   "norm_after_clip": 0.1907266527414322,
+   "scaled_norm": 12499.4619140625,
+   "unscaled_norm": 0.1907266527414322
+  },
+  "G": {
+   "clip_after_unscale": true,
+   "clip_returned_total_norm": 0.21643009781837463,
+   "norm_after_clip": 0.21643009781837463,
+   "scaled_norm": 14183.962890625,
+   "unscaled_norm": 0.21643009781837463
+  },
+  "amp_function_boundaries": {
+   "composition.activate": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float16"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "composition.artifact_map": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "composition.compose": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.idadv_microbatch": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "bool",
+     "float16",
+     "int64"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_artcon": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_bg": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_budget": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_d": {
+    "autocast_enabled": [
+     "False"
+    ],
+    "inputs": [
+     "float16"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_gadv": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float16"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_id": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_lm": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_low": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_parse": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_tv": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "losses.l_type": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float16",
+     "int64"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "spectral.s_orient": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "spectral.s_radial": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "teacher.adaface_input": {
+    "autocast_enabled": [
+     "False"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "teacher.facexformer_input": {
+    "autocast_enabled": [
+     "False"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "wavelet.dwt": {
+    "autocast_enabled": [
+     "True"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   },
+   "wavelet.idwt": {
+    "autocast_enabled": [
+     "False"
+    ],
+    "inputs": [
+     "float32"
+    ],
+    "outputs": [
+     "float32"
+    ]
+   }
+  },
+  "amp_module_output_dtypes": {
+   "attack_head": [
+    "float16"
+   ],
+   "discriminator": [
+    "float16"
+   ],
+   "e_art": [
+    "float16"
+   ],
+   "g_res": [
+    "float16"
+   ],
+   "identity_head": [
+    "float16"
+   ]
+  },
+  "amp_pass": true,
+  "checkpoint_writes": 0,
+  "group_labelled_count": 3,
+  "microbatches": [
+   {
+    "D_grads_unchanged_by_G_backward": true,
+    "G_grad_norm_unchanged_by_D_backward": true,
+    "L_D": 0.7099824547767639,
+    "L_G_dtype": "float32",
+    "L_G_weighted": 0.8137679100036621,
+    "components": {
+     "artcon": 0.20093117654323578,
+     "bg": 0.0,
+     "budget": 0.0,
+     "gadv": 0.7133591175079346,
+     "id": -2.9802322387695312e-08,
+     "lm": 2.0702231267932802e-05,
+     "low": 6.661720419742778e-08,
+     "parse": 0.8921732902526855,
+     "spec": 0.0015013935044407845,
+     "tv": 0.16901156306266785,
+     "type": 1.775718092918396
+    },
+    "finite": true,
+    "idadv_share": 0.2724081873893738,
+    "labelled": 2
+   },
+   {
+    "D_grads_unchanged_by_G_backward": true,
+    "G_grad_norm_unchanged_by_D_backward": true,
+    "L_D": 0.7117002010345459,
+    "L_G_dtype": "float32",
+    "L_G_weighted": 0.6812154054641724,
+    "components": {
+     "artcon": 0.2010861486196518,
+     "bg": 0.0,
+     "budget": 0.0,
+     "gadv": 0.710502564907074,
+     "id": -5.960464477539063e-08,
+     "lm": 1.840750155679416e-05,
+     "low": 6.654109796500052e-08,
+     "parse": 0.8922256231307983,
+     "spec": 0.001153338234871626,
+     "tv": 0.16875329613685608,
+     "type": 1.8087269067764282
+    },
+    "finite": true,
+    "idadv_share": 0.13670173287391663,
+    "labelled": 1
+   }
+  ],
+  "optimizer_steps": {
+   "D": 1,
+   "G": 1
+  },
+  "params_changed": {
+   "d": true,
+   "g": true
+  },
+  "params_finite_after_step": true,
+  "pass": true,
+  "scales": {
+   "D_after": 65536.0,
+   "D_before": 65536.0,
+   "G_after": 65536.0,
+   "G_before": 65536.0,
+   "independent_objects": true
+  },
+  "weights": [
+   0.5,
+   0.5
+  ]
+ },
+ "scaler_clip_demo": {
+  "D_scale": [
+   65536.0,
+   32768.0
+  ],
+  "D_step_skipped_on_inf": true,
+  "G_norm_after_clip": 0.9999999403953552,
+  "G_scale": [
+   65536.0,
+   65536.0
+  ],
+  "G_scaled_norm": 33879840.0,
+  "G_stepped": true,
+  "G_unscaled_norm": 516.96533203125,
+  "clip_binds_after_unscale": true,
+  "clip_returned_total_norm": 516.96533203125,
+  "pass": true,
+  "scalers_independent": true
+ },
+ "seed": 20261003,
+ "static_authority": {
+  "config_sha256": {
+   "B0": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+   "B1": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+   "B2": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+   "B3": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca"
+  },
+  "counts_match": true,
+  "parameter_counts": {
+   "attack_head": {
+    "total": 3078,
+    "trainable": 3078
+   },
+   "discriminator": {
+    "total": 2767809,
+    "trainable": 2767809
+   },
+   "e_art": {
+    "total": 11204736,
+    "trainable": 11204736
+   },
+   "g_res": {
+    "total": 31677421,
+    "trainable": 31677421
+   },
+   "identity_head": {
+    "total": 30780,
+    "trainable": 30780
+   }
+  }
+ },
+ "status": "PASS",
+ "synthetic_only": true,
+ "teacher_adapter_autocast": {
+  "call_site_contract": "teacher adapters + teacher forwards run inside torch.autocast(enabled=False)",
+  "inside_autocast": [
+   "torch.float16",
+   "torch.float16"
+  ],
+  "inside_explicit_fp32_region": [
+   "torch.float32",
+   "torch.float32"
+  ],
+  "pass": true
+ },
+ "training_runs": 0,
+ "vram": {
+  "A_B0_forward_N4": {
+   "max_memory_allocated_GiB": 0.472,
+   "max_memory_allocated_bytes": 507148800,
+   "max_memory_reserved_GiB": 0.52,
+   "max_memory_reserved_bytes": 557842432
+  },
+  "B_B3_forward_N4": {
+   "max_memory_allocated_GiB": 0.472,
+   "max_memory_allocated_bytes": 507284992,
+   "max_memory_reserved_GiB": 0.52,
+   "max_memory_reserved_bytes": 557842432
+  },
+  "C_B3_one_group_backward_and_step": {
+   "max_memory_allocated_GiB": 1.752,
+   "max_memory_allocated_bytes": 1880794112,
+   "max_memory_reserved_GiB": 1.809,
+   "max_memory_reserved_bytes": 1941962752
+  },
+  "oom": false,
+  "physical_batch": 4
+ }
+}

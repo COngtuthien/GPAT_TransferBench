@@ -5,9 +5,16 @@ adapters take the native GPAT float tensor x ([N, 3, 256, 256], RGB, range [-1, 
 frozen resampling without uint8 rounding, so gradients reach x_hat. Teacher weights and code are not touched
 here; this module builds only fixed resampling operators and the adapter transforms.
 
-FaceXFormer: CLIP_EMULATING_DIFFERENTIABLE_COMPATIBILITY -- v = clamp((x + 1) / 2, 0, 1); horizontal PIL
-  bicubic pass; clamp(0, 1); vertical pass; clamp(0, 1); ImageNet normalization. PIL clips after each pass
-  (clip8), so the adapter is piecewise-linear, not a global linear operator.
+FaceXFormer (production, M7C3): EXACT_FORWARD_SURROGATE_BACKWARD_COMPATIBILITY (`facexformer_input_exact`).
+  Forward = the frozen PIL path bit for bit: legal teacher uint8 u8 = clip(round(255 * (x + 1) / 2), 0, 255), Pillow
+  12.3.0 Resample.c 8bpc bicubic 256 -> 224 (22-bit fixed-point coefficients, accumulator start 2^21, clip8 after
+  the horizontal pass and again after the vertical pass), ToTensor (u8 / 255 in fp32), ImageNet normalization.
+  Backward = the VJP of the M7C2a clip-emulating adapter below (the owner-approved differentiable surrogate).
+  History: M7C2a used the clip-emulating adapter as forward too; the M7C3 R-04 Level-2 worst-case landmark gate
+  exposed its 1.05-1.12 LSB forward mismatch to PIL, so the forward became exact (owner M7C3 decision).
+FaceXFormer surrogate (M7C2a, unchanged): CLIP_EMULATING_DIFFERENTIABLE_COMPATIBILITY -- v = clamp((x + 1) / 2, 0, 1);
+  horizontal PIL bicubic pass; clamp(0, 1); vertical pass; clamp(0, 1); ImageNet normalization. PIL clips after
+  each pass (clip8), so the adapter is piecewise-linear, not a global linear operator.
 AdaFace: AREA_MATRIX_DIFFERENTIABLE_COMPATIBILITY -- clamp(x, -1, 1); exact INTER_AREA 256->112 area
   matrix in the [-1, 1] domain; RGB->BGR flip.
 ArtifactProbe (VAL only, no gradient): the frozen [0,1] path on float input (INTER_AREA 224, then
@@ -101,6 +108,125 @@ def facexformer_unit(x, w=None):
     v = ((x.float() + 1.0) * 0.5).clamp(0.0, 1.0)
     h = torch.einsum('nchw,pw->nchp', v, w).clamp(0.0, 1.0)
     return torch.einsum('oh,nchp->ncop', w, h).clamp(0.0, 1.0)
+
+
+# ----------------------------------------------------------------------------- M7C3 exact FaceXFormer forward
+PIL_PRECISION_BITS = 22                       # Resample.c: PRECISION_BITS (32 - 8 - 2)
+FACEXFORMER_ADAPTER_CLASS = 'EXACT_FORWARD_SURROGATE_BACKWARD_COMPATIBILITY'
+
+
+def _pil_bicubic(x: float) -> float:
+    """Resample.c bicubic_filter (a = -0.5), double precision, same operation order."""
+    a = -0.5
+    if x < 0.0:
+        x = -x
+    if x < 1.0:
+        return ((a + 2.0) * x - (a + 3.0)) * x * x + 1
+    if x < 2.0:
+        return (((x - 5) * x + 8) * x - 4) * a
+    return 0.0
+
+
+def pil_bicubic_fixed_point(in_size: int = CANONICAL, out_size: int = FX_INPUT) -> np.ndarray:
+    """Integer coefficient matrix [out, in] of Resample.c precompute_coeffs + normalize_coeffs_8bpc (box 0..in).
+
+    Doubles are accumulated sequentially exactly as in C (ww += w; k /= ww), then quantized to 22-bit fixed point
+    with round-half-away-from-zero ((int)(+-0.5 + k * 2^22), C truncation toward zero).
+    """
+    scale = float(in_size - 0) / out_size
+    filterscale = max(scale, 1.0)
+    support = 2.0 * filterscale
+    inv = 1.0 / filterscale
+    out = np.zeros((out_size, in_size), np.int64)
+    for xx in range(out_size):
+        center = 0.0 + (xx + 0.5) * scale
+        xmin = max(int(center - support + 0.5), 0)
+        xmax = min(int(center + support + 0.5), in_size) - xmin
+        k = []
+        ww = 0.0
+        for x in range(xmax):
+            w = _pil_bicubic((x + xmin - center + 0.5) * inv)
+            k.append(w)
+            ww += w
+        if ww != 0.0:
+            k = [v / ww for v in k]
+        for x, v in enumerate(k):
+            q = v * (1 << PIL_PRECISION_BITS)
+            out[xx, xmin + x] = int(-0.5 + q) if v < 0 else int(0.5 + q)
+    return out
+
+
+def teacher_uint8(x):
+    """Legal teacher uint8 of the GPAT tensor: clip(round(255 * (x + 1) / 2), 0, 255) (inverse of u8 / 127.5 - 1;
+    the M7C2a R-04 quantization operator; torch.round = half to even). Returned as float64 integer values."""
+    import torch
+    v = (x.detach().to(torch.float64) + 1.0) * 0.5
+    return torch.round(v * 255.0).clamp(0.0, 255.0)
+
+
+def _clip8_pass(ss):
+    import torch
+    return torch.floor(ss / float(1 << PIL_PRECISION_BITS)).clamp(0.0, 255.0)     # clip8: lookup[ss >> 22]
+
+
+def facexformer_uint8_exact(x, k=None):
+    """[N, 3, 256, 256] GPAT float -> the frozen PIL BICUBIC 224x224 uint8 image (float64 integer values, NCHW).
+    All products and sums are integers < 2^53, so float64 arithmetic is exact in any summation order."""
+    import torch
+    k = torch.as_tensor(pil_bicubic_fixed_point() if k is None else k, dtype=torch.float64, device=x.device)
+    half = float(1 << (PIL_PRECISION_BITS - 1))
+    with torch.autocast(device_type=x.device.type, enabled=False):
+        u8 = teacher_uint8(x)
+        h = _clip8_pass(half + torch.einsum('nchw,pw->nchp', u8, k))       # horizontal pass, clip8 -> uint8 temp
+        return _clip8_pass(half + torch.einsum('oh,nchp->ncop', k, h))     # vertical pass, clip8 -> uint8
+
+
+def facexformer_normalize_uint8(u8):
+    """torchvision ToTensor (uint8 -> fp32 / 255) then Normalize(ImageNet) in fp32, same operation order.
+
+    The divisor is a 0-dim tensor on the input device: CUDA division by a Python scalar multiplies by the reciprocal
+    (up to 1 ulp from CPU true division); tensor division is IEEE true division on both devices, as in the frozen
+    CPU ToTensor."""
+    import torch
+    t = u8.to(torch.float32) / torch.tensor(255.0, dtype=torch.float32, device=u8.device)
+    mean = torch.as_tensor(IMAGENET_MEAN, dtype=torch.float32, device=t.device).view(1, 3, 1, 1)
+    std = torch.as_tensor(IMAGENET_STD, dtype=torch.float32, device=t.device).view(1, 3, 1, 1)
+    return t.sub(mean).div(std)
+
+
+def _exact_surrogate_function():
+    import torch
+
+    class ExactForwardSurrogateBackward(torch.autograd.Function):
+        """FORWARD: exact frozen FaceXFormer preprocessing. BACKWARD: VJP of the M7C2a clip-emulating adapter
+        (re-evaluated under enable_grad with torch.autograd.grad; never recursive)."""
+
+        @staticmethod
+        def forward(ctx, x):
+            ctx.save_for_backward(x)
+            with torch.no_grad():
+                return facexformer_normalize_uint8(facexformer_uint8_exact(x))
+
+        @staticmethod
+        def backward(ctx, grad):
+            (x,) = ctx.saved_tensors
+            with torch.enable_grad(), torch.autocast(device_type=x.device.type, enabled=False):
+                xx = x.detach().requires_grad_(True)
+                (gx,) = torch.autograd.grad(facexformer_input(xx), xx, grad)
+            return gx
+
+    return ExactForwardSurrogateBackward
+
+
+_EXACT_FN = []
+
+
+def facexformer_input_exact(x):
+    """Production FaceXFormer adapter (M7C3): exact frozen forward, approved surrogate backward. [N,3,256,256] ->
+    ImageNet-normalized fp32 [N,3,224,224]."""
+    if not _EXACT_FN:
+        _EXACT_FN.append(_exact_surrogate_function())
+    return _EXACT_FN[0].apply(x)
 
 
 def adaface_input(x, w=None):

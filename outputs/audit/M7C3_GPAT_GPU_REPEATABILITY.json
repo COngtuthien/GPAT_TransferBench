@@ -1,0 +1,131 @@
+{
+ "bitwise_identical": true,
+ "compared": [
+  "DWT target LL",
+  "G_res output",
+  "x_hat",
+  "artifact map A",
+  "D logits",
+  "synthetic loss",
+  "grads g_res.ending/intro, e_art.conv1, D conv1 (fp32 and fp16 autocast)",
+  "12 operator forward/backward digests"
+ ],
+ "determinism": {
+  "applied": {
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+   "cudnn_benchmark": false,
+   "cudnn_deterministic": true,
+   "gpu": true,
+   "seed": 20261003,
+   "tf32_cudnn": false,
+   "tf32_matmul": false,
+   "use_deterministic_algorithms": true
+  },
+  "observed": {
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+   "cudnn_benchmark": false,
+   "cudnn_deterministic": true,
+   "deterministic_warn_only": false,
+   "float32_matmul_precision": "highest",
+   "tf32_cudnn": false,
+   "tf32_matmul": false,
+   "use_deterministic_algorithms": true
+  }
+ },
+ "digests": {
+  "core": {
+   "amp_fp16": {
+    "A": "75e6653a4ef22ab7be6403bd1debfa68664f9d173c1712cc0e6be430c0f4f971",
+    "D_logits": "10fb629d192aae7e22747af2cbf1b950f3703b7f30788eab6d5af2e760828501",
+    "dwt_target_LL": "21bcf71fd3748e4dabae82bd69dd194aeefb300c0b33e20384dacb98ffbed81a",
+    "g_res_raw": "0510a8b8eaa437cea2d0ccc46b8a9f9f6299ac1e61980b9c8ef7416ec3cfc538",
+    "grad_D_first_conv": "38cf40e13163e88aa97edd71c3635697fa3ddd8428737dbbe0a935bca758ae10",
+    "grad_e_art_conv1": "0a3f0ee9e3cbab26f89ed53b7b20e22cb985b650fd4c52ef57e4aeb27560d773",
+    "grad_g_res_ending": "a4b5478b773309d6d4b810441f185b348dace9bd0a9c0d01f807d2f276bc5631",
+    "grad_g_res_intro": "e9106b4e4d93a41af5ea05cff33dcc4ce443e2252a2b088883fd1e7f77aaca32",
+    "loss": "d29e7d842a6d149538ad8737c383e9e730d86a2640479015f5b5126d4202dace",
+    "x_hat": "a7b1def9835adb3a67ea1fa501dd3045d1c519435d13d1b434927a8f712c72fc"
+   },
+   "fp32": {
+    "A": "14862342939ee43061dfa9b5727daea849247b243fe4115e2346f421473b18ae",
+    "D_logits": "21e0837136bb9a3c39097c401012a5d46ea8c7b818f636605e3299dbc9ba9e67",
+    "dwt_target_LL": "21bcf71fd3748e4dabae82bd69dd194aeefb300c0b33e20384dacb98ffbed81a",
+    "g_res_raw": "efed9ca23517e8778cf5bf3a8d316661e35a09c084b05ea2d751ee81de58c681",
+    "grad_D_first_conv": "596f1894fdf73a8153d99620c69807893583695dfbb9c14b11caa8e29838f284",
+    "grad_e_art_conv1": "a05b54ba67e7294ce5418a6377f614ec135e450f737a33a2a1be991669ac23fd",
+    "grad_g_res_ending": "7e8fc0f31e76e2188f2f33943923547fb38d9e719a3952daf6c0289e5a4f959a",
+    "grad_g_res_intro": "0f47ec3ef3036919fe7d98cdee9dca5dfb4ebbb7d4e83c8783a133e1575790c3",
+    "loss": "86f370850b1facf61b544ef8c2e40e2c47c947d07162c06edac23874bae52750",
+    "x_hat": "d237fecc19f9b25ecad45ac8c16028c6f87ef2a16e23fbadafae7564ae68306c"
+   }
+  },
+  "ops": {
+   "avgpool_bottleneck": {
+    "finite": true,
+    "forward": "a72f26bc417d52facfbc605361393696f15266a5c75e2bf1b1185eaa9ed40f79",
+    "grad": "7049d33f416c35e0781076b90687cd3e94e5d23c05140f6c26e968c928949c48"
+   },
+   "bilinear_x2_source_bands": {
+    "finite": true,
+    "forward": "8b539649dbe056f50e735473270643821fa8668638d8ffe014fd3330dbbd28ae",
+    "grad": "e3895e75022a2d3bc6f5b7c94a8e6a63267d3cfa3d752818e1532dfca359b474"
+   },
+   "decoder_up_bilinear_conv": {
+    "finite": true,
+    "forward": "766a904b0cdd2cc8f65327df36fa20cd12b754437892b674434e85998c61c141",
+    "grad": "a58dd99ced21c8d2be673353534b36e4484ddba5e9d33be2589c682b166f6358"
+   },
+   "dwt": {
+    "finite": true,
+    "forward": "b2d5a6901eefa5ca969fdfb6552e85d3714d43250912eed36315d8e8576990fc",
+    "grad": "e9fd4a3939340d21d9ae6ad17642f4889980d89fafe1a943f221811e13152422"
+   },
+   "face_mask_nearest_exact": {
+    "finite": true,
+    "forward": "5e2290c3b28be730f9ee062994f940650073dacff8de973325c2de6486c74107",
+    "grad": null
+   },
+   "film": {
+    "finite": true,
+    "forward": "1470caabc063142155dc756cc288f17e443a63ce630c8d2ad8bd82bc6e8e3dd9",
+    "grad": "578fa6a273298ee6a9e20249402bc3648fb97633c32996ccc046335df4ff4636"
+   },
+   "highpass": {
+    "finite": true,
+    "forward": "f59f3044eb6be9b339e9e62fb416274e418dc9e25e7ea043ded2aeaf3c45d6c6",
+    "grad": "2fc9f62527dfce2b8b0f038a38869b2557b2c0fb85f208f4343249095c7a055a"
+   },
+   "idwt": {
+    "finite": true,
+    "forward": "0936b07c9a316911e3c16db9d7082a76d03844b686e9f21b6f5924e782a271cd",
+    "grad": "5ea3285087b0d45ee171f8a5eac78d0681c0798860c13b4130abda1f1dd61416"
+   },
+   "nafblock": {
+    "finite": true,
+    "forward": "0412fd51ad584abced4a0c921b04cfda1ab2d4925b50b8453558955d5d574a0c",
+    "grad": "de25e688937b94e171cfd768cb95c506e1fc01215d2df25d4701394d927289f4"
+   },
+   "patchgan": {
+    "finite": true,
+    "forward": "920caa7be60480da86b43a8bce969d952d2e63d799e5f934f0a35c9d16dcc4c3",
+    "grad": "370da6f4a41204265d23b2b6688f0cedd2e956afcce548b960d4ca1daa25016e"
+   },
+   "s_orient": {
+    "finite": true,
+    "forward": "548f95b190389769b591d61ae7061f76854a45049768dc5cae275f8cd9caf088",
+    "grad": "bcb4562dcb7994c89769909c61d878973a2a3a93380d1f64565a239becfcd563"
+   },
+   "s_radial": {
+    "finite": true,
+    "forward": "9e0f02ec2f64e78e0981b468c5100fd25f2169327f2a7abba745e8e454a479e7",
+    "grad": "dbfb2a0f37762a3b0aa97e64f64762b7eba84cd63f2117344ba5e352fee48908"
+   }
+  }
+ },
+ "kind": "gpu_repeatability",
+ "method": "tools/m7c3_gpat_gpu_qualification.py --digests run twice in fresh processes, identical seeds, gpat-m7-gpu",
+ "milestone": "M7C3",
+ "nondeterminism_found": [],
+ "process_1_sha256": "c5ed7c4d23bda85ac37e3cdea629f71549eb6a3d2bbf3004b621f8a1b6096932",
+ "process_2_sha256": "c5ed7c4d23bda85ac37e3cdea629f71549eb6a3d2bbf3004b621f8a1b6096932"
+}

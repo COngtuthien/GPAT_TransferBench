@@ -442,3 +442,29 @@ and blocks GPU runtime qualification and scientific training.
 **M7 status: STATIC_CORE_IMPLEMENTED · CPU_SYNTHETIC_QUALIFIED · GPU_RUNTIME_NOT_QUALIFIED ·
 SCIENTIFIC_TRAINING_NOT_ALLOWED · SCIENTIFIC_TRAINING_NOT_STARTED.** **M6_CLOSED = true.** No GPAT checkpoint, run or bank
 exists. Evidence: `outputs/audit/M7C2B_GPAT_STATIC_CORE.md` / `outputs/audit/M7C2B_GPAT_STATIC_CORE.json`.
+
+**M7C3 (2026-10-03) — GPAT GPU runtime qualification + R-04 Level-2 teacher parity.** This note is additive and is the
+**current state** for the GPAT rows; the M7B, M7C2a and M7C2b notes above stay as history.
+- **Environment.** The new `gpat-m7-gpu` environment on the RTX 3090 host is an offline clone of gpat-m5 plus only ptwt
+  1.0.1 and PyWavelets 1.9.0 (hash-pinned). Its lock is `environments/gpat_m7_gpu.lock.json`. No existing environment
+  was mutated.
+- **Runtime gates.** The pinned NAFNet source works on torch 2.12.1 / CUDA 13.0. Deterministic CUDA rejected no op, and
+  two fresh processes are bitwise repeatable. AMP/fp32 boundaries, batch-4 B0/B3 forward, the synthetic
+  accumulation-group smoke, DEV-022, D11/D12 and VRAM (no OOM) all pass.
+- **R-04 Level 2.** It ran on 192 TRAIN faces (no VAL/TEST image).
+  - Attempt 1, with the M7C2a clip-emulating FaceXFormer adapter, FAILED the landmark max-abs gate; it is preserved.
+  - Owner decision: exact frozen forward + approved surrogate backward
+    (`EXACT_FORWARD_SURROGATE_BACKWARD_COMPATIBILITY`, a RUNTIME_COMPATIBILITY refinement of A10 D07; no new DEV, no
+    gate relaxed). This adds `facexformer_input_exact` to `methods/gpat/teacher_preprocess.py`; the M7C2a definitions
+    are unchanged.
+  - Attempt 2 passes every gate against the original attempt-1 noise floors.
+  - The owner-approved teacher-input quantization, `u8 = clip(round_half_to_even(255 * (x + 1) / 2), 0, 255)`, is an
+    OWNER_RUNTIME_COMPATIBILITY_CLARIFICATION. It is recorded, together with the adapter contract and the R-04
+    results, in the additive record `configs/amendments/gpat_m7c3_gpu_runtime_resolution.yaml` (not an amendment;
+    no DEV).
+- **Driver.** The GPU driver is 580.178.04; the M6 capture recorded 595.84. This is recorded and is not a blocker.
+
+**M7 status: STATIC_CORE_IMPLEMENTED · CPU_SYNTHETIC_QUALIFIED · GPU_RUNTIME_QUALIFIED ·
+R04_LEVEL2_TEACHER_PARITY_QUALIFIED · PRODUCTION_RUNNER_NOT_IMPLEMENTED · REAL_TRAIN_QUALIFICATION_NOT_DONE ·
+SCIENTIFIC_TRAINING_NOT_ALLOWED · SCIENTIFIC_TRAINING_NOT_STARTED.** **M6_CLOSED = true.** No GPAT checkpoint, run or
+bank exists. Evidence: `outputs/audit/M7C3_GPAT_GPU_RUNTIME.md` and the `M7C3_*.json` records.
