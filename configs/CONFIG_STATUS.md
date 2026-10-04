@@ -499,3 +499,34 @@ CHECKPOINT_RESUME_QUALIFIED · WARMUP_RUNNER_QUALIFIED · AMP_OVERFLOW_FAIL_CLOS
 SCIENTIFIC_TRAINING_READY_NOT_STARTED.** **M6_CLOSED = true.**
 The 12 scientific GPAT runs (B0-B3 × seeds 42/1337/2026) have not started. Evidence:
 `outputs/audit/M7C4_GPAT_RUNNER.md` / `outputs/audit/M7C4_GPAT_RUNNER_QUALIFICATION.json`.
+
+**M7D1 (2026-10-03/04) — scientific attempt 2 of GPAT-B0/E08/seed 42 stopped FAIL_CLOSED_AMP_OVERFLOW; M7D1-N1
+diagnosis + additive ATOMIC_AMP_BACKOFF_RETRY resolution.** This note is additive and is the **current state** for the
+GPAT rows.
+- **Attempt 2 is preserved read-only.** It stopped at attempted update 1971 (epoch 2, group 866) with D_OPT only:
+  `discriminator.model.0.weight` and `.2.weight` were non-finite at D/G scale 65536, and G was finite.
+  - Last safe recovery: end of epoch 1, update 1105, SHA `a34e73d1…`.
+  - VAL/TEST access was 0. The run root is unchanged (tree hash equal before and after M7D1-N1). It was not resumed.
+- **Diagnosis: LOSS_SCALE_OVERFLOW_CONFIRMED.**
+  - An exact qualification replay reproduced updates 1106..1970 bitwise and reproduced the failure exactly.
+  - From the pre-update-1971 snapshot, D overflowed at scales 65536 and 32768 but was finite at 16384, 8192 and 4096
+    (unscaled D norm ~43.56; losses scale-independent).
+- **Resolution** (owner M7D1-N1; record `configs/amendments/gpat_m7d1_amp_retry_resolution.yaml`,
+  ADDITIVE_RUNTIME_NUMERICAL_STABILITY_RESOLUTION, no DEV). The production runner uses **ATOMIC_AMP_BACKOFF_RETRY**:
+  - an overflowed D/G group is undone (buffers incl. E_art BN, RNG, scalers restored; no step, update, schedule, EMA
+    or checkpoint);
+  - it is recomputed at the same update index with only the offending scaler backed off by ×0.5;
+  - a retry is never an optimizer update, and no group is ever skipped;
+  - overflow at scale 1.0 stops with FAIL_CLOSED_AMP_OVERFLOW_FINAL. **FAIL_CLOSED_AMP_OVERFLOW** (M7C4) remains the
+    fallback.
+- **Unchanged:** AMP fp16 + GradScaler, the 66300 successful updates, architecture, LR, optimizer, betas, batch,
+  accumulation, curriculum, losses, lambdas, order, seeds, clipping and EMA.
+- **Qualified.** Retrying update 1971 was accepted at D scale 16384, bitwise equal to one attempt from the pre-group
+  state. Updates 1971..1991 were finite with D:G 1:1; one further backoff happened at 1985.
+- **Restart.** A restart under the new code is a fresh run: the attempt-2 recovery carries code 6cf271e and is refused
+  on resume.
+
+**M7 status: PRODUCTION_RUNNER_IMPLEMENTED · AMP_OVERFLOW_DIAGNOSED (LOSS_SCALE_OVERFLOW_CONFIRMED) ·
+ATOMIC_AMP_BACKOFF_RETRY_QUALIFIED · FAIL_CLOSED_AMP_OVERFLOW_FALLBACK ·
+SCIENTIFIC_TRAINING_BLOCKED_NUMERICAL_POLICY_RESOLVED_READY_TO_RESTART.** **M6_CLOSED = true.** No GPAT scientific
+run has completed; the restart of B0/seed 42, seeds 1337/2026 and B1-B3 await owner instruction.

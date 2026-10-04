@@ -1,0 +1,325 @@
+{
+  "schema": "gpat.m7d1.amp_retry_resolution",
+  "schema_version": 1,
+  "milestone": "M7D1-N1",
+  "classification": "ADDITIVE_RUNTIME_NUMERICAL_STABILITY_RESOLUTION",
+  "status": [
+    "OWNER_SCIENTIFIC_DECISION_M7D1_N1",
+    "ADDITIVE",
+    "NOT_A_FROZEN_SPEC_REWRITE",
+    "NOT_AN_ARCHITECTURE_CHANGE",
+    "NOT_AN_OPTIMIZER_LR_LOSS_CHANGE",
+    "NOT_AN_A10_REWRITE",
+    "NO_NEW_DEVIATION"
+  ],
+  "parent_commit": "6cf271ebd0d658dcc5384da00265326e7bac6476",
+  "decision_date": "2026-10-04",
+  "new_deviation": null,
+  "bound_authority_sha256": {
+    "configs/amendments/gpat_m7c4_runner_resolution.yaml": "a712ca498f1d02633ce8e5a1ac6aa7fa5c5f4664567671e24171be0cde8d82f7",
+    "configs/amendments/gpat_m7c3_gpu_runtime_resolution.yaml": "f89a91206ffe1c82a55b600f87fc824c91b1840d4222f2b45346121d6af82717",
+    "configs/amendments/gpat_a10_m7_contract_resolution.yaml": "57b37f09ca4279ad3999f4f9efa21fbf6fa39836574a0336bd13e34b2bd53203",
+    "environments/gpat_m7_gpu.lock.json": "24c983ebbb308acacd63f32837532e5f9166114962f524e993f243f2ff746114",
+    "configs/methods/gpat_b0.yaml": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "configs/methods/gpat_b1.yaml": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+    "configs/methods/gpat_b2.yaml": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+    "configs/methods/gpat_b3.yaml": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243"
+  },
+  "frozen_spec_basis": "The frozen specification requires AMP fp16 on CUDA with GradScaler enabled; it does not freeze GradScaler initial-scale/backoff implementation details or the handling of an overflowed optimizer group.",
+  "failed_attempt_evidence": {
+    "method": "GPAT-B0",
+    "experiment": "E08",
+    "seed": 42,
+    "attempt": 2,
+    "run_id": "1215d39ebc184ab9",
+    "run_root": "<runtime_root>/runs/m7/E08/seed_42 (preserved read-only; not resumed, not overwritten)",
+    "completion_status": "FAIL_CLOSED_AMP_OVERFLOW",
+    "attempted_global_update": 1971,
+    "last_completed_update": 1970,
+    "epoch": 2,
+    "group": 866,
+    "offending_optimizer": "D_OPT",
+    "offending_parameters": [
+      "discriminator.model.0.weight",
+      "discriminator.model.2.weight"
+    ],
+    "G_OPT_nonfinite_gradients": 0,
+    "D_scale": 65536.0,
+    "G_scale": 65536.0,
+    "last_safe_recovery": "<runtime_root>/runs/m7/E08/seed_42/checkpoints/recovery/latest.pt",
+    "last_safe_recovery_sha256": "a34e73d1d8e8f6571ee214aba221a7d0858893cc25208df6be24531239e66706",
+    "last_safe_recovery_global_update": 1105,
+    "VAL_access": 0,
+    "TEST_access": 0,
+    "run_tree_sha256_before_and_after_m7d1": "bbeb62545e306218472590594efb3bca3b05b90204509aad64c9ff26f4e9c8b8"
+  },
+  "diagnosis": {
+    "classification": "LOSS_SCALE_OVERFLOW_CONFIRMED",
+    "replay": "qualification replay (scientific seed-42 epoch-2 order, M7C4 runner unmodified) from a byte-identical copy of the end-epoch-1 recovery: updates 1106..1970 bitwise equal to the scientific records (865/865), failure at 1971 identical (D_OPT only, same 2 parameters, G finite)",
+    "pre_update_1971_snapshot_sha256": "5e91e9f5de1641df3a5ae2119a35e7f6a0639da1039428d8b044bafe0e244af3",
+    "probe_table": [
+      {
+        "D_scale": 65536.0,
+        "G_scale": 65536.0,
+        "D_finite": false,
+        "D_offending": [
+          "discriminator.model.0.weight",
+          "discriminator.model.2.weight"
+        ],
+        "D_nonfinite_elements": {
+          "discriminator.model.0.weight": 288,
+          "discriminator.model.2.weight": 16
+        },
+        "D_grad_norm_unscaled": null,
+        "G_finite": true,
+        "G_grad_norm_unscaled": 0.031090427190065384,
+        "microbatch_losses": [
+          {
+            "L_G": 0.19104930758476257,
+            "L_D": 0.005363620817661285
+          },
+          {
+            "L_G": 0.21892942488193512,
+            "L_D": 0.03673943504691124
+          }
+        ],
+        "optimizer_steps": {
+          "D": 0,
+          "G": 0
+        }
+      },
+      {
+        "D_scale": 32768.0,
+        "G_scale": 65536.0,
+        "D_finite": false,
+        "D_offending": [
+          "discriminator.model.0.weight"
+        ],
+        "D_nonfinite_elements": {
+          "discriminator.model.0.weight": 84
+        },
+        "D_grad_norm_unscaled": null,
+        "G_finite": true,
+        "G_grad_norm_unscaled": 0.031090427190065384,
+        "microbatch_losses": [
+          {
+            "L_G": 0.19104930758476257,
+            "L_D": 0.005363620817661285
+          },
+          {
+            "L_G": 0.21892942488193512,
+            "L_D": 0.03673943504691124
+          }
+        ],
+        "optimizer_steps": {
+          "D": 0,
+          "G": 0
+        }
+      },
+      {
+        "D_scale": 16384.0,
+        "G_scale": 65536.0,
+        "D_finite": true,
+        "D_offending": [],
+        "D_nonfinite_elements": {},
+        "D_grad_norm_unscaled": 43.56209945678711,
+        "G_finite": true,
+        "G_grad_norm_unscaled": 0.031090427190065384,
+        "microbatch_losses": [
+          {
+            "L_G": 0.19104930758476257,
+            "L_D": 0.005363620817661285
+          },
+          {
+            "L_G": 0.21892942488193512,
+            "L_D": 0.03673943504691124
+          }
+        ],
+        "optimizer_steps": {
+          "D": 1,
+          "G": 1
+        }
+      },
+      {
+        "D_scale": 8192.0,
+        "G_scale": 65536.0,
+        "D_finite": true,
+        "D_offending": [],
+        "D_nonfinite_elements": {},
+        "D_grad_norm_unscaled": 43.56339645385742,
+        "G_finite": true,
+        "G_grad_norm_unscaled": 0.031090427190065384,
+        "microbatch_losses": [
+          {
+            "L_G": 0.19104930758476257,
+            "L_D": 0.005363620817661285
+          },
+          {
+            "L_G": 0.21892942488193512,
+            "L_D": 0.03673943504691124
+          }
+        ],
+        "optimizer_steps": {
+          "D": 1,
+          "G": 1
+        }
+      },
+      {
+        "D_scale": 4096.0,
+        "G_scale": 65536.0,
+        "D_finite": true,
+        "D_offending": [],
+        "D_nonfinite_elements": {},
+        "D_grad_norm_unscaled": 43.562713623046875,
+        "G_finite": true,
+        "G_grad_norm_unscaled": 0.031090427190065384,
+        "microbatch_losses": [
+          {
+            "L_G": 0.19104930758476257,
+            "L_D": 0.005363620817661285
+          },
+          {
+            "L_G": 0.21892942488193512,
+            "L_D": 0.03673943504691124
+          }
+        ],
+        "optimizer_steps": {
+          "D": 1,
+          "G": 1
+        }
+      }
+    ],
+    "lowest_finite_tested_D_scale": 4096.0,
+    "highest_finite_tested_D_scale": 16384.0,
+    "forward_losses_identical_across_scales": true,
+    "interpretation": "The forward pass and losses are finite and scale-independent; at D scale 16384 and below every unscaled D gradient is finite (norm ~43.56, clipped to 1.0), so the 1971 failure is fp16 overflow of the scaled D gradient (scale x gradient > fp16 max) in the first two PatchGAN convolutions, not a non-finite unscaled optimization state."
+  },
+  "policy": {
+    "name": "ATOMIC_AMP_BACKOFF_RETRY",
+    "scope": "production Trainer (generator D_OPT/G_OPT group and B1/B3 warmup WARMUP_OPT)",
+    "fallback": "FAIL_CLOSED_AMP_OVERFLOW (M7C4) remains the GeneratorStep/WarmupStep default and the terminal behaviour",
+    "backoff_factor": 0.5,
+    "backoff_semantics": "standard GradScaler backoff of each offending scaler only: scale *= 0.5, growth tracker = 0; non-offending scalers keep their exact pre-attempt state",
+    "minimum_scale": 1.0,
+    "final_failure": "FAIL_CLOSED_AMP_OVERFLOW_FINAL",
+    "pre_group_state_preserved": [
+      "all core module buffers (E_art BatchNorm running_mean/running_var/num_batches_tracked)",
+      "Python/NumPy/torch CPU/CUDA RNG",
+      "G_SCALER/D_SCALER (WARMUP_SCALER) state"
+    ],
+    "not_copied_because_unreachable_by_a_failed_attempt": [
+      "parameters",
+      "optimizer moments/step counts",
+      "EMA",
+      "schedule/position",
+      "checkpoints"
+    ],
+    "rules": [
+      "one optimizer group = one scientific update",
+      "both D and G unscaled and scanned before either step",
+      "on any non-finite unscaled gradient: no optimizer step, no scaler update, no update-index/schedule advance, no EMA, no checkpoint; restore pre-group state, zero gradients, back off only the offending scaler(s), recompute the SAME group at the SAME update index",
+      "the whole D/G group is recomputed whichever side overflowed",
+      "TRAIN accesses are logged once per group (at admission), never per attempt",
+      "each failed attempt logs record_type=amp_retry (not an optimizer update)",
+      "a successful attempt produces exactly one COMPLETE optimizer_group record",
+      "hard stops unchanged: non-finite loss before backward, post-step non-finite parameter, restore inconsistency, data-group mismatch; overflow with the offending scale already at 1.0 -> FAIL_CLOSED_AMP_OVERFLOW_FINAL",
+      "no recovery checkpoint can be written while a group or its retries are in flight"
+    ]
+  },
+  "invariants": {
+    "amp_fp16_enabled": true,
+    "grad_scaler_enabled": true,
+    "grad_scaler_construction_unchanged": true,
+    "successful_scientific_updates": 66300,
+    "overflowed_attempts_count_as_updates": false,
+    "scientific_group_skipped": false,
+    "d_fp32_switch": false,
+    "unchanged": [
+      "architecture",
+      "learning rate",
+      "optimizer",
+      "betas",
+      "batch size",
+      "grad accumulation",
+      "curriculum",
+      "losses",
+      "lambda values",
+      "dataset order",
+      "scientific seed",
+      "gradient clipping",
+      "EMA schedule"
+    ]
+  },
+  "qualification": {
+    "update_1971_accepted_D_scale": 16384.0,
+    "update_1971_attempts": 3,
+    "restore_equivalence_post_group_state_digest": "d744004d6814e6c601723dd4030565666c490aec800c5685a67b62361a452c64",
+    "bn_restore_equivalence": true,
+    "rng_restore_equivalence": true,
+    "failed_attempt_mutated_e_art_bn": true,
+    "gpat_step_consumes_global_rng": false,
+    "post_failure_updates": [
+      1971,
+      1972,
+      1973,
+      1974,
+      1975,
+      1976,
+      1977,
+      1978,
+      1979,
+      1980,
+      1981,
+      1982,
+      1983,
+      1984,
+      1985,
+      1986,
+      1987,
+      1988,
+      1989,
+      1990,
+      1991
+    ],
+    "post_failure_amp_retries": [
+      {
+        "global_update_attempted": 1971,
+        "retry_number": 1,
+        "old_scale": {
+          "D_OPT": 65536.0
+        },
+        "new_scale": {
+          "D_OPT": 32768.0
+        }
+      },
+      {
+        "global_update_attempted": 1971,
+        "retry_number": 2,
+        "old_scale": {
+          "D_OPT": 32768.0
+        },
+        "new_scale": {
+          "D_OPT": 16384.0
+        }
+      },
+      {
+        "global_update_attempted": 1985,
+        "retry_number": 1,
+        "old_scale": {
+          "D_OPT": 16384.0
+        },
+        "new_scale": {
+          "D_OPT": 8192.0
+        }
+      }
+    ],
+    "observation_for_owner": "In the 20 updates after 1971 a second, normal backoff occurred at update 1985 (D 16384 -> 8192) and unscaled D gradient norms rose to ~100-133 by 1985-1991 (clipped to 1.0); all finite."
+  },
+  "qualification_evidence": {
+    "path": "outputs/audit/M7D1_GPAT_AMP_RETRY_QUALIFICATION.json",
+    "sha256": "af0891104c37f44dd4dbb17a83b35c53f91dbeacf9163e112564009360e36d3a"
+  },
+  "resume_note": "Recovery checkpoints carry code_commit provenance; the attempt-2 recovery (code 6cf271e) is refused by the M7D1 runner on resume, so a restart under this policy is a fresh run in an owner-designated run root (the attempt-2 root is never overwritten).",
+  "m7_status_after": "SCIENTIFIC_TRAINING_BLOCKED_NUMERICAL_POLICY_RESOLVED_READY_TO_RESTART"
+}

@@ -19,6 +19,14 @@ Generator update (one optimizer group = 2 physical microbatches of 4; tail [4, 2
   no EMA, no recovery). Only with all gradients finite: D clip 1.0 -> step -> update; G clip 1.0 -> step -> update;
   post-step parameter finiteness (else NumericalPostStepStop = FAILED_NUMERICAL_POST_STEP); zero both; EMA update
   (E_art, G_res) when active (u > 5525; initialized at the end of epoch 5). The D/G group is one atomic unit.
+  AMP policy (M7D1, configs/amendments/gpat_m7d1_amp_retry_resolution.yaml): the production Trainer runs
+  ATOMIC_AMP_BACKOFF_RETRY. Before a group the mutable state a never-stepped attempt can change is preserved (all
+  module buffers incl. E_art BN running stats, Python/NumPy/CPU/CUDA RNG, both scaler states). If the boundary scan
+  finds a non-finite unscaled gradient, neither optimizer steps, the pre-group state is restored, gradients are zeroed,
+  ONLY each offending scaler backs off (x0.5, growth tracker 0, i.e. standard GradScaler backoff) and the SAME group
+  is recomputed at the SAME update index (an `amp_retry` event, never an optimizer update; data are not re-read or
+  re-logged). An offending scaler already at scale <= 1.0 -> AmpOverflowFinalStop (FAIL_CLOSED_AMP_OVERFLOW_FINAL).
+  The M7C4 policy FAIL_CLOSED_AMP_OVERFLOW (stop at the first overflow) remains the step default and the fallback.
 Epoch end: counts verified; EMA init at epoch 5; EMA candidate at epochs 10..60; recovery/latest.pt; epoch record.
 Warmup (B1/B3): 10 epochs x 139 batches of 64 TRAIN source spoof frames, AdamW(E_art + attack head, lr
 attack_warmup_lr(s), wd 1e-4), fp16 forward, fp32 CE, WARMUP_SCALER, clip 1.0, BN train. Handoff carries E_art +
@@ -82,8 +90,22 @@ class AmpOverflowStop(NumericalStop):
     failure_type = 'FAIL_CLOSED_AMP_OVERFLOW'
 
 
+class AmpOverflowFinalStop(AmpOverflowStop):
+    failure_type = 'FAIL_CLOSED_AMP_OVERFLOW_FINAL'
+
+
 class NumericalPostStepStop(NumericalStop):
     failure_type = 'FAILED_NUMERICAL_POST_STEP'
+
+
+# AMP overflow policies: M7C4 fail-closed (the step default and the fallback) and the M7D1 atomic backoff-and-retry
+# (the production Trainer). GradScaler construction is unchanged (init 65536, growth 2, backoff 0.5, interval 2000).
+AMP_FAIL_CLOSED = 'FAIL_CLOSED_AMP_OVERFLOW'
+AMP_ATOMIC_RETRY = 'ATOMIC_AMP_BACKOFF_RETRY'
+AMP_POLICIES = (AMP_FAIL_CLOSED, AMP_ATOMIC_RETRY)
+PRODUCTION_AMP_POLICY = AMP_ATOMIC_RETRY
+AMP_BACKOFF = 0.5
+AMP_MIN_SCALE = 1.0
 
 
 def nonfinite(named_params, attr='grad'):
@@ -108,6 +130,58 @@ def finite(t):
 def _digest(t):
     import hashlib
     return hashlib.sha256(t.detach().contiguous().cpu().numpy().tobytes()).hexdigest()
+
+
+def _rng_equal(a, b):
+    if isinstance(a, dict):
+        return isinstance(b, dict) and a.keys() == b.keys() and all(_rng_equal(a[k], b[k]) for k in a)
+    if isinstance(a, (list, tuple)):
+        return isinstance(b, (list, tuple)) and len(a) == len(b) and all(_rng_equal(x, y) for x, y in zip(a, b))
+    if torch.is_tensor(a):
+        return torch.is_tensor(b) and a.dtype == b.dtype and a.shape == b.shape and torch.equal(a, b)
+    return a == b
+
+
+class PreGroupState:
+    """Mutable state that an attempt which never reaches an optimizer step can change: every module buffer of the
+    core (E_art BatchNorm running_mean/running_var/num_batches_tracked in train mode, ...), the Python/NumPy/torch CPU/
+    CUDA RNG and the GradScaler states. Parameters, optimizer states, EMA, schedule and position change only after the
+    boundary scan has passed, so a failed attempt cannot touch them. `scalers` maps the optimizer name to its scaler."""
+
+    def __init__(self, core, scalers):
+        self.buffers = [(name, b, b.detach().clone()) for name, b in core.named_buffers()]
+        self.rng = ck.rng_state()
+        self.scalers = dict(scalers)
+        self.scaler_states = {k: s.state_dict() for k, s in self.scalers.items()}
+
+    def back_off(self, name, factor):
+        """Standard GradScaler backoff of one offending scaler: scale * factor, growth tracker reset to 0."""
+        st = self.scaler_states[name]
+        st['scale'] = float(st['scale']) * factor
+        st['_growth_tracker'] = 0
+        return st['scale']
+
+    def restore(self, params):
+        for p in params:
+            p.grad = None
+        with torch.no_grad():
+            for _, b, saved in self.buffers:
+                b.copy_(saved)
+        ck.restore_rng(self.rng)
+        for k, s in self.scalers.items():
+            st = self.scaler_states[k]
+            s.update(new_scale=float(st['scale']))      # drops the failed attempt's per-optimizer unscale/inf records
+            s.load_state_dict(st)
+        self.verify(params)
+
+    def verify(self, params):
+        gate(all(p.grad is None for p in params), 'retry restore: gradients not cleared')
+        gate(all(torch.equal(b, saved) for _, b, saved in self.buffers), 'retry restore: module buffers differ')
+        gate(_rng_equal(ck.rng_state(), self.rng), 'retry restore: RNG state differs')
+        for k, s in self.scalers.items():
+            got, want = s.state_dict(), self.scaler_states[k]
+            gate(got == want, f'retry restore: {k} scaler state {got} != {want}')
+            gate(not s._per_optimizer_states, f'retry restore: {k} scaler kept per-optimizer records')
 
 
 @contextlib.contextmanager
@@ -184,7 +258,11 @@ def grad_norm(params):
 class GeneratorStep:
     """One optimizer group under the N-04 pre-update joint-gradient scheme. Owns no data, no checkpoint."""
 
-    def __init__(self, core, teachers, cfg, g_opt, d_opt, g_scaler, d_scaler, ema=None):
+    def __init__(self, core, teachers, cfg, g_opt, d_opt, g_scaler, d_scaler, ema=None, amp_policy=AMP_FAIL_CLOSED):
+        gate(amp_policy in AMP_POLICIES, f'AMP policy {amp_policy!r}')
+        self.amp_policy = amp_policy
+        self.on_retry = None                            # callable(event) per amp_retry (Trainer: metrics.jsonl)
+        self.active = False                             # True while a group (incl. its retries) is in flight
         self.core, self.t, self.cfg = core, teachers, cfg
         self.g_opt, self.d_opt, self.g_scaler, self.d_scaler = g_opt, d_opt, g_scaler, d_scaler
         self.ema = ema                                  # {'e_art': ModelEMA, 'g_res': ModelEMA} once active
@@ -217,6 +295,20 @@ class GeneratorStep:
         return comps
 
     def __call__(self, group, u):
+        """One scientific update u. Under ATOMIC_AMP_BACKOFF_RETRY an overflowed attempt is undone and the same group is
+        recomputed at u with the offending scaler(s) backed off; exactly one attempt ever reaches the optimizer steps."""
+        gate(not self.active, 're-entrant optimizer group')
+        self.active = True
+        try:
+            if self.amp_policy == AMP_FAIL_CLOSED:
+                return dict(self.attempt(group, u), amp_policy=self.amp_policy, amp_attempts=1)
+            scalers = {'D_OPT': self.d_scaler, 'G_OPT': self.g_scaler}
+            return run_atomic_retry(lambda: self.attempt(group, u), PreGroupState(self.core, scalers),
+                                    list(self.core.parameters()), self, u, 'global_update_attempted')
+        finally:
+            self.active = False
+
+    def attempt(self, group, u):
         cur = rc.curriculum(u)
         lr = rc.main_lr(u)
         set_lr(self.g_opt, lr)
@@ -319,8 +411,56 @@ class GeneratorStep:
 
 
 # ============================================================================= warmup step
+def run_atomic_retry(attempt, pre, params, step, index, index_key):
+    """ATOMIC_AMP_BACKOFF_RETRY loop shared by the generator group (D_OPT/G_OPT) and the warmup step (WARMUP_OPT).
+    AmpOverflowStop is raised only by the boundary scan, i.e. before any optimizer step, scaler update, position or
+    schedule advance, EMA update or checkpoint; any other stop propagates unchanged."""
+    events = []
+    while True:
+        n_capture = len(step.capture) if getattr(step, 'capture', None) is not None else None
+        try:
+            rec = attempt()
+        except AmpOverflowFinalStop:
+            raise
+        except AmpOverflowStop as exc:
+            if n_capture is not None:
+                del step.capture[n_capture:]                   # the failed attempt's records are not group records
+            r = exc.record
+            offending = list(r['offending_optimizers'])
+            gate(offending and set(offending) <= set(pre.scalers), 'retry: offending optimizer set')
+            gate(r['optimizer_steps_taken'] == 0, 'retry: an optimizer stepped in an overflowed attempt')
+            old = {k: float(pre.scalers[k].get_scale()) for k in offending}
+            gate(all(old[k] == float(pre.scaler_states[k]['scale']) for k in offending), 'retry: scale bookkeeping')
+            if any(old[k] <= AMP_MIN_SCALE for k in offending):
+                raise AmpOverflowFinalStop(f'non-finite gradient after unscale at {index_key} {index} with the offending '
+                                           f'scale at {AMP_MIN_SCALE}', {
+                                               **r, 'failure_type': AmpOverflowFinalStop.failure_type,
+                                               'amp_policy': AMP_ATOMIC_RETRY, 'amp_retries': len(events),
+                                               'scale_at_final_attempt': old}) from exc
+            for k in offending:
+                gate(pre.scalers[k].get_backoff_factor() == AMP_BACKOFF, f'{k} backoff factor')
+            new = {k: pre.back_off(k, AMP_BACKOFF) for k in offending}
+            pre.restore(params)
+            event = {index_key: index, 'retry_number': len(events) + 1, 'amp_policy': AMP_ATOMIC_RETRY,
+                     'offending_optimizers': offending,
+                     'offending_parameter_count': {k: r['offending_parameter_count'][k] for k in offending},
+                     'offending_parameters': {k: r['offending_parameters'][k] for k in offending},
+                     'old_scale': old, 'new_scale': new,
+                     'scales_after_restore': {k: float(s.get_scale()) for k, s in pre.scalers.items()},
+                     'optimizer_steps_taken': 0, 'optimizer_update': False, 'pre_group_state_restored': True}
+            events.append(event)
+            if step.on_retry is not None:
+                step.on_retry(event)
+            continue
+        return dict(rec, amp_policy=AMP_ATOMIC_RETRY, amp_attempts=len(events) + 1)
+
+
 class WarmupStep:
-    def __init__(self, core, optimizer, scaler):
+    def __init__(self, core, optimizer, scaler, amp_policy=AMP_FAIL_CLOSED):
+        gate(amp_policy in AMP_POLICIES, f'AMP policy {amp_policy!r}')
+        self.amp_policy = amp_policy
+        self.on_retry = None
+        self.active = False
         self.core, self.opt, self.scaler = core, optimizer, scaler
         self.named = ([(f'e_art.{n}', p) for n, p in core.e_art.named_parameters()] +
                       [(f'attack_head.{n}', p) for n, p in core.attack_head.named_parameters()])
@@ -328,6 +468,17 @@ class WarmupStep:
         self.inspect = None                             # qualification: callable(step) after unscale_
 
     def __call__(self, batch, s):
+        gate(not self.active, 're-entrant warmup step')
+        self.active = True
+        try:
+            if self.amp_policy == AMP_FAIL_CLOSED:
+                return dict(self.attempt(batch, s), amp_policy=self.amp_policy, amp_attempts=1)
+            return run_atomic_retry(lambda: self.attempt(batch, s), PreGroupState(self.core, {'WARMUP_OPT': self.scaler}),
+                                    list(self.core.parameters()), self, s, 'warmup_step_attempted')
+        finally:
+            self.active = False
+
+    def attempt(self, batch, s):
         lr = rc.attack_warmup_lr(s)
         set_lr(self.opt, lr)
         self.core.e_art.train()
@@ -483,7 +634,7 @@ class GPATRunContext:
                 'pytorch_version': str(torch.__version__), 'cuda_version': torch.version.cuda,
                 'cudnn_version': torch.backends.cudnn.version(),
                 'gpu_model': torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
-                'command_line': ' '.join(sys.argv), 'completion_status': status,
+                'command_line': ' '.join(sys.argv), 'completion_status': status, 'amp_policy': PRODUCTION_AMP_POLICY,
                 'val_split_accessed': False, 'test_split_accessed': False}
 
     def log(self, record_type, record):
@@ -564,14 +715,14 @@ class Trainer:
         self.g_scaler, self.d_scaler = torch.amp.GradScaler('cuda'), torch.amp.GradScaler('cuda')
         self.ema = None
         self.step = GeneratorStep(self.core, self.teachers, self.cfg, self.g_opt, self.d_opt, self.g_scaler,
-                                  self.d_scaler)
+                                  self.d_scaler, amp_policy=PRODUCTION_AMP_POLICY)
         self.position = {'stage': 'warmup' if self.cfg.attack_type_head else 'generator', 'epoch': 1,
                          'next_group': 1, 'global_update': 0, 'warmup_epoch': 1, 'warmup_next_batch': 1,
                          'warmup_step': 0}
         self.warm = None
         if self.cfg.attack_type_head:
             self.w_opt, self.w_scaler = warmup_optimizer(self.core), torch.amp.GradScaler('cuda')
-            self.warm = WarmupStep(self.core, self.w_opt, self.w_scaler)
+            self.warm = WarmupStep(self.core, self.w_opt, self.w_scaler, amp_policy=PRODUCTION_AMP_POLICY)
 
     # ---------------------------------------------------------------- data
     def log_access(self, batch, roles):
@@ -599,10 +750,15 @@ class Trainer:
             **exc.record, 'stage': stage, 'epoch': epoch, 'attempted_group_or_batch': attempted,
             'position_unchanged': dict(self.position),
             'last_safe_recovery': None if safe is None else {k: safe[k] for k in ('path', 'sha256', 'global_step')},
-            'resume_policy': 'owner intervention required; the failed group is never retried or skipped automatically'})
+            'resume_policy': 'owner intervention required; the failed group is never skipped, and it is retried only '
+                             'by the in-group ATOMIC_AMP_BACKOFF_RETRY policy before this stop'})
 
     # ---------------------------------------------------------------- checkpoints
+    def in_flight(self):
+        return bool(getattr(self.step, 'active', False) or getattr(self.warm, 'active', False))
+
     def save_recovery(self):
+        gate(not self.in_flight(), 'no recovery checkpoint while an optimizer group or retry is in flight')
         modules = {'e_art': self.core.e_art, 'g_res': self.core.g_res, 'discriminator': self.core.discriminator,
                    'attack_head': self.core.attack_head, 'identity_head': self.core.identity_head}
         u = self.position['global_update']
@@ -620,6 +776,7 @@ class Trainer:
         return info
 
     def save_warmup_recovery(self):
+        gate(not self.in_flight(), 'no warmup recovery checkpoint while a warmup step or retry is in flight')
         payload = ck.warmup_recovery_payload(e_art=self.core.e_art, attack_head=self.core.attack_head,
                                              optimizer=self.w_opt, scaler=self.w_scaler, position=dict(self.position),
                                              provenance=self.provenance,
@@ -693,6 +850,8 @@ class Trainer:
                 gate(batch['index'].tolist() == plan[b - 1], 'warmup batch differs from the plan')
                 self.log_access(batch, ('source_spoof_id',))
                 s = self.position['warmup_step'] + 1
+                self.warm.on_retry = lambda ev, _e=e, _b=b: self.ctx.log('amp_retry', dict(ev, stage='warmup',
+                                                                                         warmup_epoch=_e, warmup_batch=_b))
                 try:
                     rec = self.warm(to_device(batch), s)
                 except NumericalStop as exc:
@@ -718,7 +877,7 @@ class Trainer:
         self.drop_warmup()
         self.g_opt, self.g_scaler = handoff(self.core)
         self.step = GeneratorStep(self.core, self.teachers, self.cfg, self.g_opt, self.d_opt, self.g_scaler,
-                                  self.d_scaler, self.ema)
+                                  self.d_scaler, self.ema, amp_policy=PRODUCTION_AMP_POLICY)
         self.position.update(stage='generator')
 
     def run_generator_groups(self, stop, limit=None, only_groups=None):
@@ -737,6 +896,9 @@ class Trainer:
                     self.log_access(b, ('source_spoof_id', 'target_live_id'))
                 u = rio.update_index(e, g)
                 gate(u == self.position['global_update'] + 1, 'global update continuity')
+                if hasattr(self.step, 'on_retry'):
+                    self.step.on_retry = lambda ev, _e=e, _g=g: self.ctx.log('amp_retry', dict(ev, stage='generator',
+                                                                                             epoch=_e, group=_g))
                 try:
                     rec = self.step([to_device(b) for b in group], u)
                 except NumericalStop as exc:
