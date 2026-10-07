@@ -1,0 +1,5205 @@
+{
+  "amp_retry_summary": {
+    "affected_global_updates": [
+      1971,
+      1985,
+      2587,
+      3002,
+      5031,
+      5234,
+      5527,
+      5529,
+      5758,
+      5759,
+      15107,
+      18072,
+      19766,
+      20183,
+      21766,
+      22269,
+      23766,
+      24640,
+      25766,
+      27063,
+      27766,
+      29287,
+      29766,
+      29983,
+      30940,
+      34940,
+      35011,
+      35360,
+      37947,
+      38128,
+      40265,
+      41248,
+      42791,
+      43400,
+      45457,
+      45943,
+      47507,
+      49509,
+      50456,
+      51521,
+      53526,
+      54486,
+      54498,
+      55529,
+      57541,
+      59543,
+      61543,
+      63544,
+      65545
+    ],
+    "affected_update_count": 49,
+    "amendment": "configs/amendments/gpat_m7d1_amp_retry_resolution.yaml",
+    "events": [
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 65536.0,
+        "complete_G_scale_before": 65536.0,
+        "complete_amp_attempts": 3,
+        "complete_epoch_group": [
+          2,
+          866
+        ],
+        "complete_record_count": 1,
+        "epoch": 2,
+        "global_update_attempted": 1971,
+        "group": 866,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight",
+          "discriminator.model.2.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1,
+          2
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 32768.0
+            },
+            "old_scale": {
+              "D_OPT": 65536.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 32768.0,
+              "G_OPT": 65536.0
+            }
+          },
+          {
+            "new_scale": {
+              "D_OPT": 16384.0
+            },
+            "old_scale": {
+              "D_OPT": 32768.0
+            },
+            "retry_number": 2,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 65536.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 65536.0,
+        "complete_G_scale_before": 65536.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          2,
+          880
+        ],
+        "complete_record_count": 1,
+        "epoch": 2,
+        "global_update_attempted": 1985,
+        "group": 880,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 65536.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 4096.0,
+        "complete_D_scale_before": 4096.0,
+        "complete_G_scale": 131072.0,
+        "complete_G_scale_before": 131072.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          3,
+          377
+        ],
+        "complete_record_count": 1,
+        "epoch": 3,
+        "global_update_attempted": 2587,
+        "group": 377,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 4096.0
+            },
+            "old_scale": {
+              "D_OPT": 8192.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 4096.0,
+              "G_OPT": 131072.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 2048.0,
+        "complete_D_scale_before": 2048.0,
+        "complete_G_scale": 131072.0,
+        "complete_G_scale_before": 131072.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          3,
+          792
+        ],
+        "complete_record_count": 1,
+        "epoch": 3,
+        "global_update_attempted": 3002,
+        "group": 792,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 2048.0
+            },
+            "old_scale": {
+              "D_OPT": 4096.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 2048.0,
+              "G_OPT": 131072.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 2048.0,
+        "complete_D_scale_before": 2048.0,
+        "complete_G_scale": 262144.0,
+        "complete_G_scale_before": 262144.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          5,
+          611
+        ],
+        "complete_record_count": 1,
+        "epoch": 5,
+        "global_update_attempted": 5031,
+        "group": 611,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 2048.0
+            },
+            "old_scale": {
+              "D_OPT": 4096.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 2048.0,
+              "G_OPT": 262144.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 1024.0,
+        "complete_D_scale_before": 1024.0,
+        "complete_G_scale": 262144.0,
+        "complete_G_scale_before": 262144.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          5,
+          814
+        ],
+        "complete_record_count": 1,
+        "epoch": 5,
+        "global_update_attempted": 5234,
+        "group": 814,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 1024.0
+            },
+            "old_scale": {
+              "D_OPT": 2048.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 1024.0,
+              "G_OPT": 262144.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 1024.0,
+        "complete_D_scale_before": 1024.0,
+        "complete_G_scale": 131072.0,
+        "complete_G_scale_before": 131072.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          6,
+          2
+        ],
+        "complete_record_count": 1,
+        "epoch": 6,
+        "global_update_attempted": 5527,
+        "group": 2,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.decoders.3.blocks.1.sca.1.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 131072.0
+            },
+            "old_scale": {
+              "G_OPT": 262144.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 1024.0,
+              "G_OPT": 131072.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 1024.0,
+        "complete_D_scale_before": 1024.0,
+        "complete_G_scale": 65536.0,
+        "complete_G_scale_before": 65536.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          6,
+          4
+        ],
+        "complete_record_count": 1,
+        "epoch": 6,
+        "global_update_attempted": 5529,
+        "group": 4,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.ending.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 65536.0
+            },
+            "old_scale": {
+              "G_OPT": 131072.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 1024.0,
+              "G_OPT": 65536.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 1024.0,
+        "complete_D_scale_before": 1024.0,
+        "complete_G_scale": 32768.0,
+        "complete_G_scale_before": 32768.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          6,
+          233
+        ],
+        "complete_record_count": 1,
+        "epoch": 6,
+        "global_update_attempted": 5758,
+        "group": 233,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.ending.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 32768.0
+            },
+            "old_scale": {
+              "G_OPT": 65536.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 1024.0,
+              "G_OPT": 32768.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 1024.0,
+        "complete_D_scale_before": 1024.0,
+        "complete_G_scale": 16384.0,
+        "complete_G_scale_before": 16384.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          6,
+          234
+        ],
+        "complete_record_count": 1,
+        "epoch": 6,
+        "global_update_attempted": 5759,
+        "group": 234,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.ending.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 16384.0
+            },
+            "old_scale": {
+              "G_OPT": 32768.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 1024.0,
+              "G_OPT": 16384.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 262144.0,
+        "complete_G_scale_before": 262144.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          14,
+          742
+        ],
+        "complete_record_count": 1,
+        "epoch": 14,
+        "global_update_attempted": 15107,
+        "group": 742,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 262144.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          17,
+          392
+        ],
+        "complete_record_count": 1,
+        "epoch": 17,
+        "global_update_attempted": 18072,
+        "group": 392,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          18,
+          981
+        ],
+        "complete_record_count": 1,
+        "epoch": 18,
+        "global_update_attempted": 19766,
+        "group": 981,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 1048576.0
+            },
+            "old_scale": {
+              "G_OPT": 2097152.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          19,
+          293
+        ],
+        "complete_record_count": 1,
+        "epoch": 19,
+        "global_update_attempted": 20183,
+        "group": 293,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          20,
+          771
+        ],
+        "complete_record_count": 1,
+        "epoch": 20,
+        "global_update_attempted": 21766,
+        "group": 771,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 1048576.0
+            },
+            "old_scale": {
+              "G_OPT": 2097152.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          21,
+          169
+        ],
+        "complete_record_count": 1,
+        "epoch": 21,
+        "global_update_attempted": 22269,
+        "group": 169,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          22,
+          561
+        ],
+        "complete_record_count": 1,
+        "epoch": 22,
+        "global_update_attempted": 23766,
+        "group": 561,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 1048576.0
+            },
+            "old_scale": {
+              "G_OPT": 2097152.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          23,
+          330
+        ],
+        "complete_record_count": 1,
+        "epoch": 23,
+        "global_update_attempted": 24640,
+        "group": 330,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          24,
+          351
+        ],
+        "complete_record_count": 1,
+        "epoch": 24,
+        "global_update_attempted": 25766,
+        "group": 351,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 1048576.0
+            },
+            "old_scale": {
+              "G_OPT": 2097152.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          25,
+          543
+        ],
+        "complete_record_count": 1,
+        "epoch": 25,
+        "global_update_attempted": 27063,
+        "group": 543,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          26,
+          141
+        ],
+        "complete_record_count": 1,
+        "epoch": 26,
+        "global_update_attempted": 27766,
+        "group": 141,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 1048576.0
+            },
+            "old_scale": {
+              "G_OPT": 2097152.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          27,
+          557
+        ],
+        "complete_record_count": 1,
+        "epoch": 27,
+        "global_update_attempted": 29287,
+        "group": 557,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          27,
+          1036
+        ],
+        "complete_record_count": 1,
+        "epoch": 27,
+        "global_update_attempted": 29766,
+        "group": 1036,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 1048576.0
+            },
+            "old_scale": {
+              "G_OPT": 2097152.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 4096.0,
+        "complete_D_scale_before": 4096.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          28,
+          148
+        ],
+        "complete_record_count": 1,
+        "epoch": 28,
+        "global_update_attempted": 29983,
+        "group": 148,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 4096.0
+            },
+            "old_scale": {
+              "D_OPT": 8192.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 4096.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 4096.0,
+        "complete_D_scale_before": 4096.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          28,
+          1105
+        ],
+        "complete_record_count": 1,
+        "epoch": 28,
+        "global_update_attempted": 30940,
+        "group": 1105,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 4096.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          32,
+          685
+        ],
+        "complete_record_count": 1,
+        "epoch": 32,
+        "global_update_attempted": 34940,
+        "group": 685,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 1048576.0
+            },
+            "old_scale": {
+              "G_OPT": 2097152.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          32,
+          756
+        ],
+        "complete_record_count": 1,
+        "epoch": 32,
+        "global_update_attempted": 35011,
+        "group": 756,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          32,
+          1105
+        ],
+        "complete_record_count": 1,
+        "epoch": 32,
+        "global_update_attempted": 35360,
+        "group": 1105,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          35,
+          377
+        ],
+        "complete_record_count": 1,
+        "epoch": 35,
+        "global_update_attempted": 37947,
+        "group": 377,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          35,
+          558
+        ],
+        "complete_record_count": 1,
+        "epoch": 35,
+        "global_update_attempted": 38128,
+        "group": 558,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias",
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 1048576.0,
+        "complete_G_scale_before": 1048576.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          37,
+          485
+        ],
+        "complete_record_count": 1,
+        "epoch": 37,
+        "global_update_attempted": 40265,
+        "group": 485,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias",
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 1048576.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          38,
+          363
+        ],
+        "complete_record_count": 1,
+        "epoch": 38,
+        "global_update_attempted": 41248,
+        "group": 363,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          39,
+          801
+        ],
+        "complete_record_count": 1,
+        "epoch": 39,
+        "global_update_attempted": 42791,
+        "group": 801,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias",
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          40,
+          305
+        ],
+        "complete_record_count": 1,
+        "epoch": 40,
+        "global_update_attempted": 43400,
+        "group": 305,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          42,
+          152
+        ],
+        "complete_record_count": 1,
+        "epoch": 42,
+        "global_update_attempted": 45457,
+        "group": 152,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          42,
+          638
+        ],
+        "complete_record_count": 1,
+        "epoch": 42,
+        "global_update_attempted": 45943,
+        "group": 638,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias",
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 8192.0
+            },
+            "old_scale": {
+              "D_OPT": 16384.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 8192.0,
+        "complete_D_scale_before": 8192.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          43,
+          1097
+        ],
+        "complete_record_count": 1,
+        "epoch": 43,
+        "global_update_attempted": 47507,
+        "group": 1097,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 8192.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          45,
+          889
+        ],
+        "complete_record_count": 1,
+        "epoch": 45,
+        "global_update_attempted": 49509,
+        "group": 889,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          46,
+          731
+        ],
+        "complete_record_count": 1,
+        "epoch": 46,
+        "global_update_attempted": 50456,
+        "group": 731,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 16384.0
+            },
+            "old_scale": {
+              "D_OPT": 32768.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          47,
+          691
+        ],
+        "complete_record_count": 1,
+        "epoch": 47,
+        "global_update_attempted": 51521,
+        "group": 691,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 32768.0,
+        "complete_D_scale_before": 32768.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          49,
+          486
+        ],
+        "complete_record_count": 1,
+        "epoch": 49,
+        "global_update_attempted": 53526,
+        "group": 486,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 32768.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 32768.0,
+        "complete_D_scale_before": 32768.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          50,
+          341
+        ],
+        "complete_record_count": 1,
+        "epoch": 50,
+        "global_update_attempted": 54486,
+        "group": 341,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 32768.0
+            },
+            "old_scale": {
+              "D_OPT": 65536.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 32768.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          50,
+          353
+        ],
+        "complete_record_count": 1,
+        "epoch": 50,
+        "global_update_attempted": 54498,
+        "group": 353,
+        "offending_optimizers": [
+          "D_OPT"
+        ],
+        "offending_parameters": [
+          "discriminator.model.0.bias",
+          "discriminator.model.0.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "D_OPT": 16384.0
+            },
+            "old_scale": {
+              "D_OPT": 32768.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 16384.0,
+        "complete_D_scale_before": 16384.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          51,
+          279
+        ],
+        "complete_record_count": 1,
+        "epoch": 51,
+        "global_update_attempted": 55529,
+        "group": 279,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 16384.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 32768.0,
+        "complete_D_scale_before": 32768.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          53,
+          81
+        ],
+        "complete_record_count": 1,
+        "epoch": 53,
+        "global_update_attempted": 57541,
+        "group": 81,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 32768.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 65536.0,
+        "complete_D_scale_before": 65536.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          54,
+          978
+        ],
+        "complete_record_count": 1,
+        "epoch": 54,
+        "global_update_attempted": 59543,
+        "group": 978,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 65536.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 131072.0,
+        "complete_D_scale_before": 131072.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          56,
+          768
+        ],
+        "complete_record_count": 1,
+        "epoch": 56,
+        "global_update_attempted": 61543,
+        "group": 768,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 131072.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 262144.0,
+        "complete_D_scale_before": 262144.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          58,
+          559
+        ],
+        "complete_record_count": 1,
+        "epoch": 58,
+        "global_update_attempted": 63544,
+        "group": 559,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 262144.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      },
+      {
+        "all_amp_policy": [
+          "ATOMIC_AMP_BACKOFF_RETRY"
+        ],
+        "all_optimizer_steps_taken_zero": true,
+        "all_optimizer_update_false": true,
+        "all_pre_group_state_restored": true,
+        "complete_D_scale": 524288.0,
+        "complete_D_scale_before": 524288.0,
+        "complete_G_scale": 524288.0,
+        "complete_G_scale_before": 524288.0,
+        "complete_amp_attempts": 2,
+        "complete_epoch_group": [
+          60,
+          350
+        ],
+        "complete_record_count": 1,
+        "epoch": 60,
+        "global_update_attempted": 65545,
+        "group": 350,
+        "offending_optimizers": [
+          "G_OPT"
+        ],
+        "offending_parameters": [
+          "g_res.encoders.0.blocks.0.beta",
+          "g_res.encoders.0.blocks.0.conv1.bias",
+          "g_res.encoders.0.blocks.0.conv1.weight",
+          "g_res.encoders.0.blocks.0.conv2.bias",
+          "g_res.encoders.0.blocks.0.conv2.weight",
+          "g_res.encoders.0.blocks.0.conv3.bias",
+          "g_res.encoders.0.blocks.0.conv3.weight",
+          "g_res.encoders.0.blocks.0.conv4.bias",
+          "g_res.encoders.0.blocks.0.conv4.weight",
+          "g_res.encoders.0.blocks.0.conv5.bias",
+          "g_res.encoders.0.blocks.0.conv5.weight",
+          "g_res.encoders.0.blocks.0.gamma",
+          "g_res.encoders.0.blocks.0.norm1.bias",
+          "g_res.encoders.0.blocks.0.norm1.weight",
+          "g_res.encoders.0.blocks.0.norm2.bias",
+          "g_res.encoders.0.blocks.0.norm2.weight",
+          "g_res.encoders.0.blocks.0.sca.1.bias",
+          "g_res.encoders.0.blocks.0.sca.1.weight",
+          "g_res.encoders.0.blocks.1.beta",
+          "g_res.encoders.0.blocks.1.conv1.bias",
+          "g_res.encoders.0.blocks.1.conv1.weight",
+          "g_res.encoders.0.blocks.1.conv2.bias",
+          "g_res.encoders.0.blocks.1.conv2.weight",
+          "g_res.encoders.0.blocks.1.conv3.bias",
+          "g_res.encoders.0.blocks.1.conv3.weight",
+          "g_res.encoders.0.blocks.1.conv4.bias",
+          "g_res.encoders.0.blocks.1.conv4.weight",
+          "g_res.encoders.0.blocks.1.conv5.bias",
+          "g_res.encoders.0.blocks.1.conv5.weight",
+          "g_res.encoders.0.blocks.1.gamma",
+          "g_res.encoders.0.blocks.1.norm1.bias",
+          "g_res.encoders.0.blocks.1.norm1.weight",
+          "g_res.encoders.0.blocks.1.norm2.bias",
+          "g_res.encoders.0.blocks.1.norm2.weight",
+          "g_res.encoders.0.blocks.1.sca.1.bias",
+          "g_res.encoders.0.blocks.1.sca.1.weight",
+          "g_res.encoders.0.film.affine.bias",
+          "g_res.encoders.0.film.affine.weight",
+          "g_res.encoders.1.blocks.0.beta",
+          "g_res.encoders.1.blocks.0.conv1.bias",
+          "g_res.encoders.1.blocks.0.conv1.weight",
+          "g_res.encoders.1.blocks.0.conv2.bias",
+          "g_res.encoders.1.blocks.0.conv2.weight",
+          "g_res.encoders.1.blocks.0.conv3.bias",
+          "g_res.encoders.1.blocks.0.conv3.weight",
+          "g_res.encoders.1.blocks.0.gamma",
+          "g_res.encoders.1.blocks.0.sca.1.bias",
+          "g_res.encoders.1.blocks.0.sca.1.weight",
+          "g_res.intro.bias",
+          "g_res.intro.weight"
+        ],
+        "previous_update_completed": true,
+        "retry_numbers": [
+          1
+        ],
+        "scale_transitions": [
+          {
+            "new_scale": {
+              "G_OPT": 524288.0
+            },
+            "old_scale": {
+              "G_OPT": 1048576.0
+            },
+            "retry_number": 1,
+            "scales_after_restore": {
+              "D_OPT": 524288.0,
+              "G_OPT": 524288.0
+            }
+          }
+        ],
+        "stages": [
+          "generator"
+        ],
+        "update_not_advanced_on_retry": true
+      }
+    ],
+    "max_D_scale": 524288.0,
+    "max_G_scale": 2097152.0,
+    "max_retries_for_one_update": 2,
+    "min_D_scale": 1024.0,
+    "min_G_scale": 16384.0,
+    "offending_optimizers": [
+      "D_OPT",
+      "G_OPT"
+    ],
+    "policy": "ATOMIC_AMP_BACKOFF_RETRY",
+    "total_retry_events": 50
+  },
+  "audit_timestamp_utc": "2026-10-07T09:49:55Z",
+  "authority": {
+    "amp_amendment_in_head": true,
+    "branch": "m6-baselines",
+    "clean": true,
+    "clean_scope": "tracked files at audit start (only the new audit tool was untracked)",
+    "gpu_host_repo_clean": true,
+    "gpu_host_repo_head": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+    "head": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+    "ls_remote": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+    "origin": "058e976e5a538c4d18e1177f0eb27727cfb735cd"
+  },
+  "authority_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+  "classification": "SCIENTIFIC_TRAINING_COMPLETION_AUDIT",
+  "collected_utc": "2026-10-07T09:49:21Z",
+  "completion_status": "completed",
+  "confirmations": {
+    "b1_b2_b3_started": false,
+    "bank_generated": false,
+    "downstream_run": false,
+    "run_root_modified": false,
+    "seed_1337_or_2026_started": false,
+    "test_access": false,
+    "training_resumed_or_restarted": false,
+    "val_selection_performed": false
+  },
+  "ema_candidates": {
+    "candidates": [
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 11050,
+        "epoch": 10,
+        "expected_global_update": 11050,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_10.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "403a48ac1d8d8c79b4e5e3dacdca441ca9c70d92b2839455a5b55d712f8f22a9",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 12155,
+        "epoch": 11,
+        "expected_global_update": 12155,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_11.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "a15eff463fd839858fa0b829ddf5d49d2d1c211d533cf23a0afe119167194845",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 13260,
+        "epoch": 12,
+        "expected_global_update": 13260,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_12.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "fa15c2e22fa571d550cf900bad2e9f9dee6e56a3df3ae1b81272e9f1de6d533c",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 14365,
+        "epoch": 13,
+        "expected_global_update": 14365,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_13.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "248c494aadcc4f880048a138da490ee553cd798f01eff4a335ab1ebab5047c05",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 15470,
+        "epoch": 14,
+        "expected_global_update": 15470,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_14.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "3b6e086e934b425f360a64dcc7e2a386ea09b87ab466f0c3491f1fc07e7dadf8",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 16575,
+        "epoch": 15,
+        "expected_global_update": 16575,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_15.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "16238874ee53cb3f4fcf2941e58527e69ceb68d5094655fb55e8d05f3280e111",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 17680,
+        "epoch": 16,
+        "expected_global_update": 17680,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_16.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "467983647a1ec8c157bcd6e9ad6cbb59ed1b2c177bc6010dbf05bcc5e62e6bbe",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 18785,
+        "epoch": 17,
+        "expected_global_update": 18785,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_17.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "0f685a94ae83e332e7211ef81727a6db4ed3ae6b94762d3f13cc9ce122710cc6",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 19890,
+        "epoch": 18,
+        "expected_global_update": 19890,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_18.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "2b908d56435174b9d6fa4c7506c61599a9baefe6cf83aa037026fe7eaad534d4",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 20995,
+        "epoch": 19,
+        "expected_global_update": 20995,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_19.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "abc91bf34c681ec9bb01156b4157d8d8306b8cd051c311064ab5bdd64c15a894",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 22100,
+        "epoch": 20,
+        "expected_global_update": 22100,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_20.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "a691312dbf58e6cbe9f03846897527714c52a13aaa3ca64fefaa02c09e9bf534",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 23205,
+        "epoch": 21,
+        "expected_global_update": 23205,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_21.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "9941d70065fa5500e930b43161428a0ed25dceb3ea32f8168d368b41760b356f",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 24310,
+        "epoch": 22,
+        "expected_global_update": 24310,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_22.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "6b1c4facb7b021968b13046c652ea50813b4f06131660b256383e0dc1d52cbd9",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 25415,
+        "epoch": 23,
+        "expected_global_update": 25415,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_23.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "b351b8e5a5bd040b543977889da88e043f7faa8e2354621cfbdd36f3ea763e51",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 26520,
+        "epoch": 24,
+        "expected_global_update": 26520,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_24.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "31051c1de2ae712f342ad359e9d9359b9a61712930deb993f906c02a3c3cac51",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 27625,
+        "epoch": 25,
+        "expected_global_update": 27625,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_25.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "40d4d736a3795ea1f305d033687940fd2df3ddb191792d481b27e3eec347d1ce",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 28730,
+        "epoch": 26,
+        "expected_global_update": 28730,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_26.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "2fb7cd6f275c9cc7a6761589738ee6b394de93cc98595912625a2d4f83497b7c",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 29835,
+        "epoch": 27,
+        "expected_global_update": 29835,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_27.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "ca4579ab35508b9875b2ae44b6085c2fca9b045bc2d08548f7484a58824c81c1",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 30940,
+        "epoch": 28,
+        "expected_global_update": 30940,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_28.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "8d20e1b691f9619531e9cfa3ac87d1e1f342d9cbd2e4cabe4b13e0b052516aa9",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 32045,
+        "epoch": 29,
+        "expected_global_update": 32045,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_29.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "b71bac22bc984077bb8c46f1b2b4d1c5165d5b34954388cda38fde910bce8d65",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 33150,
+        "epoch": 30,
+        "expected_global_update": 33150,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_30.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "1c88a4ae167aa203f2ea56ad499e05a71279bb20e1fe3a773d11e614dc1dfaec",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 34255,
+        "epoch": 31,
+        "expected_global_update": 34255,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_31.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "1b9326d4b8497484a5e148498d14abdb8a99540eaa6e6ca03054d73f9863dd6d",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 35360,
+        "epoch": 32,
+        "expected_global_update": 35360,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_32.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "5dcaf58f5aa797fe5a619b2f5ce7d9809932a10c311af78e75b8a01429fb19db",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 36465,
+        "epoch": 33,
+        "expected_global_update": 36465,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_33.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "4fbba779fcfde09e84791b7dd1e96515f337f46b76a17b6a84d389deaf79a9e3",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 37570,
+        "epoch": 34,
+        "expected_global_update": 37570,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_34.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "36659c1cc461393b895b17f59ceea5879b75daffd0fc7790a53aca819d1af9a0",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 38675,
+        "epoch": 35,
+        "expected_global_update": 38675,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_35.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "be7cc5e8bfe8a70a0782347c55a005bea1bb6be381e7cf5cf228ed6f3c143f88",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 39780,
+        "epoch": 36,
+        "expected_global_update": 39780,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_36.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "73cb83b7aae52ce4700977ea1f0a607f12bc61c4b562c978823e66b35eed5063",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 40885,
+        "epoch": 37,
+        "expected_global_update": 40885,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_37.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "01e59cf244096ba59b4bc7154d772fb6e8caccac3e402e9cfb10ded9f324cd7d",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 41990,
+        "epoch": 38,
+        "expected_global_update": 41990,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_38.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "cc970b438d6f827a617500fb5f3f4fa4782b85be4b872af5dc5750c3ca1f1c94",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 43095,
+        "epoch": 39,
+        "expected_global_update": 43095,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_39.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "2b775219b2367bd05c73d216ccbc237a41449ea6cca791ae2eed56cc677138eb",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 44200,
+        "epoch": 40,
+        "expected_global_update": 44200,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_40.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "f19413c295361c53e963ee3880fc8121e74f4b8078d4fdfcebe537108b7d27f3",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 45305,
+        "epoch": 41,
+        "expected_global_update": 45305,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_41.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "fea355a1b56b0da860396ba7dc1eb257b8994abaa18ee072a4126b4261fa1e5c",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 46410,
+        "epoch": 42,
+        "expected_global_update": 46410,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_42.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "23096363d4bba494425da84e57bfb7180d451edd8b06b64f95990dbf889508a4",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 47515,
+        "epoch": 43,
+        "expected_global_update": 47515,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_43.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "097cbd05bfdc341b776902c446d373ec41e564c794ee9a25f302057038c8908f",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 48620,
+        "epoch": 44,
+        "expected_global_update": 48620,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_44.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "a1222d57c9a18300cb4890f1ae295c9a9fd6df1ac28051c11eaa88218b64e73b",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 49725,
+        "epoch": 45,
+        "expected_global_update": 49725,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_45.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "0ec929a6f3cf425abc68de0bb90b521d4355a18b776aac330eb587d48c15f1ae",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 50830,
+        "epoch": 46,
+        "expected_global_update": 50830,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_46.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "1c761b6954193253d9ff8fd246388c4ef8c716e9adc27d4e7977b65e847ec70f",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 51935,
+        "epoch": 47,
+        "expected_global_update": 51935,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_47.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "38d0c98ce575824f69be2c52ac5f5f0da10a53104f4f2684f840de20468eb721",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 53040,
+        "epoch": 48,
+        "expected_global_update": 53040,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_48.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "c005671795ca8766d6c0f6da513efdb15ff80eddb5fdd58b983b9f3c5b499f04",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 54145,
+        "epoch": 49,
+        "expected_global_update": 54145,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_49.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "675f4881b5f70db1b80510847c0a883ad7d439b6184fe6ba7319e36218c56ad9",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 55250,
+        "epoch": 50,
+        "expected_global_update": 55250,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_50.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "373282c605f4f5621f8c1af72905c2082cc59b3a735666253c2d8b755260ebc4",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 56355,
+        "epoch": 51,
+        "expected_global_update": 56355,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_51.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "dc2e44a35e9a1199fa94d06c56cba27d71d8159ac7d608d6f0afcde3c7267074",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 57460,
+        "epoch": 52,
+        "expected_global_update": 57460,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_52.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "ca599d3baf13f4d4e2e72ab354e1b0f592ef566dd25ff54b2d0d9dba431237ce",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 58565,
+        "epoch": 53,
+        "expected_global_update": 58565,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_53.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "26868f2ba6f06c17033850ba181837d214dbd449af88f6ff122b9333143c8da0",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 59670,
+        "epoch": 54,
+        "expected_global_update": 59670,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_54.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "c03c9e339fd85c0b40700733d219d3c507423b2fad4cfec554385e7012f0e9fe",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 60775,
+        "epoch": 55,
+        "expected_global_update": 60775,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_55.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "2970da7e64ed0acb8053d56bcd001edd55a4c6073ebcb153946a62c8c4a46404",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 61880,
+        "epoch": 56,
+        "expected_global_update": 61880,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_56.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "eabb4e2b7eac2086ca2b1baa3ecceab4d99d00db498594b5780fcdb9f83e1c82",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 62985,
+        "epoch": 57,
+        "expected_global_update": 62985,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_57.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "4fefc6153110a62ec7b24ec6bc703df9905ddab9148309785a14b3f43df2a633",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 64090,
+        "epoch": 58,
+        "expected_global_update": 64090,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_58.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "e0251ec4282432d9a6637e56c1d4cb09f8bd6fed4e51871453724348a6fad00d",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 65195,
+        "epoch": 59,
+        "expected_global_update": 65195,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_59.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "5a38e5d00b19dcc36401d22fc5496d59a21fea54a2abfbcc9005ad7f73ce3dc7",
+        "test_fields": [],
+        "val_fields": []
+      },
+      {
+        "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ema_decay": 0.999,
+        "ema_scope": [
+          "E_art",
+          "G_res"
+        ],
+        "embedded_global_update": 66300,
+        "epoch": 60,
+        "expected_global_update": 66300,
+        "file_size_bytes": 171853487,
+        "filename": "ema_epoch_60.pt",
+        "index_selected_for_final": false,
+        "kind": "GPAT_EMA_CANDIDATE",
+        "method": "GPAT-B0",
+        "seed": 42,
+        "selected": false,
+        "sha256": "d54507deb757edfec986794e16b9834e0416dc48cf957f1b38893c329e360ee8",
+        "test_fields": [],
+        "val_fields": []
+      }
+    ],
+    "count": 51,
+    "epoch_range": [
+      10,
+      60
+    ],
+    "sha256_manifest_digest": "063a7088a618eca98cf71614065f4391b06fd7b7dc6247b553dc7ede3711e103",
+    "sha256_manifest_file": "outputs/audit/M7D1_E08_SEED42_EMA_SHA256.txt"
+  },
+  "epoch_count": 60,
+  "experiment": "E08",
+  "failed_gates": [],
+  "final_epoch": 60,
+  "final_epoch_record": {
+    "ema_active": true,
+    "epoch": 60,
+    "global_step": 66300,
+    "microbatches": 2210,
+    "optimizer_groups": 1105,
+    "rows": 8838,
+    "val_losses": null,
+    "val_metrics": null
+  },
+  "final_group": {
+    "D_scale": 524288.0,
+    "D_scale_before": 524288.0,
+    "G_scale": 524288.0,
+    "G_scale_before": 524288.0,
+    "amp_attempts": 1,
+    "amp_policy": "ATOMIC_AMP_BACKOFF_RETRY",
+    "ema_updated": true,
+    "epoch": 60,
+    "group": 1105,
+    "group_samples": 6,
+    "microbatch_sizes": [
+      4,
+      2
+    ],
+    "n_loss_terms": 14
+  },
+  "final_scalers": {
+    "D_scale": 524288.0,
+    "G_scale": 524288.0,
+    "recovery_checkpoint_scalers": {
+      "D_SCALER": {
+        "_growth_tracker": 1803,
+        "backoff_factor": 0.5,
+        "growth_factor": 2.0,
+        "growth_interval": 2000,
+        "scale": 524288.0
+      },
+      "G_SCALER": {
+        "_growth_tracker": 756,
+        "backoff_factor": 0.5,
+        "growth_factor": 2.0,
+        "growth_interval": 2000,
+        "scale": 524288.0
+      }
+    }
+  },
+  "firewall": {
+    "evidence_source": "runner-produced run_summary.json/run_manifest.json only; no VAL/TEST file opened",
+    "non_train_images": 0,
+    "opened_events": 1060560,
+    "test_images": 0,
+    "test_metadata": 0,
+    "test_split_accessed": false,
+    "train_images": 1060560,
+    "unique_ids": 12668,
+    "unique_ids_sha256": "27a8dff74625704c99b7dcbbf38a5b70ee9eaede0fe7b0ea8d6206719d5ebb1d",
+    "val_images": 0,
+    "val_metadata": 0,
+    "val_split_accessed": false
+  },
+  "gates": [
+    {
+      "detail": {
+        "amp_amendment_in_head": true,
+        "branch": "m6-baselines",
+        "clean": true,
+        "clean_scope": "tracked files at audit start (only the new audit tool was untracked)",
+        "gpu_host_repo_clean": true,
+        "gpu_host_repo_head": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "head": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "ls_remote": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+        "origin": "058e976e5a538c4d18e1177f0eb27727cfb735cd"
+      },
+      "gate": "A.repo_authority",
+      "pass": true
+    },
+    {
+      "gate": "A.manifest_code_authority",
+      "pass": true
+    },
+    {
+      "gate": "A.run_root_unchanged_during_audit",
+      "pass": true
+    },
+    {
+      "gate": "A.run_root_path",
+      "pass": true
+    },
+    {
+      "gate": "B.completion_status",
+      "pass": true
+    },
+    {
+      "gate": "B.identity",
+      "pass": true
+    },
+    {
+      "gate": "B.global_update",
+      "pass": true
+    },
+    {
+      "detail": {
+        "amp_retry": 50,
+        "epoch": 60,
+        "optimizer_group_complete": 66300,
+        "other": {}
+      },
+      "gate": "B.record_counts",
+      "pass": true
+    },
+    {
+      "gate": "B.update_sequence_exact",
+      "pass": true
+    },
+    {
+      "gate": "B.all_group_status_complete",
+      "pass": true
+    },
+    {
+      "gate": "B.all_losses_and_grad_norms_finite",
+      "pass": true
+    },
+    {
+      "detail": {},
+      "gate": "B.no_terminal_markers",
+      "pass": true
+    },
+    {
+      "gate": "B.per_epoch_groups",
+      "pass": true
+    },
+    {
+      "gate": "B.only_tail_groups_partial",
+      "pass": true
+    },
+    {
+      "gate": "B.epoch_records",
+      "pass": true
+    },
+    {
+      "detail": {
+        "ema_active": true,
+        "epoch": 60,
+        "global_step": 66300,
+        "microbatches": 2210,
+        "optimizer_groups": 1105,
+        "rows": 8838,
+        "val_losses": null,
+        "val_metrics": null
+      },
+      "gate": "B.final_epoch_record",
+      "pass": true
+    },
+    {
+      "detail": {
+        "D_scale": 524288.0,
+        "D_scale_before": 524288.0,
+        "G_scale": 524288.0,
+        "G_scale_before": 524288.0,
+        "amp_attempts": 1,
+        "amp_policy": "ATOMIC_AMP_BACKOFF_RETRY",
+        "ema_updated": true,
+        "epoch": 60,
+        "group": 1105,
+        "group_samples": 6,
+        "microbatch_sizes": [
+          4,
+          2
+        ],
+        "n_loss_terms": 14
+      },
+      "gate": "B.final_group",
+      "pass": true
+    },
+    {
+      "gate": "B.amp_policy",
+      "pass": true
+    },
+    {
+      "gate": "C.retry_events_recovered",
+      "pass": true
+    },
+    {
+      "gate": "C.retry_log_order",
+      "pass": true
+    },
+    {
+      "gate": "C.attempts_consistent",
+      "pass": true
+    },
+    {
+      "gate": "C.no_fail_closed_final",
+      "pass": true
+    },
+    {
+      "gate": "C.no_duplicate_train_group",
+      "pass": true
+    },
+    {
+      "detail": {
+        "non_train_images": 0,
+        "opened_events": 1060560,
+        "test_images": 0,
+        "test_metadata": 0,
+        "train_images": 1060560,
+        "unique_ids": 12668,
+        "unique_ids_sha256": "27a8dff74625704c99b7dcbbf38a5b70ee9eaede0fe7b0ea8d6206719d5ebb1d",
+        "val_images": 0,
+        "val_metadata": 0
+      },
+      "gate": "D.firewall",
+      "pass": true
+    },
+    {
+      "gate": "D.unique_ids_sha256",
+      "pass": true
+    },
+    {
+      "detail": "two roles opened per TRAIN row per epoch; AMP retries re-opened nothing",
+      "gate": "D.train_open_accounting",
+      "pass": true
+    },
+    {
+      "gate": "E.recovery_present_and_indexed",
+      "pass": true
+    },
+    {
+      "gate": "E.recovery_kind_labels",
+      "pass": true
+    },
+    {
+      "detail": {
+        "curriculum": {
+          "lambda_adv": 0.1,
+          "lambda_con": 1.0,
+          "lambda_spec": 0.5,
+          "s_hf": 0.15,
+          "stage": 3
+        },
+        "epoch": 61,
+        "global_update": 66300,
+        "lr": 2e-06,
+        "next_group": 1,
+        "stage": "generator",
+        "warmup_epoch": 1,
+        "warmup_next_batch": 1,
+        "warmup_step": 0
+      },
+      "gate": "E.recovery_final_boundary",
+      "pass": true
+    },
+    {
+      "gate": "E.recovery_provenance",
+      "pass": true
+    },
+    {
+      "gate": "E.recovery_no_val_test_fields",
+      "pass": true
+    },
+    {
+      "detail": 51,
+      "gate": "F.candidate_set_exact",
+      "pass": true
+    },
+    {
+      "gate": "F.candidate_identity_provenance",
+      "pass": true
+    },
+    {
+      "gate": "F.no_selection_state",
+      "pass": true
+    },
+    {
+      "gate": "F.no_val_test_fields",
+      "pass": true
+    },
+    {
+      "gate": "F.epochs_10_to_60",
+      "pass": true
+    },
+    {
+      "gate": "F.index_complete",
+      "pass": true
+    },
+    {
+      "gate": "G.config_sha256",
+      "pass": true
+    },
+    {
+      "gate": "G.pair_manifest_sha256",
+      "pass": true
+    },
+    {
+      "gate": "G.env_lock_sha256",
+      "pass": true
+    },
+    {
+      "gate": "G.amp_amendment_sha256",
+      "pass": true
+    }
+  ],
+  "global_update": 66300,
+  "method": "GPAT-B0",
+  "milestone": "M7D1-CLOSE-SEED42",
+  "non_finite_record_count": 0,
+  "observations": [
+    {
+      "evidence": "per-epoch medians from metrics.jsonl (D_total, gadv, G_grad_norm, D_grad_norm): ep10 0.133/5.1/1.64e-05/7.47; ep20 0.0113/12.3/6.73e-08/2.03; ep30 8.17e-04/16.6/6.14e-10/0.236; ep40 3.11e-05/19.5/7.99e-11/0.01; ep60 1.22e-06/22.0/4.76e-11/4.14e-04",
+      "gating": false,
+      "id": "M7D1-CLOSE-OBS-01",
+      "note": "all values finite; no gate is affected. The D wins decisively in stage 3 and the logged G gradient norm is ~1e-10 from ~epoch 30, which is below Adam eps=1e-8 scale. Flagged for owner review before VAL selection / seeds 1337 and 2026; not assessed further here (no VAL access).",
+      "topic": "discriminator saturation / vanishing generator gradient"
+    }
+  ],
+  "optimizer_group_count": 66300,
+  "provenance": {
+    "amp_amendment_binding": "via code commit 058e976 (amendment added in that commit) and run_manifest.amp_policy=ATOMIC_AMP_BACKOFF_RETRY; the manifest does not embed the amendment hash",
+    "amp_amendment_path": "configs/amendments/gpat_m7d1_amp_retry_resolution.yaml",
+    "amp_amendment_sha256": "4dc8a838cbdce72c454313b4951684dfad8d90f82b8a6a8a090d355e8499e0a7",
+    "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+    "config_path": "configs/methods/gpat_b0.yaml",
+    "config_sha256": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "environment_lock_path": "environments/gpat_m7_gpu.lock.json",
+    "environment_lock_sha256": "24c983ebbb308acacd63f32837532e5f9166114962f524e993f243f2ff746114",
+    "m7c3_record_sha256": "f89a91206ffe1c82a55b600f87fc824c91b1840d4222f2b45346121d6af82717",
+    "pair_manifest_sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "repo_file_sha256": {
+      "amp_amendment": "4dc8a838cbdce72c454313b4951684dfad8d90f82b8a6a8a090d355e8499e0a7",
+      "config": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+      "env_lock": "24c983ebbb308acacd63f32837532e5f9166114962f524e993f243f2ff746114"
+    },
+    "teacher_sha256": {
+      "adaface_weight": "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8",
+      "e_art_resnet18_imagenet1k_v1": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+      "f_art_resnet18_imagenet1k_v1": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+      "facexformer_weight": "327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d"
+    }
+  },
+  "recovery_checkpoint": {
+    "boundary_note": "position.epoch=61/next_group=1 is the next epoch to run: last completed epoch is 60, global_update 66300",
+    "ema_modules": [
+      "e_art",
+      "g_res"
+    ],
+    "file_size_bytes": 720644568,
+    "kind": "GPAT_RECOVERY_CHECKPOINT",
+    "labels": [
+      "RECOVERY_ONLY",
+      "NOT_ELIGIBLE_FOR_VAL_SELECTION",
+      "NOT_ELIGIBLE_FOR_BANK",
+      "NOT_ELIGIBLE_FOR_PAPER_RESULT"
+    ],
+    "modules": [
+      "discriminator",
+      "e_art",
+      "g_res"
+    ],
+    "optimizers": [
+      "D_OPT",
+      "G_OPT"
+    ],
+    "path": "checkpoints/recovery/latest.pt",
+    "position": {
+      "curriculum": {
+        "lambda_adv": 0.1,
+        "lambda_con": 1.0,
+        "lambda_spec": 0.5,
+        "s_hf": 0.15,
+        "stage": 3
+      },
+      "epoch": 61,
+      "global_update": 66300,
+      "lr": 2e-06,
+      "next_group": 1,
+      "stage": "generator",
+      "warmup_epoch": 1,
+      "warmup_next_batch": 1,
+      "warmup_step": 0
+    },
+    "provenance": {
+      "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+      "config_sha256": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+      "ema_decay": 0.999,
+      "gamma": 0.0,
+      "gpu_env_lock_sha256": "24c983ebbb308acacd63f32837532e5f9166114962f524e993f243f2ff746114",
+      "m7c3_record_sha256": "f89a91206ffe1c82a55b600f87fc824c91b1840d4222f2b45346121d6af82717",
+      "method": "GPAT-B0",
+      "source_manifest_sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "teacher_sha256": {
+        "adaface_weight": "52cca7c64808fea6f44f9b9aee2b0e091bf96c1ab4f6e31bedcdf5d77009b4f8",
+        "e_art_resnet18_imagenet1k_v1": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+        "f_art_resnet18_imagenet1k_v1": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+        "facexformer_weight": "327a755849ba64d336fb96589ff87b27e84a12be1ecf8bcfaa503d66f803286d"
+      }
+    },
+    "sha256": "790e64c700a77b7036f2fc181e29b42111979f465a8cdc438c74abd5c080bd8b"
+  },
+  "run_id": "7b799fbd6d0426da",
+  "run_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m7/E08/seed_42",
+  "run_root_files": {
+    "file_count": 59,
+    "metrics_jsonl_lines": 66410,
+    "metrics_jsonl_sha256": "5f4aa9a004516fe2297b39e0a847f1d12d786e6f6c54f0bc0c401b0f476d632f",
+    "small_file_sha256": {
+      "checkpoint_index.json": "a6aaed4a5ff79603646a637e178fb8f7f82d04af4ce67c223d7e5d4317e769a4",
+      "resolved_config.yaml": "6096c9e00fa27d0f8de68cc95f4aa2a5b80478c9896321d0f31c81ab7f9f9af6",
+      "run_manifest.json": "9bc418d3182fabbe1e9870c345e281d84782d903caea84c2c2cfa13a1721bb73",
+      "run_summary.json": "626dc5d0b7c3a15ffbdc5736e167eb51db9ebcad70316171a25109840208b4e4",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "unchanged_during_audit": true
+  },
+  "seed": 42,
+  "status": "M7D1_E08_SEED42_TRAINING_AUDITED_COMPLETE",
+  "tail_group_policy": "group 1105 of every epoch has group_samples=6, microbatch_sizes=[4,2] (8838 = 1104*8+6); expected, not an anomaly",
+  "terminal_marker_counts": {},
+  "terminal_numerical_failure_count": 0,
+  "update_sequence": {
+    "contiguous": true,
+    "duplicates": [],
+    "first": 1,
+    "last": 66300,
+    "missing": []
+  }
+}
