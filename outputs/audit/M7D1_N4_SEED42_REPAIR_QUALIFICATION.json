@@ -1,0 +1,653 @@
+{
+ "artifact_rule": {
+  "declared": "before any repair branch was run; characterization used for preference criterion 3 only",
+  "metric": "per-update group mean of A, epoch median",
+  "name": "N4_ARTIFACT_RETENTION_CHARACTERIZATION_V1",
+  "reference_floor": 0.01,
+  "reference_floor_source": "frozen budget hinge ARTIFACT_MIN (A10 D10.6, methods/gpat/losses.py)",
+  "retained": "every completed post-ramp stage-2 epoch has median group-mean A >= 0.01 and no declared collapse"
+ },
+ "authority_commit": "d88563a46757d171a5e2af359eebc4fc18c305eb",
+ "base_snapshot": {
+  "n3_relative_path": "snapshots/replay/pre_update_5526.pt",
+  "position_after": {
+   "epoch": 6,
+   "global_update": 5525,
+   "next_group": 1,
+   "stage": "generator"
+  },
+  "sha256": "3b77d738e810c5cad05f7974e7c688fb71719fcd1547bac270f8c2346b8eaf59"
+ },
+ "branch_definitions": {
+  "R0": {
+   "kind": "CONTROL_FROZEN_STAGE2",
+   "name": "CONTROL"
+  },
+  "R1": {
+   "kind": "LINEAR_RAMP",
+   "name": "ADV_RAMP_1E",
+   "ramp_end": 6630
+  },
+  "R2": {
+   "kind": "LINEAR_RAMP",
+   "name": "ADV_RAMP_5E",
+   "ramp_end": 11050
+  },
+  "R3": {
+   "kind": "CONSTANT",
+   "name": "LOW_ADV_001",
+   "value": 0.01
+  },
+  "R4": {
+   "kind": "CONSTANT",
+   "name": "LOW_ADV_002",
+   "value": 0.02
+  }
+ },
+ "branches": {
+  "R0": {
+   "amp_retries": 4,
+   "amp_retry_updates": [
+    5527,
+    5529,
+    5758,
+    5759
+   ],
+   "eventual_lambda_adv": 0.05,
+   "hard_gate_failures": [],
+   "last_update": 5850,
+   "phase_a": {
+    "event_update": 5790,
+    "onset_update": 5781,
+    "result": "COLLAPSED"
+   },
+   "role": "CONTROL (must collapse)",
+   "schedule": {
+    "contiguous_from_5526": true,
+    "lambda_adv_at": {
+     "5526": 0.05,
+     "5527": 0.05
+    },
+    "lambda_adv_exact_mismatch": [],
+    "other_terms_vs_frozen_contract_mismatch": [],
+    "other_terms_vs_scientific_mismatch": [],
+    "rows": 325
+   },
+   "status": "COMPLETED_TO_END"
+  },
+  "R1": {
+   "amp_retries": 7,
+   "amp_retry_updates": [
+    5890,
+    6893,
+    9154,
+    11396,
+    14815,
+    14896,
+    15235
+   ],
+   "artifact_retained": true,
+   "eventual_lambda_adv": 0.05,
+   "hard_gate_failures": [],
+   "last_update": 16575,
+   "long_horizon_reached": true,
+   "phase_a": {
+    "result": "EARLY_COLLAPSE_NOT_OBSERVED"
+   },
+   "post_ramp_epoch_median_A_mean": {
+    "10": 0.013591306284070015,
+    "11": 0.013988484628498554,
+    "12": 0.014591345563530922,
+    "13": 0.015590309165418148,
+    "14": 0.015951218083500862,
+    "15": 0.015689287334680557,
+    "7": 0.011719798669219017,
+    "8": 0.012393900193274021,
+    "9": 0.012684871442615986
+   },
+   "post_ramp_epochs": [
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15"
+   ],
+   "qualification": "QUALIFIED",
+   "schedule": {
+    "contiguous_from_5526": true,
+    "lambda_adv_at": {
+     "11049": 0.05,
+     "11050": 0.05,
+     "11051": 0.05,
+     "16575": 0.05,
+     "5526": 0.0,
+     "5527": 4.528985507246377e-05,
+     "6078": 0.025,
+     "6629": 0.04995471014492754,
+     "6630": 0.05,
+     "6631": 0.05,
+     "8288": 0.05
+    },
+    "lambda_adv_exact_mismatch": [],
+    "other_terms_vs_frozen_contract_mismatch": [],
+    "other_terms_vs_scientific_mismatch": [],
+    "rows": 11050
+   },
+   "status": "COMPLETED_TO_END"
+  },
+  "R2": {
+   "amp_retries": 9,
+   "amp_retry_updates": [
+    5903,
+    7941,
+    10024,
+    12793,
+    13306,
+    15970,
+    16381,
+    16494
+   ],
+   "artifact_retained": true,
+   "eventual_lambda_adv": 0.05,
+   "hard_gate_failures": [],
+   "last_update": 16575,
+   "long_horizon_reached": true,
+   "phase_a": {
+    "result": "EARLY_COLLAPSE_NOT_OBSERVED"
+   },
+   "post_ramp_epoch_median_A_mean": {
+    "11": 0.013227694667875767,
+    "12": 0.013783292844891548,
+    "13": 0.014148548245429993,
+    "14": 0.014617865905165672,
+    "15": 0.014901967719197273
+   },
+   "post_ramp_epochs": [
+    "11",
+    "12",
+    "13",
+    "14",
+    "15"
+   ],
+   "qualification": "QUALIFIED",
+   "schedule": {
+    "contiguous_from_5526": true,
+    "lambda_adv_at": {
+     "11049": 0.04999094858797973,
+     "11050": 0.05,
+     "11051": 0.05,
+     "16575": 0.05,
+     "5526": 0.0,
+     "5527": 9.051412020275162e-06,
+     "6078": 0.004996379435191891,
+     "6629": 0.009983707458363505,
+     "6630": 0.009992758870383782,
+     "6631": 0.010001810282404057,
+     "8288": 0.025
+    },
+    "lambda_adv_exact_mismatch": [],
+    "other_terms_vs_frozen_contract_mismatch": [],
+    "other_terms_vs_scientific_mismatch": [],
+    "rows": 11050
+   },
+   "status": "COMPLETED_TO_END"
+  },
+  "R3": {
+   "amp_retries": 2,
+   "amp_retry_updates": [
+    5584,
+    5669
+   ],
+   "eventual_lambda_adv": 0.01,
+   "hard_gate_failures": [],
+   "last_update": 5850,
+   "phase_a": {
+    "result": "EARLY_COLLAPSE_NOT_OBSERVED"
+   },
+   "qualification": "NOT_LONG_QUALIFIED",
+   "schedule": {
+    "contiguous_from_5526": true,
+    "lambda_adv_at": {
+     "5526": 0.01,
+     "5527": 0.01
+    },
+    "lambda_adv_exact_mismatch": [],
+    "other_terms_vs_frozen_contract_mismatch": [],
+    "other_terms_vs_scientific_mismatch": [],
+    "rows": 325
+   },
+   "status": "COMPLETED_TO_END"
+  },
+  "R4": {
+   "amp_retries": 0,
+   "amp_retry_updates": [],
+   "eventual_lambda_adv": 0.02,
+   "hard_gate_failures": [
+    "declared identity collapse"
+   ],
+   "last_update": 5850,
+   "phase_a": {
+    "event_update": 5544,
+    "onset_update": 5535,
+    "result": "COLLAPSED"
+   },
+   "qualification": "COLLAPSED_IN_PHASE_A",
+   "schedule": {
+    "contiguous_from_5526": true,
+    "lambda_adv_at": {
+     "5526": 0.02,
+     "5527": 0.02
+    },
+    "lambda_adv_exact_mismatch": [],
+    "other_terms_vs_frozen_contract_mismatch": [],
+    "other_terms_vs_scientific_mismatch": [],
+    "rows": 325
+   },
+   "status": "COMPLETED_TO_END"
+  }
+ },
+ "collapse_rule": {
+  "consecutive_complete_updates": 10,
+  "declared": "M7D1-N4 instruction section 7, implemented before any repair branch was run",
+  "event_update": "the 10th update of that run (first update at which the 10-update condition holds)",
+  "metric": "M_mean: mean of M = sigmoid(float(mask_logit)) over every mask pixel of every sample of the accepted (COMPLETE) forward of update u (sample-weighted over the microbatches of the group)",
+  "name": "N4_IDENTITY_COLLAPSE_V1",
+  "onset_update": "first update of the first run of 10 consecutive updates with M_mean < 0.01",
+  "threshold": 0.01
+ },
+ "gradient_summary": {
+  "R0": {
+   "5526": {
+    "M_mean": 0.9999251365661621,
+    "grad_share_gadv": 0.680904746055603,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -2.4949350357055664,
+    "lin_dlogit_gadv": -3.4510416984558105,
+    "trunk_step_share_gadv": 0.7123049834780631
+   },
+   "5600": {
+    "M_mean": 0.9906375408172607,
+    "grad_share_gadv": 1.029201865196228,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.7942043542861938,
+    "lin_dlogit_gadv": -4.792351722717285,
+    "trunk_step_share_gadv": 0.1893270589871864
+   },
+   "5700": {
+    "M_mean": 0.9999451637268066,
+    "grad_share_gadv": 0.9368846416473389,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.6260742545127869,
+    "lin_dlogit_gadv": -0.5030633211135864,
+    "trunk_step_share_gadv": 0.37866115644028103
+   },
+   "5750": {
+    "M_mean": 0.999993622303009,
+    "grad_share_gadv": 0.8805287480354309,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.7487255334854126,
+    "lin_dlogit_gadv": -0.14067986607551575,
+    "trunk_step_share_gadv": 0.5558110526002398
+   },
+   "5781": {
+    "M_mean": 1.9518431599863106e-06,
+    "grad_share_gadv": 0.00973207876086235,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -9.20012092590332,
+    "lin_dlogit_gadv": -0.002991744317114353,
+    "trunk_step_share_gadv": 2.8480516747902946e-06
+   },
+   "5850": {
+    "M_mean": 9.981004467363164e-09,
+    "grad_share_gadv": 2.612372009025421e-05,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.017221806570887566,
+    "lin_dlogit_gadv": 0.0,
+    "trunk_step_share_gadv": 4.735753714116759e-06
+   }
+  },
+  "R1": {
+   "5526": {
+    "M_mean": 0.9999251365661621,
+    "grad_share_gadv": 0.0,
+    "lambda_adv": 0.0,
+    "lin_dlogit_TOTAL": 0.9828029870986938,
+    "lin_dlogit_gadv": null,
+    "trunk_step_share_gadv": null
+   },
+   "5600": {
+    "M_mean": 0.999028205871582,
+    "grad_share_gadv": 0.44879963994026184,
+    "lambda_adv": 0.003351449275362319,
+    "lin_dlogit_TOTAL": 0.04018975794315338,
+    "lin_dlogit_gadv": -0.23567654192447662,
+    "trunk_step_share_gadv": 0.012903905588346464
+   },
+   "5700": {
+    "M_mean": 0.9964199066162109,
+    "grad_share_gadv": 0.2582111954689026,
+    "lambda_adv": 0.007880434782608697,
+    "lin_dlogit_TOTAL": -0.17029282450675964,
+    "lin_dlogit_gadv": 0.006189515348523855,
+    "trunk_step_share_gadv": 0.029881508870209204
+   },
+   "5750": {
+    "M_mean": 0.9973506927490234,
+    "grad_share_gadv": 0.15090294182300568,
+    "lambda_adv": 0.010144927536231885,
+    "lin_dlogit_TOTAL": 0.012031495571136475,
+    "lin_dlogit_gadv": -0.010344571433961391,
+    "trunk_step_share_gadv": 0.023727185279792687
+   },
+   "5781": {
+    "M_mean": 0.9979326725006104,
+    "grad_share_gadv": 0.6841250061988831,
+    "lambda_adv": 0.011548913043478262,
+    "lin_dlogit_TOTAL": -0.011128759011626244,
+    "lin_dlogit_gadv": -0.002860183361917734,
+    "trunk_step_share_gadv": -0.010182165032643955
+   },
+   "5850": {
+    "M_mean": 0.9982383847236633,
+    "grad_share_gadv": 0.5260380506515503,
+    "lambda_adv": 0.014673913043478263,
+    "lin_dlogit_TOTAL": -0.06999596953392029,
+    "lin_dlogit_gadv": -0.1214039996266365,
+    "trunk_step_share_gadv": 0.11103486043281063
+   },
+   "6630": {
+    "M_mean": 0.9963195323944092,
+    "grad_share_gadv": 0.3035750687122345,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": 0.03919996693730354,
+    "lin_dlogit_gadv": -0.04699121415615082,
+    "trunk_step_share_gadv": 0.032259876145709916
+   },
+   "6631": {
+    "M_mean": 0.9966158270835876,
+    "grad_share_gadv": 0.6526629328727722,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.18049682676792145,
+    "lin_dlogit_gadv": -0.18325692415237427,
+    "trunk_step_share_gadv": 0.24009372182569086
+   },
+   "8840": {
+    "M_mean": 0.9989151954650879,
+    "grad_share_gadv": 0.5888638496398926,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.10908272117376328,
+    "lin_dlogit_gadv": -0.09192120283842087,
+    "trunk_step_share_gadv": 0.19480077407494997
+   },
+   "11050": {
+    "M_mean": 0.999467134475708,
+    "grad_share_gadv": 0.3687719702720642,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": 0.03055618703365326,
+    "lin_dlogit_gadv": -0.08196942508220673,
+    "trunk_step_share_gadv": 0.030588230023541833
+   },
+   "13800": {
+    "M_mean": 0.9998815059661865,
+    "grad_share_gadv": 0.6127601861953735,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.18803852796554565,
+    "lin_dlogit_gadv": -0.2848445177078247,
+    "trunk_step_share_gadv": 0.09012121154122557
+   },
+   "16575": {
+    "M_mean": 0.9998087882995605,
+    "grad_share_gadv": 0.0702848732471466,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": 0.2543116509914398,
+    "lin_dlogit_gadv": -0.1924726665019989,
+    "trunk_step_share_gadv": -0.0010576834365750155
+   }
+  },
+  "R2": {
+   "5526": {
+    "M_mean": 0.9999251365661621,
+    "grad_share_gadv": 0.0,
+    "lambda_adv": 0.0,
+    "lin_dlogit_TOTAL": 0.9828029870986938,
+    "lin_dlogit_gadv": null,
+    "trunk_step_share_gadv": null
+   },
+   "5600": {
+    "M_mean": 0.9996346235275269,
+    "grad_share_gadv": 0.10836613178253174,
+    "lambda_adv": 0.0006698044895003621,
+    "lin_dlogit_TOTAL": 0.5571324229240417,
+    "lin_dlogit_gadv": -0.04424325376749039,
+    "trunk_step_share_gadv": 0.005310767857533844
+   },
+   "5700": {
+    "M_mean": 0.9987683892250061,
+    "grad_share_gadv": 0.17718033492565155,
+    "lambda_adv": 0.0015749456915278783,
+    "lin_dlogit_TOTAL": -0.20389319956302643,
+    "lin_dlogit_gadv": -0.01513723935931921,
+    "trunk_step_share_gadv": 0.009751237777906478
+   },
+   "5750": {
+    "M_mean": 0.9989699125289917,
+    "grad_share_gadv": 0.13178154826164246,
+    "lambda_adv": 0.0020275162925416364,
+    "lin_dlogit_TOTAL": 0.12158389389514923,
+    "lin_dlogit_gadv": -0.023951837792992592,
+    "trunk_step_share_gadv": 0.0005372311396847588
+   },
+   "5781": {
+    "M_mean": 0.9992339611053467,
+    "grad_share_gadv": 0.20377607643604279,
+    "lambda_adv": 0.0023081100651701665,
+    "lin_dlogit_TOTAL": 0.04823409765958786,
+    "lin_dlogit_gadv": -0.010354826226830482,
+    "trunk_step_share_gadv": 0.006932004980111186
+   },
+   "5850": {
+    "M_mean": 0.9983484745025635,
+    "grad_share_gadv": 0.3484056293964386,
+    "lambda_adv": 0.002932657494569153,
+    "lin_dlogit_TOTAL": 0.009594711475074291,
+    "lin_dlogit_gadv": 0.003694787621498108,
+    "trunk_step_share_gadv": 0.02139644997921946
+   },
+   "6630": {
+    "M_mean": 0.9994009733200073,
+    "grad_share_gadv": 0.10684389621019363,
+    "lambda_adv": 0.009992758870383782,
+    "lin_dlogit_TOTAL": -0.13403408229351044,
+    "lin_dlogit_gadv": 0.00010178641969105229,
+    "trunk_step_share_gadv": -0.026044461040331496
+   },
+   "8840": {
+    "M_mean": 0.9996880292892456,
+    "grad_share_gadv": 0.6964635848999023,
+    "lambda_adv": 0.02999637943519189,
+    "lin_dlogit_TOTAL": 0.027657076716423035,
+    "lin_dlogit_gadv": -0.074617899954319,
+    "trunk_step_share_gadv": 0.09791130632130314
+   },
+   "11050": {
+    "M_mean": 0.999085545539856,
+    "grad_share_gadv": 0.1371198147535324,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": 0.15164309740066528,
+    "lin_dlogit_gadv": -0.0872977003455162,
+    "trunk_step_share_gadv": 0.06458548895208494
+   },
+   "11051": {
+    "M_mean": 0.9990535378456116,
+    "grad_share_gadv": 0.7148135304450989,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.11736561357975006,
+    "lin_dlogit_gadv": -0.14393724501132965,
+    "trunk_step_share_gadv": 0.12395673425607044
+   },
+   "13800": {
+    "M_mean": 0.9998420476913452,
+    "grad_share_gadv": 0.5583714842796326,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": -0.38797271251678467,
+    "lin_dlogit_gadv": -0.24628719687461853,
+    "trunk_step_share_gadv": 0.1189543117530414
+   },
+   "16575": {
+    "M_mean": 0.9999638795852661,
+    "grad_share_gadv": 0.1681729406118393,
+    "lambda_adv": 0.05,
+    "lin_dlogit_TOTAL": 1.4464213848114014,
+    "lin_dlogit_gadv": -0.21598470211029053,
+    "trunk_step_share_gadv": -0.07819209731968431
+   }
+  },
+  "R3": {
+   "5850": {
+    "M_mean": 0.9980052709579468,
+    "grad_share_gadv": 0.025206860154867172,
+    "lambda_adv": 0.01,
+    "lin_dlogit_TOTAL": 0.02569703198969364,
+    "lin_dlogit_gadv": -0.010895730927586555,
+    "trunk_step_share_gadv": 0.020317953535976756
+   }
+  },
+  "R4": {
+   "5850": {
+    "M_mean": 0.0,
+    "grad_share_gadv": 0.0,
+    "lambda_adv": 0.02,
+    "lin_dlogit_TOTAL": -0.21860328316688538,
+    "lin_dlogit_gadv": 0.0,
+    "trunk_step_share_gadv": 0.0
+   }
+  }
+ },
+ "labels": [
+  "DIAGNOSTIC_ONLY",
+  "NOT_SCIENTIFIC",
+  "NOT_A_REPLACEMENT_RUN",
+  "NOT_ELIGIBLE_FOR_VAL_SELECTION",
+  "NOT_ELIGIBLE_FOR_BANK",
+  "NOT_ELIGIBLE_FOR_PAPER_RESULT",
+  "DIAGNOSTIC_REPAIR_VARIANT",
+  "NOT_AN_APPROVED_PROTOCOL_CHANGE"
+ ],
+ "long_hard_gates": [
+  "declared identity collapse",
+  "terminal numerical failure",
+  "OOM",
+  "FAIL_CLOSED_AMP_OVERFLOW_FINAL",
+  "non-finite loss/parameter",
+  "update discontinuity",
+  "TRAIN-order mismatch",
+  "provenance mismatch",
+  "VAL/TEST access",
+  "scientific-run mutation"
+ ],
+ "milestone": "M7D1-N4",
+ "n3_root_cause": {
+  "classification": "ADVERSARIAL_IMBALANCE / CURRICULUM_TRANSITION_INSTABILITY",
+  "commit": "d88563a46757d171a5e2af359eebc4fc18c305eb",
+  "fork_A_collapse_u": 5781,
+  "fork_C_collapse_u": 5716,
+  "mechanism": "MASK_SIGMOID_SATURATION through shared G_res trunk"
+ },
+ "post_ramp_epoch_rule": "complete 1105-update epochs whose every update has lambda_adv == 0.05",
+ "preference": [
+  "passes hard gates",
+  "prevents the known collapse through u16575",
+  "preserves meaningful artifact output",
+  "preserves eventual lambda_adv = 0.05",
+  "smallest protocol deviation",
+  "no architecture change",
+  "no optimizer / D reset"
+ ],
+ "primary_repair_candidate": "R1",
+ "qualified": {
+  "R1": "ADV_RAMP_1E_QUALIFIED",
+  "R2": "ADV_RAMP_5E_QUALIFIED"
+ },
+ "r0_parity": {
+  "amp_retry_updates": [
+   5527,
+   5529,
+   5758,
+   5759
+  ],
+  "bitwise_equal_vs_n3_fork_A": 325,
+  "bitwise_equal_vs_scientific": 325,
+  "collapse": {
+   "event_update": 5790,
+   "onset_update": 5781
+  },
+  "collapse_onset_equals_n3_fork_A_5781": true,
+  "n3_mask_rows_bitwise_equal_fork_A": 325,
+  "records_bitwise": true,
+  "status": "R0_PARITY_PASS",
+  "updates_compared": 325
+ },
+ "r5": {
+  "reason": "the scientific run records no initial-D state or digest (run_manifest has no init record, only the final recovery/latest.pt exists, the N3 snapshots start at u5525); a reset would need an invented definition (seed, D_OPT/D_SCALER state), which N4 forbids",
+  "status": "R5_UNSUPPORTED_EXACT_STATE"
+ },
+ "scientific_metrics_sha256": "5f4aa9a004516fe2297b39e0a847f1d12d786e6f6c54f0bc0c401b0f476d632f",
+ "source_collected_sha256": "fdda0232e94feb366b0e34b1a1a19fc191ea7f18c0f8c9b3f2c9e2e4d094d540",
+ "train_order": {
+  "R0": {
+   "mismatch": [],
+   "reference_branches": [
+    "R0",
+    "R1",
+    "R2"
+   ],
+   "sequence_sha256": "9a080c8d8370d2e47fc0fca842820cd398bc70149a62f066a37cf02decc57c68",
+   "updates_compared": 325
+  },
+  "R1": {
+   "mismatch": [],
+   "reference_branches": [
+    "R0",
+    "R1",
+    "R2"
+   ],
+   "sequence_sha256": "6e506b2f1a7e3155c52bc9c1cbfc5069153a27f36f43b00c59e2dcf5879fdf94",
+   "updates_compared": 11050
+  },
+  "R2": {
+   "mismatch": [],
+   "reference_branches": [
+    "R0",
+    "R1",
+    "R2"
+   ],
+   "sequence_sha256": "6e506b2f1a7e3155c52bc9c1cbfc5069153a27f36f43b00c59e2dcf5879fdf94",
+   "updates_compared": 11050
+  },
+  "R3": {
+   "mismatch": [],
+   "reference_branches": [
+    "R0",
+    "R1",
+    "R2"
+   ],
+   "sequence_sha256": "9a080c8d8370d2e47fc0fca842820cd398bc70149a62f066a37cf02decc57c68",
+   "updates_compared": 325
+  },
+  "R4": {
+   "mismatch": [],
+   "reference_branches": [
+    "R0",
+    "R1",
+    "R2"
+   ],
+   "sequence_sha256": "9a080c8d8370d2e47fc0fca842820cd398bc70149a62f066a37cf02decc57c68",
+   "updates_compared": 325
+  }
+ },
+ "verdict": "M7D1_N4_REPAIR_CANDIDATE_QUALIFIED"
+}
