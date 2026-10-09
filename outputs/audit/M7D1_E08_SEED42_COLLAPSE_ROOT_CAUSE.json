@@ -1,0 +1,691 @@
+{
+ "access_and_safety": {
+  "B1_B2_B3": "NOT_LAUNCHED",
+  "bank": "NOT_TOUCHED",
+  "diagnostic_runtime_in_git": false,
+  "fix": "NOT_IMPLEMENTED",
+  "scientific_run_root_unchanged": {
+   "all_equal_to": "outputs/audit/M7D1_E08_SEED42_COMPLETION.json",
+   "file_count": 59,
+   "files_newer_than_completion_2026-10-07T08:03+07:00": 0,
+   "method": "read-only sha256 + mtime check on the GPU host, 2026-10-09, after all N3 processes",
+   "sha256": {
+    "checkpoint_index.json": "a6aaed4a5ff79603646a637e178fb8f7f82d04af4ce67c223d7e5d4317e769a4",
+    "metrics.jsonl": "5f4aa9a004516fe2297b39e0a847f1d12d786e6f6c54f0bc0c401b0f476d632f",
+    "run_manifest.json": "9bc418d3182fabbe1e9870c345e281d84782d903caea84c2c2cfa13a1721bb73",
+    "run_summary.json": "626dc5d0b7c3a15ffbdc5736e167eb51db9ebcad70316171a25109840208b4e4"
+   },
+   "unchanged": true
+  },
+  "seed1337_2026": "NOT_LAUNCHED",
+  "val_selection": "NOT_RUN",
+  "val_test_access_zero_all_processes": true,
+  "write_firewall_clean_all_processes": true
+ },
+ "amp_retry_role": {
+  "facts": [
+   "retries are atomic (no optimizer step on the overflowed attempt)",
+   "overflowing parameter g_res.ending.weight",
+   "accepted gradients scale-invariant to <= 6e-5 relative",
+   "fork C collapses with retries at different updates (5527, 5663)"
+  ],
+  "role": "RULED_OUT_AS_CAUSE (symptom of large gadv-dominated G gradients)",
+  "scaler_sensitivity": {
+   "5758": {
+    "16384.0": {
+     "finite_fraction": 1.0,
+     "nonfinite_param_count": 0,
+     "nonfinite_params": [],
+     "norm_finite_part": 14.402947425842285,
+     "rel_diff_vs_scale_32768": 5.9295107348589227e-05
+    },
+    "32768.0": {
+     "finite_fraction": 1.0,
+     "nonfinite_param_count": 0,
+     "nonfinite_params": [],
+     "norm_finite_part": 14.402994155883789
+    },
+    "65536.0": {
+     "finite_fraction": 0.9999998807907104,
+     "nonfinite_param_count": 1,
+     "nonfinite_params": [
+      "g_res.ending.weight"
+     ],
+     "norm_finite_part": 13.599444389343262
+    }
+   },
+   "5759": {
+    "16384.0": {
+     "finite_fraction": 1.0,
+     "nonfinite_param_count": 0,
+     "nonfinite_params": [],
+     "norm_finite_part": 23.65643310546875
+    },
+    "32768.0": {
+     "finite_fraction": 0.9999998807907104,
+     "nonfinite_param_count": 1,
+     "nonfinite_params": [
+      "g_res.ending.weight"
+     ],
+     "norm_finite_part": 21.904762268066406
+    },
+    "8192.0": {
+     "finite_fraction": 1.0,
+     "nonfinite_param_count": 0,
+     "nonfinite_params": [],
+     "norm_finite_part": 23.65639877319336,
+     "rel_diff_vs_scale_16384": 4.258579065208323e-05
+    }
+   }
+  },
+  "updates": [
+   5758,
+   5759
+  ]
+ },
+ "attribution": {
+  "flip_5777_5780": {
+   "artcon_lin_dlogit": 4.615060403943062,
+   "budget_lin_dlogit": 0.42350053787231445,
+   "fidelity_losses_lin_dlogit": {
+    "bg": -1.139600157737732,
+    "id": -0.1350601422600448,
+    "lm": -0.2582802511751652,
+    "parse": -0.1865381095558405
+   },
+   "fidelity_losses_lin_dlogit_sum": -1.7194786607287824,
+   "gadv_lin_dlogit": -56.5571403503418,
+   "gadv_share_of_closing": 0.8179817664406294,
+   "momentum_lin_dlogit": -10.531506061553955,
+   "total_lin_dlogit": -64.25461864471436
+  },
+  "gadv_projection_share": {
+   "5526": 0.680904746055603,
+   "5700": 0.9368846416473389,
+   "5757": 1.0030064582824707,
+   "5777": 0.9727689623832703,
+   "5778": 0.9862169027328491,
+   "5779": 0.9805012941360474,
+   "5780": 0.9985665678977966
+  },
+  "method": "per-term gradients at the trained weight; exact linear split of the real G Adam step into momentum + one part per weighted term; first-order (eps=1/64) and full-step effect on the mask logit by fp32 forwards on the update group",
+  "momentum_after_collapse_u5781_lin_dlogit": -9.12797737121582,
+  "self_checks": {
+   "max_rel_err_predicted_vs_next_snapshot_step": 0.004695807583630085,
+   "max_rel_err_vs_recorded_G_grad_norm": 0.002148037952409462
+  },
+  "trunk_vs_head_lin_dlogit": {
+   "5777": {
+    "e_art": -0.0492795966565609,
+    "g_res_except_mask_row": -6.750227928161621,
+    "mask_head_row": -0.8184354305267334
+   },
+   "5778": {
+    "e_art": -0.03536594659090042,
+    "g_res_except_mask_row": -5.827654838562012,
+    "mask_head_row": -0.6104304790496826
+   },
+   "5779": {
+    "e_art": -0.03679767996072769,
+    "g_res_except_mask_row": -12.000741958618164,
+    "mask_head_row": -1.110517978668213
+   },
+   "5780": {
+    "e_art": -0.9856112599372864,
+    "g_res_except_mask_row": -34.896949768066406,
+    "mask_head_row": -1.1204090118408203
+   }
+  },
+  "windows_fork_A": {
+   "5757-5769": {
+    "gadv_share_of_closing": -0.0,
+    "largest_closing_part": "artcon",
+    "lin_dlogit_by_part": {
+     "artcon": -8.140976052731276,
+     "bg": -0.33559699822217226,
+     "budget": 0.0,
+     "gadv": 4.322890214622021,
+     "id": -0.10226682852953672,
+     "lm": 0.007663084659725428,
+     "low": 0.0,
+     "momentum": -1.2596670538187027,
+     "parse": 0.08883170178160071,
+     "spec": 0.03211097093299031,
+     "tv": 0.08344482094980776
+    },
+    "lin_dlogit_total": -5.323530497029424
+   },
+   "5770-5776": {
+    "gadv_share_of_closing": 0.4655307206357545,
+    "largest_closing_part": "gadv",
+    "lin_dlogit_by_part": {
+     "artcon": -1.1525839706882834,
+     "bg": -0.19013756327331066,
+     "budget": 0.0,
+     "gadv": -5.4938559383153915,
+     "id": -0.11061313841491938,
+     "lm": -0.06793200457468629,
+     "low": 0.0,
+     "momentum": -4.786152133718133,
+     "parse": 0.05125174392014742,
+     "spec": 0.00947354652453214,
+     "tv": 0.09700114605948329
+    },
+    "lin_dlogit_total": -11.647282764315605
+   },
+   "5777-5780": {
+    "gadv_share_of_closing": 0.8179817664406294,
+    "largest_closing_part": "gadv",
+    "lin_dlogit_by_part": {
+     "artcon": 4.615060403943062,
+     "bg": -1.139600157737732,
+     "budget": 0.42350053787231445,
+     "gadv": -56.5571403503418,
+     "id": -0.1350601422600448,
+     "lm": -0.2582802511751652,
+     "low": 0.0,
+     "momentum": -10.531506061553955,
+     "parse": -0.1865381095558405,
+     "spec": -0.01067828619852662,
+     "tv": -0.323496226221323
+    },
+    "lin_dlogit_total": -64.25461864471436
+   }
+  }
+ },
+ "classification": {
+  "diagnose_rule_result": "LAMBDA_ADV_STAGE2_ACTIVATION__ADVERSARIAL_G_GRADIENT_CLOSES_MASK_VIA_SHARED_TRUNK",
+  "lambda_adv_sufficient_and_necessary_scope": "ONLY within the tested diagnostic window u5526..u5850 from the exact pre-u5526 state of seed 42 (one seed, 325 updates); not generalized beyond that window or beyond seed 42",
+  "mechanism": "MASK_SIGMOID_SATURATION through shared G_res trunk",
+  "necessity_fork": {
+   "first_collapse_update": null,
+   "fork": "BDE",
+   "values": {
+    "lambda_adv": 0.0,
+    "lambda_con": 1.0,
+    "lambda_spec": 0.5,
+    "s_hf": 0.1
+   }
+  },
+  "not_sufficient_single_changes": [
+   "lambda_con",
+   "lambda_spec",
+   "s_hf"
+  ],
+  "primary": "ADVERSARIAL_IMBALANCE / CURRICULUM_TRANSITION_INSTABILITY",
+  "statement": "Activation of the generator adversarial loss (lambda_adv 0 -> 0.05) at the stage-2 boundary against a discriminator trained for 5525 updates with lambda_adv = 0: the gadv gradient dominates the generator update; through the shared G_res trunk it drives the mask logit into negative sigmoid saturation (absorbing x_hat == x_t).",
+  "sufficient_single_changes": [
+   "lambda_adv"
+  ]
+ },
+ "forks": {
+  "A": {
+   "changed_factors": "s_hf+lambda_adv+lambda_con+lambda_spec",
+   "collapse": true,
+   "collapse_update": 5781,
+   "description": "exact stage 2",
+   "end_update": 5850,
+   "final_M_mean": 9.981004023273954e-09,
+   "lambda_adv": 0.05,
+   "lambda_con": 1.0,
+   "lambda_spec": 0.5,
+   "min_M_mean": 6.698155363693559e-09,
+   "s_hf": 0.1,
+   "start_update": 5526
+  },
+  "B": {
+   "changed_factors": "s_hf",
+   "collapse": false,
+   "collapse_update": null,
+   "description": "only s_hf change",
+   "end_update": 5850,
+   "final_M_mean": 0.9997471570968628,
+   "lambda_adv": 0.0,
+   "lambda_con": 0.5,
+   "lambda_spec": 0.25,
+   "min_M_mean": 0.9620214998722076,
+   "s_hf": 0.1,
+   "start_update": 5526
+  },
+  "BDE": {
+   "changed_factors": "s_hf+lambda_con+lambda_spec",
+   "collapse": false,
+   "collapse_update": null,
+   "description": "stage 2 without the lambda_adv change (necessity test)",
+   "end_update": 5850,
+   "final_M_mean": 0.9996901750564575,
+   "lambda_adv": 0.0,
+   "lambda_con": 1.0,
+   "lambda_spec": 0.5,
+   "min_M_mean": 0.9483873546123505,
+   "s_hf": 0.1,
+   "start_update": 5526
+  },
+  "C": {
+   "changed_factors": "lambda_adv",
+   "collapse": true,
+   "collapse_update": 5716,
+   "description": "only lambda_adv change",
+   "end_update": 5850,
+   "final_M_mean": 0.0,
+   "lambda_adv": 0.05,
+   "lambda_con": 0.5,
+   "lambda_spec": 0.25,
+   "min_M_mean": 0.0,
+   "s_hf": 0.05,
+   "start_update": 5526
+  },
+  "D": {
+   "changed_factors": "lambda_con",
+   "collapse": false,
+   "collapse_update": null,
+   "description": "only lambda_con change",
+   "end_update": 5850,
+   "final_M_mean": 0.9999334216117859,
+   "lambda_adv": 0.0,
+   "lambda_con": 1.0,
+   "lambda_spec": 0.25,
+   "min_M_mean": 0.9459826648235321,
+   "s_hf": 0.05,
+   "start_update": 5526
+  },
+  "E": {
+   "changed_factors": "lambda_spec",
+   "collapse": false,
+   "collapse_update": null,
+   "description": "only lambda_spec change",
+   "end_update": 5850,
+   "final_M_mean": 0.9999085962772369,
+   "lambda_adv": 0.0,
+   "lambda_con": 0.5,
+   "lambda_spec": 0.5,
+   "min_M_mean": 0.9908115863800049,
+   "s_hf": 0.05,
+   "start_update": 5526
+  },
+  "F": {
+   "changed_factors": "none",
+   "collapse": false,
+   "collapse_update": null,
+   "description": "hold stage-1 values",
+   "end_update": 5850,
+   "final_M_mean": 0.9999277889728546,
+   "lambda_adv": 0.0,
+   "lambda_con": 0.5,
+   "lambda_spec": 0.25,
+   "min_M_mean": 0.9989856779575348,
+   "s_hf": 0.05,
+   "start_update": 5526
+  }
+ },
+ "grad_clipping_role": {
+  "clip_coefficient_fork_A_5757_5780": {
+   "5757": 0.1988763570576895,
+   "5758": 0.06944037147587442,
+   "5759": 0.042273815615525526,
+   "5760": 0.06575289806330441,
+   "5761": 0.06121260337315298,
+   "5762": 0.12227162156690995,
+   "5763": 0.6512286467464247,
+   "5764": 0.36526225601879947,
+   "5765": 0.24711833718402598,
+   "5766": 0.18442551719673586,
+   "5767": 1.0,
+   "5768": 1.0,
+   "5769": 0.9351947023492286,
+   "5770": 0.6468338012515967,
+   "5771": 0.8290810930241512,
+   "5772": 0.4353952919470946,
+   "5773": 0.6602412258680723,
+   "5774": 0.1362293706883342,
+   "5775": 0.23776527011336265,
+   "5776": 0.07979983042137524,
+   "5777": 0.13198032076117408,
+   "5778": 0.4219356346322508,
+   "5779": 0.1861856348360565,
+   "5780": 0.32387574551617465
+  },
+  "role": "NOT_CAUSAL_NO_PROTECTIVE_EFFECT (no no-clip counterfactual was run)",
+  "statement": "clipping shrinks the gradient norm but Adam normalizes per coordinate"
+ },
+ "hf_residual_active": {
+  "statement": "HF residual remained active through and after the collapse; the collapse is a mask closure, not a dead HF branch",
+  "tanh_hf_absmean": {
+   "5776": 0.854725569486618,
+   "5777": 0.8954112529754639,
+   "5778": 0.9142395555973053,
+   "5779": 0.9284926950931549,
+   "5780": 0.9252832233905792,
+   "5781": 0.9432691633701324,
+   "5782": 0.9416791200637817,
+   "5790": 0.9751176834106445,
+   "5800": 0.99147629737854,
+   "5850": 0.9969488382339478
+  }
+ },
+ "kind": "GPAT_M7D1_N3_COLLAPSE_ROOT_CAUSE",
+ "labels": [
+  "DIAGNOSTIC_ONLY",
+  "NOT_SCIENTIFIC",
+  "NOT_A_REPLACEMENT_RUN",
+  "NOT_ELIGIBLE_FOR_VAL_SELECTION",
+  "NOT_ELIGIBLE_FOR_BANK",
+  "NOT_ELIGIBLE_FOR_PAPER_RESULT"
+ ],
+ "limitations": [
+  "forks end at u5850 (69 updates after fork-A collapse, 134 after fork-C): no-collapse for B, D, E, F, BDE holds only within 325 updates; one seed (42)",
+  "attribution is first-order per update (full-step effects reported; signs agree on the flip totals)",
+  "the mechanism by which gadv closes the mask (D keying on the generator HF residual) is an interpretation, not separately tested",
+  "diagnose rules and the collapse threshold (mean M < 0.01) were written after the replay trajectory was seen",
+  "the tool changed during the milestone (replay ran with sha 1610d939..., copy kept on the GPU host); result JSONs record the tool sha read at process end; the G/D update computation was never changed",
+  "stage-1 partial mask closure (u~1751-2900, 15-22% of pixels, recovered) is not analyzed",
+  "no no-clip counterfactual was run",
+  "moved-aside smoke/aborted runs are not evidence"
+ ],
+ "mask_logit_trajectory": {
+  "1105": {
+   "M_mean": 0.9989289939403534,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 72.75,
+   "logit_mean": 18.50255298614502,
+   "logit_min": 1.302734375,
+   "mask_bias": 0.050332099199295044,
+   "sigmoid_deriv_mean": 0.0010384051129221916,
+   "tanh_hf_absmean": 0.4469516724348068
+  },
+  "5525": {
+   "M_mean": 0.9999573528766632,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 32.78125,
+   "logit_mean": 13.740204334259033,
+   "logit_min": 4.66796875,
+   "mask_bias": 0.16552220284938812,
+   "sigmoid_deriv_mean": 4.2621371903805993e-05,
+   "tanh_hf_absmean": 0.33640018105506897
+  },
+  "5526": {
+   "M_mean": 0.9999251663684845,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 37.46875,
+   "logit_mean": 13.934197425842285,
+   "logit_min": 3.216796875,
+   "mask_bias": 0.16553422808647156,
+   "sigmoid_deriv_mean": 7.44641620258335e-05,
+   "tanh_hf_absmean": 0.3711365759372711
+  },
+  "5700": {
+   "M_mean": 0.9999451637268066,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 74.375,
+   "logit_mean": 12.346532344818115,
+   "logit_min": 1.9580078125,
+   "mask_bias": 0.18559545278549194,
+   "sigmoid_deriv_mean": 5.451357355923392e-05,
+   "tanh_hf_absmean": 0.8124241232872009
+  },
+  "5750": {
+   "M_mean": 0.9999936819076538,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 20.8125,
+   "logit_mean": 13.857236385345459,
+   "logit_min": 4.8046875,
+   "mask_bias": 0.18613454699516296,
+   "sigmoid_deriv_mean": 6.380493687174749e-06,
+   "tanh_hf_absmean": 0.8989393711090088
+  },
+  "5758": {
+   "M_mean": 0.9999997019767761,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 31.703125,
+   "logit_mean": 21.6733455657959,
+   "logit_min": 5.90234375,
+   "mask_bias": 0.18613649904727936,
+   "sigmoid_deriv_mean": 3.363847582704693e-07,
+   "tanh_hf_absmean": 0.9237969815731049
+  },
+  "5759": {
+   "M_mean": 0.9999993741512299,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 31.21875,
+   "logit_mean": 20.73922061920166,
+   "logit_min": 5.953125,
+   "mask_bias": 0.18613660335540771,
+   "sigmoid_deriv_mean": 6.439345270337071e-07,
+   "tanh_hf_absmean": 0.948647141456604
+  },
+  "5770": {
+   "M_mean": 0.9999963939189911,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 25.5625,
+   "logit_mean": 15.7618408203125,
+   "logit_min": 4.87890625,
+   "mask_bias": 0.1861501932144165,
+   "sigmoid_deriv_mean": 3.7319650800782256e-06,
+   "tanh_hf_absmean": 0.9575476944446564
+  },
+  "5775": {
+   "M_mean": 0.9976842403411865,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 22.96875,
+   "logit_mean": 8.968256950378418,
+   "logit_min": 0.75634765625,
+   "mask_bias": 0.18625013530254364,
+   "sigmoid_deriv_mean": 0.0022122020018287003,
+   "tanh_hf_absmean": 0.8848257660865784
+  },
+  "5776": {
+   "M_mean": 0.9812947809696198,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 23.921875,
+   "logit_mean": 6.608268976211548,
+   "logit_min": -0.0247802734375,
+   "mask_bias": 0.18463489413261414,
+   "sigmoid_deriv_mean": 0.017013621516525745,
+   "tanh_hf_absmean": 0.854725569486618
+  },
+  "5777": {
+   "M_mean": 0.8670055568218231,
+   "frac_M_lt_1e-2": 0.0,
+   "logit_max": 21.703125,
+   "logit_mean": 4.339343309402466,
+   "logit_min": -2.26953125,
+   "mask_bias": 0.18265873193740845,
+   "sigmoid_deriv_mean": 0.08343765512108803,
+   "tanh_hf_absmean": 0.8954112529754639
+  },
+  "5778": {
+   "M_mean": 0.16508779674768448,
+   "frac_M_lt_1e-2": 0.6848831176757812,
+   "logit_max": 20.515625,
+   "logit_mean": -4.161074876785278,
+   "logit_min": -10.7265625,
+   "mask_bias": 0.18124960362911224,
+   "sigmoid_deriv_mean": 0.02016395702958107,
+   "tanh_hf_absmean": 0.9142395555973053
+  },
+  "5779": {
+   "M_mean": 0.09112031385302544,
+   "frac_M_lt_1e-2": 0.8627548217773438,
+   "logit_max": 19.921875,
+   "logit_mean": -10.179674625396729,
+   "logit_min": -17.546875,
+   "mask_bias": 0.1786821037530899,
+   "sigmoid_deriv_mean": 0.01023635407909751,
+   "tanh_hf_absmean": 0.9284926950931549
+  },
+  "5780": {
+   "M_mean": 0.029345247894525528,
+   "frac_M_lt_1e-2": 0.9509124755859375,
+   "logit_max": 17.296875,
+   "logit_mean": -19.962529182434082,
+   "logit_min": -28.875,
+   "mask_bias": 0.17605268955230713,
+   "sigmoid_deriv_mean": 0.0037484262138605118,
+   "tanh_hf_absmean": 0.9252832233905792
+  },
+  "5781": {
+   "M_mean": 1.951842932612635e-06,
+   "frac_M_lt_1e-2": 0.99993896484375,
+   "logit_max": -2.9140625,
+   "logit_mean": -45.46846008300781,
+   "logit_min": -50.8125,
+   "mask_bias": 0.17473645508289337,
+   "sigmoid_deriv_mean": 1.9085781559624593e-06,
+   "tanh_hf_absmean": 0.9432691633701324
+  },
+  "5782": {
+   "M_mean": 1.618931264601997e-07,
+   "frac_M_lt_1e-2": 1.0,
+   "logit_max": -5.953125,
+   "logit_mean": -53.34253120422363,
+   "logit_min": -59.34375,
+   "mask_bias": 0.17407801747322083,
+   "sigmoid_deriv_mean": 1.6168007022088204e-07,
+   "tanh_hf_absmean": 0.9416791200637817
+  },
+  "5790": {
+   "M_mean": 2.470359738993011e-08,
+   "frac_M_lt_1e-2": 1.0,
+   "logit_max": -7.828125,
+   "logit_mean": -62.84022521972656,
+   "logit_min": -68.4375,
+   "mask_bias": 0.17342153191566467,
+   "sigmoid_deriv_mean": 2.4697866862766205e-08,
+   "tanh_hf_absmean": 0.9751176834106445
+  },
+  "5800": {
+   "M_mean": 1.958160922299612e-08,
+   "frac_M_lt_1e-2": 1.0,
+   "logit_max": -7.859375,
+   "logit_mean": -64.4377670288086,
+   "logit_min": -69.375,
+   "mask_bias": 0.17341892421245575,
+   "sigmoid_deriv_mean": 1.9577542254012315e-08,
+   "tanh_hf_absmean": 0.99147629737854
+  },
+  "5850": {
+   "M_mean": 9.981004023273954e-09,
+   "frac_M_lt_1e-2": 1.0,
+   "logit_max": -8.3359375,
+   "logit_mean": -66.67431259155273,
+   "logit_min": -71.6875,
+   "mask_bias": 0.17341892421245575,
+   "sigmoid_deriv_mean": 9.979954640471078e-09,
+   "tanh_hf_absmean": 0.9969488382339478
+  }
+ },
+ "milestone": "M7D1-N3",
+ "owner_decision_required": "any fix is a protocol change; VAL selection, bank and seeds 1337/2026 remain blocked on the owner decision",
+ "parity": {
+  "amp_retry_events_equal": true,
+  "amp_retry_updates": [
+   1971,
+   1985,
+   2587,
+   3002,
+   5031,
+   5234,
+   5527,
+   5529,
+   5758,
+   5759
+  ],
+  "ema_harness_caveat": "The u1..u5850 replay ran with a diagnostic step wrapper that forwarded only on_retry, so Trainer.activate_ema() set step.ema on the wrapper and the replay EMA stayed at its epoch-5 initialization: ema_updated False on u5526..u5850 (325 records). The EMA is write-only in GeneratorStep; G/D/optimizer/scaler states are unaffected. Fixed (wrapper forwards ema).",
+  "fork_A_corrected_parity": {
+   "amp_retry_event_mismatch": [],
+   "bitwise_equal_updates": 325,
+   "first_mismatch_fields": null,
+   "mismatched_updates": [],
+   "updates_compared": 325
+  },
+  "fork_A_full_parity_u5526_u5850": true,
+  "replay_differing_fields": {
+   "ema_updated": [
+    5526,
+    5850,
+    325
+   ]
+  },
+  "replay_only_differing_field": [
+   "ema_updated"
+  ],
+  "replay_records": 5850,
+  "replay_training_fields_bitwise_equal_all": true,
+  "representative_updates": {
+   "1": true,
+   "1105": true,
+   "1971": true,
+   "5525": true,
+   "5526": true,
+   "5700": true,
+   "5750": true,
+   "5758": true,
+   "5759": true,
+   "5777": true,
+   "5778": true,
+   "5779": true,
+   "5780": true,
+   "5781": true,
+   "5800": true
+  },
+  "status": "PARITY_PASS_TRAINING_STATE"
+ },
+ "ruled_out": [
+  "s_hf curriculum change (fork B)",
+  "lambda_con curriculum change (fork D)",
+  "lambda_spec curriculum change (fork E)",
+  "s_hf+lambda_con+lambda_spec together (fork BDE)",
+  "AMP retry / loss scaling",
+  "gradient clipping as trigger",
+  "EMA (write-only)",
+  "replay/numerical artefact (bitwise parity)",
+  "dead HF branch",
+  "direct mask-head drift",
+  "data order (identical groups in every fork)",
+  "stage-3 change (collapse inside stage 2)"
+ ],
+ "scientific_run": {
+  "authority_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+  "diagnostic_processes_code_head": "b229bdc2e75148b883ba86f9191b126a1d45e96f",
+  "experiment": "E08",
+  "finding_commit_M7D1_N2": "b229bdc2e75148b883ba86f9191b126a1d45e96f",
+  "method": "GPAT-B0",
+  "run_id": "7b799fbd6d0426da",
+  "seed": 42
+ },
+ "secondary_contributors": [
+  "stage-1 discriminator over-confidence (D trains from u1 while lambda_adv = 0)",
+  "mask parametrization without recovery path (sigmoid saturation; budget acts only when A < 0.01)",
+  "Adam momentum carrying the closing direction; per-coordinate normalization defeats clipping",
+  "weak closing preference of fidelity losses (bg, lm, id, parse); artcon closing in u5757-5769"
+ ],
+ "sigmoid_saturation": {
+  "budget_loss": {
+   "5778": 0.0,
+   "5779": 0.0024154342245310545,
+   "5780": 0.007592919748276472,
+   "5781": 0.009999873582273722,
+   "5850": 0.009999999310821295
+  },
+  "sigmoid_derivative_p50": {
+   "5776": 0.0040379296988248825,
+   "5777": 0.04238174483180046,
+   "5778": 0.0015523959882557392,
+   "5779": 4.289314802008448e-06,
+   "5780": 3.6954447835135795e-10,
+   "5781": 2.7470757000178413e-21,
+   "5782": 1.1832823845387208e-24,
+   "5800": 1.3164880709322313e-29,
+   "5850": 1.5723208370779615e-30
+  },
+  "statement": "after u5781 every mask logit is strongly negative (sigmoid derivative ~1e-21 and below); the budget hinge on A = clip(M * ...) is pinned at 0.01 but has no gradient path to reopen the mask; momentum and TV continue lowering the logit"
+ },
+ "source_collected_sha256": "7f557787baf24c882c16f9be3f1c2ba49bf3949e839cb2a3494826abc67a3338",
+ "status": "ROOT_CAUSE_LOCALIZED",
+ "timeline": {
+  "collapse_definition": "per-update mean M < 0.01 (mask forward hook)",
+  "collapse_onset_update": 5781,
+  "fork_A_first_collapse_update": 5781,
+  "stage2_transition_update": 5526
+ }
+}
