@@ -33,7 +33,9 @@ SCIENTIFIC, QUALIFICATION = 'SCIENTIFIC', 'QUALIFICATION'
 EXPERIMENT_SEEDS = (42, 1337, 2026)
 QUALIFICATION_SEED = 70404                      # engineering only; never valid for a scientific run
 VARIANTS = {'GPAT-B0': ('B0', 'E08'), 'GPAT-B1': ('B1', 'E09'), 'GPAT-B2': ('B2', 'E10'), 'GPAT-B3': ('B3', 'E11')}
-SCIENTIFIC_PARTS = ('runs', 'm7')
+# M7D1-A1: scientific runs under the amended curriculum get a fresh tree; the v1.0-curriculum roots under runs/m7/
+# (e.g. B0/E08/seed_42 run_id 7b799fbd6d0426da) stay immutable historical evidence and are never resumed.
+SCIENTIFIC_PARTS = ('runs', 'm7_a1')
 QUALIFICATION_PARTS = ('qualification', 'm7', 'M7C4')
 QUALIFICATION_LABELS = ('QUALIFICATION_ONLY', 'NOT_SCIENTIFIC', 'NOT_ELIGIBLE_FOR_BANK', 'NOT_ELIGIBLE_FOR_SELECTION',
                         'NOT_ELIGIBLE_FOR_PAPER_RESULT')

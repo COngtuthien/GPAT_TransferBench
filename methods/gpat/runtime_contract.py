@@ -46,8 +46,9 @@ def attack_warmup_lr(s: int) -> float:
     return 0.5 * ATTACK_WARMUP_LR * (1.0 + math.cos(math.pi * (s - 1) / (ATTACK_WARMUP_STEPS - 1)))
 
 
-def curriculum(u: int) -> dict:
-    """s_hf (runtime residual scale), lambda_adv, lambda_con, lambda_spec of generator update u."""
+def curriculum_v1_0(u: int) -> dict:
+    """ORIGINAL frozen v1.0 curriculum (spec 10.5 / M7C2a N-07), historical authority for runs at code <= 162bdfd:
+    s_hf (runtime residual scale), lambda_adv, lambda_con, lambda_spec of generator update u."""
     u = _update(u, TOTAL_UPDATES)
     if u < STAGE2_FIRST:
         return {'stage': 1, 's_hf': 0.02 + 0.03 * (u - 1) / (WARMUP_UPDATES - 1),
@@ -55,6 +56,36 @@ def curriculum(u: int) -> dict:
     if u < STAGE3_FIRST:
         return {'stage': 2, 's_hf': 0.10, 'lambda_adv': 0.05, 'lambda_con': 1.0, 'lambda_spec': 0.5}
     return {'stage': 3, 's_hf': 0.15, 'lambda_adv': 0.10, 'lambda_con': 1.0, 'lambda_spec': 0.5}
+
+
+# M7D1-A1 adversarial curriculum amendment (owner-approved in M7D1-N6A; record
+# outputs/audit/M7D1_A1_ADVERSARIAL_CURRICULUM_AMENDMENT.json). Only lambda_adv changes: the original stage-2 jump
+# 0 -> 0.05 at u5526 becomes a one-epoch linear ramp u5526..u6630; the stage-3 jump 0.05 -> 0.10 at u16576 stays.
+# The canonical float expression is the N4 R1 one, 0.05 * ((u - 5526) / 1104): exact 0.0 at u5526, 0.05 at u6630.
+CURRICULUM_ID = 'GPAT-TransferBench-v1.0+M7D1-A1'
+A1_RECORD = 'outputs/audit/M7D1_A1_ADVERSARIAL_CURRICULUM_AMENDMENT.json'
+A1_RAMP_FIRST, A1_RAMP_LAST = 5526, 6630
+A1_LAMBDA_ADV_STAGE2 = 0.05
+
+
+def lambda_adv_a1(u: int) -> float:
+    """M7D1-A1 lambda_adv of generator update u."""
+    u = _update(u, TOTAL_UPDATES)
+    if u < A1_RAMP_FIRST:
+        return 0.0
+    if u <= A1_RAMP_LAST:
+        return A1_LAMBDA_ADV_STAGE2 * ((u - A1_RAMP_FIRST) / (A1_RAMP_LAST - A1_RAMP_FIRST))
+    if u < STAGE3_FIRST:
+        return A1_LAMBDA_ADV_STAGE2
+    return 0.10
+
+
+def curriculum_a1(u: int) -> dict:
+    """Production curriculum: curriculum_v1_0(u) with lambda_adv = lambda_adv_a1(u); every other value unchanged."""
+    return dict(curriculum_v1_0(u), lambda_adv=lambda_adv_a1(u))
+
+
+curriculum = curriculum_a1
 
 
 # N-05: D trains from generator update 1 (its real/fake update runs even while lambda_adv = 0).

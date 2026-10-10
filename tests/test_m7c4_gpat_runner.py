@@ -188,7 +188,8 @@ class StaticM7C4(unittest.TestCase):
         with self.assertRaises(Exception):
             rio.validate_mode_seed(rio.QUALIFICATION, 42)
         rt = '/rt'
-        self.assertEqual(str(rio.run_root(rt, rio.SCIENTIFIC, 'GPAT-B3', 42)), '/rt/runs/m7/E11/seed_42')
+        # M7D1-A1 (N6A): scientific roots moved from runs/m7/ (v1.0 curriculum, historical) to runs/m7_a1/
+        self.assertEqual(str(rio.run_root(rt, rio.SCIENTIFIC, 'GPAT-B3', 42)), '/rt/runs/m7_a1/E11/seed_42')
         q = str(rio.run_root(rt, rio.QUALIFICATION, 'GPAT-B3', 70404, 'resume_ref'))
         self.assertTrue(q.startswith('/rt/qualification/m7/M7C4/') and 'runs/m7' not in q)
         self.assertEqual({v[1] for v in rio.VARIANTS.values()}, {'E08', 'E09', 'E10', 'E11'})
@@ -200,7 +201,9 @@ class StaticM7C4(unittest.TestCase):
         self.assertAlmostEqual(rc.main_lr(66300), 2e-6, places=15)
         self.assertAlmostEqual(rc.curriculum(1)['s_hf'], 0.02)
         self.assertAlmostEqual(rc.curriculum(5525)['s_hf'], 0.05)
-        self.assertEqual((rc.curriculum(5526)['s_hf'], rc.curriculum(5526)['lambda_adv']), (0.10, 0.05))
+        # M7D1-A1 (N6A): lambda_adv at u5526 is the A1 ramp start 0.0 (original v1.0 jumped to 0.05)
+        self.assertEqual((rc.curriculum(5526)['s_hf'], rc.curriculum(5526)['lambda_adv']), (0.10, 0.0))
+        self.assertEqual(rc.curriculum_v1_0(5526)['lambda_adv'], 0.05)
         self.assertEqual((rc.curriculum(16576)['s_hf'], rc.curriculum(16576)['lambda_adv']), (0.15, 0.10))
         self.assertEqual(rc.EMA_START_UPDATE, 5525)
         self.assertEqual(self.rio.EMA_START_EPOCH * self.rio.GROUPS_PER_EPOCH, rc.EMA_START_UPDATE)
@@ -482,7 +485,7 @@ class LiveGPUM7C4(unittest.TestCase):
         self.assertEqual(rec['sample_weights'], [4 / 6, 2 / 6])
         self.assertEqual(rec['labelled_identity_count'], 3)
         self.assertEqual(rec['learning_rate'], self.rc.main_lr(5526))
-        self.assertEqual((rec['scale_hf'], rec['lambda_adv']), (0.10, 0.05))
+        self.assertEqual((rec['scale_hf'], rec['lambda_adv']), (0.10, 0.0))     # M7D1-A1 ramp start (v1.0: 0.05)
         self.assertTrue(all(p.grad is None for p in core.parameters()))         # zeroed after the boundary
 
     def test_31_dev022_share_not_sample_weighted(self):

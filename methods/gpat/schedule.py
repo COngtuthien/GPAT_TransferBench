@@ -4,7 +4,8 @@ The single definitions live in `runtime_contract`; this module adds only the epo
 Main LR (G_OPT and D_OPT): u = 1..5525 linear 0 -> 2e-4; u = 5526..66300 cosine 2e-4 -> 2e-6.
 Attack warmup (B1/B3): s = 1..1390 cosine 1e-4 -> 0.
 Curriculum: u 1..5525 s_hf 0.02 -> 0.05, adv 0, con 0.5, spec 0.25; 5526..16575 0.10 / 0.05 / 1 / 0.5;
-16576..66300 0.15 / 0.10 / 1 / 0.5.
+16576..66300 0.15 / 0.10 / 1 / 0.5 (original v1.0). Production uses M7D1-A1: lambda_adv ramps linearly
+0 -> 0.05 over u 5526..6630, everything else as above (runtime_contract.curriculum_a1).
 """
 from __future__ import annotations
 

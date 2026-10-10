@@ -1023,8 +1023,12 @@ class LiveM7C2B(unittest.TestCase):
             schedule.update_index(61, 1)
 
     def test_38_curriculum_transitions(self):
-        from methods.gpat import schedule
-        c = schedule.curriculum
+        # M7D1-A1 (N6A): the pins below are the ORIGINAL v1.0 curriculum (historical `curriculum_v1_0`, lambda_adv
+        # jump at u5526); production schedule.curriculum is the A1 one (lambda_adv ramp u5526..u6630, all else equal).
+        from methods.gpat import runtime_contract as rc, schedule
+        self.assertIs(schedule.curriculum, rc.curriculum_a1)
+        self.assertEqual(schedule.curriculum(5526)['lambda_adv'], 0.0)
+        c = rc.curriculum_v1_0
         self.assertAlmostEqual(c(1)['s_hf'], 0.02, places=15)
         self.assertAlmostEqual(c(5525)['s_hf'], 0.05, places=15)
         self.assertEqual({k: c(5525)[k] for k in ('lambda_adv', 'lambda_con', 'lambda_spec')}, {'lambda_adv': 0.0, 'lambda_con': 0.5, 'lambda_spec': 0.25})

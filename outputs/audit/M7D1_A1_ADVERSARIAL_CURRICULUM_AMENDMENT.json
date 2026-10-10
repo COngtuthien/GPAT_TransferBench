@@ -1,0 +1,225 @@
+{
+  "amendment_id": "M7D1-A1",
+  "title": "GPAT-TransferBench v1.0 -- M7D1-A1 adversarial curriculum amendment",
+  "naming_note": "Identifier M7D1-A1 is used because docs/spec/amendments already holds an unrelated v1.0 Amendment A1 (Fair ID-Free Main Track); M7D1-A1 is NOT that amendment and is NOT part of the original frozen specification.",
+  "milestone": "M7D1-N6A",
+  "date": "2026-10-10",
+  "status": "ADOPTED_FOR_FRESH_SCIENTIFIC_USE",
+  "original_frozen_specification": {
+    "path": "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx",
+    "sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "sections": [
+      "10.5 curriculum table (epochs 6-15 adv 0.05; 16-60 adv 0.10)"
+    ],
+    "unmodified": true,
+    "historical_runtime_form": "methods/gpat/runtime_contract.py::curriculum_v1_0 (== curriculum at 162bdfd)"
+  },
+  "authority_chain": {
+    "pre_amendment_head": "162bdfd4cca8e83926ef6f64ff46da2bef1bca66",
+    "N3": {
+      "commit": "d88563a46757d171a5e2af359eebc4fc18c305eb",
+      "finding": "lambda_adv jump 0 -> 0.05 at u5526 caused the seed42 closed-mask identity collapse (u5781)"
+    },
+    "N4": {
+      "commit": "6fc875ef1c63f0d512e877643e8005879eb8c0cc",
+      "finding": "R1 (1-epoch ramp to u6630) and R2 repaired the known mechanism to u16575; R1 preferred as the smaller deviation"
+    },
+    "N5": {
+      "commit": "162bdfd4cca8e83926ef6f64ff46da2bef1bca66",
+      "finding": "original stage-3 transition S0 (0.05 -> 0.10 jump at u16576) qualified to u27625; no second ramp required"
+    }
+  },
+  "owner_decisions_recorded_in_N6A": {
+    "A_n5_anchor_acceptance": {
+      "scope": "N5 diagnostic provenance only; never a resume point for a scientific run",
+      "base": {
+        "file": "N4 branch_R1/pre_update_16575.pt",
+        "sha256": "ea26d463fa67b1adbfe70d56f997da1e32dea394a536abe2d9156e22f741a612"
+      },
+      "replayed_update": 16575,
+      "replay": "bitwise equal to N4 R1 u16575, no AMP event",
+      "anchor": {
+        "file": "N5 snapshots/anchor/pre_update_16576.pt",
+        "sha256": "99d068341632f05e8cb253baa81f9785bc9ea99c2b1efc054c1e49b8c25f2a76"
+      }
+    },
+    "B_curriculum_amendment": "approved for a fresh scientific run starting at u1"
+  },
+  "changed_field": "lambda_adv(u) only",
+  "original_schedule": {
+    "u1..u5525": 0.0,
+    "u5526..u16575": 0.05,
+    "u16576..u66300": 0.1,
+    "summary": "stage-2 lambda_adv jumped 0 -> 0.05 at u5526"
+  },
+  "amended_schedule": {
+    "u1..u5525": 0.0,
+    "u5526..u6630": "0.05 * ((u - 5526) / 1104)",
+    "u6631..u16575": 0.05,
+    "u16576..u66300": 0.1,
+    "summary": "one-epoch linear ramp u5526..u6630 (1105 updates); stage-3 jump 0.05 -> 0.10 at u16576 unchanged"
+  },
+  "float_definition": {
+    "canonical_expression": "0.05 * ((u - 5526) / (6630 - 5526))  # IEEE-754 binary64, Python float",
+    "implementation": "methods/gpat/runtime_contract.py::lambda_adv_a1 (production curriculum = curriculum_a1)",
+    "equals_N4_R1_bitwise_on": "u5526..u16575",
+    "non_canonical_warning": "(0.05 * (u - 5526)) / 1104 is algebraically equal but differs in the last bit at 378 of the 1105 ramp updates; it is NOT the definition",
+    "representative_values": {
+      "u1": {
+        "lambda_adv": 0.0,
+        "hex": "0x0.0p+0",
+        "original_v1_0": 0.0
+      },
+      "u5525": {
+        "lambda_adv": 0.0,
+        "hex": "0x0.0p+0",
+        "original_v1_0": 0.0
+      },
+      "u5526": {
+        "lambda_adv": 0.0,
+        "hex": "0x0.0p+0",
+        "original_v1_0": 0.05
+      },
+      "u5527": {
+        "lambda_adv": 4.528985507246377e-05,
+        "hex": "0x1.7beb3922e017cp-15",
+        "original_v1_0": 0.05
+      },
+      "u6078": {
+        "lambda_adv": 0.025,
+        "hex": "0x1.999999999999ap-6",
+        "original_v1_0": 0.05
+      },
+      "u6629": {
+        "lambda_adv": 0.04995471014492754,
+        "hex": "0x1.993a9ecb50e1ap-5",
+        "original_v1_0": 0.05
+      },
+      "u6630": {
+        "lambda_adv": 0.05,
+        "hex": "0x1.999999999999ap-5",
+        "original_v1_0": 0.05
+      },
+      "u6631": {
+        "lambda_adv": 0.05,
+        "hex": "0x1.999999999999ap-5",
+        "original_v1_0": 0.05
+      },
+      "u16575": {
+        "lambda_adv": 0.05,
+        "hex": "0x1.999999999999ap-5",
+        "original_v1_0": 0.05
+      },
+      "u16576": {
+        "lambda_adv": 0.1,
+        "hex": "0x1.999999999999ap-4",
+        "original_v1_0": 0.1
+      },
+      "u66300": {
+        "lambda_adv": 0.1,
+        "hex": "0x1.999999999999ap-4",
+        "original_v1_0": 0.1
+      }
+    }
+  },
+  "unchanged": [
+    "s_hf schedule",
+    "lambda_con",
+    "lambda_spec",
+    "stage labels/boundaries 5525|5526, 16575|16576",
+    "main LR (G_OPT, D_OPT) and attack-warmup LR",
+    "optimizer",
+    "Adam betas",
+    "accumulation",
+    "batch size",
+    "AMP policy (ATOMIC_AMP_BACKOFF_RETRY, M7D1-N1)",
+    "gradient clipping",
+    "EMA",
+    "G architecture",
+    "D architecture",
+    "composition",
+    "all loss terms and fixed weights",
+    "pair manifest",
+    "data order",
+    "checkpoint eligibility",
+    "VAL selection rule",
+    "TEST policy",
+    "mask parameterization (no floor/ceiling/regularizer/stopping rule added)",
+    "frozen method configs gpat_b0..b3.yaml and their sha256 (their descriptive curriculum tables stay v1.0 text; runtime uses runtime_contract)"
+  ],
+  "applies_to": {
+    "methods": [
+      "GPAT-B0",
+      "GPAT-B1",
+      "GPAT-B2",
+      "GPAT-B3"
+    ],
+    "mechanism": "every method calls runtime_contract.curriculum(u) in Trainer.attempt; no method-specific lambda_adv path",
+    "config_sha256": {
+      "GPAT-B0": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+      "GPAT-B1": "60d8e6581c3026f969ae92a79903a172f1ade2c95a8ea155b9cb99435a1b90cc",
+      "GPAT-B2": "4875138aff301145ccd763039386f92e561a9ea83fbaa4e6682b49b251fe3af9",
+      "GPAT-B3": "620303695d97ba4bab2e6081b29242080db7ead4976599709d88183edac462ca"
+    }
+  },
+  "run_identity": {
+    "curriculum_id": "GPAT-TransferBench-v1.0+M7D1-A1",
+    "provenance_key": "curriculum_id (run manifest, recovery + EMA candidate metadata; resume refuses mismatch)",
+    "scientific_root_pattern": "<runtime_root>/runs/m7_a1/<E08..E11>/seed_<seed>",
+    "historical_v1_0_roots": "<runtime_root>/runs/m7/... (immutable; never resumed under A1)"
+  },
+  "planned_N6B_run": {
+    "method": "GPAT-B0",
+    "experiment": "E08",
+    "seed": 42,
+    "curriculum_id": "GPAT-TransferBench-v1.0+M7D1-A1",
+    "start": "fresh from u1 (no snapshot, no N4/N5 anchor)",
+    "run_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m7_a1/E08/seed_42",
+    "run_id_rule": "sha256(\"GPAT-B0|42|<config_sha256>|<launch code_commit>\")[:16]",
+    "config_sha256": "0a268d2c9d1914a9e687d08cdfb96d5bf793eaa22559476b8e68d3cf58035d6a",
+    "launch_commit": "the M7D1-A1 adoption commit (or an owner-approved descendant); run_id is fixed at launch",
+    "not_created_in_N6A": true,
+    "historical_run_kept": {
+      "run_id": "7b799fbd6d0426da",
+      "root": "<runtime_root>/runs/m7/E08/seed_42",
+      "code_commit": "058e976e5a538c4d18e1177f0eb27727cfb735cd",
+      "status": "immutable historical evidence"
+    }
+  },
+  "checkpoint_policy_N6B": {
+    "train": "full 60 epochs (66300 updates) unless a true hard failure occurs",
+    "eligible_candidates": "EMA (E_art, G_res) epochs 10..60",
+    "selection": "per seed, VAL only, frozen spec 10.6 percentile-rank SelectionScore (0.25 ID + 0.15 Dice + 0.25 ArtSim + 0.20 -NME + 0.15 -LFErr; tie: ArtSim, then earlier epoch)",
+    "use": "best selected EMA checkpoint, NOT the final epoch by default",
+    "test": "never used for selection",
+    "performed_in_N6A": false
+  },
+  "limitations": [
+    "qualification is seed42 only",
+    "stage-3 qualification only reached u27625 of 66300",
+    "D continues strengthening (D_total falls)",
+    "gadv share of G gradient rises",
+    "G gradient clipping is frequent (~100% in N5 stage 3)",
+    "mask saturates open (M_mean ~1)",
+    "no VAL/TEST quality evidence yet"
+  ],
+  "monitor_in_N6B": [
+    "M_mean / open-mask saturation",
+    "D_total and gadv share",
+    "G clip fraction",
+    "AMP retries",
+    "budget hinge activity (A_mean vs artifact_min 0.01)"
+  ],
+  "not_done_in_N6A": [
+    "scientific training",
+    "seed1337/2026",
+    "B1/B2/B3",
+    "VAL",
+    "TEST",
+    "bank",
+    "checkpoint selection",
+    "downstream FAS",
+    "modification of N3/N4/N5 evidence"
+  ],
+  "historical_tools_note": "N3/N4 diagnostic tools take rc.curriculum as their frozen base; re-running them against the v1.0 trajectory requires their authority commits (under A1 their base would no longer be the v1.0 trajectory). N5 starts at u16576, where A1 == v1.0."
+}

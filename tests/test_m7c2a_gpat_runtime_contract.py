@@ -256,17 +256,21 @@ class StaticM7C2A(unittest.TestCase):
         self.assertEqual(n7['main_lr']['applies_to'], ['G_OPT', 'D_OPT'])
 
     def test_10_curriculum_boundaries(self):
+        # M7D1-A1 (N6A): these pins encode the ORIGINAL v1.0 curriculum (stage-2 lambda_adv jump 0 -> 0.05 at u5526),
+        # now the historical `curriculum_v1_0`; production `curriculum` differs from it only by the A1 lambda_adv ramp
+        # (tests/test_m7d1_a1_adversarial_curriculum.py).
         rc = self.rc
-        self.assertEqual(rc.curriculum(1)['s_hf'], 0.02)
-        self.assertAlmostEqual(rc.curriculum(5525)['s_hf'], 0.05, delta=1e-15)
-        self.assertEqual({k: rc.curriculum(5525)[k] for k in ('lambda_adv', 'lambda_con', 'lambda_spec')},
+        self.assertEqual(rc.curriculum(5526)['lambda_adv'], 0.0)                 # A1: the ramp starts at exactly 0
+        self.assertEqual(rc.curriculum_v1_0(1)['s_hf'], 0.02)
+        self.assertAlmostEqual(rc.curriculum_v1_0(5525)['s_hf'], 0.05, delta=1e-15)
+        self.assertEqual({k: rc.curriculum_v1_0(5525)[k] for k in ('lambda_adv', 'lambda_con', 'lambda_spec')},
                          {'lambda_adv': 0.0, 'lambda_con': 0.5, 'lambda_spec': 0.25})
-        self.assertEqual(rc.curriculum(5526), {'stage': 2, 's_hf': 0.10, 'lambda_adv': 0.05, 'lambda_con': 1.0,
-                                               'lambda_spec': 0.5})
-        self.assertEqual(rc.curriculum(16575)['stage'], 2)
-        self.assertEqual(rc.curriculum(16576), {'stage': 3, 's_hf': 0.15, 'lambda_adv': 0.10, 'lambda_con': 1.0,
-                                                'lambda_spec': 0.5})
-        self.assertEqual(rc.curriculum(66300)['stage'], 3)
+        self.assertEqual(rc.curriculum_v1_0(5526), {'stage': 2, 's_hf': 0.10, 'lambda_adv': 0.05, 'lambda_con': 1.0,
+                                                      'lambda_spec': 0.5})
+        self.assertEqual(rc.curriculum_v1_0(16575)['stage'], 2)
+        self.assertEqual(rc.curriculum_v1_0(16576), {'stage': 3, 's_hf': 0.15, 'lambda_adv': 0.10, 'lambda_con': 1.0,
+                                                       'lambda_spec': 0.5})
+        self.assertEqual(rc.curriculum_v1_0(66300)['stage'], 3)
         stages = self.res['N-07']['curriculum']['stages']
         self.assertEqual([s['updates'] for s in stages], [[1, 5525], [5526, 16575], [16576, 66300]])
         self.assertEqual(rc.UPDATES_PER_EPOCH * 60, rc.TOTAL_UPDATES)

@@ -544,7 +544,7 @@ def provenance(cfg, assets):
             'gpu_env_lock_sha256': rio.GPU_LOCK_SHA256, 'm7c3_record_sha256': rio.M7C3_RECORD_SHA256,
             'source_manifest_sha256': rio.RELATION_SHA256,
             'teacher_sha256': {k: v['sha256'] for k, v in assets['assets'].items() if 'sha256' in v},
-            'gamma': cfg.gamma, 'ema_decay': rc.EMA_DECAY}
+            'gamma': cfg.gamma, 'ema_decay': rc.EMA_DECAY, 'curriculum_id': rc.CURRICULUM_ID}
 
 
 class StopFlag:
@@ -569,7 +569,7 @@ class StopFlag:
 
 # ============================================================================= run context (run_logging_v1 layout)
 class GPATRunContext:
-    """<runtime_root>/runs/m7/<E08..E11>/seed_<seed>/ (scientific) or <runtime_root>/qualification/m7/M7C4/... ;
+    """<runtime_root>/runs/m7_a1/<E08..E11>/seed_<seed>/ (scientific, M7D1-A1) or <runtime_root>/qualification/m7/M7C4/... ;
     run_logging_v1 file names; append-only metrics.jsonl; atomic JSON/YAML; checkpoint_index.json of every write."""
 
     FILES = {'resolved_config': 'resolved_config.yaml', 'run_manifest': 'run_manifest.json',
