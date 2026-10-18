@@ -1,0 +1,244 @@
+{
+  "record": "M7D1_GPAT_DEFERRED_FIX_BACKLOG",
+  "milestone": "BASELINE-EXEC-P0",
+  "date": "2026-10-18",
+  "branch": "m6-baselines",
+  "authority_commit": "03217143a766f0bbeae6fcf90c45c4226881a0fc",
+  "classification": "OWNER_PRIORITY_DEFERRAL_RECORD · CURRENT_STATE_DOCUMENTATION · NOT_AN_AMENDMENT · NOT_A_FIX",
+  "gpat_status": "DEFERRED_BY_OWNER_PRIORITY",
+  "owner_direction": {
+    "gpat_development": "PAUSED",
+    "new_priority": "EXECUTE_ALL_IN_SCOPE_PREVIOUS_WORK_BASELINES_FIRST",
+    "resume_condition": "previous-work baseline program completed, or explicit owner change of priority",
+    "forbidden_until_resumed": [
+      "replay seed1337",
+      "investigate u2167",
+      "implement another GPAT fix",
+      "resume seed1337",
+      "start seed2026 GPAT",
+      "start GPAT B1/B2/B3",
+      "GPAT bank or downstream work"
+    ]
+  },
+  "A_healthy_seed42_a1": {
+    "experiment": "E08",
+    "method": "GPAT-B0",
+    "seed": 42,
+    "run_id": "92e91ddb78f1e242",
+    "curriculum_id": "GPAT-TransferBench-v1.0+M7D1-A1",
+    "launch_authority_commit": "4466e1258c24e4a5d448dd5b30e8d8768dfe7174",
+    "completion_commit": "ffffa9bd3a2f7d94f0d7fa228764dc425d2ff563",
+    "completed_epochs": 60,
+    "completed_updates": 66300,
+    "completion_status": "completed",
+    "best_ema_seed42_epoch": 28,
+    "selected_checkpoint": "ema_epoch_28.pt",
+    "selected_sha256": "01fd718ae3672491f846f41609ad2de06c8c5b3b10f9717fc1d8014e100b1bb6",
+    "selection_rule": "frozen spec 10.6 / A10 D14 VAL-only percentile-rank rule over 51 EMA candidates (epochs 10..60)",
+    "selection_score": "18/25 = 0.72 (runner-up epoch 35, 0.719; no tie-break)",
+    "n6c_selection_commit": "13a0252fd097b7552f0875f346f83c7b676cef0f",
+    "test_used_for_selection": false,
+    "evidence": [
+      "outputs/audit/M7D1_A1_E08_SEED42_COMPLETION.json",
+      "outputs/audit/M7D1_A1_E08_SEED42_SELECTION.json",
+      "outputs/audit/M7D1_A1_E08_SEED42_SELECTION.md"
+    ]
+  },
+  "B_failure_mode_F1_seed42_historical_stage2_collapse": {
+    "id": "F1",
+    "run": "v1.0 seed42 run 7b799fbd6d0426da (code d4c0af5 lineage), historical; not a selectable result",
+    "status": "ROOT_CAUSE_LOCALIZED (M7D1-N3, d88563a46757d171a5e2af359eebc4fc18c305eb)",
+    "primary_classification": "ADVERSARIAL_IMBALANCE / CURRICULUM_TRANSITION_INSTABILITY",
+    "mechanism": "MASK_SIGMOID_SATURATION through shared G_res trunk",
+    "chain": [
+      "original curriculum switches lambda_adv 0 -> 0.05 at u5526 (stage-2 activation)",
+      "D trained 5525 updates with lambda_adv = 0 is overconfident (D_real ~ +11.5, D_fake ~ -10.3, L_gadv ~ 10)",
+      "gadv supplies 68-100 % of the generator gradient projection; Adam with clipping lets it set the update direction",
+      "through the shared G_res trunk the mask logit (ending channel 12) is driven from ~+14 to -45 in five updates (u5777-u5781)",
+      "sigmoid saturation (derivative ~1e-21 at logit -45) makes the closed mask an absorbing state; budget hinge has no gradient path back"
+    ],
+    "repair": "M7D1-A1 one-epoch lambda_adv ramp repaired this observed mechanism for seed42 (N4 R1; N5 stage-3 qualified; N6B completed run)",
+    "evidence": [
+      "outputs/audit/M7D1_N3_SEED42_COLLAPSE_ROOT_CAUSE.md",
+      "outputs/audit/M7D1_E08_SEED42_COLLAPSE_ROOT_CAUSE.json",
+      "outputs/audit/M7D1_N4_SEED42_REPAIR.md",
+      "outputs/audit/M7D1_N5_SEED42_STAGE3.md"
+    ]
+  },
+  "C_m7d1_a1": {
+    "id": "M7D1-A1",
+    "status": "ADOPTED_FOR_FRESH_SCIENTIFIC_USE (4466e1258c24e4a5d448dd5b30e8d8768dfe7174)",
+    "changed_field": "lambda_adv(u) only",
+    "schedule": [
+      {
+        "updates": "u1..u5525",
+        "lambda_adv": "0"
+      },
+      {
+        "updates": "u5526..u6630",
+        "lambda_adv": "0.05 * ((u - 5526) / 1104)"
+      },
+      {
+        "updates": "u6631..u16575",
+        "lambda_adv": "0.05"
+      },
+      {
+        "updates": "u16576..u66300",
+        "lambda_adv": "0.10"
+      }
+    ],
+    "implementation": "methods/gpat/runtime_contract.py::lambda_adv_a1 (IEEE-754 binary64; do not substitute (0.05*(u-5526))/1104)",
+    "retention_rule": "M7D1-A1 remains historical/active evidence for F1 and must not be removed without evidence.",
+    "record": "outputs/audit/M7D1_A1_ADVERSARIAL_CURRICULUM_AMENDMENT.md"
+  },
+  "D_failure_mode_F2_seed1337_stage1_collapse": {
+    "id": "F2",
+    "run_id": "62d7cfd98022a95a",
+    "experiment": "E08",
+    "method": "GPAT-B0",
+    "seed": 1337,
+    "curriculum_id": "GPAT-TransferBench-v1.0+M7D1-A1",
+    "launch_authority_commit": "4466e1258c24e4a5d448dd5b30e8d8768dfe7174",
+    "closure_commit": "03217143a766f0bbeae6fcf90c45c4226881a0fc",
+    "final_status": "OWNER_STOPPED_CONFIRMED_GENERATOR_COLLAPSE",
+    "last_complete_update": 15107,
+    "last_complete_epoch": 13,
+    "planned_updates": 66300,
+    "onset": {
+      "approximate_update": 2167,
+      "epoch": 2,
+      "stage": 1,
+      "lambda_adv": 0.0,
+      "G_grad_norm_pre_clip": {
+        "before": 0.02063819207251072,
+        "at_u2167": 2.453479528427124
+      },
+      "amp_event_at_onset": false,
+      "nearest_earlier_amp_retry": 2132
+    },
+    "historical_collapse_scalar_signature": {
+      "definition": "budget >= 0.0099 and bg < 1e-6 and lm < 1e-6 (M7D1-N2 training signature)",
+      "first_update": 2174,
+      "single_miss": 2175,
+      "continuous": "u2176..u15107 (12932 updates)"
+    },
+    "attribution": "THIS IS NOT EXPLAINED BY THE M7D1-A1 ADVERSARIAL-TRANSITION FAILURE (lambda_adv = 0 throughout stage 1, u < 5526).",
+    "root_cause": "NOT_INFERRED",
+    "direct_output_confirmation": {
+      "subset": "fixed 32 TRAIN pairs (M7D1-N2 rule: sha256(\"M7D1-N2|fixed-train-diagnostic-subset|v1|\"+pair_id) ascending)",
+      "u8_x_hat_equals_x_target": "32/32 for every state (EMA 10-13, recovery live/EMA)",
+      "mean_abs_x_hat_minus_x_target": "~6e-8 (median 6.07e-08, max 2.38e-07)",
+      "mask_M": "effectively zero (M < 0.01 on 100 % of pixels)",
+      "artifact_A": "effectively zero",
+      "hf_residual": "saturated but masked out"
+    },
+    "recovery_states_not_selectable": {
+      "u15107_final": "c1b4295e8c1a2c0838daa5ee833f8da003bb4b09382fa2cf26151dc2f75f6fe1",
+      "u14365_epoch13_copy": "0f845ec5530b0d7ab6eca521eba374e9efd5698da28e1d58271c74ed48ade2b8"
+    },
+    "pre_onset_state_available": false,
+    "nearest_exact_pre_onset_state": "fresh start (u0) at 4466e12 / seed1337 / SCIENTIFIC mode",
+    "evidence": [
+      "outputs/audit/M7D1_A1_E08_SEED1337_STOPPED_COLLAPSE.md",
+      "outputs/audit/M7D1_A1_E08_SEED1337_STOPPED_COLLAPSE.json",
+      "outputs/audit/M7D1_A1_E08_SEED1337_COLLAPSE_DIRECT.json",
+      "outputs/audit/M7D1_A1_E08_SEED1337_STOPPED_COLLAPSE_EVIDENCE_SHA256.txt"
+    ]
+  },
+  "E_future_root_cause_milestone": {
+    "name": "M7D1-SEED1337-RC1",
+    "status": "NOT_STARTED_DEFERRED",
+    "replay": {
+      "kind": "deterministic fresh-from-u1 replay",
+      "range": "u1 -> u2210",
+      "authority": "4466e12 code, seed 1337, SCIENTIFIC-equivalent settings, diagnostic root only (never the scientific run root)",
+      "snapshots": [
+        1105,
+        2100,
+        2150,
+        2160,
+        2166,
+        2167,
+        2168,
+        2170,
+        2171,
+        2174,
+        2210
+      ]
+    },
+    "parity_gate": "Replay must match the original scientific seed1337 trajectory (metrics.jsonl training fields bitwise, AMP retry events) before any causal interpretation."
+  },
+  "F_required_future_attribution": {
+    "window": "at and around u2167",
+    "decompose_terms": [
+      "id",
+      "lm",
+      "parse",
+      "low",
+      "budget",
+      "tv",
+      "bg",
+      "artcon",
+      "spec",
+      "optimizer momentum"
+    ],
+    "invariant": "gadv must be zero in stage 1 (lambda_adv = 0); a nonzero gadv contribution is a harness/contract defect",
+    "measure_effects_on": [
+      "shared G_res trunk",
+      "raw mask logits",
+      "mask M",
+      "HF residual",
+      "M * delta_HF",
+      "x_hat - target residual",
+      "artifact A"
+    ]
+  },
+  "G_future_hypotheses_not_conclusions": [
+    "pathological scientific group / batch near u2167",
+    "artcon/spec/fidelity interaction",
+    "E_art/shared-trunk/BN feature excursion",
+    "Adam momentum / clipping overshoot",
+    "generic sigmoid-mask trap",
+    "budget gradient unable to reopen a closed mask",
+    "seed-specific initialization/data-order interaction"
+  ],
+  "G_u2167_group_inspection": [
+    "datasets",
+    "pair IDs",
+    "source/target IDs",
+    "attack types",
+    "microbatch weights",
+    "image/input statistics",
+    "teacher/artifact features"
+  ],
+  "H_candidate_future_fixes_only_after_causality": {
+    "approved": [],
+    "candidates": [
+      "mask anti-trap parameterization / bounded floor",
+      "direct mask-state regularization",
+      "stronger or earlier anti-collapse budget path if supported by gradients",
+      "per-loss or shared-trunk gradient balancing",
+      "stage1 artcon/spec/fidelity curriculum modification",
+      "optimizer/momentum mitigation if demonstrated causal",
+      "pathological-sample handling ONLY if a specific data defect is proven"
+    ],
+    "policy": "NO BLIND HYPERPARAMETER TUNING.",
+    "m7d1_a1_policy": "M7D1-A1 remains historical/active evidence for F1 and must not be removed without evidence."
+  },
+  "gpat_scientific_inventory_at_deferral": {
+    "E08_seed42_a1": "COMPLETED_AND_VAL_SELECTED (epoch 28)",
+    "E08_seed1337_a1": "OWNER_STOPPED_CONFIRMED_GENERATOR_COLLAPSE (not completed, not selectable)",
+    "E08_seed2026": "NOT_STARTED",
+    "E09_E10_E11_B1_B2_B3": "NOT_STARTED",
+    "gpat_bank": "NONE",
+    "gpat_downstream": "NONE"
+  },
+  "this_record_did_not": [
+    "train",
+    "replay",
+    "resume",
+    "modify GPAT code/config/amendments",
+    "access VAL or TEST",
+    "create a checkpoint, bank or downstream result"
+  ]
+}

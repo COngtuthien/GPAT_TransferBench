@@ -1,0 +1,533 @@
+{
+  "record": "PREVIOUS_WORK_EXECUTION_ROADMAP",
+  "milestone": "BASELINE-EXEC-P0",
+  "date": "2026-10-18",
+  "branch": "m6-baselines",
+  "authority_commit": "03217143a766f0bbeae6fcf90c45c4226881a0fc",
+  "classification": "CURRENT_STATE_DOCUMENTATION · NOT_A_SPEC_REWRITE · NOT_AN_AMENDMENT · NO_TRAINING",
+  "priority": "EXECUTE_ALL_IN_SCOPE_PREVIOUS_WORK_BASELINES_FIRST (GPAT deferred: outputs/audit/M7D1_GPAT_DEFERRED_FIX_BACKLOG.json)",
+  "authority_sources": [
+    "configs/CONFIG_STATUS.md (M6E current-state section)",
+    "outputs/audit/method_status.csv",
+    "outputs/audit/M6E_FINAL_M6_CLOSURE.md",
+    "outputs/audit/EXECUTION_LEDGER.jsonl",
+    "third_party/registry.yaml",
+    "third_party/source_pins.json",
+    "docs/spec/amendments/ (A1-A10 and addenda)",
+    "configs/methods/*.yaml"
+  ],
+  "method_status_csv_sha256": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723",
+  "scientific_fairness": {
+    "protocol": "each baseline runs its own frozen/native/adapted protocol; GPAT optimizer, epochs, batch, architecture and selection rule are NOT imposed",
+    "fidelity_wording": "controlled adaptations are never called faithful/native; reporting labels and forbidden wording come from each frozen config",
+    "checkpoint_semantics": "each method keeps its frozen final-state/checkpoint rule (E03 ckpt-50; E06b/E06c epoch-200 netG; E04/E05 BASELINE_FINAL_STATE_V1; E01/E02 not applicable)",
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "seed_policy": "all three seeds are primary evidence; best-seed, dropping or rerunning only a poor seed are FORBIDDEN",
+    "test_policy": "TEST excluded from model/checkpoint selection for every method"
+  },
+  "global_gates": {
+    "deterministic_smoke_test": "REQUIRED_NOT_COMPLETED; HARD_GATE_BEFORE_FIRST_FULL_M8_PLUS_EXECUTION; does not block M6/M7 generator training (M6D6jR O3 staged milestone precedence)",
+    "gpu": "one shared RTX 3090: exactly one GPU training job at a time; no parallel baseline launches",
+    "gpat": "DEFERRED; no GPAT job may occupy the GPU during the baseline program"
+  },
+  "active_previous_work": [
+    {
+      "experiment_id": "E06c",
+      "method": "DSDG-BIN-IDFREE",
+      "track": "A_FAIR_COMMON_IDENTITY_FREE",
+      "fidelity": "CONTROLLED_ADAPTATION",
+      "fidelity_authority": "Amendment A1, DEV-020; M6D5c/M6D5d execution overlays",
+      "reporting_label": "DSDG-BIN-IDFREE (Amendment A1 identity-free controlled adaptation)",
+      "forbidden_wording": [
+        "native",
+        "faithful",
+        "official reproduction"
+      ],
+      "frozen_config": {
+        "path": "configs/methods/e06c_dsdg_bin_idfree.yaml",
+        "sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+        "snapshot": "frozen_config_snapshot/configs/methods/e06c_dsdg_bin_idfree.yaml",
+        "snapshot_byte_identical": true
+      },
+      "source_pin": "JDAI-CV/FaceX-Zoo@16b793a7564a4b9308cf94e62bdb2ffacb3a725a (addition_module/DSDG; tree 0d2216bdbdd9977130db1100641abf336f46ac9d)",
+      "lifecycle": "LEARNED_GENERATOR_TRAINING",
+      "environment": {
+        "name": "gpat-m6-e06c",
+        "lock": "environments/e06c.lock.json",
+        "status": "QUALIFIED (M6D5a-M6D5e-r); P0 live preflight PASS"
+      },
+      "real_train_path": "QUALIFIED (M6D5e-r clean requalification: data path, deterministic loader, TRAIN-only audited firewall)",
+      "scientific_runner": "IMPLEMENTED_AND_QUALIFIED: tools/run_e06c.py -> methods/dsdg/runner.py::run_scientific; not yet launched",
+      "checkpoint_rule": "OFFICIAL_GENERATOR_EPOCH_200 (netG_model_epoch_200_iter_0.pth; SOURCE_RESOLVED; BASELINE_FINAL_STATE_V1 does not override)",
+      "checkpoint_cadence": "epoch 1 and every 10 epochs (train_generator.py:214); engineering resume sidecars are never selectable",
+      "required_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "resume_support": "QUALIFIED: explicit --resume-state on an indexed runner_state_epoch_<E>.pth (bitwise fresh-process equivalence, M6D5e-r)",
+      "budget": {
+        "epochs": 200,
+        "rows_per_epoch": 8838,
+        "global_batch": 240,
+        "optimizer_steps_per_epoch": 37,
+        "optimizer_steps_per_seed": 7400,
+        "execution_mode": "GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V2 (12 x 20; tail 198)"
+      },
+      "readiness": "READY_FOR_SCIENTIFIC_LAUNCH_PENDING_OWNER_INSTRUCTION",
+      "blockers": [],
+      "pre_launch_actions": [
+        "fast-forward the GPU host clone (now ffffa9b, clean) to the launch commit; clean worktree",
+        "repeat --preflight-only at the launch commit",
+        "explicit owner launch instruction (P1)"
+      ]
+    },
+    {
+      "experiment_id": "E06b",
+      "method": "DSDG-NATIVE",
+      "track": "B_NATIVE_FULL_SECONDARY",
+      "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+      "fidelity_authority": "M6FD owner decision (frozen YAML field PENDING_M6F_C_RUNTIME_QUALIFICATION is immutable history)",
+      "reporting_label": "DSDG-NATIVE (Track B, CASIA + MSU native same-subject)",
+      "forbidden_wording": [
+        "primary fair comparison",
+        "Track A",
+        "identity-free"
+      ],
+      "frozen_config": {
+        "path": "configs/methods/e06b_dsdg_native.yaml",
+        "sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+        "snapshot": "frozen_config_snapshot/configs/methods/e06b_dsdg_native.yaml",
+        "snapshot_byte_identical": true
+      },
+      "source_pin": "JDAI-CV/FaceX-Zoo@16b793a7564a4b9308cf94e62bdb2ffacb3a725a (shared with E06c; no new pin)",
+      "lifecycle": "LEARNED_GENERATOR_TRAINING",
+      "environment": {
+        "name": "gpat-m6-e06c (owner-chosen environment of record)",
+        "lock": "environments/e06c.lock.json",
+        "status": "QUALIFIED (M6FC/M6FD); P0 live preflight PASS"
+      },
+      "real_train_path": "QUALIFIED (M6FD: CASIA+MSU TRAIN, 3720 spoof frames, 8-worker live-partner draws equal model)",
+      "scientific_runner": "IMPLEMENTED; CLI preflight qualified (tools/run_e06b.py -> methods/dsdg/native_runner.py); full run lifecycle NOT exercised",
+      "checkpoint_rule": "OFFICIAL_GENERATOR_EPOCH_200 (SOURCE_RESOLVED)",
+      "checkpoint_cadence": "epoch 1 and every 10 epochs; no resume sidecar (fresh only)",
+      "required_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "resume_support": "NOT_QUALIFIED_FRESH_ONLY: existing seed root refused; failed seed reruns the SAME seed from scratch (spec 27)",
+      "budget": {
+        "epochs": 200,
+        "rows_per_epoch": 3720,
+        "global_batch": 240,
+        "optimizer_steps_per_epoch": 16,
+        "optimizer_steps_per_seed": 3200,
+        "execution_mode": "GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V2 (15 x 240 + 120)"
+      },
+      "readiness": "NEAR_READY_LIFECYCLE_GATE_OPEN",
+      "blockers": [
+        "CHECKPOINT_WRITER_NOT_E06B_RUNTIME_EXERCISED and SCIENTIFIC_RUN_LIFECYCLE_NOT_EXECUTED: a short qualification-root lifecycle check (run context open/close, epoch-1 checkpoint event, run_summary) or an explicit owner acceptance is required before launch",
+        "N_syn DEFERRED_TO_M8 (does not block training; blocks the bank)"
+      ]
+    },
+    {
+      "experiment_id": "E05",
+      "method": "PCGAN (controlled architecture resolution)",
+      "track": "A_FAIR_COMMON_IDENTITY_FREE",
+      "fidelity": "CONTROLLED_ADAPTATION",
+      "fidelity_authority": "A2-07 architecture resolution; A5 blur operator; M6D4c runner resolution",
+      "reporting_label": "PCGAN (controlled architecture resolution)",
+      "forbidden_wording": [
+        "native PCGAN",
+        "faithful PCGAN",
+        "official reproduction"
+      ],
+      "frozen_config": {
+        "path": "configs/methods/e05_pcgan.yaml",
+        "sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+        "snapshot": "frozen_config_snapshot/configs/methods/e05_pcgan.yaml",
+        "snapshot_byte_identical": true
+      },
+      "source_pin": "taesungp/swapping-autoencoder-pytorch@6baa180f1184ee79a6b967f9d80ee0e02a979ac7 (executable architecture basis; no official PCGAN code)",
+      "lifecycle": "LEARNED_GENERATOR_TRAINING",
+      "environment": {
+        "name": "gpat-m6-e05",
+        "lock": "environments/e05.lock.json",
+        "status": "QUALIFIED_SYNTHETIC (M6D4a/M6D4e)"
+      },
+      "real_train_path": "NOT_QUALIFIED",
+      "scientific_runner": "NOT_IMPLEMENTED: methods/pcgan/training_runner.py is an explicit-pair D->G iteration with no dataset, upstream loop or checkpoint writer; no scientific CLI",
+      "checkpoint_rule": "BASELINE_FINAL_STATE_V1 terminal at iteration 4000 (A2-06; VAL diagnostics only, never selects)",
+      "required_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "resume_support": "NOT_IMPLEMENTED",
+      "budget": {
+        "total_iterations": 4000,
+        "batch_size": 1
+      },
+      "readiness": "NEEDS_PRODUCTION_RUNNER_AND_REAL_TRAIN_QUALIFICATION",
+      "blockers": [
+        "real-TRAIN pair data path + TRAIN-only audited firewall",
+        "production loop + checkpoint writer (terminal @4000) + run lifecycle",
+        "fail-closed scientific CLI with frozen-value refusals",
+        "real-TRAIN production qualification on a qualification seed"
+      ]
+    },
+    {
+      "experiment_id": "E03",
+      "method": "STDN",
+      "track": "A_FAIR_COMMON_IDENTITY_FREE",
+      "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+      "fidelity_authority": "E03 runtime compatibility addendum (M6D2b); frozen field FAITHFUL_OFFICIAL is historical",
+      "reporting_label": "STDN",
+      "forbidden_wording": [],
+      "frozen_config": {
+        "path": "configs/methods/e03_stdn.yaml",
+        "sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+        "snapshot": "frozen_config_snapshot/configs/methods/e03_stdn.yaml",
+        "snapshot_byte_identical": true
+      },
+      "source_pin": "yaojieliu/ECCV20-STDN@c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+      "lifecycle": "LEARNED_GENERATOR_TRAINING",
+      "environment": {
+        "name": "gpat-m6-e03 (TF1 NVIDIA wheel, Python 3.8.20)",
+        "lock": "environments/e03_stdn.lock.json",
+        "status": "QUALIFIED_SYNTHETIC (M6D2a/M6D2b)"
+      },
+      "real_train_path": "NOT_QUALIFIED (needs canonical faces_256 + M2 landmarks_px256 -> STDN normalized iBUG-68)",
+      "scientific_runner": "NOT_IMPLEMENTED: no TF1 benchmark controller or scientific CLI",
+      "checkpoint_rule": "OFFICIAL_LATEST_FINAL_CKPT_50 (SOURCE_RESOLVED; BASELINE_FINAL_STATE_V1 does not override)",
+      "required_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "resume_support": "NOT_IMPLEMENTED",
+      "budget": {
+        "max_epoch": 50,
+        "steps_per_epoch": 2000,
+        "batch_size": 2,
+        "g_d_ratio": 2,
+        "val_steps": 500
+      },
+      "readiness": "NEEDS_PRODUCTION_RUNNER_AND_REAL_TRAIN_QUALIFICATION",
+      "blockers": [
+        "TF1 production controller (data feed, landmarks, flips, ckpt-1..ckpt-50 writer, run lifecycle)",
+        "decision on the official per-epoch val_steps=500 block: VAL is diagnostics-only and may never select; the feed must be firewall-audited or the block must be shown non-influential",
+        "fail-closed scientific CLI",
+        "real-TRAIN production qualification on a qualification seed"
+      ]
+    },
+    {
+      "experiment_id": "E04",
+      "method": "Physics-STD (controlled geometry/depth reconstruction)",
+      "track": "A_FAIR_COMMON_IDENTITY_FREE",
+      "fidelity": "CONTROLLED_ADAPTATION",
+      "fidelity_authority": "A3 section 4; A4; M6D3d owner resolution; M6D3e implementation addendum",
+      "reporting_label": "Physics-STD (controlled geometry/depth reconstruction)",
+      "forbidden_wording": [
+        "native",
+        "official reproduction",
+        "faithful reproduction"
+      ],
+      "frozen_config": {
+        "path": "configs/methods/e04_physics_std.yaml",
+        "sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+        "snapshot": "frozen_config_snapshot/configs/methods/e04_physics_std.yaml",
+        "snapshot_byte_identical": true
+      },
+      "source_pin": "no official code; geometry cleardusk/3DDFA_V2@1b6c67601abffc1e9f248b291708aef0e43b55ae + bfm_noneck_v3.pkl (89ac9648...) + Q=140 list 1b884401...; graph lineage STDN@c79f1f8c",
+      "lifecycle": "LEARNED_GENERATOR_TRAINING (plus fixed auxiliary depth-M0 derivation for live TRAIN samples, reused for all seeds)",
+      "environment": {
+        "name": "gpat-m6-e03 (training, read-only reuse) + gpat-m6-e04-geometry (3DDFA geometry)",
+        "lock": "environments/e04_training.lock.json; environments/e04_geometry.lock.json",
+        "status": "QUALIFIED_SYNTHETIC (M6D3a geometry; M6D3e training graph)"
+      },
+      "real_train_path": "NOT_QUALIFIED (live-TRAIN depth M0 production not built)",
+      "scientific_runner": "NOT_IMPLEMENTED: training_runtime.py is a clean-process synthetic qualification, not a benchmark runner",
+      "checkpoint_rule": "BASELINE_FINAL_STATE_V1 terminal at iteration 150000 (A2-06)",
+      "required_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "resume_support": "NOT_IMPLEMENTED",
+      "budget": {
+        "total_iterations": 150000,
+        "batch_size": 8
+      },
+      "readiness": "NEEDS_PRODUCTION_RUNNER_AND_REAL_TRAIN_QUALIFICATION",
+      "blockers": [
+        "depth-M0 production for live TRAIN samples (fixed assets, image-independent Q=140, A4 uint8 resize order), hashed once and reused for all seeds",
+        "TF1 production controller (shares E03 infrastructure) + terminal-150000 checkpoint writer + run lifecycle",
+        "fail-closed scientific CLI",
+        "real-TRAIN production qualification on a qualification seed",
+        "largest GPU budget of the active set; wall-time not yet measured"
+      ]
+    },
+    {
+      "experiment_id": "E01",
+      "method": "FAS-Aug",
+      "track": "A_FAIR_COMMON_IDENTITY_FREE",
+      "fidelity": "FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION",
+      "fidelity_authority": "A2-01 lexicographic asset enumeration; A2-05 seed preimage",
+      "reporting_label": "FAS-Aug",
+      "forbidden_wording": [],
+      "frozen_config": {
+        "path": "configs/methods/e01_fas_aug.yaml",
+        "sha256": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+        "snapshot": "frozen_config_snapshot/configs/methods/e01_fas_aug.yaml",
+        "snapshot_byte_identical": true
+      },
+      "source_pin": "RizhaoCai/FAS-Aug@0da1dd79bad00e225b8cb6977c7f3f06ee8f7517",
+      "lifecycle": "DIRECT_SYNTHETIC_TRANSFORMATION_BANK_GENERATION (non-learned, seed-dependent per-pair operator draws; CPU-capable; no training)",
+      "environment": {
+        "name": "gpat-m5 (M6D1 core environment)",
+        "lock": "environments/m6_core_gpu.lock.json",
+        "status": "QUALIFIED_SYNTHETIC (M6D1; QUALIFIED_EXECUTION_ENVIRONMENT_FOR_E01_E02_ONLY)"
+      },
+      "real_train_path": "NOT_QUALIFIED (real-TRAIN bank path not exercised)",
+      "scientific_runner": "NOT_IMPLEMENTED: generate_one() exists; no production bank CLI writing <runtime_root>/runs/m6/E01/seed_<seed>/bank_manifest.parquet",
+      "checkpoint_rule": "NOT_APPLICABLE_NO_TRAINED_GENERATOR",
+      "required_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "resume_support": "NOT_APPLICABLE (deterministic per-pair regeneration; fresh-only bank write expected)",
+      "budget": {
+        "n_syn_intended_per_seed": 8838,
+        "gpu_required": false
+      },
+      "readiness": "NEEDS_BANK_PATH_IMPLEMENTATION_AND_OWNER_GATE_CLARIFICATION",
+      "blockers": [
+        "real-TRAIN production bank writer + per-sample accounting (source pair, seed, operator metadata, output SHA256, failure reason)",
+        "OWNER_CLARIFICATION: whether the E01 per-seed bank is M6 method execution or an M8 bank that waits for the deterministic smoke test (HARD_GATE_BEFORE_FIRST_FULL_M8_PLUS_EXECUTION)"
+      ]
+    },
+    {
+      "experiment_id": "E02",
+      "method": "Frequency Substitution",
+      "track": "A_FAIR_COMMON_IDENTITY_FREE",
+      "fidelity": "SPEC_DEFINED (spec 8.2 status tag CONTROLLED_ADAPTATION; gate adapted)",
+      "fidelity_authority": "spec 8.2; A2-02/03/04",
+      "reporting_label": "Frequency Substitution",
+      "forbidden_wording": [],
+      "frozen_config": {
+        "path": "configs/methods/e02_freqsub.yaml",
+        "sha256": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+        "snapshot": "frozen_config_snapshot/configs/methods/e02_freqsub.yaml",
+        "snapshot_byte_identical": true
+      },
+      "source_pin": "NONE (frozen spec 8.2 algorithm)",
+      "lifecycle": "DIRECT_SYNTHETIC_TRANSFORMATION_BANK_GENERATION (non-learned, seed-dependent PCG64 block selection; CPU-capable; no training)",
+      "environment": {
+        "name": "gpat-m5 (M6D1 core environment; NumPy 2.4.6)",
+        "lock": "environments/m6_core_gpu.lock.json",
+        "status": "QUALIFIED_SYNTHETIC (M6D1)"
+      },
+      "real_train_path": "NOT_QUALIFIED (real-TRAIN bank path not exercised)",
+      "scientific_runner": "NOT_IMPLEMENTED: generate_one() exists; no production bank CLI",
+      "checkpoint_rule": "NOT_APPLICABLE_NO_TRAINED_GENERATOR",
+      "required_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "resume_support": "NOT_APPLICABLE (deterministic per-pair regeneration)",
+      "budget": {
+        "n_syn_intended_per_seed": 8838,
+        "gpu_required": false
+      },
+      "readiness": "NEEDS_BANK_PATH_IMPLEMENTATION_AND_OWNER_GATE_CLARIFICATION",
+      "blockers": [
+        "real-TRAIN production bank writer + per-sample accounting; NumPy must be pinned by the runtime freeze (A2-03)",
+        "OWNER_CLARIFICATION: same M6-vs-M8 smoke-gate question as E01"
+      ]
+    }
+  ],
+  "excluded_or_superseded": [
+    {
+      "experiment_id": "E07c",
+      "method": "DiffFAS-BIN-IDFREE",
+      "scope": "OWNER_EXCLUDED",
+      "gate": "blocked",
+      "authority": "Amendment A9 (OWNER_EXCLUDED_RESOURCE_CONSTRAINT); DEV-021",
+      "note": "seed-42 attempt 2 owner-interrupted at step 54836; model_050000.pt NON_SCIENTIFIC_EVIDENCE_ONLY; 1337/2026 never started"
+    },
+    {
+      "experiment_id": "E07b",
+      "method": "DiffFAS-NATIVE",
+      "scope": "OWNER_EXCLUDED",
+      "gate": "blocked",
+      "authority": "Amendment A9",
+      "note": "never implemented"
+    },
+    {
+      "experiment_id": "E06a",
+      "method": "DSDG-BIN",
+      "scope": "SUPERSEDED_BY_ADOPTED_AMENDMENT",
+      "gate": "blocked",
+      "authority": "DEV-019 (Amendment A1)",
+      "note": "identity-dependent pairing forbidden in Track A; replaced by E06c"
+    },
+    {
+      "experiment_id": "E07a",
+      "method": "DiffFAS-BIN",
+      "scope": "SUPERSEDED_BY_ADOPTED_AMENDMENT",
+      "gate": "blocked",
+      "authority": "DEV-019 (Amendment A1)",
+      "note": "identity-dependent pairing forbidden in Track A; replaced by E07c"
+    }
+  ],
+  "candidate_order_given": [
+    "E06c",
+    "E06b",
+    "E03",
+    "E04",
+    "E05",
+    "E01",
+    "E02"
+  ],
+  "recommended_execution_queue": [
+    {
+      "rank": 1,
+      "experiment_id": "E06c",
+      "resource": "RTX3090 (exclusive)",
+      "reason": "Only Track-A baseline whose real-TRAIN production runner, checkpoint writer and resume are qualified; scientific CLI exists; live preflight PASS at P0."
+    },
+    {
+      "rank": 2,
+      "experiment_id": "E06b",
+      "resource": "RTX3090 (exclusive)",
+      "reason": "Real-TRAIN data/batch path and CLI preflight qualified in the same environment; only the run-lifecycle/checkpoint-writer exercise is open; shortest learned budget (3200 steps/seed)."
+    },
+    {
+      "rank": 3,
+      "experiment_id": "E05",
+      "resource": "RTX3090 (exclusive)",
+      "reason": "MOVED UP from candidate rank 5. Same readiness tier as E03/E04 (synthetic only), but PyTorch (reuses the qualified E06c RunContext/firewall/pair-loader patterns), training iteration already qualified, and the smallest budget (4000 iterations, batch 1)."
+    },
+    {
+      "rank": 4,
+      "experiment_id": "E03",
+      "resource": "RTX3090 (exclusive)",
+      "reason": "Needs a new TF1 controller; must precede E04 because E04 trains in the E03 interpreter and inherits the STDN graph lineage and A4 Adam semantics."
+    },
+    {
+      "rank": 5,
+      "experiment_id": "E04",
+      "resource": "RTX3090 (exclusive) + CPU/GPU depth-M0 pre-pass",
+      "reason": "Depends on the E03 TF1 controller plus a live-TRAIN depth-M0 production step; largest budget (150000 iterations, batch 8)."
+    },
+    {
+      "rank": 6,
+      "experiment_id": "E01",
+      "resource": "CPU (does not need the 3090)",
+      "reason": "Non-learned direct bank generation; needs a real-TRAIN bank writer and an owner ruling on the M8 smoke-test gate. Being CPU-only, it can later run alongside GPU training without contending for the 3090."
+    },
+    {
+      "rank": 7,
+      "experiment_id": "E02",
+      "resource": "CPU (does not need the 3090)",
+      "reason": "Same lifecycle and gate as E01; implemented and verified in the same core environment."
+    }
+  ],
+  "reranking_change": "E05 moved from rank 5 to rank 3 (ahead of E03/E04); all other relative positions unchanged.",
+  "next_method": {
+    "experiment_id": "E06c",
+    "status": "STAGED_NOT_LAUNCHED",
+    "host": "student20261@100.121.84.44 (nd-System-Product-Name), single NVIDIA GeForce RTX 3090; idle at P0 (198 MiB used, 0 % util, no compute processes)",
+    "repository": "/home/student20261/workdir/GPAT_TransferBench (clean, at ffffa9b at P0; fast-forward to the launch commit first)",
+    "environment": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python (lock environments/e06c.lock.json, sha256 91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95)",
+    "command_template": "cd /home/student20261/workdir/GPAT_TransferBench && CUDA_VISIBLE_DEVICES=0 PYTHONHASHSEED=<seed> NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python tools/run_e06c.py --seed <seed> --execution-config configs/execution/m5_gpu_3090.yaml",
+    "procedure": [
+      "inside tmux on the GPU host",
+      "run the command with --preflight-only first (no torch import; must exit 0 with torch_imported=false)",
+      "then the same command without --preflight-only",
+      "seeds strictly sequential: 42, then 1337, then 2026"
+    ],
+    "resume_command_template": "same command + --resume-state checkpoints/runner_state_epoch_<E>.pth (only an indexed sidecar inside the seed root; only after a technical stop)",
+    "runtime_root": "/home/student20261/workdir/GPAT_TransferBench_runtime",
+    "run_roots": {
+      "42": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06c/seed_42",
+      "1337": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06c/seed_1337",
+      "2026": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06c/seed_2026"
+    },
+    "run_roots_exist_at_p0": false,
+    "run_id_rule": "run_logging_v1: sha256(\"E06c|<seed>|7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002|<launch git commit>\")[:16]; fixed only once the launch commit is known",
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "budget": {
+      "epochs": 200,
+      "optimizer_steps_per_epoch": 37,
+      "optimizer_steps_per_seed": 7400,
+      "global_batch": 240,
+      "microbatch": 20,
+      "tail_batch": 198,
+      "precision": "FP32, TF32 off, no AMP"
+    },
+    "expected_duration": {
+      "basis": "M6D5e-r qualification epoch: 150.83 s (real TRAIN, same runner)",
+      "per_seed_hours_estimate": 8.4,
+      "three_seeds_hours_estimate": 25.1,
+      "note": "ESTIMATE ONLY; excludes checkpoint/visualization overhead variance"
+    },
+    "expected_storage": {
+      "per_checkpoint_event_bytes": 726094982,
+      "checkpoint_events_per_seed": 21,
+      "per_seed_gb_estimate": 15.3,
+      "three_seeds_gb_estimate": 45.8,
+      "free_at_p0": "220G on /"
+    },
+    "required_assets": {
+      "frozen_config": "configs/methods/e06c_dsdg_bin_idfree.yaml 7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+      "a1_adaptation": "configs/frozen/dsdg_bin_idfree_v1.yaml a0f84fac2e893158410aab6d3cd11f464f6385edad2403c1f8ce4a66615b15de",
+      "train_relation": "manifests/pairs_train_v1.parquet a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243 (8838 rows)",
+      "faces_256": "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256 (via configs/execution/m5_gpu_3090.yaml c9d22abf1b5e284593bfed21500e8113df7f14ff564b7434e3eda43cb7e7eb70)",
+      "lightcnn": "/home/student20261/workdir/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964 (123844849 B)",
+      "source": "FaceX-Zoo@16b793a7564a4b9308cf94e62bdb2ffacb3a725a tree 0d2216bdbdd9977130db1100641abf336f46ac9d",
+      "overlays": "M6D5c V1 aa9d70899f950c461ea801e6f92537e71a072e54f6f2a54d08b291945fd487d7; M6D5d V2 f1ea0543f51b2403399080ccc2a3856ab2c0f07e5e0a962603357d7a7d83ec97; M6D5e contract 4123c93f50731f14c35f7f713b6d78d3fb30a23324399bdf1633f6c09a5e5e36",
+      "logging_contract": "configs/run_logging_v1.yaml d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15"
+    },
+    "checkpoint_rule": "OFFICIAL_GENERATOR_EPOCH_200: the authoritative final per seed is netG_model_epoch_200_iter_0.pth; cadence epoch 1 + every 10; selection WITHIN_SEED; no VAL, no TEST, no best-epoch choice",
+    "hard_gates": [
+      "clean committed worktree (dirty refused)",
+      "PYTHONHASHSEED == seed",
+      "NVIDIA_TF32_OVERRIDE=0",
+      "CUBLAS_WORKSPACE_CONFIG=:4096:8",
+      "seed in {42, 1337, 2026} (qualification seeds 60505/60506 refused)",
+      "every identity verified before torch import: config, A1 adaptation, overlays, contract, environment lock, source commit/tree/files, TRAIN relation, LightCNN, execution config",
+      "existing seed root refused unless an explicit indexed --resume-state is given",
+      "override/tuning flags refused (epochs, lr, batch, microbatch, drop_last, precision, checkpoint selection, --val/--test)",
+      "TRAIN-only data access; no split_v1 VAL/TEST image access",
+      "GPU exclusive: no concurrent GPAT or other baseline job on the 3090",
+      "spec 27: a failed seed is rerun as the SAME seed after a technical fix; never substituted or dropped"
+    ],
+    "val_test_policy": "TRAIN only. VAL is not used by E06c (the official periodic test block writes TRAIN-sample grids only and is not validation). TEST is never accessed and never selects. Primary result = mean +- std over all three seeds.",
+    "live_preflight_at_p0": {
+      "host_commit": "ffffa9bd3a2f7d94f0d7fa228764dc425d2ff563",
+      "exit_code": 0,
+      "torch_imported": false,
+      "note": "E06c/E06b code is byte-identical between ffffa9b and the P0 authority (only M7D1 audit/tool/test files changed)"
+    }
+  },
+  "this_milestone_did_not": [
+    "train or launch any method",
+    "modify scientific implementations, frozen configs or amendments",
+    "access VAL or TEST",
+    "create a checkpoint, bank or downstream result"
+  ],
+  "gpu_host_contact_at_p0": "read-only: git HEAD/status, run-root listing, nvidia-smi, df; E06c and E06b --preflight-only (no torch import); one temporary /tmp file on the host was written and removed"
+}
