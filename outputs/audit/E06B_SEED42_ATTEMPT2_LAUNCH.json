@@ -1,0 +1,214 @@
+{
+ "E06B_FIXED_AUTHORITY": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87",
+ "attempt1_archive": {
+  "archived_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/diagnostics/m6/E06B_SEED42_ATTEMPT1_d3c0ddd5dc82a4a1_CHECKPOINT_WRITER_FAILURE",
+  "archived_utc": "2026-10-21T17:17Z",
+  "canonical_root_absent_after_move": true,
+  "classification": "FAILED_TECHNICAL_CHECKPOINT_WRITER_BUG",
+  "digest_match": true,
+  "file_count_post": 14,
+  "file_count_pre": 14,
+  "listing_digest_path_size_mtime_post": "0498f9c924ac58acfad201fae08bb7b858289f7f4784fe7c3d9aa80973484dcc",
+  "listing_digest_path_size_mtime_pre": "0498f9c924ac58acfad201fae08bb7b858289f7f4784fe7c3d9aa80973484dcc",
+  "listing_digest_path_size_sha256_post": "8ce8d5a8be3ec6179ef4299a51ab7903383bb963307e809d50c7e2dd9d91f6ca",
+  "listing_digest_path_size_sha256_pre": "8ce8d5a8be3ec6179ef4299a51ab7903383bb963307e809d50c7e2dd9d91f6ca",
+  "method": "mv -n -T (rename(2), same filesystem: st_dev 66306 for source and destination parent); destination absent before move; nothing deleted",
+  "original_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_42",
+  "run_id": "d3c0ddd5dc82a4a1",
+  "selectable": false,
+  "traceback_copy": "~/workdir/e06b_s42_attempt1_tmux_pane.txt (sha256 b40e62904edc8e62b62a713f1ad256d7377ac01d16c90019d32f16cd362e09d6); dead tmux pane m6_e06b_s42 left in place"
+ },
+ "attempt2_identity": {
+  "command": "CUDA_VISIBLE_DEVICES=0 PYTHONHASHSEED=42 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python tools/run_e06b.py --seed 42 --execution-config configs/execution/m5_gpu_3090.yaml",
+  "exit_code_file": "~/workdir/e06b_s42_r2.exit",
+  "fresh": "epoch 1, global step 0, seed-42 initialization; no resume, no copied weights, no optimizer state",
+  "git_commit": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87",
+  "git_dirty": false,
+  "manifest_run_id_matches": true,
+  "pid": 2087837,
+  "root": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_42",
+  "run_id": "aa96129289d080ba",
+  "run_id_independent": "sha256(\"E06b|42|9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f|d9ecbef7295fc6b41ced6a4966b49810d36a8c87\")[:16] = aa96129289d080ba",
+  "start_utc": "2026-10-21T17:18:10Z",
+  "tmux_session": "m6_e06b_s42_r2"
+ },
+ "epoch1_checkpoint_writer": {
+  "files": [
+   {
+    "bytes": 55181976,
+    "global_step": 16,
+    "index_matches": true,
+    "path": "checkpoints/netE_spoof_model_epoch_1_iter_0.pth",
+    "selected_for_final": false,
+    "sha256": "40ba3e4c61938f402aa07f718b71de60337ec668b1296003579054d012b1fd8e",
+    "type": "periodic"
+   },
+   {
+    "bytes": 46792321,
+    "global_step": 16,
+    "index_matches": true,
+    "path": "checkpoints/netE_live_model_epoch_1_iter_0.pth",
+    "selected_for_final": false,
+    "sha256": "dec2f9cb83a50974295f1c8ea8db5d87ee845786e89c45aa78d4bfdbfde80440",
+    "type": "periodic"
+   },
+   {
+    "bytes": 79577546,
+    "global_step": 16,
+    "index_matches": true,
+    "path": "checkpoints/netG_model_epoch_1_iter_0.pth",
+    "selected_for_final": false,
+    "sha256": "b5e68e8c2e3f366f765d97d855d231234d1e6f743665e4959d1e8b889ba464e7",
+    "type": "periodic"
+   }
+  ],
+  "index_entries_epoch1": 3,
+  "result": "SUCCESS (first real-lifecycle exercise of the fixed gate)",
+  "runner_state_sidecar": null
+ },
+ "epoch1_qualification": {
+  "all_gates_pass": true,
+  "bit_identical_to_attempt1_epoch1": {
+   "epoch_order": true,
+   "epsilon_hashes": true,
+   "pair_hashes": true,
+   "per_step_losses": true,
+   "visualization_png_sha256": true
+  },
+  "epoch_spoof_order_sha256": "d638ad8aceb80714d7ffe085a313aab2c04c7444847c2ec2f4bd8c4ded6724e5",
+  "gates": {
+   "all_losses_finite": true,
+   "checkpoint_dir_exact_three": true,
+   "checkpoint_event_logged": true,
+   "checkpoint_global_step_16": true,
+   "epoch_complete_event": true,
+   "index_hash_size_match": true,
+   "index_three_epoch1": true,
+   "loss_cls_active": true,
+   "loss_keys": true,
+   "loss_pair_active": true,
+   "microbatch_12x20_tail_6x20": true,
+   "netCls_grad_nonzero": true,
+   "no_runner_state_anywhere": true,
+   "no_test_keys": true,
+   "optimizer_applications_eq_step": true,
+   "owned_grads_55_finite": true,
+   "periodic_not_selected": true,
+   "runner_mode_scientific": true,
+   "sizes_15x240_plus_120": true,
+   "steps_16": true,
+   "val_null": true
+  },
+  "independent_predictor": {
+   "epoch_order_match": 1,
+   "epoch_order_mismatch": 0,
+   "step_compared": 16,
+   "step_match": 16,
+   "step_mismatch": 0
+  },
+  "independent_predictor_epochs_1_2": {
+   "epoch_order_match": 2,
+   "epoch_order_mismatch": 0,
+   "step_compared": 32,
+   "step_match": 32
+  },
+  "loss_cls_range": [
+   7.40218722820282,
+   9.74822203318278
+  ],
+  "loss_pair_range": [
+   0.006992731204566855,
+   0.012961139747252066
+  ],
+  "mean_step_seconds_epoch1": 3.731,
+  "pairing_audit": {
+   "datasets": [
+    "casia_fasd",
+    "msu_mfsd"
+   ],
+   "epoch1_covers_all": true,
+   "epoch1_rows": 3720,
+   "epoch1_unique": 3720,
+   "labels_epoch1": {
+    "0": 2080,
+    "1": 1640
+   },
+   "live_partner_is_live": 3720,
+   "same_subject_pairs": 3720,
+   "splits": [
+    "TRAIN"
+   ]
+  },
+  "peak_gpu_memory_bytes": 6383763456
+ },
+ "evidence_id": "E06B_SEED42_ATTEMPT2_LAUNCH",
+ "evidence_only_commit": true,
+ "firewall": {
+  "SiW_accessed": 0,
+  "TEST_accessed": 0,
+  "VAL_accessed": 0,
+  "by_split": {
+   "MANIFEST": {
+    "atime_changed": 0,
+    "atime_sensitive": 10,
+    "files": 12,
+    "missing_in_post": 0
+   },
+   "SIW_ANY": {
+    "atime_changed": 0,
+    "atime_sensitive": 5580,
+    "files": 13575,
+    "missing_in_post": 0
+   },
+   "TEST": {
+    "atime_changed": 0,
+    "atime_sensitive": 992,
+    "files": 992,
+    "missing_in_post": 0
+   },
+   "TRAIN": {
+    "atime_changed": 7,
+    "atime_sensitive": 8,
+    "files": 4960,
+    "missing_in_post": 0
+   },
+   "VAL": {
+    "atime_changed": 0,
+    "atime_sensitive": 1088,
+    "files": 1088,
+    "missing_in_post": 0
+   }
+  },
+  "mid": "~/workdir/e06b_s42_r2_atime_mid.tsv (2026-10-21T17:20:25Z, after the epoch-1 checkpoint)",
+  "pre": "~/workdir/e06b_s42_r2_atime_pre.tsv (2026-10-21T17:18:07Z, stat only)",
+  "tracked_files": 20627,
+  "train_note": "CASIA/MSU TRAIN was read by attempt 1 under 30 min earlier, so relatime leaves most TRAIN atimes unchanged; TEST/VAL are fully atime-sensitive."
+ },
+ "milestone": "BASELINE-EXEC-E06B-S42-R1",
+ "not_started": [
+  "E06b seed1337",
+  "E06b seed2026",
+  "another E06b attempt",
+  "E05",
+  "E03",
+  "E04",
+  "E01",
+  "E02",
+  "banks",
+  "downstream",
+  "GPAT"
+ ],
+ "preflight": {
+  "canonical_root_absent_before_and_after": true,
+  "exit": 0,
+  "experiment_seed": 42,
+  "git_commit": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87",
+  "identical_to_attempt1_preflight_except_git_commit": true,
+  "method_id": "E06b",
+  "resume": "NOT_QUALIFIED_FRESH_ONLY",
+  "runtime_fidelity_assessment": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+  "torch_imported": false
+ },
+ "status": "E06B_SEED42_R2_RUNNING",
+ "training_authority_note": "This commit is evidence only. The E06b training authority for seeds 42/1337/2026 is E06B_FIXED_AUTHORITY d9ecbef7295fc6b41ced6a4966b49810d36a8c87; the GPU checkout stays pinned there."
+}
