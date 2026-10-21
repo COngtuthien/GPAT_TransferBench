@@ -328,7 +328,7 @@ class E06bTrainer(e06c_runner.Trainer):
 
     def checkpoint_event(self, epoch, ctx):
         """Pinned misc/util.py::save_checkpoint for netE_spoof/netE_live/netG (fresh-only: no resume sidecar)."""
-        require(rio.is_checkpoint_epoch(epoch) and ctx.mode == SCIENTIFIC, 'official checkpoint epoch, scientific only')
+        require(rio.is_checkpoint_epoch(epoch) and self.mode == SCIENTIFIC, 'official checkpoint epoch, scientific only')
         written = []
         for model, prefix in rio.OFFICIAL_FILES:
             self.util.save_checkpoint(str(ctx.run_dir / 'checkpoints') + '/', self.models[model], epoch, 0, prefix)

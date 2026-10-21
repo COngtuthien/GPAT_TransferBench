@@ -1,0 +1,267 @@
+{
+ "classification": "FAILED_TECHNICAL_CHECKPOINT_WRITER_BUG",
+ "disposition": "Historical evidence only. Never resumed, never a weight source; seed42 reruns fresh at the fix authority.",
+ "eligible_for_bank": false,
+ "eligible_for_downstream": false,
+ "eligible_for_reporting": false,
+ "epoch1_training_health": {
+  "all_gates_pass": true,
+  "batch_plan": "15 x 240 + 120",
+  "class_mapping": {
+   "print": 0,
+   "replay": 1
+  },
+  "datasets": [
+   "casia_fasd",
+   "msu_mfsd"
+  ],
+  "epoch_spoof_order_sha256": "d638ad8aceb80714d7ffe085a313aab2c04c7444847c2ec2f4bd8c4ded6724e5",
+  "gates": {
+   "all_losses_finite": true,
+   "epoch_complete_event": true,
+   "loss_cls_active": true,
+   "loss_keys": true,
+   "loss_pair_active": true,
+   "microbatch_12x20_tail_6x20": true,
+   "netCls_grad_nonzero": true,
+   "no_test_keys": true,
+   "optimizer_applications_eq_step": true,
+   "owned_grads_55_finite": true,
+   "runner_mode_scientific": true,
+   "sizes_15x240_plus_120": true,
+   "steps_16": true,
+   "val_null": true
+  },
+  "independent_predictor": "~/workdir/e06b_s42_predict.py (relation rebuilt from split_v1 without repo code; 8-worker loader draws modelled per M6F-C)",
+  "labels_epoch1": {
+   "0": 2080,
+   "1": 1640
+  },
+  "live_partner_is_live": 3720,
+  "loss_cls_note": "lambda_type-weighted CE (train_generator.py:144)",
+  "loss_cls_range": [
+   7.40218722820282,
+   9.74822203318278
+  ],
+  "loss_pair_range": [
+   0.006992731204566855,
+   0.012961139747252066
+  ],
+  "mean_step_seconds": 3.78,
+  "microbatches": "12 x 20 per 240, 6 x 20 for the 120 tail",
+  "peak_gpu_memory_bytes": 6383763456,
+  "population": {
+   "casia_fasd": {
+    "live": 840,
+    "print": 1680,
+    "replay": 840,
+    "spoof": 2520
+   },
+   "live_pools": 60,
+   "msu_mfsd": {
+    "live": 400,
+    "print": 400,
+    "replay": 800,
+    "spoof": 1200
+   },
+   "spoof_rows": 3720
+  },
+  "predictor_rerun_this_session": {
+   "epoch1_pairs_tsv_sha256": "a2d3bd9ae0c863e0eeb5e1fc23b18028990d18411cc18db91b2766b7140a2884",
+   "epoch_order_match": 1,
+   "epoch_order_mismatch": 0,
+   "regenerated_pairs_tsv_byte_identical": true,
+   "step_compared": 16,
+   "step_match": 16,
+   "step_mismatch": 0
+  },
+  "same_subject_pairs": 3720,
+  "splits": [
+   "TRAIN"
+  ],
+  "spoof_rows_exactly_once": true
+ },
+ "evidence_id": "E06B_SEED42_ATTEMPT1_CHECKPOINT_WRITER_FAILURE",
+ "exception": {
+  "call_site": "methods/dsdg/native_runner.py:443 run_scientific -> trainer.checkpoint_event(epoch, ctx)",
+  "entered_on": "first checkpoint event (epoch 1, the official epoch-1 cadence exception), after visualization",
+  "location": "methods/dsdg/native_runner.py:331 E06bTrainer.checkpoint_event (authority 24f7049)",
+  "message": "'LearnedRunContext' object has no attribute 'mode'",
+  "root_cause": "E06bTrainer.checkpoint_event read ctx.mode; run_scientific opens a methods.common.learned_runlog.LearnedRunContext, which has no mode attribute (the E06c runner opens its own E06cRunContext, which does). The trainer already owns the execution mode as self.mode. No prior test called the E06b checkpoint writer with the real context class.",
+  "run_summary_failure_reason": "AttributeError: 'LearnedRunContext' object has no attribute 'mode'",
+  "statement": "require(rio.is_checkpoint_epoch(epoch) and ctx.mode == SCIENTIFIC, 'official checkpoint epoch, scientific only')",
+  "traceback": [
+   "Traceback (most recent call last):",
+   "  File \"/home/student20261/workdir/GPAT_TransferBench/tools/run_e06b.py\", line 115, in <module>",
+   "    sys.exit(main())",
+   "             ^^^^^^",
+   "  File \"/home/student20261/workdir/GPAT_TransferBench/tools/run_e06b.py\", line 107, in main",
+   "    run_dir = nr.run_scientific(seed=args.seed, runtime_root=plan['storage']['runtime_root'],",
+   "              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+   "  File \"/home/student20261/workdir/GPAT_TransferBench/methods/dsdg/native_runner.py\", line 443, in run_scientific",
+   "    trainer.checkpoint_event(epoch, ctx)",
+   "  File \"/home/student20261/workdir/GPAT_TransferBench/methods/dsdg/native_runner.py\", line 331, in checkpoint_event",
+   "    require(rio.is_checkpoint_epoch(epoch) and ctx.mode == SCIENTIFIC, 'official checkpoint epoch, scientific only')",
+   "                                               ^^^^^^^^",
+   "AttributeError: 'LearnedRunContext' object has no attribute 'mode'",
+   "Pane is dead (status 0, Wed Oct 21 23:51:09 2026)"
+  ],
+  "traceback_sha256": "b40e62904edc8e62b62a713f1ad256d7377ac01d16c90019d32f16cd362e09d6",
+  "traceback_source": "tmux pane m6_e06b_s42 (dead pane, remain-on-exit); copy at ~/workdir/e06b_s42_attempt1_tmux_pane.txt on the GPU host",
+  "type": "AttributeError"
+ },
+ "firewall": {
+  "SiW_accessed": 0,
+  "TEST_accessed": 0,
+  "VAL_accessed": 0,
+  "by_split": {
+   "MANIFEST": {
+    "atime_changed": 0,
+    "atime_sensitive": 10,
+    "files": 12,
+    "missing_in_post": 0
+   },
+   "SIW_ANY": {
+    "atime_changed": 0,
+    "atime_sensitive": 5580,
+    "files": 13575,
+    "missing_in_post": 0
+   },
+   "TEST": {
+    "atime_changed": 0,
+    "atime_sensitive": 992,
+    "files": 992,
+    "missing_in_post": 0
+   },
+   "TRAIN": {
+    "atime_changed": 279,
+    "atime_sensitive": 287,
+    "files": 4960,
+    "missing_in_post": 0
+   },
+   "VAL": {
+    "atime_changed": 0,
+    "atime_sensitive": 1088,
+    "files": 1088,
+    "missing_in_post": 0
+   }
+  },
+  "method": "stat-only atime snapshots (no image read); relatime-sensitive files counted",
+  "post": "~/workdir/e06b_s42_atime_post.tsv (2026-10-21T16:51:34Z)",
+  "pre": "~/workdir/e06b_s42_atime_pre.tsv (2026-10-21T16:49:29Z)",
+  "run_summary_test_split_accessed": false,
+  "tracked_files": 20627
+ },
+ "milestone": "BASELINE-EXEC-E06B-S42-R1",
+ "not_classified_as": [
+  "scientific instability",
+  "numerical failure",
+  "OOM",
+  "data failure",
+  "protocol failure",
+  "completed scientific seed"
+ ],
+ "resumable": false,
+ "root_before_archive": {
+  "directories": [
+   "checkpoints/ (empty)",
+   "diagnostics/",
+   "diagnostics/visualization/"
+  ],
+  "file_count": 14,
+  "files": {
+   "checkpoint_index.json": {
+    "bytes": 190,
+    "sha256": "4fa90afa7ed09b91300420a0a4d885657aa75c42cdf785e8eefbf967b29dec03"
+   },
+   "diagnostics/visualization/Epoch_001_fake_live.png": {
+    "bytes": 17151877,
+    "sha256": "8fb0be8835b97d2de4014c1f363f658281b8b36cc32bd2de43a0b22be0cf5b99"
+   },
+   "diagnostics/visualization/Epoch_001_fake_spoof.png": {
+    "bytes": 17321313,
+    "sha256": "b8b36984763b4438eb457d10161354b337eadf9fd7c61f8b2704b5e05a7466a1"
+   },
+   "diagnostics/visualization/Epoch_001_img_live.png": {
+    "bytes": 2816256,
+    "sha256": "a36deae5d34b6c028ecdba3e4c72406ccd526e0bd89ca14cd3729037eec2080f"
+   },
+   "diagnostics/visualization/Epoch_001_img_spoof.png": {
+    "bytes": 2774905,
+    "sha256": "7d0dbb354d89b443e35d07fb6617ab3dd07ee3aa6341751e03fba7b5e9dff447"
+   },
+   "diagnostics/visualization/Epoch_001_rec_live.png": {
+    "bytes": 2232407,
+    "sha256": "906edd5adacf7d27b0337417b622fec84281b5fa8d0bfdefbffe67c39e1498a7"
+   },
+   "diagnostics/visualization/Epoch_001_rec_spoof.png": {
+    "bytes": 2233907,
+    "sha256": "dbcaecd5d222ccfefe007ab8d08227ad2a4f4c459a77766ffe3413c221cfd248"
+   },
+   "generation_log.jsonl": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "metrics.jsonl": {
+    "bytes": 36029,
+    "sha256": "24967f3a13dcb08ad151fd5adbf32dc7dc7af8e65d825e35d17c23d4a419949a"
+   },
+   "resolved_config.yaml": {
+    "bytes": 13497,
+    "sha256": "209e682127b56eb0f0400bef4e3fff4662c9400d972d03b56d8223143dbe06ff"
+   },
+   "run_manifest.json": {
+    "bytes": 2850,
+    "sha256": "6ebe43f5bcc79b3864ebdf78386d29928f6c3a453dd9c796bf1aa64f496a44df"
+   },
+   "run_summary.json": {
+    "bytes": 1691,
+    "sha256": "7e2fafadaa4fd1b032f0eeedfb2b32e576fac41c5ca192d4545da3017432ce58"
+   },
+   "stderr.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "stdout.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "listing_digest_path_size_mtime": "0498f9c924ac58acfad201fae08bb7b858289f7f4784fe7c3d9aa80973484dcc",
+  "listing_digest_path_size_mtime_convention": "find . -type f -printf \"%P %s %T@\\n\" | LC_ALL=C sort | sha256sum",
+  "listing_digest_path_size_sha256": "8ce8d5a8be3ec6179ef4299a51ab7903383bb963307e809d50c7e2dd9d91f6ca",
+  "listing_digest_path_size_sha256_convention": "find . -type f -printf \"%P\\n\" | LC_ALL=C sort | (per line: path size sha256) | sha256sum",
+  "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_42"
+ },
+ "run_identity": {
+  "command_line": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python tools/run_e06b.py --seed 42 --execution-config configs/execution/m5_gpu_3090.yaml",
+  "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+  "end_utc": "2026-10-21T16:51:08Z",
+  "experiment_seed": 42,
+  "git_dirty": false,
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "host": "nd-System-Product-Name",
+  "launch_authority": "24f7049b894330574b84d11baeb40ed4a7fb3c6b",
+  "method_id": "E06b",
+  "python": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+  "run_id": "d3c0ddd5dc82a4a1",
+  "run_uuid": "ded46fb5-4a7b-43ba-9dd7-ebcdd98bc03d",
+  "shell_exit_code": 1,
+  "start_utc": "2026-10-21T16:49:44Z",
+  "tmux_session": "m6_e06b_s42",
+  "torch": "2.12.1+cu130"
+ },
+ "selectable": false,
+ "state_at_failure": {
+  "checkpoint_files": 0,
+  "checkpoint_index_entries": 0,
+  "completion_status": "failed",
+  "last_completed_epoch": 1,
+  "last_global_step": 16,
+  "optimizer_steps_of_budget": "16 / 3200",
+  "resume_sidecars": 0,
+  "stderr_log_bytes": 0,
+  "stdout_log_bytes": 0,
+  "visualization_files_epoch1": 6
+ }
+}
