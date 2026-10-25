@@ -475,6 +475,11 @@ class Controller:
              'val_fused_bn_is_training_false': sum(1 for o in val_ops if o.type.startswith('FusedBatchNorm') and
                                                    not o.get_attr('is_training')),
              'val_reads_train_iterator': any(o.name == self.train_next[0].op.name for o in val_ops)}
+        # Informational: op types in the unchanged graph whose GPU kernels accumulate with atomics (no deterministic
+        # kernel in TF 1.15 even with TF_DETERMINISTIC_OPS=1); they make run-to-run float results non-bitwise.
+        kinds = ('ResizeBilinearGrad', 'ScatterNd', 'UnsortedSegmentSum', 'TensorScatterAdd', 'SparseSegmentSum')
+        types_in_graph = [o.type for o in graph.get_operations()]
+        s['atomic_accumulation_op_types'] = {k: types_in_graph.count(k) for k in kinds if k in types_in_graph}
         qual = importlib.util.spec_from_file_location('e03_m6d2b_oracle', ROOT / 'methods/stdn/runtime_qualification.py')
         oracle = importlib.util.module_from_spec(qual)
         qual.loader.exec_module(oracle)

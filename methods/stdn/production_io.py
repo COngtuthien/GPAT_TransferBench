@@ -185,7 +185,7 @@ def storage_from_exec_config(rel=EXEC_CONFIG, root=ROOT):
             'faces_256_root': str(faces), 'pack_root': str(pack_root(runtime_root))}
 
 
-QUALIFICATION_CASES = ('val_a', 'val_b', 'no_val', 'terminal_probe')
+QUALIFICATION_CASES = ('val_a', 'val_b', 'no_val', 'terminal_probe', 'failure_probe')
 
 
 # ---------------------------------------------------------------- schedule accounting (official)
