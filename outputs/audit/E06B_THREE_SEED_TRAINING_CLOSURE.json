@@ -1,0 +1,747 @@
+{
+  "aggregation": {
+    "applies_to": "future downstream evaluation metrics (none computed yet)",
+    "descriptive_training_losses": {
+      "by_seed": {
+        "1337": {
+          "1": {
+            "loss_rec": 8075.3495203653965,
+            "total_loss": 8078.639504430329
+          },
+          "200": {
+            "loss_rec": 428.69584401448566,
+            "total_loss": 544.8924654180155
+          }
+        },
+        "2026": {
+          "1": {
+            "loss_rec": 8218.408744812012,
+            "total_loss": 8221.716797391
+          },
+          "200": {
+            "loss_rec": 429.87623135248816,
+            "total_loss": 545.2101828449133
+          }
+        },
+        "42": {
+          "1": {
+            "loss_rec": 8300.492813110352,
+            "total_loss": 8303.899173948246
+          },
+          "200": {
+            "loss_rec": 443.09892861048377,
+            "total_loss": 560.1566481921909
+          }
+        }
+      },
+      "note": "per-seed epoch-mean training losses; descriptive only, NOT a performance metric"
+    },
+    "primary_result_rule": "MEAN_AND_STD_OVER_ALL_THREE_SEEDS",
+    "training_metadata": {
+      "checkpoint_events_each": 21,
+      "epochs_each": 200,
+      "final_checkpoint_exists_each": true,
+      "numerically_finite_each": true,
+      "official_files_each": 63,
+      "optimizer_steps_each": 3200,
+      "runner_state_sidecars_each": 0,
+      "seeds_completed": "3/3",
+      "siw_access_total": 0,
+      "test_access_total": 0,
+      "val_access_total": 0
+    },
+    "wall_clock_note": "training speed is not an acceptance gate and not a comparison metric"
+  },
+  "authority_note": "Training authority for all three successful seeds is d9ecbef (checkpoint-context fix); the seed closure commits and this family closure are evidence/reporting only.",
+  "classification": "E06B_THREE_SEED_SCIENTIFIC_TRAINING_CLOSURE",
+  "confirmations": {
+    "additional_seed_launched": false,
+    "attempt1_counted": false,
+    "bank_generation": false,
+    "best_seed_selection": false,
+    "downstream_evaluation": false,
+    "e05_started": false,
+    "gpat_started": false,
+    "other_method_started": false,
+    "preferred_seed_selection": false,
+    "replacement_seed": false,
+    "run_root_mutated": false,
+    "seed_dropped": false,
+    "siw_used": false,
+    "test_used": false,
+    "val_checkpoint_selection": false
+  },
+  "different_by_design": {
+    "also": "seed-derived shuffle / partner / noise draws, learned model and checkpoint bytes",
+    "manifest_fields": [
+      "command_line",
+      "end_utc",
+      "experiment_seed",
+      "run_id",
+      "run_uuid",
+      "start_utc"
+    ],
+    "resolved_config_lines": {
+      "1337": [
+        "  experiment_seed: 1337",
+        "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_1337"
+      ],
+      "2026": [
+        "  experiment_seed: 2026",
+        "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_2026"
+      ],
+      "42": []
+    },
+    "run_start_seeding": {
+      "1337": 1337,
+      "2026": 2026,
+      "42": 42
+    }
+  },
+  "excluded_history": {
+    "authority": "24f7049b894330574b84d11baeb40ed4a7fb3c6b",
+    "classification": "FAILED_TECHNICAL_CHECKPOINT_WRITER_BUG",
+    "counted": false,
+    "eligible_for_bank": false,
+    "eligible_for_downstream": false,
+    "file_count": 14,
+    "listing_digest_path_size_sha256": "8ce8d5a8be3ec6179ef4299a51ab7903383bb963307e809d50c7e2dd9d91f6ca",
+    "member": false,
+    "role": "seed42 failed technical history only (epoch 1 / step 16, 0 checkpoints); archived under diagnostics/m6, outside runs/",
+    "run_id": "d3c0ddd5dc82a4a1",
+    "seed": 42,
+    "selectable": false
+  },
+  "failed_gates": [],
+  "family": {
+    "completed_seeds": 3,
+    "composition_note": "exactly the three frozen experiment seeds; no fourth, replacement, preferred or dropped seed, and no cross-seed choice",
+    "dropped_seeds": [],
+    "replacement_seeds": [],
+    "run_ids": {
+      "1337": "9ffda3ea3f6cc767",
+      "2026": "ec71778b28479de5",
+      "42": "aa96129289d080ba"
+    },
+    "scientific_runs": 3,
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "successful_attempt_per_seed": {
+      "1337": 1,
+      "2026": 1,
+      "42": 2
+    }
+  },
+  "final_checkpoints": [
+    {
+      "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87",
+      "checkpoint_size_bytes": 79577600,
+      "completed_epoch": 200,
+      "completion_status": "completed",
+      "final_netG_path": "checkpoints/netG_model_epoch_200_iter_0.pth",
+      "final_netG_sha256": "d56122e0cf363a6c870e29b394998732f4bcdaf35a96a6110e937905b64ff8aa",
+      "global_step": 3200,
+      "metrics_sha256": "bcdbefd87d352ead75a158e7324c189ca7499b7e946be619b8af23524f11099d",
+      "run_id": "aa96129289d080ba",
+      "run_root_mtime_listing_digest": "6f71e3d8ee4093dddc7907dd0db02bb209353b7d707f20f8aaa71f221b24be75",
+      "run_root_sha_listing_digest": "71f8f357a563cf9b2b691490073309756cb33029dd0db1a9199a101922575575",
+      "seed": 42,
+      "seed_closure_commit": "1f546c9fab1e284efd9deaef18ab7d415ff2c2ee",
+      "siw_access": 0,
+      "test_access": 0,
+      "val_access": 0
+    },
+    {
+      "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87",
+      "checkpoint_size_bytes": 79577600,
+      "completed_epoch": 200,
+      "completion_status": "completed",
+      "final_netG_path": "checkpoints/netG_model_epoch_200_iter_0.pth",
+      "final_netG_sha256": "645538e866a6d835a1bc35240c2f15c27296742850df96d722fd4d38609b4f53",
+      "global_step": 3200,
+      "metrics_sha256": "4ee2b6164f400c7cda6839a5cbfeeb6469ba0f469cb1859c828d6ba6f407be3d",
+      "run_id": "9ffda3ea3f6cc767",
+      "run_root_mtime_listing_digest": "c534146d36fa19c6e9cee89130341b40068a9e56a46d6d177cca677b7395ce8f",
+      "run_root_sha_listing_digest": "f2cc290eb1a3b38b072958eb3cce17cdf0e290bb4715c300d073e8c249fe4f4e",
+      "seed": 1337,
+      "seed_closure_commit": "a8a7b5dd9a1fd5cd8e82b870162732163b2859f9",
+      "siw_access": 0,
+      "test_access": 0,
+      "val_access": 0
+    },
+    {
+      "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87",
+      "checkpoint_size_bytes": 79577600,
+      "completed_epoch": 200,
+      "completion_status": "completed",
+      "final_netG_path": "checkpoints/netG_model_epoch_200_iter_0.pth",
+      "final_netG_sha256": "e8d0d01cfdb59b92d0f24318ab4fec042188bf0a72f9c59054ea10204a326cad",
+      "global_step": 3200,
+      "metrics_sha256": "0442a4ad100d930ba7bc84ac9df36573b5250c89d4a1b244f5a91519a9dcdea0",
+      "run_id": "ec71778b28479de5",
+      "run_root_mtime_listing_digest": "efd862e49ac1f05e695ee4a78de55669f350e22dfdcd3402e127402e6e48b32f",
+      "run_root_sha_listing_digest": "7f03af4324673e9a0ba2095e7db4ff145f68a8771f566f5a53e36b36d563d69f",
+      "seed": 2026,
+      "seed_closure_commit": "1729333197c5caab7a0d4d9302f1d3274ac90d98",
+      "siw_access": 0,
+      "test_access": 0,
+      "val_access": 0
+    }
+  ],
+  "final_checkpoints_csv": "outputs/audit/E06B_THREE_SEED_FINAL_CHECKPOINTS.csv",
+  "final_checkpoints_csv_sha256": "9d9daaee9b8b0b92298b271c5cbabcadb6cf7ae157f0b1bf58afb1476e8389c6",
+  "firewall": {
+    "note": "per-seed stat-only relatime atime snapshots: 992/992 CASIA+MSU TEST and 1088/1088 VAL faces sensitive and unchanged in every run; SiW unchanged in every run (SiW TEST/VAL fully sensitive); no VAL pass; upstream \"test\" block = TRAIN visualization, not benchmark TEST",
+    "siw_access": 0,
+    "test_access": 0,
+    "val_access": 0
+  },
+  "frozen": {
+    "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+    "contract_sha256": "fe287ebe1ec9c19e5f63a40f1498e41f5b7044014c2cc7eb6279a32604555058",
+    "environment_lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+    "freeze_record_sha256": "2ec58a8aaf903c9e3944e8ec622229eaeb228acfb6bf0e01ad0021aa8c00a511",
+    "identities": {
+      "config_sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+      "contract_sha256": "fe287ebe1ec9c19e5f63a40f1498e41f5b7044014c2cc7eb6279a32604555058",
+      "environment_lock_sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+      "freeze_record_sha256": "2ec58a8aaf903c9e3944e8ec622229eaeb228acfb6bf0e01ad0021aa8c00a511",
+      "lightcnn_sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+      "logging_contract_sha256": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+      "m6d5c_v1_overlay_sha256": "aa9d70899f950c461ea801e6f92537e71a072e54f6f2a54d08b291945fd487d7",
+      "m6d5d_v2_overlay_sha256": "f1ea0543f51b2403399080ccc2a3856ab2c0f07e5e0a962603357d7a7d83ec97",
+      "m6fc_evidence_sha256": "bc638cf3548ac170e3d9d7d0f7263d768aebabf1cc7a99c1b743f54d931f12b2",
+      "runtime_fidelity_assessment": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+      "source_commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+      "source_tree": "0d2216bdbdd9977130db1100641abf336f46ac9d",
+      "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+    },
+    "lightcnn_sha256": "d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964",
+    "loader": {
+      "batch_sampler": "BatchSampler(240, drop_last=False)",
+      "batch_size": 240,
+      "drop_last": false,
+      "len_batches": 16,
+      "num_workers": 8,
+      "persistent_workers": false,
+      "pin_memory": true,
+      "rows": 3720,
+      "sampler": "RandomSampler(replacement=False, generator=G)",
+      "shuffle": true,
+      "worker_init_fn": "seed_torch_worker"
+    },
+    "population": {
+      "casia_fasd": {
+        "live": 840,
+        "print": 1680,
+        "replay": 840,
+        "spoof": 2520,
+        "subjects": 35
+      },
+      "msu_mfsd": {
+        "live": 400,
+        "print": 400,
+        "replay": 800,
+        "spoof": 1200,
+        "subjects": 25
+      },
+      "total": {
+        "live": 1240,
+        "print": 2080,
+        "replay": 1640,
+        "spoof": 3720,
+        "subjects": 60
+      }
+    },
+    "source_commit": "16b793a7564a4b9308cf94e62bdb2ffacb3a725a",
+    "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+  },
+  "gates": [
+    {
+      "detail": [
+        "E06B_SEED1337_COMPLETION.json",
+        "E06B_SEED2026_COMPLETION.json",
+        "E06B_SEED42_COMPLETION.json"
+      ],
+      "gate": "A.exact_seed_evidence_set",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.rederives",
+      "pass": true
+    },
+    {
+      "detail": "1f546c9fab1e284efd9deaef18ab7d415ff2c2ee",
+      "gate": "A.seed42.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.rederives",
+      "pass": true
+    },
+    {
+      "detail": "a8a7b5dd9a1fd5cd8e82b870162732163b2859f9",
+      "gate": "A.seed1337.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.rederives",
+      "pass": true
+    },
+    {
+      "detail": "1729333197c5caab7a0d4d9302f1d3274ac90d98",
+      "gate": "A.seed2026.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "detail": "E06B_SEED42_COMPLETED_CLEANLY",
+      "gate": "B.seed42.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": "E06B_SEED1337_COMPLETED_CLEANLY",
+      "gate": "B.seed1337.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": "E06B_SEED2026_COMPLETED_CLEANLY",
+      "gate": "B.seed2026.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": {
+        "42": 84,
+        "1337": 84,
+        "2026": 84
+      },
+      "gate": "B.same_gate_count",
+      "pass": true
+    },
+    {
+      "gate": "B.same_gate_semantics",
+      "pass": true
+    },
+    {
+      "gate": "C.seed42.authority",
+      "pass": true
+    },
+    {
+      "detail": "aa96129289d080ba",
+      "gate": "C.seed42.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.seed1337.authority",
+      "pass": true
+    },
+    {
+      "detail": "9ffda3ea3f6cc767",
+      "gate": "C.seed1337.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.seed2026.authority",
+      "pass": true
+    },
+    {
+      "detail": "ec71778b28479de5",
+      "gate": "C.seed2026.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.run_ids_distinct",
+      "pass": true
+    },
+    {
+      "gate": "C.method",
+      "pass": true
+    },
+    {
+      "gate": "C.frozen_config_sha",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "C.manifest_common_fields_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.manifest_seed_fields",
+      "pass": true
+    },
+    {
+      "gate": "C.command_line_differs_only_by_seed",
+      "pass": true
+    },
+    {
+      "detail": [
+        "config_sha256",
+        "contract_sha256",
+        "environment_lock_sha256",
+        "freeze_record_sha256",
+        "lightcnn_sha256",
+        "logging_contract_sha256",
+        "m6d5c_v1_overlay_sha256",
+        "m6d5d_v2_overlay_sha256",
+        "m6fc_evidence_sha256",
+        "runtime_fidelity_assessment",
+        "source_commit",
+        "source_tree",
+        "split_manifest_sha256"
+      ],
+      "gate": "C.identities_equal",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "C.run_start_blocks_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.seeding_differs_only_by_seed",
+      "pass": true
+    },
+    {
+      "gate": "C.loader_workers8",
+      "pass": true
+    },
+    {
+      "gate": "C.lightcnn_environment_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.source_and_split_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.population_rederived_equal",
+      "pass": true
+    },
+    {
+      "detail": {
+        "42": [],
+        "1337": [
+          "  experiment_seed: 1337",
+          "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_1337"
+        ],
+        "2026": [
+          "  experiment_seed: 2026",
+          "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_2026"
+        ]
+      },
+      "gate": "C.resolved_config_differs_only_by_seed",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.completed_200_3200",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.order_and_pairs_independently_predicted",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.native_pairing",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.completed_200_3200",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.order_and_pairs_independently_predicted",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.native_pairing",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.completed_200_3200",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.order_and_pairs_independently_predicted",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.native_pairing",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.same_epoch_plan",
+      "pass": true
+    },
+    {
+      "gate": "D.seed_streams_differ",
+      "pass": true
+    },
+    {
+      "gate": "E.seed42.finite_active",
+      "pass": true
+    },
+    {
+      "gate": "E.seed1337.finite_active",
+      "pass": true
+    },
+    {
+      "gate": "E.seed2026.finite_active",
+      "pass": true
+    },
+    {
+      "gate": "F.seed42.single_final_netG",
+      "pass": true
+    },
+    {
+      "gate": "F.seed42.known_final_sha",
+      "pass": true
+    },
+    {
+      "gate": "F.seed1337.single_final_netG",
+      "pass": true
+    },
+    {
+      "gate": "F.seed1337.known_final_sha",
+      "pass": true
+    },
+    {
+      "gate": "F.seed2026.single_final_netG",
+      "pass": true
+    },
+    {
+      "gate": "F.final_netG_distinct",
+      "pass": true
+    },
+    {
+      "gate": "F.run_roots_distinct",
+      "pass": true
+    },
+    {
+      "gate": "G.seed42.val_0_test_0_siw_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed42.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "gate": "G.seed1337.val_0_test_0_siw_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed1337.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "gate": "G.seed2026.val_0_test_0_siw_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed2026.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "gate": "H.attempt1_not_a_member",
+      "pass": true
+    },
+    {
+      "gate": "H.attempt1_classified_nonselectable",
+      "pass": true
+    },
+    {
+      "detail": {
+        "exists": true,
+        "file_count": 14,
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/diagnostics/m6/E06B_SEED42_ATTEMPT1_d3c0ddd5dc82a4a1_CHECKPOINT_WRITER_FAILURE",
+        "sha_listing_digest": "8ce8d5a8be3ec6179ef4299a51ab7903383bb963307e809d50c7e2dd9d91f6ca",
+        "under_runs": false
+      },
+      "gate": "H.attempt1_archived_untouched",
+      "pass": true
+    },
+    {
+      "detail": [
+        ".seed_1337.lock",
+        ".seed_2026.lock",
+        ".seed_42.lock",
+        "seed_1337",
+        "seed_2026",
+        "seed_42"
+      ],
+      "gate": "I.host_parent_exactly_three_seeds",
+      "pass": true
+    },
+    {
+      "gate": "I.seed42.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "gate": "I.seed1337.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "gate": "I.seed2026.host_matches_evidence",
+      "pass": true
+    }
+  ],
+  "host_recheck": {
+    "attempt1_archive": {
+      "exists": true,
+      "file_count": 14,
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/diagnostics/m6/E06B_SEED42_ATTEMPT1_d3c0ddd5dc82a4a1_CHECKPOINT_WRITER_FAILURE",
+      "sha_listing_digest": "8ce8d5a8be3ec6179ef4299a51ab7903383bb963307e809d50c7e2dd9d91f6ca",
+      "under_runs": false
+    },
+    "parent_listing": [
+      ".seed_1337.lock",
+      ".seed_2026.lock",
+      ".seed_42.lock",
+      "seed_1337",
+      "seed_2026",
+      "seed_42"
+    ],
+    "seeds": {
+      "1337": {
+        "file_count": 197,
+        "final_netG_bytes": 79577600,
+        "final_netG_sha256": "645538e866a6d835a1bc35240c2f15c27296742850df96d722fd4d38609b4f53",
+        "listing_digest": "c534146d36fa19c6e9cee89130341b40068a9e56a46d6d177cca677b7395ce8f",
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "4ee2b6164f400c7cda6839a5cbfeeb6469ba0f469cb1859c828d6ba6f407be3d",
+        "resolved_config_sha256": "9f45b231b2449cc8cf88685da068d6aa58e33198c40be41210f63b5b6841f433",
+        "resolved_config_yaml": "version: e06b_m6fb_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-29'\nmilestone: M6FB\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\ncontract_resolution: outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json\ncontract_resolution_sha256: fe287ebe1ec9c19e5f63a40f1498e41f5b7044014c2cc7eb6279a32604555058\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E06b\nmethod_name: DSDG-NATIVE\ndisplay_name: DSDG-NATIVE (Track B secondary native/full supervision)\ntrack: B_NATIVE_FULL_SECONDARY\nspec_section: 5.2 + 8.6 + 17\ntarget_fidelity: FAITHFUL_OFFICIAL\nfinal_execution_fidelity: PENDING_M6F_C_RUNTIME_QUALIFICATION\nfidelity_class: PENDING_M6F_C_RUNTIME_QUALIFICATION\nfidelity_provenance:\n- SPEC_8_6_TARGET_FAITHFUL_OFFICIAL\n- M6FA_CONTRACT_RESOLUTION\nfidelity_note: The final execution fidelity is NOT claimed here. It is assessed after\n  the M6F-C runtime qualification of the candidate microbatch execution mapping; this\n  frozen field is never rewritten (E03 precedent).\nreporting_label: DSDG-NATIVE (Track B, CASIA + MSU native same-subject)\nforbidden_wording:\n- primary fair comparison\n- Track A\n- identity-free\ndeviation: null\nlearned_method: true\nsource:\n  repository: https://github.com/JDAI-CV/FaceX-Zoo\n  pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a\n  relevant_path: addition_module/DSDG\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/facexzoo\n  execution_entrypoint: README -> train_generator.sh -> argparse\n  train_generator_sh_git_blob: 7fcb3f8648137ea16f53e290dba2668ec540a35d\n  weight_bytes_from_source_cache: NONE\n  shared_pin_with:\n  - E06a\n  - E06c\n  new_source_pin: false\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; the official source has no validation.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  split_read: TRAIN filter at read; allowlisted columns only; no TEST row materialized\n  columns_consumed:\n  - sample_id\n  - dataset\n  - subject_id_global\n  - label_binary\n  - attack_macro\n  - split\n  - m2_status\n  required_m2_status: COMPLETE\nnative_population:\n  train_datasets:\n  - casia_fasd\n  - msu_mfsd\n  non_instantiable:\n    siwmv2:\n      status: NOT_INSTANTIABLE_MISSING_SUBJECT_ID\n      rows_used: 0\n      reason: 0 of 9507 SiW TRAIN rows carry subject_id_global (Q-14); identity is\n        never fabricated\n      dev_013_same_person_evidence: FORBIDDEN\n      pseudo_identity: FORBIDDEN\n  expected:\n    casia_fasd:\n      spoof: 2520\n      live: 840\n      subjects: 35\n      print: 1680\n      replay: 840\n    msu_mfsd:\n      spoof: 1200\n      live: 400\n      subjects: 25\n      print: 400\n      replay: 800\n    total:\n      spoof: 3720\n      live: 1240\n      subjects: 60\n      print: 2080\n      replay: 1640\n  every_spoof_has_same_subject_live_pool: true\nnative_relation:\n  semantics: SAME_SUBJECT_ONLINE_RANDOM\n  indexed_by: SPOOF_SAMPLES\n  identity_key: subject_id_global\n  identity_key_use: SAMPLING_ONLY\n  live_partner: random.choice over the SAME subject's TRAIN live pool, drawn on every\n    item load (every epoch)\n  official_source: addition_module/DSDG/data/generation_dataset.py:48,87,93\n  rng: python_random_module_in_dataloader_worker\n  materialized_pair_list: false\n  native_manifest: NOT_CREATED\n  built_at: runtime_in_memory_from_split_v1_train_rows\n  spoof_index_order: ASCENDING_SAMPLE_ID_BYTEWISE\n  live_pool_order: ASCENDING_SAMPLE_ID_BYTEWISE_WITHIN_SUBJECT\n  input: canonical_faces_256_rgb_uint8_to_float32_div_255\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  failure_policy: 'one seed fails: rerun same seed after technical fix; never replace\n    (spec 27)'\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  effective_batch_size: 240\n  effective_batch_is_native_hyperparameter: true\n  physical_batch_reduction_allowed: true\n  physical_batch_reduction_requires: global-statistic-preserving microbatch execution\n    qualified in M6F-C\n  all_epochs: 200\n  pre_epoch: 0\n  hdim: 128\n  attack_type: 2\n  attack_type_official: 4\n  attack_type_note: K = 2 is the data-derived attack_macro cardinality of the CASIA+MSU\n    TRAIN spoof population; OULU's 4 is not a benchmark class space\n  test_epoch: 10\n  workers: 8\n  workers_policy: FROZEN_AFFECTS_LIVE_PARTNER_DRAWS\n  shuffle: true\n  drop_last: false\n  scheduler: null\noptimizer:\n  name: Adam\n  learning_rate: 0.0002\n  learning_rate_source: argparse fall-through (train_generator.py:22); train_generator.sh\n    does not pass --lr\n  scope: netE_nir + netE_vis + netG\n  netCls_in_optimizer: false\n  netCls_note: 'official behaviour: the classifier head stays at initialisation while\n    loss_cls backpropagates into the encoder'\nlosses:\n  lambda_mmd: 50\n  lambda_ip: 1000\n  lambda_type: 10\n  lambda_ort: 1\n  lambda_pair: 5\n  lambda_pair_source: train_generator.sh:17 (passed via --lambda_pair at :29); argparse\n    default 0.5 is not executed\n  retained:\n  - loss_rec\n  - loss_kl\n  - loss_mmd\n  - loss_ip\n  - loss_pair\n  - loss_cls\n  - loss_ort\n  removed: []\n  loss_cls_active: true\n  loss_pair_active: true\n  assembly: 'unweighted sum: rec + kl + mmd + ip + pair + cls + ort'\n  warmup: epochs < 2 scale every term except loss_rec by 0.01\n  coefficients_retuned: false\nspoof_type_supervision:\n  target: attack_macro\n  vocabulary:\n  - print\n  - replay\n  class_index:\n    print: 0\n    replay: 1\n  num_spoof_classes: 2\n  unexpected_macro: REJECT_NO_REMAP\n  attack_raw_as_target: FORBIDDEN\nidentity_preserving_net:\n  architecture: LightCNN-29 v2\n  frozen: true\n  eval_mode: true\n  input: 128x128_grayscale\n  loaded_via: define_IP()\n  loader_is_non_strict: true\nexternal_assets:\n- name: lightcnn_29_v2_checkpoint\n  official_path_in_source: ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar\n  external_runtime_path: /media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar\n  sha256: d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964\n  bytes: 123844849\n  provenance: outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json\n  weight_bytes_from_source_cache: false\n  weight_bytes_in_git: false\n  compatibility: 60/60 define_IP() parameters matched with exact shapes; 0 missing;\n    0 shape mismatches\n  fixed_across_experiment_seeds: true\nsupervision: native_attack_macro_spoof_type_plus_same_subject_identity_pairing\nsubject_id_global_consumed: SAMPLING_ONLY\nloader:\n  batch_size: 240\n  shuffle: true\n  sampler: RandomSampler(replacement=False) created by DataLoader(shuffle=True, generator=G)\n  generator: torch.Generator().manual_seed(experiment_seed)\n  num_workers: 8\n  worker_init_fn: methods.common.learned.seed_torch_worker\n  worker_python_random_seed: torch.initial_seed() mod 2**32 in each worker = (per-epoch\n    loader base seed + worker_id) mod 2**32\n  worker_batch_assignment: worker w serves global batches w, w + 8, w + 16, ... of\n    each epoch, items in index order\n  persistent_workers: false\n  pin_memory: true\n  drop_last: false\n  chunking: after_loading_on_device\n  forbidden:\n  - weighted sampling\n  - class balancing\n  - padding\n  - wraparound\n  - sampler replacement\n  - drop_last=True\n  - changing num_workers\n  - persistent_workers=True\nepoch_plan:\n  rows: 3720\n  global_batches: 15 x 240 + 120\n  optimizer_steps_per_epoch: 16\n  total_optimizer_steps: 3200\nexecution_candidate:\n  status: CANDIDATE_NOT_YET_QUALIFIED\n  mode: GLOBAL_STATISTIC_PRESERVING_MICROBATCH\n  reused_from:\n  - M6D5c\n  - M6D5d\n  classification: EXECUTION_RUNTIME_COMPATIBILITY\n  scientific_method_change: false\n  microbatch: 20\n  microbatches_full_batch: 12\n  microbatches_tail_batch: 6\n  global_statistic_terms:\n  - loss_mmd\n  - loss_ort\n  chunk_weighted_mean_terms:\n  - loss_rec\n  - loss_kl\n  - loss_ip\n  - loss_cls\n  - loss_pair\n  precision: FP32\n  amp: false\n  tf32: false\n  physical_batch_240: OOM_ON_RTX3090_E06C_M6D5B\n  qualification_milestone: M6F-C\ncheckpoint:\n  cadence: save_epoch_10\n  cadence_note: 'official: epoch 1 and every 10 epochs (train_generator.py:214)'\n  rule: OFFICIAL_GENERATOR_EPOCH_200\n  rule_source: SOURCE_RESOLVED\n  official_default_file: netG_model_epoch_200_iter_0.pth\n  baseline_final_state_v1_overrides_this: false\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\n  periodic_test_block_note: the official periodic 'test' block only writes sample\n    images; it is NOT validation\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning: NOT_AUTHORIZED\n  if_pruned_later: metadata_and_sha256_records_must_remain\ngeneration:\n  n_syn_intended: DEFERRED_TO_M8\n  n_syn_status: GENUINELY_AMBIGUOUS_DEFERRED_TO_M8_TRACK_B_GENERATION_DECISION\n  n_syn_candidates_not_chosen:\n  - pooled 8838 (spec 7)\n  - native coverage 3720\n  blocks_m6: false\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E06b/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6fb: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - data.splits\n  - seeds.experiment_seeds\n  - target_fidelity\n  - spoof_type_supervision.target\n  AMENDMENT_A1:\n  - track\n  - native_population.train_datasets\n  - native_population.non_instantiable\n  OFFICIAL_CODE:\n  - training.all_epochs\n  - training.effective_batch_size\n  - training.hdim\n  - training.workers\n  - training.test_epoch\n  - training.pre_epoch\n  - optimizer\n  - losses.lambda_mmd\n  - losses.lambda_ip\n  - losses.lambda_pair\n  - losses.lambda_type\n  - losses.lambda_ort\n  - losses.warmup\n  - native_relation.semantics\n  - checkpoint.cadence\n  - checkpoint.rule\n  - identity_preserving_net\n  DATA_DERIVED:\n  - native_population.expected\n  - spoof_type_supervision.vocabulary\n  - training.attack_type\n  OFFICIAL_CODE_AND_FROZEN_TAXONOMY:\n  - spoof_type_supervision.class_index\n  M6B_POLICY_AND_A2_01_PRECEDENT:\n  - native_relation.spoof_index_order\n  - native_relation.live_pool_order\n  M6D5E_EXECUTION_RECORD:\n  - loader\n  M6D5C_M6D5D_EXECUTION_RECORDS:\n  - execution_candidate\n  M6A4:\n  - external_assets\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n  M6FA_DEFERRAL:\n  - generation\n_resolved:\n  method_id: E06b\n  experiment_seed: 1337\n  config_path: configs/methods/e06b_dsdg_native.yaml\n  config_sha256: 9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f\n  snapshot_path: frozen_config_snapshot/configs/methods/e06b_dsdg_native.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_1337\n  git_commit: d9ecbef7295fc6b41ced6a4966b49810d36a8c87\n  source_commits:\n    https://github.com/JDAI-CV/FaceX-Zoo: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config. No scientific value was overridden.\n",
+        "sha_listing_count": 197,
+        "sha_listing_digest": "f2cc290eb1a3b38b072958eb3cce17cdf0e290bb4715c300d073e8c249fe4f4e"
+      },
+      "2026": {
+        "file_count": 197,
+        "final_netG_bytes": 79577600,
+        "final_netG_sha256": "e8d0d01cfdb59b92d0f24318ab4fec042188bf0a72f9c59054ea10204a326cad",
+        "listing_digest": "efd862e49ac1f05e695ee4a78de55669f350e22dfdcd3402e127402e6e48b32f",
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "0442a4ad100d930ba7bc84ac9df36573b5250c89d4a1b244f5a91519a9dcdea0",
+        "resolved_config_sha256": "0272fdf09a150301503df5cfe3ca3f847d82869e8d1fb48366e7ee84077a474a",
+        "resolved_config_yaml": "version: e06b_m6fb_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-29'\nmilestone: M6FB\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\ncontract_resolution: outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json\ncontract_resolution_sha256: fe287ebe1ec9c19e5f63a40f1498e41f5b7044014c2cc7eb6279a32604555058\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E06b\nmethod_name: DSDG-NATIVE\ndisplay_name: DSDG-NATIVE (Track B secondary native/full supervision)\ntrack: B_NATIVE_FULL_SECONDARY\nspec_section: 5.2 + 8.6 + 17\ntarget_fidelity: FAITHFUL_OFFICIAL\nfinal_execution_fidelity: PENDING_M6F_C_RUNTIME_QUALIFICATION\nfidelity_class: PENDING_M6F_C_RUNTIME_QUALIFICATION\nfidelity_provenance:\n- SPEC_8_6_TARGET_FAITHFUL_OFFICIAL\n- M6FA_CONTRACT_RESOLUTION\nfidelity_note: The final execution fidelity is NOT claimed here. It is assessed after\n  the M6F-C runtime qualification of the candidate microbatch execution mapping; this\n  frozen field is never rewritten (E03 precedent).\nreporting_label: DSDG-NATIVE (Track B, CASIA + MSU native same-subject)\nforbidden_wording:\n- primary fair comparison\n- Track A\n- identity-free\ndeviation: null\nlearned_method: true\nsource:\n  repository: https://github.com/JDAI-CV/FaceX-Zoo\n  pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a\n  relevant_path: addition_module/DSDG\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/facexzoo\n  execution_entrypoint: README -> train_generator.sh -> argparse\n  train_generator_sh_git_blob: 7fcb3f8648137ea16f53e290dba2668ec540a35d\n  weight_bytes_from_source_cache: NONE\n  shared_pin_with:\n  - E06a\n  - E06c\n  new_source_pin: false\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; the official source has no validation.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  split_read: TRAIN filter at read; allowlisted columns only; no TEST row materialized\n  columns_consumed:\n  - sample_id\n  - dataset\n  - subject_id_global\n  - label_binary\n  - attack_macro\n  - split\n  - m2_status\n  required_m2_status: COMPLETE\nnative_population:\n  train_datasets:\n  - casia_fasd\n  - msu_mfsd\n  non_instantiable:\n    siwmv2:\n      status: NOT_INSTANTIABLE_MISSING_SUBJECT_ID\n      rows_used: 0\n      reason: 0 of 9507 SiW TRAIN rows carry subject_id_global (Q-14); identity is\n        never fabricated\n      dev_013_same_person_evidence: FORBIDDEN\n      pseudo_identity: FORBIDDEN\n  expected:\n    casia_fasd:\n      spoof: 2520\n      live: 840\n      subjects: 35\n      print: 1680\n      replay: 840\n    msu_mfsd:\n      spoof: 1200\n      live: 400\n      subjects: 25\n      print: 400\n      replay: 800\n    total:\n      spoof: 3720\n      live: 1240\n      subjects: 60\n      print: 2080\n      replay: 1640\n  every_spoof_has_same_subject_live_pool: true\nnative_relation:\n  semantics: SAME_SUBJECT_ONLINE_RANDOM\n  indexed_by: SPOOF_SAMPLES\n  identity_key: subject_id_global\n  identity_key_use: SAMPLING_ONLY\n  live_partner: random.choice over the SAME subject's TRAIN live pool, drawn on every\n    item load (every epoch)\n  official_source: addition_module/DSDG/data/generation_dataset.py:48,87,93\n  rng: python_random_module_in_dataloader_worker\n  materialized_pair_list: false\n  native_manifest: NOT_CREATED\n  built_at: runtime_in_memory_from_split_v1_train_rows\n  spoof_index_order: ASCENDING_SAMPLE_ID_BYTEWISE\n  live_pool_order: ASCENDING_SAMPLE_ID_BYTEWISE_WITHIN_SUBJECT\n  input: canonical_faces_256_rgb_uint8_to_float32_div_255\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  failure_policy: 'one seed fails: rerun same seed after technical fix; never replace\n    (spec 27)'\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  effective_batch_size: 240\n  effective_batch_is_native_hyperparameter: true\n  physical_batch_reduction_allowed: true\n  physical_batch_reduction_requires: global-statistic-preserving microbatch execution\n    qualified in M6F-C\n  all_epochs: 200\n  pre_epoch: 0\n  hdim: 128\n  attack_type: 2\n  attack_type_official: 4\n  attack_type_note: K = 2 is the data-derived attack_macro cardinality of the CASIA+MSU\n    TRAIN spoof population; OULU's 4 is not a benchmark class space\n  test_epoch: 10\n  workers: 8\n  workers_policy: FROZEN_AFFECTS_LIVE_PARTNER_DRAWS\n  shuffle: true\n  drop_last: false\n  scheduler: null\noptimizer:\n  name: Adam\n  learning_rate: 0.0002\n  learning_rate_source: argparse fall-through (train_generator.py:22); train_generator.sh\n    does not pass --lr\n  scope: netE_nir + netE_vis + netG\n  netCls_in_optimizer: false\n  netCls_note: 'official behaviour: the classifier head stays at initialisation while\n    loss_cls backpropagates into the encoder'\nlosses:\n  lambda_mmd: 50\n  lambda_ip: 1000\n  lambda_type: 10\n  lambda_ort: 1\n  lambda_pair: 5\n  lambda_pair_source: train_generator.sh:17 (passed via --lambda_pair at :29); argparse\n    default 0.5 is not executed\n  retained:\n  - loss_rec\n  - loss_kl\n  - loss_mmd\n  - loss_ip\n  - loss_pair\n  - loss_cls\n  - loss_ort\n  removed: []\n  loss_cls_active: true\n  loss_pair_active: true\n  assembly: 'unweighted sum: rec + kl + mmd + ip + pair + cls + ort'\n  warmup: epochs < 2 scale every term except loss_rec by 0.01\n  coefficients_retuned: false\nspoof_type_supervision:\n  target: attack_macro\n  vocabulary:\n  - print\n  - replay\n  class_index:\n    print: 0\n    replay: 1\n  num_spoof_classes: 2\n  unexpected_macro: REJECT_NO_REMAP\n  attack_raw_as_target: FORBIDDEN\nidentity_preserving_net:\n  architecture: LightCNN-29 v2\n  frozen: true\n  eval_mode: true\n  input: 128x128_grayscale\n  loaded_via: define_IP()\n  loader_is_non_strict: true\nexternal_assets:\n- name: lightcnn_29_v2_checkpoint\n  official_path_in_source: ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar\n  external_runtime_path: /media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar\n  sha256: d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964\n  bytes: 123844849\n  provenance: outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json\n  weight_bytes_from_source_cache: false\n  weight_bytes_in_git: false\n  compatibility: 60/60 define_IP() parameters matched with exact shapes; 0 missing;\n    0 shape mismatches\n  fixed_across_experiment_seeds: true\nsupervision: native_attack_macro_spoof_type_plus_same_subject_identity_pairing\nsubject_id_global_consumed: SAMPLING_ONLY\nloader:\n  batch_size: 240\n  shuffle: true\n  sampler: RandomSampler(replacement=False) created by DataLoader(shuffle=True, generator=G)\n  generator: torch.Generator().manual_seed(experiment_seed)\n  num_workers: 8\n  worker_init_fn: methods.common.learned.seed_torch_worker\n  worker_python_random_seed: torch.initial_seed() mod 2**32 in each worker = (per-epoch\n    loader base seed + worker_id) mod 2**32\n  worker_batch_assignment: worker w serves global batches w, w + 8, w + 16, ... of\n    each epoch, items in index order\n  persistent_workers: false\n  pin_memory: true\n  drop_last: false\n  chunking: after_loading_on_device\n  forbidden:\n  - weighted sampling\n  - class balancing\n  - padding\n  - wraparound\n  - sampler replacement\n  - drop_last=True\n  - changing num_workers\n  - persistent_workers=True\nepoch_plan:\n  rows: 3720\n  global_batches: 15 x 240 + 120\n  optimizer_steps_per_epoch: 16\n  total_optimizer_steps: 3200\nexecution_candidate:\n  status: CANDIDATE_NOT_YET_QUALIFIED\n  mode: GLOBAL_STATISTIC_PRESERVING_MICROBATCH\n  reused_from:\n  - M6D5c\n  - M6D5d\n  classification: EXECUTION_RUNTIME_COMPATIBILITY\n  scientific_method_change: false\n  microbatch: 20\n  microbatches_full_batch: 12\n  microbatches_tail_batch: 6\n  global_statistic_terms:\n  - loss_mmd\n  - loss_ort\n  chunk_weighted_mean_terms:\n  - loss_rec\n  - loss_kl\n  - loss_ip\n  - loss_cls\n  - loss_pair\n  precision: FP32\n  amp: false\n  tf32: false\n  physical_batch_240: OOM_ON_RTX3090_E06C_M6D5B\n  qualification_milestone: M6F-C\ncheckpoint:\n  cadence: save_epoch_10\n  cadence_note: 'official: epoch 1 and every 10 epochs (train_generator.py:214)'\n  rule: OFFICIAL_GENERATOR_EPOCH_200\n  rule_source: SOURCE_RESOLVED\n  official_default_file: netG_model_epoch_200_iter_0.pth\n  baseline_final_state_v1_overrides_this: false\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\n  periodic_test_block_note: the official periodic 'test' block only writes sample\n    images; it is NOT validation\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning: NOT_AUTHORIZED\n  if_pruned_later: metadata_and_sha256_records_must_remain\ngeneration:\n  n_syn_intended: DEFERRED_TO_M8\n  n_syn_status: GENUINELY_AMBIGUOUS_DEFERRED_TO_M8_TRACK_B_GENERATION_DECISION\n  n_syn_candidates_not_chosen:\n  - pooled 8838 (spec 7)\n  - native coverage 3720\n  blocks_m6: false\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E06b/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6fb: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - data.splits\n  - seeds.experiment_seeds\n  - target_fidelity\n  - spoof_type_supervision.target\n  AMENDMENT_A1:\n  - track\n  - native_population.train_datasets\n  - native_population.non_instantiable\n  OFFICIAL_CODE:\n  - training.all_epochs\n  - training.effective_batch_size\n  - training.hdim\n  - training.workers\n  - training.test_epoch\n  - training.pre_epoch\n  - optimizer\n  - losses.lambda_mmd\n  - losses.lambda_ip\n  - losses.lambda_pair\n  - losses.lambda_type\n  - losses.lambda_ort\n  - losses.warmup\n  - native_relation.semantics\n  - checkpoint.cadence\n  - checkpoint.rule\n  - identity_preserving_net\n  DATA_DERIVED:\n  - native_population.expected\n  - spoof_type_supervision.vocabulary\n  - training.attack_type\n  OFFICIAL_CODE_AND_FROZEN_TAXONOMY:\n  - spoof_type_supervision.class_index\n  M6B_POLICY_AND_A2_01_PRECEDENT:\n  - native_relation.spoof_index_order\n  - native_relation.live_pool_order\n  M6D5E_EXECUTION_RECORD:\n  - loader\n  M6D5C_M6D5D_EXECUTION_RECORDS:\n  - execution_candidate\n  M6A4:\n  - external_assets\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n  M6FA_DEFERRAL:\n  - generation\n_resolved:\n  method_id: E06b\n  experiment_seed: 2026\n  config_path: configs/methods/e06b_dsdg_native.yaml\n  config_sha256: 9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f\n  snapshot_path: frozen_config_snapshot/configs/methods/e06b_dsdg_native.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_2026\n  git_commit: d9ecbef7295fc6b41ced6a4966b49810d36a8c87\n  source_commits:\n    https://github.com/JDAI-CV/FaceX-Zoo: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config. No scientific value was overridden.\n",
+        "sha_listing_count": 197,
+        "sha_listing_digest": "7f03af4324673e9a0ba2095e7db4ff145f68a8771f566f5a53e36b36d563d69f"
+      },
+      "42": {
+        "file_count": 197,
+        "final_netG_bytes": 79577600,
+        "final_netG_sha256": "d56122e0cf363a6c870e29b394998732f4bcdaf35a96a6110e937905b64ff8aa",
+        "listing_digest": "6f71e3d8ee4093dddc7907dd0db02bb209353b7d707f20f8aaa71f221b24be75",
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "bcdbefd87d352ead75a158e7324c189ca7499b7e946be619b8af23524f11099d",
+        "resolved_config_sha256": "0eadd91f7eb4a9d13eb48e09b24c694f9ec0a30f76626e00305fe8d6ee0131b2",
+        "resolved_config_yaml": "version: e06b_m6fb_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-29'\nmilestone: M6FB\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\ncontract_resolution: outputs/audit/M6FA_E06B_CONTRACT_RESOLUTION.json\ncontract_resolution_sha256: fe287ebe1ec9c19e5f63a40f1498e41f5b7044014c2cc7eb6279a32604555058\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E06b\nmethod_name: DSDG-NATIVE\ndisplay_name: DSDG-NATIVE (Track B secondary native/full supervision)\ntrack: B_NATIVE_FULL_SECONDARY\nspec_section: 5.2 + 8.6 + 17\ntarget_fidelity: FAITHFUL_OFFICIAL\nfinal_execution_fidelity: PENDING_M6F_C_RUNTIME_QUALIFICATION\nfidelity_class: PENDING_M6F_C_RUNTIME_QUALIFICATION\nfidelity_provenance:\n- SPEC_8_6_TARGET_FAITHFUL_OFFICIAL\n- M6FA_CONTRACT_RESOLUTION\nfidelity_note: The final execution fidelity is NOT claimed here. It is assessed after\n  the M6F-C runtime qualification of the candidate microbatch execution mapping; this\n  frozen field is never rewritten (E03 precedent).\nreporting_label: DSDG-NATIVE (Track B, CASIA + MSU native same-subject)\nforbidden_wording:\n- primary fair comparison\n- Track A\n- identity-free\ndeviation: null\nlearned_method: true\nsource:\n  repository: https://github.com/JDAI-CV/FaceX-Zoo\n  pinned_commit: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a\n  relevant_path: addition_module/DSDG\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/facexzoo\n  execution_entrypoint: README -> train_generator.sh -> argparse\n  train_generator_sh_git_blob: 7fcb3f8648137ea16f53e290dba2668ec540a35d\n  weight_bytes_from_source_cache: NONE\n  shared_pin_with:\n  - E06a\n  - E06c\n  new_source_pin: false\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; the official source has no validation.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  split_read: TRAIN filter at read; allowlisted columns only; no TEST row materialized\n  columns_consumed:\n  - sample_id\n  - dataset\n  - subject_id_global\n  - label_binary\n  - attack_macro\n  - split\n  - m2_status\n  required_m2_status: COMPLETE\nnative_population:\n  train_datasets:\n  - casia_fasd\n  - msu_mfsd\n  non_instantiable:\n    siwmv2:\n      status: NOT_INSTANTIABLE_MISSING_SUBJECT_ID\n      rows_used: 0\n      reason: 0 of 9507 SiW TRAIN rows carry subject_id_global (Q-14); identity is\n        never fabricated\n      dev_013_same_person_evidence: FORBIDDEN\n      pseudo_identity: FORBIDDEN\n  expected:\n    casia_fasd:\n      spoof: 2520\n      live: 840\n      subjects: 35\n      print: 1680\n      replay: 840\n    msu_mfsd:\n      spoof: 1200\n      live: 400\n      subjects: 25\n      print: 400\n      replay: 800\n    total:\n      spoof: 3720\n      live: 1240\n      subjects: 60\n      print: 2080\n      replay: 1640\n  every_spoof_has_same_subject_live_pool: true\nnative_relation:\n  semantics: SAME_SUBJECT_ONLINE_RANDOM\n  indexed_by: SPOOF_SAMPLES\n  identity_key: subject_id_global\n  identity_key_use: SAMPLING_ONLY\n  live_partner: random.choice over the SAME subject's TRAIN live pool, drawn on every\n    item load (every epoch)\n  official_source: addition_module/DSDG/data/generation_dataset.py:48,87,93\n  rng: python_random_module_in_dataloader_worker\n  materialized_pair_list: false\n  native_manifest: NOT_CREATED\n  built_at: runtime_in_memory_from_split_v1_train_rows\n  spoof_index_order: ASCENDING_SAMPLE_ID_BYTEWISE\n  live_pool_order: ASCENDING_SAMPLE_ID_BYTEWISE_WITHIN_SUBJECT\n  input: canonical_faces_256_rgb_uint8_to_float32_div_255\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  failure_policy: 'one seed fails: rerun same seed after technical fix; never replace\n    (spec 27)'\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  effective_batch_size: 240\n  effective_batch_is_native_hyperparameter: true\n  physical_batch_reduction_allowed: true\n  physical_batch_reduction_requires: global-statistic-preserving microbatch execution\n    qualified in M6F-C\n  all_epochs: 200\n  pre_epoch: 0\n  hdim: 128\n  attack_type: 2\n  attack_type_official: 4\n  attack_type_note: K = 2 is the data-derived attack_macro cardinality of the CASIA+MSU\n    TRAIN spoof population; OULU's 4 is not a benchmark class space\n  test_epoch: 10\n  workers: 8\n  workers_policy: FROZEN_AFFECTS_LIVE_PARTNER_DRAWS\n  shuffle: true\n  drop_last: false\n  scheduler: null\noptimizer:\n  name: Adam\n  learning_rate: 0.0002\n  learning_rate_source: argparse fall-through (train_generator.py:22); train_generator.sh\n    does not pass --lr\n  scope: netE_nir + netE_vis + netG\n  netCls_in_optimizer: false\n  netCls_note: 'official behaviour: the classifier head stays at initialisation while\n    loss_cls backpropagates into the encoder'\nlosses:\n  lambda_mmd: 50\n  lambda_ip: 1000\n  lambda_type: 10\n  lambda_ort: 1\n  lambda_pair: 5\n  lambda_pair_source: train_generator.sh:17 (passed via --lambda_pair at :29); argparse\n    default 0.5 is not executed\n  retained:\n  - loss_rec\n  - loss_kl\n  - loss_mmd\n  - loss_ip\n  - loss_pair\n  - loss_cls\n  - loss_ort\n  removed: []\n  loss_cls_active: true\n  loss_pair_active: true\n  assembly: 'unweighted sum: rec + kl + mmd + ip + pair + cls + ort'\n  warmup: epochs < 2 scale every term except loss_rec by 0.01\n  coefficients_retuned: false\nspoof_type_supervision:\n  target: attack_macro\n  vocabulary:\n  - print\n  - replay\n  class_index:\n    print: 0\n    replay: 1\n  num_spoof_classes: 2\n  unexpected_macro: REJECT_NO_REMAP\n  attack_raw_as_target: FORBIDDEN\nidentity_preserving_net:\n  architecture: LightCNN-29 v2\n  frozen: true\n  eval_mode: true\n  input: 128x128_grayscale\n  loaded_via: define_IP()\n  loader_is_non_strict: true\nexternal_assets:\n- name: lightcnn_29_v2_checkpoint\n  official_path_in_source: ./ip_checkpoint/LightCNN_29Layers_V2_checkpoint.pth.tar\n  external_runtime_path: /media/cong/Data/GPAT_TransferBench_runtime/third_party_weights/lightcnn/LightCNN_29Layers_V2_checkpoint.pth.tar\n  sha256: d0750746622270548137b092700811b00dc64d67ca8df042c6cf48cb3b1b9964\n  bytes: 123844849\n  provenance: outputs/audit/M6A4_LIGHTCNN_WEIGHT_PROVENANCE.json\n  weight_bytes_from_source_cache: false\n  weight_bytes_in_git: false\n  compatibility: 60/60 define_IP() parameters matched with exact shapes; 0 missing;\n    0 shape mismatches\n  fixed_across_experiment_seeds: true\nsupervision: native_attack_macro_spoof_type_plus_same_subject_identity_pairing\nsubject_id_global_consumed: SAMPLING_ONLY\nloader:\n  batch_size: 240\n  shuffle: true\n  sampler: RandomSampler(replacement=False) created by DataLoader(shuffle=True, generator=G)\n  generator: torch.Generator().manual_seed(experiment_seed)\n  num_workers: 8\n  worker_init_fn: methods.common.learned.seed_torch_worker\n  worker_python_random_seed: torch.initial_seed() mod 2**32 in each worker = (per-epoch\n    loader base seed + worker_id) mod 2**32\n  worker_batch_assignment: worker w serves global batches w, w + 8, w + 16, ... of\n    each epoch, items in index order\n  persistent_workers: false\n  pin_memory: true\n  drop_last: false\n  chunking: after_loading_on_device\n  forbidden:\n  - weighted sampling\n  - class balancing\n  - padding\n  - wraparound\n  - sampler replacement\n  - drop_last=True\n  - changing num_workers\n  - persistent_workers=True\nepoch_plan:\n  rows: 3720\n  global_batches: 15 x 240 + 120\n  optimizer_steps_per_epoch: 16\n  total_optimizer_steps: 3200\nexecution_candidate:\n  status: CANDIDATE_NOT_YET_QUALIFIED\n  mode: GLOBAL_STATISTIC_PRESERVING_MICROBATCH\n  reused_from:\n  - M6D5c\n  - M6D5d\n  classification: EXECUTION_RUNTIME_COMPATIBILITY\n  scientific_method_change: false\n  microbatch: 20\n  microbatches_full_batch: 12\n  microbatches_tail_batch: 6\n  global_statistic_terms:\n  - loss_mmd\n  - loss_ort\n  chunk_weighted_mean_terms:\n  - loss_rec\n  - loss_kl\n  - loss_ip\n  - loss_cls\n  - loss_pair\n  precision: FP32\n  amp: false\n  tf32: false\n  physical_batch_240: OOM_ON_RTX3090_E06C_M6D5B\n  qualification_milestone: M6F-C\ncheckpoint:\n  cadence: save_epoch_10\n  cadence_note: 'official: epoch 1 and every 10 epochs (train_generator.py:214)'\n  rule: OFFICIAL_GENERATOR_EPOCH_200\n  rule_source: SOURCE_RESOLVED\n  official_default_file: netG_model_epoch_200_iter_0.pth\n  baseline_final_state_v1_overrides_this: false\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\n  periodic_test_block_note: the official periodic 'test' block only writes sample\n    images; it is NOT validation\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning: NOT_AUTHORIZED\n  if_pruned_later: metadata_and_sha256_records_must_remain\ngeneration:\n  n_syn_intended: DEFERRED_TO_M8\n  n_syn_status: GENUINELY_AMBIGUOUS_DEFERRED_TO_M8_TRACK_B_GENERATION_DECISION\n  n_syn_candidates_not_chosen:\n  - pooled 8838 (spec 7)\n  - native coverage 3720\n  blocks_m6: false\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E06b/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6fb: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - data.splits\n  - seeds.experiment_seeds\n  - target_fidelity\n  - spoof_type_supervision.target\n  AMENDMENT_A1:\n  - track\n  - native_population.train_datasets\n  - native_population.non_instantiable\n  OFFICIAL_CODE:\n  - training.all_epochs\n  - training.effective_batch_size\n  - training.hdim\n  - training.workers\n  - training.test_epoch\n  - training.pre_epoch\n  - optimizer\n  - losses.lambda_mmd\n  - losses.lambda_ip\n  - losses.lambda_pair\n  - losses.lambda_type\n  - losses.lambda_ort\n  - losses.warmup\n  - native_relation.semantics\n  - checkpoint.cadence\n  - checkpoint.rule\n  - identity_preserving_net\n  DATA_DERIVED:\n  - native_population.expected\n  - spoof_type_supervision.vocabulary\n  - training.attack_type\n  OFFICIAL_CODE_AND_FROZEN_TAXONOMY:\n  - spoof_type_supervision.class_index\n  M6B_POLICY_AND_A2_01_PRECEDENT:\n  - native_relation.spoof_index_order\n  - native_relation.live_pool_order\n  M6D5E_EXECUTION_RECORD:\n  - loader\n  M6D5C_M6D5D_EXECUTION_RECORDS:\n  - execution_candidate\n  M6A4:\n  - external_assets\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n  M6FA_DEFERRAL:\n  - generation\n_resolved:\n  method_id: E06b\n  experiment_seed: 42\n  config_path: configs/methods/e06b_dsdg_native.yaml\n  config_sha256: 9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f\n  snapshot_path: frozen_config_snapshot/configs/methods/e06b_dsdg_native.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E06b/seed_42\n  git_commit: d9ecbef7295fc6b41ced6a4966b49810d36a8c87\n  source_commits:\n    https://github.com/JDAI-CV/FaceX-Zoo: 16b793a7564a4b9308cf94e62bdb2ffacb3a725a\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config. No scientific value was overridden.\n",
+        "sha_listing_count": 197,
+        "sha_listing_digest": "71f8f357a563cf9b2b691490073309756cb33029dd0db1a9199a101922575575"
+      }
+    },
+    "utc": "2026-10-25T03:41:13Z"
+  },
+  "method": {
+    "execution_mode": "GLOBAL_STATISTIC_PRESERVING_MICROBATCH_V2",
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "id": "E06b",
+    "name": "DSDG-NATIVE",
+    "track": "B_NATIVE_FULL_SECONDARY"
+  },
+  "not_completed": {
+    "downstream_fas_evaluation": "NOT_STARTED",
+    "synthetic_bank": "NOT_STARTED",
+    "whole_benchmark": "NOT_COMPLETED"
+  },
+  "per_seed_evidence": {
+    "1337": {
+      "closure_commit": "a8a7b5dd9a1fd5cd8e82b870162732163b2859f9",
+      "completion": "outputs/audit/E06B_SEED1337_COMPLETION.json",
+      "manifest": "outputs/audit/E06B_SEED1337_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E06B_SEED1337_COMPLETION.md",
+      "sha256": "outputs/audit/E06B_SEED1337_EVIDENCE_SHA256.txt",
+      "tool": "tools/e06b_seed1337_completion_audit.py"
+    },
+    "2026": {
+      "closure_commit": "1729333197c5caab7a0d4d9302f1d3274ac90d98",
+      "completion": "outputs/audit/E06B_SEED2026_COMPLETION.json",
+      "manifest": "outputs/audit/E06B_SEED2026_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E06B_SEED2026_COMPLETION.md",
+      "sha256": "outputs/audit/E06B_SEED2026_EVIDENCE_SHA256.txt",
+      "tool": "tools/e06b_seed2026_completion_audit.py"
+    },
+    "42": {
+      "closure_commit": "1f546c9fab1e284efd9deaef18ab7d415ff2c2ee",
+      "completion": "outputs/audit/E06B_SEED42_COMPLETION.json",
+      "manifest": "outputs/audit/E06B_SEED42_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E06B_SEED42_COMPLETION.md",
+      "sha256": "outputs/audit/E06B_SEED42_EVIDENCE_SHA256.txt",
+      "tool": "tools/e06b_seed42_completion_audit.py"
+    }
+  },
+  "protocol": {
+    "checkpoint_epochs": [
+      1,
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200
+    ],
+    "checkpoint_rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "drop_last": false,
+    "epoch_plan": "15 x 240 + 1 x 120 = 3720 CASIA+MSU TRAIN spoof rows",
+    "epochs": 200,
+    "final_checkpoint": "checkpoints/netG_model_epoch_200_iter_0.pth",
+    "final_rule_scope": "applied independently within each seed; no cross-seed choice",
+    "max_microbatch": 20,
+    "native_relation": "online same-subject TRAIN live partner drawn per spoof row (random.choice in the 8 loader workers); print=0 / replay=1",
+    "nominal_global_batch": 240,
+    "optimizer_steps": 3200,
+    "steps_per_epoch": 16,
+    "workers": 8
+  },
+  "scientific_training_authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87",
+  "status": "SCIENTIFIC_TRAINING_COMPLETED_3_OF_3_SEEDS"
+}
