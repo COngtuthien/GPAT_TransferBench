@@ -1,0 +1,98 @@
+# E03 STDN production data / RNG owner resolution — machine-readable companion of
+# docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md
+# Decided 2026-10-25 before any E03 implementation or scientific training result.
+version: e03_production_data_rng_resolution_v1
+status: OWNER_RESOLVED
+method_id: E03
+display_name: STDN
+track: A_FAIR_COMMON_IDENTITY_FREE
+source_pin: c79f1f8c615d2b8471b3df29da881bb18dd54c90
+frozen_config: {path: configs/methods/e03_stdn.yaml, sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0, modified: false}
+runtime_addendum: {path: docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Runtime_Compatibility_Addendum.md, sha256: f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e, modified: false}
+historical_fidelity_field: FAITHFUL_OFFICIAL
+resolved_execution_fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY
+fidelity_layers:
+  official_unchanged: [stdn_graph, losses, optimizer_graph, g_d_schedule, shared_global_step, learning_rate_rule,
+                       batch_norm, ema, hard_sample_mechanism, checkpoint_cadence, ckpt_50_final_rule,
+                       max_epoch_50, steps_per_epoch_2000, val_steps_500]
+  controlled_benchmark_adaptation: [track_a_frame_pair_relations, m2_canonical_faces_and_landmarks_px256,
+                                    independent_deterministic_train_val_data_rng, serialized_deterministic_feed]
+  runtime_compatibility: [nvidia_tf_1_15_5_rtx3090_m6d2b]
+
+rulings:
+  V:
+    decision: SEPARATE_DETERMINISTIC_SPLIT_RNG_STREAMS
+    classification: CONTROLLED_BENCHMARK_DETERMINISM_ADAPTATION
+    upstream_coupling_retained: false
+    train_parser_seed: experiment_seed
+    val_parser_seed_rule: '1 + (uint32_be(SHA256(UTF8("GPAT_TRANSFERBENCH|E03|VAL_DATA|" + str(experiment_seed)))[0:4]) mod 2147483647)'
+    val_parser_seed_range: [1, 2147483647]
+    val_parser_seeds: {42: 1355875380, 1337: 1050417158, 2026: 1242808125}
+    qualification_val_parser_seed: {60903: 2050698081}
+    rng_objects: numpy.random.RandomState per split (no process-global reseeding or mutation)
+    forbidden_seed_sources: [python_hash, pid, time, filesystem_order, worker_timing]
+    dummy_frame_choice_draws: FORBIDDEN
+    preserved: distributions of retained stochastic augmentations (not RNG call counts)
+  R1:
+    decision: manifests/pairs_train_v1.parquet
+    sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243
+    rows: 8838
+    mapping: {target_live_id: live, source_spoof_id: spoof}
+    forbidden: [upstream_directory_positional_zip, video_level_or_identity_grouping, new_pair_relation]
+    authority: Amendment A1 / configs/frozen/fair_track_v1.yaml (E03 in FAIR_COMMON_IDENTITY_FREE)
+  R2:
+    decision: manifests/val_pairs_v1.parquet
+    sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872
+    rows: 1905
+    rows_by_dataset: {casia_fasd: 576, msu_mfsd: 240, siwmv2: 1089}
+    mapping: {target_live_id: live, source_spoof_id: spoof}
+    val_steps_per_epoch: 500
+    may_select_checkpoint: false
+    may_tune_hyperparameter: false
+    may_select_seed: false
+  R3:
+    decision: RETAIN_OFFICIAL_DIAGNOSTIC_FIGURES
+    train_condition: 'step % 200 == 0 (zero-based; LOG_FR_TRAIN = int(2000/10))'
+    val_condition: 'step % 50 == 0 (zero-based; LOG_FR_TEST = int(500/10))'
+    location: run root (diagnostics only)
+    figure_source: fig / fig_val returned by the SAME official sess.run of that step
+    extra_sess_run: 0
+    extra_iterator_pull: 0
+    extra_rng_draws: 0
+    optimizer_applications: 0
+    global_step_changes: 0
+
+execution:
+  train_schedule:
+    even_step: {fetch: 'losses + [g_op, d_op, fig]', sess_runs: 1, g: 1, d: 1, global_step_delta: 2}
+    odd_step: {fetch: 'losses + [g_op, fig]', sess_runs: 1, g: 1, d: 0, global_step_delta: 1}
+    sequential_g_then_d_rewrite: FORBIDDEN
+    per_epoch: {train_steps: 2000, g: 2000, d: 1000, global_step_delta: 3000}
+    total: {train_steps: 100000, g: 100000, d: 50000, final_global_step: 150000}
+  learning_rate: {initial: 6.0e-5, rate: 0.9, decay_steps_shared_global: 20000, staircase: true,
+                  boundaries_global_step: [20000, 40000, 60000, 80000, 100000, 120000, 140000],
+                  epochs_per_decay_interval_approx: 6.67}
+  epoch_order: [train_2000_steps, 'saver.save(global_step=epoch+1)', val_500_steps]
+  final_checkpoint: {name: ckpt-50, rule: OFFICIAL_LATEST_FINAL_CKPT_50, written_before_epoch_50_val: true,
+                     completed_after_epoch_50_val: true, val_changes_selection: false}
+  feed:
+    unit: one frozen pair row
+    pipeline: [from_tensor_slices, 'shuffle(full population, split seed, reshuffle_each_iteration=True)', 'repeat(-1)',
+               'map(num_parallel_calls=1)', 'batch(2)', 'prefetch(1)']
+    shuffle_buffer: {TRAIN: 8838, VAL: 1905}
+    tf_1_15_defaults_verified: {reshuffle_each_iteration_none_means: true, batch_drop_remainder_default: false}
+    iterators_persist_across_epochs: true
+    random_frame_selection: none
+    resize: none (canonical faces are 256)
+  augmentation:
+    TRAIN: {flip: 'independent live/spoof, split NumPy draw > 0.5', landmark_flip: '1 - x then iBUG-68 lm_reverse_list',
+            brightness: 'tf.image.random_brightness(max_delta=0.25) on live and spoof'}
+    VAL: {flip: 'independent live/spoof, VAL NumPy draw > 0.5', brightness: none}
+  landmarks: {field: landmarks_px256, shape: [68, 2], dtype: float32, finite: true, normalization: '/256',
+              adapter: methods/stdn/landmarks.py}
+  resume: NOT_QUALIFIED_FRESH_ONLY
+
+implementation_bindings:
+  tf_graph_seed: experiment_seed
+  shuffle_op_seed: {TRAIN: experiment_seed, VAL: val_parser_seed}
+  process_global_python_numpy: seeded with experiment_seed; unused by the feed

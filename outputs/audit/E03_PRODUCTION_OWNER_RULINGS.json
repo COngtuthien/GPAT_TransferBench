@@ -1,0 +1,156 @@
+{
+  "conclusions": [
+    "TF graph level: the official VAL block is state-nonmutating (0/747 variables, no mutating op reachable, BN is_training=False, next TRAIN step byte-identical with/without VAL).",
+    "Source data level: the shared global Python/NumPy parser RNG lets VAL change later TRAIN flips (timing-dependent with AUTOTUNE prefetch); ruling V removes this coupling.",
+    "The upstream directory zip / frame choice is not determined by the frozen E03 artifacts; rulings R1/R2 bind the Track-A common pair relations."
+  ],
+  "confirmations": {
+    "benchmark_data_opened": false,
+    "e03_root_created": false,
+    "production_code_written": false,
+    "test_accessed": false
+  },
+  "method": {
+    "id": "E03",
+    "name": "STDN",
+    "source_pin": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+    "track": "A_FAIR_COMMON_IDENTITY_FREE"
+  },
+  "milestone": "E03-PRODUCTION-OWNER-RESOLUTION",
+  "not_scientific_authority": true,
+  "resolution_files": {
+    "configs/amendments/e03_production_data_rng_resolution.yaml": "4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md": "ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a"
+  },
+  "resolved_execution_fidelity": "FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY",
+  "rulings": {
+    "R1": "manifests/pairs_train_v1.parquet (a5e4fdae..., 8838)",
+    "R2": "manifests/val_pairs_v1.parquet (84d12491..., 1905)",
+    "R3": "RETAIN_OFFICIAL_DIAGNOSTIC_FIGURES",
+    "V": "SEPARATE_DETERMINISTIC_SPLIT_RNG_STREAMS"
+  },
+  "source_line_references": {
+    "model/dataset.py:107,126,169,189": "random.randint frame choice (global Python random) in parse_fn and parse_fn_val",
+    "model/dataset.py:117,136,180,200": "np.random.rand()>0.5 flips (global NumPy RNG) in parse_fn and parse_fn_val",
+    "model/dataset.py:151": "TRAIN only: tf.image.random_brightness(..., 0.25) on live and spoof",
+    "model/dataset.py:44-65": "glob live/spoof dirs, random.sample equalisation, positional zip, shuffle(len).repeat(-1)",
+    "model/dataset.py:67-71": "map(num_parallel_calls=AUTOTUNE) + batch + prefetch(AUTOTUNE)",
+    "model/model.py:101-106": "exponential_decay(LEARNING_RATE, global_step, NUM_EPOCHS_PER_DECAY*STEPS_PER_EPOCH=20000, 0.9, staircase=True)",
+    "model/model.py:111,122": "loss EMA 0.9 and weight EMA(0.9999, num_updates=global_step)",
+    "model/model.py:118": "opt.apply_gradients(grads, global_step=global_step) in both get_train_op calls (shared step)",
+    "model/utils.py (Conv/Downsample/Upsample)": "contrib batch_norm(is_training=training_nn, updates_collections=None)",
+    "train.py:141": "losses_val,_,_,fig_val = _step(config, dataset_val, training_nn=False)",
+    "train.py:144,186": "Saver(max_to_keep=50); saver.save(..., global_step=epoch+1) after the TRAIN loop, before VAL",
+    "train.py:146-150": "upstream restore from LOG_DIR (not a qualified benchmark resume)",
+    "train.py:167-170": "step%G_D_RATIO==0 -> sess.run(losses+[g_op,d_op,fig]); else sess.run(losses+[g_op,fig])",
+    "train.py:181-183,201-203": "figure writes at step%LOG_FR_TRAIN(200)==0 and step%LOG_FR_TEST(50)==0"
+  },
+  "status": "OWNER_RESOLVED",
+  "trace": {
+    "command": "ssh <host> \"cd /tmp && env -i <M6D2b precision env> PYTHONHASHSEED=60903 MPLCONFIGDIR=/tmp/e03_trace_mpl <gpat-m6-e03 python> -I -B - --source <gpu repo>/third_party/source_cache/stdn --mode {graph|rng} [--no-val] [--post-train 80]\" < e03_source_trace.py",
+    "data": "synthetic placeholder inputs (graph) and the source repo bundled sample data/{train,val} (rng); no benchmark file opened (audit-hook firewall)",
+    "graph_schedule": [
+      {
+        "branch": "g_op+d_op",
+        "changed_by_class": {
+          "adam_slot": 344,
+          "bn_moving": 60,
+          "global_step": 1,
+          "loss_ema": 2,
+          "trainable_D": 72,
+          "trainable_G": 98
+        },
+        "global_step_after": 2,
+        "global_step_before": 0,
+        "step": 0
+      },
+      {
+        "branch": "g_op",
+        "changed_by_class": {
+          "adam_slot": 198,
+          "bn_moving": 60,
+          "global_step": 1,
+          "loss_ema": 1,
+          "trainable_G": 98,
+          "weight_ema": 98
+        },
+        "global_step_after": 3,
+        "global_step_before": 2,
+        "step": 1
+      },
+      {
+        "branch": "g_op+d_op",
+        "changed_by_class": {
+          "adam_slot": 344,
+          "bn_moving": 60,
+          "global_step": 1,
+          "loss_ema": 2,
+          "trainable_D": 72,
+          "trainable_G": 98,
+          "weight_ema": 170
+        },
+        "global_step_after": 5,
+        "global_step_before": 3,
+        "step": 2
+      },
+      {
+        "branch": "g_op",
+        "changed_by_class": {
+          "adam_slot": 198,
+          "bn_moving": 60,
+          "global_step": 1,
+          "loss_ema": 1,
+          "trainable_G": 98,
+          "weight_ema": 98
+        },
+        "global_step_after": 6,
+        "global_step_before": 5,
+        "step": 3
+      }
+    ],
+    "graph_val": {
+      "dynamic_changed_variables": 0,
+      "global_variables": 747,
+      "post_step_state_with_val": "7f38c10f732e19af1172ba14c050e69712cf4e7539d6d96649cd7e63402b7846",
+      "post_step_state_without_val": "7f38c10f732e19af1172ba14c050e69712cf4e7539d6d96649cd7e63402b7846",
+      "static": {
+        "fused_bn_training_false": 48,
+        "fused_bn_training_true": [],
+        "ops_reachable": 1996,
+        "random_ops_reachable": [
+          "RandomUniform"
+        ],
+        "reads_train_placeholders": false,
+        "state_mutating_ops_reachable": [],
+        "variable_reads": 230
+      },
+      "variables_created_by_val_graph": []
+    },
+    "host": "nd-System-Product-Name, RTX 3090 GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7, driver 580.178.04, gpat-m6-e03 Python 3.8.20",
+    "raw_trace_paths": "/tmp/claude-1000/-home-cong-GPAT-TransferBench/5772f82d-c266-4fc2-9b82-782535af3451/scratchpad/e03_trace*.out (ephemeral scratch, NOT scientific artifacts, not committed)",
+    "rng_coupling": {
+      "divergent_train_flip_bits": 134,
+      "first_divergent_train_element": 56,
+      "repeat_runs_identical": true,
+      "rng_state_changed_by_val": true,
+      "rng_state_changed_without_val": false,
+      "train_flip_bits_compared": 328
+    },
+    "sha256": {
+      "e03_source_trace.py": "e146643a334daa2bfc497a3290ed15cdc98c26b58ca17fab8500e356a9879879",
+      "e03_trace80_rng-noval_c.out": "3877af02dcf39dc83dc3c4411adbe9347aa1ef5fd75dd29818dcccb2ec7be3a6",
+      "e03_trace80_rng-noval_d.out": "3877af02dcf39dc83dc3c4411adbe9347aa1ef5fd75dd29818dcccb2ec7be3a6",
+      "e03_trace80_rng_a.out": "d51ab24cc4be675e23d9306c32475ccfa09a6039ef0eb3126a0f2436551865fd",
+      "e03_trace80_rng_b.out": "d51ab24cc4be675e23d9306c32475ccfa09a6039ef0eb3126a0f2436551865fd",
+      "e03_trace_graph-noval_c.out": "8aa0786b9133a32d6a04675aaf5d5f3238dba3428e732226ddeba73b638ec73e",
+      "e03_trace_graph_a.out": "42ea7e6a90ee9d3419385b4e5856de2644117172283f3e290468f9259edbf205",
+      "e03_trace_graph_b.out": "42ea7e6a90ee9d3419385b4e5856de2644117172283f3e290468f9259edbf205"
+    }
+  },
+  "unchanged": {
+    "configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Runtime_Compatibility_Addendum.md": "f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e",
+    "environments/e03_stdn.lock.json": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62",
+    "frozen_config_snapshot/configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0"
+  }
+}
