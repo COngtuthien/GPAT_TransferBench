@@ -30,6 +30,18 @@ EVIDENCE = {'json': 'outputs/audit/E05_PRODUCTION_RUNNER_QUALIFICATION.json',
             'report': 'outputs/audit/E05_PRODUCTION_RUNNER_QUALIFICATION.md',
             'sha256': 'outputs/audit/E05_PRODUCTION_RUNNER_EVIDENCE_SHA256.txt'}
 SMALL = ('run_manifest.json', 'run_summary.json', 'checkpoint_index.json')
+BASE_COMMIT = '3b0d308238c5d00eeb47be9a9ff14aceb894a23b'
+CODE_CLASSES = {'methods/pcgan/production_io.py': 'production integration',
+                'methods/pcgan/production_runner.py': 'production integration',
+                'tools/run_e05.py': 'scientific CLI',
+                'methods/pcgan/production_qualification.py': 'qualification harness',
+                'tools/e05_production_qualification_evidence.py': 'evidence',
+                'tests/test_e05_production_runner.py': 'test'}
+FROZEN_PATHS = ('configs', 'frozen_config_snapshot', 'environments', 'manifests', 'third_party', 'docs',
+                'methods/common', 'methods/pcgan/training_runner.py', 'methods/pcgan/training_losses.py',
+                'methods/pcgan/blur.py', 'methods/pcgan/architecture.py', 'methods/pcgan/contract.py',
+                'methods/pcgan/adapter.py', 'methods/pcgan/source.py', 'methods/pcgan/training_qualification.py',
+                'methods/pcgan/runtime_qualification.py', 'methods/pcgan/training_diagnostics.py')
 LOSS_KEYS = ('L_rec', 'L_recblur', 'L_advrec', 'L_advmix', 'L_pat', 'L_G_total', 'L_D_real', 'L_D_rec', 'L_D_mix',
              'L_D_patch_real', 'L_D_patch_fake', 'L_D_image', 'L_D_patch', 'L_D_total')
 G_TERMS = LOSS_KEYS[:5]
@@ -314,7 +326,25 @@ def build(c, repo_root):
                                                 if x['file'] != 'pairs_train_v1.parquet') and
       all(x['mtime_unchanged'] for x in a['manifests']) and all(v['mtime_changed'] == 0 for v in by.values()))
 
+    # I. code diff classification (candidate vs the pre-milestone HEAD)
+    import subprocess
+    def git(*args):
+        return subprocess.run(['git', '-C', str(repo), *args], capture_output=True, text=True).stdout
+    status = [line.split('\t') for line in git('diff', '--name-status', BASE_COMMIT, r['git_commit']).splitlines()]
+    G('I.only_additions_classified', all(st == 'A' for st, _ in status) and
+      sorted(path for _, path in status) == sorted(CODE_CLASSES), status)
+    frozen = subprocess.run(['git', '-C', str(repo), 'diff', '--quiet', BASE_COMMIT, r['git_commit'], '--',
+                             *FROZEN_PATHS]).returncode == 0
+    G('I.frozen_contract_and_existing_code_unchanged', frozen)
+    code_diff = {'base_commit': BASE_COMMIT, 'candidate_commit': r['git_commit'],
+                 'files': {path: {'status': st, 'class': CODE_CLASSES.get(path)} for st, path in status},
+                 'frozen_paths_checked_unchanged': list(FROZEN_PATHS), 'frozen_paths_unchanged': frozen,
+                 'no_change_to': ['frozen E05 config', 'A2/A5 contract', 'source pin', 'architecture resolution',
+                                  'loss equations/weights', 'optimizer values', '4000 iteration budget', 'batch size',
+                                  'final-state rule']}
+
     doc = {'status': STATUS_BLOCKED if G.failed else STATUS_OK, 'failed_gates': G.failed, 'gates': G.results,
+           'code_diff': code_diff, 'gpu_driver': r['gpu_driver'],
            'method': {'id': 'E05', 'reporting_label': 'PCGAN (controlled architecture resolution)',
                       'track': 'A_FAIR_COMMON_IDENTITY_FREE', 'fidelity': 'CONTROLLED_ADAPTATION',
                       'fidelity_authority': 'A2-07 architecture resolution; A5 blur operator; M6D4c runner resolution',
