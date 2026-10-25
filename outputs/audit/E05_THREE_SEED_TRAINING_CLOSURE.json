@@ -1,0 +1,817 @@
+{
+  "aggregation": {
+    "applies_to": "future downstream evaluation metrics (none computed yet)",
+    "descriptive_training_losses": {
+      "by_seed": {
+        "1337": {
+          "L_D_total": 0.9055057114362717,
+          "L_G_total": 333.71018447875974
+        },
+        "2026": {
+          "L_D_total": 1.0898037624359131,
+          "L_G_total": 303.99746719360354
+        },
+        "42": {
+          "L_D_total": 0.9884954807162285,
+          "L_G_total": 299.58256896972654
+        }
+      },
+      "note": "per-seed last-100-iteration mean training losses; descriptive only, NOT a performance metric and not used for any choice"
+    },
+    "primary_result_rule": "MEAN_AND_STD_OVER_ALL_THREE_SEEDS",
+    "training_metadata": {
+      "checkpoint_events_each": 2,
+      "distinct_train_pairs_each": 4000,
+      "iterations_each": 4000,
+      "numerically_finite_each": true,
+      "optimizer_applications_each": {
+        "D": 4000,
+        "G": 4000,
+        "total": 8000
+      },
+      "resume_sidecars_each": 0,
+      "seeds_completed": "3/3",
+      "selected_checkpoints_each": 1,
+      "test_access_total": 0,
+      "val_access_total": 0
+    },
+    "wall_clock_note": "training speed is not an acceptance gate and not a comparison metric"
+  },
+  "authority_note": "Training authority for all three successful seeds is efdf753; the seed closure commits and this family closure are evidence/reporting only.",
+  "classification": "E05_THREE_SEED_SCIENTIFIC_TRAINING_CLOSURE",
+  "confirmations": {
+    "additional_seed_launched": false,
+    "bank_generation": false,
+    "best_seed_selection": false,
+    "downstream_evaluation": false,
+    "e03_started": false,
+    "gpat_started": false,
+    "other_method_started": false,
+    "preferred_seed_selection": false,
+    "replacement_seed": false,
+    "run_root_mutated": false,
+    "seed_dropped": false,
+    "test_used": false,
+    "val_checkpoint_selection": false
+  },
+  "different_by_design": {
+    "also": "seed-derived pair order and model initialisation/noise; learned model and checkpoint bytes",
+    "manifest_fields": [
+      "command_line",
+      "end_utc",
+      "experiment_seed",
+      "run_id",
+      "run_uuid",
+      "start_utc"
+    ],
+    "resolved_config_lines": {
+      "1337": [
+        "  experiment_seed: 1337",
+        "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_1337",
+        "    generator_seed: 1337"
+      ],
+      "2026": [
+        "  experiment_seed: 2026",
+        "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_2026",
+        "    generator_seed: 2026"
+      ],
+      "42": []
+    },
+    "run_start_fields": [
+      "loader.generator_seed",
+      "seeding.seed"
+    ]
+  },
+  "driver_ruling": {
+    "driver_policy": "OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY",
+    "lock_driver_version": "595.84",
+    "observed_driver_version": "580.178.04",
+    "scope": "only the NVIDIA driver version differs from the lock; GPU model, GPU UUID and every other lock field are exact in all three runs"
+  },
+  "failed_gates": [],
+  "family": {
+    "best_seed": null,
+    "completed_seeds": 3,
+    "composition_note": "exactly the three frozen experiment seeds; no fourth, replacement, preferred or dropped seed, and no cross-seed choice",
+    "dropped_seeds": [],
+    "preferred_seed": null,
+    "replacement_seeds": [],
+    "run_ids": {
+      "1337": "036c806bb2f339b7",
+      "2026": "b739351daf9779bc",
+      "42": "18463bf5cd471e55"
+    },
+    "scientific_runs": 3,
+    "seeds": [
+      42,
+      1337,
+      2026
+    ]
+  },
+  "final_checkpoints": [
+    {
+      "TEST_access": 0,
+      "VAL_access": 0,
+      "checkpoint_size": 232113504,
+      "completion_status": "completed",
+      "distinct_train_pairs": 4000,
+      "final_checkpoint_path": "checkpoints/iteration_4000.pth",
+      "final_checkpoint_sha256": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1",
+      "metrics_sha256": "4b2fc19c90b2f0fd0c48212bb71a850ddafef398322d1533ac1a4649da5c04a9",
+      "observed_driver": "580.178.04",
+      "run_id": "18463bf5cd471e55",
+      "run_root_listing_digest": "526419f00fd272b2207b0b167441f4ec63b22d42687f4d0d0b8399613c6e1d1e",
+      "scientific_authority": "efdf753156045dd2bed52229d9eac869b18d72f8",
+      "seed": 42,
+      "seed_closure_commit": "072ce7d68cbdb0fab7f6d6d85ebce5b4ac1f4cfa"
+    },
+    {
+      "TEST_access": 0,
+      "VAL_access": 0,
+      "checkpoint_size": 232113504,
+      "completion_status": "completed",
+      "distinct_train_pairs": 4000,
+      "final_checkpoint_path": "checkpoints/iteration_4000.pth",
+      "final_checkpoint_sha256": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34",
+      "metrics_sha256": "2c6a4746c1339dace16768b28213e66950255d4cc0f9b312f770fbeee14c2e98",
+      "observed_driver": "580.178.04",
+      "run_id": "036c806bb2f339b7",
+      "run_root_listing_digest": "638c777fb676e7cb78b2ed92d1e6e3dae56e4217dc2c8c5021a973604b10a242",
+      "scientific_authority": "efdf753156045dd2bed52229d9eac869b18d72f8",
+      "seed": 1337,
+      "seed_closure_commit": "023beb4d69c63a29e504f4497945ac1da1bb6985"
+    },
+    {
+      "TEST_access": 0,
+      "VAL_access": 0,
+      "checkpoint_size": 232113504,
+      "completion_status": "completed",
+      "distinct_train_pairs": 4000,
+      "final_checkpoint_path": "checkpoints/iteration_4000.pth",
+      "final_checkpoint_sha256": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166",
+      "metrics_sha256": "aeb1e5c6b878a0f7f00a7c6ff271f74b2e1114b014a44be707225a21c2148374",
+      "observed_driver": "580.178.04",
+      "run_id": "b739351daf9779bc",
+      "run_root_listing_digest": "1667ccc2fc95d585d3538b73e0316dd991c35cba6b0cce9d8cf1bbe9ef36f5fc",
+      "scientific_authority": "efdf753156045dd2bed52229d9eac869b18d72f8",
+      "seed": 2026,
+      "seed_closure_commit": "21d47c24fbe827d296c6b67db1f28393f819c9c9"
+    }
+  ],
+  "final_checkpoints_csv": "outputs/audit/E05_THREE_SEED_FINAL_CHECKPOINTS.csv",
+  "final_checkpoints_csv_sha256": "8a5803cd14935c63cb5fc0d28af5463a764f7c1af5ff233112bdc61cc662ed93",
+  "firewall": {
+    "note": "per-seed stat-only relatime atime snapshots: 3121/3121 VAL and 3027/3027 TEST faces atime-sensitive and unchanged in every run; TRAIN scope proven by pair manifest, independent sampler order and M2 face digests",
+    "test_access": 0,
+    "val_access": 0
+  },
+  "frozen": {
+    "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "files_sha256": {
+      "config": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "config_snapshot": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "lock": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50",
+      "m2_sample_accounting": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+      "pair_manifest": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "production_files": {
+        "methods/pcgan/production_io.py": "6968943fedd678f13437d2ba6bffdc82ebd60d3872dc59bdc7e921a6edb32c00",
+        "methods/pcgan/production_runner.py": "5622b292cc0e44d28f682d903a9eb82945da41498343fa3a62bd867124ed33e0",
+        "tools/run_e05.py": "7bdff320ca901538d1ea8d0272145e774d78f64fc4dbf4c5eb2b15e032022835"
+      },
+      "python_executable": "d3255ce6eac7a06a653a6f238d703ebf863423912b39ec957334ce2974364244",
+      "split_manifest": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+    },
+    "identities": {
+      "a2_sha256": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+      "a5_amendment_sha256": "05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd",
+      "a5_overlay_sha256": "af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1",
+      "compatibility_manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+      "config_sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+      "environment_lock_sha256": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50",
+      "fidelity_class": "CONTROLLED_ADAPTATION",
+      "logging_contract_sha256": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+      "m6d4c_overlay_sha256": "8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828",
+      "m6d4e_evidence_sha256": "94c13a3198aced3dbe3286cd708c23f8bd328e175e8fcfb9f06ba337ddddf60e",
+      "pair_manifest_sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "production_files_sha256": {
+        "methods/pcgan/production_io.py": "6968943fedd678f13437d2ba6bffdc82ebd60d3872dc59bdc7e921a6edb32c00",
+        "methods/pcgan/production_runner.py": "5622b292cc0e44d28f682d903a9eb82945da41498343fa3a62bd867124ed33e0",
+        "tools/run_e05.py": "7bdff320ca901538d1ea8d0272145e774d78f64fc4dbf4c5eb2b15e032022835"
+      },
+      "source_commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+      "source_tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+      "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e"
+    },
+    "loader_except_seed": {
+      "batch_sampler": "BatchSampler(1, drop_last=False)",
+      "batch_size": 1,
+      "drop_last": false,
+      "len_batches": 8838,
+      "num_workers": 0,
+      "persistent_workers": false,
+      "pin_memory": false,
+      "rows": 8838,
+      "sampler": "RandomSampler(replacement=False, generator=G)",
+      "shuffle": true
+    },
+    "pair_manifest": {
+      "columns_read": [
+        "pair_id",
+        "source_spoof_id",
+        "target_live_id",
+        "dataset",
+        "split"
+      ],
+      "pair_id_order_sha256": "c6948677c5c0b5af84b48637b456b38c0a6c46fe0b9814312a4a90cef6e4fc9c",
+      "path": "manifests/pairs_train_v1.parquet",
+      "rows": 8838,
+      "rows_by_dataset": {
+        "casia_fasd": 2520,
+        "msu_mfsd": 1200,
+        "siwmv2": 5118
+      },
+      "schema_columns": 25,
+      "sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "sha256_checked_before_parse": true,
+      "splits": [
+        "TRAIN"
+      ],
+      "subject_columns_present_in_file": [
+        "source_subject",
+        "target_subject"
+      ],
+      "subject_columns_read": [],
+      "unique_sample_ids": 12668,
+      "unique_source_ids": 8838,
+      "unique_target_ids": 3830
+    },
+    "precision": {
+      "amp": false,
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+    }
+  },
+  "gates": [
+    {
+      "detail": [
+        "E05_SEED1337_COMPLETION.json",
+        "E05_SEED2026_COMPLETION.json",
+        "E05_SEED42_COMPLETION.json"
+      ],
+      "gate": "A.exact_seed_evidence_set",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.rederives_current_tool",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.rederives_closure_commit_tool",
+      "pass": true
+    },
+    {
+      "detail": 1,
+      "gate": "A.seed42.tool_differs_only_in_run_id_table",
+      "pass": true
+    },
+    {
+      "detail": "072ce7d68cbdb0fab7f6d6d85ebce5b4ac1f4cfa",
+      "gate": "A.seed42.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.rederives_current_tool",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.rederives_closure_commit_tool",
+      "pass": true
+    },
+    {
+      "detail": 0,
+      "gate": "A.seed1337.tool_differs_only_in_run_id_table",
+      "pass": true
+    },
+    {
+      "detail": "023beb4d69c63a29e504f4497945ac1da1bb6985",
+      "gate": "A.seed1337.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.rederives_current_tool",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.rederives_closure_commit_tool",
+      "pass": true
+    },
+    {
+      "detail": 0,
+      "gate": "A.seed2026.tool_differs_only_in_run_id_table",
+      "pass": true
+    },
+    {
+      "detail": "21d47c24fbe827d296c6b67db1f28393f819c9c9",
+      "gate": "A.seed2026.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "detail": "E05_SEED42_COMPLETED_CLEANLY",
+      "gate": "B.seed42.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": "E05_SEED1337_COMPLETED_CLEANLY",
+      "gate": "B.seed1337.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": "E05_SEED2026_COMPLETED_CLEANLY",
+      "gate": "B.seed2026.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": {
+        "42": 65,
+        "1337": 65,
+        "2026": 65
+      },
+      "gate": "B.same_gate_semantics",
+      "pass": true
+    },
+    {
+      "gate": "C.seed42.authority",
+      "pass": true
+    },
+    {
+      "detail": "18463bf5cd471e55",
+      "gate": "C.seed42.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.seed1337.authority",
+      "pass": true
+    },
+    {
+      "detail": "036c806bb2f339b7",
+      "gate": "C.seed1337.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.seed2026.authority",
+      "pass": true
+    },
+    {
+      "detail": "b739351daf9779bc",
+      "gate": "C.seed2026.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.run_ids_distinct",
+      "pass": true
+    },
+    {
+      "gate": "C.method",
+      "pass": true
+    },
+    {
+      "gate": "C.frozen_config_sha",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "C.manifest_common_fields_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.command_line_differs_only_by_seed",
+      "pass": true
+    },
+    {
+      "detail": [
+        "a2_sha256",
+        "a5_amendment_sha256",
+        "a5_overlay_sha256",
+        "compatibility_manifest_sha256",
+        "config_sha256",
+        "environment_lock_sha256",
+        "fidelity_class",
+        "logging_contract_sha256",
+        "m6d4c_overlay_sha256",
+        "m6d4e_evidence_sha256",
+        "pair_manifest_sha256",
+        "production_files_sha256",
+        "source_commit",
+        "source_tree",
+        "spec_sha256"
+      ],
+      "gate": "C.identities_equal",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "C.run_start_equal_except_seed",
+      "pass": true
+    },
+    {
+      "gate": "C.files_identities_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.environment_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.extensions_equal_no_rebuild",
+      "pass": true
+    },
+    {
+      "gate": "C.driver_ruling_consistent",
+      "pass": true
+    },
+    {
+      "detail": {
+        "42": [],
+        "1337": [
+          "  experiment_seed: 1337",
+          "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_1337",
+          "    generator_seed: 1337"
+        ],
+        "2026": [
+          "  experiment_seed: 2026",
+          "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_2026",
+          "    generator_seed: 2026"
+        ]
+      },
+      "gate": "C.resolved_config_differs_only_by_seed",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.completed_4000",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.applications",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.order_independently_predicted",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.distinct_train_pairs",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.source_target_disjoint",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.input_contract",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.completed_4000",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.applications",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.order_independently_predicted",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.distinct_train_pairs",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.source_target_disjoint",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.input_contract",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.completed_4000",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.applications",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.order_independently_predicted",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.distinct_train_pairs",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.source_target_disjoint",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.input_contract",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed_streams_differ",
+      "pass": true
+    },
+    {
+      "gate": "E.seed42.finite_active",
+      "pass": true
+    },
+    {
+      "gate": "E.seed1337.finite_active",
+      "pass": true
+    },
+    {
+      "gate": "E.seed2026.finite_active",
+      "pass": true
+    },
+    {
+      "gate": "F.seed42.two_events_one_selected",
+      "pass": true
+    },
+    {
+      "gate": "F.seed42.final_provenance",
+      "pass": true
+    },
+    {
+      "gate": "F.seed1337.two_events_one_selected",
+      "pass": true
+    },
+    {
+      "gate": "F.seed1337.final_provenance",
+      "pass": true
+    },
+    {
+      "gate": "F.seed2026.two_events_one_selected",
+      "pass": true
+    },
+    {
+      "gate": "F.seed2026.final_provenance",
+      "pass": true
+    },
+    {
+      "gate": "F.final_checkpoints_distinct",
+      "pass": true
+    },
+    {
+      "gate": "F.run_roots_distinct",
+      "pass": true
+    },
+    {
+      "gate": "G.seed42.val_0_test_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed42.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "gate": "G.seed1337.val_0_test_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed1337.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "gate": "G.seed2026.val_0_test_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed2026.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "detail": [
+        ".seed_1337.lock",
+        ".seed_2026.lock",
+        ".seed_42.lock",
+        "seed_1337",
+        "seed_2026",
+        "seed_42"
+      ],
+      "gate": "H.host_parent_exactly_three_seeds",
+      "pass": true
+    },
+    {
+      "gate": "H.seed42.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "gate": "H.seed1337.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "gate": "H.seed2026.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "H.host_final_state",
+      "pass": true
+    },
+    {
+      "gate": "H.gpu_checkout_authority_clean",
+      "pass": true
+    }
+  ],
+  "host_recheck": {
+    "host_state": {
+      "candidate_bundle": {
+        "bytes": 193640,
+        "exists": true,
+        "path": "/tmp/e05_candidate.bundle",
+        "sha256": "13acd1a8f1f41d5efc7c7e087f5f93cd9b4c2ecb09533e9ae68170463f2b8a2d"
+      },
+      "e05_tmux_panes": {
+        "m6_e05_s1337": "1 0",
+        "m6_e05_s2026": "1 0",
+        "m6_e05_s42": "1 0"
+      },
+      "git_branch": "m6-baselines",
+      "git_head": "efdf753156045dd2bed52229d9eac869b18d72f8",
+      "git_status_porcelain": "",
+      "gpu": "NVIDIA GeForce RTX 3090, 580.178.04, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+      "gpu_compute_apps": [],
+      "hostname": "nd-System-Product-Name",
+      "method_processes": [],
+      "runs_m6_listing": [
+        "E05",
+        "E06b",
+        "E06c",
+        "E07c"
+      ]
+    },
+    "parent_listing": [
+      ".seed_1337.lock",
+      ".seed_2026.lock",
+      ".seed_42.lock",
+      "seed_1337",
+      "seed_2026",
+      "seed_42"
+    ],
+    "seeds": {
+      "1337": {
+        "checkpoints": {
+          "checkpoints/iteration_0001.pth": {
+            "bytes": 232113504,
+            "sha256": "cf6bc24e555eef1cddfe9aeaa2b78692496bac26e89fd4fa98ad554249725905"
+          },
+          "checkpoints/iteration_4000.pth": {
+            "bytes": 232113504,
+            "sha256": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+          }
+        },
+        "file_count": 10,
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "2c6a4746c1339dace16768b28213e66950255d4cc0f9b312f770fbeee14c2e98",
+        "resolved_config_sha256": "366a641115e4c2b92f12da83ff97cd8a30c163884411580bcaeb15d13c200e2b",
+        "resolved_config_yaml": "version: e05_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E05\ndisplay_name: PCGAN (controlled architecture resolution)\nspec_section: '8.5'\nfidelity_class: CONTROLLED_ADAPTATION\nfidelity_provenance:\n- AMENDMENT_A2_A2_07_ARCHITECTURE_RESOLUTION\nreporting_label: PCGAN (controlled architecture resolution)\nforbidden_wording:\n- native PCGAN\n- faithful PCGAN\n- official reproduction\nlearned_method: true\nsource:\n  paper: arXiv:2604.09018\n  official_code_release: NONE_LOCATED_AS_OF_2026_09_21\n  executable_architecture_basis:\n    repository: https://github.com/taesungp/swapping-autoencoder-pytorch\n    pinned_commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    provenance: third_party/source_pins.json\n    local_source_path: third_party/source_cache/swapping_autoencoder\n    weight_bytes_from_source_cache: NONE\n  architecture_resolution:\n    follow: '[34]''s ACTUAL executable architecture, including StyleGAN2-style modulation/demodulation\n      and its discriminator'\n    port_stylegan_v1_adain_for_prose_citation_35: false\n    reason: PCGAN prose cites AdaIN/StyleGAN-v1 [35] while its named executable base\n      [34] uses StyleGAN2 demodulation\n    disclosure_required_in_report: true\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  pair_manifest: manifests/pairs_train_v1.parquet\n  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  input_resolution_note: '[34] officially runs at 256/512/1024; 256 is the benchmark\n    canonical size (E05-1, M6A2)'\n  total_iterations: 4000\n  batch_size: 1\noptimizer:\n  name: Adam\n  learning_rate: 1.0e-06\n  betas:\n  - 0.9\n  - 0.999\narchitecture_at_256:\n  netE_num_downsampling_sp: 1\n  spatial_code_ch: 8\n  z_pat: 8 x 128 x 128\n  blur_loss_downsample: 256 -> 128 (relative /2)\nlosses:\n  total: L_rec + L_recblur + L_advrec + L_advmix + L_pat\n  weighting: ALL_UNIT_WEIGHTED\n  alpha: 0.2\n  beta: 1.0e-06\n  coefficients_retuned_in_m6b: false\nsupervision: pooled_train_live_attack_labels\nattack_type_labels: FORBIDDEN\ngpat_identity_or_landmark_losses_in_main_row: false\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\noutput: full 256x256 RGB synthetic image\nexternal_assets: []\ncheckpoint:\n  cadence: implementation_defined_periodic_plus_terminal\n  rule: BASELINE_FINAL_STATE_V1\n  terminal_state: iteration_4000\n  rule_source: AMENDMENT_A2_A2_06\n  disclosure: '''end of budget'' is a BENCHMARK CONVENTION, not a paper fact'\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E05/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  PAPER:\n  - training\n  - optimizer\n  - losses\n  SPEC:\n  - output\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - architecture_at_256\n  - source.executable_architecture_basis\n  AMENDMENT_A2:\n  - source.architecture_resolution\n  - checkpoint.rule\n  - checkpoint.terminal_state\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E05\n  experiment_seed: 1337\n  config_path: configs/methods/e05_pcgan.yaml\n  config_sha256: 478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de\n  snapshot_path: frozen_config_snapshot/configs/methods/e05_pcgan.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_1337\n  git_commit: efdf753156045dd2bed52229d9eac869b18d72f8\n  source_commits: {}\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; every execution choice is listed\n    here and was NOT part of the frozen YAML. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  qualification_only: false\n  labels: []\n  identities:\n    config_sha256: 478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\n    a5_amendment_sha256: 05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd\n    a5_overlay_sha256: af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1\n    m6d4c_overlay_sha256: 8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828\n    m6d4e_evidence_sha256: 94c13a3198aced3dbe3286cd708c23f8bd328e175e8fcfb9f06ba337ddddf60e\n    environment_lock_sha256: 849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50\n    compatibility_manifest_sha256: b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac\n    pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    source_tree: 25a434f1282a0177d6afdcc68ebfcf40bd805621\n    fidelity_class: CONTROLLED_ADAPTATION\n    production_files_sha256:\n      methods/pcgan/production_io.py: 6968943fedd678f13437d2ba6bffdc82ebd60d3872dc59bdc7e921a6edb32c00\n      methods/pcgan/production_runner.py: 5622b292cc0e44d28f682d903a9eb82945da41498343fa3a62bd867124ed33e0\n      tools/run_e05.py: 7bdff320ca901538d1ea8d0272145e774d78f64fc4dbf4c5eb2b15e032022835\n  fidelity_class: CONTROLLED_ADAPTATION\n  reporting_label: PCGAN (controlled architecture resolution)\n  source_pin:\n    repository: https://github.com/taesungp/swapping-autoencoder-pytorch\n    commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    tree: 25a434f1282a0177d6afdcc68ebfcf40bd805621\n    role: executable architecture basis (no official PCGAN code release)\n  amendments:\n    A2: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\n    A5_amendment: 05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd\n    A5_overlay:\n      path: configs/amendments/e05_a5_blur_operator_resolution.yaml\n      sha256: af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1\n    M6D4c_overlay:\n      path: configs/amendments/e05_training_runner_resolution.yaml\n      sha256: 8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828\n  environment_lock:\n    path: environments/e05.lock.json\n    sha256: 849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50\n  pair_manifest:\n    path: manifests/pairs_train_v1.parquet\n    sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n    columns_read:\n    - pair_id\n    - source_spoof_id\n    - target_live_id\n    - dataset\n    - split\n  training:\n    total_iterations: 4000\n    batch_size: 1\n    iterations_executed_limit: 4000\n    iteration_unit: one D Adam application then one G Adam application\n    optimizers: 'D: ImageD+PatchD, G: Encoder+Generator; Adam lr 1e-6 betas (0.9,\n      0.999)'\n  execution_choices:\n    classification: PRODUCTION_INTEGRATION_OF_THE_QUALIFIED_M6D4C_RUNNER\n    pair_roles: x_src = face(source_spoof_id) [pattern/artifact], x_tgt = face(target_live_id)\n      [content]; spec 8.5 + M6D4c pair (m = G(z_pat_src, z_con_tgt))\n    pair_order: 'torch DataLoader(batch_size=1, shuffle=True, num_workers=0, drop_last=False)\n      on the stored manifest order with generator = torch.Generator().manual_seed(seed)\n      (methods.common.learned.torch_loader_options); iteration t consumes sampler\n      position t-1 of the first pass: one int64 base-seed draw, then randperm(8838);\n      4000 distinct pairs, none repeated; shuffle provenance: pinned data/__init__.py:93\n      (train phase shuffles)'\n    input_mapping: canonical uint8 RGB -> float32 (x/255-0.5)/0.5 in [-1,1]; pinned\n      data/base_dataset.py:137-141; no resize/crop/flip (canonical faces are already\n      256; no augmentation)\n    workers: num_workers = 0 (workers_policy IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT;\n      the dataset has no randomness, so no worker RNG exists)\n    checkpoint_cadence: 'pinned predecessor cadence util/iter_counter.py save_freq=50000\n      (+ final save): benchmark iteration 1 periodic, iteration 4000 terminal/selected'\n    checkpoint_content: 'state_dicts of Encoder, Generator, ImageD, PatchD + JSON\n      provenance (no optimizer state: resume is not qualified)'\n    resume: NOT_QUALIFIED_FRESH_ONLY\n  dataloader:\n    batch_size: 1\n    shuffle: true\n    num_workers: 0\n    pin_memory: false\n    drop_last: false\n    generator_seed: 1337\n    worker_init_fn: 'methods.common.learned.seed_torch_worker (inactive: 0 workers)'\n  checkpoint_rule:\n    rule: BASELINE_FINAL_STATE_V1\n    iterations:\n    - 1\n    - 4000\n    selected: checkpoints/iteration_4000.pth\n  logging_contract:\n    version: run_logging_v1\n    sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    record_per: BENCHMARK_ITERATION\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "638c777fb676e7cb78b2ed92d1e6e3dae56e4217dc2c8c5021a973604b10a242"
+      },
+      "2026": {
+        "checkpoints": {
+          "checkpoints/iteration_0001.pth": {
+            "bytes": 232113504,
+            "sha256": "74a62dcc39925845f60596770f3fc9999733d0af6a6ff6400b9d5a71756833e4"
+          },
+          "checkpoints/iteration_4000.pth": {
+            "bytes": 232113504,
+            "sha256": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+          }
+        },
+        "file_count": 10,
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "aeb1e5c6b878a0f7f00a7c6ff271f74b2e1114b014a44be707225a21c2148374",
+        "resolved_config_sha256": "34754f7f38e13f47c18bc6948378ff94cf08bad1e3def1d02ef1f5c26ede8739",
+        "resolved_config_yaml": "version: e05_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E05\ndisplay_name: PCGAN (controlled architecture resolution)\nspec_section: '8.5'\nfidelity_class: CONTROLLED_ADAPTATION\nfidelity_provenance:\n- AMENDMENT_A2_A2_07_ARCHITECTURE_RESOLUTION\nreporting_label: PCGAN (controlled architecture resolution)\nforbidden_wording:\n- native PCGAN\n- faithful PCGAN\n- official reproduction\nlearned_method: true\nsource:\n  paper: arXiv:2604.09018\n  official_code_release: NONE_LOCATED_AS_OF_2026_09_21\n  executable_architecture_basis:\n    repository: https://github.com/taesungp/swapping-autoencoder-pytorch\n    pinned_commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    provenance: third_party/source_pins.json\n    local_source_path: third_party/source_cache/swapping_autoencoder\n    weight_bytes_from_source_cache: NONE\n  architecture_resolution:\n    follow: '[34]''s ACTUAL executable architecture, including StyleGAN2-style modulation/demodulation\n      and its discriminator'\n    port_stylegan_v1_adain_for_prose_citation_35: false\n    reason: PCGAN prose cites AdaIN/StyleGAN-v1 [35] while its named executable base\n      [34] uses StyleGAN2 demodulation\n    disclosure_required_in_report: true\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  pair_manifest: manifests/pairs_train_v1.parquet\n  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  input_resolution_note: '[34] officially runs at 256/512/1024; 256 is the benchmark\n    canonical size (E05-1, M6A2)'\n  total_iterations: 4000\n  batch_size: 1\noptimizer:\n  name: Adam\n  learning_rate: 1.0e-06\n  betas:\n  - 0.9\n  - 0.999\narchitecture_at_256:\n  netE_num_downsampling_sp: 1\n  spatial_code_ch: 8\n  z_pat: 8 x 128 x 128\n  blur_loss_downsample: 256 -> 128 (relative /2)\nlosses:\n  total: L_rec + L_recblur + L_advrec + L_advmix + L_pat\n  weighting: ALL_UNIT_WEIGHTED\n  alpha: 0.2\n  beta: 1.0e-06\n  coefficients_retuned_in_m6b: false\nsupervision: pooled_train_live_attack_labels\nattack_type_labels: FORBIDDEN\ngpat_identity_or_landmark_losses_in_main_row: false\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\noutput: full 256x256 RGB synthetic image\nexternal_assets: []\ncheckpoint:\n  cadence: implementation_defined_periodic_plus_terminal\n  rule: BASELINE_FINAL_STATE_V1\n  terminal_state: iteration_4000\n  rule_source: AMENDMENT_A2_A2_06\n  disclosure: '''end of budget'' is a BENCHMARK CONVENTION, not a paper fact'\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E05/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  PAPER:\n  - training\n  - optimizer\n  - losses\n  SPEC:\n  - output\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - architecture_at_256\n  - source.executable_architecture_basis\n  AMENDMENT_A2:\n  - source.architecture_resolution\n  - checkpoint.rule\n  - checkpoint.terminal_state\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E05\n  experiment_seed: 2026\n  config_path: configs/methods/e05_pcgan.yaml\n  config_sha256: 478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de\n  snapshot_path: frozen_config_snapshot/configs/methods/e05_pcgan.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_2026\n  git_commit: efdf753156045dd2bed52229d9eac869b18d72f8\n  source_commits: {}\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; every execution choice is listed\n    here and was NOT part of the frozen YAML. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  qualification_only: false\n  labels: []\n  identities:\n    config_sha256: 478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\n    a5_amendment_sha256: 05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd\n    a5_overlay_sha256: af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1\n    m6d4c_overlay_sha256: 8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828\n    m6d4e_evidence_sha256: 94c13a3198aced3dbe3286cd708c23f8bd328e175e8fcfb9f06ba337ddddf60e\n    environment_lock_sha256: 849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50\n    compatibility_manifest_sha256: b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac\n    pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    source_tree: 25a434f1282a0177d6afdcc68ebfcf40bd805621\n    fidelity_class: CONTROLLED_ADAPTATION\n    production_files_sha256:\n      methods/pcgan/production_io.py: 6968943fedd678f13437d2ba6bffdc82ebd60d3872dc59bdc7e921a6edb32c00\n      methods/pcgan/production_runner.py: 5622b292cc0e44d28f682d903a9eb82945da41498343fa3a62bd867124ed33e0\n      tools/run_e05.py: 7bdff320ca901538d1ea8d0272145e774d78f64fc4dbf4c5eb2b15e032022835\n  fidelity_class: CONTROLLED_ADAPTATION\n  reporting_label: PCGAN (controlled architecture resolution)\n  source_pin:\n    repository: https://github.com/taesungp/swapping-autoencoder-pytorch\n    commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    tree: 25a434f1282a0177d6afdcc68ebfcf40bd805621\n    role: executable architecture basis (no official PCGAN code release)\n  amendments:\n    A2: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\n    A5_amendment: 05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd\n    A5_overlay:\n      path: configs/amendments/e05_a5_blur_operator_resolution.yaml\n      sha256: af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1\n    M6D4c_overlay:\n      path: configs/amendments/e05_training_runner_resolution.yaml\n      sha256: 8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828\n  environment_lock:\n    path: environments/e05.lock.json\n    sha256: 849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50\n  pair_manifest:\n    path: manifests/pairs_train_v1.parquet\n    sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n    columns_read:\n    - pair_id\n    - source_spoof_id\n    - target_live_id\n    - dataset\n    - split\n  training:\n    total_iterations: 4000\n    batch_size: 1\n    iterations_executed_limit: 4000\n    iteration_unit: one D Adam application then one G Adam application\n    optimizers: 'D: ImageD+PatchD, G: Encoder+Generator; Adam lr 1e-6 betas (0.9,\n      0.999)'\n  execution_choices:\n    classification: PRODUCTION_INTEGRATION_OF_THE_QUALIFIED_M6D4C_RUNNER\n    pair_roles: x_src = face(source_spoof_id) [pattern/artifact], x_tgt = face(target_live_id)\n      [content]; spec 8.5 + M6D4c pair (m = G(z_pat_src, z_con_tgt))\n    pair_order: 'torch DataLoader(batch_size=1, shuffle=True, num_workers=0, drop_last=False)\n      on the stored manifest order with generator = torch.Generator().manual_seed(seed)\n      (methods.common.learned.torch_loader_options); iteration t consumes sampler\n      position t-1 of the first pass: one int64 base-seed draw, then randperm(8838);\n      4000 distinct pairs, none repeated; shuffle provenance: pinned data/__init__.py:93\n      (train phase shuffles)'\n    input_mapping: canonical uint8 RGB -> float32 (x/255-0.5)/0.5 in [-1,1]; pinned\n      data/base_dataset.py:137-141; no resize/crop/flip (canonical faces are already\n      256; no augmentation)\n    workers: num_workers = 0 (workers_policy IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT;\n      the dataset has no randomness, so no worker RNG exists)\n    checkpoint_cadence: 'pinned predecessor cadence util/iter_counter.py save_freq=50000\n      (+ final save): benchmark iteration 1 periodic, iteration 4000 terminal/selected'\n    checkpoint_content: 'state_dicts of Encoder, Generator, ImageD, PatchD + JSON\n      provenance (no optimizer state: resume is not qualified)'\n    resume: NOT_QUALIFIED_FRESH_ONLY\n  dataloader:\n    batch_size: 1\n    shuffle: true\n    num_workers: 0\n    pin_memory: false\n    drop_last: false\n    generator_seed: 2026\n    worker_init_fn: 'methods.common.learned.seed_torch_worker (inactive: 0 workers)'\n  checkpoint_rule:\n    rule: BASELINE_FINAL_STATE_V1\n    iterations:\n    - 1\n    - 4000\n    selected: checkpoints/iteration_4000.pth\n  logging_contract:\n    version: run_logging_v1\n    sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    record_per: BENCHMARK_ITERATION\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "1667ccc2fc95d585d3538b73e0316dd991c35cba6b0cce9d8cf1bbe9ef36f5fc"
+      },
+      "42": {
+        "checkpoints": {
+          "checkpoints/iteration_0001.pth": {
+            "bytes": 232113504,
+            "sha256": "82d0606303d6a1ed38da5581758f12e444da603fb86817922ce7fb0dc87971df"
+          },
+          "checkpoints/iteration_4000.pth": {
+            "bytes": 232113504,
+            "sha256": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+          }
+        },
+        "file_count": 10,
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "4b2fc19c90b2f0fd0c48212bb71a850ddafef398322d1533ac1a4649da5c04a9",
+        "resolved_config_sha256": "33a3c86db4d666e77564d98fe13fccb1ef7cace45ea0004d16c08fad63046bf7",
+        "resolved_config_yaml": "version: e05_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E05\ndisplay_name: PCGAN (controlled architecture resolution)\nspec_section: '8.5'\nfidelity_class: CONTROLLED_ADAPTATION\nfidelity_provenance:\n- AMENDMENT_A2_A2_07_ARCHITECTURE_RESOLUTION\nreporting_label: PCGAN (controlled architecture resolution)\nforbidden_wording:\n- native PCGAN\n- faithful PCGAN\n- official reproduction\nlearned_method: true\nsource:\n  paper: arXiv:2604.09018\n  official_code_release: NONE_LOCATED_AS_OF_2026_09_21\n  executable_architecture_basis:\n    repository: https://github.com/taesungp/swapping-autoencoder-pytorch\n    pinned_commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    provenance: third_party/source_pins.json\n    local_source_path: third_party/source_cache/swapping_autoencoder\n    weight_bytes_from_source_cache: NONE\n  architecture_resolution:\n    follow: '[34]''s ACTUAL executable architecture, including StyleGAN2-style modulation/demodulation\n      and its discriminator'\n    port_stylegan_v1_adain_for_prose_citation_35: false\n    reason: PCGAN prose cites AdaIN/StyleGAN-v1 [35] while its named executable base\n      [34] uses StyleGAN2 demodulation\n    disclosure_required_in_report: true\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  pair_manifest: manifests/pairs_train_v1.parquet\n  pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  input_resolution_note: '[34] officially runs at 256/512/1024; 256 is the benchmark\n    canonical size (E05-1, M6A2)'\n  total_iterations: 4000\n  batch_size: 1\noptimizer:\n  name: Adam\n  learning_rate: 1.0e-06\n  betas:\n  - 0.9\n  - 0.999\narchitecture_at_256:\n  netE_num_downsampling_sp: 1\n  spatial_code_ch: 8\n  z_pat: 8 x 128 x 128\n  blur_loss_downsample: 256 -> 128 (relative /2)\nlosses:\n  total: L_rec + L_recblur + L_advrec + L_advmix + L_pat\n  weighting: ALL_UNIT_WEIGHTED\n  alpha: 0.2\n  beta: 1.0e-06\n  coefficients_retuned_in_m6b: false\nsupervision: pooled_train_live_attack_labels\nattack_type_labels: FORBIDDEN\ngpat_identity_or_landmark_losses_in_main_row: false\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\noutput: full 256x256 RGB synthetic image\nexternal_assets: []\ncheckpoint:\n  cadence: implementation_defined_periodic_plus_terminal\n  rule: BASELINE_FINAL_STATE_V1\n  terminal_state: iteration_4000\n  rule_source: AMENDMENT_A2_A2_06\n  disclosure: '''end of budget'' is a BENCHMARK CONVENTION, not a paper fact'\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E05/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  PAPER:\n  - training\n  - optimizer\n  - losses\n  SPEC:\n  - output\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - architecture_at_256\n  - source.executable_architecture_basis\n  AMENDMENT_A2:\n  - source.architecture_resolution\n  - checkpoint.rule\n  - checkpoint.terminal_state\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E05\n  experiment_seed: 42\n  config_path: configs/methods/e05_pcgan.yaml\n  config_sha256: 478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de\n  snapshot_path: frozen_config_snapshot/configs/methods/e05_pcgan.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_42\n  git_commit: efdf753156045dd2bed52229d9eac869b18d72f8\n  source_commits: {}\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; every execution choice is listed\n    here and was NOT part of the frozen YAML. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  qualification_only: false\n  labels: []\n  identities:\n    config_sha256: 478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\n    a5_amendment_sha256: 05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd\n    a5_overlay_sha256: af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1\n    m6d4c_overlay_sha256: 8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828\n    m6d4e_evidence_sha256: 94c13a3198aced3dbe3286cd708c23f8bd328e175e8fcfb9f06ba337ddddf60e\n    environment_lock_sha256: 849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50\n    compatibility_manifest_sha256: b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac\n    pair_manifest_sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    source_tree: 25a434f1282a0177d6afdcc68ebfcf40bd805621\n    fidelity_class: CONTROLLED_ADAPTATION\n    production_files_sha256:\n      methods/pcgan/production_io.py: 6968943fedd678f13437d2ba6bffdc82ebd60d3872dc59bdc7e921a6edb32c00\n      methods/pcgan/production_runner.py: 5622b292cc0e44d28f682d903a9eb82945da41498343fa3a62bd867124ed33e0\n      tools/run_e05.py: 7bdff320ca901538d1ea8d0272145e774d78f64fc4dbf4c5eb2b15e032022835\n  fidelity_class: CONTROLLED_ADAPTATION\n  reporting_label: PCGAN (controlled architecture resolution)\n  source_pin:\n    repository: https://github.com/taesungp/swapping-autoencoder-pytorch\n    commit: 6baa180f1184ee79a6b967f9d80ee0e02a979ac7\n    tree: 25a434f1282a0177d6afdcc68ebfcf40bd805621\n    role: executable architecture basis (no official PCGAN code release)\n  amendments:\n    A2: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\n    A5_amendment: 05d6c6c271bf23aece3b2fcf9cdef5d94bd32517421a0ac83be26c5a9174d4dd\n    A5_overlay:\n      path: configs/amendments/e05_a5_blur_operator_resolution.yaml\n      sha256: af28a48b43828652a7423235aba6be239325e3fbfeeaf8fded9bbb57c11a7ca1\n    M6D4c_overlay:\n      path: configs/amendments/e05_training_runner_resolution.yaml\n      sha256: 8eee350c5642f2de38c92af366b99e80f7b6dab4404433ff88ca71da87b92828\n  environment_lock:\n    path: environments/e05.lock.json\n    sha256: 849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50\n  pair_manifest:\n    path: manifests/pairs_train_v1.parquet\n    sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n    columns_read:\n    - pair_id\n    - source_spoof_id\n    - target_live_id\n    - dataset\n    - split\n  training:\n    total_iterations: 4000\n    batch_size: 1\n    iterations_executed_limit: 4000\n    iteration_unit: one D Adam application then one G Adam application\n    optimizers: 'D: ImageD+PatchD, G: Encoder+Generator; Adam lr 1e-6 betas (0.9,\n      0.999)'\n  execution_choices:\n    classification: PRODUCTION_INTEGRATION_OF_THE_QUALIFIED_M6D4C_RUNNER\n    pair_roles: x_src = face(source_spoof_id) [pattern/artifact], x_tgt = face(target_live_id)\n      [content]; spec 8.5 + M6D4c pair (m = G(z_pat_src, z_con_tgt))\n    pair_order: 'torch DataLoader(batch_size=1, shuffle=True, num_workers=0, drop_last=False)\n      on the stored manifest order with generator = torch.Generator().manual_seed(seed)\n      (methods.common.learned.torch_loader_options); iteration t consumes sampler\n      position t-1 of the first pass: one int64 base-seed draw, then randperm(8838);\n      4000 distinct pairs, none repeated; shuffle provenance: pinned data/__init__.py:93\n      (train phase shuffles)'\n    input_mapping: canonical uint8 RGB -> float32 (x/255-0.5)/0.5 in [-1,1]; pinned\n      data/base_dataset.py:137-141; no resize/crop/flip (canonical faces are already\n      256; no augmentation)\n    workers: num_workers = 0 (workers_policy IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT;\n      the dataset has no randomness, so no worker RNG exists)\n    checkpoint_cadence: 'pinned predecessor cadence util/iter_counter.py save_freq=50000\n      (+ final save): benchmark iteration 1 periodic, iteration 4000 terminal/selected'\n    checkpoint_content: 'state_dicts of Encoder, Generator, ImageD, PatchD + JSON\n      provenance (no optimizer state: resume is not qualified)'\n    resume: NOT_QUALIFIED_FRESH_ONLY\n  dataloader:\n    batch_size: 1\n    shuffle: true\n    num_workers: 0\n    pin_memory: false\n    drop_last: false\n    generator_seed: 42\n    worker_init_fn: 'methods.common.learned.seed_torch_worker (inactive: 0 workers)'\n  checkpoint_rule:\n    rule: BASELINE_FINAL_STATE_V1\n    iterations:\n    - 1\n    - 4000\n    selected: checkpoints/iteration_4000.pth\n  logging_contract:\n    version: run_logging_v1\n    sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    record_per: BENCHMARK_ITERATION\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "526419f00fd272b2207b0b167441f4ec63b22d42687f4d0d0b8399613c6e1d1e"
+      }
+    },
+    "utc": "2026-10-25T08:15:13Z"
+  },
+  "method": {
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "id": "E05",
+    "name": "PCGAN (controlled architecture resolution)",
+    "track": "A_FAIR_COMMON_IDENTITY_FREE"
+  },
+  "not_completed": {
+    "downstream_fas_evaluation": "NOT_STARTED",
+    "synthetic_bank": "NOT_STARTED",
+    "whole_benchmark": "NOT_COMPLETED"
+  },
+  "per_seed_evidence": {
+    "1337": {
+      "closure_commit": "023beb4d69c63a29e504f4497945ac1da1bb6985",
+      "completion": "outputs/audit/E05_SEED1337_COMPLETION.json",
+      "manifest": "outputs/audit/E05_SEED1337_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E05_SEED1337_COMPLETION.md",
+      "sha256": "outputs/audit/E05_SEED1337_EVIDENCE_SHA256.txt",
+      "tool": "tools/e05_seed_completion_audit.py"
+    },
+    "2026": {
+      "closure_commit": "21d47c24fbe827d296c6b67db1f28393f819c9c9",
+      "completion": "outputs/audit/E05_SEED2026_COMPLETION.json",
+      "manifest": "outputs/audit/E05_SEED2026_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E05_SEED2026_COMPLETION.md",
+      "sha256": "outputs/audit/E05_SEED2026_EVIDENCE_SHA256.txt",
+      "tool": "tools/e05_seed_completion_audit.py"
+    },
+    "42": {
+      "closure_commit": "072ce7d68cbdb0fab7f6d6d85ebce5b4ac1f4cfa",
+      "completion": "outputs/audit/E05_SEED42_COMPLETION.json",
+      "manifest": "outputs/audit/E05_SEED42_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E05_SEED42_COMPLETION.md",
+      "sha256": "outputs/audit/E05_SEED42_EVIDENCE_SHA256.txt",
+      "tool": "tools/e05_seed_completion_audit.py"
+    }
+  },
+  "protocol": {
+    "batch_size": 1,
+    "benchmark_iterations": 4000,
+    "checkpoint_rule": "BASELINE_FINAL_STATE_V1",
+    "checkpoints": {
+      "1": "periodic, not selected",
+      "4000": "selected, BASELINE_FINAL_STATE_V1"
+    },
+    "drop_last": false,
+    "final_checkpoint": "checkpoints/iteration_4000.pth",
+    "final_rule_scope": "applied independently within each seed; no cross-seed choice",
+    "g_losses": [
+      "L_rec",
+      "L_recblur",
+      "L_advrec",
+      "L_advmix",
+      "L_pat"
+    ],
+    "g_total": "unit-weighted sum",
+    "input_mapping": "canonical RGB256 uint8 -> float32 (x/255-0.5)/0.5 in [-1,1]; no resize, crop, flip or augmentation",
+    "iteration_unit": "one D Adam application then one G Adam application",
+    "num_workers": 0,
+    "optimizer": "Adam lr 1e-6 betas (0.9, 0.999), D = ImageD+PatchD, G = Encoder+Generator",
+    "pair_order": "seeded shuffle: torch.Generator().manual_seed(seed), one int64 draw, then randperm(8838); iteration t uses sampler position t-1; 4000 distinct pairs",
+    "pair_roles": "x_src = source_spoof_id face (pattern/artifact), x_tgt = target_live_id face (content)",
+    "resolution_wording": "owner-approved controlled implementation resolutions; not native, faithful or official PCGAN choices",
+    "resume": "NOT_QUALIFIED_FRESH_ONLY"
+  },
+  "scientific_training_authority": "efdf753156045dd2bed52229d9eac869b18d72f8",
+  "status": "SCIENTIFIC_TRAINING_COMPLETED_3_OF_3_SEEDS"
+}
