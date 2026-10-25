@@ -34,7 +34,7 @@ RUNTIME = '/home/student20261/workdir/GPAT_TransferBench_runtime'
 WORKDIR = '/home/student20261/workdir'
 AUTHORITY = 'efdf753156045dd2bed52229d9eac869b18d72f8'
 CONFIG_SHA = '478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de'
-RUN_IDS = {42: '18463bf5cd471e55', 1337: '036c806bb2f339b7'}
+RUN_IDS = {42: '18463bf5cd471e55', 1337: '036c806bb2f339b7', 2026: 'b739351daf9779bc'}
 EXPECTED = {
     'method_id': 'E05', 'method_name': 'PCGAN (controlled architecture resolution)', 'host': 'nd-System-Product-Name',
     'fidelity': 'CONTROLLED_ADAPTATION', 'track': 'A_FAIR_COMMON_IDENTITY_FREE', 'resume': 'NOT_QUALIFIED_FRESH_ONLY',
