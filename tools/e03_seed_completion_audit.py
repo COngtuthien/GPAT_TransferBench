@@ -41,7 +41,7 @@ RUNTIME = '/home/student20261/workdir/GPAT_TransferBench_runtime'
 WORKDIR = '/home/student20261/workdir'
 AUTHORITY = 'd547fc9f8932a273d719ae589aade85a9d989b85'
 CONFIG_SHA = '08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0'
-RUN_IDS = {42: 'a565b76bc7349532'}
+RUN_IDS = {42: 'a565b76bc7349532', 1337: 'e8c85cc378e778f5'}
 VAL_SEEDS = {42: 1355875380, 1337: 1050417158, 2026: 1242808125}     # owner ruling V (qualified mappings)
 FIDELITY = 'FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY'
 EXPECTED = {
@@ -108,6 +108,7 @@ SMALL_FILES = ('run_manifest.json', 'run_summary.json', 'checkpoint_index.json',
 PANE_FAIL_PATTERNS = ('Traceback', 'ResourceExhausted', 'out of memory', 'OOM', 'E03 STOP', 'REFUSED', 'Killed',
                       'Segmentation fault', 'core dumped', 'NaN', 'non-finite')
 LOG_PATTERNS = ('Traceback', 'Error', 'error', 'OutOfMemory', 'out of memory', 'Killed', 'nan', 'inf', 'Warning')
+KEY_ECHO = ('^[[A', '^[[B', '^[[C', '^[[D')      # tty ECHOCTL echo of cursor keys typed into an attached tmux pane
 RUN_ROOT_FILES = len(SMALL_FILES) + MAX_EPOCH * len(SUFFIXES) + 1 + MAX_EPOCH * (STEPS // 200 + VAL_STEPS // 50)
 
 
@@ -213,6 +214,15 @@ def sha_listing(root):
 
 def finite(v):
     return isinstance(v, float) and math.isfinite(v)
+
+
+def split_key_echo(line):
+    """Strips a leading run of caret-notation cursor-key echoes only (written by the tty line discipline when keys are
+    pressed in an attached client, never by the runner, which reads no stdin); returns (rest, echo count)."""
+    n = 0
+    while line[:4] in KEY_ECHO:
+        line, n = line[4:], n + 1
+    return line, n
 
 
 def git_state():
@@ -716,9 +726,11 @@ def build(c, t, repo_root):
       summ['train_steps'] == TRAIN_STEPS and summ['val_steps'] == VAL_TOTAL)
     G('B.records_written', summ['records_written'] == m['lines'] == TRAIN_STEPS + VAL_TOTAL + MAX_EPOCH + 1,
       summ['records_written'])
+    last, echoes = split_key_echo(host['pane_log_last'][0]) if len(host['pane_log_last']) == 1 else (None, 0)
+    echo = {'raw_last_line': host['pane_log_last'][0], 'cursor_key_echoes_stripped': echoes} if echoes else None
     G('B.pane_log_clean', all(v == 0 for v in host['pane_log_fail_hits'].values()) and
-      host['pane_log_last'] == ['{"status": "completed", "run_dir": "%s"}' % paths(seed)['run_root']],
-      host['pane_log_fail_hits'])
+      last == '{"status": "completed", "run_dir": "%s"}' % paths(seed)['run_root'],
+      dict(host['pane_log_fail_hits'], keyboard_echo=echo) if echo else host['pane_log_fail_hits'])
     G('B.window', host['launch_time'] <= man['start_utc'] <= man['end_utc'] <= host['end_time'] and
       summ['start_utc'] == man['start_utc'] and summ['end_utc'] == man['end_utc'])
     G('B.logs_clean', all(v['bytes'] == 0 for v in c['logs'].values()), {k: v['bytes'] for k, v in c['logs'].items()})
@@ -962,6 +974,11 @@ def build(c, t, repo_root):
                           'downstream_evaluation': False, 'run_root_mutated': False, 'downstream_metric': None},
         'collected': c, 'collected_tf': t,
     }
+    if echo:
+        doc['disclosures'] = {'pane_log_keyboard_echo': dict(echo, note=(
+            'the last pane-log line is the runner completion record preceded only by caret-notation cursor-key echo '
+            '(^[[A..^[[D) from keys pressed in an attached tmux client; it is tty echo, not runner output, and no E03 '
+            'production or pinned-source code path reads stdin; fail-pattern hits are all zero'))}
     return doc, text
 
 
@@ -1067,7 +1084,15 @@ def report(doc):
         '- %d files; LC_ALL=C `<path> <size> <sha256>` listing digest **`%s`**, identical before and after the audit.'
         % (d['run_root_integrity']['file_count'], d['run_root_integrity']['sha_listing_digest']),
         '- metrics.jsonl `%s`' % d['run_root_integrity']['metrics_jsonl_sha256'],
+        ''] + ([
+        '## Disclosure: keyboard echo in the pane log',
         '',
+        '- The last line of `~/workdir/e03_s%d.pane.log` is the completion record preceded by %d caret-notation '
+        'cursor-key echoes (`^[[A`..`^[[D`). This is tty echo of keys pressed in an attached tmux client, not runner '
+        'output; no E03 production or pinned-source code path reads stdin. `B.pane_log_clean` strips only that '
+        'prefix and records the raw line.' % (seed, d['disclosures']['pane_log_keyboard_echo']
+                                              ['cursor_key_echoes_stripped']),
+        ''] if 'disclosures' in d else []) + [
         '## Boundary',
         '',
         'No downstream metric, bank, best-epoch or best-seed logic. ckpt-50 is the final checkpoint by the frozen '
