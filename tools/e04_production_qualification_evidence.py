@@ -29,7 +29,7 @@ def sha256_bytes(b):
 
 
 # ============================================================================ collect-atime (GPU host)
-def collect_atime():
+def collect_atime(post_name='post'):
     from datetime import datetime, timezone
     import pyarrow.parquet as pq
     w = Path('/home/student20261/workdir')
@@ -43,8 +43,8 @@ def collect_atime():
             out[p] = (float(a), float(m))
         return out
     t = {k: datetime.strptime((w / ('e04_prodq_atime_%s.time' % k)).read_text().strip(), '%Y-%m-%dT%H:%M:%SZ')
-         .replace(tzinfo=timezone.utc).timestamp() for k in ('pre', 'post')}
-    pre, post = load('e04_prodq_atime_pre.tsv'), load('e04_prodq_atime_post.tsv')
+         .replace(tzinfo=timezone.utc).timestamp() for k in ('pre', post_name)}
+    pre, post = load('e04_prodq_atime_pre.tsv'), load('e04_prodq_atime_%s.tsv' % post_name)
     stats, manifests = {}, []
     for p, (a, m) in sorted(pre.items()):
         if '/manifests/' in p:
@@ -61,9 +61,9 @@ def collect_atime():
         s['atime_changed'] += post[p][0] != a
         s['mtime_changed'] += post[p][1] != m
     return {'pre_utc': (w / 'e04_prodq_atime_pre.time').read_text().strip(),
-            'post_utc': (w / 'e04_prodq_atime_post.time').read_text().strip(),
+            'post_name': post_name, 'post_utc': (w / ('e04_prodq_atime_%s.time' % post_name)).read_text().strip(),
             'pre_sha256': sha256_bytes((w / 'e04_prodq_atime_pre.tsv').read_bytes()),
-            'post_sha256': sha256_bytes((w / 'e04_prodq_atime_post.tsv').read_bytes()),
+            'post_sha256': sha256_bytes((w / ('e04_prodq_atime_%s.tsv' % post_name)).read_bytes()),
             'files': len(pre), 'same_paths': sorted(pre) == sorted(post), 'by_split': stats, 'manifests': manifests}
 
 
@@ -213,6 +213,9 @@ def build(root, collected):
       t.get('sensitive') == 3027 and all(v['mtime_changed'] == v['missing'] == 0 for v in atime['by_split'].values())
       and 'UNMAPPED' not in atime['by_split'], atime['by_split'])
     G('J.manifests_unmodified', all(m['mtime_unchanged'] for m in atime['manifests']))
+    t2 = load('atime2.json')['by_split'].get('TEST', {})
+    G('J.atime_test_unchanged_after_diagnostics', t2.get('files') == 3027 and t2.get('atime_changed') == 0 and
+      t2.get('sensitive') == 3027, t2)
     G('J.no_scientific_run_root', not load('host_state.json')['e04_run_root_exists'])
 
     # K. runtime / D9
@@ -220,6 +223,32 @@ def build(root, collected):
                                               q[c]['driver']['lock_driver_version'] == pio.LOCK_DRIVER for c in CASES))
     variants = [json.loads((root / ('outputs/audit/E04_D9_BN_PROBE_%s.json' % v)).read_text())['post_state_sha256']
                 for v in 'AB']
+    # K3. real-data gradient repeatability (D9 condition 6: any new gradient discrepancy fails closed)
+    rdp = [load('rdp_%d.json' % k) for k in (1, 2, 3)]
+    lg = load('lg_probe.json')
+    grad_findings = {}
+    for k in sorted(rdp[0]['iterations'][0]['gradients']):
+        g = [p['iterations'][0]['gradients'][k] for p in rdp]
+        grad_findings[k] = {
+            'variables': len(g[0]['per_variable_sha256']),
+            'in_process_repeat_differs': max(len(x['in_process_repeat_differs']) for x in g),
+            'cross_process_differs': sum(len({x['per_variable_sha256'][n] for x in g}) > 1
+                                         for n in g[0]['per_variable_sha256'])}
+    nondet = sorted(k for k, v in grad_findings.items() if v['in_process_repeat_differs'] or v['cross_process_differs'])
+    rels = sorted(v['rel_l2_max'] for v in lg['per_variable'].values())
+    gradient_detail = {
+        'iteration0_identical_state_and_inputs': len({p['initial_state_sha256'] for p in rdp}) == 1 and all(
+            p['iterations'][0]['input_sha256'] == rdp[0]['iterations'][0]['input_sha256'] for p in rdp),
+        'per_loss': grad_findings, 'non_repeatable_losses': nondet,
+        'gpu_ops_only_on_LG_backward_path': lg['those_ops_placed_on_gpu_by_type'],
+        'known_nondeterministic_gpu_ops': {k: lg['those_ops_placed_on_gpu_by_type'].get(k) for k in
+                                           ('ResizeBilinearGrad', 'ScatterNd')},
+        'L_G_rel_l2_median': rels[len(rels) // 2], 'L_G_rel_l2_max': rels[-1], 'L_G_max_abs_diff': lg['max_abs_diff'],
+        'note': ('relative differences near 1 occur only for biases of convolutions followed by training-mode BN, '
+                 'whose exact gradient is zero (rounding noise ~1e-6); substantive tensors differ at float32 '
+                 'rounding level. M6D3e (synthetic) recorded bit-repeatable gradients for every loss.')}
+    G('K.real_data_gradient_repeatability', gradient_detail['iteration0_identical_state_and_inputs'] and not nondet,
+      gradient_detail)
     G('K.d9_compatibility_reprobe_matches_accepted_variant', compat['status'] == 'PASS' and
       compat['graph_def_sha256'] == pio.QUALIFIED_WORKER_GRAPH_SHA and any(compat['post_state_sha256'] == v
                                                                          for v in variants))
@@ -244,7 +273,8 @@ def build(root, collected):
                                    'D3 GPU nondeterminism (M6D3e, D9)'},
            'timing': {'seconds_per_iteration': seconds,
                       'projected_150000_iteration_hours': [s * 150000 / 3600 for s in seconds]},
-           'atime': atime, 'compat_probe': {k: compat[k] for k in ('status', 'graph_def_sha256', 'native_runtime')},
+           'gradient_determinism': gradient_detail, 'atime': atime, 'atime_after_diagnostics': load('atime2.json'),
+           'compat_probe': {k: compat[k] for k in ('status', 'graph_def_sha256', 'native_runtime')},
            'cases': {c: {k: q[c][k] for k in ('status', 'run_dir', 'run_id', 'plan', 'seconds', 'firewall',
                                                'run_summary')} for c in CASES},
            'confirmations': {'scientific_seed_launched': False, 'test_accessed': False, 'val_accessed': False,
@@ -255,7 +285,7 @@ def build(root, collected):
 
 def report(doc):
     rows = ''.join('| `%s` | %s |\n' % (g['gate'], 'pass' if g['pass'] else '**FAIL**') for g in doc['gates'])
-    crop = ''.join('| %s | %d | %d | %d | %d | %d |\n' % (k, v['faces'], v['outside_any'], v['padded_faces'],
+    crop = ''.join('| %s | %d | %d | %d | %d | %d |\n' % (k.replace('|', ' / '), v['faces'], v['outside_any'], v['padded_faces'],
                                                          v['padded_pixels_median'], v['padded_pixels_max'])
                    for k, v in sorted(doc['prepass']['crop_boundary'].items()))
     t = doc['timing']
@@ -277,19 +307,41 @@ def report(doc):
         '## Crop boundary (official landmark ROI vs the 256 frame)', '',
         '| dataset/role | faces | ROI outside frame | zero-padded faces | median padded px | max padded px |',
         '|---|---|---|---|---|---|', crop.rstrip('\n'), '',
-        '## Determinism', '', doc['determinism']['note'] + '.', '', ''])
+        '## Determinism', '', doc['determinism']['note'] + '.', ''] + (blocker(doc) if doc['failed_gates'] else []) + [''])
+
+
+def blocker(doc):
+    g = doc['gradient_determinism']
+    return ['## Blocker: real-data adversarial gradient is not bit-repeatable (fail closed, D9 condition 6)', '',
+            '- With identical initial state and identical real TRAIN inputs (iteration 0), every per-loss gradient is '
+            'bit-repeatable in-process and across 3 processes except `%s`.' % ', '.join(g['non_repeatable_losses']),
+            '- L_G (adversarial generator loss) backpropagates through the four discriminators into 58 generator '
+            'variables. Its backward path alone contains GPU `ResizeBilinearGrad` (%s) and `ScatterNd` (%s; the '
+            'gradient of the CPU-forward trace warp `GatherNd`), op types without deterministic TF 1.15 GPU kernels.'
+            % (g['known_nondeterministic_gpu_ops']['ResizeBilinearGrad'], g['known_nondeterministic_gpu_ops']['ScatterNd']),
+            '- Size: median per-variable relative L2 difference %.2e; the largest relative values (%.2f) occur only for '
+            'biases of convolutions followed by training-mode BN, whose exact gradient is zero; max |diff| %.2e.'
+            % (g['L_G_rel_l2_median'], g['L_G_rel_l2_max'], g['L_G_max_abs_diff']),
+            '- Consequence: E04 real-data training is not bitwise reproducible across processes; the generator state '
+            'differs from Step 1 of iteration 0 and later losses diverge at ~1e-7 to 1e-6 relative within 2 '
+            'iterations. Data, RNG draws, inputs, initial state and iteration-0 losses stay identical.',
+            '- M6D3e recorded bit-repeatable gradients for every loss on synthetic data, so this is a new gradient-level '
+            'observation; the M6D3e statement that the warp has a deterministic backward path holds for its forward '
+            'pass only (the gradient ScatterNd is placed on /gpu:0). It is not a driver difference (in-process).',
+            '- No graph, placement or optimizer change was made. An owner decision is required.', '']
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest='cmd')
-    sub.add_parser('collect-atime')
+    ca = sub.add_parser('collect-atime')
+    ca.add_argument('--post', default='post')
     b = sub.add_parser('build')
     b.add_argument('--collected', required=True)
     b.add_argument('--repo-root', default=str(Path(globals().get('__file__', 'tools/x')).resolve().parents[1]))
     args = ap.parse_args(argv)
     if args.cmd == 'collect-atime':
-        json.dump(collect_atime(), sys.stdout, sort_keys=True)
+        json.dump(collect_atime(args.post), sys.stdout, sort_keys=True)
         return 0
     root = Path(args.repo_root)
     doc = build(root, args.collected)
