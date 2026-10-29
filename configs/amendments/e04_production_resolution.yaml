@@ -1,0 +1,179 @@
+{
+  "schema_version": "e04_production_owner_resolution_v1",
+  "amendment_id": "E04_PRODUCTION_OWNER_RESOLUTION",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "approval_date": "2026-10-29",
+  "approval_scope": "production preparation and qualification only; no E04 scientific seed is authorized",
+  "creates_scientific_authority": false,
+  "scientific_seed_execution_authorized": false,
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Production_Owner_Resolution_Addendum.md",
+  "approved_draft": {
+    "commit": "4112d164861bffa9adbe042f97833bc8ebaa697a",
+    "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Production_Owner_Resolution_Addendum_DRAFT.md",
+    "document_sha256": "1611122ea5e1092e7eb717fdf6d68c00c2d485a4dc7cb0bc8aaba0f769004115",
+    "companion": "configs/amendments/e04_production_resolution.DRAFT.yaml",
+    "companion_sha256": "72ddac6180c28f4d681cc5fa02746da9017a63f9533ce42f68fe408fd074f280",
+    "evidence": "outputs/audit/E04_OWNER_RESOLUTION_INVESTIGATION.json",
+    "evidence_sha256": "276fa8f3ea57b7d81b76b60fb16da00b154964a40104ee6807bba8e0defbe5f5",
+    "rng_test_vectors": "outputs/audit/E04_RNG_TEST_VECTORS.json",
+    "rng_test_vectors_sha256": "35eded87f8da406752bd10337cf626bb4a003993ccd6c6492219f7a8a9bb2eac"
+  },
+  "immutable_inputs_sha256": {
+    "configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "configs/amendments/e04_a4_execution_resolution.yaml": "7579b7177e8b48513bb7a9057e6f700cf9b1f576b5c577887c07bbda9cf35355",
+    "configs/amendments/e04_training_graph_resolution.yaml": "f62f28c8fe8e090f47436544287243c308fb73b32fb26b1b0e55e6bb6b98e3cb",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243"
+  },
+  "fidelity_class": "CONTROLLED_ADAPTATION",
+  "decisions": {
+    "D1": {
+      "owner_status": "APPROVED",
+      "rule": "official TDDFA crop_policy='landmark' (parse_roi_box_from_landmark, crop_img, INTER_LINEAR 120, NormalizeGjz(127.5,128), param*std+mean, recon_vers dense with float roi_box)",
+      "landmarks": "M2 landmarks_px256 from e03_feed_pack_v1 (c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833), pts = landmarks.T [2,68] float32, all 68 points, no offset or rescale",
+      "coordinate_convention": "0-based pixel coordinates, pixel centres at integers (identical in 3DDFA similar_transform and M2 denorm)",
+      "image_read": "cv2.imread(path, cv2.IMREAD_COLOR) BGR uint8 after face_png_sha256 verification",
+      "failure": "FAIL_CLOSED_NO_FALLBACK",
+      "source_pin": "1b6c67601abffc1e9f248b291708aef0e43b55ae",
+      "source_sha256": {
+        "utils/functions.py": "4245b8c58d77e1952de5f9c1a10be381c7a9c34e1f1bcc5317c591f86c524790"
+      },
+      "alternative_conventions_remaining": [],
+      "disclosure": "CONTROLLED_ADAPTATION: externally supplied frozen M2 FaceXFormer landmarks feed the official 3DDFA_V2 landmark crop (upstream tracking uses 3DDFA landmarks); no fallback crop, tracker or redetection",
+      "numpy_scalar_promotion": "pts float32; ROI arithmetic follows the qualified geometry environment (numpy 2.5.3, NEP 50) and is recorded per sample"
+    },
+    "D2": {
+      "owner_status": "APPROVED",
+      "population": {
+        "TRAIN_live": 3830,
+        "TRAIN_spoof": 8838,
+        "VAL": 0,
+        "TEST": 0
+      },
+      "live_outputs": [
+        "param62",
+        "roi_box",
+        "dense_mesh",
+        "M0_32x32_float32",
+        "face_mask_256",
+        "q140_xy"
+      ],
+      "spoof_outputs": [
+        "param62",
+        "roi_box",
+        "q140_xy"
+      ],
+      "spoof_depth": "exact float32 zeros 32x32 constant target; spoof never rendered; no spoof depth stored",
+      "q140_xy": "dense_vertices[q140_indices, :2] in canonical-256 pixels",
+      "offsets": "dense_offsets(source_xy=spoof_q140, target_xy=live_q140) per pair (M6D3e)",
+      "forbidden_columns": [
+        "attack_macro"
+      ],
+      "generated_once_reused_for_seeds": [
+        42,
+        1337,
+        2026
+      ],
+      "test_geometry_or_images": "FORBIDDEN"
+    },
+    "D3": {
+      "owner_status": "APPROVED",
+      "device": "cpu",
+      "environment": "gpat-m6-e04-geometry",
+      "torch_settings": [
+        "set_num_threads(1)",
+        "manual_seed(0)",
+        "use_deterministic_algorithms(True)",
+        "cudnn.benchmark=False",
+        "cudnn.deterministic=True",
+        "TF32 off"
+      ],
+      "acceptance": "two independent pre-pass executions byte-identical",
+      "gpu_generation": "FORBIDDEN in the accepted pre-pass"
+    },
+    "D4": {
+      "owner_status": "APPROVED",
+      "seed": "1 + (u32_be(SHA256('GPAT_TRANSFERBENCH|E04|PAIR_ORDER|<seed>')[0:4]) mod 2147483647)",
+      "generator": "numpy.random.RandomState (legacy MT19937)",
+      "pass_rule": "pass p = rng.permutation(8838), indices into pairs_train_v1 stored order (sorted by pair_id); passes concatenated",
+      "iteration_rule": "iteration t consumes stream[4t:4t+4]; slot j -> rgb[j]=target_live, rgb[4+j]=source_spoof, depth[j]=M0(live), depth[4+j]=0",
+      "draws": 600000,
+      "full_passes": 67,
+      "tail_rows": 7854,
+      "replacement": false,
+      "oversampling": false,
+      "drop": false,
+      "boundary_repeat_policy": "a pass-straddling batch may repeat a row; observed 0 for seeds 42/1337/2026",
+      "restart": "fresh only; rerun of a failed seed starts at iteration 0 with the identical stream",
+      "audit": "per-iteration row indices logged in metrics.jsonl",
+      "test_vectors": "outputs/audit/E04_RNG_TEST_VECTORS.json",
+      "pair_order_rule": "stored order of pairs_train_v1 must equal ascending pair_id (verified, fail closed)",
+      "deduplication": "FORBIDDEN",
+      "padding": "FORBIDDEN"
+    },
+    "D5": {
+      "owner_status": "APPROVED",
+      "data_pipeline_augmentation": "NONE",
+      "intrinsic_model_operations_retained": [
+        "frequency_decomposition",
+        "geometric_trace_warp",
+        "hard_sample_perturbation",
+        "additive_inpainting_synthesis"
+      ],
+      "stdn_flip_brightness_inherited": false
+    },
+    "D6": {
+      "owner_status": "APPROVED",
+      "val_block": "NONE",
+      "val_fields": "explicit null, reason NO_VAL_PROTOCOL_IN_SOURCE_OR_FROZEN_CONTRACT",
+      "checkpoint": "BASELINE_FINAL_STATE_V1 iteration_150000",
+      "runner_reads_val": false,
+      "runner_reads_test": false
+    },
+    "D7": {
+      "owner_status": "APPROVED",
+      "seed": "1 + (u32_be(SHA256('GPAT_TRANSFERBENCH|E04|HARD_SAMPLE|<seed>')[0:4]) mod 2147483647)",
+      "generator": "numpy.random.RandomState (legacy MT19937)",
+      "per_iteration": "u = uniform(0,1,(4,1,1,3)); k = uniform(0,1,(4,1,1,1)); hard_scales = float32(u); hard_keep = float32(k >= 0.5); same arrays for steps 1-3",
+      "draws_per_iteration": 16,
+      "graph_change_required": false,
+      "independent_of": [
+        "D4 pair stream",
+        "data",
+        "TF graph seed (weight initialisation, seed_plan framework_seed = experiment seed)"
+      ],
+      "qualification_realization_reproduced": true,
+      "test_vectors": "outputs/audit/E04_RNG_TEST_VECTORS.json",
+      "separate_rng_objects": true,
+      "seed_inequality_not_relied_upon": "the derived PAIR_ORDER and HARD_SAMPLE seeds are not guaranteed distinct; correctness relies only on separate RNG objects",
+      "graph_change": "FORBIDDEN"
+    },
+    "D8": {
+      "owner_status": "APPROVED",
+      "encoding": "RGB channel order; float32(uint8)/255 once in the feed; live and spoof identically; no mean/std, no clip, no second scaling"
+    },
+    "D9": {
+      "owner_status": "APPROVED_CONDITIONAL_NARROW_SCOPE",
+      "proposal": "extend OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY to E04 training (gpat-m6-e03); pre-pass on CPU is driver-independent",
+      "lock_driver": "595.84",
+      "observed_driver": "580.178.04",
+      "finding": "step-1 D/D3/conv{1..4}/BN/moving_mean differ from history in summaries by <= 2 float32 ulps at the tensor's largest magnitude (|delta| <= 4.66e-10; historical raw tensors not retained), deterministic per runtime; write-only statistics (consumers Identity/Sub/AssignSub/Assign); all losses and trainable update sets identical to history; steps 2/3 current trainables equal historical process-2 variant",
+      "unexplained": "exact kernel not identified (CUPTI unavailable)",
+      "conditions": [
+        "driver VERSION field only: 595.84 (locks) -> 580.178.04 (observed); GPU model, UUID and every other lock field exact",
+        "E04 training environment gpat-m6-e03 only; the geometry pre-pass is CPU-only",
+        "not generalized to any different TensorFlow, CUDA, cuDNN, graph, optimizer, input or training semantics",
+        "no bitwise equivalence between the historical and current driver environments is claimed",
+        "the 4 D3 BN moving_mean summary differences (<= 2 float32 ulps) are a documented runtime observation, not proof that future long-run differences are irrelevant",
+        "the exact GPU kernel-level source is unidentified (disclosed)",
+        "compatibility checks are repeated in production qualification; any new material numerical, state-transition, gradient or graph discrepancy fails closed"
+      ]
+    }
+  },
+  "implementation_defined_within_authority": {
+    "checkpoint_cadence": "periodic (e.g. every 15000) + iteration_150000, zero extra optimizer steps",
+    "metrics_interval": "every iteration",
+    "dense_offsets": "computed in the feed with pinned scipy 1.10.1",
+    "workers": "IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT"
+  }
+}
