@@ -1,0 +1,41 @@
+{
+  "schema_version": "e03_family_host_state_owner_ruling_v1",
+  "amendment_id": "E03_FAMILY_HOST_STATE_POST_COMPLETION_REBOOT_RULING",
+  "status": "OWNER_APPROVED_AUDIT_TOOL_AMENDMENT",
+  "ruling": "OWNER_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE_SUBSTITUTION_FAMILY_HOST_STATE",
+  "date": "2026-10-29",
+  "authority": "explicit owner approval, recorded after the family closure 374de40c66818bf27cf3bd98cb1871046bd57c2a flagged this gate for review",
+  "amendment_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Family_Host_State_Reboot_Owner_Ruling.md",
+  "method_id": "E03",
+  "tool": "tools/e03_three_seed_training_closure.py",
+  "gate": "H.host_final_state",
+  "result": "PASS_BY_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE",
+  "scope": "only the E03 tmux pane part of H.host_final_state; hostname, GPU identity and the no-method-process check are unchanged exact gates; the live path (every E03 pane dead with status 0) is unchanged",
+  "conditions": {
+    "1_runs_completed_before_verified_reboot": "every E03 seed's run end_utc is strictly before the run-boot journal end and the kernel boot time recorded by the seed2026 post-completion-reboot evidence",
+    "2_original_evidence_valid": "every seed is E03_SEED<s>_COMPLETED_CLEANLY 88/88 with valid exit markers, end timestamps, summaries and completion records; per-seed evidence is byte-equal to its closure commit and re-derives",
+    "3_no_e03_tmux_session": "the host recheck lists no tmux session named e03_stdn_seed*",
+    "4_no_e03_runner_process": "the host recheck lists no method process",
+    "5_exact_verified_boot": "the host recheck kernel boot id equals the current_boot_id of the seed2026 post-completion-reboot disclosure",
+    "6_boot_after_every_seed": "the host recheck kernel boot time is strictly after the latest end_utc of the three seeds",
+    "7_all_other_gates_pass": "the alternative passes only if every other family gate passes"
+  },
+  "implementation": {
+    "conditions_1_to_6": "tools/e03_three_seed_training_closure.py H.host_final_state (panes_rebooted), committed in 374de40",
+    "condition_7": "tools/e03_three_seed_training_closure.py: the reboot path is failed with blocked_by when any other family gate fails (added with this record); output for the committed 74/74 evidence is byte-identical"
+  },
+  "not_authorized": [
+    "weakening the live-tmux path",
+    "accepting a missing E03 session without the verified reboot evidence",
+    "accepting a host in any boot other than the verified post-reboot boot",
+    "changing scientific source, runner behaviour, checkpoints or training outputs"
+  ],
+  "related_rulings": [
+    {"id": "seed1337_pane_log_keyboard_echo", "gate": "B.pane_log_clean", "commit": "5cdb65db0a75fcdcddb64b1b5af040364a057723"},
+    {"id": "seed2026_post_completion_reboot_evidence", "ruling": "OWNER_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE_SUBSTITUTION",
+     "gates": ["B.process_exited_zero", "J.single_e03_session"], "commit": "15bfc84dd4cf1d68427d85d867188b702a847b65"}
+  ],
+  "changes_trained_model_or_procedure": false,
+  "scientific_training_authority": "d547fc9f8932a273d719ae589aade85a9d989b85",
+  "family_closure_commit": "374de40c66818bf27cf3bd98cb1871046bd57c2a"
+}

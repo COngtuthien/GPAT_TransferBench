@@ -1,0 +1,231 @@
+{
+  "changes_trained_model_or_procedure": false,
+  "checks": {
+    "1_runs_completed_before_verified_reboot": {
+      "end_utc": {
+        "1337": "2026-10-27T12:45:59Z",
+        "2026": "2026-10-28T18:52:21Z",
+        "42": "2026-10-25T17:55:01Z"
+      },
+      "kernel_btime_utc": "2026-10-29T02:44:20Z",
+      "pass": true,
+      "run_boot_last_entry_utc": "2026-10-29T02:44:03Z"
+    },
+    "2_original_evidence_valid": {
+      "live_pane_evidence_seeds": [
+        42,
+        1337
+      ],
+      "pass": true,
+      "reboot_evidence_seed": 2026
+    },
+    "3_no_e03_tmux_session": {
+      "committed_recheck": [],
+      "fresh_recheck": [],
+      "pass": true
+    },
+    "4_no_e03_runner_process": {
+      "committed_recheck": [],
+      "fresh_recheck": [],
+      "pass": true
+    },
+    "5_exact_verified_boot": {
+      "committed_recheck": "a74f71de47614d8381b53a3f56741765",
+      "fresh_recheck": "a74f71de47614d8381b53a3f56741765",
+      "pass": true,
+      "verified_boot_id": "a74f71de47614d8381b53a3f56741765"
+    },
+    "6_boot_after_every_seed": {
+      "committed_recheck": 1793241860,
+      "fresh_recheck": 1793241860,
+      "latest_seed_end_utc": "2026-10-28T18:52:21Z",
+      "pass": true
+    },
+    "7_all_other_gates_pass": {
+      "committed_gates": "74/74",
+      "pass": true
+    },
+    "earlier_disclosures_preserved": {
+      "pass": true
+    },
+    "gate_probes_fail_closed_and_live_path_unchanged": {
+      "pass": true,
+      "probes": {
+        "boot_before_last_seed_end": {
+          "as_expected": true,
+          "e03_tmux": "FAIL",
+          "expected_pass": false,
+          "pass": false
+        },
+        "different_boot": {
+          "as_expected": true,
+          "e03_tmux": "FAIL",
+          "expected_pass": false,
+          "pass": false
+        },
+        "e03_tmux_session_present": {
+          "as_expected": true,
+          "e03_tmux": "FAIL",
+          "expected_pass": false,
+          "pass": false
+        },
+        "live_pane_nonzero_status": {
+          "as_expected": true,
+          "e03_tmux": "FAIL",
+          "expected_pass": false,
+          "pass": false
+        },
+        "live_panes_dead_status_0": {
+          "as_expected": true,
+          "e03_tmux": "LIVE_PANES_DEAD_STATUS_0",
+          "expected_pass": true,
+          "pass": true
+        },
+        "other_gate_fails": {
+          "as_expected": true,
+          "e03_tmux": "FAIL_POST_COMPLETION_REBOOT_EVIDENCE",
+          "expected_pass": false,
+          "pass": false
+        },
+        "runner_process_present": {
+          "as_expected": true,
+          "e03_tmux": "PASS_BY_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE",
+          "expected_pass": false,
+          "pass": false
+        }
+      }
+    },
+    "gate_result_committed_and_fresh": {
+      "fresh_gates": "74/74",
+      "fresh_status": "SCIENTIFIC_TRAINING_COMPLETED_3_OF_3_SEEDS",
+      "fresh_utc": "2026-10-29T08:44:28Z",
+      "pass": true
+    },
+    "ruling_record_consistent": {
+      "pass": true
+    }
+  },
+  "closure_evidence_sha256": "184a20b0dc7d979c3d0abe016eeaabb5d723b4b96464e895dcd6832ef5eb5b93",
+  "confirmations": {
+    "e03_evidence_modified": false,
+    "host_written": false,
+    "test_accessed": false,
+    "training_launched": false
+  },
+  "date": "2026-10-29",
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Family_Host_State_Reboot_Owner_Ruling.md",
+  "document_sha256": "62482184d4d4683e966b78b4c8f92f88140933900fabd012ddb61091ab6327a2",
+  "failed_checks": [],
+  "family_closure_commit": "374de40c66818bf27cf3bd98cb1871046bd57c2a",
+  "fresh_host_recheck": {
+    "host_state": {
+      "boot_id": "a74f71de47614d8381b53a3f56741765",
+      "btime": 1793241860,
+      "e03_tmux_panes": {
+        "e03_stdn_seed1337": "",
+        "e03_stdn_seed2026": "",
+        "e03_stdn_seed42": ""
+      },
+      "git_branch": "m6-baselines",
+      "git_head": "d547fc9f8932a273d719ae589aade85a9d989b85",
+      "git_status_porcelain": "",
+      "gpu": "NVIDIA GeForce RTX 3090, 580.178.04, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+      "gpu_compute_apps": [],
+      "hostname": "nd-System-Product-Name",
+      "method_processes": [],
+      "runs_m6_listing": [
+        "E03",
+        "E05",
+        "E06b",
+        "E06c",
+        "E07c"
+      ],
+      "tmux_sessions": []
+    },
+    "parent_listing": [
+      ".seed_1337.lock",
+      ".seed_2026.lock",
+      ".seed_42.lock",
+      "seed_1337",
+      "seed_2026",
+      "seed_42"
+    ],
+    "seeds": {
+      "1337": {
+        "file_count": 1159,
+        "final_checkpoint": {
+          "checkpoints/ckpt-50.data-00000-of-00001": {
+            "bytes": 20749008,
+            "sha256": "316c94c066c32314c6819bc105d0043e1ddc7b27329afd48ddcfb8bc8d181551"
+          },
+          "checkpoints/ckpt-50.index": {
+            "bytes": 28161,
+            "sha256": "29b36079f28c557ab9a44daa8dedb85770ed9d32c5cd0b04d002f39ae386ab70"
+          },
+          "checkpoints/ckpt-50.meta": {
+            "bytes": 4243523,
+            "sha256": "a6119bdc1f830fdf0b968054ea929dce6e6e5838050ffbe06826d8e499a40e1c"
+          }
+        },
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "273454ca12af55debc8372b5b82a9e95dddcffdb62edbe09b51ad40a50e5e342",
+        "resolved_config_sha256": "4eb4e482aa633e53ae07312caa504c010016396db62aa175a502f26fd74986ac",
+        "resolved_config_yaml": "version: e03_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E03\ndisplay_name: STDN\nspec_section: '8.3'\nfidelity_class: FAITHFUL_OFFICIAL\nfidelity_provenance: []\nlearned_method: true\nsource:\n  repository: https://github.com/yaojieliu/ECCV20-STDN\n  pinned_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/stdn\n  framework: TensorFlow 1.x (>1.8.0, <1.13.0; tested TF 1.13.0 / Py 3.6)\n  weight_bytes_from_source_cache: NONE\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  geometry_input: 68-point 2-D landmarks from the frozen M2 cache, normalised by image\n    width\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  map_size: 32\n  batch_size: 2\n  batch_size_note: model/config.py:39 is the effective default; root config.py (BATCH_SIZE=5)\n    is vestigial/unimported\n  g_d_ratio: 2\n  max_epoch: 50\n  steps_per_epoch: 2000\n  val_steps: 500\n  horizontal_flip: enabled\n  flip_permutation: canonical_iBUG_68_lm_reverse_list\noptimizer:\n  name: tf.train.AdamOptimizer\n  learning_rate: 6.0e-05\n  lr_decay:\n    type: exponential\n    rate: 0.9\n    every_steps: 20000\n    staircase: true\n  beta1: 0.9\n  beta2: 0.999\n  epsilon: 1.0e-08\n  weight_ema_decay: 0.9999\n  loss_ema_decay: 0.9\nlosses:\n  g_loss: 50*esr + gan + (10*reg_live + 1e-4*reg_spoof)\n  d_loss: sum/4\n  a_loss: 5*esr_a + {0.0 or 0.1}*pixel\n  hard_sample_scaling: U(0.1, 0.8) per component\n  multiscale_discriminators:\n  - 256\n  - 160\n  - 40\nsupervision: binary_live_spoof_only\nattack_type_labels: FORBIDDEN\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\nseed_adapter:\n  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED\n  note: Source sets no seed; the frozen spec seed set takes precedence. Adapter implemented\n    at M6C.\ncheckpoint:\n  cadence: every_epoch_ckpt_1_to_ckpt_50\n  rule: OFFICIAL_LATEST_FINAL_CKPT_50\n  rule_source: SOURCE_RESOLVED\n  baseline_final_state_v1_overrides_this: false\n  overridden_note: A2-06 clause 1 preserves an already-resolved official checkpoint\n    rule.\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\nexternal_assets: []\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E03/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - training\n  - optimizer\n  - losses\n  - checkpoint.cadence\n  - checkpoint.rule\n  AMENDMENT_A2:\n  - checkpoint.baseline_final_state_v1_overrides_this\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E03\n  experiment_seed: 1337\n  config_path: configs/methods/e03_stdn.yaml\n  config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n  snapshot_path: frozen_config_snapshot/configs/methods/e03_stdn.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_1337\n  git_commit: d547fc9f8932a273d719ae589aade85a9d989b85\n  source_commits:\n    https://github.com/yaojieliu/ECCV20-STDN: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; execution bindings below are the\n    owner rulings and the M6D2b runtime layer. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  labels: []\n  historical_fidelity_field: FAITHFUL_OFFICIAL\n  fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n  fidelity_layers:\n    official_unchanged: STDN graph, losses, optimizer graph, G/D schedule, shared\n      global_step, learning-rate rule, BN, weight/loss EMA, hard-sample mechanism,\n      checkpoint cadence, ckpt-50 final rule, 50 x 2000 TRAIN steps, 500 VAL steps\n      per epoch\n    controlled_benchmark_adaptation: Track-A frozen frame-pair relations (pairs_train_v1\n      / val_pairs_v1), M2 canonical faces + landmarks_px256 via the E03 feed pack,\n      independent deterministic TRAIN/VAL data RNG, serialized deterministic feed\n    runtime_compatibility: qualified NVIDIA TF 1.15.5+nv22.12 runtime on the RTX 3090\n      (M6D2b)\n  identities:\n    config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    runtime_addendum_sha256: f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e\n    ruling_addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    ruling_yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n    environment_lock_sha256: b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62\n    compatibility_manifest_sha256: 4cf2d14ed302f15418b887dfef5e45312328bc1e9e4273c2ea74ef607e447f84\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n    source_tree: 991a4f127990f98a108b8426113396f1c39f558d\n    source_files_sha256: ef4975ecf8d27d9f20681889c281816dca24ffb243cb26d3f3128e691e633f53\n    pack_manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n    pair_manifest_sha256:\n      TRAIN: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      VAL: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n    split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n    preprocess_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n    fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n    production_files_sha256:\n      methods/stdn/production_io.py: ba4e2938eec887d7baffc8858ec7b9c69de89eea6663c9b9eb2fa5bdc96ae4e1\n      methods/stdn/production_runner.py: 17a72e929d2e86f9f2b4414ff99ffd0a0d29b48e33ebbfba19cde5061932d07f\n      methods/stdn/feed_pack.py: 12125864491d5142d253406b22c7f080ea7ba31ef7ac8b06406f80b5ce9b8cf0\n      tools/run_e03.py: 59a888a63b4468b84f399ab698e0ade9c2f211b064dfa3160163838aa59e34ad\n  owner_resolution:\n    addendum: docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md\n    addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    yaml: configs/amendments/e03_production_data_rng_resolution.yaml\n    yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n  relations:\n    TRAIN:\n      path: manifests/pairs_train_v1.parquet\n      sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      rows: 8838\n    VAL:\n      path: manifests/val_pairs_v1.parquet\n      sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n      rows: 1905\n  feed_pack:\n    dir: e03_feed_pack_v1\n    manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n  rng:\n    tf_graph_seed: 1337\n    TRAIN:\n      parser_seed: 1337\n      shuffle_seed: 1337\n    VAL:\n      parser_seed: 1050417158\n      shuffle_seed: 1050417158\n    process_global_python_numpy: seeded with experiment_seed; never used by the feed\n    val_seed_rule: 1 + (u32_be(SHA256(UTF8(\"GPAT_TRANSFERBENCH|E03|VAL_DATA|\" + str(seed))))[0:4]\n      mod 2147483647)\n  schedule:\n    train_steps_per_epoch: 2000\n    val_steps_per_epoch: 500\n    max_epoch: 50\n    even_step: sess.run(losses + [g_op, d_op, fig])\n    odd_step: sess.run(losses + [g_op, fig])\n    global_step_per_epoch: 3000\n    final_global_step: 150000\n    decay_steps_shared_global: 20000\n    epoch_order:\n    - train\n    - saver.save(global_step=epoch+1)\n    - val\n  feed:\n    pipeline: from_tensor_slices -> shuffle(N, seed, reshuffle_each_iteration=True)\n      -> repeat(-1) -> map(num_parallel_calls=1) -> batch(2) -> prefetch(1)\n    TRAIN_augmentation: independent live/spoof flip (RandomState draw > 0.5), random_brightness\n      0.25\n    VAL_augmentation: independent live/spoof flip (VAL RandomState draw > 0.5), no\n      brightness\n    landmarks: 'M2 landmarks_px256 / 256; flip: x -> 1 - x then iBUG-68 lm_reverse_list'\n  figures:\n    TRAIN: step % 200 == 0\n    VAL: step % 50 == 0\n    dir: diagnostics/figures\n    source: fig / fig_val of the same official sess.run\n  checkpoint_rule:\n    rule: OFFICIAL_LATEST_FINAL_CKPT_50\n    cadence: ckpt-1..ckpt-50 (one per epoch, before VAL)\n    selected: checkpoints/ckpt-50\n  resume: NOT_QUALIFIED_FRESH_ONLY\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "ad748419b53d4c07c54832282bbf8ca706ac5db53b9a6af2d59f767a5390095e"
+      },
+      "2026": {
+        "file_count": 1159,
+        "final_checkpoint": {
+          "checkpoints/ckpt-50.data-00000-of-00001": {
+            "bytes": 20749008,
+            "sha256": "9dbd463cb3eb56c9ecc578dd275e0c2507a1e6d5f8b9b4876406d5011bd52cb3"
+          },
+          "checkpoints/ckpt-50.index": {
+            "bytes": 28161,
+            "sha256": "42107c3d56f1ec2892def0840eea520e1950ced453ffa09981899ded11ed96dc"
+          },
+          "checkpoints/ckpt-50.meta": {
+            "bytes": 4243523,
+            "sha256": "504845f926c1940a4aa0ba647dada611dba79044cb247dc11410614464f75543"
+          }
+        },
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "4d30934a91bc01133af5a34e068a44e543b1debecfe8294b9458eb7de5e42236",
+        "resolved_config_sha256": "9b2633939a40c4068f005ddf58594cca248d3768166749e15d0353418c3c602a",
+        "resolved_config_yaml": "version: e03_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E03\ndisplay_name: STDN\nspec_section: '8.3'\nfidelity_class: FAITHFUL_OFFICIAL\nfidelity_provenance: []\nlearned_method: true\nsource:\n  repository: https://github.com/yaojieliu/ECCV20-STDN\n  pinned_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/stdn\n  framework: TensorFlow 1.x (>1.8.0, <1.13.0; tested TF 1.13.0 / Py 3.6)\n  weight_bytes_from_source_cache: NONE\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  geometry_input: 68-point 2-D landmarks from the frozen M2 cache, normalised by image\n    width\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  map_size: 32\n  batch_size: 2\n  batch_size_note: model/config.py:39 is the effective default; root config.py (BATCH_SIZE=5)\n    is vestigial/unimported\n  g_d_ratio: 2\n  max_epoch: 50\n  steps_per_epoch: 2000\n  val_steps: 500\n  horizontal_flip: enabled\n  flip_permutation: canonical_iBUG_68_lm_reverse_list\noptimizer:\n  name: tf.train.AdamOptimizer\n  learning_rate: 6.0e-05\n  lr_decay:\n    type: exponential\n    rate: 0.9\n    every_steps: 20000\n    staircase: true\n  beta1: 0.9\n  beta2: 0.999\n  epsilon: 1.0e-08\n  weight_ema_decay: 0.9999\n  loss_ema_decay: 0.9\nlosses:\n  g_loss: 50*esr + gan + (10*reg_live + 1e-4*reg_spoof)\n  d_loss: sum/4\n  a_loss: 5*esr_a + {0.0 or 0.1}*pixel\n  hard_sample_scaling: U(0.1, 0.8) per component\n  multiscale_discriminators:\n  - 256\n  - 160\n  - 40\nsupervision: binary_live_spoof_only\nattack_type_labels: FORBIDDEN\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\nseed_adapter:\n  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED\n  note: Source sets no seed; the frozen spec seed set takes precedence. Adapter implemented\n    at M6C.\ncheckpoint:\n  cadence: every_epoch_ckpt_1_to_ckpt_50\n  rule: OFFICIAL_LATEST_FINAL_CKPT_50\n  rule_source: SOURCE_RESOLVED\n  baseline_final_state_v1_overrides_this: false\n  overridden_note: A2-06 clause 1 preserves an already-resolved official checkpoint\n    rule.\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\nexternal_assets: []\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E03/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - training\n  - optimizer\n  - losses\n  - checkpoint.cadence\n  - checkpoint.rule\n  AMENDMENT_A2:\n  - checkpoint.baseline_final_state_v1_overrides_this\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E03\n  experiment_seed: 2026\n  config_path: configs/methods/e03_stdn.yaml\n  config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n  snapshot_path: frozen_config_snapshot/configs/methods/e03_stdn.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_2026\n  git_commit: d547fc9f8932a273d719ae589aade85a9d989b85\n  source_commits:\n    https://github.com/yaojieliu/ECCV20-STDN: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; execution bindings below are the\n    owner rulings and the M6D2b runtime layer. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  labels: []\n  historical_fidelity_field: FAITHFUL_OFFICIAL\n  fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n  fidelity_layers:\n    official_unchanged: STDN graph, losses, optimizer graph, G/D schedule, shared\n      global_step, learning-rate rule, BN, weight/loss EMA, hard-sample mechanism,\n      checkpoint cadence, ckpt-50 final rule, 50 x 2000 TRAIN steps, 500 VAL steps\n      per epoch\n    controlled_benchmark_adaptation: Track-A frozen frame-pair relations (pairs_train_v1\n      / val_pairs_v1), M2 canonical faces + landmarks_px256 via the E03 feed pack,\n      independent deterministic TRAIN/VAL data RNG, serialized deterministic feed\n    runtime_compatibility: qualified NVIDIA TF 1.15.5+nv22.12 runtime on the RTX 3090\n      (M6D2b)\n  identities:\n    config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    runtime_addendum_sha256: f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e\n    ruling_addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    ruling_yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n    environment_lock_sha256: b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62\n    compatibility_manifest_sha256: 4cf2d14ed302f15418b887dfef5e45312328bc1e9e4273c2ea74ef607e447f84\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n    source_tree: 991a4f127990f98a108b8426113396f1c39f558d\n    source_files_sha256: ef4975ecf8d27d9f20681889c281816dca24ffb243cb26d3f3128e691e633f53\n    pack_manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n    pair_manifest_sha256:\n      TRAIN: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      VAL: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n    split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n    preprocess_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n    fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n    production_files_sha256:\n      methods/stdn/production_io.py: ba4e2938eec887d7baffc8858ec7b9c69de89eea6663c9b9eb2fa5bdc96ae4e1\n      methods/stdn/production_runner.py: 17a72e929d2e86f9f2b4414ff99ffd0a0d29b48e33ebbfba19cde5061932d07f\n      methods/stdn/feed_pack.py: 12125864491d5142d253406b22c7f080ea7ba31ef7ac8b06406f80b5ce9b8cf0\n      tools/run_e03.py: 59a888a63b4468b84f399ab698e0ade9c2f211b064dfa3160163838aa59e34ad\n  owner_resolution:\n    addendum: docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md\n    addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    yaml: configs/amendments/e03_production_data_rng_resolution.yaml\n    yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n  relations:\n    TRAIN:\n      path: manifests/pairs_train_v1.parquet\n      sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      rows: 8838\n    VAL:\n      path: manifests/val_pairs_v1.parquet\n      sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n      rows: 1905\n  feed_pack:\n    dir: e03_feed_pack_v1\n    manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n  rng:\n    tf_graph_seed: 2026\n    TRAIN:\n      parser_seed: 2026\n      shuffle_seed: 2026\n    VAL:\n      parser_seed: 1242808125\n      shuffle_seed: 1242808125\n    process_global_python_numpy: seeded with experiment_seed; never used by the feed\n    val_seed_rule: 1 + (u32_be(SHA256(UTF8(\"GPAT_TRANSFERBENCH|E03|VAL_DATA|\" + str(seed))))[0:4]\n      mod 2147483647)\n  schedule:\n    train_steps_per_epoch: 2000\n    val_steps_per_epoch: 500\n    max_epoch: 50\n    even_step: sess.run(losses + [g_op, d_op, fig])\n    odd_step: sess.run(losses + [g_op, fig])\n    global_step_per_epoch: 3000\n    final_global_step: 150000\n    decay_steps_shared_global: 20000\n    epoch_order:\n    - train\n    - saver.save(global_step=epoch+1)\n    - val\n  feed:\n    pipeline: from_tensor_slices -> shuffle(N, seed, reshuffle_each_iteration=True)\n      -> repeat(-1) -> map(num_parallel_calls=1) -> batch(2) -> prefetch(1)\n    TRAIN_augmentation: independent live/spoof flip (RandomState draw > 0.5), random_brightness\n      0.25\n    VAL_augmentation: independent live/spoof flip (VAL RandomState draw > 0.5), no\n      brightness\n    landmarks: 'M2 landmarks_px256 / 256; flip: x -> 1 - x then iBUG-68 lm_reverse_list'\n  figures:\n    TRAIN: step % 200 == 0\n    VAL: step % 50 == 0\n    dir: diagnostics/figures\n    source: fig / fig_val of the same official sess.run\n  checkpoint_rule:\n    rule: OFFICIAL_LATEST_FINAL_CKPT_50\n    cadence: ckpt-1..ckpt-50 (one per epoch, before VAL)\n    selected: checkpoints/ckpt-50\n  resume: NOT_QUALIFIED_FRESH_ONLY\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "f42708341b91e6b6d11b601b363e2dd5309dd7b5df33b65c6ed79ca032e25136"
+      },
+      "42": {
+        "file_count": 1159,
+        "final_checkpoint": {
+          "checkpoints/ckpt-50.data-00000-of-00001": {
+            "bytes": 20749008,
+            "sha256": "5b337a63db63e405bf35bceefdacc101060cb7d1625b5a4d2d389b963e311753"
+          },
+          "checkpoints/ckpt-50.index": {
+            "bytes": 28161,
+            "sha256": "b6b9a0c4cfd6470959453cdb861341bcacff7047b66fb414f8dff504452dc899"
+          },
+          "checkpoints/ckpt-50.meta": {
+            "bytes": 4243452,
+            "sha256": "dbcf372027172396c616ba19f7d76475363d34e8bac0f438c0c7f5b97fae5f97"
+          }
+        },
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "059c266e18cc118dd70a40c37fd65c39b2d37021af1c04b8d3f0c97573e8f000",
+        "resolved_config_sha256": "179032523078dfc51be5daebaf4f1eb67f5e83e7125b9e6de29cc12887098716",
+        "resolved_config_yaml": "version: e03_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E03\ndisplay_name: STDN\nspec_section: '8.3'\nfidelity_class: FAITHFUL_OFFICIAL\nfidelity_provenance: []\nlearned_method: true\nsource:\n  repository: https://github.com/yaojieliu/ECCV20-STDN\n  pinned_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/stdn\n  framework: TensorFlow 1.x (>1.8.0, <1.13.0; tested TF 1.13.0 / Py 3.6)\n  weight_bytes_from_source_cache: NONE\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  geometry_input: 68-point 2-D landmarks from the frozen M2 cache, normalised by image\n    width\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  map_size: 32\n  batch_size: 2\n  batch_size_note: model/config.py:39 is the effective default; root config.py (BATCH_SIZE=5)\n    is vestigial/unimported\n  g_d_ratio: 2\n  max_epoch: 50\n  steps_per_epoch: 2000\n  val_steps: 500\n  horizontal_flip: enabled\n  flip_permutation: canonical_iBUG_68_lm_reverse_list\noptimizer:\n  name: tf.train.AdamOptimizer\n  learning_rate: 6.0e-05\n  lr_decay:\n    type: exponential\n    rate: 0.9\n    every_steps: 20000\n    staircase: true\n  beta1: 0.9\n  beta2: 0.999\n  epsilon: 1.0e-08\n  weight_ema_decay: 0.9999\n  loss_ema_decay: 0.9\nlosses:\n  g_loss: 50*esr + gan + (10*reg_live + 1e-4*reg_spoof)\n  d_loss: sum/4\n  a_loss: 5*esr_a + {0.0 or 0.1}*pixel\n  hard_sample_scaling: U(0.1, 0.8) per component\n  multiscale_discriminators:\n  - 256\n  - 160\n  - 40\nsupervision: binary_live_spoof_only\nattack_type_labels: FORBIDDEN\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\nseed_adapter:\n  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED\n  note: Source sets no seed; the frozen spec seed set takes precedence. Adapter implemented\n    at M6C.\ncheckpoint:\n  cadence: every_epoch_ckpt_1_to_ckpt_50\n  rule: OFFICIAL_LATEST_FINAL_CKPT_50\n  rule_source: SOURCE_RESOLVED\n  baseline_final_state_v1_overrides_this: false\n  overridden_note: A2-06 clause 1 preserves an already-resolved official checkpoint\n    rule.\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\nexternal_assets: []\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E03/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - training\n  - optimizer\n  - losses\n  - checkpoint.cadence\n  - checkpoint.rule\n  AMENDMENT_A2:\n  - checkpoint.baseline_final_state_v1_overrides_this\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E03\n  experiment_seed: 42\n  config_path: configs/methods/e03_stdn.yaml\n  config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n  snapshot_path: frozen_config_snapshot/configs/methods/e03_stdn.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_42\n  git_commit: d547fc9f8932a273d719ae589aade85a9d989b85\n  source_commits:\n    https://github.com/yaojieliu/ECCV20-STDN: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; execution bindings below are the\n    owner rulings and the M6D2b runtime layer. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  labels: []\n  historical_fidelity_field: FAITHFUL_OFFICIAL\n  fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n  fidelity_layers:\n    official_unchanged: STDN graph, losses, optimizer graph, G/D schedule, shared\n      global_step, learning-rate rule, BN, weight/loss EMA, hard-sample mechanism,\n      checkpoint cadence, ckpt-50 final rule, 50 x 2000 TRAIN steps, 500 VAL steps\n      per epoch\n    controlled_benchmark_adaptation: Track-A frozen frame-pair relations (pairs_train_v1\n      / val_pairs_v1), M2 canonical faces + landmarks_px256 via the E03 feed pack,\n      independent deterministic TRAIN/VAL data RNG, serialized deterministic feed\n    runtime_compatibility: qualified NVIDIA TF 1.15.5+nv22.12 runtime on the RTX 3090\n      (M6D2b)\n  identities:\n    config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    runtime_addendum_sha256: f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e\n    ruling_addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    ruling_yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n    environment_lock_sha256: b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62\n    compatibility_manifest_sha256: 4cf2d14ed302f15418b887dfef5e45312328bc1e9e4273c2ea74ef607e447f84\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n    source_tree: 991a4f127990f98a108b8426113396f1c39f558d\n    source_files_sha256: ef4975ecf8d27d9f20681889c281816dca24ffb243cb26d3f3128e691e633f53\n    pack_manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n    pair_manifest_sha256:\n      TRAIN: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      VAL: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n    split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n    preprocess_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n    fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n    production_files_sha256:\n      methods/stdn/production_io.py: ba4e2938eec887d7baffc8858ec7b9c69de89eea6663c9b9eb2fa5bdc96ae4e1\n      methods/stdn/production_runner.py: 17a72e929d2e86f9f2b4414ff99ffd0a0d29b48e33ebbfba19cde5061932d07f\n      methods/stdn/feed_pack.py: 12125864491d5142d253406b22c7f080ea7ba31ef7ac8b06406f80b5ce9b8cf0\n      tools/run_e03.py: 59a888a63b4468b84f399ab698e0ade9c2f211b064dfa3160163838aa59e34ad\n  owner_resolution:\n    addendum: docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md\n    addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    yaml: configs/amendments/e03_production_data_rng_resolution.yaml\n    yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n  relations:\n    TRAIN:\n      path: manifests/pairs_train_v1.parquet\n      sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      rows: 8838\n    VAL:\n      path: manifests/val_pairs_v1.parquet\n      sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n      rows: 1905\n  feed_pack:\n    dir: e03_feed_pack_v1\n    manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n  rng:\n    tf_graph_seed: 42\n    TRAIN:\n      parser_seed: 42\n      shuffle_seed: 42\n    VAL:\n      parser_seed: 1355875380\n      shuffle_seed: 1355875380\n    process_global_python_numpy: seeded with experiment_seed; never used by the feed\n    val_seed_rule: 1 + (u32_be(SHA256(UTF8(\"GPAT_TRANSFERBENCH|E03|VAL_DATA|\" + str(seed))))[0:4]\n      mod 2147483647)\n  schedule:\n    train_steps_per_epoch: 2000\n    val_steps_per_epoch: 500\n    max_epoch: 50\n    even_step: sess.run(losses + [g_op, d_op, fig])\n    odd_step: sess.run(losses + [g_op, fig])\n    global_step_per_epoch: 3000\n    final_global_step: 150000\n    decay_steps_shared_global: 20000\n    epoch_order:\n    - train\n    - saver.save(global_step=epoch+1)\n    - val\n  feed:\n    pipeline: from_tensor_slices -> shuffle(N, seed, reshuffle_each_iteration=True)\n      -> repeat(-1) -> map(num_parallel_calls=1) -> batch(2) -> prefetch(1)\n    TRAIN_augmentation: independent live/spoof flip (RandomState draw > 0.5), random_brightness\n      0.25\n    VAL_augmentation: independent live/spoof flip (VAL RandomState draw > 0.5), no\n      brightness\n    landmarks: 'M2 landmarks_px256 / 256; flip: x -> 1 - x then iBUG-68 lm_reverse_list'\n  figures:\n    TRAIN: step % 200 == 0\n    VAL: step % 50 == 0\n    dir: diagnostics/figures\n    source: fig / fig_val of the same official sess.run\n  checkpoint_rule:\n    rule: OFFICIAL_LATEST_FINAL_CKPT_50\n    cadence: ckpt-1..ckpt-50 (one per epoch, before VAL)\n    selected: checkpoints/ckpt-50\n  resume: NOT_QUALIFIED_FRESH_ONLY\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "a7bed081022c09ab753ae359536e71a964966a484e45f435d51a5809b509b163"
+      }
+    },
+    "utc": "2026-10-29T08:44:28Z"
+  },
+  "gate": "H.host_final_state",
+  "milestone": "E03-FAMILY-HOST-STATE-OWNER-RULING",
+  "not_scientific_authority": true,
+  "ruling": "OWNER_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE_SUBSTITUTION_FAMILY_HOST_STATE",
+  "ruling_file": "configs/amendments/e03_family_host_state_reboot_resolution.yaml",
+  "ruling_file_sha256": "1c15d086c572f3d63e2b21f6e65ca168a0eec50bc3b8ac0d5cc7e8ab066d94c4",
+  "scientific_training_authority": "d547fc9f8932a273d719ae589aade85a9d989b85",
+  "status": "OWNER_RULING_RECORDED_CONDITIONS_VERIFIED"
+}

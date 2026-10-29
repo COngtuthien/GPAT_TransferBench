@@ -364,6 +364,7 @@ def build(repo_root, host):
                       and not any(x.startswith('e03_stdn_seed') for x in st['tmux_sessions'])
                       and reb.get('current_boot_id') is not None and st.get('boot_id') == reb['current_boot_id']
                       and isinstance(st.get('btime'), int) and st['btime'] > last_end)
+    h_index = len(G.results)
     G('H.host_final_state', st['hostname'] == 'nd-System-Product-Name'
       and st['gpu'] == 'NVIDIA GeForce RTX 3090, 580.178.04, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7'
       and st['method_processes'] == [] and (panes_live or panes_rebooted),
@@ -372,6 +373,13 @@ def build(repo_root, host):
        'boot_id': st.get('boot_id'), 'seed2026_verified_reboot_boot_id': reb.get('current_boot_id')})
     G('H.gpu_checkout_clean_on_branch', st['git_branch'] == 'm6-baselines' and st['git_status_porcelain'] == '',
       st['git_head'])
+    # owner ruling 2026-10-29 (FAMILY_HOST_STATE_RULING, condition 7): the reboot path of H.host_final_state passes only
+    # if every other family gate passed; the live-pane path is unchanged
+    others_failed = [g for g in G.failed if g != 'H.host_final_state']
+    if not panes_live and panes_rebooted and others_failed:
+        G.results[h_index]['pass'] = False
+        G.results[h_index]['detail'] = dict(G.results[h_index]['detail'], e03_tmux='FAIL_POST_COMPLETION_REBOOT_EVIDENCE',
+                                            blocked_by=others_failed)
 
     text = csv_text(rows)
     lm = {str(s): d['loss_diagnostics'] for s, d in docs.items()}

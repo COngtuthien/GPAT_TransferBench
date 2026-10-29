@@ -1,0 +1,459 @@
+{
+  "all_green": false,
+  "categories": {
+    "ENV_MISSING_PACKAGE_scipy": 24,
+    "ENV_MISSING_PACKAGE_torch": 3,
+    "ENV_MISSING_PACKAGE_zstandard": 23,
+    "GPAT_M7D1_FLOAT_REPR_REDERIVATION_PAUSED_SCOPE": 2,
+    "HISTORICAL_MILESTONE_STATE_ASSERTION": 10,
+    "NON_AUTHORITATIVE_GITIGNORED_EXPLORATORY_ASSET": 1
+  },
+  "data_drive": {
+    "action": "udisksctl mount -b /dev/disk/by-label/Data -o ro",
+    "filesystem_modified": false,
+    "identified_by": "filesystem label Data (/dev/disk/by-label/Data -> nvme0n1p5, ntfs)",
+    "mount": "/media/cong/Data ntfs3 ro"
+  },
+  "date_utc": "2026-10-29",
+  "exploratory_asset_dependency": {
+    "behaviour": "skips when the directory is absent (clean checkout, GPU host); on the laptop all 24 block hashes disagree with the local index.csv",
+    "in_mandatory_qualification_contract": false,
+    "path": "outputs/exploratory/m2a_smoke/runC/logit_shards (git-ignored, laptop working tree only)",
+    "reason": "M2A smoke diagnostics; not referenced by any frozen config, manifest or E03/E04 qualification gate",
+    "test": "tests/test_m2b_preflight.py::TestShardIndexIntegrityAudit::test_smoke_shards_pass_the_same_audit"
+  },
+  "failing_tests": [
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2a_preprocess.TestQ23LogitStorage.test_codec_provenance_matches_the_frozen_config"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2a_preprocess.TestQ23LogitStorage.test_compression_is_lossless_and_exact"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2a_preprocess.TestQ23LogitStorage.test_encoding_is_deterministic"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2a_preprocess.TestQ23LogitStorage.test_float16_or_mask_only_cannot_silently_replace_the_logits"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2a_preprocess.TestQ23LogitStorage.test_mask_derives_from_the_stored_logits"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2a_preprocess.TestQ23LogitStorage.test_shard_round_trip_and_random_access"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestCacheAudit.test_clean_cache_passes"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestCacheAudit.test_corrupted_block_and_shard_hash_are_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestCacheAudit.test_duplicate_entry_is_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestCacheAudit.test_orphan_shard_file_is_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestCacheAudit.test_truncated_shard_is_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestShardFinalization.test_abort_removes_the_in_flight_shard"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestShardFinalization.test_finalize_publishes_shard_and_index_atomically"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestShardFinalization.test_finalize_refuses_a_corrupted_in_flight_shard"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_execution.TestShardFinalization.test_is_finalized_requires_both_shard_and_index"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestBoundedShardConstruction.test_no_raw_npy_sidecar_is_left_behind"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestBoundedShardConstruction.test_shard_grows_by_exactly_one_compressed_block_per_sample"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestShardIndexIntegrityAudit.test_clean_index_passes_every_check"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestShardIndexIntegrityAudit.test_corrupted_block_is_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestShardIndexIntegrityAudit.test_decoded_blocks_keep_dtype_shape_and_mask_consistency"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestShardIndexIntegrityAudit.test_duplicate_sample_id_is_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestShardIndexIntegrityAudit.test_missing_shard_and_orphan_bytes_are_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_zstandard",
+      "error": "ModuleNotFoundError: No module named 'zstandard'",
+      "kind": "ERROR",
+      "test": "test_m2b_preflight.TestShardIndexIntegrityAudit.test_orphan_shard_file_is_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestDeterminism.test_14_exact_tie_case"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestDeterminism.test_16_permuted_input_gives_identical_assignment"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestDeterminism.test_17_repeated_execution_is_identical"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "subprocess.CalledProcessError: Command '['/home/cong/GPAT_TransferBench/.venv/bin/python', '-c', \"import sys; sys.path.insert(0, '/home/cong/GPAT_TransferBench')\\nfrom gpatbench.split import allocator as A\\ngs=[A.Group('ds', 'g%03d'%i, tupl",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestDeterminism.test_18_hash_randomisation_cannot_affect_output"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestGroupIntegrity.test_01_one_group_goes_to_exactly_one_split"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestGroupIntegrity.test_02_multi_video_group_stays_intact"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestGroupIntegrity.test_03_subject_disjoint_invariant"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestGroupIntegrity.test_04_siw_duplicate_content_group_stays_together"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestGroupIntegrity.test_19_m2_failed_rows_never_become_usable_samples"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestGroupIntegrity.test_20_frame_counts_do_not_influence_video_balancing"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestObjectiveArithmetic.test_objective_is_integer_and_solver_agrees_with_recomputation"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestObjectiveArithmetic.test_solver_reports_proven_global_optimum"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestObjectiveArithmetic.test_tampered_objective_is_detected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestObjectiveArithmetic.test_verify_assignment_rejects_a_split_crossing_video"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestPriorityOrder.test_07_p1_beats_p2"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestPriorityOrder.test_08_p2_beats_p3"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestPriorityOrder.test_09_p3_beats_p4"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestRareCategories.test_10_11_12_rare_categories_are_handled_not_forced"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestRareCategories.test_13_category_impossible_in_all_three_splits"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestRatios.test_05_perfect_ratio_case"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestRatios.test_06_indivisible_group_size_case"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_allocator.TestRatios.test_p1_matches_brute_force_on_a_single_class"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "ERROR",
+      "test": "test_m3_split_execution.TestDeterminismAndSerialization.test_rebuild_is_byte_identical_with_shuffled_input"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "KeyError: 'model_weights_downloaded'",
+      "kind": "ERROR",
+      "test": "test_m4_fair_track.TestSourcePins.test_no_model_weights_were_downloaded"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_torch",
+      "error": "ModuleNotFoundError: No module named 'torch'",
+      "kind": "ERROR",
+      "test": "unittest.loader._FailedTest.test_m5_probe_contract"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_torch",
+      "error": "ModuleNotFoundError: No module named 'torch'",
+      "kind": "ERROR",
+      "test": "unittest.loader._FailedTest.test_m5_probe_trainer"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: '9f8e137922e131b57d702b16f7d244a8c28710dcdbc50bfcc0b5ee47a571fc04' != 'ecbef580f71c02eca26ccae2a47ae6ca201eaccb332995db0f47003093dc28cd'",
+      "kind": "FAIL",
+      "test": "test_m0_bootstrap.TestAuditState.test_artifact_index_hashes"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: False is not true : line 98",
+      "kind": "FAIL",
+      "test": "test_m0_bootstrap.TestAuditState.test_ledger_jsonl"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: False is not true : {'manifests/artifact_probe_classes_v1.json'}",
+      "kind": "FAIL",
+      "test": "test_m0_bootstrap.TestNoLaterMilestoneArtifacts.test_manifests_are_stage_appropriate"
+    },
+    {
+      "category": "NON_AUTHORITATIVE_GITIGNORED_EXPLORATORY_ASSET",
+      "error": "AssertionError: False is not true : {'rows': 24, 'unique_sample_ids': 24, 'duplicate_sample_ids': [], 'missing_or_short_shards': [], 'orphan_shard_files': [], 'overlapping_blocks': [], 'bad_block_hashes': ['09cbbfbccb912650a9f02b7242fd447a1",
+      "kind": "FAIL",
+      "test": "test_m2b_preflight.TestShardIndexIntegrityAudit.test_smoke_shards_pass_the_same_audit"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: 'COMPLETE' != 'NOT_STARTED'",
+      "kind": "FAIL",
+      "test": "test_m3_allocator.TestNoRealSplitArtifact.test_stage_order_is_respected"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_scipy",
+      "error": "ModuleNotFoundError: No module named 'scipy'",
+      "kind": "FAIL",
+      "test": "test_m3_split_execution.TestCliEquivalence.test_cli_dry_run_reports_the_same_objectives_and_row_count"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: 'COMPLETE' != 'NOT_STARTED'",
+      "kind": "FAIL",
+      "test": "test_m3_split_execution.TestStageAndNoLaterMilestone.test_stage_state"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: Lists differ: ['native_runner.py', 'adapter.py', 'runtime[357 chars].py'] != ['.gitkeep']",
+      "kind": "FAIL",
+      "test": "test_m4_execution.TestNativeManifests.test_source_evidence_guard_is_recorded"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: 'COMPLETE' != 'NOT_STARTED'",
+      "kind": "FAIL",
+      "test": "test_m4_fair_track.TestAuditsAndIntegrity.test_stage_state"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: 'COMPLETE' != 'NOT_STARTED'",
+      "kind": "FAIL",
+      "test": "test_m4_pair_preflight.TestPreflightEvidence.test_preflight_record_still_says_it_created_nothing"
+    },
+    {
+      "category": "HISTORICAL_MILESTONE_STATE_ASSERTION",
+      "error": "AssertionError: 'COMPLETE' != 'NOT_STARTED'",
+      "kind": "FAIL",
+      "test": "test_m5_probe_preflight.TestMilestoneState.test_m5_remains_not_started"
+    },
+    {
+      "category": "ENV_MISSING_PACKAGE_torch",
+      "error": "AssertionError: 'STOP' not found in 'Traceback (most recent call last):\\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\\n  File \"<frozen runpy>\", line 88, in _run_code\\n  File \"/home/cong/GPAT_TransferBench/gpatbench/cli.py\", lin",
+      "kind": "FAIL",
+      "test": "test_m5_probe_preflight.TestPreflightEvidence.test_cli_train_probe_refuses_to_train"
+    },
+    {
+      "category": "GPAT_M7D1_FLOAT_REPR_REDERIVATION_PAUSED_SCOPE",
+      "error": "AssertionError: 'bran[2772 chars]81707385,-0.06139221624471247,0.27088713007469[16527 chars]38\\n' != 'bran[2772 chars]81707407,-0.06139221624471247,0.27088713007469[16528 chars]38\\n'",
+      "kind": "FAIL",
+      "test": "test_m7d1_n4_repair_qualification.EvidenceM7D1N4.test_11_derived_files_rederive"
+    },
+    {
+      "category": "GPAT_M7D1_FLOAT_REPR_REDERIVATION_PAUSED_SCOPE",
+      "error": "AssertionError: 'bran[1079 chars]523696,-0.05657363461796194,0.657891052848226,[25829 chars]58\\n' != 'bran[1079 chars]5236958,-0.05657363461796194,0.657891052848226[25828 chars]58\\n'",
+      "kind": "FAIL",
+      "test": "test_m7d1_n5_stage3_qualification.EvidenceM7D1N5.test_11_derived_files_rederive"
+    }
+  ],
+  "milestone": "BASELINE-EXEC-BROAD-TEST-SUITE-RECONCILIATION",
+  "not_runnable_here": {
+    "zstandard": "no laptop or GPU-host environment has zstandard; installing is out of scope"
+  },
+  "repository_head": "374de40c66818bf27cf3bd98cb1871046bd57c2a",
+  "runs": [
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests",
+      "exit_code": 1,
+      "failures_plus_errors": 70,
+      "tests": 2060,
+      "where": "laptop .venv, drive NOT mounted (previous report)"
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests",
+      "errors": 49,
+      "exit_code": 1,
+      "failures": 14,
+      "failures_plus_errors": 63,
+      "fixed_by_mount": 7,
+      "new_vs_previous": 0,
+      "skipped": 208,
+      "tests": 2110,
+      "where": "laptop .venv, drive mounted read-only"
+    },
+    {
+      "command": "python -B -m unittest tests.test_m3_allocator tests.test_m3_split_execution",
+      "errors": 1,
+      "exit_code": 1,
+      "failures": 3,
+      "note": "all scipy-dependent algorithmic tests pass; the 4 left are milestone-state assertions",
+      "tests": 68,
+      "where": "GPU host checkout d547fc9 (test files byte-identical to HEAD), gpat-m6-e05 (scipy), CUDA hidden, -B"
+    },
+    {
+      "command": "python -B -m unittest tests.test_m5_probe_contract tests.test_m5_probe_trainer",
+      "errors": 0,
+      "exit_code": 1,
+      "failures": 6,
+      "note": "all 6 assert M5 not started / no checkpoint (M5 has since run)",
+      "tests": 125,
+      "where": "GPU host checkout d547fc9, gpat-m5 (torch), CUDA hidden, -B"
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests -p 'test_e03*.py'",
+      "exit_code": 0,
+      "failures_plus_errors": 0,
+      "note": "mandatory E03 evidence/qualification suite",
+      "tests": 91,
+      "where": "laptop .venv"
+    }
+  ],
+  "scientific_results_modified": false,
+  "tests_modified": false
+}
