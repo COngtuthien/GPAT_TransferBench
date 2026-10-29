@@ -1,0 +1,484 @@
+{
+  "also": [
+    "E04_READINESS_AUDIT_COMPLETE",
+    "IMPLEMENTED_NOT_EXECUTED",
+    "CONTROLLED_ADAPTATION"
+  ],
+  "confirmations": {
+    "benchmark_images_decoded": 0,
+    "e03_modified": false,
+    "e04_run_root_created": false,
+    "environment_modified": false,
+    "scientific_seed_used": false,
+    "test_accessed": false,
+    "training_launched": false
+  },
+  "contract": {
+    "architecture": "encoder 3x3 c32 + ConvBlocks 64/96/128; decoder to 13 channels (B/C/T/P/IP); attention depth head 32x32 in [0,1]; four discriminators at 32/96/256/256; 1,763,902 trainable parameters (M6D3e)",
+    "authority_chain": [
+      "configs/methods/e04_physics_std.yaml (M6B, frozen, sha 418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a)",
+      "Amendment A3 section 4 (controlled geometry/depth reconstruction)",
+      "Amendment A4 (uint8 INTER_AREA depth boundary; Adam semantics)",
+      "A2-06 BASELINE_FINAL_STATE_V1",
+      "M6D3d owner resolution (training graph contract)",
+      "M6D3e implementation record (graph realization)"
+    ],
+    "checkpoint": {
+      "cadence": "implementation_defined_periodic_plus_terminal",
+      "rule": "BASELINE_FINAL_STATE_V1",
+      "selection_uses_test": false,
+      "selection_uses_val": false,
+      "terminal_state": "iteration_150000"
+    },
+    "data": {
+      "TEST": "forbidden for every purpose; no code path",
+      "TRAIN": "pairs_train_v1 (8838 rows) for training (config data.pair_manifest)",
+      "VAL": "allowed for diagnostics only, never selects (D6 open)",
+      "passes": [
+        67,
+        7854
+      ],
+      "train_rows_consumed": 600000
+    },
+    "depth_m0": {
+      "fixed_assets": "generated once, reused unchanged for seeds 42/1337/2026 (A3 4.2b)",
+      "live": "3DDFA_V2 1b6c6760 dense mesh -> similar_transform -> Sim3DR z-buffer -> per-sample min-max [0,1] -> uint8 -> INTER_AREA 32x32 -> float32/255 -> clip (A3/A4)",
+      "q140_sha256": "1b884401377f5aadd3d56857f05fddf70e2c54a52a9eb2160cebc06a74031a1f",
+      "spoof": "exact float32 zeros 32x32 (paper Eq.21)"
+    },
+    "environments": {
+      "geometry_prepass": "gpat-m6-e04-geometry (Python 3.12, torch 2.14 cu130)",
+      "training": "gpat-m6-e03 (owned by E03; read-only reuse; E04 reference lock)"
+    },
+    "fidelity_class": "CONTROLLED_ADAPTATION",
+    "forbidden_wording": [
+      "native",
+      "official reproduction",
+      "faithful reproduction"
+    ],
+    "method": "E04 Physics-STD (controlled geometry/depth reconstruction)",
+    "qualification_seed": 314159,
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "source": {
+      "framework_in_paper": "TensorFlow",
+      "official_code_release": "NONE_LOCATED_AS_OF_2026_09_21",
+      "paper": "arXiv:2012.05185 / Liu & Liu, IEEE TPAMI, May 2022",
+      "pinned_commit": "NOT_APPLICABLE",
+      "repository": "NONE"
+    },
+    "spec_section": "8.4",
+    "training": {
+      "batch": "8 = 4 target_live + 4 source_spoof (qualified graph layout)",
+      "init": "Normal(0, 0.02)",
+      "iterations": 150000,
+      "losses": "Eq.23 100 L_depth + 5 L_G + L_P + 1e-4 L_R; Eq.24 10 L_S + L_H; beta 0.1",
+      "lr": "5e-5 x 10^-floor(t/45000); D at half the G rate (M6D3d)",
+      "optimizer": "Adam beta1 0.9 beta2 0.999 eps 1e-8, no weight decay (A4)",
+      "steps": "per minibatch: G Eq.23 -> D L_D -> G Eq.24; iteration +1 after step 3"
+    }
+  },
+  "decisions_required": [
+    {
+      "blocks": [
+        "depth-M0 pre-pass",
+        "Q140 correspondences",
+        "stages E-K"
+      ],
+      "id": "D1",
+      "options": {
+        "A": "official crop_policy=\"landmark\": parse_roi_box_from_landmark on the frozen M2 landmarks_px256 (68 iBUG, FaceXFormer; already on the host in e03_feed_pack_v1 for all TRAIN/VAL samples); dataset-uniform; same landmark geometry as E03 (spec 8.4 \"reuse the STDN-compatible geometric alignment\")",
+        "B": "official crop_policy=\"box\": parse_roi_box_from_bbox with the whole canonical frame [0,0,256,256] as the box (literal reading of the faceboxes note; 1.58x enlargement, zero-padded crop)",
+        "C": "another rule chosen by the owner"
+      },
+      "recommendation": "A",
+      "scientific": true,
+      "topic": "3DDFA crop/ROI policy for canonical 256 faces",
+      "why_open": "A3 sets faceboxes_used=false (\"pre-cropped canonical 256 faces\") but freezes no roi_box; methods/physics_std/regressor.py states crop/ROI is outside the qualification. The pinned TDDFA.__call__ has two official policies, and the canonical frame differs by dataset (SCRFD 1.25x crop for MSU/SiW; CASIA pre-cropped 112 upscaled to 256)"
+    },
+    {
+      "blocks": [
+        "depth-M0 pre-pass",
+        "trace transfer"
+      ],
+      "id": "D2",
+      "options": {
+        "A": "TRAIN pairs_train_v1 faces only: 3830 live (fit, dense mesh, M0 32x32 + mask, Q140 xy) and 8838 spoof (fit, Q140 xy; M0 = exact zeros by paper Eq.21, no render); generated once, hashed, reused for seeds 42/1337/2026",
+        "B": "A plus VAL val_pairs_v1 faces (748 live, 1905 spoof), only if D6 adopts VAL diagnostics"
+      },
+      "recommendation": "A (B only with D6 = B)",
+      "scientific": true,
+      "topic": "geometry pre-pass population and outputs",
+      "why_open": "A3 4.4 scopes the depth reconstruction to live faces, but A3 4.3 trace transfer needs Q140 correspondences of the source spoof faces as well; the pre-pass population is not stated"
+    },
+    {
+      "blocks": [
+        "depth-M0 pre-pass determinism record"
+      ],
+      "id": "D3",
+      "options": {
+        "A": "CPU (no GPU contention, repeatable)",
+        "B": "CUDA (fresh-process repeats byte-identical)"
+      },
+      "recommendation": "A",
+      "scientific": false,
+      "topic": "pre-pass device",
+      "why_open": "M6D3a: within-device repeats are byte-identical and the final uint8 depth is identical across devices, but CPU and CUDA fits/meshes (hence Q140 coordinates) are not bitwise identical"
+    },
+    {
+      "blocks": [
+        "real TRAIN feed",
+        "stages F, J"
+      ],
+      "id": "D4",
+      "options": {
+        "A": "seeded per-pass permutation of the 8838 rows (numpy RandomState(experiment_seed)), reshuffled every pass, consumed contiguously across pass boundaries, nothing dropped: 600000 rows = 67 full passes + 7854",
+        "B": "another rule chosen by the owner"
+      },
+      "recommendation": "A",
+      "scientific": true,
+      "topic": "TRAIN pair sampling over pairs_train_v1",
+      "why_open": "no official code; the qualified graph fixes 4 (target_live, source_spoof) rows per batch 8, but no order/shuffle/pass rule exists (precedent: E05 owner-approved seeded shuffle; E03 R1)"
+    },
+    {
+      "blocks": [
+        "real TRAIN feed"
+      ],
+      "id": "D5",
+      "options": {
+        "A": "none",
+        "B": "inherit STDN flips + brightness(0.25) with consistent geometry flips"
+      },
+      "recommendation": "A",
+      "scientific": true,
+      "topic": "TRAIN augmentation",
+      "why_open": "the frozen E04 contract lists none, but M6D3d stdn_reference_policy (STDN where PhySTD is silent) could be read as inheriting STDN TRAIN flips and brightness; flips would also have to flip M0 and the Q140 correspondences"
+    },
+    {
+      "blocks": [
+        "lifecycle definition"
+      ],
+      "id": "D6",
+      "options": {
+        "A": "no VAL block (TRAIN-only run; VAL and TEST untouched)",
+        "B": "periodic val_pairs_v1 diagnostic block (non-selecting; needs its own firewall/RNG proof)"
+      },
+      "recommendation": "A",
+      "scientific": false,
+      "topic": "VAL diagnostics",
+      "why_open": "the config allows VAL for diagnostics only; no source defines a VAL block or cadence"
+    },
+    {
+      "blocks": [
+        "production controller"
+      ],
+      "id": "D7",
+      "options": {
+        "A": "a dedicated numpy RandomState seeded 1 + u32be(SHA256(\"GPAT_TRANSFERBENCH|E04|HARD|<seed>\")[0:4]) mod (2^31-1), independent of the sampling stream; per iteration 4x3 uniforms then 4 keep draws, as in M6D3e",
+        "B": "another rule chosen by the owner"
+      },
+      "recommendation": "A",
+      "scientific": true,
+      "topic": "hard-sample RNG stream",
+      "why_open": "M6D3e realizes per-spoof uniform[0,1] x3 and Bernoulli(.5) draws as supplied tensors with a qualification seed; the experiment-seed stream is not defined"
+    },
+    {
+      "blocks": [
+        "real TRAIN feed"
+      ],
+      "id": "D8",
+      "options": {
+        "A": "RGB float32 / 255 in [0,1] (STDN reference)",
+        "B": "another range"
+      },
+      "recommendation": "A (confirm)",
+      "scientific": true,
+      "topic": "graph input encoding",
+      "why_open": "no E04 artifact fixes the pixel range; the sum-reduced losses and frozen alphas depend on it. The pinned STDN predecessor feeds RGB float32 / 255 (model/dataset.py:144), which M6D3d stdn_reference_policy would select; the M6D3e fixtures are in [0,1]"
+    },
+    {
+      "blocks": [
+        "stage B acceptance",
+        "launch"
+      ],
+      "id": "D9",
+      "options": {
+        "A": "extend the version-only tolerance to gpat-m6-e03 (E04 training) and gpat-m6-e04-geometry",
+        "B": "require driver 595.84"
+      },
+      "recommendation": "A, with the Step-1 D3 variance disclosed",
+      "scientific": false,
+      "topic": "driver-version tolerance for E04",
+      "why_open": "OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY was approved for E05 and reused by E03; no record extends it to E04. Both E04 locks record 595.84; the host runs 580.178.04. Synthetic re-qualification passes on 580.178.04, but D3 BN moving means now also differ after Step 1 (4 tensors; committed M6D3e processes were identical after Step 1)"
+    }
+  ],
+  "e04_scientific_authority": null,
+  "engineering_within_authority": {
+    "checkpoint_cadence": "frozen as implementation_defined_periodic_plus_terminal: the production contract may fix a periodic cadence (for example every 15000 iterations) plus iteration_150000, zero extra optimizer steps (A2-06)",
+    "dense_offsets": "per-pair Delaunay inverse offsets with the pinned SciPy LinearNDInterpolator (scipy 1.10.1 in gpat-m6-e03), computed in the feed from the frozen pre-pass Q140 xy; exact M6D3e function",
+    "metrics_reporting_interval": "configured_reporting_interval (run_logging_v1); fixed by the production contract",
+    "workers": "IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT"
+  },
+  "host_checks": {
+    "assets_match_frozen": true,
+    "e04_run_root_absent": true,
+    "environments_present": true,
+    "gpu_checkout_clean": true,
+    "gpu_identity": true,
+    "manifests_match_laptop": true,
+    "no_method_process": true,
+    "requal_files_match_copies": true,
+    "sim3dr_extension_matches_manifest": true
+  },
+  "host_collect": {
+    "assets": {
+      "configs/bfm_noneck_v3.pkl": {
+        "bytes": 24393598,
+        "sha256": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca"
+      },
+      "configs/param_mean_std_62d_120x120.pkl": {
+        "bytes": 713,
+        "sha256": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795"
+      },
+      "configs/tri.pkl": {
+        "bytes": 913040,
+        "sha256": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8"
+      },
+      "weights/mb1_120x120.pth": {
+        "bytes": 13755269,
+        "sha256": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79"
+      }
+    },
+    "boot_id": "a74f71de47614d8381b53a3f56741765",
+    "disk_free_bytes": 118235807744,
+    "e03_feed_pack_manifest_sha256": "c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833",
+    "e04_run_root_exists": false,
+    "environments": {
+      "gpat-m6-e03": {
+        "exists": true,
+        "interpreter": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+        "interpreter_sha256": "37f55912330708a4fb94028daeb8c8ae62d9023d141a75beff68721e48c5dfa6",
+        "modules": {
+          "cv2": "5.0.0",
+          "numpy": "1.23.5",
+          "python": "3.8.20",
+          "scipy": "1.10.1",
+          "tensorflow": "1.15.5",
+          "yaml": "6.0.3"
+        }
+      },
+      "gpat-m6-e04-geometry": {
+        "exists": true,
+        "interpreter": "/home/student20261/miniconda3/envs/gpat-m6-e04-geometry/bin/python",
+        "interpreter_sha256": "240398eb6986c015e2bc5190deba3be5a658165b9f15f7b3ea871ca71869fd38",
+        "modules": {
+          "Cython": "3.3.0",
+          "cv2": "5.0.0",
+          "numpy": "2.5.3",
+          "python": "3.12.14",
+          "scipy": "1.18.1",
+          "torch": "2.14.0+cu130",
+          "torchvision": "0.29.0+cu130",
+          "yaml": "6.0.3"
+        }
+      }
+    },
+    "faces_256_root_exists": true,
+    "files_sha256": {
+      "configs/methods/e04_physics_std.yaml": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+      "environments/e04_geometry.lock.json": "9426be37044ae7121fb22a757e5483850e02bf68461b1eabb5421fae164fbc3d",
+      "environments/e04_geometry.runtime.json": "5dde3e12b4a3e02e1446060ce252297c0beda689516b7cf43ed43772cae4424b",
+      "environments/e04_training.lock.json": "a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd",
+      "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+      "manifests/val_pairs_v1.parquet": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872"
+    },
+    "git": {
+      "branch": "m6-baselines",
+      "head": "d547fc9f8932a273d719ae589aade85a9d989b85",
+      "status_porcelain": ""
+    },
+    "gpu": "NVIDIA GeForce RTX 3090, 580.178.04, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+    "gpu_compute_apps": "",
+    "host": "nd-System-Product-Name",
+    "method_processes": [],
+    "phase": "collect",
+    "requal_dir": "/tmp/e04_readiness_20261029T085107Z",
+    "requal_files_sha256": {
+      "m6d3a_cpu.json": "dc296db58990a3127c65602addbb06dae232fcf59db3b4cbcf3ca58730fb251d",
+      "m6d3a_cpu.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "m6d3a_cpu.stdout": "2d76417460c4f391c9316c32f4ba625e1fb23b4c3f33015c489716d61c10b7ab",
+      "m6d3a_cuda.json": "8dac23289e930fd5de306cdbeadc2623ff3953f9c60c743f79f7c624e7db73a2",
+      "m6d3a_cuda.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "m6d3a_cuda.stdout": "9eeb24d5b72fdd03b413b4e721a9d2abbe8cb31be919a42b700a3bd4b1265719",
+      "m6d3e.stderr": "ea6fa8d6095eec877fe18027657f3a9d18bf2a9a17f2864b7aa97ce6e16985c1",
+      "m6d3e.stdout": "3ddb4d16b31b68e4962970ae213a054721533b555293df5901e8cb5a448b7c33",
+      "m6d3e_process.json": "f318535724142ffe6fda3d1f2d3111f62d62cd2f9e9c267626120d882f8d7088"
+    },
+    "runs_m6": [
+      "E03",
+      "E05",
+      "E06b",
+      "E06c",
+      "E07c"
+    ],
+    "sim3dr_extension": {
+      "exists": true,
+      "expected_sha256": "7fb03434a0e1ce4f86e248f87d462d775c24c40aad843724880bb21341c27aa4",
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e04_geometry/tddfa_v2/Sim3DR/Sim3DR_Cython.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "7fb03434a0e1ce4f86e248f87d462d775c24c40aad843724880bb21341c27aa4"
+    },
+    "tmux_sessions": []
+  },
+  "milestone": "E04-PRODUCTION-READINESS-AUDIT",
+  "next_milestone": "owner production resolution for E04 (D1-D9); then the geometry pre-pass, the feed pack, the production controller and CLI, and real-TRAIN production qualification",
+  "production_files": {
+    "existing": [
+      "methods/physics_std/adapter.py",
+      "methods/physics_std/assets.py",
+      "methods/physics_std/contract.py",
+      "methods/physics_std/geometry.py",
+      "methods/physics_std/regressor.py",
+      "methods/physics_std/renderer.py",
+      "methods/physics_std/runtime.py",
+      "methods/physics_std/source.py",
+      "methods/physics_std/trace_transfer.py",
+      "methods/physics_std/network.py",
+      "methods/physics_std/losses.py",
+      "methods/physics_std/training_contract.py",
+      "methods/physics_std/training_graph.py",
+      "methods/physics_std/training_runtime.py"
+    ],
+    "missing": {
+      "methods/physics_std/feed_pack.py (hash-verified TRAIN pack: pair rows + pre-pass M0/mask/Q140, no TEST)": "D1, D2, D4",
+      "methods/physics_std/production_io.py (contract/source/env/pack verifiers, resolved config)": "D4-D9",
+      "methods/physics_std/production_runner.py (controller: feed, 3-step loop, checkpoints, lifecycle)": "D4, D5, D6, D7, D8",
+      "tools/e04_geometry_prepass.py": "D1, D2, D3",
+      "tools/e04_production_qualification_evidence.py + tests": "all of the above",
+      "tools/e04_seed_completion_audit.py": "after qualification",
+      "tools/run_e04.py (fail-closed CLI, fresh only)": "D4-D9"
+    },
+    "not_reusable": [
+      "E03 graph, input semantics (YUV concat), G_D_RATIO schedule, ckpt-50 cadence, VAL block, RNG ruling V, feed pack v1 (no E04 geometry)"
+    ],
+    "reusable_from_e03_without_modifying_e03": [
+      "methods.common RunContext / run_logging_v1 manifest and metrics writers",
+      "Python 3.8 compatibility shims (pathlib backport, importlib.metadata path)",
+      "audit-hook firewall pattern",
+      "checkpoint index / SHA listing conventions",
+      "stat-only atime TEST firewall snapshots"
+    ]
+  },
+  "requalification": {
+    "M6D3A_CPU": {
+      "benchmark_images_decoded": 0,
+      "depth_sha256": "bf442bca634087075cd27082eef172d39576006efcfc54a2595b3ad613099531",
+      "depth_sha256_in_committed_m6d3a": true,
+      "end_to_end_repeat_byte_identical": true,
+      "face_mask_pixels": 18983,
+      "file_access_denied": [],
+      "mesh_sha256": "c784798a0b864c331b66a802f33e224efbd4e103f369c96a90c0a3e6b8170599",
+      "optimizer_steps": 0,
+      "regressor_repeat_byte_identical": true,
+      "spoof_exact_zeros": true
+    },
+    "M6D3A_CUDA": {
+      "benchmark_images_decoded": 0,
+      "depth_sha256": "bf442bca634087075cd27082eef172d39576006efcfc54a2595b3ad613099531",
+      "depth_sha256_in_committed_m6d3a": true,
+      "end_to_end_repeat_byte_identical": true,
+      "face_mask_pixels": 18983,
+      "file_access_denied": [],
+      "mesh_sha256": "f71c078310eeb8ffd8ebed66d249682f2cf9d686964f62f36a778014781d0961",
+      "optimizer_steps": 0,
+      "regressor_repeat_byte_identical": true,
+      "spoof_exact_zeros": true
+    },
+    "M6D3E_PROCESS": {
+      "committed_process_pair_differences_per_step": [
+        0,
+        51,
+        51
+      ],
+      "fields_common": 9143,
+      "fields_differing": [
+        ".firewall.events.open",
+        ".firewall.events.os.listdir",
+        ".operation_structure_sha256",
+        ".steps",
+        ".tests.transcript"
+      ],
+      "firewall_denied": [],
+      "graph_def_equals_committed": true,
+      "graph_def_sha256": "7e3e84ccc40f8390819b0121b417e5ebfea78de3efddb1e306d07e70bd4c27e2",
+      "optimizer_applications": 3,
+      "post_state_difference_networks_per_step": [
+        [
+          "D3"
+        ],
+        [
+          "D3"
+        ],
+        [
+          "D3"
+        ]
+      ],
+      "post_state_differences_per_step": [
+        4,
+        51,
+        51
+      ],
+      "status": "PASS",
+      "step1_new_differences": [
+        "D/D3/conv1/BN/moving_mean:0",
+        "D/D3/conv2/BN/moving_mean:0",
+        "D/D3/conv3/BN/moving_mean:0",
+        "D/D3/conv4/BN/moving_mean:0"
+      ],
+      "tests": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 33
+      }
+    }
+  },
+  "scientific_execution_authorized": false,
+  "stages": {
+    "A_static_source_and_contract": "PASS",
+    "B_environment_and_dependencies": "PASS_SYNTHETIC_PENDING_D9_DRIVER_RULING",
+    "C_scientific_graph_construction": "PASS_SYNTHETIC",
+    "D_synthetic_forward_and_gradient": "PASS_SYNTHETIC_WITH_DISCLOSED_D3_VARIANCE",
+    "E_deterministic_data_path": "BLOCKED_D4_D5_D7_D8",
+    "F_real_train_val_feed": "BLOCKED_D4_D5_D6_D8",
+    "G_depth_m0_integrity": "BLOCKED_D1_D2_D3",
+    "H_checkpoint_and_lifecycle": "NOT_IMPLEMENTED",
+    "I_test_firewall": "NOT_IMPLEMENTED (pattern reusable from E03)",
+    "J_real_data_production_qualification": "BLOCKED",
+    "K_independent_evidence_verification": "BLOCKED"
+  },
+  "static_checks": {
+    "assets_laptop": {
+      "configs/bfm_noneck_v3.pkl": "89ac96480eddc331120f2c8401737c55a5fcc97b10f8a64574e63976c3d246ca",
+      "configs/param_mean_std_62d_120x120.pkl": "090d7150f77cb66c29ddae21e4508fbde59123dcd1dea7facc24a7ed06d1c795",
+      "configs/tri.pkl": "0562a594d8369f7d1c86306522ff76fd3a2c81cf90ba9443893c1191ad0abbb8",
+      "weights/mb1_120x120.pth": "a45a946c6e9b16f8d3cf2e69376da9560a7cf9afae671bebceb7e437a405ea79"
+    },
+    "checkpoint_policy": {
+      "cadence": "implementation_defined_periodic_plus_terminal",
+      "rule": "BASELINE_FINAL_STATE_V1",
+      "selection_uses_test": false,
+      "selection_uses_val": false,
+      "terminal_state": "iteration_150000"
+    },
+    "config_equals_snapshot": true,
+    "config_sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a",
+    "m6d3d_contract": "E04_TRAINING_GRAPH_CONTRACT_RESOLVED",
+    "q140_sha256": "1b884401377f5aadd3d56857f05fddf70e2c54a52a9eb2160cebc06a74031a1f",
+    "source_verification": "PASS"
+  },
+  "status": "E04_BLOCKED_BY_SOURCE_GAP"
+}
