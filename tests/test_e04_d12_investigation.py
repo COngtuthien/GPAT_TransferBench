@@ -151,7 +151,11 @@ class E04D12Investigation(unittest.TestCase):
         for line in (AUDIT / 'E04_D12_INVESTIGATION_SHA256.txt').read_text().splitlines():
             digest, name = line.split('  ')
             names.append(name)
-            self.assertEqual(sha(name), digest, name)
+            at_result = subprocess.run(['git', 'show', '%s:%s' % (RESULT_COMMIT, name)], cwd=ROOT,
+                                       capture_output=True, check=True).stdout
+            self.assertEqual(hashlib.sha256(at_result).hexdigest(), digest, name)
+            if name != 'tools/e04_d12_procedural_gate.py':      # activated after the owner approval (c60481b)
+                self.assertEqual(sha(name), digest, name)
         self.assertEqual(len(names), 13)
         self.assertEqual(DOC['analyses']['analysis']['sha256'], sha('outputs/audit/E04_D12_ANALYSIS.json'))
         self.assertEqual(DOC['raw_outputs']['sha256sums_sha256'], sha('outputs/audit/E04_D12_RAW_SHA256SUMS.txt'))

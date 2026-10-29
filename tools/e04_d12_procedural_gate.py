@@ -1,11 +1,11 @@
-"""E04 D12 procedural-reproducibility acceptance gate: DRAFT, INACTIVE.
+"""E04 D12 procedural-reproducibility acceptance gate: OWNER_APPROVED (c60481b), ACTIVE.
 
-Implements the replacement acceptance criteria of configs/amendments/e04_d12_procedural_reproducibility.DRAFT.yaml for
-the failed bitwise gate K.real_data_gradient_repeatability. Nothing imports this module: it is not wired into
-tools/e04_production_qualification_evidence.py and no qualification record uses it. gate() refuses unless the
-owner-approved amendment configs/amendments/e04_d12_procedural_reproducibility.yaml exists with status OWNER_APPROVED
-and pins CRITERIA_SHA256; evaluate() is the pure criterion logic (regression tests and the draft validity check only).
-The superseded K gate is reported as recorded and never counted as passed. No criterion depends on performance.
+Implements the replacement acceptance criteria of configs/amendments/e04_d12_procedural_reproducibility.yaml (the DRAFT
+committed at 57bd1f9, criteria unchanged) for the failed bitwise gate K.real_data_gradient_repeatability. Its only
+caller is `tools/e04_production_qualification_evidence.py build-d12`, which writes a NEW requalification record; the
+original 41/42 record is never rewritten. gate() refuses unless the approved amendment exists with status
+OWNER_APPROVED and pins CRITERIA_SHA256; evaluate() is the pure criterion logic. The superseded K gate is reported as
+recorded and never counted as passed. No criterion depends on performance.
 
 Inputs (formats of the unchanged D12 tools): replay process directories of tools/e04_d12_production_replay.py
 (summary.json, iterations.jsonl), traced partition records of tools/e04_d12_confound_probe.py --factor d10_trace2
@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import e04_d11_analysis as d11a  # noqa: E402
 import e04_d12_analysis as d12a  # noqa: E402
 
-ACTIVE = False
+ACTIVE = True                           # owner approval c60481b; activation commit wires build-d12
 APPROVED_AMENDMENT = 'configs/amendments/e04_d12_procedural_reproducibility.yaml'
 SUPERSEDED_GATE = 'K.real_data_gradient_repeatability'
 BOUND = d12a.BOUND                      # 1e-3, fixed by E04_D12_INVESTIGATION_PROTOCOL.json before any D12 evidence
@@ -221,5 +221,7 @@ def require_approval(repo):
 
 
 def gate(repo, replay_dirs, trace_records, gates):
+    if not ACTIVE:
+        raise SystemExit('E04 D12 gate inactive')
     require_approval(repo)
     return evaluate([load_replay(d) for d in replay_dirs], trace_records, gates)

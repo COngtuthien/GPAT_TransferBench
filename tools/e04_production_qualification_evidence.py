@@ -7,21 +7,43 @@
                 manifest, feed pack verification on the GPU host and here, the det_a / det_b / terminal_probe /
                 failure_probe qualification outputs, the D9 compatibility re-probe, the atime classification) and
                 writes outputs/audit/E04_PRODUCTION_QUALIFICATION.{json,md} + E04_PRODUCTION_QUALIFICATION_SHA256.txt.
+                The original 41/42 record is preserved: build refuses to overwrite it.
+  build-d12     (repository; owner-approved E04 D12, configs/amendments/e04_d12_procedural_reproducibility.yaml): a NEW
+                requalification. Computes the same 42 gates on fresh --collected documents, keeps the 41 retained gates
+                gating, records K.real_data_gradient_repeatability as superseded (never counted as passed), evaluates
+                tools/e04_d12_procedural_gate.py R1-R10 on the fresh stage-P replays (P/P1..P3) and d10_trace2 traces
+                (C/d10_trace2/P1..P2), checks the collected evidence against the raw archive SHA256SUMS, and writes
+                outputs/audit/E04_PRODUCTION_QUALIFICATION_D12.{json,md} + E04_PRODUCTION_QUALIFICATION_D12_SHA256.txt.
 """
 import argparse
 import hashlib
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 
 STATUS_OK, STATUS_FAIL = 'E04_PRODUCTION_QUALIFIED', 'E04_PRODUCTION_QUALIFICATION_INCOMPLETE'
+STATUS_D12_OK = 'E04_PRODUCTION_QUALIFIED_READY_FOR_SCIENTIFIC_EXECUTION'
 RUNTIME = '/home/student20261/workdir/GPAT_TransferBench_runtime'
 REPO_GPU = '/home/student20261/workdir/GPAT_TransferBench'
 OUT = {'record': 'outputs/audit/E04_PRODUCTION_QUALIFICATION.json',
        'report': 'outputs/audit/E04_PRODUCTION_QUALIFICATION.md',
        'sha256': 'outputs/audit/E04_PRODUCTION_QUALIFICATION_SHA256.txt'}
+OUT_D12 = {'record': 'outputs/audit/E04_PRODUCTION_QUALIFICATION_D12.json',
+           'report': 'outputs/audit/E04_PRODUCTION_QUALIFICATION_D12.md',
+           'sha256': 'outputs/audit/E04_PRODUCTION_QUALIFICATION_D12_SHA256.txt'}
+ORIGINAL_RECORD_SHA256 = 'd158a1ca773cfae2b099a5942b126581efa620a683a10c8494214d4f3da38843'   # 41/42, 1d02625
+ORIGINAL_RUN_ID = 'caf16974d17fe5b7'
+D12_APPROVAL_COMMIT = 'c60481b91922c1c72c73a603219585ec4a78c1e4'
 CASES = ('det_a', 'det_b', 'terminal_probe', 'failure_probe')
+D12_REPLAYS = ('P/P1', 'P/P2', 'P/P3')
+D12_TRACES = ('C/d10_trace2/P1', 'C/d10_trace2/P2')
+D12_COLLECTED = tuple('%s.json' % c for c in CASES) + (
+    'compat_probe.json', 'rdp_1.json', 'rdp_2.json', 'rdp_3.json', 'lg_probe.json', 'prepass_compare.json',
+    'prepass_compare_frozen.json') + tuple('%s/%s' % (d, f) for d in D12_REPLAYS for f in
+                                           ('summary.json', 'iterations.jsonl')) + tuple(
+    '%s/d12_extra.json' % d for d in D12_TRACES)
 
 
 def sha256_bytes(b):
@@ -29,7 +51,7 @@ def sha256_bytes(b):
 
 
 # ============================================================================ collect-atime (GPU host)
-def collect_atime(post_name='post'):
+def collect_atime(post_name='post', prefix='e04_prodq'):
     from datetime import datetime, timezone
     import pyarrow.parquet as pq
     w = Path('/home/student20261/workdir')
@@ -42,9 +64,9 @@ def collect_atime(post_name='post'):
             a, m, p = line.split('\t')
             out[p] = (float(a), float(m))
         return out
-    t = {k: datetime.strptime((w / ('e04_prodq_atime_%s.time' % k)).read_text().strip(), '%Y-%m-%dT%H:%M:%SZ')
+    t = {k: datetime.strptime((w / ('%s_atime_%s.time' % (prefix, k))).read_text().strip(), '%Y-%m-%dT%H:%M:%SZ')
          .replace(tzinfo=timezone.utc).timestamp() for k in ('pre', post_name)}
-    pre, post = load('e04_prodq_atime_pre.tsv'), load('e04_prodq_atime_%s.tsv' % post_name)
+    pre, post = load('%s_atime_pre.tsv' % prefix), load('%s_atime_%s.tsv' % (prefix, post_name))
     stats, manifests = {}, []
     for p, (a, m) in sorted(pre.items()):
         if '/manifests/' in p:
@@ -60,10 +82,10 @@ def collect_atime(post_name='post'):
             continue
         s['atime_changed'] += post[p][0] != a
         s['mtime_changed'] += post[p][1] != m
-    return {'pre_utc': (w / 'e04_prodq_atime_pre.time').read_text().strip(),
-            'post_name': post_name, 'post_utc': (w / ('e04_prodq_atime_%s.time' % post_name)).read_text().strip(),
-            'pre_sha256': sha256_bytes((w / 'e04_prodq_atime_pre.tsv').read_bytes()),
-            'post_sha256': sha256_bytes((w / ('e04_prodq_atime_%s.tsv' % post_name)).read_bytes()),
+    return {'prefix': prefix, 'pre_utc': (w / ('%s_atime_pre.time' % prefix)).read_text().strip(),
+            'post_name': post_name, 'post_utc': (w / ('%s_atime_%s.time' % (prefix, post_name))).read_text().strip(),
+            'pre_sha256': sha256_bytes((w / ('%s_atime_pre.tsv' % prefix)).read_bytes()),
+            'post_sha256': sha256_bytes((w / ('%s_atime_%s.tsv' % (prefix, post_name))).read_bytes()),
             'files': len(pre), 'same_paths': sorted(pre) == sorted(post), 'by_split': stats, 'manifests': manifests}
 
 
@@ -283,6 +305,133 @@ def build(root, collected):
     return doc
 
 
+# ============================================================================ build-d12 (repository; approved D12)
+def evidence_check(root, col, original_run_id=ORIGINAL_RUN_ID, approval_commit=D12_APPROVAL_COMMIT):
+    """Fail-closed completeness and provenance of a fresh requalification: every required document is collected and
+    equals its raw-archive SHA256SUMS entry, the runs are new (not the original 41/42 run id), the GPU checkout was
+    clean at a descendant of the D12 approval commit, and the fresh pre-pass equals the frozen pre-pass."""
+    col = Path(col)
+    problems = []
+    sums = {}
+    for line in (col / 'raw_SHA256SUMS').read_text().splitlines() if (col / 'raw_SHA256SUMS').is_file() else []:
+        digest, name = line.split('  ', 1)
+        sums[name[2:] if name.startswith('./') else name] = digest
+    if not sums:
+        problems.append('raw_SHA256SUMS missing or empty')
+    for name in D12_COLLECTED:
+        if not (col / name).is_file():
+            problems.append('missing %s' % name)
+        elif sums.get(name) != sha256_bytes((col / name).read_bytes()):
+            problems.append('hash differs from raw archive: %s' % name)
+    run_ids = {}
+    for c in CASES:
+        if (col / ('%s.json' % c)).is_file():
+            run_ids[c] = json.loads((col / ('%s.json' % c)).read_text())['run_id']
+    if len(set(run_ids.values())) != 1 or original_run_id in run_ids.values():
+        problems.append('qualification runs are not one fresh run id: %s' % run_ids)
+    host = json.loads((col / 'host_state.json').read_text()) if (col / 'host_state.json').is_file() else {}
+    head = host.get('git_head', '')
+    if host.get('git_status') != '' or subprocess.run(['git', 'merge-base', '--is-ancestor', approval_commit, head],
+                                                     cwd=str(root), capture_output=True).returncode != 0:
+        problems.append('GPU checkout %s not clean or not a descendant of the D12 approval commit' % head)
+    frozen = json.loads((col / 'prepass_compare_frozen.json').read_text()) \
+        if (col / 'prepass_compare_frozen.json').is_file() else {}
+    if not (frozen.get('identical') and not frozen.get('differing')):
+        problems.append('fresh pre-pass differs from the frozen pre-pass')
+    return {'pass': not problems, 'problems': problems, 'run_ids': run_ids, 'gpu_checkout_commit': head,
+            'raw_files': len(sums)}
+
+
+def compose_d12(doc, d12, evidence, approval, original_sha256):
+    """New-record document: the 41 retained gates and R1-R10 (+ evidence) gate; K is superseded, never counted."""
+    from e04_d12_procedural_gate import SUPERSEDED_GATE, CRITERIA_SHA256
+    k = [g for g in doc['gates'] if g['gate'] == SUPERSEDED_GATE]
+    gates = [g for g in doc['gates'] if g['gate'] != SUPERSEDED_GATE]
+    gates += [{'gate': 'D12.%s' % name, 'pass': bool(ok), 'detail': d12['failures'].get(name, [])}
+              for name, ok in sorted(d12['criteria'].items())]
+    gates.append({'gate': 'D12.evidence_complete_and_hashed', 'pass': evidence['pass'], 'detail': evidence})
+    failed = [g['gate'] for g in gates if not g['pass']]
+    if d12['criteria_sha256'] != CRITERIA_SHA256 or approval['acceptance_criteria_sha256'] != CRITERIA_SHA256 or \
+            d12['superseded_gate']['counted_as_passed'] is not False:
+        failed.append('D12.approval_pin')
+    out = dict(doc, milestone='E04-PRODUCTION-REQUALIFICATION-D12', gates=gates, failed_gates=failed,
+               gates_passed=len(gates) - len([g for g in gates if not g['pass']]), gates_total=len(gates),
+               status=STATUS_FAIL if failed else STATUS_D12_OK)
+    out['superseded_gates'] = [dict(g, gating=False, counted_as_passed=False,
+                                    superseded_by='E04 D12 R1-R10 (%s, criteria %s)' % (
+                                        'configs/amendments/e04_d12_procedural_reproducibility.yaml', CRITERIA_SHA256))
+                               for g in k]
+    out['d12'] = {'amendment': 'configs/amendments/e04_d12_procedural_reproducibility.yaml',
+                  'amendment_status': approval['status'], 'acceptance_criteria_sha256': d12['criteria_sha256'],
+                  'approved_draft_commit': approval['approved_draft']['commit'],
+                  'criteria': d12['criteria'], 'failures': d12['failures'],
+                  'diagnostics_not_gating': d12['diagnostics_not_gating'], 'superseded_gate': d12['superseded_gate'],
+                  'disclosed_numerical_behavior': approval['disclosed_numerical_behavior'],
+                  'numerical_divergence_never_excuses': approval['numerical_divergence_never_excuses']}
+    out['original_record'] = {'path': OUT['record'], 'sha256': original_sha256, 'status': STATUS_FAIL,
+                              'gates': '41/42', 'failed_gates': [SUPERSEDED_GATE], 'modified': False,
+                              'retroactively_passed': False}
+    out['evidence'] = evidence
+    out['production_qualification_authority'] = not failed
+    out['scientific_seed_execution_authorized'] = False
+    out['e04_scientific_authority'] = None
+    out['scientific_seeds_launched'] = []
+    return out
+
+
+def build_d12(root, collected):
+    root, col = Path(root), Path(collected)
+    sys.path.insert(0, str(root / 'tools'))
+    import e04_d12_procedural_gate as d12g
+    approval = d12g.require_approval(root)
+    original = sha256_bytes((root / OUT['record']).read_bytes())
+    if original != ORIGINAL_RECORD_SHA256:
+        raise SystemExit('the original 41/42 qualification record changed: %s' % original)
+    doc = build(root, col)
+    traces = [json.loads((col / t / 'd12_extra.json').read_text()) for t in D12_TRACES
+              if (col / t / 'd12_extra.json').is_file()]
+    res = d12g.gate(root, [col / r for r in D12_REPLAYS if (col / r / 'summary.json').is_file()], traces,
+                    doc['gates'])
+    return compose_d12(doc, res, evidence_check(root, col), approval, original)
+
+
+def report_d12(doc):
+    rows = ''.join('| `%s` | %s |\n' % (g['gate'], 'pass' if g['pass'] else '**FAIL**') for g in doc['gates'])
+    k = doc['superseded_gates'][0] if doc['superseded_gates'] else {'gate': '-', 'pass': None}
+    d, t = doc['d12'], doc['timing']
+    diag = d['diagnostics_not_gating']
+    ratios = [v for v in diag['functional_gradient_ratio'].values() if v is not None]
+    return '\n'.join([
+        '# E04 Physics-STD: production requalification under approved D12', '',
+        '**Status:** `%s`, %d/%d gates. Qualification seed %d only. **No E04 scientific seed was launched**, no '
+        'scientific seed is authorized by this record, and no E04 scientific result exists. Machine-readable record: '
+        '`E04_PRODUCTION_QUALIFICATION_D12.json`.' % (doc['status'], doc['gates_passed'], doc['gates_total'],
+                                                      doc['qualification_seed']), '',
+        '- Approved amendment `%s` (`%s`), criteria `%s`.' % (d['amendment'], d['amendment_status'],
+                                                             d['acceptance_criteria_sha256']),
+        '- Original record `%s` (`%s…`) is unchanged: 41/42, `%s` FAIL. It is not re-counted.'
+        % (doc['original_record']['path'], doc['original_record']['sha256'][:16], k['gate']),
+        '- Pre-pass `%s` (fresh repeat byte-identical and equal to the frozen pre-pass); feed pack `%s`.'
+        % (doc['prepass']['manifest_sha256'], doc['feed_pack']['manifest_sha256']),
+        '- Production construction `%s…` (%d ops).' % (doc['graph']['construction'][0][:16],
+                                                       doc['graph']['construction'][1]),
+        '- %.3f / %.3f s per iteration, projected %.1f / %.1f h for 150000 iterations.'
+        % (t['seconds_per_iteration'][0], t['seconds_per_iteration'][1], t['projected_150000_iteration_hours'][0],
+           t['projected_150000_iteration_hours'][1]), '',
+        '## Gates (41 retained + D12 R1-R10 + evidence)', '', '| gate | result |', '|---|---|', rows.rstrip('\n'), '',
+        '## Superseded gate (recorded, not gating, never counted as passed)', '',
+        '- `%s`: computed result %s on this requalification.' % (k['gate'], 'pass' if k['pass'] else 'FAIL'), '',
+        '## Disclosed numerical behavior (D12)', '',
+        '- GPU computation is not bitwise reproducible. Parameters, losses and checkpoints of two runs with the same '
+        'seed may diverge and are not guaranteed identical. D12 does not bound long-run trajectory divergence.',
+        '- Diagnostics (not gating): max functional step-gradient relative L2 %s; varying forward tensors per '
+        'iteration %s; distinct post-state hashes across processes per iteration %s.'
+        % ('%.2e' % max(ratios) if ratios else 'n/a', diag['forward_varying_tensors'],
+           diag['cross_process_post_state_distinct']), '',
+        '## Remaining before scientific execution', '',
+        '- A separate owner launch decision for scientific seeds 42, 1337 and 2026.', ''])
+
+
 def report(doc):
     rows = ''.join('| `%s` | %s |\n' % (g['gate'], 'pass' if g['pass'] else '**FAIL**') for g in doc['gates'])
     crop = ''.join('| %s | %d | %d | %d | %d | %d |\n' % (k.replace('|', ' / '), v['faces'], v['outside_any'], v['padded_faces'],
@@ -336,18 +485,26 @@ def main(argv=None):
     sub = ap.add_subparsers(dest='cmd')
     ca = sub.add_parser('collect-atime')
     ca.add_argument('--post', default='post')
-    b = sub.add_parser('build')
-    b.add_argument('--collected', required=True)
-    b.add_argument('--repo-root', default=str(Path(globals().get('__file__', 'tools/x')).resolve().parents[1]))
+    ca.add_argument('--prefix', default='e04_prodq')
+    for name in ('build', 'build-d12'):
+        b = sub.add_parser(name)
+        b.add_argument('--collected', required=True)
+        b.add_argument('--repo-root', default=str(Path(globals().get('__file__', 'tools/x')).resolve().parents[1]))
     args = ap.parse_args(argv)
     if args.cmd == 'collect-atime':
-        json.dump(collect_atime(args.post), sys.stdout, sort_keys=True)
+        json.dump(collect_atime(args.post, args.prefix), sys.stdout, sort_keys=True)
         return 0
     root = Path(args.repo_root)
-    doc = build(root, args.collected)
-    (root / OUT['record']).write_text(json.dumps(doc, indent=2, sort_keys=True) + '\n')
-    (root / OUT['report']).write_text(report(doc))
-    (root / OUT['sha256']).write_text(''.join('%s  %s\n' % (sha256_bytes((root / OUT[k]).read_bytes()), OUT[k])
+    if args.cmd == 'build-d12':
+        doc, out, text = build_d12(root, args.collected), OUT_D12, report_d12
+    else:
+        if (root / OUT['record']).is_file() and \
+                sha256_bytes((root / OUT['record']).read_bytes()) == ORIGINAL_RECORD_SHA256:
+            raise SystemExit('refusing to overwrite the preserved original 41/42 record %s' % OUT['record'])
+        doc, out, text = build(root, args.collected), OUT, report
+    (root / out['record']).write_text(json.dumps(doc, indent=2, sort_keys=True) + '\n')
+    (root / out['report']).write_text(text(doc))
+    (root / out['sha256']).write_text(''.join('%s  %s\n' % (sha256_bytes((root / out[k]).read_bytes()), out[k])
                                               for k in ('record', 'report')))
     print(doc['status'], doc['gates_passed'], '/', doc['gates_total'], doc['failed_gates'])
     return 0 if not doc['failed_gates'] else 1
