@@ -25,6 +25,11 @@ Three phases (the two collectors never write anything; this file must stay parse
               documents so the build can be re-derived on any host.
 
 No training, restore, selection, TEST, bank or downstream code is run. VAL losses are reported as diagnostics only.
+
+Disclosed audit amendments (neither changes the trained model or the scientific procedure): seed1337, B.pane_log_clean
+strips only a leading ^[[A..^[[D tty echo prefix; seed2026 (owner ruling 2026-10-29, REBOOT_RULING), B.process_exited_zero
+and J.single_e03_session may pass on durable post-completion-reboot evidence when a clean reboot after completion has
+removed the tmux server.
 """
 import argparse
 import hashlib
@@ -41,7 +46,7 @@ RUNTIME = '/home/student20261/workdir/GPAT_TransferBench_runtime'
 WORKDIR = '/home/student20261/workdir'
 AUTHORITY = 'd547fc9f8932a273d719ae589aade85a9d989b85'
 CONFIG_SHA = '08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0'
-RUN_IDS = {42: 'a565b76bc7349532', 1337: 'e8c85cc378e778f5'}
+RUN_IDS = {42: 'a565b76bc7349532', 1337: 'e8c85cc378e778f5', 2026: '237887eebab18637'}
 VAL_SEEDS = {42: 1355875380, 1337: 1050417158, 2026: 1242808125}     # owner ruling V (qualified mappings)
 FIDELITY = 'FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY'
 EXPECTED = {
@@ -110,6 +115,27 @@ PANE_FAIL_PATTERNS = ('Traceback', 'ResourceExhausted', 'out of memory', 'OOM', 
 LOG_PATTERNS = ('Traceback', 'Error', 'error', 'OutOfMemory', 'out of memory', 'Killed', 'nan', 'inf', 'Warning')
 KEY_ECHO = ('^[[A', '^[[B', '^[[C', '^[[D')      # tty ECHOCTL echo of cursor keys typed into an attached tmux pane
 RUN_ROOT_FILES = len(SMALL_FILES) + MAX_EPOCH * len(SUFFIXES) + 1 + MAX_EPOCH * (STEPS // 200 + VAL_STEPS // 50)
+# Owner ruling 2026-10-29 (seed2026): when a clean host shutdown/reboot AFTER the run's completion has removed the tmux
+# server, the two live-tmux gates below may instead pass on durable post-completion-reboot evidence. Only these two
+# gates; only when the seed's tmux session is absent; never when any other gate fails.
+REBOOT_RULING = {
+    'ruling': 'OWNER_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE_SUBSTITUTION', 'date': '2026-10-29',
+    'gates': ['B.process_exited_zero', 'J.single_e03_session'],
+    'result': 'PASS_BY_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE',
+    'scope': ('applies only when the seed tmux session is absent and the host provably shut down cleanly and rebooted '
+              'after the run completed; the live tmux path is unchanged; not a fallback for any missing session; no '
+              'other gate is relaxed; tmux data is neither modified nor fabricated')}
+_REBOOT_CORE = ('live_tmux_state_absent', 'exit_marker_zero', 'end_marker_valid', 'marker_files_durable',
+                'run_identity_consistent', 'completion_record', 'no_runner_process', 'reboot_after_completion',
+                'clean_shutdown_recorded', 'pane_scope_exited_at_completion', 'single_pane_scope_in_run_window',
+                'other_gates_pass', 'prior_diagnostic_preserved')
+REBOOT_GATE_CHECKS = {'B.process_exited_zero': _REBOOT_CORE, 'J.single_e03_session': _REBOOT_CORE}
+PANE_SCOPE_SLACK = 60                     # s: tmux pane scope start before launch_time / stop after the runner end_utc
+# the first (86/88, NEEDS_REVIEW) build of a seed whose two live-tmux gates later passed by the reboot ruling; kept
+PRIOR_DIAGNOSTICS = {2026: {'path': 'outputs/audit/history/E03_SEED2026_AUDIT1_NEEDS_REVIEW/E03_SEED2026_COMPLETION.json',
+                            'sha256': '62bbc549c838f96be97cfc093fa0b6be66a3a52d0925cbb12858c1583b079ceb',
+                            'status': 'E03_SEED2026_NEEDS_REVIEW', 'gates_passed': 86, 'gates_total': 88,
+                            'failed_gates': ['B.process_exited_zero', 'J.single_e03_session']}}
 
 
 def paths(seed):
@@ -534,7 +560,43 @@ def host_state(seed):
             'pane_log_fail_hits': {k: sum(k in x for x in pane_log) for k in PANE_FAIL_PATTERNS},
             'other_e03_tmux': sorted(x for x in sh('tmux', 'ls', '-F', '#{session_name}').splitlines()
                                      if x.startswith('e03_stdn_seed')),
-            'gpu_query': sh('nvidia-smi', '--query-gpu=name,driver_version,uuid', '--format=csv,noheader')}
+            'gpu_query': sh('nvidia-smi', '--query-gpu=name,driver_version,uuid', '--format=csv,noheader'),
+            'exit_file_raw': Path(p['exit']).read_bytes().decode('utf-8', errors='replace'),
+            'marker_files': {k: marker_file(p[k]) for k in ('command', 'launch_time', 'pane_log', 'exit', 'end_time')},
+            'reboot_provenance': boot_provenance(p)}
+
+
+def marker_file(path):
+    q = Path(path)
+    if not q.is_file():
+        return None
+    st = q.stat()
+    return {'size': st.st_size, 'mtime': st.st_mtime_ns / 1e9, 'mtime_utc': utc(st.st_mtime), 'sha256': sha256_file(q)}
+
+
+def boot_provenance(p):
+    """Durable boot/shutdown records for the owner-approved post-completion-reboot path (read-only): kernel boot id and
+    btime, the journal boot list, the user-visible journal lines of tmux pane scopes since launch, the wtmp
+    reboot/shutdown records and the tmux server state."""
+    def run(*a):
+        r = subprocess.run(list(a), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        return r.returncode, r.stdout, r.stderr.strip()
+    out = {'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip().replace('-', ''),
+           'btime': int(next(x.split()[1] for x in Path('/proc/stat').read_text().splitlines()
+                             if x.startswith('btime ')))}
+    rc, so, _ = run('journalctl', '--list-boots', '-o', 'json', '--no-pager')
+    out['journal_boots'] = json.loads(so) if rc == 0 and so.strip() else None
+    since = datetime.fromtimestamp(epoch_seconds(Path(p['launch_time']).read_text().strip()) - 3600, timezone.utc)
+    rc, so, _ = run('journalctl', '--utc', '-q', '--no-pager', '-o', 'json', '--output-fields=MESSAGE,_BOOT_ID',
+                    '--since', since.strftime('%Y-%m-%d %H:%M:%S UTC'), '-g', 'tmux-spawn-')
+    out['journal_tmux_scopes'] = ([{'realtime': int(r['__REALTIME_TIMESTAMP']) / 1e6, 'boot_id': r['_BOOT_ID'],
+                                    'message': r['MESSAGE']} for r in map(json.loads, so.splitlines())]
+                                  if rc == 0 else None)
+    rc, so, _ = run('last', '-x', '--time-format', 'iso', 'reboot', 'shutdown')
+    out['wtmp'] = [x for x in so.splitlines() if x.startswith(('reboot ', 'shutdown '))][:20] if rc == 0 else None
+    rc, so, se = run('tmux', 'ls', '-F', '#{session_name}')
+    out['tmux_ls'] = {'rc': rc, 'sessions': sorted(so.splitlines()), 'stderr': se}
+    return out
 
 
 def collect(seed, repo):
@@ -673,6 +735,105 @@ def manifest_text(c, t):
                           'runner-state / resume sidecars: none (E03 is fresh-only, NOT_QUALIFIED_FRESH_ONLY)\n')
 
 
+def wtmp_record(line):
+    """`last -x --time-format iso` line -> (kind, start epoch seconds, still running)."""
+    f = line.split()
+    kind = {('reboot', 'system', 'boot'): 'reboot', ('shutdown', 'system', 'down'): 'shutdown'}.get(tuple(f[:3]))
+    try:
+        return kind, datetime.strptime(f[4], '%Y-%m-%dT%H:%M:%S%z').timestamp(), 'still running' in line
+    except (IndexError, ValueError):
+        return None, None, False
+
+
+def reboot_evidence(c, seed, last, repo_root):
+    """The owner-approved post-completion-reboot evidence (REBOOT_RULING), check by check. Every check fails closed on
+    missing, malformed or inconsistent input; `other_gates_pass` is filled in by build() once every other gate ran."""
+    host, man, summ = c['host'], c['run_manifest'], c['run_summary']
+    rp, mk = host.get('reboot_provenance') or {}, host.get('marker_files') or {}
+    ev = {}
+
+    def chk(name, ok, **detail):
+        ev[name] = dict(detail, **{'pass': bool(ok)})
+
+    def secs(iso):
+        try:
+            return epoch_seconds(iso)
+        except (TypeError, ValueError):
+            return None
+    start, end = secs(man.get('start_utc')), secs(man.get('end_utc'))
+    launch, end_marker = secs(host.get('launch_time')), secs(host.get('end_time'))
+    times_ok = None not in (start, end, launch, end_marker)
+    ls_ = rp.get('tmux_ls')
+    chk('live_tmux_state_absent', host['tmux_pane_dead'] is None and host['tmux_pane_dead_status'] is None and
+        host['other_e03_tmux'] == [] and ls_ is not None and
+        not any(x.startswith('e03_stdn_seed') for x in ls_['sessions']),
+        tmux_ls=ls_, other_e03_tmux=host['other_e03_tmux'])
+    chk('exit_marker_zero', host['exit_file'] == '0' and host.get('exit_file_raw') == '0\n',
+        exit_file_raw=host.get('exit_file_raw'))
+    chk('end_marker_valid', times_ok and launch <= start <= end <= end_marker <= end + PANE_SCOPE_SLACK,
+        launch_time=host.get('launch_time'), start_utc=man.get('start_utc'), end_utc=man.get('end_utc'),
+        end_time=host.get('end_time'))
+    chk('run_identity_consistent', man.get('run_id') == summ.get('run_id') == RUN_IDS.get(seed) == run_id(seed) and
+        man.get('experiment_seed') == seed and host['preflight'].get('experiment_seed') == seed and
+        man.get('completion_status') == summ.get('completion_status') == 'completed' and
+        summ.get('failure_reason') is None, run_id=man.get('run_id'))
+    chk('completion_record', last == '{"status": "completed", "run_dir": "%s"}' % paths(seed)['run_root'] and
+        all(v == 0 for v in host['pane_log_fail_hits'].values()), pane_log_last=host['pane_log_last'])
+    chk('no_runner_process', host['runner_processes'] == [], runner_processes=host['runner_processes'])
+    # boots: exactly one journal boot spans the whole run; it is not the current boot; every later boot starts after
+    # the run ended; the kernel boot time of the current boot is after the run ended
+    boots = rp.get('journal_boots') or []
+    run_boot = [b for b in boots if times_ok and b['first_entry'] / 1e6 <= launch and b['last_entry'] / 1e6 >= end]
+    rb = run_boot[0] if len(run_boot) == 1 else None
+    later = [b for b in boots if rb and b['index'] > rb['index']]
+    cur = [b for b in boots if b['index'] == 0]
+    shutdown_at = rb['last_entry'] / 1e6 if rb else None
+    btime = rp.get('btime')
+    chk('reboot_after_completion', rb is not None and later and len(cur) == 1 and
+        cur[0]['boot_id'] == rp.get('boot_id') != rb['boot_id'] and isinstance(btime, int) and
+        end < shutdown_at <= min(b['first_entry'] / 1e6 for b in later) and end < btime and
+        all(b['first_entry'] / 1e6 > end for b in later),
+        run_boot_id=rb and rb['boot_id'], run_boot_first_entry_utc=rb and utc(rb['first_entry'] / 1e6),
+        run_boot_last_entry_utc=rb and utc(shutdown_at), current_boot_id=rp.get('boot_id'),
+        kernel_btime_utc=utc(btime) if isinstance(btime, int) else None,
+        later_boots=[[b['boot_id'], utc(b['first_entry'] / 1e6)] for b in later])
+    # wtmp: a clean `shutdown system down` record after the run ended, followed by the current `reboot system boot`
+    recs = [(x,) + wtmp_record(x) for x in (rp.get('wtmp') or [])]
+    sd = [r for r in recs if r[1] == 'shutdown' and times_ok and end < r[2] <= (btime or 0) + PANE_SCOPE_SLACK]
+    rbt = [r for r in recs if r[1] == 'reboot' and r[3] and sd and r[2] >= sd[0][2]]
+    chk('clean_shutdown_recorded', bool(sd) and len(rbt) == 1, wtmp_shutdown=sd[0][0] if sd else None,
+        wtmp_reboot=rbt[0][0] if rbt else None)
+    # journal (user manager): the run's own tmux pane scope started just before launch_time and stopped at completion
+    scopes = [x for x in (rp.get('journal_tmux_scopes') or []) if rb and x['boot_id'] == rb['boot_id']]
+    started = [(x['realtime'], x['message'].split()[1][len('tmux-spawn-'):-len('.scope')]) for x in scopes
+               if x['message'].startswith('Started tmux-spawn-') and times_ok and
+               launch - PANE_SCOPE_SLACK <= x['realtime'] <= end]
+    own = [s for s in started if s[0] <= launch]
+    stops = [x['realtime'] for x in scopes if own and
+             x['message'].startswith('tmux-spawn-%s.scope: ' % own[0][1]) and
+             ('Consumed' in x['message'] or 'Deactivated successfully' in x['message'])]
+    chk('pane_scope_exited_at_completion', len(own) == 1 and len(stops) >= 1 and
+        end <= stops[0] <= end + PANE_SCOPE_SLACK and stops[0] < shutdown_at,
+        scope=own[0][1] if own else None, started_utc=utc(own[0][0]) if own else None,
+        stopped_utc=utc(stops[0]) if stops else None)
+    chk('single_pane_scope_in_run_window', len(started) == len(own) == 1,
+        pane_scopes_started_in_window=[[utc(a), b] for a, b in started])
+    # durable host markers: present, unchanged command file, written in the run window, none after the shutdown
+    m = {k: mk.get(k) for k in ('command', 'launch_time', 'pane_log', 'exit', 'end_time')}
+    present = all(isinstance(v, dict) for v in m.values())
+    chk('marker_files_durable', present and times_ok and shutdown_at is not None and
+        m['command']['sha256'] == host['command_file_sha256'] and m['command']['mtime'] <= launch + 1 and
+        launch <= m['launch_time']['mtime'] <= launch + 1 and m['exit']['size'] == 2 and
+        all(end <= m[k]['mtime'] <= end + PANE_SCOPE_SLACK and m[k]['mtime'] < shutdown_at
+            for k in ('pane_log', 'exit', 'end_time')) and m['exit']['mtime'] <= m['end_time']['mtime'],
+        marker_files=m)
+    pd = PRIOR_DIAGNOSTICS.get(seed)
+    pp = Path(repo_root) / pd['path'] if pd else None
+    chk('prior_diagnostic_preserved', pd is not None and pp.is_file() and sha256_file(pp) == pd['sha256'],
+        prior_diagnostic=pd)
+    return ev
+
+
 def build(c, t, repo_root):
     seed = c['seed']
     G = Gates()
@@ -717,8 +878,17 @@ def build(c, t, repo_root):
       man['historical_fidelity_field'] == 'FAITHFUL_OFFICIAL')
 
     # B. completion
-    G('B.process_exited_zero', host['exit_file'] == '0' and host['tmux_pane_dead'] is True and
-      host['tmux_pane_dead_status'] == 0 and host['runner_processes'] == [])
+    last, echoes = split_key_echo(host['pane_log_last'][0]) if len(host['pane_log_last']) == 1 else (None, 0)
+    echo = {'raw_last_line': host['pane_log_last'][0], 'cursor_key_echoes_stripped': echoes} if echoes else None
+    # live tmux evidence is used whenever the seed's pane exists; only an absent session evaluates REBOOT_RULING
+    reboot = reboot_evidence(c, seed, last, repo_root) if host['tmux_pane_dead'] is None else None
+    alternative = {}                     # gate -> index in G.results, finalised after every other gate has run
+    if reboot is None:
+        G('B.process_exited_zero', host['exit_file'] == '0' and host['tmux_pane_dead'] is True and
+          host['tmux_pane_dead_status'] == 0 and host['runner_processes'] == [])
+    else:
+        alternative['B.process_exited_zero'] = len(G.results)
+        G('B.process_exited_zero', False)
     G('B.completion_status', man['completion_status'] == summ['completion_status'] == 'completed' and
       summ['failure_reason'] is None)
     G('B.summary_counts', summ['shared_global_step'] == FINAL_GS and
@@ -726,8 +896,6 @@ def build(c, t, repo_root):
       summ['train_steps'] == TRAIN_STEPS and summ['val_steps'] == VAL_TOTAL)
     G('B.records_written', summ['records_written'] == m['lines'] == TRAIN_STEPS + VAL_TOTAL + MAX_EPOCH + 1,
       summ['records_written'])
-    last, echoes = split_key_echo(host['pane_log_last'][0]) if len(host['pane_log_last']) == 1 else (None, 0)
-    echo = {'raw_last_line': host['pane_log_last'][0], 'cursor_key_echoes_stripped': echoes} if echoes else None
     G('B.pane_log_clean', all(v == 0 for v in host['pane_log_fail_hits'].values()) and
       last == '{"status": "completed", "run_dir": "%s"}' % paths(seed)['run_root'],
       dict(host['pane_log_fail_hits'], keyboard_echo=echo) if echo else host['pane_log_fail_hits'])
@@ -909,8 +1077,25 @@ def build(c, t, repo_root):
       c['run_root_tree_sha256'] == t['run_root_tree_sha256'])
     G('J.run_root_files', c['run_root_file_count'] == len(c['run_root_sha_listing']) == RUN_ROOT_FILES,
       c['run_root_file_count'])
-    G('J.single_e03_session', host['other_e03_tmux'] == sorted(set(host['other_e03_tmux'])) and
-      paths(seed)['tmux'] in host['other_e03_tmux'])
+    if reboot is None or paths(seed)['tmux'] in host['other_e03_tmux']:
+        G('J.single_e03_session', host['other_e03_tmux'] == sorted(set(host['other_e03_tmux'])) and
+          paths(seed)['tmux'] in host['other_e03_tmux'])
+    else:
+        alternative['J.single_e03_session'] = len(G.results)
+        G('J.single_e03_session', False)
+
+    # REBOOT_RULING: a substituted gate passes only if all its durable-evidence checks pass and every other gate passed
+    others_failed = [g for g in G.failed if g not in alternative]
+    for name, i in alternative.items():
+        checks = dict(reboot, other_gates_pass={'pass': not others_failed, 'failed': others_failed})
+        checks = {k: checks[k] for k in REBOOT_GATE_CHECKS[name]}
+        ok = all(v['pass'] for v in checks.values())
+        G.results[i] = {'gate': name, 'pass': ok, 'detail': {
+            'result': REBOOT_RULING['result'] if ok else 'FAIL_POST_COMPLETION_REBOOT_EVIDENCE',
+            'ruling': REBOOT_RULING['ruling'], 'live_tmux': {'tmux_pane_dead': host['tmux_pane_dead'],
+                                                             'other_e03_tmux': host['other_e03_tmux']},
+            'checks': checks}}
+    substituted = [n for n, i in sorted(alternative.items(), key=lambda x: x[1]) if G.results[i]['pass']]
 
     failed = G.failed
     status = 'E03_SEED%d_COMPLETED_CLEANLY' % seed if not failed else 'E03_SEED%d_NEEDS_REVIEW' % seed
@@ -974,12 +1159,72 @@ def build(c, t, repo_root):
                           'downstream_evaluation': False, 'run_root_mutated': False, 'downstream_metric': None},
         'collected': c, 'collected_tf': t,
     }
+    disclosures = {}
     if echo:
-        doc['disclosures'] = {'pane_log_keyboard_echo': dict(echo, note=(
+        disclosures['pane_log_keyboard_echo'] = dict(echo, note=(
             'the last pane-log line is the runner completion record preceded only by caret-notation cursor-key echo '
             '(^[[A..^[[D) from keys pressed in an attached tmux client; it is tty echo, not runner output, and no E03 '
-            'production or pinned-source code path reads stdin; fail-pattern hits are all zero'))}
+            'production or pinned-source code path reads stdin; fail-pattern hits are all zero'))
+    if alternative:
+        doc['gates_passed_by_approved_alternative'] = substituted
+    if substituted:
+        r = reboot
+        disclosures['post_completion_reboot'] = {
+            'ruling': REBOOT_RULING, 'gates': substituted, 'run_end_utc': summ['end_utc'],
+            'end_time_marker': host['end_time'], 'exit_marker': host['exit_file'],
+            'pane_scope': r['pane_scope_exited_at_completion']['scope'],
+            'pane_scope_stopped_utc': r['pane_scope_exited_at_completion']['stopped_utc'],
+            'run_boot_id': r['reboot_after_completion']['run_boot_id'],
+            'run_boot_last_entry_utc': r['reboot_after_completion']['run_boot_last_entry_utc'],
+            'wtmp_shutdown': r['clean_shutdown_recorded']['wtmp_shutdown'],
+            'wtmp_reboot': r['clean_shutdown_recorded']['wtmp_reboot'],
+            'current_boot_id': r['reboot_after_completion']['current_boot_id'],
+            'kernel_btime_utc': r['reboot_after_completion']['kernel_btime_utc'],
+            'tmux_ls': r['live_tmux_state_absent']['tmux_ls'],
+            'prior_diagnostic': PRIOR_DIAGNOSTICS.get(seed),
+            'note': ('the run completed at %s (exit marker 0, runner completion record, tmux pane scope stopped %s); '
+                     'the host was then cleanly shut down (wtmp shutdown record, run-boot journal ends %s) and rebooted '
+                     '(kernel boot %s), which removed the tmux server, so B.process_exited_zero and J.single_e03_session '
+                     'pass by owner-approved durable post-completion-reboot evidence instead of live pane state; this '
+                     'is an audit-tool amendment only and changes neither the trained model nor the scientific '
+                     'procedure; the first 86/88 NEEDS_REVIEW build is kept at %s'
+                     % (summ['end_utc'], r['pane_scope_exited_at_completion']['stopped_utc'],
+                        r['reboot_after_completion']['run_boot_last_entry_utc'],
+                        r['reboot_after_completion']['kernel_btime_utc'], PRIOR_DIAGNOSTICS[seed]['path']))}
+    if disclosures:
+        doc['disclosures'] = disclosures
     return doc, text
+
+
+def reboot_report(d):
+    r = d['disclosures']['post_completion_reboot']
+    gates = {g['gate']: g for g in d['gates']}
+    rows = ['| `%s` | %s | %s |' % (k, 'pass' if v['pass'] else 'FAIL', ', '.join(
+        g for g in r['gates'] if k in gates[g]['detail']['checks'])) for k, v in sorted(
+        dict(kv for g in r['gates'] for kv in gates[g]['detail']['checks'].items()).items())]
+    return [
+        '## Disclosure: post-completion host reboot (owner ruling %s)' % r['ruling']['date'],
+        '',
+        '- The run completed on its own at **%s**: exit marker `%s`, end_time marker `%s`, the runner completion '
+        'record as the last pane-log line, and the user-manager journal shows its tmux pane scope `tmux-spawn-%s` '
+        'stopping at %s.' % (r['run_end_utc'], r['exit_marker'], r['end_time_marker'], r['pane_scope'],
+                             r['pane_scope_stopped_utc']),
+        '- Afterwards the host was cleanly shut down and rebooted. The run boot `%s` journal ends at %s; wtmp records '
+        '`%s` and `%s`; the current boot `%s` has kernel boot time %s.'
+        % (r['run_boot_id'], r['run_boot_last_entry_utc'], ' '.join(r['wtmp_shutdown'].split()),
+           ' '.join(r['wtmp_reboot'].split()), r['current_boot_id'], r['kernel_btime_utc']),
+        '- The reboot removed the tmux server (`tmux ls`: `%s`), so the live pane state that `B.process_exited_zero` '
+        'and `J.single_e03_session` read no longer exists. Under `%s`, these two gates (and only these) report `%s` on '
+        'the durable evidence below instead. The live path is unchanged whenever the pane exists, and a substituted '
+        'gate passes only if every other gate passed.' % (r['tmux_ls']['stderr'] or r['tmux_ls']['sessions'],
+                                                         r['ruling']['ruling'], r['ruling']['result']),
+        '- This is an audit-tool amendment only. It changes neither the trained model nor the scientific procedure. '
+        'The first build of this seed (%d/%d, `%s`, failed %s) is kept unchanged at `%s` (sha256 `%s`).'
+        % (r['prior_diagnostic']['gates_passed'], r['prior_diagnostic']['gates_total'], r['prior_diagnostic']['status'],
+           ', '.join('`%s`' % g for g in r['prior_diagnostic']['failed_gates']), r['prior_diagnostic']['path'],
+           r['prior_diagnostic']['sha256']),
+        '',
+        '| evidence check | result | used by |', '|---|---|---|'] + rows + ['']
 
 
 def report(doc):
@@ -992,6 +1237,18 @@ def report(doc):
                                                               v['changed_not_consumed'], v['consumed'])
                    for k, v in sorted(d['firewall']['by_split'].items()))
     fmt = lambda xs: ' / '.join('%.4g' % x for x in xs)  # noqa: E731
+    reboot = d.get('disclosures', {}).get('post_completion_reboot')
+    if reboot:
+        exit_row = ('| exit | `~/workdir/e03_s%d.exit` = %s; the run completed at %s (end_time marker %s; its tmux pane '
+                    'scope stopped %s); the host was then cleanly shut down and rebooted (run-boot journal ends %s, '
+                    'kernel boot %s), which removed the live tmux state; `B.process_exited_zero` and '
+                    '`J.single_e03_session` pass by owner-approved post-completion-reboot evidence (disclosure '
+                    'below); no runner process; stdout/stderr/generation_log empty |'
+                    % (seed, reboot['exit_marker'], reboot['run_end_utc'], reboot['end_time_marker'],
+                       reboot['pane_scope_stopped_utc'], reboot['run_boot_last_entry_utc'], reboot['kernel_btime_utc']))
+    else:
+        exit_row = ('| exit | `~/workdir/e03_s%d.exit` = %s; tmux `%s` pane dead with status 0; no runner process; '
+                    'stdout/stderr/generation_log empty |' % (seed, d['host_markers']['exit'], d['host_markers']['tmux']))
     return '\n'.join([
         '# E03 seed%d: scientific run %s' % (seed, 'completed cleanly' if not d['failed_gates'] else 'NEEDS REVIEW'),
         '',
@@ -1010,8 +1267,7 @@ def report(doc):
         'configs/execution/m5_gpu_3090.yaml` |' % (d['resume'], seed),
         '| window | %s → %s, %.0f s of training, median %.3f s per step |'
         % (d['start_utc'], d['end_utc'], d['training_duration_seconds'], c['metrics']['step_seconds']['median']),
-        '| exit | `~/workdir/e03_s%d.exit` = %s; tmux `%s` pane dead with status 0; no runner process; '
-        'stdout/stderr/generation_log empty |' % (seed, d['host_markers']['exit'], d['host_markers']['tmux']),
+        exit_row,
         '',
         '## Completion accounting',
         '',
@@ -1092,7 +1348,7 @@ def report(doc):
         'output; no E03 production or pinned-source code path reads stdin. `B.pane_log_clean` strips only that '
         'prefix and records the raw line.' % (seed, d['disclosures']['pane_log_keyboard_echo']
                                               ['cursor_key_echoes_stripped']),
-        ''] if 'disclosures' in d else []) + [
+        ''] if 'pane_log_keyboard_echo' in d.get('disclosures', {}) else []) + (reboot_report(d) if reboot else []) + [
         '## Boundary',
         '',
         'No downstream metric, bank, best-epoch or best-seed logic. ckpt-50 is the final checkpoint by the frozen '
