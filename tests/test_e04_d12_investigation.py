@@ -1,11 +1,13 @@
 """E04 D12 procedural-reproducibility semantic investigation (protocol fixed at d1af9b6): pins the committed result. The
 pre-registered decision is NO_SEMANTIC_DEFECT_FOUND (every criterion passed); the D/D3 forward variation occurs on the
 uninstrumented production path; D12 is a draft ready for owner approval, nothing is approved or active, the original
-41/42 record and the D10 / D11 records are unchanged and E04 stays INCOMPLETE. Stdlib only.
+41/42 record and the D10 / D11 records are unchanged and E04 stays INCOMPLETE. The "nothing approved" facts are pinned
+to the result commit 57bd1f9 (the owner approved D12 in a later commit). Stdlib only.
 """
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +16,7 @@ DOC = json.loads((AUDIT / 'E04_D12_INVESTIGATION.json').read_text())
 AN = json.loads((AUDIT / 'E04_D12_ANALYSIS.json').read_text())
 PROTOCOL = json.loads((AUDIT / 'E04_D12_INVESTIGATION_PROTOCOL.json').read_text())
 DRAFT_PATH = 'configs/amendments/e04_d12_procedural_reproducibility.DRAFT.yaml'
+RESULT_COMMIT = '57bd1f931010f8e0470fb0beac8209000f12e0f7'
 ORIGINAL_SHA256 = 'd158a1ca773cfae2b099a5942b126581efa620a683a10c8494214d4f3da38843'
 D10_RECORD_SHA256 = '2f0c0c00a1757711ab02ede4f857fe984928aa92e079a87d4f15910c4ebf76d9'
 D11_RECORD_SHA256 = '9305fb825d56db75e940a44254c43171969dd06365df23f895ee83a78fdc0578'
@@ -46,10 +49,12 @@ class E04D12Investigation(unittest.TestCase):
         self.assertEqual(DOC['scientific_seeds_launched'], [])
         self.assertEqual(DOC['d12_draft_file'], DRAFT_PATH)
         self.assertEqual(DOC['d12_draft_sha256'], sha(DRAFT_PATH))
-        self.assertFalse((ROOT / 'configs/amendments/e04_d12_procedural_reproducibility.yaml').exists())
-        self.assertEqual([p.name for p in (ROOT / 'configs').glob('**/*d12*')],
-                         ['e04_d12_procedural_reproducibility.DRAFT.yaml'])
-        self.assertFalse((AUDIT / 'E04_PRODUCTION_QUALIFICATION_D12.json').exists())
+        tree = subprocess.run(['git', 'ls-tree', '-r', '--name-only', RESULT_COMMIT], cwd=ROOT, capture_output=True,
+                              text=True, check=True).stdout.split()
+        self.assertEqual([p for p in tree if p.startswith('configs/') and 'd12' in p], [DRAFT_PATH])
+        self.assertNotIn('outputs/audit/E04_PRODUCTION_QUALIFICATION_D12.json', tree)
+        self.assertNotIn('docs/spec/amendments/GPAT_TransferBench_v1_0_E04_D12_Procedural_Reproducibility_Addendum.md',
+                         tree)
 
     def test_03_prior_evidence_preserved(self):
         self.assertEqual(sha('outputs/audit/E04_PRODUCTION_QUALIFICATION.json'), ORIGINAL_SHA256)

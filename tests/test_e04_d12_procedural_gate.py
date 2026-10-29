@@ -1,5 +1,5 @@
-"""E04 D12 draft procedural gate: inactive (not imported by the qualification evidence tool, refuses without an
-OWNER_APPROVED amendment pinning its criteria), criteria identical to the DRAFT amendment, the superseded K gate never
+"""E04 D12 procedural gate: owner-approved, not yet wired (not imported by the qualification evidence tool; refuses
+without an OWNER_APPROVED amendment pinning its criteria), criteria identical to the DRAFT amendment, the superseded K gate never
 counted as passed, and every criterion fails closed on its defect (graph change, input / initial-state difference,
 missing gradient, wrong optimizer application, wrong state transition, non-finite state, forward corruption, gradient
 above the integrity bound, a failed or missing retained gate, firewall). Numerical (non-bitwise) variation within the
@@ -86,19 +86,20 @@ class D12ProceduralGate(unittest.TestCase):
         return sorted(k for k, v in out['criteria'].items() if not v)
 
     def test_01_inactive_and_not_wired(self):
+        # owner approval is recorded; activation needs its own implementation commit
         self.assertFalse(g.ACTIVE)
-        self.assertFalse((ROOT / g.APPROVED_AMENDMENT).exists())
+        self.assertEqual(g.require_approval(ROOT)['acceptance_criteria_sha256'], g.CRITERIA_SHA256)
         for p in list((ROOT / 'tools').glob('*.py')) + list((ROOT / 'methods').glob('**/*.py')):
             if p.name != 'e04_d12_procedural_gate.py':
                 self.assertNotIn('e04_d12_procedural_gate', p.read_text(), p)
-        committed = subprocess.run(['git', 'show', 'HEAD:tools/e04_production_qualification_evidence.py'], cwd=ROOT,
-                                   capture_output=True, text=True)
-        if committed.returncode == 0:
-            self.assertNotIn('d12', committed.stdout.lower())
-        with self.assertRaises(SystemExit):
-            g.require_approval(ROOT)
-        with self.assertRaises(SystemExit):
-            g.gate(ROOT, [], [], [])
+        draft = subprocess.run(['git', 'show', '57bd1f9:tools/e04_production_qualification_evidence.py'], cwd=ROOT,
+                               capture_output=True, text=True, check=True)
+        self.assertNotIn('d12', draft.stdout.lower())
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(SystemExit):
+                g.require_approval(d)
+            with self.assertRaises(SystemExit):
+                g.gate(d, [], [], [])
 
     def test_02_guard_requires_owner_approved_pin(self):
         with tempfile.TemporaryDirectory() as d:
