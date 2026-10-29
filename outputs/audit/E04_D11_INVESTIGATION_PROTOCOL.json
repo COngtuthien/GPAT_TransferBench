@@ -1,0 +1,81 @@
+{
+  "schema_version": "e04_d11_investigation_protocol_v1",
+  "protocol_id": "E04_D11_TARGETED_CPU_GRADIENT_PLACEMENT_INVESTIGATION",
+  "status": "FIXED_BEFORE_EXECUTION",
+  "fixed_date": "2026-10-29",
+  "purpose": "Owner-authorized, narrowly scoped investigation of CPU placement for the nondeterministic ScatterNd gradient operations of E04 Physics-STD after D10 (de46f66) was not supported. Diagnostic only: no RunContext, no checkpoint, no run root, no scientific seed, no VAL, no TEST, no source / config / data-pack / environment change. The experimental placement exists only inside the probe process.",
+  "creates_scientific_authority": false,
+  "approves_d11": false,
+  "inputs_fixed": {
+    "qualification_seed": 60904,
+    "graph": "production_runner.prepare() -> unchanged TrainingGraph (construction 61f1ed58..., 11315 ops); no source file is changed",
+    "design_file": "outputs/audit/E04_D10_INVESTIGATION_PROTOCOL.json (sha256 55b5231dd84cd96ffbb054ebb59afb0769374bccfde17d22833571d8ad9e6c43), used unchanged as the probe design (iterations, gradient-probe iterations, repeats, snapshots) and as the C1-C6 definition",
+    "probe": "tools/e04_d10_numerical_probe.py, unchanged, driven by tools/e04_d11_placement_probe.py",
+    "established_analysis": "tools/e04_d10_analysis.analyse, unchanged",
+    "environment": "gpat-m6-e03, E04 training precision environment, PYTHONHASHSEED=60904, production_runner.session_config (classic graph optimizer; Grappler meta-optimizer disabled)"
+  },
+  "arms": {
+    "original": "the unchanged graph (independently runnable control)",
+    "cpu_scatternd": "identical graph except that (i) the requested device of every ScatterNd op that is the gradient of a CPU-requested GatherNd (scatter indices = that GatherNd's indices tensor, name '<gradients scope>/<GatherNd name>_grad/ScatterNd') is set to /device:CPU:0 with Operation._set_device, and (ii) every colocation reference to such a target ('loc:@<target>' in another op's _class list) is removed from that op, which keeps its own requested device; both between graph construction and session creation. Expected targets: exactly the 32 D10 variation origins. ResizeBilinearGrad, the gradient Shape ops and every other op keep their requested devices."
+  },
+  "corrected_bias_detector": {
+    "tool": "tools/e04_d11_bias_detector.py",
+    "defect": "the D10 detector required op type 'BiasAdd'; under this TF build with TF_DETERMINISTIC_OPS=1 tf.nn.bias_add emits op type 'Add' (named BiasAdd), so the D10 detector returned an empty set",
+    "rule": "a convolution bias whose every forward read consumer is a two-input BiasAdd/Add/AddV2 of the bias vector and a rank-4 NHWC tensor with matching channel count, and whose every forward consumer of that sum is a training-mode NHWC FusedBatchNorm taking it as input 0",
+    "use": "used for the probe's variable groups (BN-cancelled biases reported separately, excluded from the functional groups, as the D10 protocol text states); the probe refuses to run unless the set equals the BN-sibling-scope bias set (15 G + 16 D). D10 evidence is not rewritten."
+  },
+  "stages": {
+    "S_short": {
+      "processes": "3 clean processes per arm, run sequentially and interleaved O1 C1 O2 C2 O3 C3",
+      "iterations": 25,
+      "note": "the D10 probe's short path (--smoke with SMOKE_ITERATIONS=25): gradient probes at [0,1,2,5,10], snapshots at [0,1,2,3,5,10,20]"
+    },
+    "T_trace": {
+      "processes": "4 additional clean 1-iteration processes per arm, interleaved, after S_short",
+      "purpose": "descriptive only: executed-operation set, partition graphs and step-stats node sets of the iteration-0 trace, to explain the D10 3935 / 3932 signature difference; never a criterion"
+    },
+    "L_bounded": {
+      "condition": "run only if every S criterion passes",
+      "processes": "3 clean processes, arm cpu_scatternd, the unchanged D10 design (1000 iterations)",
+      "control": "the D10 original-placement processes (raw outputs d10_probe_a6bb459) serve as the unchanged 1000-iteration control"
+    }
+  },
+  "probe_additions": "per process, iteration 0: the unchanged D10 FULL_TRACE, then a second FULL_TRACE of the same fetches with output_partition_graphs (raw partition GraphDefs and step stats saved, summarized to JSON); the placement record (targets, forward GatherNd, shapes, dtypes, consumers, which probe sets depend on targets, GraphDef node diff against the pre-override graph, construction signature (Controller) and graph signature immediately before / after the override, colocation references); gradient presence; peak GPU allocator bytes (MaxBytesInUse via Controller.counters) and peak CPU RSS (ru_maxrss)",
+  "criteria_short": {
+    "S1_placement_scope": "every process: targets == the 32 D10 origin op names, each the gradient of a CPU-requested GatherNd; GraphDef diff against the pre-override graph is empty (original) or exactly the targets with only the device field changed plus the recorded colocation-reference ops with only their _class attribute changed and no remaining reference to a target (cpu_scatternd); construction before override == qualified; no node added or removed; in both iteration-0 traces every target executed on CPU (cpu_scatternd) / GPU (original); every other graph op executed in both arms, including the released ops, executed on the same device type",
+    "S2_gradients_present": "the per-loss and step gradient presence pattern is identical in all processes of both arms",
+    "S3_contract_identity": "across all 6 processes: initial state sha256, and at every iteration pair rows / passes, hard scales / keep, input sha256, counters before / after, session-call log sha256, Adam beta powers; look-ahead batches equal the next batch; firewall clean; diagnostics never changed state",
+    "S4_forward_identity": "iteration 0: in-run step-1 losses and every gradient probe set whose ancestor closure contains no target are bit-identical across the two arms",
+    "S5_cpu_bitwise_reproducibility": "cpu_scatternd: localization finds zero varying tensors and no origin in every process; every in-process repeat of every gradient probe set and every per-iteration step-1 / L_G repeat is bit-identical; across the 3 processes the state sha256 after every iteration, all in-run losses at every iteration and the saved gradients at every probe iteration are bit-identical",
+    "S6_finite": "every loss, gradient and state value of every process is finite",
+    "S7_deviation_from_control": "iteration 0, same state and input: for L_G and step1, for every (cpu process, original process) pair, ||g_cpu - g_original||_2 <= 1e-3 * the original process's minibatch-reference ||g(S_0,X_1) - g(S_0,X_0)||_2 (the C4 threshold)",
+    "S8_completion": "every process exits 0 with summary.json, d11_extra.json and 25 iteration records"
+  },
+  "criteria_bounded": {
+    "established_C1_C6": "tools/e04_d10_analysis.analyse on the 3 L_bounded processes, unchanged definitions and thresholds",
+    "L_C5_D10_grouping": "C5 recomputed with the BN-cancelled biases merged into G_functional / D_functional (the grouping the D10 runs executed): deviation and update norms combined as sqrt(functional^2 + cancelled^2); same rule and threshold; must also pass, so the corrected grouping can never be the reason C5 passes",
+    "L_scope": "S1 on the 3 L_bounded processes",
+    "reported_separately": [
+      "bitwise reproducibility (state sha256 at every iteration)",
+      "gradient numerical stability",
+      "parameter-trajectory stability",
+      "optimizer-state stability",
+      "loss-trajectory stability",
+      "runtime overhead against D10",
+      "deviation from the D10 original-placement control trajectories"
+    ]
+  },
+  "decision_rule": {
+    "E04_D11_UNSUPPORTED": "any S criterion fails (stop: no L_bounded run); or in L_bounded any of C2, C3, C4, C5, C6, L_C5_D10_grouping, L_scope fails; or C1 fails on any check other than executed_signature_set_equal",
+    "E04_D11_INCONCLUSIVE": "C1 fails only on executed_signature_set_equal while every other C1 check, C2-C6, L_C5_D10_grouping and L_scope pass and the state sha256 is bit-identical across processes at every iteration (the op-set clause then needs an owner ruling)",
+    "E04_D11_READY_FOR_OWNER_APPROVAL": "every S criterion passes, C1-C6 all pass, L_C5_D10_grouping and L_scope pass",
+    "no_post_hoc_change": "criteria, thresholds, arms, process counts and probe lengths are fixed by this file and by the D11 tools at the commit that adds them; the T_trace forensics are descriptive and may be extended after results without affecting any criterion"
+  },
+  "tools": {
+    "probe": "tools/e04_d11_placement_probe.py",
+    "bias_detector": "tools/e04_d11_bias_detector.py",
+    "analysis": "tools/e04_d11_analysis.py"
+  },
+  "colocation_finding": "code-path smoke runs (not interpreted) showed that setting the device alone left 2 of 32 targets on GPU: TF1 gradient aggregation (_MultiDeviceAddN) creates each per-device AddN under _colocate_with_for_gradient(tensors[0].op), so gradients_1/AddN_5 and gradients_7/AddN_5 (each the sum of the four warp_T ScatterNd gradients) carry _class=[loc:@.../warp_T/GatherNd_3_grad/ScatterNd]; the placer resolves that colocation group to the AddN's GPU under allow_soft_placement. Removing only that colocation reference enforces CPU for all 32 targets while every non-target op keeps its device. The released ops are recorded per process; the alternative (moving the AddN ops to CPU) is not used because it would change the device of non-ScatterNd ops.",
+  "smoke_runs": "code-path runs only, never interpreted: /tmp/gpat_e04_d11_smoke (both arms, 2 iterations, device override without colocation release) and /tmp/gpat_e04_d11_smoke2 (cpu_scatternd, 2 iterations, final tool); archived under smoke_not_interpreted/ with the raw outputs"
+}
