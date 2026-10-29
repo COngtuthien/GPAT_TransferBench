@@ -1,0 +1,76 @@
+{
+  "schema_version": "e04_d12_investigation_protocol_v1",
+  "protocol_id": "E04_D12_PROCEDURAL_REPRODUCIBILITY_SEMANTIC_INVESTIGATION",
+  "status": "FIXED_BEFORE_EXECUTION",
+  "fixed_date": "2026-10-29",
+  "purpose": "Owner-authorized investigation preceding a D12 procedural-reproducibility policy: (i) resolve the D11 instrumentation confound (forward-op variation in D/D3 seen in both D11 arms, never in D10) on the UNCHANGED production graph and device placement; (ii) verify the scientific semantics of the ordinary production path (gradient connectivity, optimizer application, state transitions, counters, finiteness, graph identity) independently of bitwise reproducibility. Diagnostic only: no RunContext, no checkpoint, no run root, no scientific seed, no VAL, no TEST, no source / config / data / RNG / placement / environment change.",
+  "creates_scientific_authority": false,
+  "approves_d12": false,
+  "activates_any_gate": false,
+  "prior_evidence_preserved": {
+    "original_qualification": "outputs/audit/E04_PRODUCTION_QUALIFICATION.json (sha256 d158a1ca773cfae2b099a5942b126581efa620a683a10c8494214d4f3da38843; 41/42; K.real_data_gradient_repeatability failed)",
+    "d10": "outputs/audit/E04_D10_INVESTIGATION.json (STOP_AND_REPORT; de46f66)",
+    "d11": "outputs/audit/E04_D11_INVESTIGATION.json (E04_D11_UNSUPPORTED; d276aae)",
+    "d10_gate_draft": "uncommitted laptop worktree change preserved at local ref refs/drafts/e04-d10-gate-unapproved (09cc14b); not activated, not committed, not used"
+  },
+  "inputs_fixed": {
+    "qualification_seed": 60904,
+    "graph": "production_runner.prepare() -> unchanged TrainingGraph (construction 61f1ed58..., 11315 ops), original requested devices; no source file is changed",
+    "data": "the qualified Feed over the pinned E04 feed pack (TRAIN only), iteration order from the qualification seed",
+    "environment": "gpat-m6-e03, E04 training precision environment (/tmp/gpat_e04_d10_env.sh, unchanged), PYTHONHASHSEED=60904, production_runner.session_config",
+    "frozen_identities_sha256": "cc77c431600f126af9c0877a0f6590dee816cc1dc09e5c175e40ec0298428291 (production_io.identities as recorded by every D11 process)"
+  },
+  "stages": {
+    "authority": "tools/e04_d12_authority_check.py on the GPU host (contract, identities, pre-pass, feed pack, environment, prepare, M6D3e reference construction) and --no-tf on the laptop",
+    "P_production_path": {
+      "tool": "tools/e04_d12_production_replay.py",
+      "processes": 3,
+      "iterations": 3,
+      "design": "per iteration: D10 localization algorithm over the forward closure (3 plain repeats) at the pre-iteration state; per step: 3 production replays (exactly Controller.iteration's calls) and 2 semantic replays ([apply, gradients, losses] in one call) from the exact restored pre-step state; trajectory continues from production replay 0. No RunOptions in any call."
+    },
+    "C_confound": {
+      "tool": "tools/e04_d12_confound_probe.py",
+      "factors": {
+        "plain": "D10 probe, 1 iteration, no traced call before the localization",
+        "d10": "D10 probe unchanged, 1 iteration (one FULL_TRACE)",
+        "d10_trace2": "D10 probe plus D11's second FULL_TRACE with output_partition_graphs",
+        "d11_wrapper": "tools/e04_d11_placement_probe.py --arm original --iterations 1 (all D11 hooks)"
+      },
+      "processes": "4 clean processes per factor, interleaved per process index (plain, d10, d10_trace2, d11_wrapper)",
+      "localization": "unchanged D10 algorithm through a comparing session proxy (same calls); per varying tensor: name, producer, chunk, magnitude"
+    }
+  },
+  "definitions": {
+    "forward_tensor": "a tensor whose producer is in the ancestor closure of the losses and D1-D4 predictions and whose name does not start with 'gradients'",
+    "data_movement_ops": "ConcatV2, Identity, Reshape, Slice, StridedSlice, Pack, Unpack, Transpose, GatherNd, Tile, Squeeze, ExpandDims, Placeholder, VariableV2, Split, SplitV, StopGradient",
+    "chunk_local_root": "a varying tensor whose producer's inputs were all fetched in the same session call and none of them varied",
+    "functional_variables": "trainable variables except the 31 BN-cancelled convolution biases (bias whose layer scope also holds BN/beta; equals the D11 corrected detector set)",
+    "integrity_bound": "relative L2 difference ||b - a|| / ||a|| <= 1e-3 (the D10 C4 threshold value); an integrity bound against corruption / wrong computation, not a performance or reproducibility threshold",
+    "adam_tolerance": "per element |actual - expected| <= 4 ulp_f32(expected) + 1e-5 |expected - before|, expected = TF 1.15 ApplyAdam (use_nesterov=False) in float64 from the float32 inputs and the gradient fetched in the same call; beta powers exactly float32(before * beta)"
+  },
+  "criteria": {
+    "A_authority": "contract verified; identities equal the D11-recorded identities; pre-pass 12668 TRAIN rows verified; feed pack verified and bound to the pre-pass; production construction equals 61f1ed58.../11315 and the M6D3e reference construction; every D12 process has those identities and construction, the same initial state (951dad42...), a clean firewall and the protocol sha256",
+    "completion": "every process exits 0 with complete records",
+    "B_restore_exact": "tool validity: every restore reproduces the recorded state bit-for-bit, and in every stage-C process the comparing proxy finds exactly the varying-tensor count reported by the unchanged D10 algorithm",
+    "B_production_semantics": "every process / iteration / step / semantic replay: gradient presence equals differentiable reachability with matching shapes; one ApplyAdam per present step gradient targeting its variable and consuming that gradient; no stateful random op on any step or BN path; each call changes only its allowed variables (BN calls: the moving statistics of that path; apply: the step's variables with gradients, their Adam slots, that optimizer's beta powers, phase, and global_iteration in step 3); Adam within the tolerance; beta powers exact; phase / iteration counters as frozen (1, 2, 0; +1 after step 3); all values finite; diagnostics never mutate state; no op added to the graph",
+    "C1_production_forward_integrity": "stage P forward repeats: no fed input varies, no data-movement chunk-local root varies, every varying forward tensor within the integrity bound",
+    "C2_production_gradient_integrity": "stage P semantic replays: functional-variable step-gradient difference within the integrity bound for every step",
+    "C3_confound_forward_integrity": "stage C (every factor): same as C1 for every varying forward tensor",
+    "D1_confound_reproduced": "at least one d11_wrapper process shows forward-tensor variation (otherwise the D11 observation cannot be characterized)",
+    "E_graph_and_placement": "the executed device type of every op common to two traced processes is equal across all traced processes and factors; the canonical partition-graph node set and fetched-output canonical hash of every d10_trace2 / d11_wrapper process equal the D11 original-arm values (094566e1... / fea3730e...)"
+  },
+  "decision_rule": {
+    "E04_D12_INCONCLUSIVE": "A_authority, completion, B_restore_exact or D1_confound_reproduced fails",
+    "E04_D12_BLOCKED_BY_SEMANTIC_DEFECT": "otherwise, any of B_production_semantics, C1, C2, C3, E fails",
+    "NO_SEMANTIC_DEFECT_FOUND": "otherwise; the D12 draft (policy and replacement acceptance criteria, written only after this result and before any new qualification evidence) and its regression tests are then prepared, and the reported status is E04_D12_READY_FOR_OWNER_APPROVAL once they are committed; nothing is activated",
+    "descriptive_only": "which factors show the forward variation, its scope (ops, scopes, magnitudes), production-path step-replay variation (which steps / variables / D3), runtime graph rewrites; never change a criterion",
+    "no_post_hoc_change": "criteria, bounds, factors, process counts and iterations are fixed by this file and the D12 tools at the commit that adds them"
+  },
+  "tools": {
+    "authority": "tools/e04_d12_authority_check.py",
+    "production_replay": "tools/e04_d12_production_replay.py",
+    "confound_probe": "tools/e04_d12_confound_probe.py",
+    "analysis": "tools/e04_d12_analysis.py"
+  },
+  "smoke_runs": "code-path runs before this file is committed are never interpreted; archived under smoke_not_interpreted/"
+}
