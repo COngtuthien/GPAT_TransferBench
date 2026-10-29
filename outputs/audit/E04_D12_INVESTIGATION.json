@@ -1,0 +1,1811 @@
+{
+  "acceptance_criteria_sha256": "9f1a2471f0c9e6ad24b9cc4727779361b763ec84b7e43dc221fc6b411c199d0d",
+  "analyses": {
+    "analysis": {
+      "file": "outputs/audit/E04_D12_ANALYSIS.json",
+      "sha256": "749cd18f714435dd5bbbf16343e501aa5a4225fbdd1244dd96eed55ece10313c"
+    }
+  },
+  "authority_preserved": {
+    "authority_record": {
+      "file": "outputs/audit/E04_D12_AUTHORITY.json",
+      "sha256": "b76a2e19e82cd3ba6e2045a96702466aac12b59bf67403251790ad340d108216"
+    },
+    "construction_equals_m6d3e_reference": true,
+    "d10": {
+      "raw_files": 1346,
+      "raw_reverified": true,
+      "record_sha256": "2f0c0c00a1757711ab02ede4f857fe984928aa92e079a87d4f15910c4ebf76d9"
+    },
+    "d10_gate_draft": {
+      "activated": false,
+      "committed": false,
+      "evidence_tool_sha256": "d281260af023d3e9a6b2ca2581b1a2bf92e3f9a1d98c2e960cc13b589841b010",
+      "location": "uncommitted laptop worktree (tools/e04_production_qualification_evidence.py modified, tests/test_e04_d10_gate.py untracked) and local ref refs/drafts/e04-d10-gate-unapproved (09cc14b)",
+      "test_sha256": "57756c173a4903ec9afb2a3a5cbd86e15f04ea80c1eb10c9aa3e16f8eac2c623",
+      "used": false,
+      "worktree_equals_ref": true
+    },
+    "d11": {
+      "raw_files": 266,
+      "raw_reverified": true,
+      "record_sha256": "9305fb825d56db75e940a44254c43171969dd06365df23f895ee83a78fdc0578"
+    },
+    "frozen_inputs_unchanged_since_1d02625": "git diff 1d02625..d1af9b6 over methods, configs, environments, manifests, frozen_config_snapshot, docs/spec, tools/run_e04.py is empty",
+    "head_before_d12": "d276aae6756426125e45afbe1202a55fd9b48832 (parent ba625b8), identical on laptop, origin and GPU checkout",
+    "identities_sha256": "cc77c431600f126af9c0877a0f6590dee816cc1dc09e5c175e40ec0298428291",
+    "original_failed_qualification": {
+      "failed": [
+        "K.real_data_gradient_repeatability"
+      ],
+      "gates": "41/42",
+      "raw_reverified": true,
+      "record_sha256": "d158a1ca773cfae2b099a5942b126581efa620a683a10c8494214d4f3da38843"
+    },
+    "pack_manifest_sha256": "db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b",
+    "prepass_manifest_sha256": "274a4b0a52077cae18a5477565429410b24479236e8835415cf0eb783f026279",
+    "production_construction": [
+      "61f1ed5868d6774abb809915c2e9dfd0a50c5313064672389033ca46dd951e1d",
+      11315
+    ],
+    "verify_contract": {
+      "gpu": true,
+      "laptop_no_tf": true
+    }
+  },
+  "creates_scientific_authority": false,
+  "criteria": {
+    "A_authority": true,
+    "B_production_semantics": true,
+    "B_restore_exact": true,
+    "C1_production_forward_integrity": true,
+    "C2_production_gradient_integrity": true,
+    "C3_confound_forward_integrity": true,
+    "D1_confound_reproduced": true,
+    "E_graph_and_placement": true,
+    "completion": true
+  },
+  "d12_approved": false,
+  "d12_draft_file": "configs/amendments/e04_d12_procedural_reproducibility.DRAFT.yaml",
+  "d12_draft_sha256": "0ee2df0255e1aeceb82d28a7dfeaa8d1de0696b7503a360c9ae8db111312407e",
+  "d12_gate_active": false,
+  "d12_gate_file": "tools/e04_d12_procedural_gate.py",
+  "d12_status": "E04_D12_READY_FOR_OWNER_APPROVAL",
+  "date": "2026-10-30",
+  "decision": "NO_SEMANTIC_DEFECT_FOUND",
+  "decision_rule_applied": "NO_SEMANTIC_DEFECT_FOUND: A_authority, completion, B_restore_exact and D1_confound_reproduced pass and none of B_production_semantics, C1, C2, C3, E fails (protocol decision_rule, fixed before execution at d1af9b6)",
+  "draft_gate_validity_check": {
+    "criteria_sha256": "9f1a2471f0c9e6ad24b9cc4727779361b763ec84b7e43dc221fc6b411c199d0d",
+    "guard": "require_approval refuses: configs/amendments/e04_d12_procedural_reproducibility.yaml does not exist",
+    "note": "tool validity only, not qualification evidence: the inactive draft gate evaluated on the D12 stage-P records, the 4 d10_trace2 traces and the original 41/42 record's gate list",
+    "pass": true,
+    "superseded_gate": {
+      "counted_as_passed": false,
+      "gate": "K.real_data_gradient_repeatability",
+      "recorded_pass": false
+    }
+  },
+  "e04_scientific_authority": null,
+  "execution": {
+    "gpu_checkout_clean": true,
+    "gpu_checkout_commit": "d1af9b65a6c2f3c6790938c19ba824022b9e23e0",
+    "host": "GPU host (RTX 3090 GPU-b722cd9d, driver 580.178.04), gpat-m6-e03, /tmp/gpat_e04_d10_env.sh, PYTHONHASHSEED=60904",
+    "initial_state_identical": true,
+    "no_run_context_checkpoint_or_run_root": true,
+    "order": "authority; P1-P3 production replay; stage C interleaved per process index (plain, d10, d10_trace2, d11_wrapper) for P1-P4; analysis (gpat-m6-e05 python)",
+    "process_exit": {
+      "C/d10/P1": 0,
+      "C/d10/P2": 0,
+      "C/d10/P3": 0,
+      "C/d10/P4": 0,
+      "C/d10_trace2/P1": 0,
+      "C/d10_trace2/P2": 0,
+      "C/d10_trace2/P3": 0,
+      "C/d10_trace2/P4": 0,
+      "C/d11_wrapper/P1": 0,
+      "C/d11_wrapper/P2": 0,
+      "C/d11_wrapper/P3": 0,
+      "C/d11_wrapper/P4": 0,
+      "C/plain/P1": 0,
+      "C/plain/P2": 0,
+      "C/plain/P3": 0,
+      "C/plain/P4": 0,
+      "P/P1": 0,
+      "P/P2": 0,
+      "P/P3": 0,
+      "analysis": 0,
+      "authority": 0
+    },
+    "processes": {
+      "P1": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "iterations": 3,
+        "pid": 524031,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "seconds": 130.2,
+        "stage": "P",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f",
+          "tools/e04_d12_production_replay.py": "66ada6df43343f94f8cf4f1ebdc2b38ff7f88e024857b3dfab96dec5dc38916d"
+        }
+      },
+      "P2": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "iterations": 3,
+        "pid": 525354,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "seconds": 129.5,
+        "stage": "P",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f",
+          "tools/e04_d12_production_replay.py": "66ada6df43343f94f8cf4f1ebdc2b38ff7f88e024857b3dfab96dec5dc38916d"
+        }
+      },
+      "P3": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "iterations": 3,
+        "pid": 526673,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "seconds": 127.6,
+        "stage": "P",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f",
+          "tools/e04_d12_production_replay.py": "66ada6df43343f94f8cf4f1ebdc2b38ff7f88e024857b3dfab96dec5dc38916d"
+        }
+      },
+      "d10/P1": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 1
+      },
+      "d10/P2": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 1
+      },
+      "d10/P3": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 1
+      },
+      "d10/P4": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 1
+      },
+      "d10_trace2/P1": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "d10_trace2/P2": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "d10_trace2/P3": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "d10_trace2/P4": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "d11_wrapper/P1": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "d11_wrapper/P2": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "d11_wrapper/P3": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "d11_wrapper/P4": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": null,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 2
+      },
+      "plain/P1": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": true,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 0
+      },
+      "plain/P2": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": true,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 0
+      },
+      "plain/P3": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": true,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 0
+      },
+      "plain/P4": {
+        "firewall": {
+          "denied": [],
+          "runtime_writes": []
+        },
+        "initial_state_sha256": "951dad42fd2e2c6d09622bbc12dd50fa7094d4c611db45467fe996beeb107df0",
+        "plain_place_is_requested_device": true,
+        "protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+        "rc": 0,
+        "stage": "C",
+        "tool_sha256": {
+          "tools/e04_d10_numerical_probe.py": "70041330afa14c67f78066be7e64eb56ec4b07274070ada3256017d9ccc6fdf1",
+          "tools/e04_d11_bias_detector.py": "114f314bca5ce2bb7436aab856ca276e01469a6270ad92f075aa4ff2d8be6c51",
+          "tools/e04_d11_placement_probe.py": "ad0ab8d894e990415950814d4369ea3923fa1245eaf8a9e20bc748d3113ee075",
+          "tools/e04_d12_confound_probe.py": "47ab95c6539f9d69934ffbe4d88dc66e9a85eb489b0aa06cbedb85588fbdef4f"
+        },
+        "traced_calls_before_localization": 0
+      }
+    },
+    "tool_sha256_recorded_equals_commit": true,
+    "window_utc": [
+      "2026-10-29T17:03:42Z",
+      "2026-10-29T18:56:46Z"
+    ]
+  },
+  "failed_criteria": [],
+  "findings": {
+    "cross_process": {
+      "initial_state_identical": true,
+      "inputs_and_pair_rows_identical": true,
+      "losses_max_relative_difference_by_iteration": [
+        1.02e-07,
+        7.83e-07,
+        4.38e-06
+      ],
+      "post_state_distinct_per_iteration": [
+        3,
+        3,
+        3
+      ]
+    },
+    "graph_and_placement": {
+      "canonical": [
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d10_trace2/P1",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        },
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d10_trace2/P2",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        },
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d10_trace2/P3",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        },
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d10_trace2/P4",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        },
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d11_wrapper/P1",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        },
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d11_wrapper/P2",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        },
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d11_wrapper/P3",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        },
+        {
+          "canonical_set_sha256": "094566e10e620cf0ebf0b0586d5509359e2e781c8fcce7040eb36ffbf90816aa",
+          "process": "d11_wrapper/P4",
+          "retval_canonical_sha256": "fea3730eca5675fbddd01a9f165a5bfca4aa93a513d6b5bb768bfd0d299b9395"
+        }
+      ],
+      "checks": {
+        "canonical_partitions_equal_d11_original": true,
+        "placement_consistent": true
+      },
+      "placement_differences": []
+    },
+    "instrumentation_confound": {
+      "answer": "yes: it occurs with no traced call and the requested devices (plain: 4/4 processes), with the unchanged D10 probe (d10: 4/4), with D11's second trace (4/4) and with the D11 wrapper (3/4), and on the production replay path (6 of 9 iterations); it is not caused by tracing or the D11 instrumentation",
+      "d11_versus_d10_difference": "D11 recorded no forward variation in the 3 D10 full processes; D12 reran the unchanged D10 probe and saw it in 4/4: the variation is intermittent at process level, not instrumentation-dependent",
+      "forward_origin": {
+        "kernel_mechanism_claimed": false,
+        "max_abs_difference": 4.76837158203125e-07,
+        "note": "max absolute difference equals one float32 ulp at the tensor maximum magnitude; larger ulp distances only where the sum nearly cancels",
+        "observed_as_root_in": "plain 4/4 stage-C processes and the stage-P production path; in traced factors the variation appears downstream without a localizable root",
+        "only_chunk_local_root_observed": true,
+        "op": "AddN (T_A = B_low + C_low + T, methods/physics_std/network.py:100)",
+        "requested_device": "/device:GPU:0",
+        "tensor": "T_A:0",
+        "tensor_max_abs": 6.987456798553467
+      },
+      "per_process": {
+        "d10/P1": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.283269642463933e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "ConcatV2": 1,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "Sub": 2
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "sub_21",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 25,
+          "traced_calls_before_localization": 1,
+          "varying_tensors": 537
+        },
+        "d10/P2": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.670121440025871e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 5,
+            "ConcatV2": 1,
+            "Conv2D": 5,
+            "FusedBatchNormV3": 20,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 1,
+            "Sub": 2
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_7",
+            "sub_21",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 40,
+          "traced_calls_before_localization": 1,
+          "varying_tensors": 548
+        },
+        "d10/P3": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.670121531062956e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 5,
+            "ConcatV2": 1,
+            "Conv2D": 5,
+            "FusedBatchNormV3": 20,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 2,
+            "Sub": 2
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_20",
+            "strided_slice_7",
+            "sub_21",
+            "sub_25"
+          ],
+          "forward_varying_tensors": 41,
+          "traced_calls_before_localization": 1,
+          "varying_tensors": 527
+        },
+        "d10/P4": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.670121531062956e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 5,
+            "ConcatV2": 1,
+            "Conv2D": 5,
+            "FusedBatchNormV3": 20,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 2,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_20",
+            "strided_slice_7",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 42,
+          "traced_calls_before_localization": 1,
+          "varying_tensors": 570
+        },
+        "d10_trace2/P1": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.283269642463933e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "ConcatV2": 1,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 1,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_20",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 27,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 552
+        },
+        "d10_trace2/P2": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.670121531062956e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 5,
+            "ConcatV2": 1,
+            "Conv2D": 5,
+            "FusedBatchNormV3": 20,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 2,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_20",
+            "strided_slice_7",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 42,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 609
+        },
+        "d10_trace2/P3": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.283269626175523e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 1,
+            "Sub": 2
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "strided_slice_20",
+            "sub_21",
+            "sub_25"
+          ],
+          "forward_varying_tensors": 25,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 514
+        },
+        "d10_trace2/P4": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.283269642463933e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "ConcatV2": 1,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 1,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_20",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 27,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 554
+        },
+        "d11_wrapper/P1": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.670121440025871e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 5,
+            "ConcatV2": 1,
+            "Conv2D": 5,
+            "FusedBatchNormV3": 20,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 1
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_7"
+          ],
+          "forward_varying_tensors": 38,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 467
+        },
+        "d11_wrapper/P2": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.283269626175523e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "ConcatV2": 1,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 1,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "strided_slice_20",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 27,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 555
+        },
+        "d11_wrapper/P3": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 5.283269642463933e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "ConcatV2": 1,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "Sub": 2
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "concat_2",
+            "sub_21",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 25,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 535
+        },
+        "d11_wrapper/P4": {
+          "d10_origin_types": [
+            "ScatterNd"
+          ],
+          "d10_origins": 32,
+          "forward_max_relative_l2": 0.0,
+          "forward_max_ulp": 0,
+          "forward_varying_by_type": {},
+          "forward_varying_scopes": [],
+          "forward_varying_tensors": 0,
+          "traced_calls_before_localization": 2,
+          "varying_tensors": 429
+        },
+        "plain/P1": {
+          "d10_origin_types": [
+            "ScatterNd",
+            "T_A"
+          ],
+          "d10_origins": 33,
+          "forward_max_relative_l2": 5.283269642463933e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "AddN": 1,
+            "AddV2": 1,
+            "ConcatV2": 1,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "Mul": 1,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 2,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "T_A",
+            "add",
+            "concat_2",
+            "mul_4",
+            "strided_slice_20",
+            "strided_slice_7",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 31,
+          "traced_calls_before_localization": 0,
+          "varying_tensors": 600
+        },
+        "plain/P2": {
+          "d10_origin_types": [
+            "ScatterNd",
+            "T_A"
+          ],
+          "d10_origins": 33,
+          "forward_max_relative_l2": 5.283269626175523e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 4,
+            "AddN": 1,
+            "AddV2": 1,
+            "ConcatV2": 1,
+            "FusedBatchNormV3": 12,
+            "LeakyRelu": 4,
+            "Mul": 1,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 2,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "T_A",
+            "add",
+            "concat_2",
+            "mul_4",
+            "strided_slice_20",
+            "strided_slice_7",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 31,
+          "traced_calls_before_localization": 0,
+          "varying_tensors": 560
+        },
+        "plain/P3": {
+          "d10_origin_types": [
+            "ScatterNd",
+            "T_A"
+          ],
+          "d10_origins": 33,
+          "forward_max_relative_l2": 5.670121440025871e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 5,
+            "AddN": 1,
+            "AddV2": 1,
+            "ConcatV2": 1,
+            "Conv2D": 5,
+            "FusedBatchNormV3": 20,
+            "LeakyRelu": 4,
+            "Mul": 1,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 2,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "T_A",
+            "add",
+            "concat_2",
+            "mul_4",
+            "strided_slice_20",
+            "strided_slice_7",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 45,
+          "traced_calls_before_localization": 0,
+          "varying_tensors": 571
+        },
+        "plain/P4": {
+          "d10_origin_types": [
+            "ScatterNd",
+            "T_A"
+          ],
+          "d10_origins": 33,
+          "forward_max_relative_l2": 5.670121531062956e-07,
+          "forward_max_ulp": 1752205580,
+          "forward_varying_by_type": {
+            "Add": 5,
+            "AddN": 1,
+            "AddV2": 1,
+            "ConcatV2": 1,
+            "Conv2D": 5,
+            "FusedBatchNormV3": 20,
+            "LeakyRelu": 4,
+            "Mul": 1,
+            "ResizeBilinear": 1,
+            "Sigmoid": 1,
+            "StridedSlice": 2,
+            "Sub": 3
+          },
+          "forward_varying_scopes": [
+            "D/D3",
+            "T_A",
+            "add",
+            "concat_2",
+            "mul_4",
+            "strided_slice_20",
+            "strided_slice_7",
+            "sub_21",
+            "sub_25",
+            "sub_3"
+          ],
+          "forward_varying_tensors": 45,
+          "traced_calls_before_localization": 0,
+          "varying_tensors": 570
+        }
+      },
+      "processes_with_forward_variation_by_factor": {
+        "d10": 4,
+        "d10_trace2": 4,
+        "d11_wrapper": 3,
+        "plain": 4
+      },
+      "propagation": "observed varying forward tensors downstream of T_A (graph edges not individually verified): reconstruction-side sub_3, mul_4, add (consistent with reconstruction = (1 - P) * (x - T_A) + P * I_P, network.py:101) and strided_slice_7; the D3 input concat_2, D/D3/input_resize ResizeBilinear, D/D3 conv1-conv4 Conv2D / BiasAdd / FusedBatchNormV3 / LeakyRelu and D/D3/probability Sigmoid; and loss-side elementwise / reduction tensors (Sub, Square, Sum, StridedSlice); the full sets are scope.stage_P_tensor_scopes and scope.stage_C_scopes",
+      "question": "does the D/D3 forward variation seen in both D11 arms occur on the ordinary uninstrumented production path?",
+      "scope": {
+        "forward_max_relative_l2_all_processes": 5.670121531062956e-07,
+        "scopes": [
+          "D/D3",
+          "Square_2",
+          "Square_8",
+          "Square_9",
+          "Sum_10",
+          "Sum_3",
+          "Sum_9",
+          "T_A",
+          "add",
+          "concat_2",
+          "mul_4",
+          "strided_slice_13",
+          "strided_slice_19",
+          "strided_slice_20",
+          "strided_slice_24",
+          "strided_slice_7",
+          "sub_21",
+          "sub_25",
+          "sub_3",
+          "sub_4"
+        ],
+        "stage_C_scopes": [
+          "D/D3",
+          "T_A",
+          "add",
+          "concat_2",
+          "mul_4",
+          "strided_slice_20",
+          "strided_slice_7",
+          "sub_21",
+          "sub_25",
+          "sub_3"
+        ],
+        "stage_P_tensor_scopes": [
+          "D/D3",
+          "Square_2",
+          "Square_8",
+          "Square_9",
+          "Sum_10",
+          "Sum_3",
+          "Sum_9",
+          "T_A",
+          "add",
+          "concat_2",
+          "mul_4",
+          "strided_slice_13",
+          "strided_slice_19",
+          "strided_slice_20",
+          "strided_slice_24",
+          "strided_slice_7",
+          "sub_21",
+          "sub_25",
+          "sub_3",
+          "sub_4"
+        ],
+        "subnetworks_with_varying_forward_tensors": [
+          "D/D3"
+        ],
+        "varying_data_movement_roots": 0,
+        "varying_fed_inputs": 0,
+        "violations_of_integrity_bound": 0
+      }
+    },
+    "production_forward_varying": {
+      "P1/t0": [
+        "T_A:0",
+        "add:0",
+        "mul_4:0",
+        "strided_slice_7:0",
+        "sub_3:0",
+        "sub_4:0"
+      ],
+      "P1/t1": [
+        "D/D3/conv1/BN/FusedBatchNormV3:0",
+        "D/D3/conv1/BN/FusedBatchNormV3:1",
+        "D/D3/conv1/BN/FusedBatchNormV3:2",
+        "D/D3/conv1/BN/FusedBatchNormV3:3",
+        "D/D3/conv1/BN/FusedBatchNormV3:4",
+        "D/D3/conv1/BiasAdd:0",
+        "D/D3/conv1/Conv2D:0",
+        "D/D3/conv1/leaky_relu:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:1",
+        "D/D3/conv2/BN/FusedBatchNormV3:2",
+        "D/D3/conv2/BN/FusedBatchNormV3:3",
+        "D/D3/conv2/BN/FusedBatchNormV3:4",
+        "D/D3/conv2/BiasAdd:0",
+        "D/D3/conv2/Conv2D:0",
+        "D/D3/conv2/leaky_relu:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:1",
+        "D/D3/conv3/BN/FusedBatchNormV3:2",
+        "D/D3/conv3/BN/FusedBatchNormV3:3",
+        "D/D3/conv3/BN/FusedBatchNormV3:4",
+        "D/D3/conv3/BiasAdd:0",
+        "D/D3/conv3/Conv2D:0",
+        "D/D3/conv3/leaky_relu:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:1",
+        "D/D3/conv4/BN/FusedBatchNormV3:2",
+        "D/D3/conv4/BN/FusedBatchNormV3:3",
+        "D/D3/conv4/BN/FusedBatchNormV3:4",
+        "D/D3/conv4/BiasAdd:0",
+        "D/D3/conv4/Conv2D:0",
+        "D/D3/conv4/leaky_relu:0",
+        "D/D3/input_resize/ResizeBilinear:0",
+        "D/D3/output/BiasAdd:0",
+        "D/D3/output/Conv2D:0",
+        "D/D3/probability:0",
+        "concat_2:0",
+        "strided_slice_7:0"
+      ],
+      "P1/t2": [
+        "D/D3/conv1/BN/FusedBatchNormV3:0",
+        "D/D3/conv1/BN/FusedBatchNormV3:1",
+        "D/D3/conv1/BN/FusedBatchNormV3:2",
+        "D/D3/conv1/BN/FusedBatchNormV3:3",
+        "D/D3/conv1/BN/FusedBatchNormV3:4",
+        "D/D3/conv1/BiasAdd:0",
+        "D/D3/conv1/Conv2D:0",
+        "D/D3/conv1/leaky_relu:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:1",
+        "D/D3/conv2/BN/FusedBatchNormV3:2",
+        "D/D3/conv2/BN/FusedBatchNormV3:3",
+        "D/D3/conv2/BN/FusedBatchNormV3:4",
+        "D/D3/conv2/BiasAdd:0",
+        "D/D3/conv2/Conv2D:0",
+        "D/D3/conv2/leaky_relu:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:1",
+        "D/D3/conv3/BN/FusedBatchNormV3:2",
+        "D/D3/conv3/BN/FusedBatchNormV3:3",
+        "D/D3/conv3/BN/FusedBatchNormV3:4",
+        "D/D3/conv3/BiasAdd:0",
+        "D/D3/conv3/Conv2D:0",
+        "D/D3/conv3/leaky_relu:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:1",
+        "D/D3/conv4/BN/FusedBatchNormV3:2",
+        "D/D3/conv4/BN/FusedBatchNormV3:3",
+        "D/D3/conv4/BN/FusedBatchNormV3:4",
+        "D/D3/conv4/BiasAdd:0",
+        "D/D3/conv4/Conv2D:0",
+        "D/D3/conv4/leaky_relu:0",
+        "D/D3/input_resize/ResizeBilinear:0",
+        "D/D3/output/BiasAdd:0",
+        "D/D3/output/Conv2D:0",
+        "D/D3/probability:0",
+        "concat_2:0",
+        "strided_slice_7:0"
+      ],
+      "P2/t0": [
+        "D/D3/conv1/BN/FusedBatchNormV3:0",
+        "D/D3/conv1/BN/FusedBatchNormV3:1",
+        "D/D3/conv1/BN/FusedBatchNormV3:2",
+        "D/D3/conv1/BN/FusedBatchNormV3:3",
+        "D/D3/conv1/BN/FusedBatchNormV3:4",
+        "D/D3/conv1/BiasAdd:0",
+        "D/D3/conv1/Conv2D:0",
+        "D/D3/conv1/leaky_relu:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:1",
+        "D/D3/conv2/BN/FusedBatchNormV3:2",
+        "D/D3/conv2/BN/FusedBatchNormV3:3",
+        "D/D3/conv2/BN/FusedBatchNormV3:4",
+        "D/D3/conv2/BiasAdd:0",
+        "D/D3/conv2/Conv2D:0",
+        "D/D3/conv2/leaky_relu:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:1",
+        "D/D3/conv3/BN/FusedBatchNormV3:2",
+        "D/D3/conv3/BN/FusedBatchNormV3:3",
+        "D/D3/conv3/BN/FusedBatchNormV3:4",
+        "D/D3/conv3/BiasAdd:0",
+        "D/D3/conv3/Conv2D:0",
+        "D/D3/conv3/leaky_relu:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:1",
+        "D/D3/conv4/BN/FusedBatchNormV3:2",
+        "D/D3/conv4/BN/FusedBatchNormV3:3",
+        "D/D3/conv4/BN/FusedBatchNormV3:4",
+        "D/D3/conv4/BiasAdd:0",
+        "D/D3/conv4/Conv2D:0",
+        "D/D3/conv4/leaky_relu:0",
+        "D/D3/input_resize/ResizeBilinear:0",
+        "D/D3/output/BiasAdd:0",
+        "D/D3/output/Conv2D:0",
+        "D/D3/probability:0",
+        "T_A:0",
+        "add:0",
+        "concat_2:0",
+        "mul_4:0",
+        "strided_slice_7:0",
+        "sub_3:0",
+        "sub_4:0"
+      ],
+      "P2/t1": [],
+      "P2/t2": [
+        "D/D3/conv1/BN/FusedBatchNormV3:0",
+        "D/D3/conv1/BN/FusedBatchNormV3:1",
+        "D/D3/conv1/BN/FusedBatchNormV3:2",
+        "D/D3/conv1/BN/FusedBatchNormV3:3",
+        "D/D3/conv1/BN/FusedBatchNormV3:4",
+        "D/D3/conv1/BiasAdd:0",
+        "D/D3/conv1/Conv2D:0",
+        "D/D3/conv1/leaky_relu:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:0",
+        "D/D3/conv2/BN/FusedBatchNormV3:1",
+        "D/D3/conv2/BN/FusedBatchNormV3:2",
+        "D/D3/conv2/BN/FusedBatchNormV3:3",
+        "D/D3/conv2/BN/FusedBatchNormV3:4",
+        "D/D3/conv2/BiasAdd:0",
+        "D/D3/conv2/Conv2D:0",
+        "D/D3/conv2/leaky_relu:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:0",
+        "D/D3/conv3/BN/FusedBatchNormV3:1",
+        "D/D3/conv3/BN/FusedBatchNormV3:2",
+        "D/D3/conv3/BN/FusedBatchNormV3:3",
+        "D/D3/conv3/BN/FusedBatchNormV3:4",
+        "D/D3/conv3/BiasAdd:0",
+        "D/D3/conv3/Conv2D:0",
+        "D/D3/conv3/leaky_relu:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:0",
+        "D/D3/conv4/BN/FusedBatchNormV3:1",
+        "D/D3/conv4/BN/FusedBatchNormV3:2",
+        "D/D3/conv4/BN/FusedBatchNormV3:3",
+        "D/D3/conv4/BN/FusedBatchNormV3:4",
+        "D/D3/conv4/BiasAdd:0",
+        "D/D3/conv4/Conv2D:0",
+        "D/D3/conv4/leaky_relu:0",
+        "D/D3/input_resize/ResizeBilinear:0",
+        "D/D3/output/BiasAdd:0",
+        "D/D3/output/Conv2D:0",
+        "D/D3/probability:0",
+        "concat_2:0",
+        "strided_slice_7:0"
+      ],
+      "P3/t0": [
+        "D/D3/probability:0",
+        "Square_2:0",
+        "Square_8:0",
+        "Square_9:0",
+        "Sum_10:0",
+        "Sum_3:0",
+        "Sum_9:0",
+        "T_A:0",
+        "add:0",
+        "mul_4:0",
+        "strided_slice_13:0",
+        "strided_slice_19:0",
+        "strided_slice_20:0",
+        "strided_slice_24:0",
+        "strided_slice_7:0",
+        "sub_21:0",
+        "sub_25:0",
+        "sub_3:0",
+        "sub_4:0"
+      ],
+      "P3/t1": [],
+      "P3/t2": []
+    },
+    "production_gradient_integrity": {
+      "bound": 0.001,
+      "max_functional_ratio_by_step": {
+        "step1": 1.830391239129137e-07,
+        "step2": 0.00015854826248788253,
+        "step3": 0.0
+      },
+      "rows": [
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 43,
+          "functional_l2_diff": 0.006779428032817099,
+          "functional_l2_ref": 39210.93651755434,
+          "ratio": 1.7289635583638808e-07,
+          "where": "P1/t0/step1"
+        },
+        {
+          "cancelled_bias_differing": 4,
+          "functional_differing": 13,
+          "functional_l2_diff": 0.13438965394841235,
+          "functional_l2_ref": 8017.97583249427,
+          "ratio": 1.676104502632378e-05,
+          "where": "P1/t0/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 5004694.201992981,
+          "ratio": 0.0,
+          "where": "P1/t0/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 43,
+          "functional_l2_diff": 0.0062179022724467075,
+          "functional_l2_ref": 39147.79472481898,
+          "ratio": 1.588314824922864e-07,
+          "where": "P1/t1/step1"
+        },
+        {
+          "cancelled_bias_differing": 4,
+          "functional_differing": 13,
+          "functional_l2_diff": 0.44397966197730426,
+          "functional_l2_ref": 7602.817267884338,
+          "ratio": 5.8396729308851586e-05,
+          "where": "P1/t1/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 4805887.099202876,
+          "ratio": 0.0,
+          "where": "P1/t1/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 43,
+          "functional_l2_diff": 0.008164368948017258,
+          "functional_l2_ref": 64122.50693798567,
+          "ratio": 1.2732454387526058e-07,
+          "where": "P1/t2/step1"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 7130.231990453778,
+          "ratio": 0.0,
+          "where": "P1/t2/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 3468361.1010495923,
+          "ratio": 0.0,
+          "where": "P1/t2/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 43,
+          "functional_l2_diff": 0.007010683124682137,
+          "functional_l2_ref": 39210.93643985478,
+          "ratio": 1.7879407535792334e-07,
+          "where": "P2/t0/step1"
+        },
+        {
+          "cancelled_bias_differing": 4,
+          "functional_differing": 14,
+          "functional_l2_diff": 1.2712391266534242,
+          "functional_l2_ref": 8017.994689475591,
+          "ratio": 0.00015854826248788253,
+          "where": "P2/t0/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 5004690.672902006,
+          "ratio": 0.0,
+          "where": "P2/t0/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 44,
+          "functional_l2_diff": 0.006024282650433719,
+          "functional_l2_ref": 39147.96021312232,
+          "ratio": 1.5388496916920822e-07,
+          "where": "P2/t1/step1"
+        },
+        {
+          "cancelled_bias_differing": 4,
+          "functional_differing": 13,
+          "functional_l2_diff": 0.0017102397125877856,
+          "functional_l2_ref": 7602.510381725554,
+          "ratio": 2.2495723474429637e-07,
+          "where": "P2/t1/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 4805919.2040629,
+          "ratio": 0.0,
+          "where": "P2/t1/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 43,
+          "functional_l2_diff": 0.008236730906260918,
+          "functional_l2_ref": 64124.42383730458,
+          "ratio": 1.2844919943700414e-07,
+          "where": "P2/t2/step1"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 7130.224105242695,
+          "ratio": 0.0,
+          "where": "P2/t2/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 3468324.774163974,
+          "ratio": 0.0,
+          "where": "P2/t2/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 42,
+          "functional_l2_diff": 0.007177135442719149,
+          "functional_l2_ref": 39210.93637955721,
+          "ratio": 1.830391239129137e-07,
+          "where": "P3/t0/step1"
+        },
+        {
+          "cancelled_bias_differing": 4,
+          "functional_differing": 14,
+          "functional_l2_diff": 0.19585264798376556,
+          "functional_l2_ref": 8017.979215561403,
+          "ratio": 2.4426684419891244e-05,
+          "where": "P3/t0/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 5004691.886548176,
+          "ratio": 0.0,
+          "where": "P3/t0/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 42,
+          "functional_l2_diff": 0.006023886593335066,
+          "functional_l2_ref": 39146.44068879342,
+          "ratio": 1.5388082511060945e-07,
+          "where": "P3/t1/step1"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 7602.548163970994,
+          "ratio": 0.0,
+          "where": "P3/t1/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 4805897.642180917,
+          "ratio": 0.0,
+          "where": "P3/t1/step3"
+        },
+        {
+          "cancelled_bias_differing": 14,
+          "functional_differing": 43,
+          "functional_l2_diff": 0.008066287554076436,
+          "functional_l2_ref": 64119.84018018808,
+          "ratio": 1.2580018183777037e-07,
+          "where": "P3/t2/step1"
+        },
+        {
+          "cancelled_bias_differing": 4,
+          "functional_differing": 13,
+          "functional_l2_diff": 0.0348980775180187,
+          "functional_l2_ref": 7130.061011839135,
+          "ratio": 4.894499143846323e-06,
+          "where": "P3/t2/step2"
+        },
+        {
+          "cancelled_bias_differing": 0,
+          "functional_differing": 0,
+          "functional_l2_diff": 0.0,
+          "functional_l2_ref": 3468635.0529145305,
+          "ratio": 0.0,
+          "where": "P3/t2/step3"
+        }
+      ]
+    },
+    "production_path_semantics": {
+      "adam": true,
+      "adam_worst_error_over_tolerance": {
+        "m": 0.125,
+        "v": 0.125,
+        "var": 0.2989
+      },
+      "beta_powers": true,
+      "connectivity": true,
+      "counters": true,
+      "diagnostics_non_mutating": true,
+      "finite": true,
+      "gradient_connectivity_detail": "every loss and step: present equals differentiable reachability (L_D 72, L_G/L_P/L_R/L_S 58, L_H/L_depth 70, step1-3 72 of 72)",
+      "graph_operations_during_session": "11828 before and after (no op added)",
+      "graph_unchanged_by_session": true,
+      "no_random_ops_on_step_paths": true,
+      "optimizer_application": true,
+      "optimizer_application_detail": "72 ApplyAdam per step, each targeting its variable and consuming its step gradient; no random op on any step or BN path",
+      "proxy_count_equals_d10_algorithm": true,
+      "restore_exact": true,
+      "scope": true,
+      "semantic_replays": 54
+    },
+    "production_step_replay": {
+      "step1": [
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 157,
+          "where": "P1/t0"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 136,
+          "where": "P1/t1"
+        },
+        {
+          "D3_variables_differing": 4,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 121,
+          "where": "P1/t2"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 157,
+          "where": "P2/t0"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 138,
+          "where": "P2/t1"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 123,
+          "where": "P2/t2"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 156,
+          "where": "P3/t0"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 133,
+          "where": "P3/t1"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 5,
+          "variables_differing": 118,
+          "where": "P3/t2"
+        }
+      ],
+      "step2": [
+        {
+          "D3_variables_differing": 52,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 3,
+          "variables_differing": 52,
+          "where": "P1/t0"
+        },
+        {
+          "D3_variables_differing": 53,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 3,
+          "variables_differing": 53,
+          "where": "P1/t1"
+        },
+        {
+          "D3_variables_differing": 55,
+          "losses_identical_across_replays": false,
+          "replay_post_states_distinct": 3,
+          "variables_differing": 55,
+          "where": "P1/t2"
+        },
+        {
+          "D3_variables_differing": 50,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 2,
+          "variables_differing": 50,
+          "where": "P2/t0"
+        },
+        {
+          "D3_variables_differing": 47,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 2,
+          "variables_differing": 47,
+          "where": "P2/t1"
+        },
+        {
+          "D3_variables_differing": 47,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 2,
+          "variables_differing": 47,
+          "where": "P2/t2"
+        },
+        {
+          "D3_variables_differing": 50,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 2,
+          "variables_differing": 50,
+          "where": "P3/t0"
+        },
+        {
+          "D3_variables_differing": 49,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 2,
+          "variables_differing": 49,
+          "where": "P3/t1"
+        },
+        {
+          "D3_variables_differing": 47,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 2,
+          "variables_differing": 47,
+          "where": "P3/t2"
+        }
+      ],
+      "step3": [
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P1/t0"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P1/t1"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P1/t2"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P2/t0"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P2/t1"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P2/t2"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P3/t0"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P3/t1"
+        },
+        {
+          "D3_variables_differing": 0,
+          "losses_identical_across_replays": true,
+          "replay_post_states_distinct": 1,
+          "variables_differing": 0,
+          "where": "P3/t2"
+        }
+      ]
+    },
+    "semantic_defect_found": false
+  },
+  "protocol": {
+    "analysis_protocol_sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277",
+    "file": "outputs/audit/E04_D12_INVESTIGATION_PROTOCOL.json",
+    "fixed_at_commit": "d1af9b65a6c2f3c6790938c19ba824022b9e23e0",
+    "sha256": "64b1c858dbc898cec9105df2048e65a5f94f730e60bf62004df9d291ca838277"
+  },
+  "raw_outputs": {
+    "files": 223,
+    "location": "<rt>/qualification/e04_production/d12_probe_d1af9b6",
+    "read_only": true,
+    "sha256sums_copy": "outputs/audit/E04_D12_RAW_SHA256SUMS.txt",
+    "sha256sums_sha256": "c820968a8fcfeb1ade97ceb939be971e2a607d1123867d5d8ab4a81860a66ff0",
+    "smoke_runs": "smoke_not_interpreted/ (code-path runs before the protocol commit; never interpreted)"
+  },
+  "record_id": "E04_D12_PROCEDURAL_REPRODUCIBILITY_SEMANTIC_INVESTIGATION_RESULT",
+  "remaining_blockers": [
+    "owner approval of configs/amendments/e04_d12_procedural_reproducibility.DRAFT.yaml (D12 is a draft; nothing is activated)",
+    "after approval: a separate commit wiring tools/e04_d12_procedural_gate.py into the qualification evidence tool, then a new full requalification execution and record; until then E04 stays E04_PRODUCTION_QUALIFICATION_INCOMPLETE (41/42)",
+    "an owner decision on the unapproved D10 gate draft (refs/drafts/e04-d10-gate-unapproved), which D12 does not use",
+    "scientific seeds 42, 1337, 2026 need a separate owner launch decision after a passing requalification"
+  ],
+  "requalification_run": false,
+  "schema_version": "e04_d12_investigation_record_v1",
+  "scientific_seeds_launched": [],
+  "status": "E04_PRODUCTION_QUALIFICATION_INCOMPLETE",
+  "test_isolation": {
+    "atime": {
+      "by_split": {
+        "TEST": {
+          "atime_changed": 0,
+          "files": 3027,
+          "mtime_changed": 0
+        },
+        "TRAIN": {
+          "atime_changed": 0,
+          "files": 14467,
+          "mtime_changed": 0
+        },
+        "VAL": {
+          "atime_changed": 0,
+          "files": 3121,
+          "mtime_changed": 0
+        }
+      },
+      "files": 20627,
+      "post_sha256": "9b25acbc1505c809e5b9503a8bfff80c8e20cc0b55c80f7d8785e3b402f0a6cf",
+      "pre_sha256": "9b25acbc1505c809e5b9503a8bfff80c8e20cc0b55c80f7d8785e3b402f0a6cf",
+      "same_paths": true
+    },
+    "e04_run_root_exists": false,
+    "manifests_mtime_unchanged": true,
+    "test_files_accessed": 0,
+    "val_files_accessed": 0
+  },
+  "tests": {
+    "command": "python3 -m unittest tests.test_e04_d10_investigation tests.test_e04_d11_investigation tests.test_e04_d11_tools tests.test_e04_d12_investigation tests.test_e04_d12_procedural_gate tests.test_e04_d12_tools tests.test_e04_owner_resolution_investigation tests.test_e04_production_io tests.test_e04_production_qualification tests.test_e04_production_readiness_audit tests.test_m6a6_e04_contract tests.test_m6d3a_e04_geometry_runtime tests.test_m6d3e_e04_training_graph",
+    "committed_e04_tests": 125,
+    "d12_tools_tests_at_d1af9b6": {
+      "tests/test_e04_d12_tools.py": 6
+    },
+    "full_laptop_suite": "2205 tests; failures only in the pre-existing laptop M0-M5 modules and test_m7d1_n4/n5 test_11_derived_files_rederive (float-format re-derivation; fails identically at d1af9b6), none in any E04 / D12 module",
+    "new_in_this_record": {
+      "tests/test_e04_d12_investigation.py": 9,
+      "tests/test_e04_d12_procedural_gate.py": 11
+    },
+    "qualification_gate_comparison": "no requalification ran; the original record remains 41/42 with K.real_data_gradient_repeatability failed (record sha256 unchanged)",
+    "uncommitted_d10_gate_draft_tests": "tests/test_e04_d10_gate.py (9) runs only in the laptop worktree; not committed, not counted"
+  }
+}
