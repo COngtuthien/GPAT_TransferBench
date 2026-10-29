@@ -1,0 +1,1334 @@
+{
+  "aggregation": {
+    "applies_to": "future downstream evaluation metrics (none computed yet)",
+    "descriptive_losses": {
+      "by_seed": {
+        "1337": {
+          "keys": [
+            "a_loss",
+            "d_loss",
+            "g_loss"
+          ],
+          "note": "VAL losses are diagnostics only; no selection, threshold or ranking uses them",
+          "train_epoch_means": {
+            "1": [
+              9.040807998657227,
+              0.7835903825759888,
+              87.48444970417023
+            ],
+            "50": [
+              5.512648700594902,
+              0.4228074811026454,
+              31.68749369287491
+            ]
+          },
+          "val_epoch_means": {
+            "1": [
+              8.75504178094864,
+              0.7644288755655289,
+              82.01670361709594
+            ],
+            "50": [
+              6.934711665868759,
+              0.5529027380943299,
+              49.928467580795285
+            ]
+          }
+        },
+        "2026": {
+          "keys": [
+            "a_loss",
+            "d_loss",
+            "g_loss"
+          ],
+          "note": "VAL losses are diagnostics only; no selection, threshold or ranking uses them",
+          "train_epoch_means": {
+            "1": [
+              9.00012002825737,
+              0.7828769744187594,
+              86.73283729457856
+            ],
+            "50": [
+              5.285741125911474,
+              0.41491725615411995,
+              29.65461474132538
+            ]
+          },
+          "val_epoch_means": {
+            "1": [
+              8.756636805534363,
+              0.7597036644220352,
+              82.52403692626953
+            ],
+            "50": [
+              6.741077714443207,
+              0.5957510521411896,
+              45.5536839427948
+            ]
+          }
+        },
+        "42": {
+          "keys": [
+            "a_loss",
+            "d_loss",
+            "g_loss"
+          ],
+          "note": "VAL losses are diagnostics only; no selection, threshold or ranking uses them",
+          "train_epoch_means": {
+            "1": [
+              9.154121457695961,
+              0.7768785691559315,
+              86.68551542282104
+            ],
+            "50": [
+              5.594144633412361,
+              0.41381530445069076,
+              32.09407057094574
+            ]
+          },
+          "val_epoch_means": {
+            "1": [
+              9.467538320064545,
+              0.7386264564990997,
+              91.16416016769409
+            ],
+            "50": [
+              6.9572472426891325,
+              0.590445272564888,
+              47.50862610530853
+            ]
+          }
+        }
+      },
+      "note": "per-seed epoch-1 / epoch-50 mean TRAIN and VAL (diagnostic) losses; descriptive only, NOT a performance metric, not aggregated and not used for any choice"
+    },
+    "primary_result_rule": "MEAN_AND_STD_OVER_ALL_THREE_SEEDS",
+    "training_metadata": {
+      "checkpoints_each": 50,
+      "d_applications_each": 50000,
+      "epochs_each": 50,
+      "final_global_step_each": 150000,
+      "g_applications_each": 100000,
+      "numerically_finite_each": true,
+      "resume_sidecars_each": 0,
+      "seeds_completed": "3/3",
+      "test_access_total": 0,
+      "train_steps_each": 100000,
+      "val_blocks_each": 50
+    },
+    "wall_clock_note": "training speed is not an acceptance gate and not a comparison metric"
+  },
+  "approved_alternative_gates": {
+    "1337": [],
+    "2026": [
+      "B.process_exited_zero",
+      "J.single_e03_session"
+    ],
+    "42": []
+  },
+  "authority_note": "Training authority for all three seeds is d547fc9; the seed closure commits and this family closure are evidence/reporting only.",
+  "classification": "E03_THREE_SEED_SCIENTIFIC_TRAINING_CLOSURE",
+  "confirmations": {
+    "additional_seed_launched": false,
+    "bank_generation": false,
+    "best_seed_selection": false,
+    "downstream_evaluation": false,
+    "gpat_started": false,
+    "other_method_started": false,
+    "preferred_seed_selection": false,
+    "replacement_seed": false,
+    "run_root_mutated": false,
+    "seed_dropped": false,
+    "test_used": false,
+    "val_checkpoint_selection": false
+  },
+  "different_by_design": {
+    "also": "seed-derived TRAIN/VAL streams, flips, brightness and model initialisation; learned weights and checkpoint bytes",
+    "manifest_fields": [
+      "command_line",
+      "end_utc",
+      "experiment_seed",
+      "run_id",
+      "run_uuid",
+      "start_utc"
+    ],
+    "resolved_config_lines": {
+      "1337": [
+        "  experiment_seed: 1337",
+        "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_1337",
+        "    tf_graph_seed: 1337",
+        "      parser_seed: 1337",
+        "      shuffle_seed: 1337",
+        "      parser_seed: 1050417158",
+        "      shuffle_seed: 1050417158"
+      ],
+      "2026": [
+        "  experiment_seed: 2026",
+        "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_2026",
+        "    tf_graph_seed: 2026",
+        "      parser_seed: 2026",
+        "      shuffle_seed: 2026",
+        "      parser_seed: 1242808125",
+        "      shuffle_seed: 1242808125"
+      ],
+      "42": []
+    },
+    "run_start_fields": [
+      "seeding",
+      "_seed"
+    ]
+  },
+  "driver_ruling": {
+    "driver_policy": "OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY",
+    "lock_driver_version": "595.84",
+    "observed_driver_version": "580.178.04",
+    "scope": "only the NVIDIA driver version differs from the lock; GPU model, GPU UUID and every other lock field are exact in all three runs"
+  },
+  "failed_gates": [],
+  "family": {
+    "best_seed": null,
+    "completed_seeds": 3,
+    "composition_note": "exactly the three frozen experiment seeds; no fourth, replacement, preferred or dropped seed, and no cross-seed choice",
+    "dropped_seeds": [],
+    "preferred_seed": null,
+    "replacement_seeds": [],
+    "run_ids": {
+      "1337": "e8c85cc378e778f5",
+      "2026": "237887eebab18637",
+      "42": "a565b76bc7349532"
+    },
+    "scientific_runs": 3,
+    "seeds": [
+      42,
+      1337,
+      2026
+    ]
+  },
+  "final_checkpoints": [
+    {
+      "TEST_access": 0,
+      "completion_status": "completed",
+      "d_applications": 50000,
+      "final_checkpoint_prefix": "checkpoints/ckpt-50",
+      "final_data_sha256": "5b337a63db63e405bf35bceefdacc101060cb7d1625b5a4d2d389b963e311753",
+      "final_global_step": 150000,
+      "final_index_sha256": "b6b9a0c4cfd6470959453cdb861341bcacff7047b66fb414f8dff504452dc899",
+      "final_meta_sha256": "dbcf372027172396c616ba19f7d76475363d34e8bac0f438c0c7f5b97fae5f97",
+      "g_applications": 100000,
+      "metrics_sha256": "059c266e18cc118dd70a40c37fd65c39b2d37021af1c04b8d3f0c97573e8f000",
+      "observed_driver": "580.178.04",
+      "run_id": "a565b76bc7349532",
+      "run_root_listing_digest": "a7bed081022c09ab753ae359536e71a964966a484e45f435d51a5809b509b163",
+      "scientific_authority": "d547fc9f8932a273d719ae589aade85a9d989b85",
+      "seed": 42,
+      "seed_closure_commit": "b95c127e394d9b2ea644573d317b44405652039e",
+      "train_parser_seed": 42,
+      "val_parser_seed": 1355875380
+    },
+    {
+      "TEST_access": 0,
+      "completion_status": "completed",
+      "d_applications": 50000,
+      "final_checkpoint_prefix": "checkpoints/ckpt-50",
+      "final_data_sha256": "316c94c066c32314c6819bc105d0043e1ddc7b27329afd48ddcfb8bc8d181551",
+      "final_global_step": 150000,
+      "final_index_sha256": "29b36079f28c557ab9a44daa8dedb85770ed9d32c5cd0b04d002f39ae386ab70",
+      "final_meta_sha256": "a6119bdc1f830fdf0b968054ea929dce6e6e5838050ffbe06826d8e499a40e1c",
+      "g_applications": 100000,
+      "metrics_sha256": "273454ca12af55debc8372b5b82a9e95dddcffdb62edbe09b51ad40a50e5e342",
+      "observed_driver": "580.178.04",
+      "run_id": "e8c85cc378e778f5",
+      "run_root_listing_digest": "ad748419b53d4c07c54832282bbf8ca706ac5db53b9a6af2d59f767a5390095e",
+      "scientific_authority": "d547fc9f8932a273d719ae589aade85a9d989b85",
+      "seed": 1337,
+      "seed_closure_commit": "5cdb65db0a75fcdcddb64b1b5af040364a057723",
+      "train_parser_seed": 1337,
+      "val_parser_seed": 1050417158
+    },
+    {
+      "TEST_access": 0,
+      "completion_status": "completed",
+      "d_applications": 50000,
+      "final_checkpoint_prefix": "checkpoints/ckpt-50",
+      "final_data_sha256": "9dbd463cb3eb56c9ecc578dd275e0c2507a1e6d5f8b9b4876406d5011bd52cb3",
+      "final_global_step": 150000,
+      "final_index_sha256": "42107c3d56f1ec2892def0840eea520e1950ced453ffa09981899ded11ed96dc",
+      "final_meta_sha256": "504845f926c1940a4aa0ba647dada611dba79044cb247dc11410614464f75543",
+      "g_applications": 100000,
+      "metrics_sha256": "4d30934a91bc01133af5a34e068a44e543b1debecfe8294b9458eb7de5e42236",
+      "observed_driver": "580.178.04",
+      "run_id": "237887eebab18637",
+      "run_root_listing_digest": "f42708341b91e6b6d11b601b363e2dd5309dd7b5df33b65c6ed79ca032e25136",
+      "scientific_authority": "d547fc9f8932a273d719ae589aade85a9d989b85",
+      "seed": 2026,
+      "seed_closure_commit": "15bfc84dd4cf1d68427d85d867188b702a847b65",
+      "train_parser_seed": 2026,
+      "val_parser_seed": 1242808125
+    }
+  ],
+  "final_checkpoints_csv": "outputs/audit/E03_THREE_SEED_FINAL_CHECKPOINTS.csv",
+  "final_checkpoints_csv_sha256": "2420c132fc2e994e3a32253b0411e785eb13fcd74a4bd2d570d2340361b544be",
+  "firewall": {
+    "note": "per-seed stat-only relatime atime snapshots: 3027/3027 TEST faces atime-sensitive and unchanged in every run; every changed face was a consumed TRAIN/VAL pack face",
+    "test_access": 0
+  },
+  "frozen": {
+    "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+    "files_sha256": {
+      "configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+      "environments/e03_stdn.lock.json": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62",
+      "frozen_config_snapshot/configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+      "manifests/m2_sample_accounting.parquet": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+      "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+      "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+      "manifests/val_pairs_v1.parquet": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872"
+    },
+    "identities": {
+      "compatibility_manifest_sha256": "4cf2d14ed302f15418b887dfef5e45312328bc1e9e4273c2ea74ef607e447f84",
+      "config_sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+      "environment_lock_sha256": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62",
+      "fidelity": "FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY",
+      "logging_contract_sha256": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+      "pack_manifest_sha256": "c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833",
+      "pair_manifest_sha256": {
+        "TRAIN": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+        "VAL": "84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872"
+      },
+      "preprocess_sha256": "265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e",
+      "production_files_sha256": {
+        "methods/stdn/feed_pack.py": "12125864491d5142d253406b22c7f080ea7ba31ef7ac8b06406f80b5ce9b8cf0",
+        "methods/stdn/production_io.py": "ba4e2938eec887d7baffc8858ec7b9c69de89eea6663c9b9eb2fa5bdc96ae4e1",
+        "methods/stdn/production_runner.py": "17a72e929d2e86f9f2b4414ff99ffd0a0d29b48e33ebbfba19cde5061932d07f",
+        "tools/run_e03.py": "59a888a63b4468b84f399ab698e0ade9c2f211b064dfa3160163838aa59e34ad"
+      },
+      "ruling_addendum_sha256": "ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a",
+      "ruling_yaml_sha256": "4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b",
+      "runtime_addendum_sha256": "f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e",
+      "source_commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+      "source_files_sha256": "ef4975ecf8d27d9f20681889c281816dca24ffb243cb26d3f3128e691e633f53",
+      "source_tree": "991a4f127990f98a108b8426113396f1c39f558d",
+      "spec_sha256": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+      "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+    },
+    "pack": {
+      "counts": {
+        "landmark_rows": 15321,
+        "m2_rows_not_taken": 5294,
+        "pairs": {
+          "TRAIN": 8838,
+          "VAL": 1905
+        },
+        "samples_by_role": {
+          "TRAIN_live": 3830,
+          "TRAIN_spoof": 8838,
+          "VAL_live": 748,
+          "VAL_spoof": 1905
+        },
+        "samples_by_split": {
+          "TRAIN": 12668,
+          "VAL": 2653
+        },
+        "unique_samples": 15321
+      },
+      "manifest_sha256": "c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833"
+    },
+    "session_config": "intra_op_parallelism_threads: 1\ninter_op_parallelism_threads: 1\ngpu_options {\n  allow_growth: true\n}\ngraph_options {\n  optimizer_options {\n    global_jit_level: OFF\n  }\n  rewrite_options {\n    disable_meta_optimizer: true\n    auto_mixed_precision: OFF\n  }\n}\n",
+    "structure": {
+      "adam_ops": 170,
+      "atomic_accumulation_op_types": {
+        "ResizeBilinearGrad": 10,
+        "ScatterNd": 4
+      },
+      "bn_moving": 60,
+      "global_variables": 747,
+      "loss_ema": 2,
+      "trainable_D": 72,
+      "trainable_G": 98,
+      "trainable_equals_m6d2b_oracle": true,
+      "trainable_variables": 170,
+      "val_fused_bn_is_training_false": 48,
+      "val_fused_bn_is_training_true": 0,
+      "val_reachable_state_mutating_ops": [],
+      "val_reads_train_iterator": false,
+      "val_step_returns_no_train_op": true,
+      "variables_created_by_feed": 0,
+      "variables_created_by_val_graph": 0,
+      "weight_ema": 170
+    }
+  },
+  "gates": [
+    {
+      "detail": [
+        39,
+        296
+      ],
+      "gate": "A.seed_tool_current_equals_latest_closure_except_run_ids",
+      "pass": true
+    },
+    {
+      "detail": [
+        "seed1337_pane_log_keyboard_echo",
+        "seed2026_post_completion_reboot_evidence"
+      ],
+      "gate": "A.seed_tool_amendment_chain",
+      "pass": true
+    },
+    {
+      "detail": [
+        "E03_SEED1337_COMPLETION.json",
+        "E03_SEED2026_COMPLETION.json",
+        "E03_SEED42_COMPLETION.json"
+      ],
+      "gate": "A.exact_seed_evidence_set",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.rederives_current_tool",
+      "pass": true
+    },
+    {
+      "gate": "A.seed42.rederives_closure_commit_tool",
+      "pass": true
+    },
+    {
+      "detail": [
+        "seed1337_pane_log_keyboard_echo",
+        "seed2026_post_completion_reboot_evidence"
+      ],
+      "gate": "A.seed42.tool_differs_only_in_run_ids_or_disclosed_amendments",
+      "pass": true
+    },
+    {
+      "detail": "b95c127e394d9b2ea644573d317b44405652039e",
+      "gate": "A.seed42.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.rederives_current_tool",
+      "pass": true
+    },
+    {
+      "gate": "A.seed1337.rederives_closure_commit_tool",
+      "pass": true
+    },
+    {
+      "detail": [
+        "seed2026_post_completion_reboot_evidence"
+      ],
+      "gate": "A.seed1337.tool_differs_only_in_run_ids_or_disclosed_amendments",
+      "pass": true
+    },
+    {
+      "detail": "5cdb65db0a75fcdcddb64b1b5af040364a057723",
+      "gate": "A.seed1337.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.evidence_sha256",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.rederives_current_tool",
+      "pass": true
+    },
+    {
+      "gate": "A.seed2026.rederives_closure_commit_tool",
+      "pass": true
+    },
+    {
+      "detail": "identical",
+      "gate": "A.seed2026.tool_differs_only_in_run_ids_or_disclosed_amendments",
+      "pass": true
+    },
+    {
+      "detail": "15bfc84dd4cf1d68427d85d867188b702a847b65",
+      "gate": "A.seed2026.equals_closure_commit",
+      "pass": true
+    },
+    {
+      "detail": "E03_SEED42_COMPLETED_CLEANLY",
+      "gate": "B.seed42.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": "E03_SEED1337_COMPLETED_CLEANLY",
+      "gate": "B.seed1337.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": "E03_SEED2026_COMPLETED_CLEANLY",
+      "gate": "B.seed2026.closed_clean",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "B.seed42.approved_alternative_gates",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "B.seed1337.approved_alternative_gates",
+      "pass": true
+    },
+    {
+      "detail": [
+        "B.process_exited_zero",
+        "J.single_e03_session"
+      ],
+      "gate": "B.seed2026.approved_alternative_gates",
+      "pass": true
+    },
+    {
+      "detail": "outputs/audit/history/E03_SEED2026_AUDIT1_NEEDS_REVIEW/E03_SEED2026_COMPLETION.json",
+      "gate": "B.seed2026.prior_needs_review_build_preserved",
+      "pass": true
+    },
+    {
+      "detail": {
+        "42": 88,
+        "1337": 88,
+        "2026": 88
+      },
+      "gate": "B.same_gate_semantics",
+      "pass": true
+    },
+    {
+      "gate": "C.seed42.authority",
+      "pass": true
+    },
+    {
+      "detail": "a565b76bc7349532",
+      "gate": "C.seed42.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.seed1337.authority",
+      "pass": true
+    },
+    {
+      "detail": "e8c85cc378e778f5",
+      "gate": "C.seed1337.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.seed2026.authority",
+      "pass": true
+    },
+    {
+      "detail": "237887eebab18637",
+      "gate": "C.seed2026.run_id_rule",
+      "pass": true
+    },
+    {
+      "gate": "C.run_ids_distinct",
+      "pass": true
+    },
+    {
+      "gate": "C.method",
+      "pass": true
+    },
+    {
+      "gate": "C.frozen_config_sha",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "C.manifest_common_fields_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.command_line_differs_only_by_seed",
+      "pass": true
+    },
+    {
+      "detail": [
+        "compatibility_manifest_sha256",
+        "config_sha256",
+        "environment_lock_sha256",
+        "fidelity",
+        "logging_contract_sha256",
+        "pack_manifest_sha256",
+        "pair_manifest_sha256",
+        "preprocess_sha256",
+        "production_files_sha256",
+        "ruling_addendum_sha256",
+        "ruling_yaml_sha256",
+        "runtime_addendum_sha256",
+        "source_commit",
+        "source_files_sha256",
+        "source_tree",
+        "spec_sha256",
+        "split_manifest_sha256"
+      ],
+      "gate": "C.identities_equal",
+      "pass": true
+    },
+    {
+      "detail": [],
+      "gate": "C.run_start_equal_except_seed",
+      "pass": true
+    },
+    {
+      "gate": "C.files_identities_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.environment_equal",
+      "pass": true
+    },
+    {
+      "gate": "C.driver_ruling_consistent",
+      "pass": true
+    },
+    {
+      "gate": "C.official_graph_structure_equal",
+      "pass": true
+    },
+    {
+      "detail": {
+        "42": [],
+        "1337": [
+          "  experiment_seed: 1337",
+          "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_1337",
+          "    tf_graph_seed: 1337",
+          "      parser_seed: 1337",
+          "      shuffle_seed: 1337",
+          "      parser_seed: 1050417158",
+          "      shuffle_seed: 1050417158"
+        ],
+        "2026": [
+          "  experiment_seed: 2026",
+          "  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_2026",
+          "    tf_graph_seed: 2026",
+          "      parser_seed: 2026",
+          "      shuffle_seed: 2026",
+          "      parser_seed: 1242808125",
+          "      shuffle_seed: 1242808125"
+        ]
+      },
+      "gate": "C.resolved_config_differs_only_by_seed",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.completed_50_epochs",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.streams_independently_replayed",
+      "pass": true
+    },
+    {
+      "gate": "D.seed42.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.completed_50_epochs",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.streams_independently_replayed",
+      "pass": true
+    },
+    {
+      "gate": "D.seed1337.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.completed_50_epochs",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.streams_independently_replayed",
+      "pass": true
+    },
+    {
+      "gate": "D.seed2026.fresh_run",
+      "pass": true
+    },
+    {
+      "gate": "D.seed_streams_differ",
+      "pass": true
+    },
+    {
+      "gate": "E.seed42.finite",
+      "pass": true
+    },
+    {
+      "gate": "E.seed1337.finite",
+      "pass": true
+    },
+    {
+      "gate": "E.seed2026.finite",
+      "pass": true
+    },
+    {
+      "gate": "F.seed42.ckpt50_final",
+      "pass": true
+    },
+    {
+      "gate": "F.seed1337.ckpt50_final",
+      "pass": true
+    },
+    {
+      "gate": "F.seed2026.ckpt50_final",
+      "pass": true
+    },
+    {
+      "gate": "F.final_checkpoints_distinct",
+      "pass": true
+    },
+    {
+      "gate": "F.run_roots_distinct",
+      "pass": true
+    },
+    {
+      "gate": "G.seed42.test_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed42.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "gate": "G.seed1337.test_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed1337.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "gate": "G.seed2026.test_0",
+      "pass": true
+    },
+    {
+      "gate": "G.seed2026.no_best_or_downstream",
+      "pass": true
+    },
+    {
+      "detail": [
+        ".seed_1337.lock",
+        ".seed_2026.lock",
+        ".seed_42.lock",
+        "seed_1337",
+        "seed_2026",
+        "seed_42"
+      ],
+      "gate": "H.host_parent_exactly_three_seeds",
+      "pass": true
+    },
+    {
+      "gate": "H.seed42.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "gate": "H.seed1337.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "gate": "H.seed2026.host_matches_evidence",
+      "pass": true
+    },
+    {
+      "detail": {
+        "boot_id": "a74f71de47614d8381b53a3f56741765",
+        "e03_tmux": "PASS_BY_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE",
+        "method_processes": [],
+        "seed2026_verified_reboot_boot_id": "a74f71de47614d8381b53a3f56741765"
+      },
+      "gate": "H.host_final_state",
+      "pass": true
+    },
+    {
+      "detail": "d547fc9f8932a273d719ae589aade85a9d989b85",
+      "gate": "H.gpu_checkout_clean_on_branch",
+      "pass": true
+    }
+  ],
+  "gates_passed": 74,
+  "gates_total": 74,
+  "host_recheck": {
+    "host_state": {
+      "boot_id": "a74f71de47614d8381b53a3f56741765",
+      "btime": 1793241860,
+      "e03_tmux_panes": {
+        "e03_stdn_seed1337": "",
+        "e03_stdn_seed2026": "",
+        "e03_stdn_seed42": ""
+      },
+      "git_branch": "m6-baselines",
+      "git_head": "d547fc9f8932a273d719ae589aade85a9d989b85",
+      "git_status_porcelain": "",
+      "gpu": "NVIDIA GeForce RTX 3090, 580.178.04, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+      "gpu_compute_apps": [],
+      "hostname": "nd-System-Product-Name",
+      "method_processes": [],
+      "runs_m6_listing": [
+        "E03",
+        "E05",
+        "E06b",
+        "E06c",
+        "E07c"
+      ],
+      "tmux_sessions": []
+    },
+    "parent_listing": [
+      ".seed_1337.lock",
+      ".seed_2026.lock",
+      ".seed_42.lock",
+      "seed_1337",
+      "seed_2026",
+      "seed_42"
+    ],
+    "seeds": {
+      "1337": {
+        "file_count": 1159,
+        "final_checkpoint": {
+          "checkpoints/ckpt-50.data-00000-of-00001": {
+            "bytes": 20749008,
+            "sha256": "316c94c066c32314c6819bc105d0043e1ddc7b27329afd48ddcfb8bc8d181551"
+          },
+          "checkpoints/ckpt-50.index": {
+            "bytes": 28161,
+            "sha256": "29b36079f28c557ab9a44daa8dedb85770ed9d32c5cd0b04d002f39ae386ab70"
+          },
+          "checkpoints/ckpt-50.meta": {
+            "bytes": 4243523,
+            "sha256": "a6119bdc1f830fdf0b968054ea929dce6e6e5838050ffbe06826d8e499a40e1c"
+          }
+        },
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "273454ca12af55debc8372b5b82a9e95dddcffdb62edbe09b51ad40a50e5e342",
+        "resolved_config_sha256": "4eb4e482aa633e53ae07312caa504c010016396db62aa175a502f26fd74986ac",
+        "resolved_config_yaml": "version: e03_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E03\ndisplay_name: STDN\nspec_section: '8.3'\nfidelity_class: FAITHFUL_OFFICIAL\nfidelity_provenance: []\nlearned_method: true\nsource:\n  repository: https://github.com/yaojieliu/ECCV20-STDN\n  pinned_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/stdn\n  framework: TensorFlow 1.x (>1.8.0, <1.13.0; tested TF 1.13.0 / Py 3.6)\n  weight_bytes_from_source_cache: NONE\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  geometry_input: 68-point 2-D landmarks from the frozen M2 cache, normalised by image\n    width\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  map_size: 32\n  batch_size: 2\n  batch_size_note: model/config.py:39 is the effective default; root config.py (BATCH_SIZE=5)\n    is vestigial/unimported\n  g_d_ratio: 2\n  max_epoch: 50\n  steps_per_epoch: 2000\n  val_steps: 500\n  horizontal_flip: enabled\n  flip_permutation: canonical_iBUG_68_lm_reverse_list\noptimizer:\n  name: tf.train.AdamOptimizer\n  learning_rate: 6.0e-05\n  lr_decay:\n    type: exponential\n    rate: 0.9\n    every_steps: 20000\n    staircase: true\n  beta1: 0.9\n  beta2: 0.999\n  epsilon: 1.0e-08\n  weight_ema_decay: 0.9999\n  loss_ema_decay: 0.9\nlosses:\n  g_loss: 50*esr + gan + (10*reg_live + 1e-4*reg_spoof)\n  d_loss: sum/4\n  a_loss: 5*esr_a + {0.0 or 0.1}*pixel\n  hard_sample_scaling: U(0.1, 0.8) per component\n  multiscale_discriminators:\n  - 256\n  - 160\n  - 40\nsupervision: binary_live_spoof_only\nattack_type_labels: FORBIDDEN\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\nseed_adapter:\n  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED\n  note: Source sets no seed; the frozen spec seed set takes precedence. Adapter implemented\n    at M6C.\ncheckpoint:\n  cadence: every_epoch_ckpt_1_to_ckpt_50\n  rule: OFFICIAL_LATEST_FINAL_CKPT_50\n  rule_source: SOURCE_RESOLVED\n  baseline_final_state_v1_overrides_this: false\n  overridden_note: A2-06 clause 1 preserves an already-resolved official checkpoint\n    rule.\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\nexternal_assets: []\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E03/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - training\n  - optimizer\n  - losses\n  - checkpoint.cadence\n  - checkpoint.rule\n  AMENDMENT_A2:\n  - checkpoint.baseline_final_state_v1_overrides_this\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E03\n  experiment_seed: 1337\n  config_path: configs/methods/e03_stdn.yaml\n  config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n  snapshot_path: frozen_config_snapshot/configs/methods/e03_stdn.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_1337\n  git_commit: d547fc9f8932a273d719ae589aade85a9d989b85\n  source_commits:\n    https://github.com/yaojieliu/ECCV20-STDN: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; execution bindings below are the\n    owner rulings and the M6D2b runtime layer. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  labels: []\n  historical_fidelity_field: FAITHFUL_OFFICIAL\n  fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n  fidelity_layers:\n    official_unchanged: STDN graph, losses, optimizer graph, G/D schedule, shared\n      global_step, learning-rate rule, BN, weight/loss EMA, hard-sample mechanism,\n      checkpoint cadence, ckpt-50 final rule, 50 x 2000 TRAIN steps, 500 VAL steps\n      per epoch\n    controlled_benchmark_adaptation: Track-A frozen frame-pair relations (pairs_train_v1\n      / val_pairs_v1), M2 canonical faces + landmarks_px256 via the E03 feed pack,\n      independent deterministic TRAIN/VAL data RNG, serialized deterministic feed\n    runtime_compatibility: qualified NVIDIA TF 1.15.5+nv22.12 runtime on the RTX 3090\n      (M6D2b)\n  identities:\n    config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    runtime_addendum_sha256: f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e\n    ruling_addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    ruling_yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n    environment_lock_sha256: b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62\n    compatibility_manifest_sha256: 4cf2d14ed302f15418b887dfef5e45312328bc1e9e4273c2ea74ef607e447f84\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n    source_tree: 991a4f127990f98a108b8426113396f1c39f558d\n    source_files_sha256: ef4975ecf8d27d9f20681889c281816dca24ffb243cb26d3f3128e691e633f53\n    pack_manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n    pair_manifest_sha256:\n      TRAIN: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      VAL: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n    split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n    preprocess_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n    fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n    production_files_sha256:\n      methods/stdn/production_io.py: ba4e2938eec887d7baffc8858ec7b9c69de89eea6663c9b9eb2fa5bdc96ae4e1\n      methods/stdn/production_runner.py: 17a72e929d2e86f9f2b4414ff99ffd0a0d29b48e33ebbfba19cde5061932d07f\n      methods/stdn/feed_pack.py: 12125864491d5142d253406b22c7f080ea7ba31ef7ac8b06406f80b5ce9b8cf0\n      tools/run_e03.py: 59a888a63b4468b84f399ab698e0ade9c2f211b064dfa3160163838aa59e34ad\n  owner_resolution:\n    addendum: docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md\n    addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    yaml: configs/amendments/e03_production_data_rng_resolution.yaml\n    yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n  relations:\n    TRAIN:\n      path: manifests/pairs_train_v1.parquet\n      sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      rows: 8838\n    VAL:\n      path: manifests/val_pairs_v1.parquet\n      sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n      rows: 1905\n  feed_pack:\n    dir: e03_feed_pack_v1\n    manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n  rng:\n    tf_graph_seed: 1337\n    TRAIN:\n      parser_seed: 1337\n      shuffle_seed: 1337\n    VAL:\n      parser_seed: 1050417158\n      shuffle_seed: 1050417158\n    process_global_python_numpy: seeded with experiment_seed; never used by the feed\n    val_seed_rule: 1 + (u32_be(SHA256(UTF8(\"GPAT_TRANSFERBENCH|E03|VAL_DATA|\" + str(seed))))[0:4]\n      mod 2147483647)\n  schedule:\n    train_steps_per_epoch: 2000\n    val_steps_per_epoch: 500\n    max_epoch: 50\n    even_step: sess.run(losses + [g_op, d_op, fig])\n    odd_step: sess.run(losses + [g_op, fig])\n    global_step_per_epoch: 3000\n    final_global_step: 150000\n    decay_steps_shared_global: 20000\n    epoch_order:\n    - train\n    - saver.save(global_step=epoch+1)\n    - val\n  feed:\n    pipeline: from_tensor_slices -> shuffle(N, seed, reshuffle_each_iteration=True)\n      -> repeat(-1) -> map(num_parallel_calls=1) -> batch(2) -> prefetch(1)\n    TRAIN_augmentation: independent live/spoof flip (RandomState draw > 0.5), random_brightness\n      0.25\n    VAL_augmentation: independent live/spoof flip (VAL RandomState draw > 0.5), no\n      brightness\n    landmarks: 'M2 landmarks_px256 / 256; flip: x -> 1 - x then iBUG-68 lm_reverse_list'\n  figures:\n    TRAIN: step % 200 == 0\n    VAL: step % 50 == 0\n    dir: diagnostics/figures\n    source: fig / fig_val of the same official sess.run\n  checkpoint_rule:\n    rule: OFFICIAL_LATEST_FINAL_CKPT_50\n    cadence: ckpt-1..ckpt-50 (one per epoch, before VAL)\n    selected: checkpoints/ckpt-50\n  resume: NOT_QUALIFIED_FRESH_ONLY\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "ad748419b53d4c07c54832282bbf8ca706ac5db53b9a6af2d59f767a5390095e"
+      },
+      "2026": {
+        "file_count": 1159,
+        "final_checkpoint": {
+          "checkpoints/ckpt-50.data-00000-of-00001": {
+            "bytes": 20749008,
+            "sha256": "9dbd463cb3eb56c9ecc578dd275e0c2507a1e6d5f8b9b4876406d5011bd52cb3"
+          },
+          "checkpoints/ckpt-50.index": {
+            "bytes": 28161,
+            "sha256": "42107c3d56f1ec2892def0840eea520e1950ced453ffa09981899ded11ed96dc"
+          },
+          "checkpoints/ckpt-50.meta": {
+            "bytes": 4243523,
+            "sha256": "504845f926c1940a4aa0ba647dada611dba79044cb247dc11410614464f75543"
+          }
+        },
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "4d30934a91bc01133af5a34e068a44e543b1debecfe8294b9458eb7de5e42236",
+        "resolved_config_sha256": "9b2633939a40c4068f005ddf58594cca248d3768166749e15d0353418c3c602a",
+        "resolved_config_yaml": "version: e03_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E03\ndisplay_name: STDN\nspec_section: '8.3'\nfidelity_class: FAITHFUL_OFFICIAL\nfidelity_provenance: []\nlearned_method: true\nsource:\n  repository: https://github.com/yaojieliu/ECCV20-STDN\n  pinned_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/stdn\n  framework: TensorFlow 1.x (>1.8.0, <1.13.0; tested TF 1.13.0 / Py 3.6)\n  weight_bytes_from_source_cache: NONE\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  geometry_input: 68-point 2-D landmarks from the frozen M2 cache, normalised by image\n    width\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  map_size: 32\n  batch_size: 2\n  batch_size_note: model/config.py:39 is the effective default; root config.py (BATCH_SIZE=5)\n    is vestigial/unimported\n  g_d_ratio: 2\n  max_epoch: 50\n  steps_per_epoch: 2000\n  val_steps: 500\n  horizontal_flip: enabled\n  flip_permutation: canonical_iBUG_68_lm_reverse_list\noptimizer:\n  name: tf.train.AdamOptimizer\n  learning_rate: 6.0e-05\n  lr_decay:\n    type: exponential\n    rate: 0.9\n    every_steps: 20000\n    staircase: true\n  beta1: 0.9\n  beta2: 0.999\n  epsilon: 1.0e-08\n  weight_ema_decay: 0.9999\n  loss_ema_decay: 0.9\nlosses:\n  g_loss: 50*esr + gan + (10*reg_live + 1e-4*reg_spoof)\n  d_loss: sum/4\n  a_loss: 5*esr_a + {0.0 or 0.1}*pixel\n  hard_sample_scaling: U(0.1, 0.8) per component\n  multiscale_discriminators:\n  - 256\n  - 160\n  - 40\nsupervision: binary_live_spoof_only\nattack_type_labels: FORBIDDEN\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\nseed_adapter:\n  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED\n  note: Source sets no seed; the frozen spec seed set takes precedence. Adapter implemented\n    at M6C.\ncheckpoint:\n  cadence: every_epoch_ckpt_1_to_ckpt_50\n  rule: OFFICIAL_LATEST_FINAL_CKPT_50\n  rule_source: SOURCE_RESOLVED\n  baseline_final_state_v1_overrides_this: false\n  overridden_note: A2-06 clause 1 preserves an already-resolved official checkpoint\n    rule.\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\nexternal_assets: []\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E03/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - training\n  - optimizer\n  - losses\n  - checkpoint.cadence\n  - checkpoint.rule\n  AMENDMENT_A2:\n  - checkpoint.baseline_final_state_v1_overrides_this\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E03\n  experiment_seed: 2026\n  config_path: configs/methods/e03_stdn.yaml\n  config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n  snapshot_path: frozen_config_snapshot/configs/methods/e03_stdn.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_2026\n  git_commit: d547fc9f8932a273d719ae589aade85a9d989b85\n  source_commits:\n    https://github.com/yaojieliu/ECCV20-STDN: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; execution bindings below are the\n    owner rulings and the M6D2b runtime layer. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  labels: []\n  historical_fidelity_field: FAITHFUL_OFFICIAL\n  fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n  fidelity_layers:\n    official_unchanged: STDN graph, losses, optimizer graph, G/D schedule, shared\n      global_step, learning-rate rule, BN, weight/loss EMA, hard-sample mechanism,\n      checkpoint cadence, ckpt-50 final rule, 50 x 2000 TRAIN steps, 500 VAL steps\n      per epoch\n    controlled_benchmark_adaptation: Track-A frozen frame-pair relations (pairs_train_v1\n      / val_pairs_v1), M2 canonical faces + landmarks_px256 via the E03 feed pack,\n      independent deterministic TRAIN/VAL data RNG, serialized deterministic feed\n    runtime_compatibility: qualified NVIDIA TF 1.15.5+nv22.12 runtime on the RTX 3090\n      (M6D2b)\n  identities:\n    config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    runtime_addendum_sha256: f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e\n    ruling_addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    ruling_yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n    environment_lock_sha256: b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62\n    compatibility_manifest_sha256: 4cf2d14ed302f15418b887dfef5e45312328bc1e9e4273c2ea74ef607e447f84\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n    source_tree: 991a4f127990f98a108b8426113396f1c39f558d\n    source_files_sha256: ef4975ecf8d27d9f20681889c281816dca24ffb243cb26d3f3128e691e633f53\n    pack_manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n    pair_manifest_sha256:\n      TRAIN: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      VAL: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n    split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n    preprocess_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n    fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n    production_files_sha256:\n      methods/stdn/production_io.py: ba4e2938eec887d7baffc8858ec7b9c69de89eea6663c9b9eb2fa5bdc96ae4e1\n      methods/stdn/production_runner.py: 17a72e929d2e86f9f2b4414ff99ffd0a0d29b48e33ebbfba19cde5061932d07f\n      methods/stdn/feed_pack.py: 12125864491d5142d253406b22c7f080ea7ba31ef7ac8b06406f80b5ce9b8cf0\n      tools/run_e03.py: 59a888a63b4468b84f399ab698e0ade9c2f211b064dfa3160163838aa59e34ad\n  owner_resolution:\n    addendum: docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md\n    addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    yaml: configs/amendments/e03_production_data_rng_resolution.yaml\n    yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n  relations:\n    TRAIN:\n      path: manifests/pairs_train_v1.parquet\n      sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      rows: 8838\n    VAL:\n      path: manifests/val_pairs_v1.parquet\n      sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n      rows: 1905\n  feed_pack:\n    dir: e03_feed_pack_v1\n    manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n  rng:\n    tf_graph_seed: 2026\n    TRAIN:\n      parser_seed: 2026\n      shuffle_seed: 2026\n    VAL:\n      parser_seed: 1242808125\n      shuffle_seed: 1242808125\n    process_global_python_numpy: seeded with experiment_seed; never used by the feed\n    val_seed_rule: 1 + (u32_be(SHA256(UTF8(\"GPAT_TRANSFERBENCH|E03|VAL_DATA|\" + str(seed))))[0:4]\n      mod 2147483647)\n  schedule:\n    train_steps_per_epoch: 2000\n    val_steps_per_epoch: 500\n    max_epoch: 50\n    even_step: sess.run(losses + [g_op, d_op, fig])\n    odd_step: sess.run(losses + [g_op, fig])\n    global_step_per_epoch: 3000\n    final_global_step: 150000\n    decay_steps_shared_global: 20000\n    epoch_order:\n    - train\n    - saver.save(global_step=epoch+1)\n    - val\n  feed:\n    pipeline: from_tensor_slices -> shuffle(N, seed, reshuffle_each_iteration=True)\n      -> repeat(-1) -> map(num_parallel_calls=1) -> batch(2) -> prefetch(1)\n    TRAIN_augmentation: independent live/spoof flip (RandomState draw > 0.5), random_brightness\n      0.25\n    VAL_augmentation: independent live/spoof flip (VAL RandomState draw > 0.5), no\n      brightness\n    landmarks: 'M2 landmarks_px256 / 256; flip: x -> 1 - x then iBUG-68 lm_reverse_list'\n  figures:\n    TRAIN: step % 200 == 0\n    VAL: step % 50 == 0\n    dir: diagnostics/figures\n    source: fig / fig_val of the same official sess.run\n  checkpoint_rule:\n    rule: OFFICIAL_LATEST_FINAL_CKPT_50\n    cadence: ckpt-1..ckpt-50 (one per epoch, before VAL)\n    selected: checkpoints/ckpt-50\n  resume: NOT_QUALIFIED_FRESH_ONLY\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "f42708341b91e6b6d11b601b363e2dd5309dd7b5df33b65c6ed79ca032e25136"
+      },
+      "42": {
+        "file_count": 1159,
+        "final_checkpoint": {
+          "checkpoints/ckpt-50.data-00000-of-00001": {
+            "bytes": 20749008,
+            "sha256": "5b337a63db63e405bf35bceefdacc101060cb7d1625b5a4d2d389b963e311753"
+          },
+          "checkpoints/ckpt-50.index": {
+            "bytes": 28161,
+            "sha256": "b6b9a0c4cfd6470959453cdb861341bcacff7047b66fb414f8dff504452dc899"
+          },
+          "checkpoints/ckpt-50.meta": {
+            "bytes": 4243452,
+            "sha256": "dbcf372027172396c616ba19f7d76475363d34e8bac0f438c0c7f5b97fae5f97"
+          }
+        },
+        "listing_stable_during_recheck": true,
+        "metrics_jsonl_sha256": "059c266e18cc118dd70a40c37fd65c39b2d37021af1c04b8d3f0c97573e8f000",
+        "resolved_config_sha256": "179032523078dfc51be5daebaf4f1eb67f5e83e7125b9e6de29cc12887098716",
+        "resolved_config_yaml": "version: e03_m6b_v1\nstatus: CONFIG_FROZEN\nfrozen_utc: '2026-09-21'\nmilestone: M6B\nmilestone_status: NOT_TRAINED\nspec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\namendment_a1_sha256: 03828716def5e535d82445974972bf71a5c8ecc60392fac4b884bcbe060e3472\namendment_a2_sha256: b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d\namendment_a3_sha256: b12451537bcc3bc14e96e5bcd2ce390b5fc0c8a4b5c60bff7f40a2333665a67a\nlogging_contract: run_logging_v1\nlogging_contract_path: configs/run_logging_v1.yaml\nmethod_id: E03\ndisplay_name: STDN\nspec_section: '8.3'\nfidelity_class: FAITHFUL_OFFICIAL\nfidelity_provenance: []\nlearned_method: true\nsource:\n  repository: https://github.com/yaojieliu/ECCV20-STDN\n  pinned_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  provenance: third_party/source_pins.json\n  local_source_path: third_party/source_cache/stdn\n  framework: TensorFlow 1.x (>1.8.0, <1.13.0; tested TF 1.13.0 / Py 3.6)\n  weight_bytes_from_source_cache: NONE\ndata:\n  split_manifest: manifests/split_v1.parquet\n  split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n  canonical_face_root: <runtime_root>/data/processed/faces_256\n  canonical_face_size: 256\n  preprocess_contract: configs/frozen/preprocess_v1.yaml\n  preprocess_contract_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n  splits:\n    TRAIN:\n      used_for:\n      - method_training\n      allowed: true\n    VAL:\n      used_for:\n      - diagnostics_only\n      allowed: true\n      may_select_checkpoint: false\n      note: VAL never selects a checkpoint; no VAL-based rule exists in this method's\n        source.\n    TEST:\n      used_for: []\n      allowed: false\n      never_training: true\n      never_checkpoint_selection: true\n      never_hyperparameter_selection: true\n      never_reconstruction_choice: true\n      never_seed_selection: true\n      code_path_present: false\n  geometry_input: 68-point 2-D landmarks from the frozen M2 cache, normalised by image\n    width\nseeds:\n  experiment_seeds:\n  - 42\n  - 1337\n  - 2026\n  runs_per_method: 3\n  all_three_are_primary_evidence: true\n  best_seed: FORBIDDEN\n  preferred_seed: FORBIDDEN\n  presentation_seed: FORBIDDEN\n  seed_selection_using_test: FORBIDDEN\n  primary_result_aggregation: MEAN_AND_STD_OVER_ALL_THREE_SEEDS\n  per_seed_values_reported: true\n  max_over_seeds_as_primary: FORBIDDEN\n  dropping_a_poor_seed: FORBIDDEN\n  rerunning_only_a_poor_seed: FORBIDDEN\n  seed_scope: seeds the main training run; checkpoint selection happens INSIDE each\n    seed\ntraining:\n  input_resolution: 256\n  map_size: 32\n  batch_size: 2\n  batch_size_note: model/config.py:39 is the effective default; root config.py (BATCH_SIZE=5)\n    is vestigial/unimported\n  g_d_ratio: 2\n  max_epoch: 50\n  steps_per_epoch: 2000\n  val_steps: 500\n  horizontal_flip: enabled\n  flip_permutation: canonical_iBUG_68_lm_reverse_list\noptimizer:\n  name: tf.train.AdamOptimizer\n  learning_rate: 6.0e-05\n  lr_decay:\n    type: exponential\n    rate: 0.9\n    every_steps: 20000\n    staircase: true\n  beta1: 0.9\n  beta2: 0.999\n  epsilon: 1.0e-08\n  weight_ema_decay: 0.9999\n  loss_ema_decay: 0.9\nlosses:\n  g_loss: 50*esr + gan + (10*reg_live + 1e-4*reg_spoof)\n  d_loss: sum/4\n  a_loss: 5*esr_a + {0.0 or 0.1}*pixel\n  hard_sample_scaling: U(0.1, 0.8) per component\n  multiscale_discriminators:\n  - 256\n  - 160\n  - 40\nsupervision: binary_live_spoof_only\nattack_type_labels: FORBIDDEN\nworkers_policy: IMPLEMENTATION_ADAPTABLE_NO_SCIENTIFIC_IMPACT\nseed_adapter:\n  status: RESOLVED_BY_SPEC_PRECEDENCE_BUT_IMPLEMENTATION_ADAPTER_REQUIRED\n  note: Source sets no seed; the frozen spec seed set takes precedence. Adapter implemented\n    at M6C.\ncheckpoint:\n  cadence: every_epoch_ckpt_1_to_ckpt_50\n  rule: OFFICIAL_LATEST_FINAL_CKPT_50\n  rule_source: SOURCE_RESOLVED\n  baseline_final_state_v1_overrides_this: false\n  overridden_note: A2-06 clause 1 preserves an already-resolved official checkpoint\n    rule.\n  selection_scope: WITHIN_SEED\n  selection_uses_val: false\n  selection_uses_test: false\nexternal_assets: []\ncheckpoint_retention:\n  metric_history: RETAIN_COMPLETE\n  checkpoint_bytes: RETAIN_PER_OFFICIAL_CADENCE\n  never_delete:\n  - authoritative_final_checkpoint\n  - selected_checkpoint\n  - officially_required_checkpoint\n  pruning_in_m6b: false\n  if_pruned_later: metadata_and_sha256_records_must_remain\nrun_layout:\n  root_template: <runtime_root>/runs/m6/E03/seed_<seed>/\n  files:\n    resolved_config: resolved_config.yaml\n    run_manifest: run_manifest.json\n    metrics: metrics.jsonl\n    checkpoint_dir: checkpoints/\n    checkpoint_index: checkpoint_index.json\n    run_summary: run_summary.json\n    stdout: stdout.log\n    stderr: stderr.log\n  outputs_in_git: false\n  checkpoint_bytes_in_git: false\nlogging:\n  contract: run_logging_v1\n  full_trajectory_retained: true\n  keep_only_final_epoch: FORBIDDEN\n  metrics_format: metrics.jsonl\n  metrics_append_only: true\n  one_record_per: configured_reporting_interval\n  resume_policy: APPEND_OR_EXPLICITLY_RECONCILE_NEVER_OVERWRITE\n  per_record_required:\n  - epoch\n  - global_step\n  - learning_rate\n  - all_available_train_losses\n  - all_available_train_metrics\n  - all_available_val_losses\n  - all_available_val_metrics\n  - wall_clock_seconds\n  - gpu_memory_bytes_where_practical\n  missing_fields_must_be_explicit: true\n  fabricating_unexposed_metrics: FORBIDDEN\n  checkpoint_history_required: true\n  run_summary_required: true\nsynthetic_bank_accounting:\n  generated_in_m6b: false\n  per_sample_record_required:\n  - source_pair_or_sample_id\n  - method_id\n  - experiment_seed\n  - generator_checkpoint_sha256\n  - recipe_or_operator_metadata\n  - synthetic_output_path\n  - output_sha256\n  - success_or_failure_reason\n  merged_into_test: FORBIDDEN\nfield_provenance:\n  SPEC:\n  - supervision\n  - data.splits\n  - seeds.experiment_seeds\n  OFFICIAL_CODE:\n  - training\n  - optimizer\n  - losses\n  - checkpoint.cadence\n  - checkpoint.rule\n  AMENDMENT_A2:\n  - checkpoint.baseline_final_state_v1_overrides_this\n  M6B:\n  - run_layout\n  - logging\n  - checkpoint_retention\n  - synthetic_bank_accounting\n_resolved:\n  method_id: E03\n  experiment_seed: 42\n  config_path: configs/methods/e03_stdn.yaml\n  config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n  snapshot_path: frozen_config_snapshot/configs/methods/e03_stdn.yaml\n  snapshot_verified: true\n  runtime_root: /home/student20261/workdir/GPAT_TransferBench_runtime\n  run_dir: /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_42\n  git_commit: d547fc9f8932a273d719ae589aade85a9d989b85\n  source_commits:\n    https://github.com/yaojieliu/ECCV20-STDN: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n  scientific_override_applied: false\n  note: Verbatim copy of the frozen config above; execution bindings below are the\n    owner rulings and the M6D2b runtime layer. No scientific value was overridden.\n  runner_mode: SCIENTIFIC\n  qualification_seed: null\n  qualification_case: null\n  scientific_run: true\n  labels: []\n  historical_fidelity_field: FAITHFUL_OFFICIAL\n  fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n  fidelity_layers:\n    official_unchanged: STDN graph, losses, optimizer graph, G/D schedule, shared\n      global_step, learning-rate rule, BN, weight/loss EMA, hard-sample mechanism,\n      checkpoint cadence, ckpt-50 final rule, 50 x 2000 TRAIN steps, 500 VAL steps\n      per epoch\n    controlled_benchmark_adaptation: Track-A frozen frame-pair relations (pairs_train_v1\n      / val_pairs_v1), M2 canonical faces + landmarks_px256 via the E03 feed pack,\n      independent deterministic TRAIN/VAL data RNG, serialized deterministic feed\n    runtime_compatibility: qualified NVIDIA TF 1.15.5+nv22.12 runtime on the RTX 3090\n      (M6D2b)\n  identities:\n    config_sha256: 08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0\n    spec_sha256: f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e\n    runtime_addendum_sha256: f5133f81ed1a0567a7bb1426fc23e05d43e9d689d6478b0f37ec2377832d9d0e\n    ruling_addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    ruling_yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n    environment_lock_sha256: b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62\n    compatibility_manifest_sha256: 4cf2d14ed302f15418b887dfef5e45312328bc1e9e4273c2ea74ef607e447f84\n    logging_contract_sha256: d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15\n    source_commit: c79f1f8c615d2b8471b3df29da881bb18dd54c90\n    source_tree: 991a4f127990f98a108b8426113396f1c39f558d\n    source_files_sha256: ef4975ecf8d27d9f20681889c281816dca24ffb243cb26d3f3128e691e633f53\n    pack_manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n    pair_manifest_sha256:\n      TRAIN: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      VAL: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n    split_manifest_sha256: fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d\n    preprocess_sha256: 265b75755ecede0d9c01f6d1e22f4d232767ec1e15faf8d7d55de11a68996e9e\n    fidelity: FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY\n    production_files_sha256:\n      methods/stdn/production_io.py: ba4e2938eec887d7baffc8858ec7b9c69de89eea6663c9b9eb2fa5bdc96ae4e1\n      methods/stdn/production_runner.py: 17a72e929d2e86f9f2b4414ff99ffd0a0d29b48e33ebbfba19cde5061932d07f\n      methods/stdn/feed_pack.py: 12125864491d5142d253406b22c7f080ea7ba31ef7ac8b06406f80b5ce9b8cf0\n      tools/run_e03.py: 59a888a63b4468b84f399ab698e0ade9c2f211b064dfa3160163838aa59e34ad\n  owner_resolution:\n    addendum: docs/spec/amendments/GPAT_TransferBench_v1_0_E03_Production_Data_RNG_Owner_Resolution_Addendum.md\n    addendum_sha256: ad3bf3b13815ca013fbd72237cf4bebe40473729f1e00507fe0ac6d209446f8a\n    yaml: configs/amendments/e03_production_data_rng_resolution.yaml\n    yaml_sha256: 4bf6f87967a837be7c26efb61a1c3cc13285c16e52c8ca5c7de424b696b85d3b\n  relations:\n    TRAIN:\n      path: manifests/pairs_train_v1.parquet\n      sha256: a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243\n      rows: 8838\n    VAL:\n      path: manifests/val_pairs_v1.parquet\n      sha256: 84d124919a52cd8d84a89766f464a4dcde1aeaa7791218f6356813a40904f872\n      rows: 1905\n  feed_pack:\n    dir: e03_feed_pack_v1\n    manifest_sha256: c8c9850edf783a7fce392c934e721feb29a0b88a9223612a39bd33ee46813833\n  rng:\n    tf_graph_seed: 42\n    TRAIN:\n      parser_seed: 42\n      shuffle_seed: 42\n    VAL:\n      parser_seed: 1355875380\n      shuffle_seed: 1355875380\n    process_global_python_numpy: seeded with experiment_seed; never used by the feed\n    val_seed_rule: 1 + (u32_be(SHA256(UTF8(\"GPAT_TRANSFERBENCH|E03|VAL_DATA|\" + str(seed))))[0:4]\n      mod 2147483647)\n  schedule:\n    train_steps_per_epoch: 2000\n    val_steps_per_epoch: 500\n    max_epoch: 50\n    even_step: sess.run(losses + [g_op, d_op, fig])\n    odd_step: sess.run(losses + [g_op, fig])\n    global_step_per_epoch: 3000\n    final_global_step: 150000\n    decay_steps_shared_global: 20000\n    epoch_order:\n    - train\n    - saver.save(global_step=epoch+1)\n    - val\n  feed:\n    pipeline: from_tensor_slices -> shuffle(N, seed, reshuffle_each_iteration=True)\n      -> repeat(-1) -> map(num_parallel_calls=1) -> batch(2) -> prefetch(1)\n    TRAIN_augmentation: independent live/spoof flip (RandomState draw > 0.5), random_brightness\n      0.25\n    VAL_augmentation: independent live/spoof flip (VAL RandomState draw > 0.5), no\n      brightness\n    landmarks: 'M2 landmarks_px256 / 256; flip: x -> 1 - x then iBUG-68 lm_reverse_list'\n  figures:\n    TRAIN: step % 200 == 0\n    VAL: step % 50 == 0\n    dir: diagnostics/figures\n    source: fig / fig_val of the same official sess.run\n  checkpoint_rule:\n    rule: OFFICIAL_LATEST_FINAL_CKPT_50\n    cadence: ckpt-1..ckpt-50 (one per epoch, before VAL)\n    selected: checkpoints/ckpt-50\n  resume: NOT_QUALIFIED_FRESH_ONLY\n  run_id_rule: 'run_logging_v1: sha256(method_id|seed|config_sha256|git_commit)[:16]'\n",
+        "sha_listing_digest": "a7bed081022c09ab753ae359536e71a964966a484e45f435d51a5809b509b163"
+      }
+    },
+    "utc": "2026-10-29T08:11:10Z"
+  },
+  "method": {
+    "fidelity": "FAITHFUL_OFFICIAL_CORE_WITH_TRACK_A_CONTROLLED_DATA_ADAPTATION_AND_RUNTIME_COMPATIBILITY",
+    "id": "E03",
+    "name": "STDN",
+    "track": "A_FAIR_COMMON_IDENTITY_FREE"
+  },
+  "not_completed": {
+    "downstream_fas_evaluation": "NOT_STARTED",
+    "synthetic_bank": "NOT_STARTED",
+    "whole_benchmark": "NOT_COMPLETED"
+  },
+  "per_seed_disclosures": {
+    "1337": {
+      "pane_log_keyboard_echo": {
+        "cursor_key_echoes_stripped": 12,
+        "note": "the last pane-log line is the runner completion record preceded only by caret-notation cursor-key echo (^[[A..^[[D) from keys pressed in an attached tmux client; it is tty echo, not runner output, and no E03 production or pinned-source code path reads stdin; fail-pattern hits are all zero",
+        "raw_last_line": "^[[B^[[B^[[B^[[B^[[B^[[B^[[B^[[B^[[B^[[A^[[A^[[A{\"status\": \"completed\", \"run_dir\": \"/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E03/seed_1337\"}"
+      }
+    },
+    "2026": {
+      "post_completion_reboot": {
+        "current_boot_id": "a74f71de47614d8381b53a3f56741765",
+        "end_time_marker": "2026-10-28T18:52:21Z",
+        "exit_marker": "0",
+        "gates": [
+          "B.process_exited_zero",
+          "J.single_e03_session"
+        ],
+        "kernel_btime_utc": "2026-10-29T02:44:20Z",
+        "note": "the run completed at 2026-10-28T18:52:21Z (exit marker 0, runner completion record, tmux pane scope stopped 2026-10-28T18:52:21Z); the host was then cleanly shut down (wtmp shutdown record, run-boot journal ends 2026-10-29T02:44:03Z) and rebooted (kernel boot 2026-10-29T02:44:20Z), which removed the tmux server, so B.process_exited_zero and J.single_e03_session pass by owner-approved durable post-completion-reboot evidence instead of live pane state; this is an audit-tool amendment only and changes neither the trained model nor the scientific procedure; the first 86/88 NEEDS_REVIEW build is kept at outputs/audit/history/E03_SEED2026_AUDIT1_NEEDS_REVIEW/E03_SEED2026_COMPLETION.json",
+        "pane_scope": "c2f56e5d-38cb-476b-9cf1-28f7bee17fa5",
+        "pane_scope_stopped_utc": "2026-10-28T18:52:21Z",
+        "prior_diagnostic": {
+          "failed_gates": [
+            "B.process_exited_zero",
+            "J.single_e03_session"
+          ],
+          "gates_passed": 86,
+          "gates_total": 88,
+          "path": "outputs/audit/history/E03_SEED2026_AUDIT1_NEEDS_REVIEW/E03_SEED2026_COMPLETION.json",
+          "sha256": "62bbc549c838f96be97cfc093fa0b6be66a3a52d0925cbb12858c1583b079ceb",
+          "status": "E03_SEED2026_NEEDS_REVIEW"
+        },
+        "ruling": {
+          "date": "2026-10-29",
+          "gates": [
+            "B.process_exited_zero",
+            "J.single_e03_session"
+          ],
+          "result": "PASS_BY_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE",
+          "ruling": "OWNER_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE_SUBSTITUTION",
+          "scope": "applies only when the seed tmux session is absent and the host provably shut down cleanly and rebooted after the run completed; the live tmux path is unchanged; not a fallback for any missing session; no other gate is relaxed; tmux data is neither modified nor fabricated"
+        },
+        "run_boot_id": "0b3cbc4d97704f239a11c81d3469ba67",
+        "run_boot_last_entry_utc": "2026-10-29T02:44:03Z",
+        "run_end_utc": "2026-10-28T18:52:21Z",
+        "tmux_ls": {
+          "rc": 1,
+          "sessions": [],
+          "stderr": "error connecting to /tmp/tmux-1002/default (No such file or directory)"
+        },
+        "wtmp_reboot": "reboot   system boot  7.0.0-38-generic 2026-10-29T09:44:27+07:00   still running",
+        "wtmp_shutdown": "shutdown system down  7.0.0-38-generic 2026-10-29T09:44:06+07:00 - 2026-10-29T09:44:27+07:00  (00:00)"
+      }
+    }
+  },
+  "per_seed_evidence": {
+    "1337": {
+      "closure_commit": "5cdb65db0a75fcdcddb64b1b5af040364a057723",
+      "completion": "outputs/audit/E03_SEED1337_COMPLETION.json",
+      "manifest": "outputs/audit/E03_SEED1337_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E03_SEED1337_COMPLETION.md",
+      "sha256": "outputs/audit/E03_SEED1337_EVIDENCE_SHA256.txt",
+      "tool": "tools/e03_seed_completion_audit.py"
+    },
+    "2026": {
+      "closure_commit": "15bfc84dd4cf1d68427d85d867188b702a847b65",
+      "completion": "outputs/audit/E03_SEED2026_COMPLETION.json",
+      "manifest": "outputs/audit/E03_SEED2026_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E03_SEED2026_COMPLETION.md",
+      "sha256": "outputs/audit/E03_SEED2026_EVIDENCE_SHA256.txt",
+      "tool": "tools/e03_seed_completion_audit.py"
+    },
+    "42": {
+      "closure_commit": "b95c127e394d9b2ea644573d317b44405652039e",
+      "completion": "outputs/audit/E03_SEED42_COMPLETION.json",
+      "manifest": "outputs/audit/E03_SEED42_CHECKPOINT_MANIFEST.txt",
+      "report": "outputs/audit/E03_SEED42_COMPLETION.md",
+      "sha256": "outputs/audit/E03_SEED42_EVIDENCE_SHA256.txt",
+      "tool": "tools/e03_seed_completion_audit.py"
+    }
+  },
+  "preserved_diagnostics": {
+    "2026": {
+      "path": "outputs/audit/history/E03_SEED2026_AUDIT1_NEEDS_REVIEW/E03_SEED2026_COMPLETION.json",
+      "sha256": "62bbc549c838f96be97cfc093fa0b6be66a3a52d0925cbb12858c1583b079ceb"
+    }
+  },
+  "protocol": {
+    "batch_size": 2,
+    "checkpoint_rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+    "checkpoints": "ckpt-1..ckpt-50, each after its TRAIN block and before its VAL block",
+    "d_applications": 50000,
+    "epochs": 50,
+    "feed": "pairs_train_v1 / val_pairs_v1 via e03_feed_pack_v1; independent TRAIN/VAL RNG (ruling V)",
+    "fidelity_note": "official STDN core unchanged with Track-A controlled data adaptation and runtime compatibility; not a fully native reproduction",
+    "final_checkpoint": "checkpoints/ckpt-50",
+    "final_global_step": 150000,
+    "final_rule_scope": "applied independently within each seed; no cross-seed choice",
+    "g_applications": 100000,
+    "g_d_ratio": 2,
+    "optimizer": "Adam 6e-5, betas (0.9, 0.999), eps 1e-8, exponential decay 0.9 every 20000 shared global steps (staircase); weight EMA 0.9999, loss EMA 0.9",
+    "resume": "NOT_QUALIFIED_FRESH_ONLY",
+    "schedule": "step % 2 == 0: g_op + d_op (+2 shared global_step); else g_op (+1)",
+    "train_steps_per_epoch": 2000,
+    "val_role": "DIAGNOSTICS_ONLY_NEVER_SELECTS",
+    "val_steps_per_epoch": 500
+  },
+  "scientific_training_authority": "d547fc9f8932a273d719ae589aade85a9d989b85",
+  "seed_tool_amendments": [
+    {
+      "diff_excluding_run_ids": [
+        "--- b95c127",
+        "+++ 5cdb65d",
+        "@@ -109,0 +110 @@",
+        "+KEY_ECHO = ('^[[A', '^[[B', '^[[C', '^[[D')      # tty ECHOCTL echo of cursor keys typed into an attached tmux pane",
+        "@@ -214,0 +216,9 @@",
+        "+",
+        "+",
+        "+def split_key_echo(line):",
+        "+    \"\"\"Strips a leading run of caret-notation cursor-key echoes only (written by the tty line discipline when keys are",
+        "+    pressed in an attached client, never by the runner, which reads no stdin); returns (rest, echo count).\"\"\"",
+        "+    n = 0",
+        "+    while line[:4] in KEY_ECHO:",
+        "+        line, n = line[4:], n + 1",
+        "+    return line, n",
+        "@@ -717,0 +728,2 @@",
+        "+    last, echoes = split_key_echo(host['pane_log_last'][0]) if len(host['pane_log_last']) == 1 else (None, 0)",
+        "+    echo = {'raw_last_line': host['pane_log_last'][0], 'cursor_key_echoes_stripped': echoes} if echoes else None",
+        "@@ -719,2 +731,2 @@",
+        "-      host['pane_log_last'] == ['{\"status\": \"completed\", \"run_dir\": \"%s\"}' % paths(seed)['run_root']],",
+        "-      host['pane_log_fail_hits'])",
+        "+      last == '{\"status\": \"completed\", \"run_dir\": \"%s\"}' % paths(seed)['run_root'],",
+        "+      dict(host['pane_log_fail_hits'], keyboard_echo=echo) if echo else host['pane_log_fail_hits'])",
+        "@@ -963,0 +976,5 @@",
+        "+    if echo:",
+        "+        doc['disclosures'] = {'pane_log_keyboard_echo': dict(echo, note=(",
+        "+            'the last pane-log line is the runner completion record preceded only by caret-notation cursor-key echo '",
+        "+            '(^[[A..^[[D) from keys pressed in an attached tmux client; it is tty echo, not runner output, and no E03 '",
+        "+            'production or pinned-source code path reads stdin; fail-pattern hits are all zero'))}",
+        "@@ -1069 +1086,9 @@",
+        "-        '',",
+        "+        ''] + ([",
+        "+        '## Disclosure: keyboard echo in the pane log',",
+        "+        '',",
+        "+        '- The last line of `~/workdir/e03_s%d.pane.log` is the completion record preceded by %d caret-notation '",
+        "+        'cursor-key echoes (`^[[A`..`^[[D`). This is tty echo of keys pressed in an attached tmux client, not runner '",
+        "+        'output; no E03 production or pinned-source code path reads stdin. `B.pane_log_clean` strips only that '",
+        "+        'prefix and records the raw line.' % (seed, d['disclosures']['pane_log_keyboard_echo']",
+        "+                                              ['cursor_key_echoes_stripped']),",
+        "+        ''] if 'disclosures' in d else []) + ["
+      ],
+      "from": "b95c127e394d9b2ea644573d317b44405652039e",
+      "id": "seed1337_pane_log_keyboard_echo",
+      "note": "B.pane_log_clean strips only a leading ^[[A..^[[D cursor-key tty echo prefix from the last pane-log line and discloses it (seed1337: keys pressed in an attached tmux client); the gate set is unchanged and seed42 re-derives byte-identically with both tool versions",
+      "to": "5cdb65db0a75fcdcddb64b1b5af040364a057723"
+    },
+    {
+      "diff_excluding_run_ids": [
+        "--- 5cdb65d",
+        "+++ 15bfc84",
+        "@@ -27,0 +28,5 @@",
+        "+",
+        "+Disclosed audit amendments (neither changes the trained model or the scientific procedure): seed1337, B.pane_log_clean",
+        "+strips only a leading ^[[A..^[[D tty echo prefix; seed2026 (owner ruling 2026-10-29, REBOOT_RULING), B.process_exited_zero",
+        "+and J.single_e03_session may pass on durable post-completion-reboot evidence when a clean reboot after completion has",
+        "+removed the tmux server.",
+        "@@ -111,0 +117,21 @@",
+        "+# Owner ruling 2026-10-29 (seed2026): when a clean host shutdown/reboot AFTER the run's completion has removed the tmux",
+        "+# server, the two live-tmux gates below may instead pass on durable post-completion-reboot evidence. Only these two",
+        "+# gates; only when the seed's tmux session is absent; never when any other gate fails.",
+        "+REBOOT_RULING = {",
+        "+    'ruling': 'OWNER_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE_SUBSTITUTION', 'date': '2026-10-29',",
+        "+    'gates': ['B.process_exited_zero', 'J.single_e03_session'],",
+        "+    'result': 'PASS_BY_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE',",
+        "+    'scope': ('applies only when the seed tmux session is absent and the host provably shut down cleanly and rebooted '",
+        "+              'after the run completed; the live tmux path is unchanged; not a fallback for any missing session; no '",
+        "+              'other gate is relaxed; tmux data is neither modified nor fabricated')}",
+        "+_REBOOT_CORE = ('live_tmux_state_absent', 'exit_marker_zero', 'end_marker_valid', 'marker_files_durable',",
+        "+                'run_identity_consistent', 'completion_record', 'no_runner_process', 'reboot_after_completion',",
+        "+                'clean_shutdown_recorded', 'pane_scope_exited_at_completion', 'single_pane_scope_in_run_window',",
+        "+                'other_gates_pass', 'prior_diagnostic_preserved')",
+        "+REBOOT_GATE_CHECKS = {'B.process_exited_zero': _REBOOT_CORE, 'J.single_e03_session': _REBOOT_CORE}",
+        "+PANE_SCOPE_SLACK = 60                     # s: tmux pane scope start before launch_time / stop after the runner end_utc",
+        "+# the first (86/88, NEEDS_REVIEW) build of a seed whose two live-tmux gates later passed by the reboot ruling; kept",
+        "+PRIOR_DIAGNOSTICS = {2026: {'path': 'outputs/audit/history/E03_SEED2026_AUDIT1_NEEDS_REVIEW/E03_SEED2026_COMPLETION.json',",
+        "+                            'sha256': '62bbc549c838f96be97cfc093fa0b6be66a3a52d0925cbb12858c1583b079ceb',",
+        "+                            'status': 'E03_SEED2026_NEEDS_REVIEW', 'gates_passed': 86, 'gates_total': 88,",
+        "+                            'failed_gates': ['B.process_exited_zero', 'J.single_e03_session']}}",
+        "@@ -536 +562,37 @@",
+        "-            'gpu_query': sh('nvidia-smi', '--query-gpu=name,driver_version,uuid', '--format=csv,noheader')}",
+        "+            'gpu_query': sh('nvidia-smi', '--query-gpu=name,driver_version,uuid', '--format=csv,noheader'),",
+        "+            'exit_file_raw': Path(p['exit']).read_bytes().decode('utf-8', errors='replace'),",
+        "+            'marker_files': {k: marker_file(p[k]) for k in ('command', 'launch_time', 'pane_log', 'exit', 'end_time')},",
+        "+            'reboot_provenance': boot_provenance(p)}",
+        "+",
+        "+",
+        "+def marker_file(path):",
+        "+    q = Path(path)",
+        "+    if not q.is_file():",
+        "+        return None",
+        "+    st = q.stat()",
+        "+    return {'size': st.st_size, 'mtime': st.st_mtime_ns / 1e9, 'mtime_utc': utc(st.st_mtime), 'sha256': sha256_file(q)}",
+        "+",
+        "+",
+        "+def boot_provenance(p):",
+        "+    \"\"\"Durable boot/shutdown records for the owner-approved post-completion-reboot path (read-only): kernel boot id and",
+        "+    btime, the journal boot list, the user-visible journal lines of tmux pane scopes since launch, the wtmp",
+        "+    reboot/shutdown records and the tmux server state.\"\"\"",
+        "+    def run(*a):",
+        "+        r = subprocess.run(list(a), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)",
+        "+        return r.returncode, r.stdout, r.stderr.strip()",
+        "+    out = {'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip().replace('-', ''),",
+        "+           'btime': int(next(x.split()[1] for x in Path('/proc/stat').read_text().splitlines()",
+        "+                             if x.startswith('btime ')))}",
+        "+    rc, so, _ = run('journalctl', '--list-boots', '-o', 'json', '--no-pager')",
+        "+    out['journal_boots'] = json.loads(so) if rc == 0 and so.strip() else None",
+        "+    since = datetime.fromtimestamp(epoch_seconds(Path(p['launch_time']).read_text().strip()) - 3600, timezone.utc)",
+        "+    rc, so, _ = run('journalctl', '--utc', '-q', '--no-pager', '-o', 'json', '--output-fields=MESSAGE,_BOOT_ID',",
+        "+                    '--since', since.strftime('%Y-%m-%d %H:%M:%S UTC'), '-g', 'tmux-spawn-')",
+        "+    out['journal_tmux_scopes'] = ([{'realtime': int(r['__REALTIME_TIMESTAMP']) / 1e6, 'boot_id': r['_BOOT_ID'],",
+        "+                                    'message': r['MESSAGE']} for r in map(json.loads, so.splitlines())]",
+        "+                                  if rc == 0 else None)",
+        "+    rc, so, _ = run('last', '-x', '--time-format', 'iso', 'reboot', 'shutdown')",
+        "+    out['wtmp'] = [x for x in so.splitlines() if x.startswith(('reboot ', 'shutdown '))][:20] if rc == 0 else None",
+        "+    rc, so, se = run('tmux', 'ls', '-F', '#{session_name}')",
+        "+    out['tmux_ls'] = {'rc': rc, 'sessions': sorted(so.splitlines()), 'stderr': se}",
+        "+    return out",
+        "@@ -674,0 +737,99 @@",
+        "+def wtmp_record(line):",
+        "+    \"\"\"`last -x --time-format iso` line -> (kind, start epoch seconds, still running).\"\"\"",
+        "+    f = line.split()",
+        "+    kind = {('reboot', 'system', 'boot'): 'reboot', ('shutdown', 'system', 'down'): 'shutdown'}.get(tuple(f[:3]))",
+        "+    try:",
+        "+        return kind, datetime.strptime(f[4], '%Y-%m-%dT%H:%M:%S%z').timestamp(), 'still running' in line",
+        "+    except (IndexError, ValueError):",
+        "+        return None, None, False",
+        "+",
+        "+",
+        "+def reboot_evidence(c, seed, last, repo_root):",
+        "+    \"\"\"The owner-approved post-completion-reboot evidence (REBOOT_RULING), check by check. Every check fails closed on",
+        "+    missing, malformed or inconsistent input; `other_gates_pass` is filled in by build() once every other gate ran.\"\"\"",
+        "+    host, man, summ = c['host'], c['run_manifest'], c['run_summary']",
+        "+    rp, mk = host.get('reboot_provenance') or {}, host.get('marker_files') or {}",
+        "+    ev = {}",
+        "+",
+        "+    def chk(name, ok, **detail):",
+        "+        ev[name] = dict(detail, **{'pass': bool(ok)})",
+        "+",
+        "+    def secs(iso):",
+        "+        try:",
+        "+            return epoch_seconds(iso)",
+        "+        except (TypeError, ValueError):",
+        "+            return None",
+        "+    start, end = secs(man.get('start_utc')), secs(man.get('end_utc'))",
+        "+    launch, end_marker = secs(host.get('launch_time')), secs(host.get('end_time'))",
+        "+    times_ok = None not in (start, end, launch, end_marker)",
+        "+    ls_ = rp.get('tmux_ls')",
+        "+    chk('live_tmux_state_absent', host['tmux_pane_dead'] is None and host['tmux_pane_dead_status'] is None and",
+        "+        host['other_e03_tmux'] == [] and ls_ is not None and",
+        "+        not any(x.startswith('e03_stdn_seed') for x in ls_['sessions']),",
+        "+        tmux_ls=ls_, other_e03_tmux=host['other_e03_tmux'])",
+        "+    chk('exit_marker_zero', host['exit_file'] == '0' and host.get('exit_file_raw') == '0\\n',",
+        "+        exit_file_raw=host.get('exit_file_raw'))",
+        "+    chk('end_marker_valid', times_ok and launch <= start <= end <= end_marker <= end + PANE_SCOPE_SLACK,",
+        "+        launch_time=host.get('launch_time'), start_utc=man.get('start_utc'), end_utc=man.get('end_utc'),",
+        "+        end_time=host.get('end_time'))",
+        "+    chk('run_identity_consistent', man.get('run_id') == summ.get('run_id') == RUN_IDS.get(seed) == run_id(seed) and",
+        "+        man.get('experiment_seed') == seed and host['preflight'].get('experiment_seed') == seed and",
+        "+        man.get('completion_status') == summ.get('completion_status') == 'completed' and",
+        "+        summ.get('failure_reason') is None, run_id=man.get('run_id'))",
+        "+    chk('completion_record', last == '{\"status\": \"completed\", \"run_dir\": \"%s\"}' % paths(seed)['run_root'] and",
+        "+        all(v == 0 for v in host['pane_log_fail_hits'].values()), pane_log_last=host['pane_log_last'])",
+        "+    chk('no_runner_process', host['runner_processes'] == [], runner_processes=host['runner_processes'])",
+        "+    # boots: exactly one journal boot spans the whole run; it is not the current boot; every later boot starts after",
+        "+    # the run ended; the kernel boot time of the current boot is after the run ended",
+        "+    boots = rp.get('journal_boots') or []",
+        "+    run_boot = [b for b in boots if times_ok and b['first_entry'] / 1e6 <= launch and b['last_entry'] / 1e6 >= end]",
+        "+    rb = run_boot[0] if len(run_boot) == 1 else None",
+        "+    later = [b for b in boots if rb and b['index'] > rb['index']]",
+        "+    cur = [b for b in boots if b['index'] == 0]",
+        "+    shutdown_at = rb['last_entry'] / 1e6 if rb else None",
+        "+    btime = rp.get('btime')",
+        "+    chk('reboot_after_completion', rb is not None and later and len(cur) == 1 and",
+        "+        cur[0]['boot_id'] == rp.get('boot_id') != rb['boot_id'] and isinstance(btime, int) and",
+        "+        end < shutdown_at <= min(b['first_entry'] / 1e6 for b in later) and end < btime and",
+        "+        all(b['first_entry'] / 1e6 > end for b in later),",
+        "+        run_boot_id=rb and rb['boot_id'], run_boot_first_entry_utc=rb and utc(rb['first_entry'] / 1e6),",
+        "+        run_boot_last_entry_utc=rb and utc(shutdown_at), current_boot_id=rp.get('boot_id'),",
+        "+        kernel_btime_utc=utc(btime) if isinstance(btime, int) else None,",
+        "+        later_boots=[[b['boot_id'], utc(b['first_entry'] / 1e6)] for b in later])",
+        "+    # wtmp: a clean `shutdown system down` record after the run ended, followed by the current `reboot system boot`",
+        "+    recs = [(x,) + wtmp_record(x) for x in (rp.get('wtmp') or [])]",
+        "+    sd = [r for r in recs if r[1] == 'shutdown' and times_ok and end < r[2] <= (btime or 0) + PANE_SCOPE_SLACK]",
+        "+    rbt = [r for r in recs if r[1] == 'reboot' and r[3] and sd and r[2] >= sd[0][2]]",
+        "+    chk('clean_shutdown_recorded', bool(sd) and len(rbt) == 1, wtmp_shutdown=sd[0][0] if sd else None,",
+        "+        wtmp_reboot=rbt[0][0] if rbt else None)",
+        "+    # journal (user manager): the run's own tmux pane scope started just before launch_time and stopped at completion",
+        "+    scopes = [x for x in (rp.get('journal_tmux_scopes') or []) if rb and x['boot_id'] == rb['boot_id']]",
+        "+    started = [(x['realtime'], x['message'].split()[1][len('tmux-spawn-'):-len('.scope')]) for x in scopes",
+        "+               if x['message'].startswith('Started tmux-spawn-') and times_ok and",
+        "+               launch - PANE_SCOPE_SLACK <= x['realtime'] <= end]",
+        "+    own = [s for s in started if s[0] <= launch]",
+        "+    stops = [x['realtime'] for x in scopes if own and",
+        "+             x['message'].startswith('tmux-spawn-%s.scope: ' % own[0][1]) and",
+        "+             ('Consumed' in x['message'] or 'Deactivated successfully' in x['message'])]",
+        "+    chk('pane_scope_exited_at_completion', len(own) == 1 and len(stops) >= 1 and",
+        "+        end <= stops[0] <= end + PANE_SCOPE_SLACK and stops[0] < shutdown_at,",
+        "+        scope=own[0][1] if own else None, started_utc=utc(own[0][0]) if own else None,",
+        "+        stopped_utc=utc(stops[0]) if stops else None)",
+        "+    chk('single_pane_scope_in_run_window', len(started) == len(own) == 1,",
+        "+        pane_scopes_started_in_window=[[utc(a), b] for a, b in started])",
+        "+    # durable host markers: present, unchanged command file, written in the run window, none after the shutdown",
+        "+    m = {k: mk.get(k) for k in ('command', 'launch_time', 'pane_log', 'exit', 'end_time')}",
+        "+    present = all(isinstance(v, dict) for v in m.values())",
+        "+    chk('marker_files_durable', present and times_ok and shutdown_at is not None and",
+        "+        m['command']['sha256'] == host['command_file_sha256'] and m['command']['mtime'] <= launch + 1 and",
+        "+        launch <= m['launch_time']['mtime'] <= launch + 1 and m['exit']['size'] == 2 and",
+        "+        all(end <= m[k]['mtime'] <= end + PANE_SCOPE_SLACK and m[k]['mtime'] < shutdown_at",
+        "+            for k in ('pane_log', 'exit', 'end_time')) and m['exit']['mtime'] <= m['end_time']['mtime'],",
+        "+        marker_files=m)",
+        "+    pd = PRIOR_DIAGNOSTICS.get(seed)",
+        "+    pp = Path(repo_root) / pd['path'] if pd else None",
+        "+    chk('prior_diagnostic_preserved', pd is not None and pp.is_file() and sha256_file(pp) == pd['sha256'],",
+        "+        prior_diagnostic=pd)",
+        "+    return ev",
+        "+",
+        "+",
+        "@@ -719,2 +880,11 @@",
+        "-    G('B.process_exited_zero', host['exit_file'] == '0' and host['tmux_pane_dead'] is True and",
+        "-      host['tmux_pane_dead_status'] == 0 and host['runner_processes'] == [])",
+        "+    last, echoes = split_key_echo(host['pane_log_last'][0]) if len(host['pane_log_last']) == 1 else (None, 0)",
+        "+    echo = {'raw_last_line': host['pane_log_last'][0], 'cursor_key_echoes_stripped': echoes} if echoes else None",
+        "+    # live tmux evidence is used whenever the seed's pane exists; only an absent session evaluates REBOOT_RULING",
+        "+    reboot = reboot_evidence(c, seed, last, repo_root) if host['tmux_pane_dead'] is None else None",
+        "+    alternative = {}                     # gate -> index in G.results, finalised after every other gate has run",
+        "+    if reboot is None:",
+        "+        G('B.process_exited_zero', host['exit_file'] == '0' and host['tmux_pane_dead'] is True and",
+        "+          host['tmux_pane_dead_status'] == 0 and host['runner_processes'] == [])",
+        "+    else:",
+        "+        alternative['B.process_exited_zero'] = len(G.results)",
+        "+        G('B.process_exited_zero', False)",
+        "@@ -728,2 +897,0 @@",
+        "-    last, echoes = split_key_echo(host['pane_log_last'][0]) if len(host['pane_log_last']) == 1 else (None, 0)",
+        "-    echo = {'raw_last_line': host['pane_log_last'][0], 'cursor_key_echoes_stripped': echoes} if echoes else None",
+        "@@ -911,2 +1079,19 @@",
+        "-    G('J.single_e03_session', host['other_e03_tmux'] == sorted(set(host['other_e03_tmux'])) and",
+        "-      paths(seed)['tmux'] in host['other_e03_tmux'])",
+        "+    if reboot is None or paths(seed)['tmux'] in host['other_e03_tmux']:",
+        "+        G('J.single_e03_session', host['other_e03_tmux'] == sorted(set(host['other_e03_tmux'])) and",
+        "+          paths(seed)['tmux'] in host['other_e03_tmux'])",
+        "+    else:",
+        "+        alternative['J.single_e03_session'] = len(G.results)",
+        "+        G('J.single_e03_session', False)",
+        "+",
+        "+    # REBOOT_RULING: a substituted gate passes only if all its durable-evidence checks pass and every other gate passed",
+        "+    others_failed = [g for g in G.failed if g not in alternative]",
+        "+    for name, i in alternative.items():",
+        "+        checks = dict(reboot, other_gates_pass={'pass': not others_failed, 'failed': others_failed})",
+        "+        checks = {k: checks[k] for k in REBOOT_GATE_CHECKS[name]}",
+        "+        ok = all(v['pass'] for v in checks.values())",
+        "+        G.results[i] = {'gate': name, 'pass': ok, 'detail': {",
+        "+            'result': REBOOT_RULING['result'] if ok else 'FAIL_POST_COMPLETION_REBOOT_EVIDENCE',",
+        "+            'ruling': REBOOT_RULING['ruling'], 'live_tmux': {'tmux_pane_dead': host['tmux_pane_dead'],",
+        "+                                                             'other_e03_tmux': host['other_e03_tmux']},",
+        "+            'checks': checks}}",
+        "+    substituted = [n for n, i in sorted(alternative.items(), key=lambda x: x[1]) if G.results[i]['pass']]",
+        "@@ -975,0 +1161 @@",
+        "+    disclosures = {}",
+        "@@ -977 +1163 @@",
+        "-        doc['disclosures'] = {'pane_log_keyboard_echo': dict(echo, note=(",
+        "+        disclosures['pane_log_keyboard_echo'] = dict(echo, note=(",
+        "@@ -980 +1166,29 @@",
+        "-            'production or pinned-source code path reads stdin; fail-pattern hits are all zero'))}",
+        "+            'production or pinned-source code path reads stdin; fail-pattern hits are all zero'))",
+        "+    if alternative:",
+        "+        doc['gates_passed_by_approved_alternative'] = substituted",
+        "+    if substituted:",
+        "+        r = reboot",
+        "+        disclosures['post_completion_reboot'] = {",
+        "+            'ruling': REBOOT_RULING, 'gates': substituted, 'run_end_utc': summ['end_utc'],",
+        "+            'end_time_marker': host['end_time'], 'exit_marker': host['exit_file'],",
+        "+            'pane_scope': r['pane_scope_exited_at_completion']['scope'],",
+        "+            'pane_scope_stopped_utc': r['pane_scope_exited_at_completion']['stopped_utc'],",
+        "+            'run_boot_id': r['reboot_after_completion']['run_boot_id'],",
+        "+            'run_boot_last_entry_utc': r['reboot_after_completion']['run_boot_last_entry_utc'],",
+        "+            'wtmp_shutdown': r['clean_shutdown_recorded']['wtmp_shutdown'],",
+        "+            'wtmp_reboot': r['clean_shutdown_recorded']['wtmp_reboot'],",
+        "+            'current_boot_id': r['reboot_after_completion']['current_boot_id'],",
+        "+            'kernel_btime_utc': r['reboot_after_completion']['kernel_btime_utc'],",
+        "+            'tmux_ls': r['live_tmux_state_absent']['tmux_ls'],",
+        "+            'prior_diagnostic': PRIOR_DIAGNOSTICS.get(seed),",
+        "+            'note': ('the run completed at %s (exit marker 0, runner completion record, tmux pane scope stopped %s); '",
+        "+                     'the host was then cleanly shut down (wtmp shutdown record, run-boot journal ends %s) and rebooted '",
+        "+                     '(kernel boot %s), which removed the tmux server, so B.process_exited_zero and J.single_e03_session '",
+        "+                     'pass by owner-approved durable post-completion-reboot evidence instead of live pane state; this '",
+        "+                     'is an audit-tool amendment only and changes neither the trained model nor the scientific '",
+        "+                     'procedure; the first 86/88 NEEDS_REVIEW build is kept at %s'",
+        "+                     % (summ['end_utc'], r['pane_scope_exited_at_completion']['stopped_utc'],",
+        "+                        r['reboot_after_completion']['run_boot_last_entry_utc'],",
+        "+                        r['reboot_after_completion']['kernel_btime_utc'], PRIOR_DIAGNOSTICS[seed]['path']))}",
+        "+    if disclosures:",
+        "+        doc['disclosures'] = disclosures",
+        "@@ -981,0 +1196,31 @@",
+        "+",
+        "+",
+        "+def reboot_report(d):",
+        "+    r = d['disclosures']['post_completion_reboot']",
+        "+    gates = {g['gate']: g for g in d['gates']}",
+        "+    rows = ['| `%s` | %s | %s |' % (k, 'pass' if v['pass'] else 'FAIL', ', '.join(",
+        "+        g for g in r['gates'] if k in gates[g]['detail']['checks'])) for k, v in sorted(",
+        "+        dict(kv for g in r['gates'] for kv in gates[g]['detail']['checks'].items()).items())]",
+        "+    return [",
+        "+        '## Disclosure: post-completion host reboot (owner ruling %s)' % r['ruling']['date'],",
+        "+        '',",
+        "+        '- The run completed on its own at **%s**: exit marker `%s`, end_time marker `%s`, the runner completion '",
+        "+        'record as the last pane-log line, and the user-manager journal shows its tmux pane scope `tmux-spawn-%s` '",
+        "+        'stopping at %s.' % (r['run_end_utc'], r['exit_marker'], r['end_time_marker'], r['pane_scope'],",
+        "+                             r['pane_scope_stopped_utc']),",
+        "+        '- Afterwards the host was cleanly shut down and rebooted. The run boot `%s` journal ends at %s; wtmp records '",
+        "+        '`%s` and `%s`; the current boot `%s` has kernel boot time %s.'",
+        "+        % (r['run_boot_id'], r['run_boot_last_entry_utc'], ' '.join(r['wtmp_shutdown'].split()),",
+        "+           ' '.join(r['wtmp_reboot'].split()), r['current_boot_id'], r['kernel_btime_utc']),",
+        "+        '- The reboot removed the tmux server (`tmux ls`: `%s`), so the live pane state that `B.process_exited_zero` '",
+        "+        'and `J.single_e03_session` read no longer exists. Under `%s`, these two gates (and only these) report `%s` on '",
+        "+        'the durable evidence below instead. The live path is unchanged whenever the pane exists, and a substituted '",
+        "+        'gate passes only if every other gate passed.' % (r['tmux_ls']['stderr'] or r['tmux_ls']['sessions'],",
+        "+                                                         r['ruling']['ruling'], r['ruling']['result']),",
+        "+        '- This is an audit-tool amendment only. It changes neither the trained model nor the scientific procedure. '",
+        "+        'The first build of this seed (%d/%d, `%s`, failed %s) is kept unchanged at `%s` (sha256 `%s`).'",
+        "+        % (r['prior_diagnostic']['gates_passed'], r['prior_diagnostic']['gates_total'], r['prior_diagnostic']['status'],",
+        "+           ', '.join('`%s`' % g for g in r['prior_diagnostic']['failed_gates']), r['prior_diagnostic']['path'],",
+        "+           r['prior_diagnostic']['sha256']),",
+        "+        '',",
+        "+        '| evidence check | result | used by |', '|---|---|---|'] + rows + ['']",
+        "@@ -993,0 +1239,12 @@",
+        "+    reboot = d.get('disclosures', {}).get('post_completion_reboot')",
+        "+    if reboot:",
+        "+        exit_row = ('| exit | `~/workdir/e03_s%d.exit` = %s; the run completed at %s (end_time marker %s; its tmux pane '",
+        "+                    'scope stopped %s); the host was then cleanly shut down and rebooted (run-boot journal ends %s, '",
+        "+                    'kernel boot %s), which removed the live tmux state; `B.process_exited_zero` and '",
+        "+                    '`J.single_e03_session` pass by owner-approved post-completion-reboot evidence (disclosure '",
+        "+                    'below); no runner process; stdout/stderr/generation_log empty |'",
+        "+                    % (seed, reboot['exit_marker'], reboot['run_end_utc'], reboot['end_time_marker'],",
+        "+                       reboot['pane_scope_stopped_utc'], reboot['run_boot_last_entry_utc'], reboot['kernel_btime_utc']))",
+        "+    else:",
+        "+        exit_row = ('| exit | `~/workdir/e03_s%d.exit` = %s; tmux `%s` pane dead with status 0; no runner process; '",
+        "+                    'stdout/stderr/generation_log empty |' % (seed, d['host_markers']['exit'], d['host_markers']['tmux']))",
+        "@@ -1012,2 +1269 @@",
+        "-        '| exit | `~/workdir/e03_s%d.exit` = %s; tmux `%s` pane dead with status 0; no runner process; '",
+        "-        'stdout/stderr/generation_log empty |' % (seed, d['host_markers']['exit'], d['host_markers']['tmux']),",
+        "+        exit_row,",
+        "@@ -1094 +1350 @@",
+        "-        ''] if 'disclosures' in d else []) + [",
+        "+        ''] if 'pane_log_keyboard_echo' in d.get('disclosures', {}) else []) + (reboot_report(d) if reboot else []) + ["
+      ],
+      "from": "5cdb65db0a75fcdcddb64b1b5af040364a057723",
+      "id": "seed2026_post_completion_reboot_evidence",
+      "note": "owner ruling 2026-10-29 (OWNER_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE_SUBSTITUTION): B.process_exited_zero and J.single_e03_session may pass as PASS_BY_APPROVED_POST_COMPLETION_REBOOT_EVIDENCE on durable evidence when a clean host reboot after the run completed removed the tmux server (seed2026); the live tmux path and every other gate are unchanged and seed42/seed1337 re-derive byte-identically with all three tool versions",
+      "to": "15bfc84dd4cf1d68427d85d867188b702a847b65"
+    }
+  ],
+  "status": "SCIENTIFIC_TRAINING_COMPLETED_3_OF_3_SEEDS"
+}
