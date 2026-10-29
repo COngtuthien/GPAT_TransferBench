@@ -1,0 +1,78 @@
+{
+  "schema_version": "e04_d10_investigation_protocol_v1",
+  "protocol_id": "E04_D10_NUMERICAL_GRADIENT_REPRODUCIBILITY_INVESTIGATION",
+  "status": "FIXED_BEFORE_EXECUTION",
+  "fixed_date": "2026-10-29",
+  "purpose": "Bounded characterization of the real-data L_G gradient non-bitwise behaviour found by E04 production qualification 1d026252743d077b483b5d451002e5b406c1caef (K.real_data_gradient_repeatability, 41/42). Diagnostic only: no RunContext, no checkpoint, no run root, no scientific seed, no VAL, no TEST, no graph / placement / optimizer / data / seed / environment change.",
+  "creates_scientific_authority": false,
+  "inputs_fixed": {
+    "qualification_seed": 60904,
+    "qualification_seed_note": "The owner directive names 'the existing qualification seed 314159'. The existing production qualification seed is 60904 (production_io.QUALIFICATION_SEED; validate_mode_seed refuses any other). 314159 is only the M6D3e reference-construction seed used for the graph-signature comparison. 60904 is used; no seed is changed.",
+    "graph": "methods/physics_std/training_graph.TrainingGraph via production_runner.prepare() (construction 61f1ed58..., 11315 ops), unchanged",
+    "feed": "production_runner.Feed: D4 PairStream / D7 HardStream (seed 60904), feed pack db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b, pre-pass 274a4b0a52077cae18a5477565429410b24479236e8835415cf0eb783f026279, real TRAIN faces only",
+    "update_sequence": "production_runner.Controller.iteration (per step: BN update collections, then apply with that step's losses) -- the frozen scientific update sequence",
+    "environment": "gpat-m6-e03, E04 training precision environment, PYTHONHASHSEED=60904, E04 training lock except the D9 driver version",
+    "session": "production_runner.session_config"
+  },
+  "design": {
+    "processes": ["P1", "P2", "P3"],
+    "process_rule": "three independent clean python -B processes, run sequentially (one GPU process at a time) from the same committed checkout",
+    "iterations": 1000,
+    "gradient_probe_iterations": [0, 1, 2, 5, 10, 25, 50, 100, 250, 500, 750, 999],
+    "gradient_probe_repeats": 3,
+    "gradient_probe_tensors": "per-loss gradients L_depth, L_G, L_P, L_R, L_S, L_H (G variables) and L_D (D variables); the applied step gradients step_gradients[1] (G, Eq.23), [2] (D, L_D), [3] (G, Eq.24); all evaluated at the iteration-start state S_t on the iteration input X_t before Step 1",
+    "minibatch_reference": "the same L_G and step-1 gradients at the same state S_t on the next real TRAIN batch X_{t+1}, produced by a separate look-ahead Feed (same seed, separate RandomState objects) that never touches the controller feed; X_{t+1} must equal the batch the controller later draws",
+    "per_iteration_diagnostic": "before Step 1 of every iteration: the step-1 applied gradient and the L_G gradient are fetched twice at (S_t, X_t); the full state before and after the diagnostic fetches must be bit-identical (diagnostics never perturb the trajectory)",
+    "snapshot_iterations": [0, 1, 2, 3, 5, 10, 20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+    "operation_level": "iteration 0, every process: (a) one FULL_TRACE RunMetadata of all gradient tensors -> executed device of every graph operation; (b) first-divergence localization: every fetchable numeric tensor in the ancestor closure of all gradient tensors is fetched 3 times (each op together with its inputs in the same run) and sha256-compared; an op is a variation origin when an output differs across repeats while every input is bit-identical",
+    "bn_cancelled_biases": "structural, from the graph before any result: a convolution bias whose every forward BiasAdd consumer feeds only training-mode FusedBatchNorm ops (its exact gradient is zero and it cannot change any forward output); reported separately, excluded from the functional parameter groups",
+    "outputs": "/tmp/gpat_e04_d10/<P>/ on the GPU host, then copied read-only to <rt>/qualification/e04_production/d10_probe_<commit>/ with SHA256SUMS",
+    "smoke_runs": "a --smoke run (3 iterations) may be used only to exercise the code path; smoke outputs are refused by the analysis and never interpreted"
+  },
+  "criteria": {
+    "C1_contract_identity": {
+      "rule": "exact equality across P1, P2, P3 at every iteration of: pair rows and passes, hard scales and keep, input sha256 of all five arrays, counters before and after every iteration (global_iteration, phase, lr_G, lr_D), the sequence of session calls (fetch names and feed keys), the four Adam beta-power accumulators after every iteration (optimizer application count), look-ahead batch equality; and of the construction signature (= 61f1ed58..., 11315 ops), the initial state sha256 and the set of executed graph operations in the iteration-0 trace, compared by recursive structural signature (op type, attributes, requested device, input signatures; name only for stateful ops) because TF's classic-optimizer common-subexpression elimination keeps an arbitrary member of each class of identical ops (smoke runs showed executed op names differing across processes, signature sets equal); runtime-inserted _Send/_Recv transfer nodes are excluded",
+      "on_failure": "STOP: reproducibility-contract violation"
+    },
+    "C2_finite": {
+      "rule": "every loss, every fetched gradient and every state value of every process at every iteration is finite",
+      "on_failure": "STOP: non-finite state"
+    },
+    "C3_localization": {
+      "rule": "(a) iteration 0, across processes: all in-run step-1 losses, every per-loss gradient except L_G, and the step-2 and step-3 gradients at the start state are bit-identical; (b) at every gradient-probe iteration in every process, in-process repeats of every per-loss gradient except L_G and of the step-2 and step-3 gradients are bit-identical; (c) every variation origin found by the operation-level localization (union over processes) is of type ResizeBilinearGrad or ScatterNd, executes on the GPU, and has fully observable inputs; (d) every warp GatherNd and every forward ResizeBilinear executes on the CPU",
+      "on_failure": "STOP: unexpected nondeterminism source"
+    },
+    "C4_fixed_state_magnitude": {
+      "rule": "at every gradient-probe iteration in every process, for the concatenated L_G gradient and the concatenated step-1 applied gradient: max over repeats ||g_r - g_0||_2 <= 1e-3 * ||g(S_t, X_{t+1}) - g(S_t, X_t)||_2",
+      "threshold": 0.001,
+      "rationale": "the numerical repeat variation must be at least three orders of magnitude below the minibatch sampling variation that the scientific procedure itself injects at the same state"
+    },
+    "C5_trajectory_parameters": {
+      "rule": "for every process pair and every snapshot t >= 1, separately for the functional G trainables and the functional D trainables: ||theta_a(t) - theta_b(t)||_2 <= min(u_a(t), u_b(t)), where u_p(t) is the median single-iteration update norm ||theta_p(s) - theta_p(s-1)||_2 over s in [max(1, t-9), t]",
+      "threshold": "one single-iteration update",
+      "rationale": "after up to 1000 iterations the independently started trajectories must remain closer to each other than one training iteration moves the model"
+    },
+    "C6_trajectory_losses": {
+      "rule": "for every process pair and every in-run loss (11 values per iteration), over the final window t in [900, 1000): median |L_a(t) - L_b(t)| <= 1e-2 * median over both processes of |L_p(t) - L_p(t-1)|; when that sampling scale is exactly zero the difference must be exactly zero",
+      "threshold": 0.01,
+      "rationale": "cross-process loss differences must stay two orders of magnitude below the iteration-to-iteration loss change caused by minibatch sampling"
+    },
+    "descriptive_only": [
+      "per-variable gradient error distributions (absolute, relative L2, cosine, ULP, scale-aware max|d| / max|g|), BN-cancelled biases separately",
+      "Adam m / v, BN moving mean / variance deviations (absolute and normalized)",
+      "BN-cancelled bias deviations",
+      "deviation growth: log-log slope of the parameter deviation over snapshots t >= 10, and per-iteration loss differences",
+      "iteration-0 executed-node order (with inter_op_parallelism_threads=1)"
+    ]
+  },
+  "decision_rule": {
+    "D10_SUPPORTED": "C1, C2, C3, C4, C5 and C6 all pass",
+    "STOP_AND_REPORT": "any of C1, C2, C3 fails",
+    "DECISION_REPORT_NOT_SUPPORTED": "C1-C3 pass and any of C4, C5, C6 fails (bounded evidence does not support D10)",
+    "no_post_hoc_change": "thresholds, probe length, process count, probe iterations and windows are fixed by this file and by tools/e04_d10_analysis.py at the commit that adds them; they are not changed after any result is seen"
+  },
+  "tools": {
+    "probe": "tools/e04_d10_numerical_probe.py",
+    "analysis": "tools/e04_d10_analysis.py"
+  }
+}
