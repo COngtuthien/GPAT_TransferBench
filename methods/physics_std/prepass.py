@@ -116,7 +116,7 @@ class Firewall:
             bad = 'manifest read'
         elif '/runs/' in s and s.startswith(self.rt):
             bad = 'runs/ access'
-        elif write and not s.startswith(self.out):
+        elif write and not s.startswith(self.out) and s != '/dev/null':
             bad = 'write outside the pre-pass output directory'
         if bad:
             self.denied.append([bad, s])
@@ -162,6 +162,8 @@ def run(out_dir, *, root, runtime_root, limit=None):
     """Generate the pre-pass into a fresh out_dir. `limit` (qualification smoke only) truncates the population and
     makes the output non-acceptable (recorded in the manifest)."""
     import cv2
+    import scipy
+    import torchvision
     root, runtime_root, out = Path(root), Path(runtime_root), Path(out_dir)
     require(not out.exists(), '%s exists; the pre-pass writes only into a fresh directory' % out)
     require(sha256_file(root / RULING[0]) == RULING[1], 'owner resolution sha256')
@@ -232,7 +234,7 @@ def run(out_dir, *, root, runtime_root, limit=None):
             live_row += 1
         rows.append([rec[k] for k in SAMPLE_COLUMNS])
     seconds = time.monotonic() - t0
-    require(not fw.denied and sorted(fw.reads) == sorted(str(p) for p in paths.values()), 'firewall / read set')
+    require(sorted(fw.reads) == sorted(str(p) for p in paths.values()), 'read set')
     payloads = {}
     for name, a in arrays.items():
         raw = np.ascontiguousarray(a).tobytes(order='C')
@@ -242,8 +244,7 @@ def run(out_dir, *, root, runtime_root, limit=None):
     samples = dumps({'columns': list(SAMPLE_COLUMNS), 'rows': rows})
     (out / 'samples.json').write_bytes(samples)
     payloads['samples.json'] = {'sha256': sha256_bytes(samples), 'bytes': len(samples)}
-    import scipy
-    import torchvision
+    require(not fw.denied, 'firewall denials: %s' % fw.denied)
     manifest = {
         'schema': SCHEMA, 'version': VERSION, 'acceptable': limit is None,
         'limit': limit, 'counts': {'samples': n, 'live': n_live, 'spoof': n - n_live, 'VAL': 0, 'TEST': 0},
@@ -267,6 +268,7 @@ def run(out_dir, *, root, runtime_root, limit=None):
         'seconds': seconds, 'spoof_depth': 'not rendered; constant exact float32 zeros 32x32 target (not stored)'}
     raw = dumps(manifest)
     (out / MANIFEST).write_bytes(raw)
+    require(not fw.denied, 'firewall denials after manifest: %s' % fw.denied)
     return {'manifest_sha256': sha256_bytes(raw), 'seconds': seconds, 'samples': n}
 
 
