@@ -1,0 +1,52 @@
+{
+  "schema_version": "e06_runtime_driver_retrospective_disclosure_v1",
+  "disclosure_id": "E06_RETROSPECTIVE_RUNTIME_DRIVER_PROVENANCE",
+  "status": "OWNER_AUTHORIZED_RETROSPECTIVE_DISCLOSURE_RECORDED",
+  "date": "2026-10-30",
+  "authority": "explicit owner authorization of 2026-10-30 to record the E06b/E06c driver discrepancy transparently, without rerunning the completed scientific seeds",
+  "amendment_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E06_Retrospective_Runtime_Driver_Provenance_Addendum.md",
+  "evidence": "outputs/audit/E06_RUNTIME_DRIVER_PROVENANCE.json",
+  "evidence_tool": "tools/e06_runtime_driver_provenance_record.py",
+  "lock": {"path": "environments/e06c.lock.json", "sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95",
+           "identity.gpu_driver": "NVIDIA GeForce RTX 3090, 595.84, GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"},
+  "lock_driver_version": "595.84",
+  "historical_driver_version": "580.178.04",
+  "gpu": {"model": "NVIDIA GeForce RTX 3090", "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7", "unchanged": true},
+  "affected_runs": [
+    {"method_id": "E06c", "seed": 42, "run_id": "27dcaf23aac18d7a", "authority": "84809868acf472af5ba8cf6ab47165ae038e1012", "seed_closure": "cf5ed6cbd4fbc7f989136e33577ee298619fe6a4"},
+    {"method_id": "E06c", "seed": 1337, "run_id": "49a179a4dca77f41", "authority": "84809868acf472af5ba8cf6ab47165ae038e1012", "seed_closure": "9281c79d1c1f8e2b34199ff5434a6731d6e8bc9a"},
+    {"method_id": "E06c", "seed": 2026, "run_id": "86b631403e3c4ee1", "authority": "84809868acf472af5ba8cf6ab47165ae038e1012", "seed_closure": "81a8ef6d1e1dec97452b32955c17d4e8718abcb7"},
+    {"method_id": "E06b", "seed": 42, "run_id": "aa96129289d080ba", "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87", "seed_closure": "1f546c9fab1e284efd9deaef18ab7d415ff2c2ee"},
+    {"method_id": "E06b", "seed": 1337, "run_id": "9ffda3ea3f6cc767", "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87", "seed_closure": "a8a7b5dd9a1fd5cd8e82b870162732163b2859f9"},
+    {"method_id": "E06b", "seed": 2026, "run_id": "ec71778b28479de5", "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87", "seed_closure": "1729333197c5caab7a0d4d9302f1d3274ac90d98"}
+  ],
+  "not_affected": "E06b seed-42 attempt 1 (d3c0ddd5dc82a4a1, FAILED_TECHNICAL, excluded) also ran after the switch; it is not a scientific result and is listed for completeness only",
+  "family_closures": {"E06c": "24f7049", "E06b": "3b0d308"},
+  "why_undetected": "tools/run_e06c.py and tools/run_e06b.py verify the lock SHA256 and the source identity but never compare the live runtime identity (including gpu_driver) with the lock; the DSDG run roots and the E06 closures record no driver",
+  "evidence_summary": [
+    "apt transaction 2026-10-03 11:27:17-11:27:35 +07 installed nvidia-driver-580-open 580.178.04 and linux-modules-nvidia-580-open-7.0.0-38-generic, and removed nvidia-driver-595-open 595.84, libnvidia-compute-595 595.84 and the 595 modules for kernels 7.0.0-28/-31",
+    "no 595 kernel module was ever installed for kernel 7.0.0-38; the only later NVIDIA transaction is a same-version 580 module repackage (2026-10-10)",
+    "wtmp: both boots spanning the E06 runs (2026-10-03 11:22:33 +07 and 2026-10-20 15:56:42 +07) ran kernel 7.0.0-38-generic",
+    "same-boot observations of 580.178.04: M7C3 (2026-10-03, boot of E06c seed 42); E05 seeds 42/1337/2026 and E03 seeds 42/1337/2026 run_start records (2026-10-25 to 2026-10-28, boot of the other five E06 runs)",
+    "live host: libcuda.so.580.178.04 is the only CUDA driver library; /proc/driver/nvidia/version 580.178.04"
+  ],
+  "statements": {
+    "disclosed_retrospectively": true,
+    "lock_edited": false,
+    "scientific_source_training_data_checkpoints_run_outputs_modified": false,
+    "bitwise_runtime_equivalence_established": false,
+    "runs_presented_as_executed_under_locked_driver": false,
+    "results_preserved_without_retraining_or_cherry_picking": true,
+    "e03_e05_driver_rulings_reused_as_prior_e06_approval": false
+  },
+  "remaining_limitations": [
+    "the E06 qualifications (M6D5a-e 2026-09-25, M6FC/FD 2026-09-29) ran under 595.84; no E06 requalification under 580.178.04 exists",
+    "no driver observation was taken inside any E06 run window; the kernel journal is not readable by the run account",
+    "reproducing the E06 runs bitwise under 595.84 is not possible on this host (595.84 is uninstalled and has no module for the running kernel)"
+  ],
+  "runtime_compatibility_acceptance": {
+    "status": "PENDING_OWNER_DECISION",
+    "draft": "configs/amendments/e06_runtime_driver_acceptance.DRAFT.yaml",
+    "note": "this record discloses; it does not grant a driver-version-only runtime-compatibility acceptance for E06 (as E05 and E03 hold, granted before their launches)"
+  }
+}

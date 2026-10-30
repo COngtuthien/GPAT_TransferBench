@@ -1,0 +1,18 @@
+{
+  "schema_version": "e06_runtime_driver_acceptance_v1",
+  "status": "DRAFT_PENDING_OWNER_DECISION",
+  "approved": false,
+  "date_prepared": "2026-10-30",
+  "proposed_ruling": "OWNER_APPROVED_RETROSPECTIVE_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY_E06",
+  "scope": "the six completed E06b/E06c scientific runs listed in configs/amendments/e06_runtime_driver_retrospective_disclosure.yaml",
+  "proposed_terms": [
+    "accept the completed E06b/E06c results as runtime-compatible with environments/e06c.lock.json except for the GPU driver version (lock 595.84, historical 580.178.04)",
+    "the acceptance is retrospective; it is not a pre-execution approval and does not reuse the E05 or E03 rulings",
+    "GPU model and UUID are unchanged; every other lock identity field is accepted only as recorded by the lock hash and source checks the E06 CLIs performed",
+    "no claim of bitwise runtime equivalence between 595.84 and 580.178.04",
+    "no rerun, no lock edit, no change to checkpoints or run outputs",
+    "future E06 work on this host (bank generation) must record the live driver"
+  ],
+  "if_not_approved": "the E06 results remain disclosed with a runtime-provenance limitation; the owner decides separately how they may be used",
+  "activation": "the owner approves by committing configs/amendments/e06_runtime_driver_acceptance.yaml with approved true; nothing reads this draft"
+}
