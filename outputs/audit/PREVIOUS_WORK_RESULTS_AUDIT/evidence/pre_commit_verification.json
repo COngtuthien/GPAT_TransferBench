@@ -1,0 +1,34 @@
+{
+ "base_commit": "b0f0ffd06b26e1c2d542df9e09101417ee3b687c",
+ "date_utc": "2026-10-30",
+ "frozen_sources_modified": false,
+ "host_rehash": {
+  "command": "ssh student20261@10.31.131.201 'bash -s' < tools/host_hash.sh",
+  "result": "IDENTICAL to evidence/host_runroot_listings.txt (all 12 run roots, every path/size/sha256 and path/size/mtime line; START/END lines excluded)",
+  "window_utc": [
+   "2026-10-30T02:18:56Z",
+   "2026-10-30T02:20:38Z"
+  ]
+ },
+ "laptop_test_suite": {
+  "command": ".venv/bin/python -m unittest discover -s tests",
+  "errors": 49,
+  "failing_ids_sha256": "e68c1e09c068da106bcf0d01408b23d1df46111ddba0a6332d0c094d6fabd8f5",
+  "failures": 14,
+  "note": "identical FAIL/ERROR id set with the package present and with it moved out; all are pre-existing historical-milestone/env failures (M0-M5, 2 M7D1); Data partition mounted",
+  "ran": 2213,
+  "skipped": 208,
+  "with_package_equals_without_package": true
+ },
+ "record": "PREVIOUS_WORK_RESULTS_AUDIT pre-commit verification",
+ "rederivation": {
+  "commands": [
+   "python3 -I -B tools/analyze_runs.py --runs <copy> --listings evidence/host_runroot_listings.txt --repo <repo> --out <tmp>",
+   "python3 -I -B tools/build_package.py --analysis <tmp>/run_analysis.json --runs <copy> --repo <repo> --out <tmp>",
+   "python3 -I -B tools/write_matrices.py --out <tmp>"
+  ],
+  "result": "23/23 derived files byte-identical (run_analysis.json, 10 CSV tables/matrices, 12 curve CSVs)",
+  "run_root_copy_metrics_sha256_equal_closure": true
+ },
+ "test_data_access": "none: no image, VAL/TEST manifest or prediction was opened by this audit"
+}

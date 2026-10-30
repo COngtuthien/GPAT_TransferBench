@@ -1,0 +1,51 @@
+item,scope,status,detail_class,source,reason
+total generator loss vs iteration,E06c,READY,READY_FROM_EXISTING_DATA,metrics.jsonl train_losses.total_loss by global_step (7400/seed),"Caveat: epoch 1 uses 0.01 weights on aux terms (pinned train_generator.py:174-178), so steps 1-37 sit on a different scale; mark the epoch-1/2 boundary."
+total generator loss vs iteration,E06b,READY,READY_FROM_EXISTING_DATA,metrics.jsonl train_losses.total_loss by global_step (3200/seed),Same epoch-1 weighting caveat (boundary at step 16/17).
+total generator loss vs iteration,E05,READY,READY_FROM_EXISTING_DATA,metrics.jsonl train_losses.L_G_total by global_step (4000/seed),"Batch 1: per-iteration values are very noisy; binned means are postprocessing (curves/E05_seed*_curve.csv, 100-iteration bins)."
+total generator loss vs iteration,E03,READY,READY_WITH_POSTPROCESSING,metrics.jsonl TRAIN_STEP train_losses.g_loss + a_loss,"The STDN G optimizer minimizes g_loss + a_loss (pinned model/model.py get_train_op(g_loss+a_loss)); both are logged per step, so the sum is exact. Index: train_step_total is 0-based."
+total discriminator loss vs iteration,E06c,NOT_APPLICABLE,NOT_APPLICABLE,pinned DSDG train_generator.py,DSDG generator training has no discriminator.
+total discriminator loss vs iteration,E06b,NOT_APPLICABLE,NOT_APPLICABLE,pinned DSDG train_generator.py,DSDG generator training has no discriminator.
+total discriminator loss vs iteration,E05,READY,READY_FROM_EXISTING_DATA,metrics.jsonl train_losses.L_D_total,L_D_total = L_D_image + L_D_patch re-derived (<= 6e-8).
+total discriminator loss vs iteration,E03,READY,READY_WITH_POSTPROCESSING,metrics.jsonl TRAIN_STEP train_losses.d_loss + optimizer_ops_applied,d_loss is fetched every TRAIN step but d_op is applied only on even steps (50000 of 100000); filter on optimizer_ops_applied for the applied-D curve.
+loss components vs iteration,E06c,READY,READY_FROM_EXISTING_DATA,"metrics.jsonl train_losses.{loss_rec,loss_kl,loss_mmd,loss_ip,loss_ort}","loss_cls and loss_pair are identically 0 by design (DEV-020: one spoof class, lambda_pair=0); plotting them as learned curves would mislead."
+loss components vs iteration,E06b,READY,READY_FROM_EXISTING_DATA,metrics.jsonl train_losses (7 terms),"All 7 terms active (loss_cls K=2, loss_pair lambda=5)."
+loss components vs iteration,E05,READY,READY_FROM_EXISTING_DATA,"metrics.jsonl train_losses (5 G terms, 7 D terms)",Terms are defined by M6D4c; G total is their unit sum.
+loss components vs iteration,E03,PARTIAL,PARTIALLY_AVAILABLE,metrics.jsonl g_loss/d_loss/a_loss (TRAIN and VAL),"The official source exposes only these three aggregates. esr/gan/reg/pixel sub-terms were never logged and cannot be recovered for historical steps. a_loss mixes two definitions per step (random `dec` branch, pixel weight 0.0 or 0.1), and the branch was not logged."
+learning rate vs iteration,E06c,READY,READY_FROM_EXISTING_DATA,metrics.jsonl learning_rate,Constant 2e-4 for all 7400 steps. A table entry is more informative than a plot.
+learning rate vs iteration,E06b,READY,READY_FROM_EXISTING_DATA,metrics.jsonl learning_rate,Constant 2e-4.
+learning rate vs iteration,E05,READY,READY_FROM_EXISTING_DATA,"metrics.jsonl learning_rates.{G,D}",Constant 1e-6 (G and D).
+learning rate vs iteration,E03,READY,READY_FROM_EXISTING_DATA,"metrics.jsonl learning_rates.{G,D}",Staircase 6e-5*0.9^floor(gs/20000) on the shared global_step; read-back max rel err 2.5e-7.
+training runtime vs iteration,"E06c,E06b,E05,E03",READY,READY_FROM_EXISTING_DATA,"metrics.jsonl step_seconds, wall_clock_seconds, utc",MISLEADING for method-cost or seed comparisons without disclosure. The GPU was shared and contention was not recorded (E06c s42 ran 2.2-2.5x slower than s1337/s2026; E03 s1337 took 1.35x as long). step_seconds also differs in definition across methods.
+gradient diagnostics,E06c,PARTIAL,PARTIALLY_AVAILABLE,metrics.jsonl owned_gradients_finite,Only a finite-gradient count per step (55/55); no norms.
+gradient diagnostics,E06b,PARTIAL,PARTIALLY_AVAILABLE,"metrics.jsonl owned_gradients_finite, netCls_grad_nonzero",Counts only; no norms.
+gradient diagnostics,E05,PARTIAL,PARTIALLY_AVAILABLE,"metrics.jsonl gradients.{D,G}.{finite,non_none,nonzero,tensors}",Counts only; no norms.
+gradient diagnostics,E03,NOT_READY,NOT_RECORDED,methods/stdn/production_runner.py fetch list,No gradient quantity is fetched; cannot be recovered without retraining.
+checkpoint chronology,"E06c,E06b,E05,E03",READY,READY_FROM_EXISTING_DATA,"metrics.jsonl *_checkpoint_event (utc, epoch/step) + checkpoint_index.json","E06c/E06b 21 events, E05 2, E03 50; all payloads present and equal to the index."
+scientific budget verification,"E06c,E06b,E05,E03",READY,READY_FROM_EXISTING_DATA,run_analysis.json checks,"Re-derived in this audit: full budget, contiguous index, counters equal budget."
+seed-to-seed variability,"E06c,E06b,E05,E03",READY,READY_WITH_POSTPROCESSING,curves/*_curve.csv; D3 table,Within-method mean and sample std over 3 seeds of the final-window means. Never across methods.
+method-specific diagnostics,"E06c,E06b",READY,READY_FROM_EXISTING_DATA,"metrics.jsonl batch/epoch-order hashes, epsilon hashes; *_visualization_diagnostic + diagnostics/visualization PNGs (126 files)","The visualization PNGs are TRAIN-sample grids, not validation."
+method-specific diagnostics,E05,READY,READY_FROM_EXISTING_DATA,"metrics.jsonl pair_id, dataset, sampler_index, PNG sha256 per iteration",4000 distinct TRAIN pairs per seed (single partial pass over 8838).
+method-specific diagnostics,E03,READY,READY_FROM_EXISTING_DATA,metrics.jsonl VAL_STEP val_losses; flips; brightness; diagnostics/figures PNGs,The VAL losses are diagnostics only (never used for selection). Label any VAL curve accordingly.
+peak GPU memory,"E06c,E06b,E05,E03",READY,READY_FROM_EXISTING_DATA,metrics.jsonl gpu_memory_bytes (max),"The semantics differ: torch max_memory_allocated reset per step (E05/E06) vs TF MaxBytesInUse, cumulative allocator (E03). E03 run_summary.peak_vram_bytes is null by design; its value is the maximum over metrics."
+parameter counts,E05,READY,READY_FROM_EXISTING_DATA,metrics.jsonl run_start payload.runtime_closure.models / optimizers,"Encoder 929960, Generator 3699233, ImageD 28859521, PatchD 24522145."
+parameter counts,"E03,E06c,E06b",PARTIAL,READY_WITH_POSTPROCESSING,checkpoints (read-only inspection),Not in the run logs. Countable from the checkpoints (TF .index shapes; DSDG weights_only sidecar / raw storages) without training.
+cross-method loss magnitude comparison,all,NOT_APPLICABLE,NOT_APPLICABLE,-,"The architectures and loss definitions differ, so a shared axis would mislead. Plot each method separately."
+fig24_training_curves.png (Train/VAL losses and ACER/AUC per epoch),previous work,PARTIAL,PARTIALLY_AVAILABLE,spec s20; run logs,"Generator TRAIN-loss curves are ready. VAL losses exist only for E03 (diagnostic). ACER/AUC per epoch belong to downstream detector training, which has not run."
+fig14/14b/15/16 downstream ACER/AUC/EER bars,all,NOT_READY,PENDING_DOWNSTREAM_EVALUATION,"spec s14-16, s18-20","No bank, detector, prediction or metric exists."
+fig17_downstream_roc.png / fig18_det_curve.png,all,NOT_READY,PENDING_DOWNSTREAM_EVALUATION,spec s22.2 prediction file,"Requires per-video TEST scores (video_score per sample) from the prediction file. An aggregate AUC/EER cannot produce ROC or DET curves, and no prediction file exists."
+fig19 attack-wise APCER / fig20 dataset-wise metrics,all,NOT_READY,PENDING_DOWNSTREAM_EVALUATION,"spec s16 subgroups, T13/T14",Pending downstream evaluation.
+fig21 binary vs native delta (E06c vs E06b),"E06c,E06b",NOT_READY,PENDING_DOWNSTREAM_EVALUATION,T09,Pending downstream evaluation.
+fig25 compute trade-off (ACER vs generation cost),all,NOT_READY,PENDING_DOWNSTREAM_EVALUATION,T15,Needs downstream ACER and generation sec/image.
+fig04 pair examples grid; fig05-fig13 generator metrics; qualitative grid (s21),all,NOT_READY,PENDING_BANK_GENERATION,"spec s13, s20, s21",No synthetic bank exists for any method.
+fig22/23/26 GPAT ablations,GPAT,NOT_APPLICABLE,NOT_APPLICABLE,spec s17.1/17.2,GPAT-only ablations; GPAT is owner-paused. None exist for the previous-work baselines.
+fig27 ranking parallel coordinates; fig28 failure counts,all,NOT_READY,PENDING_DOWNSTREAM_EVALUATION,T04/T06/T15/T17,Pending bank generation and evaluation.
+Table A training configuration,"E06c,E06b,E05,E03,E04,E01,E02",READY,READY_FROM_EXISTING_DATA,"configs/methods/*.yaml (= frozen_config_snapshot), run_start payloads",Draft in D1_table_A_training_configuration.csv.
+Table B training execution,"E06c,E06b,E05,E03",READY,READY_FROM_EXISTING_DATA,"run_summary.json, metrics.jsonl",GPU contention and CPU/RAM/IO are NOT_RECORDED. The E06c/E06b observed driver is not in the run artifacts.
+Table C generator training diagnostics,"E06c,E06b,E05,E03",READY,READY_WITH_POSTPROCESSING,metrics.jsonl,Within-method mean ± sample std only. Final-window definitions differ by method and are stated per row.
+T03 reimplementation fidelity,all,READY,READY_FROM_EXISTING_DATA,"method_status.csv, configs, amendments",Fidelity fields are current; the scientific execution columns in method_status.csv are stale (see G).
+T05 generator distribution metrics,all,NOT_READY,PENDING_BANK_GENERATION,spec s13,No bank.
+T06/T07/T08 downstream (video/DINOv3/frame),all,NOT_READY,PENDING_DOWNSTREAM_EVALUATION,spec s14-16,"The DINOv3 frozen config is NOT CREATED (CONFIG_STATUS Q-06), and the evaluator is not implemented."
+"T13/T14/T16 attack-wise, dataset-wise, statistics",all,NOT_READY,PENDING_DOWNSTREAM_EVALUATION,"spec s16, s18",Pending.
+T15 compute,"E06c,E06b,E05,E03",PARTIAL,PARTIALLY_AVAILABLE,"run_summary, metrics.jsonl",Training time and peak VRAM are ready. Params: E05 ready; E03/E06 need postprocessing. Gen sec/image and evaluator time are pending.
+T17 failures,all,PARTIAL,PARTIALLY_AVAILABLE,E06B_SEED42_ATTEMPT1_CHECKPOINT_WRITER_FAILURE.*,Training failures are documented; generation failures are pending.
+cross-domain (source->target domain) performance tables,all,NOT_APPLICABLE,NOT_APPLICABLE,spec s3 (pooled held-out protocol); spec limitations (line 840 of spec_extracted_text.txt),"The frozen protocol is pooled held-out, not cross-dataset DG. The defined analogue is the dataset-wise subgroup table T14 (pending)."
