@@ -1,5 +1,6 @@
 """E06b/E06c retrospective runtime-driver provenance (2026-10-30): checks the committed disclosure, re-derives the
-evidence record from its embedded host collection, and probes that contradicting evidence fails closed.
+evidence record from its embedded host collection, and probes that contradicting evidence fails closed. The "nothing
+approved" facts are pinned to the disclosure commit 09b4524 (the owner approved the acceptance in a later commit).
 
 Stdlib only, any host.
 """
@@ -9,6 +10,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,6 +18,7 @@ AUDIT = ROOT / 'outputs' / 'audit'
 RECORD = AUDIT / 'E06_RUNTIME_DRIVER_PROVENANCE.json'
 DISCLOSURE = ROOT / 'configs' / 'amendments' / 'e06_runtime_driver_retrospective_disclosure.yaml'
 DRAFT = ROOT / 'configs' / 'amendments' / 'e06_runtime_driver_acceptance.DRAFT.yaml'
+DISCLOSURE_COMMIT = '09b452415988f03bae074a134890c6438639ff02'
 
 
 def tool():
@@ -61,7 +64,10 @@ class E06RuntimeDriverProvenance(unittest.TestCase):
         self.assertEqual(d['runtime_compatibility_acceptance']['status'], 'PENDING_OWNER_DECISION')
         draft = json.loads(DRAFT.read_text())
         self.assertIs(draft['approved'], False)
-        self.assertFalse((ROOT / 'configs' / 'amendments' / 'e06_runtime_driver_acceptance.yaml').exists())
+        tree = subprocess.run(['git', 'ls-tree', '--name-only', DISCLOSURE_COMMIT, 'configs/amendments/'], cwd=ROOT,
+                              capture_output=True, check=True, text=True).stdout.split()
+        self.assertIn('configs/amendments/e06_runtime_driver_acceptance.DRAFT.yaml', tree)
+        self.assertNotIn('configs/amendments/e06_runtime_driver_acceptance.yaml', tree)
 
     def test_04_affected_runs_equal_closures(self):
         closed = set()

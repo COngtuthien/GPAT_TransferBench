@@ -1,0 +1,76 @@
+{
+  "schema_version": "e06_runtime_driver_acceptance_v1",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "approval_date": "2026-10-30",
+  "ruling": "OWNER_APPROVED_RETROSPECTIVE_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY_E06",
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E06_Runtime_Driver_Acceptance_Addendum.md",
+  "owner_ruling": "The owner accepts the six completed E06b/E06c scientific runs listed below as valid comparison baselines, without rerunning or discarding them, subject to explicit disclosure that they ran under NVIDIA driver 580.178.04 while environments/e06c.lock.json records 595.84. The acceptance is retrospective, applies only to these six runs and is limited to the driver version.",
+  "approved_draft": {
+    "commit": "09b452415988f03bae074a134890c6438639ff02",
+    "draft": "configs/amendments/e06_runtime_driver_acceptance.DRAFT.yaml",
+    "draft_sha256": "379c552e3587f8b499e69320a07bf3dc33267ffe320ee219c9bfe04b8554e691",
+    "disclosure": "configs/amendments/e06_runtime_driver_retrospective_disclosure.yaml",
+    "disclosure_sha256": "567567f31353a3f0ce14419671cb36996306d13000dc17d22cbb7260f3b34d7f",
+    "disclosure_document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E06_Retrospective_Runtime_Driver_Provenance_Addendum.md",
+    "disclosure_document_sha256": "525925c6619d3b5d2900eba14fd05c27031ef7683a745b777ed51d71b6e36a3a",
+    "evidence": "outputs/audit/E06_RUNTIME_DRIVER_PROVENANCE.json",
+    "evidence_sha256": "65762dad235532c4e5d9c668e9e783d5370096dfd4ee2d4e768cf1c98176563e",
+    "evidence_status": "E06_HISTORICAL_DRIVER_ESTABLISHED"
+  },
+  "draft_terms_approved": [
+    "accept the completed E06b/E06c results as runtime-compatible with environments/e06c.lock.json except for the GPU driver version (lock 595.84, historical 580.178.04)",
+    "the acceptance is retrospective; it is not a pre-execution approval and does not reuse the E05 or E03 rulings",
+    "GPU model and UUID are unchanged; every other lock identity field is accepted only as recorded by the lock hash and source checks the E06 CLIs performed",
+    "no claim of bitwise runtime equivalence between 595.84 and 580.178.04",
+    "no rerun, no lock edit, no change to checkpoints or run outputs",
+    "future E06 work on this host (bank generation) must record the live driver"
+  ],
+  "owner_scope_limits": [
+    "retrospective only",
+    "applies only to the six E06b/E06c runs listed in affected_runs",
+    "does not establish bitwise equivalence between NVIDIA drivers",
+    "does not claim the runs used driver 595.84",
+    "does not retroactively change environments/e06c.lock.json or any environment lock",
+    "does not modify any checkpoint, weight, log, run output or training data",
+    "does not authorize future E06 runs under arbitrary drivers",
+    "does not waive future runtime qualification requirements",
+    "does not authorize rerunning a seed because its performance is unfavorable"
+  ],
+  "lock": {"path": "environments/e06c.lock.json", "sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95", "edited": false},
+  "lock_driver_version": "595.84",
+  "historical_driver_version": "580.178.04",
+  "gpu": {"model": "NVIDIA GeForce RTX 3090", "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7", "unchanged": true},
+  "affected_runs": [
+    {"method_id": "E06c", "seed": 42, "run_id": "27dcaf23aac18d7a", "authority": "84809868acf472af5ba8cf6ab47165ae038e1012", "seed_closure": "cf5ed6cbd4fbc7f989136e33577ee298619fe6a4"},
+    {"method_id": "E06c", "seed": 1337, "run_id": "49a179a4dca77f41", "authority": "84809868acf472af5ba8cf6ab47165ae038e1012", "seed_closure": "9281c79d1c1f8e2b34199ff5434a6731d6e8bc9a"},
+    {"method_id": "E06c", "seed": 2026, "run_id": "86b631403e3c4ee1", "authority": "84809868acf472af5ba8cf6ab47165ae038e1012", "seed_closure": "81a8ef6d1e1dec97452b32955c17d4e8718abcb7"},
+    {"method_id": "E06b", "seed": 42, "run_id": "aa96129289d080ba", "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87", "seed_closure": "1f546c9fab1e284efd9deaef18ab7d415ff2c2ee"},
+    {"method_id": "E06b", "seed": 1337, "run_id": "9ffda3ea3f6cc767", "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87", "seed_closure": "a8a7b5dd9a1fd5cd8e82b870162732163b2859f9"},
+    {"method_id": "E06b", "seed": 2026, "run_id": "ec71778b28479de5", "authority": "d9ecbef7295fc6b41ced6a4966b49810d36a8c87", "seed_closure": "1729333197c5caab7a0d4d9302f1d3274ac90d98"}
+  ],
+  "not_covered": [
+    "E06b seed-42 attempt 1 (d3c0ddd5dc82a4a1, FAILED_TECHNICAL, excluded): not a scientific result and not accepted",
+    "any future E06 execution, including synthetic-bank generation"
+  ],
+  "statements": {
+    "retrospective": true,
+    "results_preserved_without_retraining_or_cherry_picking": true,
+    "lock_edited": false,
+    "scientific_source_training_data_checkpoints_run_outputs_modified": false,
+    "bitwise_runtime_equivalence_established": false,
+    "runs_presented_as_executed_under_locked_driver": false,
+    "e03_e05_driver_rulings_reused_as_prior_e06_approval": false,
+    "authorizes_future_e06_execution": false,
+    "waives_future_runtime_qualification": false,
+    "authorizes_performance_driven_rerun": false
+  },
+  "remaining_limitations": [
+    "the E06 qualifications (M6D5a-e 2026-09-25, M6FC/FD 2026-09-29) ran under 595.84; no E06 requalification under 580.178.04 exists",
+    "the 580.178.04 driver was not sampled inside any E06 scientific process; it is established with HIGH confidence from package history, kernel identity, library inventory and same-boot observations",
+    "reproducing the E06 runs bitwise under 595.84 is not possible on this host (595.84 is uninstalled and has no module for the running kernel)",
+    "per-run package versions, torchvision and the Python binary hash were not recorded per run"
+  ],
+  "disclosure_requirement": "every use of these six runs as comparison baselines must carry the driver disclosure (lock 595.84, executed 580.178.04, retrospective driver-version-only acceptance)",
+  "resolves": "the PENDING_OWNER_DECISION runtime_compatibility_acceptance of the disclosure committed at 09b4524; the disclosure record itself is unchanged"
+}
