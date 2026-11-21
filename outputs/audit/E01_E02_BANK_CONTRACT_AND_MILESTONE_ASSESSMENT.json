@@ -1,0 +1,98 @@
+{
+  "record": "E01_E02_BANK_CONTRACT_AND_MILESTONE_ASSESSMENT",
+  "date": "2026-11-22",
+  "branch": "m6-baselines",
+  "authority_commit": "1630d6a14af361f8975083cbc59ab967a73babab",
+  "gpu_checkout_commit": "18ba00e94813f005876c8d6235b0b848226b2c1d",
+  "gpu_checkout_moved": false,
+  "status": "E01_E02_BLOCKED_BY_MILESTONE_RULING",
+  "e04_seed2026_observed": {
+    "state": "RUNNING",
+    "tmux": "e04_physics_std_seed2026",
+    "pid": 435565,
+    "run_id": "e7100eb9a5ab0537",
+    "run_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_2026",
+    "global_step_observed": 426,
+    "observed_local": "2026-11-22T00:33+07:00",
+    "exit_marker_present": false,
+    "host_contact": "read-only (ps, tmux ls, nvidia-smi, ls, tail metrics.jsonl)"
+  },
+  "authority_sha256": {
+    "configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_Amendment_A2_M6_Baseline_Execution_Contracts.md": "b4fa7bfa75e5a977348c468d1bfe3e0004c3920293ecd9178700f9f4869fca8d",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E07c_Science_Launch_Decision_M6D6jR.md": "4707d1350ceecf651c1f5121a4b9b4795a85c667b308ce711a8e2b1ba9cfae2c",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "outputs/audit/PREVIOUS_WORK_EXECUTION_ROADMAP.json": "e30818e75d37fa54c63588c871f1d492448863f690ccfe12b378818846240e5d",
+    "outputs/audit/method_status.csv": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "manifests/m2_sample_accounting.parquet": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+    "environments/m6_core_gpu.lock.json": "53d4910a17c541ad7ac57a1ac410c0fef8c2d1c63399b423c97e490817b335eb",
+    "methods/fas_aug/e01.py": "c896d5b65dc3c719d1d81cc003b702aa5b77fb3b3a9653a3261aa8787ca00d70",
+    "methods/fas_aug/official.py": "909ece16ca2bb2df05e10c10804efd74b193baa39bd881693468d5c715ae5f7a",
+    "methods/freq_sub/e02.py": "7c2a539efa296e83e0e0d8d93cd94b877efe59dc86271b8e009563cbf7c07c78",
+    "configs/amendments/e01_e02_bank_milestone_ruling.DRAFT.yaml": "d51989a28dd623c6250ed6b021e0bd1254e37d0510868aed55e59bee1da466e8"
+  },
+  "population": {
+    "pairs": 8838,
+    "split": "TRAIN only",
+    "pair_id_range": [
+      "PTR000001",
+      "PTR008838"
+    ],
+    "pair_ids_contiguous_ascending": true,
+    "distinct_targets": 3830,
+    "distinct_sources": 8838,
+    "referenced_samples": 12668,
+    "referenced_samples_all_TRAIN": true,
+    "referenced_samples_m2_complete_with_face_sha256": true,
+    "datasets": {
+      "siwmv2": 5118,
+      "casia_fasd": 2520,
+      "msu_mfsd": 1200
+    },
+    "label_binary_target_source": [
+      0,
+      1
+    ]
+  },
+  "milestone_boundary": {
+    "resolved_by_frozen_authority": false,
+    "recommended": "A_M8_SMOKE_GATED",
+    "alternative": "B_M6_EXECUTION_EXTENSION (needs amendment)",
+    "production_execution_authorized": false,
+    "o3_smoke_test_completed": false
+  },
+  "open_owner_questions": {
+    "Q1": "milestone owner",
+    "Q2": "E01 round-robin ordinal (blocks E01 under any Q1 option)",
+    "Q3": "E02 clip->rint confirmation",
+    "Q4": "execution host"
+  },
+  "spec_silent_details": {
+    "E01_RR": {
+      "candidates": [
+        "MANIFEST_POSITION_ZERO_BASED",
+        "PAIR_ID_NUMERIC"
+      ],
+      "generator_default": "PAIR_ID_NUMERIC",
+      "m6c1_known_limitation": "pass canonical ordinal explicitly when consuming the frozen pair manifest",
+      "resolved": false
+    },
+    "E02_Q": {
+      "implemented": "clip then numpy.rint then uint8",
+      "qualified": "M6D1",
+      "resolved_by_spec": false
+    }
+  },
+  "this_record_did_not": [
+    "generate any real bank output",
+    "touch TEST",
+    "touch E04",
+    "move the GPU checkout",
+    "change frozen configs",
+    "change method_status.csv"
+  ]
+}

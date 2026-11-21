@@ -1,0 +1,50 @@
+{
+  "schema_version": "e01_e02_bank_milestone_ruling_v1",
+  "status": "DRAFT_PENDING_OWNER_DECISION",
+  "approved": false,
+  "date_prepared": "2026-11-22",
+  "assessment": "outputs/audit/E01_E02_BANK_CONTRACT_AND_MILESTONE_ASSESSMENT.md",
+  "questions": {
+    "Q1_milestone_owner": {
+      "question": "Is the full per-seed E01/E02 bank (8838 outputs x seeds 42/1337/2026) M6 method execution, or M8 'all synthetic banks' work gated by the M6D6jR O3 deterministic smoke test?",
+      "options": {
+        "A_M8_SMOKE_GATED": "E01/E02 full banks are M8 bank work; they stay behind the O3 smoke hard gate. M6 closes E01/E02 at PRODUCTION_WRITER_QUALIFIED. Banks are written at the M6B run-layout paths after the smoke test passes.",
+        "B_M6_EXECUTION_EXTENSION": "Extend O3: for non-learned E01/E02, full bank generation is the M6 execution step (the analogue of generator training) and may run before the smoke test; the smoke test still gates every M8+ downstream use (evaluator, metrics, plots) of those banks. Requires an explicit amendment because O3 lists 'bank' among the gated stages."
+      },
+      "recommended": "A_M8_SMOKE_GATED",
+      "recommendation_reason": "Spec section 25 assigns 'all synthetic banks' to M8; O3 exempts only generator training and names 'bank' as gated; E01/E02 have no training step, so their only execution is the bank."
+    },
+    "Q2_e01_round_robin_ordinal": {
+      "question": "Which ordinal drives the spec 8.1 'deterministic round-robin by pair_id'? pairs_train_v1 pair_ids are exactly PTR000001..PTR008838 in stored order, so the two candidates differ by one operator for every pair.",
+      "options": {
+        "MANIFEST_POSITION_ZERO_BASED": "operator_set[i mod 8] with i the 0-based position in ascending pair_id order (PTR000001 -> Color_Diversity). Matches the M6C1 known limitation: 'pass canonical ordinal explicitly when consuming the frozen pair manifest'.",
+        "PAIR_ID_NUMERIC": "operator_set[int(digits(pair_id)) mod 8] (PTR000001 -> Color_Distortion). This is the M6C1 E01Generator default when no index is passed."
+      },
+      "recommended": "MANIFEST_POSITION_ZERO_BASED",
+      "operator_count_effect": "8838 = 8 x 1104 + 6; zero-based gives the 6 extra pairs to operators 0-5, numeric gives them to operators 1-6"
+    },
+    "Q3_e02_uint8_quantization": {
+      "question": "Spec 8.2 says 'real part, clip to [0,255]' and spec 7 requires uint8 output, but neither fixes the float-to-uint8 rounding. M6C1 implemented clip then numpy.rint (round half to even), and M6D1 qualified it.",
+      "options": {
+        "CONFIRM_CLIP_THEN_RINT": "keep the implemented and qualified clip -> numpy.rint -> uint8",
+        "OTHER": "owner names a different rule (would require reimplementation and requalification)"
+      },
+      "recommended": "CONFIRM_CLIP_THEN_RINT"
+    },
+    "Q4_execution_host": {
+      "question": "Where may the banks run? The qualified E01/E02 environment is gpat-m5 on the GPU host (environments/m6_core_gpu.lock.json; NumPy 2.4.6; A2-03 requires the NumPy pin at runtime). The GPU checkout is pinned to 18ba00e for E04 and must not move while E04 trains.",
+      "options": {
+        "SEPARATE_CLONE_CPU_CONCURRENT": "separate clone on the GPU host at the bank-writer commit; CPU only (CUDA_VISIBLE_DEVICES empty), nice 19 + ionice idle; runs alongside E04",
+        "AFTER_E04": "wait for E04 seed 2026 to finish, then fast-forward the GPU checkout"
+      },
+      "recommended": "SEPARATE_CLONE_CPU_CONCURRENT"
+    }
+  },
+  "unchanged_by_any_option": [
+    "frozen configs/methods/e01_fas_aug.yaml and e02_freqsub.yaml and their snapshots",
+    "operator set, ranges, magnitude grid, level-zero retention, asset order (A2-01), seed preimages (A2-04/A2-05), block geometry, k=40, PCG64 selection",
+    "N_syn = 8838 per seed; seeds 42, 1337, 2026; TEST firewall",
+    "method_status.csv (a separate approval is required to change it)"
+  ],
+  "activation": "the owner approves by committing configs/amendments/e01_e02_bank_milestone_ruling.yaml with approved true and one chosen option per question; tools/e01_e02_bank.py refuses production while that file is absent, unapproved or incomplete; nothing reads this draft as authority"
+}
