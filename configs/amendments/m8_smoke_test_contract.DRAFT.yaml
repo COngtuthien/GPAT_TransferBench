@@ -1,0 +1,118 @@
+{
+  "schema_version": "m8_smoke_test_contract_v1",
+  "status": "DRAFT_PENDING_OWNER_DECISION",
+  "approved": false,
+  "date_prepared": "2026-11-22",
+  "assessment": "outputs/audit/M8_SMOKE_TEST_AUTHORITY_ASSESSMENT.md",
+  "frozen_requirements": {
+    "spec_26": "A full deterministic smoke test on a 2-subject-per-class toy subset must finish before full runs.",
+    "spec_32": "smoke test passes for generator -> bank -> evaluator -> metrics -> plots.",
+    "M6D6jR_O3": "smoke_test_required true, smoke_test_completed false, not waived; hard gate before the first FULL M8+ end-to-end bank / evaluator / metrics / plots execution; must_exercise [generator, bank, evaluator, metrics, plots]; scientific results from the smoke FORBIDDEN",
+    "e01_e02_ruling_Q1": "A_M8_SMOKE_GATED: production E01/E02 banks wait for a committed, hash-verified smoke-test record bound in configs/amendments/e01_e02_bank_milestone_ruling.yaml"
+  },
+  "questions": {
+    "S1_scope": {
+      "question": "Is the smoke test one global end-to-end gate, or may it be staged so that a bank-stage smoke unlocks full M8 banks before the evaluator/metrics/plots stages exist?",
+      "options": {
+        "A_GLOBAL_END_TO_END": "literal spec 26/32 and O3: one smoke test exercising generator -> bank -> evaluator -> metrics -> plots must pass before any full M8 bank, including E01/E02. Requires the M9/M10 evaluator, metrics and plot code, a locked evaluator environment and a smoke-scale downstream training run first.",
+        "B_STAGED_AMENDMENT": "amend the O3 reading: a per-method bank-stage smoke (generator -> bank on the toy subset, real TRAIN images, deterministic replay) unlocks full M8 banks for that method; the evaluator -> metrics -> plots smoke stays a hard gate before the first full M9+ execution and before any downstream use of any bank. Changes how 'must finish before full runs' is applied and needs an explicit owner amendment."
+      },
+      "recommended": "A_GLOBAL_END_TO_END",
+      "recommendation_reason": "the only option consistent with the frozen text without an amendment; B is the only route to E01/E02 banks before the evaluator exists and is an owner trade-off, not an inference"
+    },
+    "S2_class_definition": {
+      "question": "What is a 'class' in '2-subject-per-class'?",
+      "options": {
+        "BINARY_LABEL_PER_DATASET": "label_binary (live/spoof) within each of casia_fasd, msu_mfsd, siwmv2",
+        "ATTACK_MACRO_PER_DATASET": "attack_macro (live, print, replay, makeup, mask_2d, mask_3d, partial) within each dataset",
+        "BINARY_LABEL_POOLED": "label_binary over the pooled data"
+      },
+      "recommended": "BINARY_LABEL_PER_DATASET",
+      "note": "T01 counts 'binary class'; the primary track is Binary. In CASIA/MSU every TRAIN subject has both live and spoof samples, so the same 2 subjects can serve both classes."
+    },
+    "S3_siwmv2_subject_unit": {
+      "question": "SiW-Mv2 has no subject_id_global (all 9507 TRAIN rows null; split is video-disjoint by content_group_id, DEV-012). Which unit stands in for 'subject'?",
+      "options": {
+        "CONTENT_GROUP_ID": "use the DEV-012 allocation unit content_group_id (= allocation_group_id) as the subject proxy, disclosed as not subject-level",
+        "EXCLUDE_SIWMV2": "toy subset from CASIA-FASD and MSU-MFSD only"
+      },
+      "recommended": "CONTENT_GROUP_ID"
+    },
+    "S4_selection_rule": {
+      "question": "How are the toy subjects chosen deterministically?",
+      "options": {
+        "HASH_RANK": "per (dataset, split, class): rank eligible subject units by SHA256('gpatbench.smoke.v1|'+dataset+'|'+split+'|'+class+'|'+unit_id) ascending, take the first 2; frozen seed-free and recorded",
+        "OWNER_LIST": "owner names the units explicitly"
+      },
+      "recommended": "HASH_RANK"
+    },
+    "S5_splits_and_test": {
+      "question": "Which splits does the smoke use, and may it touch TEST?",
+      "options": {
+        "TRAIN_VAL_ONLY_TEST_PROXY": "toy TRAIN units for generator/bank/downstream training, toy VAL units for checkpoint/threshold selection, and a disjoint toy VAL unit set as the stand-in for the 'apply threshold once to TEST' stage; no TEST row, file or metadata used",
+        "TOY_TEST": "toy TEST units exercise the TEST stage (conflicts with 'TEST untouched before checkpoint/threshold freeze' unless explicitly ruled)"
+      },
+      "recommended": "TRAIN_VAL_ONLY_TEST_PROXY"
+    },
+    "S6_bank_pair_population": {
+      "question": "Whether any frozen pairs_train_v1 pair lies entirely inside the toy subjects depends on which subjects are chosen (the first 2 CASIA/MSU subject ids contain 0; the best 2-subject sets contain at most 24 CASIA / 38 MSU pairs; SiW-Mv2 depends on S3). Which pairs feed the bank stage?",
+      "options": {
+        "FROZEN_PAIRS_TARGET_IN_TOY": "frozen pairs_train_v1 rows whose target_live sample is in a toy TRAIN unit; the source spoof may come from any TRAIN unit; frozen positions kept, so E01 operator = global position % 8 and outputs equal the corresponding future production outputs",
+        "FROZEN_PAIRS_FIRST_N": "the first N frozen pairs by position (owner sets N), independent of the toy subjects",
+        "REBUILD_PAIRS_ON_TOY": "rerun the M4 pair builder on the toy subset (smoke-only pairs, not frozen pairs)"
+      },
+      "recommended": "FROZEN_PAIRS_TARGET_IN_TOY"
+    },
+    "S7_methods_covered": {
+      "question": "Which generators must the smoke exercise?",
+      "options": {
+        "ALL_METHODS_WITH_BANK_WRITERS": "every method whose M8 bank writer exists at smoke time (today only E01/E02); each later method needs its own bank-stage smoke before its full bank",
+        "ALL_ACTIVE_METHODS": "all active M8 methods (E01-E06c and GPAT) in one run; waits for every bank writer and for GPAT"
+      },
+      "recommended": "ALL_METHODS_WITH_BANK_WRITERS"
+    },
+    "S8_evaluator_budget_and_environment": {
+      "question": "configs/frozen/downstream_resnet18.yaml fixes 40 epochs, AMP and ImageNet weights; no evaluator code, no torchvision weights and no evaluator environment exist (PLANNED_ENVIRONMENT_REQUIREMENTS env-core NOT CREATED). What smoke budget, device and environment apply?",
+      "options": {
+        "SMOKE_SCHEDULE_CPU": "frozen downstream config with an owner-fixed smoke schedule (e.g. 1 epoch or a fixed iteration count), CPU, new locked env-core; requires authorization to implement M9/M10 code and to create the environment (package installation)",
+        "SMOKE_SCHEDULE_GPU_AFTER_E04": "same, on the 3090 after E04 seed 2026 ends"
+      },
+      "recommended": "owner choice; no default (package installation and evaluator implementation are explicit authorizations)"
+    },
+    "S9_determinism_criterion": {
+      "question": "What does 'deterministic' require?",
+      "options": {
+        "BITWISE_ALL_STAGES": "two runs give byte-identical banks, predictions, metrics tables and plot inputs",
+        "BITWISE_BANK_PROCEDURAL_EVALUATOR": "byte-identical banks and metric recomputation from saved predictions; the evaluator training follows the E04 D12 procedural-reproducibility precedent"
+      },
+      "recommended": "BITWISE_BANK_PROCEDURAL_EVALUATOR if the evaluator runs on GPU; BITWISE_ALL_STAGES if CPU"
+    },
+    "S10_seeds": {
+      "question": "Which seeds?",
+      "options": {
+        "ALL_THREE_BANK_SEED42_EVALUATOR": "banks for 42/1337/2026, downstream smoke at seed 42",
+        "SEED42_ONLY": "seed 42 throughout"
+      },
+      "recommended": "ALL_THREE_BANK_SEED42_EVALUATOR"
+    }
+  },
+  "proposed_completion_record": {
+    "path": "outputs/audit/M8_SMOKE_TEST_RECORD.json (does not exist; written only by a passing, independently re-derived smoke run)",
+    "required_fields": ["smoke_test_passed (true only if every stage gate passes)", "contract sha256 (the approved version of this file)", "source commit and clean tree", "environment identities", "toy subset ids and their manifest hashes", "per-method per-seed bank manifest sha256 and replay result", "evaluator, metrics and plot stage gates", "TEST firewall evidence", "commands and exit codes"],
+    "reader_constraint": "methods/common/bank_writer.load_production_authorization requires a .json file at ROOT/<path>, its SHA256 equal to the bound sha256, and top-level smoke_test_passed true"
+  },
+  "proposed_e01_e02_binding": {
+    "field": "configs/amendments/e01_e02_bank_milestone_ruling.yaml smoke_test_record",
+    "value_template": {"path": "outputs/audit/M8_SMOKE_TEST_RECORD.json", "sha256": "<SHA256 of the committed passing record>"},
+    "requires": ["owner approval of this contract (separate commit)", "a passing record committed and independently re-derived", "a new owner approval to set smoke_test_record (the ruling is an approved amendment; the change is recorded additively with an addendum)", "a record that O3 smoke_test_completed is now true (additive; the M6D6jR record stays unchanged)", "the production authority commit named in that approval"],
+    "recommended_gate_hardening_at_binding": "load_production_authorization should also require that the record names the method (E01/E02) with a passing bank stage and a contract sha256 equal to the approved contract; today it checks only the file hash and smoke_test_passed"
+  },
+  "unchanged_by_any_option": [
+    "frozen spec, E01/E02 configs and snapshots, the E01/E02 owner ruling and its decisions",
+    "M6D6jR O3 (until an owner amendment says otherwise)",
+    "no smoke output is a scientific result",
+    "method_status.csv",
+    "E04 and every completed baseline result"
+  ],
+  "activation": "the owner approves by committing configs/amendments/m8_smoke_test_contract.yaml with approved true and one option per question; nothing reads this draft as authority"
+}

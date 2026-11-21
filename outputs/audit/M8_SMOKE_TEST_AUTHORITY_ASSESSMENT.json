@@ -1,0 +1,132 @@
+{
+  "record": "M8_SMOKE_TEST_AUTHORITY_ASSESSMENT",
+  "date": "2026-11-22",
+  "branch": "m6-baselines",
+  "starting_commit": "fa239adb9df6913c866cfeae05849aa6567f6b6d",
+  "status": "M8_SMOKE_TEST_BLOCKED_BY_OWNER_DECISION",
+  "scope_finding": "GLOBAL_END_TO_END (spec 26/32, O3 must_exercise generator, bank, evaluator, metrics, plots); not method-specific under current authority",
+  "authority_sha256": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "docs/spec/spec_extracted_text.txt": "0bf6b1607d2f39db1f091df772c1da82c1e76539fa7859f627d115da706e5d83",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "configs/amendments/e01_e02_bank_milestone_ruling.yaml": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e",
+    "configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+    "configs/frozen/downstream_resnet18.yaml": "f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b",
+    "configs/frozen/split_v1.yaml": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+    "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "outputs/audit/PREVIOUS_WORK_EXECUTION_ROADMAP.json": "e30818e75d37fa54c63588c871f1d492448863f690ccfe12b378818846240e5d",
+    "outputs/audit/E01_M6_WRITER_READINESS_CLOSURE.json": "4fdc14c7a6469e415f152cb12d597eff438fe73635a50f350c6870f1720cce41",
+    "outputs/audit/E02_M6_WRITER_READINESS_CLOSURE.json": "d650bc282686285e82990d0daad6b1a0c2923a0302ba790faa9d978c253bfc5f",
+    "outputs/audit/method_status.csv": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723",
+    "environments/PLANNED_ENVIRONMENT_REQUIREMENTS.md": "5608f5a63a4e00026fae09ee60c094e8f8ffe907646362f073458f0e6da2345a"
+  },
+  "o3": {
+    "smoke_test_required": true,
+    "smoke_test_completed": false,
+    "smoke_test_waived": false,
+    "must_exercise": [
+      "generator",
+      "bank",
+      "evaluator",
+      "metrics",
+      "plots"
+    ]
+  },
+  "existing_infrastructure": {
+    "generator_bank_stage": "E01/E02 only: methods/common/bank_writer.py, tools/e01_e02_bank.py (qualified, 6f15f8a); no bank writer for E03-E06c or GPAT",
+    "evaluator_stage": "MISSING: no downstream ResNet-18/DINOv3 code (downstream/ holds only .gitkeep); no generator-eval (T04/T05) code; gpatbench/cli.py has no generate-bank / evaluate-generator / train-downstream / evaluate-downstream command",
+    "metrics_stage": "MISSING for M9/M10 (only gpatbench/probe/metrics.py, ArtifactProbeNet macro-F1)",
+    "plots_stage": "MISSING (outputs/plots holds only .gitkeep)",
+    "evaluator_environment": "NOT CREATED (PLANNED_ENVIRONMENT_REQUIREMENTS env-core; torchvision ResNet-18 weights MISSING)",
+    "smoke_contract_or_toy_subset": "MISSING: no committed toy-subset definition, selection rule, budget or acceptance gates"
+  },
+  "toy_subset_facts_train_val_only": {
+    "TRAIN/casia_fasd": {
+      "unit": "subject_id_global",
+      "live_units": 35,
+      "spoof_units": 35,
+      "null_subject_id_rows": 0
+    },
+    "TRAIN/msu_mfsd": {
+      "unit": "subject_id_global",
+      "live_units": 25,
+      "spoof_units": 25,
+      "null_subject_id_rows": 0
+    },
+    "TRAIN/siwmv2": {
+      "unit": "content_group_id",
+      "live_units": 549,
+      "spoof_units": 641,
+      "null_subject_id_rows": 9507
+    },
+    "VAL/casia_fasd": {
+      "unit": "subject_id_global",
+      "live_units": 8,
+      "spoof_units": 8,
+      "null_subject_id_rows": 0
+    },
+    "VAL/msu_mfsd": {
+      "unit": "subject_id_global",
+      "live_units": 5,
+      "spoof_units": 5,
+      "null_subject_id_rows": 0
+    },
+    "VAL/siwmv2": {
+      "unit": "content_group_id",
+      "live_units": 118,
+      "spoof_units": 131,
+      "null_subject_id_rows": 2033
+    }
+  },
+  "toy_pair_illustration": {
+    "casia_fasd": {
+      "illustrative_units": [
+        "casia_fasd::1",
+        "casia_fasd::10"
+      ],
+      "pairs_fully_inside": 0,
+      "pairs_target_inside": 93
+    },
+    "msu_mfsd": {
+      "illustrative_units": [
+        "msu_mfsd::001",
+        "msu_mfsd::003"
+      ],
+      "pairs_fully_inside": 0,
+      "pairs_target_inside": 172
+    },
+    "max_frozen_pairs_inside_any_2_subject_set": {
+      "casia_fasd": 24,
+      "msu_mfsd": 38
+    }
+  },
+  "test_rows_inspected": 0,
+  "blocking_owner_decisions": [
+    "S1 scope",
+    "S2 class",
+    "S3 SiW-Mv2 unit",
+    "S4 selection",
+    "S5 splits/TEST",
+    "S6 bank pairs",
+    "S7 methods",
+    "S8 evaluator budget/environment (needs implementation + package-installation authorization)",
+    "S9 determinism",
+    "S10 seeds"
+  ],
+  "excluded_by_this_task": [
+    "downstream detector training (the evaluator stage)",
+    "package installation (evaluator environment)",
+    "TEST access"
+  ],
+  "e01_e02_contract_reverified": {
+    "tests": "test_e01_e02_* 40/40 OK, test_m6c1_* 83/83 OK (laptop .venv)",
+    "frozen_configs_equal_snapshots": true,
+    "production_gate_status": "E01_E02_BLOCKED_BY_M8_SMOKE_GATE"
+  },
+  "correction_to_prior_record": "outputs/audit/E01_E02_M6_WRITER_READINESS_CLOSURE.md (fa239ad) says '--check-only performs the first real-face read'. That is wrong: tools/e01_e02_bank.py --check-only reads only manifests and checks that the faces root is a directory; no face file is opened. The historical record is left unchanged; a face-bytes preflight (read + SHA256 of all 12,668 referenced faces, no decode) is proposed as a production launch check.",
+  "smoke_test_executed": false,
+  "real_images_read": 0,
+  "banks_generated": 0
+}
