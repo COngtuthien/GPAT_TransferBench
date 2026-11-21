@@ -70,9 +70,16 @@ class TestAuthorizationGate(unittest.TestCase):
         self.assertIn(bw.BLOCKED_STATUS, str(cm.exception))
 
     def test_01_repository_has_no_approved_ruling(self):
-        self.assertFalse((ROOT / bw.RULING_PATH).exists())
+        # Historical claim, pinned to the writer/qualification commits (01de91a..028b5c1): no approved ruling existed
+        # then. The owner ruling added later (tests/test_e01_e02_bank_owner_ruling.py) still refuses production.
+        import subprocess
+        for commit in ("01de91ac3d532d008a046cba4ade173d8fbe555f", "241321f760bfcc9e3bbdfb4088b73ba8fc9bc727",
+                       "028b5c1d4b3e86270c22eb8db54360ece5daaaca"):
+            r = subprocess.run(["git", "cat-file", "-e", f"{commit}:{bw.RULING_PATH}"], cwd=ROOT, capture_output=True)
+            self.assertNotEqual(r.returncode, 0, commit)
         for m in bw.METHODS:
-            self.assertBlocked(m)
+            with self.assertRaises(bw.BankBlocked):
+                bw.load_production_authorization(m)
 
     def test_02_draft_is_never_authority(self):
         draft = ROOT / "configs/amendments/e01_e02_bank_milestone_ruling.DRAFT.yaml"

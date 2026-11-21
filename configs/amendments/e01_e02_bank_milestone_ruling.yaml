@@ -1,0 +1,92 @@
+{
+  "schema_version": "e01_e02_bank_milestone_ruling_v1",
+  "amendment_id": "E01_E02_BANK_MILESTONE_RULING",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "approval_date": "2026-11-22",
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E01_E02_Bank_Milestone_Owner_Ruling_Addendum.md",
+  "approved_draft": {
+    "path": "configs/amendments/e01_e02_bank_milestone_ruling.DRAFT.yaml",
+    "commit": "01de91ac3d532d008a046cba4ade173d8fbe555f",
+    "sha256": "e49df97fa2eefa451b26efae89077d155697c3bbafdd9a9c26981614bac13482",
+    "assessment": "outputs/audit/E01_E02_BANK_CONTRACT_AND_MILESTONE_ASSESSMENT.md",
+    "assessment_sha256": "f70edd59332d0b2a0bedbecce14911402f7a686ba198bfe1db6b353fb86428d6",
+    "consistency": "each decision below is the option the DRAFT recommended for that question; no materially different scientific choice was introduced"
+  },
+  "decisions": {
+    "Q1_milestone_owner": "A_M8_SMOKE_GATED",
+    "Q2_e01_round_robin_ordinal": "MANIFEST_POSITION_ZERO_BASED",
+    "Q3_e02_uint8_quantization": "CONFIRM_CLIP_THEN_RINT",
+    "Q4_execution_host": "SEPARATE_CLONE_CPU_CONCURRENT"
+  },
+  "smoke_test_record": null,
+  "smoke_test_record_note": "null on purpose. Under Q1 option A, tools/e01_e02_bank.py refuses production until a committed, hash-verified deterministic smoke-test record with smoke_test_passed true is bound here. That binding is M8 work and needs its own owner authorization; this ruling does not supply, waive or shortcut it.",
+  "owner_ruling": {
+    "Q1_milestone_owner": {
+      "decision": "A_M8_SMOKE_GATED",
+      "text": "M8 owns real production synthetic-bank generation. M6 owns method implementation, frozen-contract verification, production writer qualification and readiness evidence. M8 owns production synthetic-bank generation, final bank manifests and bank completion audits. The deterministic smoke-test gate required by the existing authority (M6D6jR O3) remains mandatory before production banks. E01 and E02 require no generator training. The correct M6 closure for both methods is writer-qualified, not bank-completed.",
+      "scope": "milestone ownership of the E01/E02 per-seed banks (8838 outputs x seeds 42/1337/2026); no change to the frozen milestone specification (spec section 25) or to M6D6jR O3",
+      "prohibitions": ["no real TRAIN bank is generated in M6", "this ruling is not approval to bypass the M8 smoke-test gate", "the frozen milestone specification is not altered"]
+    },
+    "Q2_e01_round_robin_ordinal": {
+      "decision": "MANIFEST_POSITION_ZERO_BASED",
+      "text": "For the canonical TRAIN pair relation sorted by pair_id ascending, use zero-based positional indexing: the first pair PTR000001 has position 0, and the official operator is operator_set[position % 8]. PTR000001 maps to operator 0 (Color_Diversity), PTR000002 to operator 1 (Color_Distortion), cyclically across the full frozen population. The operator index is not derived from the numeric suffix of pair_id and the operator sequence is not rotated by experiment seed.",
+      "pinned_operator_order": ["Color_Diversity", "Color_Distortion", "Reflection", "BN_Halftone", "Moire_Pattern", "SFC_Halftone", "Hand_Trembling", "Low_Resolution"],
+      "pinned_operator_order_source": "official RizhaoCai/FAS-Aug@0da1dd79bad00e225b8cb6977c7f3f06ee8f7517 data/FAS_Augmentations.py augment list entries #0..#7; equal to configs/methods/e01_fas_aug.yaml generation.operator_set; OfficialFASAugBackend.prepare() refuses any mismatch",
+      "population_effect": "8838 = 8 x 1104 + 6: operators 0-5 receive 1105 pairs and operators 6-7 receive 1104 pairs per seed",
+      "preserved": ["approved per-pair seed derivation operator_seed = int.from_bytes(SHA256(UTF-8(pair_id + str(seed))), 'big') mod 2^31 (A2-05; PTR000001/42 -> 795981663)", "all eight official FAS-Aug operators and their magnitude ranges", "NUM_MAG 10 magnitude grid", "level 0 retained; some outputs may be unchanged copies of the live image and are disclosed"],
+      "implementation_status_at_ruling": "the writer (methods/common/bank_writer.py at 01de91a) already passes index = position for MANIFEST_POSITION_ZERO_BASED, and the 028b5c1 synthetic qualification used that rule (gate G5: operator = position mod 8); the approved rule is therefore not a mapping change relative to the qualified writer"
+    },
+    "Q3_e02_uint8_quantization": {
+      "decision": "CONFIRM_CLIP_THEN_RINT",
+      "text": "Keep the existing M6C1/M6D1 implementation-defined rule: frozen frequency-substitution computation, target phase preserved, inverse FFT, real component, clip to [0,255], numpy.rint (round to nearest, ties to even), convert to uint8.",
+      "disclosure": "the final rounding convention is an implementation-defined choice already qualified in M6D1, not an explicit instruction of spec section 8.2",
+      "unchanged": ["frequency-band selection (0.20 <= r <= 0.50, >= 75 % block coverage)", "16x16 block size", "eligible block population n_eligible = 159 and k = 40", "source/target semantics (source spoof magnitude, target live phase)", "pixel-wise conjugate closure", "inverse transform", "numerical tolerance 1e-8 on the inverse-FFT imaginary residual"],
+      "retained_evidence": "E02 numerical regression fixtures and the cross-environment pixel identity observed at 028b5c1"
+    },
+    "Q4_execution_host": {
+      "decision": "SEPARATE_CLONE_CPU_CONCURRENT",
+      "text": "Future E01/E02 production banks run on CPU in the locked gpat-m5 environment on the GPU host, from an isolated clean checkout or clone pinned to the approved production authority, never from the GPU checkout used by E04 scientific training. E04's environment and runtime are not modified. No package is installed or upgraded.",
+      "interpretation_of_concurrent": "the isolated CPU-only run need not wait for an E04 run to end; it never touches the E04 checkout, environment, runtime root, tmux session or GPU (CUDA_VISIBLE_DEVICES empty). This does not authorize running before the M8 gate.",
+      "disclosures": ["E01: cross-environment numerical variation was observed in the Hand_Trembling operator (3/72 synthetic outputs differ by <= 1 LSB between the laptop .venv and gpat-m5); laptop and GPU-host E01 outputs are not claimed byte-identical", "E02: the observed cross-environment pixel identity is evidence for those two stacks only, not an unrestricted guarantee"],
+      "machine_checked": "operational; tools/e01_e02_bank.py enforces the locked gpat-m5 interpreter (verify_locked_environment) and a clean worktree"
+    }
+  },
+  "frozen_authorities": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml (M6D6jR O3)": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E07c_Science_Launch_Decision_M6D6jR.md": "4707d1350ceecf651c1f5121a4b9b4795a85c667b308ce711a8e2b1ba9cfae2c",
+    "outputs/audit/PREVIOUS_WORK_EXECUTION_ROADMAP.json": "e30818e75d37fa54c63588c871f1d492448863f690ccfe12b378818846240e5d",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "manifests/m2_sample_accounting.parquet": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+    "environments/m6_core_gpu.lock.json": "53d4910a17c541ad7ac57a1ac410c0fef8c2d1c63399b423c97e490817b335eb",
+    "outputs/audit/method_status.csv": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723"
+  },
+  "qualification_implications": {
+    "Q2": "no operator mapping change relative to the qualified writer; production authorization is narrowed to the approved rule, and a fresh post-ruling synthetic qualification re-tests the exact assignment instead of relying on the 028b5c1 record",
+    "Q3": "no change; the M6D1 rule stays qualified and is re-checked by an independent recomputation in the post-ruling qualification",
+    "Q1": "the CLI must still refuse production after this ruling, now because the M8 smoke-test record is absent",
+    "historical_evidence": "the 028b5c1 qualification records and the DRAFT stay byte-unchanged; they are not rewritten"
+  },
+  "authorizes": {
+    "production_bank_generation": false,
+    "smoke_test_waiver": false,
+    "scientific_training": false,
+    "downstream_evaluation": false,
+    "test_split_access": false,
+    "method_status_update": false,
+    "package_installation": false
+  },
+  "unchanged_by_this_ruling": [
+    "frozen spec, configs/methods/e01_fas_aug.yaml and e02_freqsub.yaml and their snapshots",
+    "operator set, ranges, magnitude grid, level-zero retention, asset order (A2-01), seed preimages (A2-04/A2-05), block geometry, k=40, PCG64 selection",
+    "N_syn = 8838 per seed; seeds 42, 1337, 2026; TEST firewall",
+    "M6D6jR O3 smoke-test hard gate",
+    "outputs/audit/method_status.csv (a separately verified registry-authority decision is required to change it)",
+    "E04 and every other completed or running scientific result"
+  ],
+  "next_authorized_milestone": "M8 deterministic smoke test (spec sections 26/32, M6D6jR O3); E01/E02 production banks only after it passes and is bound by a separate owner authorization"
+}
