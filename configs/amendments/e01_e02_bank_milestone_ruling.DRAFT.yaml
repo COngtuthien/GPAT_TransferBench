@@ -46,5 +46,17 @@
     "N_syn = 8838 per seed; seeds 42, 1337, 2026; TEST firewall",
     "method_status.csv (a separate approval is required to change it)"
   ],
-  "activation": "the owner approves by committing configs/amendments/e01_e02_bank_milestone_ruling.yaml with approved true and one chosen option per question; tools/e01_e02_bank.py refuses production while that file is absent, unapproved or incomplete; nothing reads this draft as authority"
+  "activation": "the owner approves by committing configs/amendments/e01_e02_bank_milestone_ruling.yaml with approved true and one chosen option per question; tools/e01_e02_bank.py refuses production while that file is absent, unapproved or incomplete; nothing reads this draft as authority",
+  "approved_file_schema_checked_by_methods_common_bank_writer": {
+    "schema_version": "e01_e02_bank_milestone_ruling_v1",
+    "status": "OWNER_APPROVED",
+    "approved": true,
+    "decisions": {
+      "Q1_milestone_owner": "A_M8_SMOKE_GATED | B_M6_EXECUTION_EXTENSION",
+      "Q2_e01_round_robin_ordinal": "MANIFEST_POSITION_ZERO_BASED | PAIR_ID_NUMERIC (required for E01)",
+      "Q3_e02_uint8_quantization": "CONFIRM_CLIP_THEN_RINT (required for E02)",
+      "Q4_execution_host": "SEPARATE_CLONE_CPU_CONCURRENT | AFTER_E04 (operational; not machine-checked)"
+    },
+    "smoke_test_record": "required only for option A: {path: committed JSON with smoke_test_passed true, sha256: its SHA256}"
+  }
 }
