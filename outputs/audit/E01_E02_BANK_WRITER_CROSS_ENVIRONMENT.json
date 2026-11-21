@@ -1,0 +1,81 @@
+{
+  "record": "E01_E02_BANK_WRITER_CROSS_ENVIRONMENT_COMPARISON",
+  "source_commit": "241321f760bfcc9e3bbdfb4088b73ba8fc9bc727",
+  "laptop": {
+    "python": "3.12.3",
+    "numpy": "2.5.3",
+    "pillow": "12.3.0",
+    "opencv": "5.0.0",
+    "record": "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION.json"
+  },
+  "gpat_m5_gpu_host": {
+    "python": "3.11.16",
+    "numpy": "2.4.6",
+    "pillow": "12.3.0",
+    "opencv": "5.0.0",
+    "record": "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_GPAT_M5.json",
+    "execution": "separate clone of 241321f (git bundle) at /home/student20261/workdir/e01e02_bank_qual_241321f, FAS-Aug cache symlinked read-only from the E04 checkout, CUDA_VISIBLE_DEVICES empty, nice 19, ionice idle; clone and temp files removed afterwards; E04 checkout 18ba00e unchanged and clean"
+  },
+  "banks": {
+    "E01_seed_42": {
+      "rows": 24,
+      "recipe_metadata_identical_except_E02_max_abs_imag": true,
+      "pixel_identical_rows": 22,
+      "pixel_differing": [
+        {
+          "pair_id": "PTR000007",
+          "operator": "Hand_Trembling",
+          "level": 0.7777777777777778,
+          "max_abs_diff": 1,
+          "pixels_differing": 3083
+        },
+        {
+          "pair_id": "PTR000023",
+          "operator": "Hand_Trembling",
+          "level": 1.0,
+          "max_abs_diff": 1,
+          "pixels_differing": 2689
+        }
+      ]
+    },
+    "E01_seed_1337": {
+      "rows": 24,
+      "recipe_metadata_identical_except_E02_max_abs_imag": true,
+      "pixel_identical_rows": 24,
+      "pixel_differing": []
+    },
+    "E01_seed_2026": {
+      "rows": 24,
+      "recipe_metadata_identical_except_E02_max_abs_imag": true,
+      "pixel_identical_rows": 23,
+      "pixel_differing": [
+        {
+          "pair_id": "PTR000015",
+          "operator": "Hand_Trembling",
+          "level": 0.8888888888888888,
+          "max_abs_diff": 1,
+          "pixels_differing": 3338
+        }
+      ]
+    },
+    "E02_seed_42": {
+      "rows": 24,
+      "recipe_metadata_identical_except_E02_max_abs_imag": true,
+      "pixel_identical_rows": 24,
+      "pixel_differing": []
+    },
+    "E02_seed_1337": {
+      "rows": 24,
+      "recipe_metadata_identical_except_E02_max_abs_imag": true,
+      "pixel_identical_rows": 24,
+      "pixel_differing": []
+    },
+    "E02_seed_2026": {
+      "rows": 24,
+      "recipe_metadata_identical_except_E02_max_abs_imag": true,
+      "pixel_identical_rows": 24,
+      "pixel_differing": []
+    }
+  },
+  "finding": "E02 pixels are identical across the two environments (only the max_abs_imag diagnostic differs at ~1e-13). E01 recipes are identical, but 3 of 72 Hand_Trembling outputs differ by at most 1 gray level (OpenCV filter2D rounding). E01 output bytes are therefore bound to the execution environment and host: production and any replay audit must run in the locked gpat-m5 on the GPU host, which tools/e01_e02_bank.py enforces. Within one environment, independent-root repeatability holds."
+}

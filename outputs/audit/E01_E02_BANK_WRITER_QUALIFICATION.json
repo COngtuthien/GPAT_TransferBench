@@ -1,0 +1,390 @@
+{
+  "record": "E01_E02_BANK_WRITER_QUALIFICATION",
+  "status": "E01_E02_BANK_WRITER_QUALIFIED_SYNTHETIC",
+  "scope": "synthetic fixture only; no benchmark image decoded; no production bank; not FAS-Aug/FreqSub evidence",
+  "source_commit": "241321f760bfcc9e3bbdfb4088b73ba8fc9bc727",
+  "worktree_dirty_at_run": false,
+  "host": "cong-ThinkBook-16-G7-AHP",
+  "python_executable": "/home/cong/GPAT_TransferBench/.venv/bin/python",
+  "python_version": "3.12.3",
+  "numpy": "2.5.3",
+  "pillow": "12.3.0",
+  "opencv": "5.0.0",
+  "environment_note": "laptop .venv: NumPy 2.5.3 / Python 3.12.3 differ from the M6D1 gpat-m5 lock (NumPy 2.4.6 / Python 3.11.16); this qualifies the writer logic. The production CLI refuses any interpreter other than the locked gpat-m5 (verify_locked_environment).",
+  "seed_use_disclosure": "the generators accept only 42/1337/2026, so the frozen seeds were used on synthetic images, exactly as in the M6C1/M6D1 synthetic qualifications; no benchmark data",
+  "fixture": {
+    "pairs": 24,
+    "fixture_seed": 20261122,
+    "generator": "PCG64 smooth+noise",
+    "e01_ordinal_rule_used": "MANIFEST_POSITION_ZERO_BASED",
+    "e01_ordinal_rule_note": "qualification choice only; production takes it from the owner ruling (Q2)"
+  },
+  "gates": {
+    "G1_authorization_blocked": true,
+    "G2_frozen_population": true,
+    "G3_banks_complete_verified_replayed": true,
+    "G4_repeatability_independent_root": true,
+    "G5_method_invariants": true,
+    "G6_collision_and_integrity_fail_closed": true,
+    "G7_firewall": true
+  },
+  "evidence": {
+    "G1": [
+      {
+        "method": "E01",
+        "seed": 42,
+        "exit": 3,
+        "status": "E01_E02_BLOCKED_BY_MILESTONE_RULING"
+      },
+      {
+        "method": "E01",
+        "seed": 1337,
+        "exit": 3,
+        "status": "E01_E02_BLOCKED_BY_MILESTONE_RULING"
+      },
+      {
+        "method": "E01",
+        "seed": 2026,
+        "exit": 3,
+        "status": "E01_E02_BLOCKED_BY_MILESTONE_RULING"
+      },
+      {
+        "method": "E02",
+        "seed": 42,
+        "exit": 3,
+        "status": "E01_E02_BLOCKED_BY_MILESTONE_RULING"
+      },
+      {
+        "method": "E02",
+        "seed": 1337,
+        "exit": 3,
+        "status": "E01_E02_BLOCKED_BY_MILESTONE_RULING"
+      },
+      {
+        "method": "E02",
+        "seed": 2026,
+        "exit": 3,
+        "status": "E01_E02_BLOCKED_BY_MILESTONE_RULING"
+      }
+    ],
+    "G2": {
+      "E01": {
+        "kind": "PRODUCTION_FROZEN_TRAIN_POPULATION",
+        "pair_manifest": "manifests/pairs_train_v1.parquet",
+        "pair_manifest_sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+        "split_manifest": "manifests/split_v1.parquet",
+        "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+        "m2_accounting": "manifests/m2_sample_accounting.parquet",
+        "m2_accounting_sha256": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+        "faces_root": "/tmp/claude-1000/-home-cong-GPAT-TransferBench/c648967b-cfb3-4d21-b251-18a894b9cedc/scratchpad/qual_final/population_runtime_root/data/processed/faces_256",
+        "pairs": 8838,
+        "referenced_samples": 12668,
+        "first": "PTR000001",
+        "last": "PTR008838",
+        "datasets": {
+          "casia_fasd": 2520,
+          "msu_mfsd": 1200,
+          "siwmv2": 5118
+        },
+        "distinct_targets": 3830,
+        "images_read": 0
+      },
+      "E02": {
+        "kind": "PRODUCTION_FROZEN_TRAIN_POPULATION",
+        "pair_manifest": "manifests/pairs_train_v1.parquet",
+        "pair_manifest_sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+        "split_manifest": "manifests/split_v1.parquet",
+        "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+        "m2_accounting": "manifests/m2_sample_accounting.parquet",
+        "m2_accounting_sha256": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+        "faces_root": "/tmp/claude-1000/-home-cong-GPAT-TransferBench/c648967b-cfb3-4d21-b251-18a894b9cedc/scratchpad/qual_final/population_runtime_root/data/processed/faces_256",
+        "pairs": 8838,
+        "referenced_samples": 12668,
+        "first": "PTR000001",
+        "last": "PTR008838",
+        "datasets": {
+          "casia_fasd": 2520,
+          "msu_mfsd": 1200,
+          "siwmv2": 5118
+        },
+        "distinct_targets": 3830,
+        "images_read": 0
+      }
+    },
+    "banks": {
+      "E01_seed_42": {
+        "root_a": {
+          "run_id": "7e07cb115889d797",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "f4758044733e9dcd874ad904dfab727f7b2de4ee20f49fa3995d78854e8e0fd8",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.286,
+          "operator_counts": {
+            "BN_Halftone": 3,
+            "Color_Distortion": 3,
+            "Color_Diversity": 3,
+            "Hand_Trembling": 3,
+            "Low_Resolution": 3,
+            "Moire_Pattern": 3,
+            "Reflection": 3,
+            "SFC_Halftone": 3
+          },
+          "level_zero_noops": 1
+        },
+        "root_b": {
+          "run_id": "7e07cb115889d797",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "f4758044733e9dcd874ad904dfab727f7b2de4ee20f49fa3995d78854e8e0fd8",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.239,
+          "operator_counts": {
+            "BN_Halftone": 3,
+            "Color_Distortion": 3,
+            "Color_Diversity": 3,
+            "Hand_Trembling": 3,
+            "Low_Resolution": 3,
+            "Moire_Pattern": 3,
+            "Reflection": 3,
+            "SFC_Halftone": 3
+          },
+          "level_zero_noops": 1
+        }
+      },
+      "E01_seed_1337": {
+        "root_a": {
+          "run_id": "3a240e40baf09405",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "6f62c32a7061030acac7a1949306e8239f0d215b2aa5b06323b7160b9e04aefd",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.29,
+          "operator_counts": {
+            "BN_Halftone": 3,
+            "Color_Distortion": 3,
+            "Color_Diversity": 3,
+            "Hand_Trembling": 3,
+            "Low_Resolution": 3,
+            "Moire_Pattern": 3,
+            "Reflection": 3,
+            "SFC_Halftone": 3
+          },
+          "level_zero_noops": 4
+        },
+        "root_b": {
+          "run_id": "3a240e40baf09405",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "6f62c32a7061030acac7a1949306e8239f0d215b2aa5b06323b7160b9e04aefd",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.296,
+          "operator_counts": {
+            "BN_Halftone": 3,
+            "Color_Distortion": 3,
+            "Color_Diversity": 3,
+            "Hand_Trembling": 3,
+            "Low_Resolution": 3,
+            "Moire_Pattern": 3,
+            "Reflection": 3,
+            "SFC_Halftone": 3
+          },
+          "level_zero_noops": 4
+        }
+      },
+      "E01_seed_2026": {
+        "root_a": {
+          "run_id": "572839e43614d2cc",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "b71e717e6b414cae313a46aa36f3cdcd0f5a6f7d6d1754a11d970be400a0d802",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.292,
+          "operator_counts": {
+            "BN_Halftone": 3,
+            "Color_Distortion": 3,
+            "Color_Diversity": 3,
+            "Hand_Trembling": 3,
+            "Low_Resolution": 3,
+            "Moire_Pattern": 3,
+            "Reflection": 3,
+            "SFC_Halftone": 3
+          },
+          "level_zero_noops": 3
+        },
+        "root_b": {
+          "run_id": "572839e43614d2cc",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "b71e717e6b414cae313a46aa36f3cdcd0f5a6f7d6d1754a11d970be400a0d802",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.316,
+          "operator_counts": {
+            "BN_Halftone": 3,
+            "Color_Distortion": 3,
+            "Color_Diversity": 3,
+            "Hand_Trembling": 3,
+            "Low_Resolution": 3,
+            "Moire_Pattern": 3,
+            "Reflection": 3,
+            "SFC_Halftone": 3
+          },
+          "level_zero_noops": 3
+        }
+      },
+      "E02_seed_42": {
+        "root_a": {
+          "run_id": "22d9ed60338b5a61",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "f3aa5426d527a688fe848b894116a045a29c718ada90eb45751a8961322eb232",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.09,
+          "max_abs_imag": 9.578966772955907e-14,
+          "k_values": [
+            40
+          ],
+          "n_eligible_values": [
+            159
+          ]
+        },
+        "root_b": {
+          "run_id": "22d9ed60338b5a61",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "f3aa5426d527a688fe848b894116a045a29c718ada90eb45751a8961322eb232",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.11,
+          "max_abs_imag": 9.578966772955907e-14,
+          "k_values": [
+            40
+          ],
+          "n_eligible_values": [
+            159
+          ]
+        }
+      },
+      "E02_seed_1337": {
+        "root_a": {
+          "run_id": "83de5cde6da450e7",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "c577c75d12bffc586cd584e30da2f05a97e8e31e3043ff87a8079808d7f88947",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.126,
+          "max_abs_imag": 9.49543359068336e-14,
+          "k_values": [
+            40
+          ],
+          "n_eligible_values": [
+            159
+          ]
+        },
+        "root_b": {
+          "run_id": "83de5cde6da450e7",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "c577c75d12bffc586cd584e30da2f05a97e8e31e3043ff87a8079808d7f88947",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.098,
+          "max_abs_imag": 9.49543359068336e-14,
+          "k_values": [
+            40
+          ],
+          "n_eligible_values": [
+            159
+          ]
+        }
+      },
+      "E02_seed_2026": {
+        "root_a": {
+          "run_id": "427d48bd5e5b3635",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "e529fdd1724661afa419974afa6e5ce948947529f5bdec0eed8256566545474a",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.099,
+          "max_abs_imag": 1.0012982056038343e-13,
+          "k_values": [
+            40
+          ],
+          "n_eligible_values": [
+            159
+          ]
+        },
+        "root_b": {
+          "run_id": "427d48bd5e5b3635",
+          "status": "completed",
+          "outputs": 24,
+          "failures": 0,
+          "bank_manifest_sha256": "e529fdd1724661afa419974afa6e5ce948947529f5bdec0eed8256566545474a",
+          "files_ok": true,
+          "replay_ok": true,
+          "seconds": 1.098,
+          "max_abs_imag": 1.0012982056038343e-13,
+          "k_values": [
+            40
+          ],
+          "n_eligible_values": [
+            159
+          ]
+        }
+      }
+    },
+    "G6": {
+      "rerun_refused": true,
+      "existing_outputs_unchanged": true,
+      "corruption_aborted": true,
+      "corrupt_run_status": "failed",
+      "rows_before_abort": 3
+    },
+    "G7": {
+      "open_events": 7742,
+      "runtime_or_faces_256_opens": [],
+      "image_opens_total": 6357,
+      "image_opens_outside_fixture_and_pinned_fas_aug_assets": [],
+      "manifests_opened": [
+        "manifests/m2_sample_accounting.parquet",
+        "manifests/pairs_train_v1.parquet",
+        "manifests/split_v1.parquet"
+      ],
+      "test_split_rows_used": 0,
+      "note": "split_v1 is read as (sample_id, split, dataset) metadata only to prove every referenced sample is TRAIN"
+    }
+  },
+  "file_sha256": {
+    "methods/common/bank_writer.py": "00350dc23f6e3cc4d554212605ed30fddefdf0a23b2e559218826f96de30ec9e",
+    "methods/common/bank_fixture.py": "1acb5fbddbb89e9bf5f32c4b30700136937f80af47b4af6f28e5661d1ef75a21",
+    "tools/e01_e02_bank.py": "cab9202807e1b972c36ab69e14aa0156ba9a66dbf2a2e0ae61e071a36fcf2f3b",
+    "tools/e01_e02_bank_qualification.py": "e9866b01647efdafda77d6e3e81658c14b7fe77e4eb687df23cf3da96f69b16f",
+    "tests/test_e01_e02_bank_writer.py": "24a953b7cf6d16caf156bd8fd19bc4517af5f9b92126d2312731c55094e1ced9",
+    "methods/fas_aug/e01.py": "c896d5b65dc3c719d1d81cc003b702aa5b77fb3b3a9653a3261aa8787ca00d70",
+    "methods/fas_aug/official.py": "909ece16ca2bb2df05e10c10804efd74b193baa39bd881693468d5c715ae5f7a",
+    "methods/freq_sub/e02.py": "7c2a539efa296e83e0e0d8d93cd94b877efe59dc86271b8e009563cbf7c07c78",
+    "configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0"
+  },
+  "wall_seconds": 16.04
+}
