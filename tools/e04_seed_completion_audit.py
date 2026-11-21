@@ -774,8 +774,13 @@ def wtmp_record(line):
 
 def boot_continuity(c):
     """No reboot or shutdown inside [launch_time, end_time]: the last wtmp boot before launch is followed by no boot or
-    shutdown record until after the end marker, no journal boot starts inside the window, and the current boot started
-    after the run ended (so the host stayed up through completion and only rebooted afterwards)."""
+    shutdown record until after the end marker and no journal boot starts inside the window. Then exactly one of:
+      (a) rebooted after the run: the current boot started after the run ended (so the host stayed up through
+          completion and only rebooted afterwards) -- the seed-42 case;
+      (b) uninterrupted: no wtmp boot record exists after launch, the run boot is the wtmp 'still running' record, the
+          kernel btime (/proc/stat) precedes launch and equals that record's start within 120 s, and the current
+          journal boot (same boot_id) has entries both before launch and after the end marker -- the host has not
+          rebooted at all since before the run started."""
     host, rp = c['host'], c['host']['boot']
     launch, end = epoch_seconds(host['launch_time']), epoch_seconds(host['end_time'])
     recs = [(x,) + wtmp_record(x) for x in (rp.get('wtmp') or [])]
@@ -787,8 +792,12 @@ def boot_continuity(c):
     jb = rp.get('journal_boots') or []
     j_inside = [b['boot_id'] for b in jb if launch <= b['first_entry'] / 1e6 <= end]
     j_after = [b for b in jb if b['last_entry'] / 1e6 >= end and b['first_entry'] / 1e6 <= end]
-    ok = (run_boot is not None and inside == [] and j_inside == [] and bool(later) and
-          min(r[2] for r in later) > end and rp['btime'] > end)
+    rebooted_after = bool(later) and min(r[2] for r in later) > end and rp['btime'] > end
+    current = [b for b in jb if b.get('boot_id') == rp.get('boot_id')]
+    uninterrupted = (run_boot is not None and not later and run_boot[4] and rp['btime'] <= launch and
+                     abs(rp['btime'] - run_boot[2]) <= 120 and len(current) == 1 and
+                     current[0]['first_entry'] / 1e6 <= launch and current[0]['last_entry'] / 1e6 >= end)
+    ok = run_boot is not None and inside == [] and j_inside == [] and (rebooted_after or uninterrupted)
     return ok, {'run_boot_wtmp': run_boot[0] if run_boot else None,
                 'next_boot_wtmp': later[0][0] if later else None,
                 'records_inside_window': inside, 'journal_boots_starting_inside_window': j_inside,
@@ -1240,9 +1249,16 @@ def report(doc):
         '| exit | `~/workdir/e04_s%d.exit` = %s, written by the launch wrapper after the runner returned; end marker '
         '%s; the runner completion record is the last pane-log line; no runner process; stdout/stderr/generation_log '
         'empty |' % (seed, d['host_markers']['exit'], d['host_markers']['end_time']),
-        '| host | no reboot or shutdown inside the run window (run boot `%s`; next boot `%s`, after the run ended); '
-        'the tmux server is absent now (later reboots), so the live pane is not used as evidence |'
-        % (' '.join((hc['run_boot_wtmp'] or '').split()[3:5]), ' '.join((hc['next_boot_wtmp'] or '').split()[3:5])),
+        ('| host | no reboot or shutdown inside the run window (run boot `%s`; next boot `%s`, after the run ended); '
+         'the tmux server is absent now (later reboots), so the live pane is not used as evidence |'
+         % (' '.join((hc['run_boot_wtmp'] or '').split()[3:5]), ' '.join((hc['next_boot_wtmp'] or '').split()[3:5]))
+         if hc['next_boot_wtmp'] else
+         '| host | no reboot or shutdown inside the run window: the host has not rebooted since before launch (run boot '
+         '= current boot `%s`, wtmp "still running", boot_id `%s`, btime %s; journal boot spans %s → %s); the tmux '
+         'session is still present (pane dead after the wrapper finished) but is not required as evidence |'
+         % (' '.join((hc['run_boot_wtmp'] or '').split()[3:5]), hc['current_boot_id'], hc['current_btime_utc'],
+            hc['journal_boot_alive_at_end'][0][1] if hc['journal_boot_alive_at_end'] else None,
+            hc['journal_boot_alive_at_end'][0][2] if hc['journal_boot_alive_at_end'] else None)),
         '',
         '## Completion accounting',
         '',
@@ -1324,11 +1340,14 @@ def report(doc):
         '- GPU sharing: not sampled continuously. %d of %d blocks of %d iterations have a median step time of at least '
         '1.25 × the overall median. That is consistent with intermittent sharing and is not a validity criterion.'
         % (len(d['runtime']['slow_blocks']), d['loss_diagnostics']['blocks'], d['loss_diagnostics']['block_size']),
-        '- Host after completion: the run boot ended without a wtmp shutdown record when the host restarted at `%s` '
-        '(after the run ended). Later shutdowns: %s. Kernel updates installed after the run (unattended upgrades) '
-        'changed only the OS kernel; the NVIDIA driver version is unchanged.'
-        % (' '.join((hc['next_boot_wtmp'] or '').split()[4:5]),
-           '; '.join('`%s`' % ' '.join(x.split()[3:5]) for x in hc['shutdowns_after_end']) or 'none'),
+        ('- Host after completion: the run boot ended without a wtmp shutdown record when the host restarted at `%s` '
+         '(after the run ended). Later shutdowns: %s. Kernel updates installed after the run (unattended upgrades) '
+         'changed only the OS kernel; the NVIDIA driver version is unchanged.'
+         % (' '.join((hc['next_boot_wtmp'] or '').split()[4:5]),
+            '; '.join('`%s`' % ' '.join(x.split()[3:5]) for x in hc['shutdowns_after_end']) or 'none')
+         if hc['next_boot_wtmp'] else
+         '- Host after completion: no reboot or shutdown since before launch (the audit ran in the same boot, '
+         '`%s`); the kernel during the run and at audit time are the same boot.' % hc['current_boot_id']),
         '',
         '## Run-root integrity',
         '',
