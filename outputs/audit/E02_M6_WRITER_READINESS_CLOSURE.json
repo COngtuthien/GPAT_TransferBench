@@ -1,0 +1,139 @@
+{
+  "schema_version": "e01_e02_m6_writer_readiness_closure_v1",
+  "record": "E02_M6_WRITER_READINESS_CLOSURE",
+  "method_id": "E02",
+  "method_name": "Frequency Substitution",
+  "status": "E02_M6_WRITER_QUALIFIED_M8_BANK_PENDING",
+  "date": "2026-11-22",
+  "branch": "m6-baselines",
+  "is_bank_generation_completion_record": false,
+  "authority": {
+    "owner_ruling_commit": "656cc8ad94b68c7ab4fb7f9591d92a86692ca3e9",
+    "gate_correction_commit": "86dac00f77a5b5768412a57cf40bdb0afa12662a",
+    "qualification_source_commit": "86dac00f77a5b5768412a57cf40bdb0afa12662a",
+    "qualification_evidence_commit": "6f15f8a523eed40067162bb6e1c915a1ba46d9bf",
+    "owner_ruling_decision": {
+      "Q1_milestone_owner": "A_M8_SMOKE_GATED",
+      "Q3_e02_uint8_quantization": "CONFIRM_CLIP_THEN_RINT",
+      "Q4_execution_host": "SEPARATE_CLONE_CPU_CONCURRENT"
+    }
+  },
+  "milestone_states": {
+    "scientific_method_implementation": "COMPLETE (M6C1 implementation; M6D1 core-environment qualification; frozen config unchanged)",
+    "production_writer_qualified": "QUALIFIED_POST_RULING_SYNTHETIC (10/10 gates in laptop .venv and in locked gpat-m5 at 86dac00)",
+    "frozen_train_population_verified": "VERIFIED_METADATA_ONLY (pairs_train_v1 8838 TRAIN pairs PTR000001..PTR008838; 12668 TRAIN samples M2 COMPLETE; 0 images read)",
+    "real_production_banks_generated": false,
+    "m8_smoke_test": "PENDING (M6D6jR O3 smoke_test_completed false; hard gate before production banks)",
+    "downstream_evaluation": "PENDING (not authorized)"
+  },
+  "production_bank": {
+    "generated": false,
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "n_syn_intended_per_seed": 8838,
+    "output_count": null,
+    "failure_count": null,
+    "bank_manifest_sha256": null,
+    "output_sha256": null,
+    "run_id": null,
+    "reason_null": "no production bank exists; counts and hashes are produced only by the M8 bank run"
+  },
+  "production_gate_status_now": "E01_E02_BLOCKED_BY_M8_SMOKE_GATE",
+  "frozen_config": {
+    "path": "configs/methods/e02_freqsub.yaml",
+    "sha256": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0"
+  },
+  "qualification": {
+    "laptop_venv": {
+      "path": "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING.json",
+      "status": "E01_E02_BANK_WRITER_QUALIFIED_POST_RULING_SYNTHETIC",
+      "gates": {
+        "G1_authorization_m8_smoke_gated": true,
+        "G2_frozen_population": true,
+        "G3_banks_complete_verified_replayed": true,
+        "G4_repeatability_independent_root": true,
+        "G5_method_invariants": true,
+        "G8_q2_exact_operator_assignment": true,
+        "G9_q3_e02_quantization_independent": true,
+        "G10_bank_manifests_equal_pre_ruling_reference": true,
+        "G6_collision_and_integrity_fail_closed": true,
+        "G7_firewall": true
+      },
+      "python": "3.12.3",
+      "numpy": "2.5.3"
+    },
+    "gpat_m5": {
+      "path": "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING_GPAT_M5.json",
+      "status": "E01_E02_BANK_WRITER_QUALIFIED_POST_RULING_SYNTHETIC",
+      "gates": {
+        "G1_authorization_m8_smoke_gated": true,
+        "G2_frozen_population": true,
+        "G3_banks_complete_verified_replayed": true,
+        "G4_repeatability_independent_root": true,
+        "G5_method_invariants": true,
+        "G8_q2_exact_operator_assignment": true,
+        "G9_q3_e02_quantization_independent": true,
+        "G10_bank_manifests_equal_pre_ruling_reference": true,
+        "G6_collision_and_integrity_fail_closed": true,
+        "G7_firewall": true
+      },
+      "python": "3.11.16",
+      "numpy": "2.4.6"
+    },
+    "fixture_bank_manifests_gpat_m5": {
+      "E02_seed_42": "73987bf06f1c0025dde4d9688b1b20f69a2dbb3933e521d665db773acaa3f25d",
+      "E02_seed_1337": "00b5b9351703084e00188ae4fdc9a957c021c0128a0a2a3b167811ce1eb9e15e",
+      "E02_seed_2026": "bb333606dafe06093d939583ed3aaea3ab744e6393d18749063a1ee132464d69"
+    },
+    "note": "fixture manifests are synthetic qualification artifacts, not bank outputs"
+  },
+  "evidence_sha256": {
+    "configs/amendments/e01_e02_bank_milestone_ruling.yaml": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e",
+    "configs/amendments/e01_e02_bank_milestone_ruling.DRAFT.yaml": "e49df97fa2eefa451b26efae89077d155697c3bbafdd9a9c26981614bac13482",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E01_E02_Bank_Milestone_Owner_Ruling_Addendum.md": "80fc09a0e7e256806f9740d97dd8c60128cf96088a015550992dc2e88eda0a94",
+    "outputs/audit/E01_E02_BANK_CONTRACT_AND_MILESTONE_ASSESSMENT.md": "f70edd59332d0b2a0bedbecce14911402f7a686ba198bfe1db6b353fb86428d6",
+    "outputs/audit/M6C1_IMPLEMENTATION.json": "5d6d978cc8d3ac291e82818beb501fc0db6ec0579641605e3c2b4f15c6ee8188",
+    "outputs/audit/M6D1_CORE_ENVIRONMENT_QUALIFICATION.json": "d8aec8608ee47902254cd1d7834c59805afbcbd5b23e57855f8ca5d6e0c35e9a",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION.json": "08d391e8aec09fad6effe62513d17941e9b711bcbf52d7d6e6868bc9b4f0fecf",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_GPAT_M5.json": "3f5f8037e6777a1b08daf88f2cea79d3f8f9878d1e0abfeb23552e1a7e1046ec",
+    "outputs/audit/E01_E02_BANK_WRITER_CROSS_ENVIRONMENT.json": "7b0ac4124334af5f8974e076f15b59d053e9ad86960658521fa7e9eb61d44fc1",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING.json": "775a592b46971b8f8e45c150b8a5a33b3809c778cc4b8e50d4d6896b451b18c3",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING_GPAT_M5.json": "ad23798a6376f7fe866762de4ad2955430e92248cc3595c6c81c93ce04d657ee",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING.md": "0442958f7546f5d835d32c97b731d67dc8c0e865442d3df89c9441d5e1ea2ab2",
+    "outputs/audit/E01_E02_POST_RULING_EVIDENCE_SHA256.txt": "a5bf5c90145831d24c3ef43c5d4755c4fdaa7bde5bd741cb5252ed3d0fe256d5",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "outputs/audit/method_status.csv": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723"
+  },
+  "method_status_csv": {
+    "updated": false,
+    "sha256": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723",
+    "reason": "a separately verified registry-authority decision is required"
+  },
+  "remaining_dependencies": [
+    "M8 deterministic smoke test passes (spec sections 26/32; M6D6jR O3)",
+    "a separate owner authorization binds the passing smoke-test record (configs/amendments/e01_e02_bank_milestone_ruling.yaml smoke_test_record) and names the production authority commit",
+    "production run per Q4: CPU, locked gpat-m5 on the GPU host, isolated clean clone at that authority; --check-only first (first real-face read)",
+    "M8 bank completion audit (output counts, manifests, hashes, replay)",
+    "downstream evaluation (later milestone)"
+  ],
+  "next_authorized_milestone": "M8 deterministic smoke test",
+  "method_specific": {
+    "quantization": "real part -> clip [0,255] -> numpy.rint (round half to even) -> uint8; implementation-defined M6D1 rule confirmed by owner Q3, not an explicit spec 8.2 instruction",
+    "frequency_source_identity": "per channel float64 fft2+fftshift; the pair's own source spoof magnitude (source_face_sha256 recorded and verified) replaces the target live magnitude in the 40 selected of 159 eligible 16x16 blocks (0.20 <= r <= 0.50, >= 75 % coverage) and their pixel-wise conjugates; target phase preserved; ifftshift+ifft2",
+    "block_selection_rng": "pair_seed = int.from_bytes(SHA256('gpatbench.freqsub.block.v1|'+pair_id+'|'+str(seed)), 'big'); Generator(PCG64(pair_seed)).choice(159, 40, replace=False), sorted (A2-04)",
+    "g9_independent_recomputation": {
+      "rows": 72,
+      "pixel_mismatch_rows": 0,
+      "edit_map_mismatch_rows": 0,
+      "source_face_mismatch_rows": 0,
+      "pixels_where_floor_differs": 7077635,
+      "pixels_clipped": 311
+    },
+    "max_abs_imag_fixture": 1.0138198451709097e-13,
+    "imag_tolerance": 1e-08,
+    "cross_environment_disclosure": "pixels identical between laptop .venv and gpat-m5 for the synthetic fixture (only the max_abs_imag diagnostic differs); evidence for those two stacks, not an unrestricted guarantee"
+  }
+}

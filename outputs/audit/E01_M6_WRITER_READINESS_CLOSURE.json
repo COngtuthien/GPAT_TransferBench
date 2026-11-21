@@ -1,0 +1,176 @@
+{
+  "schema_version": "e01_e02_m6_writer_readiness_closure_v1",
+  "record": "E01_M6_WRITER_READINESS_CLOSURE",
+  "method_id": "E01",
+  "method_name": "FAS-Aug",
+  "status": "E01_M6_WRITER_QUALIFIED_M8_BANK_PENDING",
+  "date": "2026-11-22",
+  "branch": "m6-baselines",
+  "is_bank_generation_completion_record": false,
+  "authority": {
+    "owner_ruling_commit": "656cc8ad94b68c7ab4fb7f9591d92a86692ca3e9",
+    "gate_correction_commit": "86dac00f77a5b5768412a57cf40bdb0afa12662a",
+    "qualification_source_commit": "86dac00f77a5b5768412a57cf40bdb0afa12662a",
+    "qualification_evidence_commit": "6f15f8a523eed40067162bb6e1c915a1ba46d9bf",
+    "owner_ruling_decision": {
+      "Q1_milestone_owner": "A_M8_SMOKE_GATED",
+      "Q2_e01_round_robin_ordinal": "MANIFEST_POSITION_ZERO_BASED",
+      "Q4_execution_host": "SEPARATE_CLONE_CPU_CONCURRENT"
+    }
+  },
+  "milestone_states": {
+    "scientific_method_implementation": "COMPLETE (M6C1 implementation; M6D1 core-environment qualification; frozen config unchanged)",
+    "production_writer_qualified": "QUALIFIED_POST_RULING_SYNTHETIC (10/10 gates in laptop .venv and in locked gpat-m5 at 86dac00)",
+    "frozen_train_population_verified": "VERIFIED_METADATA_ONLY (pairs_train_v1 8838 TRAIN pairs PTR000001..PTR008838; 12668 TRAIN samples M2 COMPLETE; 0 images read)",
+    "real_production_banks_generated": false,
+    "m8_smoke_test": "PENDING (M6D6jR O3 smoke_test_completed false; hard gate before production banks)",
+    "downstream_evaluation": "PENDING (not authorized)"
+  },
+  "production_bank": {
+    "generated": false,
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "n_syn_intended_per_seed": 8838,
+    "output_count": null,
+    "failure_count": null,
+    "bank_manifest_sha256": null,
+    "output_sha256": null,
+    "run_id": null,
+    "reason_null": "no production bank exists; counts and hashes are produced only by the M8 bank run"
+  },
+  "production_gate_status_now": "E01_E02_BLOCKED_BY_M8_SMOKE_GATE",
+  "frozen_config": {
+    "path": "configs/methods/e01_fas_aug.yaml",
+    "sha256": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0"
+  },
+  "qualification": {
+    "laptop_venv": {
+      "path": "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING.json",
+      "status": "E01_E02_BANK_WRITER_QUALIFIED_POST_RULING_SYNTHETIC",
+      "gates": {
+        "G1_authorization_m8_smoke_gated": true,
+        "G2_frozen_population": true,
+        "G3_banks_complete_verified_replayed": true,
+        "G4_repeatability_independent_root": true,
+        "G5_method_invariants": true,
+        "G8_q2_exact_operator_assignment": true,
+        "G9_q3_e02_quantization_independent": true,
+        "G10_bank_manifests_equal_pre_ruling_reference": true,
+        "G6_collision_and_integrity_fail_closed": true,
+        "G7_firewall": true
+      },
+      "python": "3.12.3",
+      "numpy": "2.5.3"
+    },
+    "gpat_m5": {
+      "path": "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING_GPAT_M5.json",
+      "status": "E01_E02_BANK_WRITER_QUALIFIED_POST_RULING_SYNTHETIC",
+      "gates": {
+        "G1_authorization_m8_smoke_gated": true,
+        "G2_frozen_population": true,
+        "G3_banks_complete_verified_replayed": true,
+        "G4_repeatability_independent_root": true,
+        "G5_method_invariants": true,
+        "G8_q2_exact_operator_assignment": true,
+        "G9_q3_e02_quantization_independent": true,
+        "G10_bank_manifests_equal_pre_ruling_reference": true,
+        "G6_collision_and_integrity_fail_closed": true,
+        "G7_firewall": true
+      },
+      "python": "3.11.16",
+      "numpy": "2.4.6"
+    },
+    "fixture_bank_manifests_gpat_m5": {
+      "E01_seed_42": "f039af128dd2952927f2ffba8db4d404c814f9b17d0c80a9e8cae0af18663ed0",
+      "E01_seed_1337": "6f62c32a7061030acac7a1949306e8239f0d215b2aa5b06323b7160b9e04aefd",
+      "E01_seed_2026": "d2307136511553b67d4531bcfa6813d9003aa63e8e312a8a8629f75fb849c764"
+    },
+    "note": "fixture manifests are synthetic qualification artifacts, not bank outputs"
+  },
+  "evidence_sha256": {
+    "configs/amendments/e01_e02_bank_milestone_ruling.yaml": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e",
+    "configs/amendments/e01_e02_bank_milestone_ruling.DRAFT.yaml": "e49df97fa2eefa451b26efae89077d155697c3bbafdd9a9c26981614bac13482",
+    "docs/spec/amendments/GPAT_TransferBench_v1_0_E01_E02_Bank_Milestone_Owner_Ruling_Addendum.md": "80fc09a0e7e256806f9740d97dd8c60128cf96088a015550992dc2e88eda0a94",
+    "outputs/audit/E01_E02_BANK_CONTRACT_AND_MILESTONE_ASSESSMENT.md": "f70edd59332d0b2a0bedbecce14911402f7a686ba198bfe1db6b353fb86428d6",
+    "outputs/audit/M6C1_IMPLEMENTATION.json": "5d6d978cc8d3ac291e82818beb501fc0db6ec0579641605e3c2b4f15c6ee8188",
+    "outputs/audit/M6D1_CORE_ENVIRONMENT_QUALIFICATION.json": "d8aec8608ee47902254cd1d7834c59805afbcbd5b23e57855f8ca5d6e0c35e9a",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION.json": "08d391e8aec09fad6effe62513d17941e9b711bcbf52d7d6e6868bc9b4f0fecf",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_GPAT_M5.json": "3f5f8037e6777a1b08daf88f2cea79d3f8f9878d1e0abfeb23552e1a7e1046ec",
+    "outputs/audit/E01_E02_BANK_WRITER_CROSS_ENVIRONMENT.json": "7b0ac4124334af5f8974e076f15b59d053e9ad86960658521fa7e9eb61d44fc1",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING.json": "775a592b46971b8f8e45c150b8a5a33b3809c778cc4b8e50d4d6896b451b18c3",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING_GPAT_M5.json": "ad23798a6376f7fe866762de4ad2955430e92248cc3595c6c81c93ce04d657ee",
+    "outputs/audit/E01_E02_BANK_WRITER_QUALIFICATION_POST_RULING.md": "0442958f7546f5d835d32c97b731d67dc8c0e865442d3df89c9441d5e1ea2ab2",
+    "outputs/audit/E01_E02_POST_RULING_EVIDENCE_SHA256.txt": "a5bf5c90145831d24c3ef43c5d4755c4fdaa7bde5bd741cb5252ed3d0fe256d5",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "outputs/audit/method_status.csv": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723"
+  },
+  "method_status_csv": {
+    "updated": false,
+    "sha256": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723",
+    "reason": "a separately verified registry-authority decision is required"
+  },
+  "remaining_dependencies": [
+    "M8 deterministic smoke test passes (spec sections 26/32; M6D6jR O3)",
+    "a separate owner authorization binds the passing smoke-test record (configs/amendments/e01_e02_bank_milestone_ruling.yaml smoke_test_record) and names the production authority commit",
+    "production run per Q4: CPU, locked gpat-m5 on the GPU host, isolated clean clone at that authority; --check-only first (first real-face read)",
+    "M8 bank completion audit (output counts, manifests, hashes, replay)",
+    "downstream evaluation (later milestone)"
+  ],
+  "next_authorized_milestone": "M8 deterministic smoke test",
+  "method_specific": {
+    "operator_order": [
+      "Color_Diversity",
+      "Color_Distortion",
+      "Reflection",
+      "BN_Halftone",
+      "Moire_Pattern",
+      "SFC_Halftone",
+      "Hand_Trembling",
+      "Low_Resolution"
+    ],
+    "operator_order_source": "official RizhaoCai/FAS-Aug@0da1dd79bad00e225b8cb6977c7f3f06ee8f7517 data/FAS_Augmentations.py augment list entries #0..#7; equal to configs/methods/e01_fas_aug.yaml generation.operator_set; OfficialFASAugBackend.prepare() refuses any mismatch",
+    "ordinal_rule": "operator_set[position % 8], position zero-based in pairs_train_v1 sorted by pair_id ascending; PTR000001 -> Color_Diversity; never the pair_id suffix; no seed rotation",
+    "per_pair_rng": "operator_seed = int.from_bytes(SHA256(UTF-8(pair_id + str(seed))), 'big') mod 2^31 (A2-05; PTR000001/42 -> 795981663) seeds random.Random; level k = first randrange(10); then asset and official operator draws",
+    "full_population_operator_counts_per_seed": {
+      "Color_Diversity": 1105,
+      "Color_Distortion": 1105,
+      "Reflection": 1105,
+      "BN_Halftone": 1105,
+      "Moire_Pattern": 1105,
+      "SFC_Halftone": 1105,
+      "Hand_Trembling": 1104,
+      "Low_Resolution": 1104
+    },
+    "predicted_level_zero_noops": {
+      "42": 857,
+      "1337": 872,
+      "2026": 889
+    },
+    "predicted_level_zero_note": "derived from pure recipes over the frozen pair ids; disclosed unchanged copies of the live image; not bank output counts",
+    "g8_full_population_checks": {
+      "42": {
+        "operator_mismatch": 0,
+        "pair_id_suffix_agreements": 0,
+        "operator_seed_mismatch": 0,
+        "same_sequence_as_seed_42": true
+      },
+      "1337": {
+        "operator_mismatch": 0,
+        "pair_id_suffix_agreements": 0,
+        "operator_seed_mismatch": 0,
+        "same_sequence_as_seed_42": true
+      },
+      "2026": {
+        "operator_mismatch": 0,
+        "pair_id_suffix_agreements": 0,
+        "operator_seed_mismatch": 0,
+        "same_sequence_as_seed_42": true
+      }
+    },
+    "output_identity": "fixture outputs equal direct generate_one (replay) and level-0 outputs equal the live input (G8)",
+    "cross_environment_disclosure": "Hand_Trembling: <= 1 LSB differences between laptop .venv and gpat-m5 (3/72 synthetic outputs); laptop and GPU-host bytes are not claimed identical; production and replay audits must run in gpat-m5"
+  }
+}
