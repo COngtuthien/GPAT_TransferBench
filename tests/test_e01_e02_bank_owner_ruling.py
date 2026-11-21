@@ -74,8 +74,10 @@ class E01E02BankOwnerRuling(unittest.TestCase):
         self.assertIsNone(A["smoke_test_record"])
         self.assertEqual(set(A["authorizes"].values()), {False})
         for m in bw.METHODS:
-            with self.assertRaises(bw.BankBlocked):
+            with self.assertRaises(bw.BankBlocked) as cm:
                 bw.load_production_authorization(m)
+            if hasattr(bw, "M8_SMOKE_GATE_STATUS"):     # gate correction committed after the ruling
+                self.assertEqual(cm.exception.status, bw.M8_SMOKE_GATE_STATUS)
 
     def test_06_operator_order_pinned_to_config_and_official_source(self):
         order = A["owner_ruling"]["Q2_e01_round_robin_ordinal"]["pinned_operator_order"]

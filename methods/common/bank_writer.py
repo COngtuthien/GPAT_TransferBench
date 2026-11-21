@@ -5,11 +5,13 @@ per-seed bank at the frozen M6B run layout `<runtime_root>/runs/m6/<method>/seed
 semantics: every pixel comes from the unchanged `generate_one`. It adds only input selection, integrity checks,
 deterministic output naming, fail-closed writes, per-sample accounting and a bank manifest.
 
-Authorization. A PRODUCTION bank needs an owner-approved `configs/amendments/e01_e02_bank_milestone_ruling.yaml`
-(see the DRAFT next to it and outputs/audit/E01_E02_BANK_CONTRACT_AND_MILESTONE_ASSESSMENT.md). While that file is
-absent, unapproved or incomplete, `load_production_authorization` raises `BankBlocked` with the status
-`E01_E02_BLOCKED_BY_MILESTONE_RULING`. QUALIFICATION authorizations exist only for synthetic fixtures and never
-accept the production faces root.
+Authorization. A PRODUCTION bank needs the owner-approved `configs/amendments/e01_e02_bank_milestone_ruling.yaml`
+(approved 2026-11-22: Q1 A_M8_SMOKE_GATED, Q2 MANIFEST_POSITION_ZERO_BASED, Q3 CONFIRM_CLIP_THEN_RINT). While that
+file is absent, unapproved, incomplete or deviates from the approved decisions, `load_production_authorization`
+raises `BankBlocked` with status `E01_E02_BLOCKED_BY_MILESTONE_RULING`. With the approved ruling, it raises
+`BankBlocked` with status `E01_E02_BLOCKED_BY_M8_SMOKE_GATE` until a committed, hash-verified M8 deterministic
+smoke-test record with smoke_test_passed true is bound in the ruling (M6D6jR O3). QUALIFICATION authorizations exist
+only for synthetic fixtures and never accept the production faces root.
 
 Inputs. Pairs come from the frozen `manifests/pairs_train_v1.parquet` (SHA256 checked before parse, every row TRAIN,
 pair_ids ascending and unique, N rows = n_syn_intended). Every referenced sample must be TRAIN in `split_v1` and
@@ -46,6 +48,7 @@ M2_ACCOUNTING_SHA256 = "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4
 RULING_PATH = "configs/amendments/e01_e02_bank_milestone_ruling.yaml"
 RULING_SCHEMA = "e01_e02_bank_milestone_ruling_v1"
 BLOCKED_STATUS = "E01_E02_BLOCKED_BY_MILESTONE_RULING"
+M8_SMOKE_GATE_STATUS = "E01_E02_BLOCKED_BY_M8_SMOKE_GATE"
 ENV_LOCK_PATH = "environments/m6_core_gpu.lock.json"
 LOCKED_ENVIRONMENT = {"python_executable": "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
                       "python_version": "3.11.16", "numpy": "2.4.6", "pillow": "12.3.0", "opencv": "5.0.0"}
@@ -53,6 +56,9 @@ LOCKED_ENVIRONMENT = {"python_executable": "/home/student20261/miniconda3/envs/g
 MILESTONE_OPTIONS = ("A_M8_SMOKE_GATED", "B_M6_EXECUTION_EXTENSION")
 ORDINAL_RULES = ("MANIFEST_POSITION_ZERO_BASED", "PAIR_ID_NUMERIC")
 E02_QUANTIZATION = "CONFIRM_CLIP_THEN_RINT"
+# Owner ruling 2026-11-22 (configs/amendments/e01_e02_bank_milestone_ruling.yaml). PRODUCTION accepts only these.
+APPROVED_MILESTONE_OPTION = "A_M8_SMOKE_GATED"
+APPROVED_E01_ORDINAL = "MANIFEST_POSITION_ZERO_BASED"
 METHODS = ("E01", "E02")
 PAIR_ID_RE = re.compile(r"^PTR\d{6}$")
 CANONICAL = 256
@@ -69,7 +75,11 @@ class BankError(RuntimeError):
 
 
 class BankBlocked(BankError):
-    """Production authorization is absent or incomplete."""
+    """Production authorization is absent or incomplete. `status` names the blocking gate."""
+
+    def __init__(self, message: str, status: str = BLOCKED_STATUS):
+        super().__init__(message)
+        self.status = status
 
 
 def require(ok, message):
@@ -107,8 +117,8 @@ def load_production_authorization(method_id: str, path: str | Path | None = None
         raise BankError(f"unknown bank method {method_id!r}")
     p = Path(path) if path is not None else ROOT / RULING_PATH
 
-    def blocked(why):
-        raise BankBlocked(f"{BLOCKED_STATUS}: {why}")
+    def blocked(why, status=BLOCKED_STATUS):
+        raise BankBlocked(f"{status}: {why}", status)
 
     if p.name.endswith(".DRAFT.yaml"):
         blocked("a DRAFT ruling is never authority")
@@ -128,18 +138,21 @@ def load_production_authorization(method_id: str, path: str | Path | None = None
     option = decisions.get("Q1_milestone_owner")
     if option not in MILESTONE_OPTIONS:
         blocked("Q1 milestone owner unanswered")
-    if option == "A_M8_SMOKE_GATED":
-        smoke = ruling.get("smoke_test_record") or {}
-        sp = ROOT / str(smoke.get("path", ""))
-        if not smoke.get("path") or not sp.is_file() or sha256_file(sp) != smoke.get("sha256"):
-            blocked("option A requires a committed, hash-verified deterministic smoke-test record")
-        if (json.loads(sp.read_text()) if sp.suffix == ".json" else {}).get("smoke_test_passed") is not True:
-            blocked("smoke-test record does not state smoke_test_passed true")
+    if option != APPROVED_MILESTONE_OPTION:
+        blocked(f"Q1 {option} differs from the owner-approved {APPROVED_MILESTONE_OPTION}")
     ordinal = decisions.get("Q2_e01_round_robin_ordinal")
     if method_id == "E01" and ordinal not in ORDINAL_RULES:
         blocked("Q2 E01 round-robin ordinal unanswered")
+    if method_id == "E01" and ordinal != APPROVED_E01_ORDINAL:
+        blocked(f"Q2 {ordinal} differs from the owner-approved {APPROVED_E01_ORDINAL} (position % 8, never the pair_id suffix)")
     if method_id == "E02" and decisions.get("Q3_e02_uint8_quantization") != E02_QUANTIZATION:
         blocked("Q3 E02 quantization not confirmed as the implemented clip->rint")
+    smoke = ruling.get("smoke_test_record") or {}
+    sp = ROOT / str(smoke.get("path", ""))
+    if not smoke.get("path") or not sp.is_file() or sha256_file(sp) != smoke.get("sha256"):
+        blocked("option A requires a committed, hash-verified M8 deterministic smoke-test record", M8_SMOKE_GATE_STATUS)
+    if (json.loads(sp.read_text()) if sp.suffix == ".json" else {}).get("smoke_test_passed") is not True:
+        blocked("smoke-test record does not state smoke_test_passed true", M8_SMOKE_GATE_STATUS)
     return Authorization(mode="PRODUCTION", e01_round_robin_ordinal=ordinal if method_id == "E01" else None,
                          milestone_option=option, ruling_path=str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p),
                          ruling_sha256=sha256_bytes(raw), label="production")

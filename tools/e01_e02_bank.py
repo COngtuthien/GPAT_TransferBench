@@ -4,8 +4,9 @@
     python tools/e01_e02_bank.py --method E01 --seed 42 --runtime-root <runtime_root> [--check-only]
 
 Order of gates, each refusing before any image is read:
-  1. owner ruling (`configs/amendments/e01_e02_bank_milestone_ruling.yaml`, approved, complete for this method);
-     absent -> exit 3 with E01_E02_BLOCKED_BY_MILESTONE_RULING;
+  1. owner ruling (`configs/amendments/e01_e02_bank_milestone_ruling.yaml`, approved, equal to the approved decisions);
+     absent/deviating -> exit 3 with E01_E02_BLOCKED_BY_MILESTONE_RULING; approved but no bound, passing M8
+     deterministic smoke-test record -> exit 3 with E01_E02_BLOCKED_BY_M8_SMOKE_GATE;
   2. clean git worktree (the run id binds the commit);
   3. the M6D1-locked gpat-m5 interpreter (A2-03 NumPy pin);
   4. frozen TRAIN population + M2 face hashes; faces root = <runtime_root>/data/processed/faces_256;
@@ -42,7 +43,7 @@ def main(argv=None) -> int:
     try:
         auth = bw.load_production_authorization(a.method)
     except bw.BankBlocked as exc:
-        print(json.dumps({"status": bw.BLOCKED_STATUS, "method": a.method, "seed": a.seed, "reason": str(exc)}))
+        print(json.dumps({"status": exc.status, "method": a.method, "seed": a.seed, "reason": str(exc)}))
         return EXIT_BLOCKED
     if git_dirty():
         print(json.dumps({"status": "REFUSED", "reason": "git worktree is dirty"}))

@@ -50,11 +50,19 @@ class _Tmp(unittest.TestCase):
 
 
 class TestAuthorizationGate(unittest.TestCase):
+    def smoke_record(self, td, passed=True):
+        sp = Path(td) / "smoke_test_record.json"
+        sp.write_text(json.dumps({"smoke_test_passed": passed}))
+        return {"path": str(sp), "sha256": bw.sha256_file(sp)}
+
     def ruling(self, td, **over):
+        # The owner-approved decisions (2026-11-22) plus a temporary, passing smoke-test record bound (the M8 path).
         doc = {"schema_version": bw.RULING_SCHEMA, "status": "OWNER_APPROVED", "approved": True,
-               "decisions": {"Q1_milestone_owner": "B_M6_EXECUTION_EXTENSION",
+               "decisions": {"Q1_milestone_owner": "A_M8_SMOKE_GATED",
                              "Q2_e01_round_robin_ordinal": "MANIFEST_POSITION_ZERO_BASED",
-                             "Q3_e02_uint8_quantization": "CONFIRM_CLIP_THEN_RINT"}}
+                             "Q3_e02_uint8_quantization": "CONFIRM_CLIP_THEN_RINT",
+                             "Q4_execution_host": "SEPARATE_CLONE_CPU_CONCURRENT"},
+               "smoke_test_record": self.smoke_record(td)}
         for k, v in over.items():
             if k.startswith("Q"):
                 doc["decisions"][k] = v
@@ -64,10 +72,11 @@ class TestAuthorizationGate(unittest.TestCase):
         p.write_text(json.dumps(doc))
         return p
 
-    def assertBlocked(self, method, path=None):
+    def assertBlocked(self, method, path=None, status=bw.BLOCKED_STATUS):
         with self.assertRaises(bw.BankBlocked) as cm:
             bw.load_production_authorization(method, path)
-        self.assertIn(bw.BLOCKED_STATUS, str(cm.exception))
+        self.assertEqual(cm.exception.status, status)
+        self.assertIn(status, str(cm.exception))
 
     def test_01_repository_has_no_approved_ruling(self):
         # Historical claim, pinned to the writer/qualification commits (01de91a..028b5c1): no approved ruling existed
@@ -94,7 +103,16 @@ class TestAuthorizationGate(unittest.TestCase):
             self.assertBlocked("E01", self.ruling(td, Q1_milestone_owner=None))
             self.assertBlocked("E01", self.ruling(td, Q2_e01_round_robin_ordinal=None))
             self.assertBlocked("E02", self.ruling(td, Q3_e02_uint8_quantization="OTHER"))
-            self.assertBlocked("E01", self.ruling(td, Q1_milestone_owner="A_M8_SMOKE_GATED"))  # no smoke record
+            # Owner ruling 2026-11-22: production accepts only the approved Q1/Q2.
+            self.assertBlocked("E01", self.ruling(td, Q1_milestone_owner="B_M6_EXECUTION_EXTENSION"))
+            self.assertBlocked("E02", self.ruling(td, Q1_milestone_owner="B_M6_EXECUTION_EXTENSION"))
+            self.assertBlocked("E01", self.ruling(td, Q2_e01_round_robin_ordinal="PAIR_ID_NUMERIC"))
+            # M8 smoke gate: absent, hash-mismatched or non-passing record.
+            m8 = bw.M8_SMOKE_GATE_STATUS
+            for m in bw.METHODS:
+                self.assertBlocked(m, self.ruling(td, smoke_test_record=None), m8)
+            self.assertBlocked("E01", self.ruling(td, smoke_test_record={**self.smoke_record(td), "sha256": "0" * 64}), m8)
+            self.assertBlocked("E01", self.ruling(td, smoke_test_record=self.smoke_record(td, passed=False)), m8)
 
     def test_04_complete_ruling_yields_production_authorization(self):
         with tempfile.TemporaryDirectory() as td:
@@ -111,7 +129,7 @@ class TestAuthorizationGate(unittest.TestCase):
                 with contextlib.redirect_stdout(out):
                     rc = cli.main(["--method", m, "--seed", "42", "--runtime-root", td])
                 self.assertEqual(rc, cli.EXIT_BLOCKED)
-                self.assertEqual(json.loads(out.getvalue())["status"], bw.BLOCKED_STATUS)
+                self.assertEqual(json.loads(out.getvalue())["status"], bw.M8_SMOKE_GATE_STATUS)  # approved ruling
             self.assertEqual(os.listdir(td), [])
 
     def test_06_locked_environment_check(self):
@@ -142,7 +160,7 @@ class TestProductionPopulation(unittest.TestCase):
     def test_08_production_mode_refuses_fixture_inputs_and_unverified_env(self):
         with tempfile.TemporaryDirectory() as td:
             inp = build_fixture(Path(td) / "faces", 2)
-            prod = bw.Authorization("PRODUCTION", "MANIFEST_POSITION_ZERO_BASED", "B_M6_EXECUTION_EXTENSION",
+            prod = bw.Authorization("PRODUCTION", "MANIFEST_POSITION_ZERO_BASED", "A_M8_SMOKE_GATED",
                                     None, None, "production")
             with self.assertRaises(bw.BankError):
                 bw.write_bank("E01", 42, inp, prod, Path(td) / "rt")
