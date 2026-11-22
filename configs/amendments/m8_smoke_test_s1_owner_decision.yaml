@@ -1,0 +1,53 @@
+{
+  "schema_version": "m8_smoke_test_partial_owner_decision_v1",
+  "amendment_id": "M8_SMOKE_TEST_S1_OWNER_DECISION",
+  "status": "OWNER_APPROVED_PARTIAL_DECISION",
+  "approved": true,
+  "approval_date": "2026-11-22",
+  "scope": "question S1 of configs/amendments/m8_smoke_test_contract.DRAFT.yaml only; S2-S10 remain DRAFT_PENDING_OWNER_DECISION",
+  "full_contract_approved": false,
+  "full_contract_activation_file": "configs/amendments/m8_smoke_test_contract.yaml (does not exist; this partial record is NOT that file and activates nothing)",
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_M8_Smoke_Test_S1_Owner_Decision_Addendum.md",
+  "draft": {
+    "path": "configs/amendments/m8_smoke_test_contract.DRAFT.yaml",
+    "commit": "025d9e8993ff18ca7b7b16e23a15411f45f44683",
+    "sha256": "1e3eef541be642a08b871409a1c09f4187c83d6990c14e7da86df41e4a4eb2a7",
+    "preserved_unchanged": true
+  },
+  "decision": {
+    "question": "S1_scope",
+    "option": "A_GLOBAL_END_TO_END",
+    "owner_label": "A_GLOBAL_END_TO_END_SMOKE_REQUIRED (recorded under the DRAFT's exact identifier A_GLOBAL_END_TO_END)",
+    "rejected_option": "B_STAGED_AMENDMENT",
+    "meaning": [
+      "M8 requires one global deterministic end-to-end smoke test",
+      "it covers generator/baseline transformation, bank, evaluator, metrics and plots",
+      "it must pass before any full M8+ production execution",
+      "the M6 E01/E02 writer qualification does not substitute for it",
+      "E01/E02 real production banks remain blocked (O3 is not amended)",
+      "GPAT remains deferred until the previous-work evaluation is completed"
+    ]
+  },
+  "frozen_authorities": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml (M6D6jR O3)": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "configs/amendments/e01_e02_bank_milestone_ruling.yaml": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e"
+  },
+  "spec_basis": {
+    "section_25": "M8 Banks: all synthetic banks; M9 generator eval; M10 ResNet downstream",
+    "section_26": "A full deterministic smoke test on a 2-subject-per-class toy subset must finish before full runs.",
+    "section_32": "smoke test passes for generator -> bank -> evaluator -> metrics -> plots."
+  },
+  "authorizes": {
+    "smoke_test_execution": false,
+    "toy_subset_selection": false,
+    "downstream_training": false,
+    "production_bank_generation": false,
+    "test_split_access": false,
+    "package_installation": false,
+    "gpat_work": false,
+    "method_status_update": false,
+    "smoke_record_binding": false
+  },
+  "open_questions": ["S2_class_definition", "S3_siwmv2_subject_unit", "S4_selection_rule", "S5_splits_and_test", "S6_bank_pair_population", "S7_methods_covered", "S8_evaluator_budget_and_environment", "S9_determinism_criterion", "S10_seeds"]
+}
