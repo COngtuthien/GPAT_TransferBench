@@ -458,6 +458,7 @@ def filesystem_identity(path):
     mount = source = fstype = options = None
     best = -1
     rp = os.path.realpath(path)
+    super_options = None
     for line in Path('/proc/self/mountinfo').read_text().splitlines():
         left, right = line.split(' - ', 1)
         f = left.split()
@@ -467,6 +468,7 @@ def filesystem_identity(path):
         if (rp == mp or rp.startswith(mp.rstrip('/') + '/')) and len(mp) > best:
             best, mount, options = len(mp), mp, f[5]
             fstype, source = right.split()[0], right.split()[1]
+            super_options = right.split()[2] if len(right.split()) > 2 else None
     uuid = None
     by_uuid = Path('/dev/disk/by-uuid')
     if by_uuid.is_dir():
@@ -479,8 +481,31 @@ def filesystem_identity(path):
                 continue
     vfs = os.statvfs(path)
     return {'path': str(path), 'device': dev, 'source': source, 'fstype': fstype, 'mount_point': mount,
-            'mount_options': options, 'filesystem_uuid': uuid, 'free_bytes': vfs.f_bavail * vfs.f_frsize,
-            'free_inodes': vfs.f_favail}
+            'mount_options': options, 'super_options': super_options, 'filesystem_uuid': uuid,
+            'free_bytes': vfs.f_bavail * vfs.f_frsize, 'free_inodes': vfs.f_favail}
+
+
+def _read_write(options):
+    opts = (options or '').split(',')
+    return 'rw' in opts and 'ro' not in opts
+
+
+def bank_root_contents_ok(root, owner_uid):
+    """The private root holds only <method>/seed_<s>/ real directories owned by the bank user (empty at activation).
+    Anything else (files, symlinks, foreign directories, other names) is unexpected and refuses the root."""
+    bad = []
+    seeds = {'seed_%d' % s for s in SEEDS}
+    for name in sorted(os.listdir(root)):
+        p = os.path.join(root, name)
+        st = os.lstat(p)
+        if name not in METHODS or not stat.S_ISDIR(st.st_mode) or st.st_uid != owner_uid:
+            bad.append(name)
+            continue
+        for sub in sorted(os.listdir(p)):
+            sst = os.lstat(os.path.join(p, sub))
+            if sub not in seeds or not stat.S_ISDIR(sst.st_mode) or sst.st_uid != owner_uid:
+                bad.append(name + '/' + sub)
+    return bad
 
 
 def storage_preflight(bank_root=None, expected=None):
@@ -505,8 +530,13 @@ def storage_preflight(bank_root=None, expected=None):
     checks['mount_point'] = fs.get('mount_point') == exp['mount_point']
     checks['filesystem_uuid'] = fs.get('filesystem_uuid') == exp['filesystem_uuid']
     checks['fstype_ext4'] = fs.get('fstype') == exp['fstype']
+    checks['mount_read_write'] = _read_write(fs.get('mount_options')) and _read_write(fs.get('super_options'))
+    checks['user_rwx_access'] = bool(checks['is_directory'] and lst.st_uid == os.getuid()
+                                     and os.access(root, os.R_OK | os.W_OK | os.X_OK))
+    unexpected = bank_root_contents_ok(root, lst.st_uid) if checks['is_directory'] and checks['not_symlink'] else ['?']
+    checks['no_unexpected_contents'] = unexpected == []
     return {'bank_root': root, 'exists': True, 'mode_octal': oct(stat.S_IMODE(lst.st_mode)), 'filesystem': fs,
-            'checks': checks, 'ok': all(checks.values())}
+            'unexpected_entries': unexpected, 'checks': checks, 'ok': all(checks.values())}
 
 
 def load_storage_authority(root=None):
@@ -522,7 +552,9 @@ def load_storage_authority(root=None):
         raise LearnedBankBlocked('storage authority is not an activated L1 B approval', STATUS_STORAGE)
     reg = rec.get('bank_root_registry') or {}
     if reg.get('bank_root') != HDD['bank_root'] or reg.get('filesystem_uuid') != HDD['filesystem_uuid'] \
-            or reg.get('mount_point') != HDD['mount_point']:
+            or reg.get('mount_point') != HDD['mount_point'] or reg.get('fstype') != HDD['fstype'] \
+            or reg.get('owner') != HDD['owner'] or reg.get('mode') != '0700' \
+            or reg.get('layout') != BANK_ROOT_LAYOUT or sorted(reg.get('methods') or ()) != sorted(METHODS):
         raise LearnedBankBlocked('storage registry differs from the approved HDD root', STATUS_STORAGE)
     act = rec.get('activation_verification') or {}
     if act.get('ok') is not True:
@@ -539,10 +571,22 @@ def verify_storage_root(storage):
     return pf
 
 
+BANK_ROOT_LAYOUT = '<bank_root>/<method>/seed_<seed>/'
+
+
 def production_bank_dir(method_id, seed, storage):
-    """The single registered location of a production bank: <bank_root>/<method>/seed_<seed>."""
-    require(method_id in METHODS and seed in SEEDS, 'unknown production bank')
-    return Path(storage['bank_root']) / method_id / ('seed_%d' % seed)
+    """The single registered location of a production bank: <bank_root>/<method>/seed_<seed>. Only the approved HDD
+    root is accepted (never the udisks duplicate, never a relative or redirected root), and the result must stay
+    inside it (no traversal: method and seed come from the closed METHODS / SEEDS sets)."""
+    require(method_id in METHODS and seed in SEEDS and type(seed) is int, 'unknown production bank')
+    root = storage['bank_root']
+    require(root == HDD['bank_root'] and os.path.isabs(root) and os.path.normpath(root) == root,
+            'bank root is not the registered HDD root')
+    require(not root.startswith(HDD['forbidden_mount_prefix']), 'the udisks duplicate mount is never a bank path')
+    out = Path(root) / method_id / ('seed_%d' % seed)
+    require(os.path.normpath(str(out)) == str(out) and _is_within(out, root) and out.parent.parent == Path(root),
+            'bank path escapes the registered root')
+    return out
 
 
 def resolve_registered_bank(method_id, seed, root=None):
