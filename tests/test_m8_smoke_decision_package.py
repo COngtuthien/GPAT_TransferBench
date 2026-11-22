@@ -67,7 +67,8 @@ class M8SmokeDecisionPackage(unittest.TestCase):
             self.assertEqual(sum(1 for r in sel if r["subject_id_global"] is None), fact["null_subject_id_rows"])
 
     def test_04_production_refused_while_unbound(self):
-        if json.loads((ROOT / bw.RULING_PATH).read_text())["smoke_test_record"] is not None:
+        if json.loads((ROOT / bw.RULING_PATH).read_text())["smoke_test_record"] is not None or \
+                getattr(bw, "SMOKE_BINDING_PATH", None) and (ROOT / bw.SMOKE_BINDING_PATH).is_file():
             self.skipTest("smoke record bound by a later owner approval")
         for m in bw.METHODS:
             with self.assertRaises(bw.BankBlocked) as cm:

@@ -73,6 +73,8 @@ class E01E02BankOwnerRuling(unittest.TestCase):
     def test_05_authorizes_nothing_and_smoke_record_absent(self):
         self.assertIsNone(A["smoke_test_record"])
         self.assertEqual(set(A["authorizes"].values()), {False})
+        if getattr(bw, "SMOKE_BINDING_PATH", None) and (ROOT / bw.SMOKE_BINDING_PATH).is_file():
+            return      # bound later by the additive owner binding; see tests/test_e01_e02_production_gate.py
         for m in bw.METHODS:
             with self.assertRaises(bw.BankBlocked) as cm:
                 bw.load_production_authorization(m)

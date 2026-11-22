@@ -1,0 +1,35 @@
+{
+  "schema_version": "m8_o3_smoke_completion_v1",
+  "amendment_id": "M6D6JR_O3_SMOKE_TEST_COMPLETION",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "approval_date": "2026-11-22",
+  "owner_authorization": "Owner directive 2026-11-22 'GPAT-TransferBench v1.0 - M8 Production Binding, GPU-Host Storage Discovery, and E01/E02 Full Bank Generation', section 7: create a separate additive O3 completion record with smoke_test_completed true.",
+  "smoke_test_completed": true,
+  "historical_o3_record": {
+    "path": "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml",
+    "sha256": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "field": "O3_smoke_test",
+    "historical_value": {"smoke_test_required": true, "smoke_test_completed": false, "smoke_test_waived": false},
+    "note": "The M6D6jR record stays byte-unchanged. It states what was true when it was written. This file records the later completion; it does not rewrite the record."
+  },
+  "smoke_test_record": {
+    "path": "outputs/audit/M8_SMOKE_TEST_RECORD.json",
+    "sha256": "6eaa865aaff168ba1aeb8ec8fdd915eba45142a4bb4f3608fb008b5ee71d1db2",
+    "evidence_commit": "fec7370d39baca2f04d3df2f3f361a5043b884ed",
+    "smoke_source_commit": "dd893016ddb0e6e828d867a69c2d7c18ba363834",
+    "smoke_contract_sha256": "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb",
+    "evaluator_contract_sha256": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0",
+    "label": "SMOKE_NON_SCIENTIFIC"
+  },
+  "o3_must_exercise_satisfied": ["generator", "bank", "evaluator", "metrics", "plots"],
+  "scientific_results_from_smoke": "FORBIDDEN (unchanged; the smoke record states scientific_results_produced false)",
+  "effect": "Satisfies the O3 hard gate before the first full M8+ execution. Each full M8+ execution still needs its own authority: E01/E02 banks are bound by configs/amendments/e01_e02_m8_smoke_binding.yaml, and downstream training and evaluation need separate owner authorizations.",
+  "does_not_authorize": [
+    "TEST access or TEST evaluation",
+    "scientific downstream (ResNet-18 / DINOv3) training",
+    "learned-method (E03-E07) bank generation",
+    "GPAT",
+    "method_status.csv changes"
+  ]
+}

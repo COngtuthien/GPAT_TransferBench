@@ -9,8 +9,13 @@ Authorization. A PRODUCTION bank needs the owner-approved `configs/amendments/e0
 (approved 2026-11-22: Q1 A_M8_SMOKE_GATED, Q2 MANIFEST_POSITION_ZERO_BASED, Q3 CONFIRM_CLIP_THEN_RINT). While that
 file is absent, unapproved, incomplete or deviates from the approved decisions, `load_production_authorization`
 raises `BankBlocked` with status `E01_E02_BLOCKED_BY_MILESTONE_RULING`. With the approved ruling, it raises
-`BankBlocked` with status `E01_E02_BLOCKED_BY_M8_SMOKE_GATE` until a committed, hash-verified M8 deterministic
-smoke-test record with smoke_test_passed true is bound in the ruling (M6D6jR O3). QUALIFICATION authorizations exist
+`BankBlocked` with status `E01_E02_BLOCKED_BY_M8_SMOKE_GATE` until the additive owner binding
+`configs/amendments/e01_e02_m8_smoke_binding.yaml` names the exact approved M8 smoke record and that record passes the
+strict validator and every pinned identity (M6D6jR O3; the ruling itself stays byte-unchanged and an inline record in it
+is refused). `verify_production_launch` then requires the owner-approved production authority record (candidate commit
+ancestry, byte-identical authority files, clean worktree), the approved host, the locked gpat-m5 interpreter with CUDA
+hidden, the approved runtime root on the approved filesystem UUID with the free-space floor, and an absent run
+directory (`E01_E02_BLOCKED_BY_PRODUCTION_AUTHORITY` / `..._PRODUCTION_PREFLIGHT`). QUALIFICATION authorizations exist
 only for synthetic fixtures and never accept the production faces root. SMOKE authorizations (M8 global smoke) need
 the owner-approved configs/amendments/m8_smoke_test_contract.yaml; they accept only the toy population or a synthetic
 smoke fixture, keep canonical global pair positions, read faces with O_NOATIME and write only under a separate smoke
@@ -19,8 +24,9 @@ root. The production CLI (tools/e01_e02_bank.py) never constructs a SMOKE author
 Inputs. Pairs come from the frozen `manifests/pairs_train_v1.parquet` (SHA256 checked before parse, every row TRAIN,
 pair_ids ascending and unique, N rows = n_syn_intended). Every referenced sample must be TRAIN in `split_v1` and
 COMPLETE in `manifests/m2_sample_accounting.parquet`. Each face is read from
-`<runtime_root>/data/processed/faces_256/<dataset>/<sample_id>.png` and its bytes must match the M2 face_png_sha256
-before decoding. The decoded image must be PIL mode RGB, 256x256; nothing is converted silently.
+`<runtime_root>/data/processed/faces_256/<dataset>/<sample_id>.png` with O_NOATIME in every mode (the atime is
+stat-checked unchanged across the read, which is also the read that is hashed), and its bytes must match the M2
+face_png_sha256 before decoding. The decoded image must be PIL mode RGB, 256x256; nothing is converted silently.
 
 Failure policy. Input integrity violations (hash mismatch, missing file, wrong mode/size, non-TRAIN sample) abort
 the whole run, which is closed as `failed` and keeps its partial evidence. A method-level exception for one pair
@@ -35,6 +41,7 @@ import io
 import json
 import os
 import re
+import subprocess
 import time
 from pathlib import Path
 from typing import Callable
@@ -65,6 +72,45 @@ APPROVED_E01_ORDINAL = "MANIFEST_POSITION_ZERO_BASED"
 METHODS = ("E01", "E02")
 SMOKE_CONTRACT_PATH = "configs/amendments/m8_smoke_test_contract.yaml"
 SMOKE_KINDS = ("SMOKE_TOY_POPULATION", "SMOKE_SYNTHETIC_FIXTURE")
+
+# M8 production binding (owner approval 2026-11-22). The ruling above stays byte-unchanged; the additive binding file
+# names the one passing smoke record. Every identity is pinned here too, so an edited binding cannot redirect the gate.
+SMOKE_BINDING_PATH = "configs/amendments/e01_e02_m8_smoke_binding.yaml"
+SMOKE_BINDING_SCHEMA = "e01_e02_m8_smoke_binding_v1"
+APPROVED_RULING_SHA256 = "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e"
+APPROVED_SMOKE_RECORD_PATH = "outputs/audit/M8_SMOKE_TEST_RECORD.json"
+APPROVED_SMOKE_RECORD_SHA256 = "6eaa865aaff168ba1aeb8ec8fdd915eba45142a4bb4f3608fb008b5ee71d1db2"
+APPROVED_SMOKE_CONTRACT_SHA256 = "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb"
+EVALUATOR_CONTRACT_PATH = "configs/amendments/m8_downstream_evaluator_contract.yaml"
+APPROVED_EVALUATOR_CONTRACT_SHA256 = "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0"
+SMOKE_SOURCE_COMMIT = "dd893016ddb0e6e828d867a69c2d7c18ba363834"
+SMOKE_TOY_PAIRS = 186
+SMOKE_REPLAY_ARTIFACTS = 1721
+SMOKE_STAGES = ("generator", "bank", "evaluator", "metrics", "plots")
+SMOKE_RUNS = ("A", "B")
+SMOKE_BANK_GATES = {"E01": ("completed_no_failures", "file_verification", "full_replay", "rows_equal_toy_pairs",
+                            "operator_is_position_mod_8"),
+                    "E02": ("completed_no_failures", "file_verification", "full_replay", "rows_equal_toy_pairs",
+                            "k40_n159_residual")}
+PRODUCTION_SEEDS = (42, 1337, 2026)
+APPROVED_METHOD_CONFIGS = {
+    "E01": ("configs/methods/e01_fas_aug.yaml", "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0"),
+    "E02": ("configs/methods/e02_freqsub.yaml", "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0")}
+PRODUCTION_AUTHORITY_PATH = "configs/amendments/e01_e02_production_authority.yaml"
+PRODUCTION_AUTHORITY_SCHEMA = "e01_e02_production_authority_v1"
+PRODUCTION_AUTHORITY_STATUS = "E01_E02_BLOCKED_BY_PRODUCTION_AUTHORITY"
+PRODUCTION_PREFLIGHT_STATUS = "E01_E02_BLOCKED_BY_PRODUCTION_PREFLIGHT"
+EXECUTION_CONFIG_PATH = "configs/execution/m5_gpu_3090.yaml"
+# Files whose bytes decide what a production bank contains or which gate admits it. The production authority record
+# must pin each one, and the launch checkout must hold exactly those bytes.
+AUTHORITY_FILES = (
+    "methods/common/bank_writer.py", "methods/common/config.py", "methods/common/runlog.py",
+    "methods/common/interface.py", "methods/fas_aug/e01.py", "methods/fas_aug/official.py", "methods/freq_sub/e02.py",
+    "tools/e01_e02_bank.py", "gpatbench/downstream/smoke_evidence.py", "gpatbench/downstream/audit_hook.py",
+    "configs/methods/e01_fas_aug.yaml", "configs/methods/e02_freqsub.yaml", "configs/run_logging_v1.yaml",
+    "outputs/audit/M6B_CONFIG_FREEZE.json", EXECUTION_CONFIG_PATH, RULING_PATH, SMOKE_BINDING_PATH,
+    "configs/amendments/m8_o3_smoke_completion.yaml", SMOKE_CONTRACT_PATH, EVALUATOR_CONTRACT_PATH,
+    APPROVED_SMOKE_RECORD_PATH, PAIRS_PATH, SPLIT_PATH, M2_ACCOUNTING_PATH, ENV_LOCK_PATH, "third_party/source_pins.json")
 PAIR_ID_RE = re.compile(r"^PTR\d{6}$")
 CANONICAL = 256
 PNG_COMPRESS_LEVEL = 6
@@ -111,13 +157,145 @@ class Authorization:
     ruling_path: str | None
     ruling_sha256: str | None
     label: str
+    binding: tuple | None = None      # PRODUCTION only: sorted (key, value) identity of the verified M8 smoke binding
 
     def record(self) -> dict:
-        return dataclasses.asdict(self)
+        d = dataclasses.asdict(self)
+        if d["binding"] is None:          # QUALIFICATION / SMOKE records keep their historical shape
+            del d["binding"]
+        else:
+            d["binding"] = dict(self.binding)
+        return d
 
 
-def load_production_authorization(method_id: str, path: str | Path | None = None) -> Authorization:
-    """Owner ruling gate. Refuses with BLOCKED_STATUS unless the approved ruling answers what `method_id` needs."""
+def _git(*args) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", "-C", str(ROOT), *args], capture_output=True)
+
+
+def _is_ancestor(commit: str, of: str = "HEAD") -> bool:
+    return bool(re.fullmatch(r"[0-9a-f]{40}", commit or "")) and \
+        _git("merge-base", "--is-ancestor", commit, of).returncode == 0
+
+
+def _load_json_or_yaml(raw: bytes):
+    try:
+        return json.loads(raw)
+    except ValueError:
+        import yaml
+        return yaml.safe_load(raw)
+
+
+def _verified_smoke_binding(method_id: str, ruling: dict, ruling_sha: str, binding_path, seed) -> dict:
+    """The M8 binding gate (gate items 2-13, 17, 18). Raises BankBlocked; returns the verified identities."""
+    from gpatbench.downstream.smoke_evidence import SmokeRecordInvalid, validate_smoke_record
+
+    def m8(why):
+        raise BankBlocked(f"{M8_SMOKE_GATE_STATUS}: {why}", M8_SMOKE_GATE_STATUS)
+
+    def authority(why):
+        raise BankBlocked(f"{PRODUCTION_AUTHORITY_STATUS}: {why}", PRODUCTION_AUTHORITY_STATUS)
+
+    if ruling.get("smoke_test_record") is not None:
+        m8("a smoke_test_record inside the ruling is never authority; the owner binding is the additive "
+           f"{SMOKE_BINDING_PATH}")
+    bp = Path(binding_path) if binding_path is not None else ROOT / SMOKE_BINDING_PATH
+    if bp.name.endswith((".DRAFT.yaml", ".FINAL_DRAFT.yaml")) or not bp.is_file() or bp.is_symlink():
+        m8(f"no owner-approved M8 smoke binding at {SMOKE_BINDING_PATH}")
+    braw = bp.read_bytes()
+    try:
+        b = json.loads(braw)
+    except ValueError:
+        m8("binding is not JSON")
+    if not isinstance(b, dict) or b.get("schema_version") != SMOKE_BINDING_SCHEMA:
+        m8("binding schema_version mismatch")
+    if b.get("status") != "OWNER_APPROVED" or b.get("approved") is not True:
+        m8("binding is not owner-approved")
+    if ruling_sha != APPROVED_RULING_SHA256 or (b.get("ruling") or {}).get("sha256") != ruling_sha \
+            or (b.get("ruling") or {}).get("path") != RULING_PATH:
+        m8("binding does not bind the approved, byte-unchanged owner ruling")
+    rec = b.get("smoke_test_record") or {}
+    if rec.get("path") != APPROVED_SMOKE_RECORD_PATH or rec.get("sha256") != APPROVED_SMOKE_RECORD_SHA256:
+        m8("binding does not name the approved smoke record path and SHA256 exactly")
+    sp = ROOT / APPROVED_SMOKE_RECORD_PATH
+    if not sp.is_file() or sp.is_symlink() or sha256_file(sp) != APPROVED_SMOKE_RECORD_SHA256:
+        m8("the approved smoke record is missing or its SHA256 differs")
+    record = json.loads(sp.read_bytes())
+    try:
+        v = validate_smoke_record(record, ROOT)
+    except SmokeRecordInvalid as exc:
+        m8(f"strict smoke validator: {exc}")
+    if not (v["admissible"] and v["passed"]):
+        m8(f"strict smoke validator did not pass: {v['problems']}")
+    if record.get("smoke_test_passed") is not True or record.get("mode") != "real" \
+            or record.get("label") != "SMOKE_NON_SCIENTIFIC" or record.get("scientific_results_produced") is not False:
+        m8("smoke record is not a passing real SMOKE_NON_SCIENTIFIC run")
+    for name, path, approved, record_key, binding_key in (
+            ("smoke contract", SMOKE_CONTRACT_PATH, APPROVED_SMOKE_CONTRACT_SHA256, "contract_sha256", "smoke_contract"),
+            ("evaluator contract", EVALUATOR_CONTRACT_PATH, APPROVED_EVALUATOR_CONTRACT_SHA256,
+             "evaluator_contract_sha256", "evaluator_contract")):
+        p = ROOT / path
+        doc = json.loads(p.read_bytes()) if p.is_file() else {}
+        if doc.get("status") != "OWNER_APPROVED" or doc.get("approved") is not True or sha256_file(p) != approved \
+                or record.get(record_key) != approved or b.get(binding_key) != {"path": path, "sha256": approved}:
+            m8(f"{name} is not the approved {approved[:12]}... in the repository, the record and the binding")
+    stages = record.get("stages") or {}
+    if set(stages) != set(SMOKE_STAGES) or not all(
+            stages[s].get("executed") is True and stages[s].get("simulated") is False and stages[s].get("status") == "PASS"
+            for s in SMOKE_STAGES):
+        m8("smoke record does not hold exactly the five executed, non-simulated, passing O3 stages")
+    banks = (record.get("coverage") or {}).get("banks") or {}
+    expected = {f"{m}.seed_{s}" for m in METHODS for s in PRODUCTION_SEEDS}
+    if set(banks) != expected or not all(x.get("rows") == x.get("outputs") == SMOKE_TOY_PAIRS and x.get("failures") == 0
+                                         for x in banks.values()):
+        m8(f"smoke bank coverage is not exactly E01/E02 x {PRODUCTION_SEEDS} with {SMOKE_TOY_PAIRS} outputs, 0 failures")
+    gates = {**(stages["generator"].get("gates") or {}), **(stages["bank"].get("gates") or {})}
+    for s in PRODUCTION_SEEDS:
+        for run in SMOKE_RUNS:
+            for g in SMOKE_BANK_GATES[method_id]:
+                if gates.get(f"{run}.banks.{method_id}.seed_{s}.{g}") is not True:
+                    m8(f"smoke bank-stage gate {run}.banks.{method_id}.seed_{s}.{g} is not true")
+    rp = record.get("independent_replay") or {}
+    if rp.get("identical") is not True or rp.get("artifacts_compared") != SMOKE_REPLAY_ARTIFACTS or rp.get("differences"):
+        m8(f"smoke replay is not {SMOKE_REPLAY_ARTIFACTS} artifacts with zero differences")
+    fw = record.get("test_firewall") or {}
+    if (fw.get("violations"), fw.get("test_rows_used"), fw.get("listing_attempts"), fw.get("atime_changed_files")) \
+            != (0, 0, 0, 0):
+        m8("smoke TEST firewall evidence is not clean")
+    src = record.get("source") or {}
+    if src.get("git_commit") != SMOKE_SOURCE_COMMIT or b.get("smoke_source_commit") != SMOKE_SOURCE_COMMIT \
+            or src.get("worktree_dirty") is not False:
+        m8("smoke source authority is not the clean, approved smoke implementation commit")
+    scope = b.get("scope") or {}
+    if scope.get("methods") != list(METHODS) or scope.get("seeds") != list(PRODUCTION_SEEDS) or scope.get("split") != "TRAIN":
+        m8("binding scope is not exactly E01/E02, seeds 42/1337/2026, TRAIN")
+    auth = b.get("authorizes") or {}
+    if auth.get("e01_e02_production_bank_generation") is not True or \
+            any(v is not False for k, v in auth.items() if k != "e01_e02_production_bank_generation"):
+        m8("binding must authorize E01/E02 production banks and nothing else (no TEST, training, GPAT)")
+    cfg_path, cfg_sha = APPROVED_METHOD_CONFIGS[method_id]
+    if (b.get("method_configs") or {}).get(method_id) != {"path": cfg_path, "sha256": cfg_sha} \
+            or sha256_file(ROOT / cfg_path) != cfg_sha or (ruling.get("frozen_authorities") or {}).get(cfg_path) != cfg_sha:
+        m8(f"{method_id} scientific configuration identity differs from the approved {cfg_sha[:12]}...")
+    if seed is not None and seed not in PRODUCTION_SEEDS:
+        authority(f"seed {seed} is outside the bound production seeds {PRODUCTION_SEEDS}")
+    if not _is_ancestor(SMOKE_SOURCE_COMMIT):
+        authority("the smoke source commit is not an ancestor of this checkout")
+    return {"binding_path": SMOKE_BINDING_PATH, "binding_sha256": sha256_bytes(braw),
+            "smoke_record_path": APPROVED_SMOKE_RECORD_PATH, "smoke_record_sha256": APPROVED_SMOKE_RECORD_SHA256,
+            "smoke_contract_sha256": APPROVED_SMOKE_CONTRACT_SHA256,
+            "evaluator_contract_sha256": APPROVED_EVALUATOR_CONTRACT_SHA256, "smoke_source_commit": SMOKE_SOURCE_COMMIT,
+            "method_config_sha256": cfg_sha}
+
+
+def load_production_authorization(method_id: str, path: str | Path | None = None, *,
+                                  binding_path: str | Path | None = None, seed: int | None = None) -> Authorization:
+    """Governance gate, fail-closed. Refuses with BLOCKED_STATUS unless the approved ruling answers what `method_id`
+    needs; then with M8_SMOKE_GATE_STATUS unless the additive owner binding (SMOKE_BINDING_PATH) names the exact
+    approved smoke record, the record passes the strict validator and every pinned identity (contracts, five stages,
+    E01/E02 x 42/1337/2026 coverage, per-method bank gates, replay, firewall, clean smoke source, scope, method config)
+    holds; then with PRODUCTION_AUTHORITY_STATUS unless the smoke source is an ancestor of this checkout and `seed`
+    (when given) is bound. Launch-time checks (production authority commit, environment, storage, collisions) are
+    `verify_production_launch`."""
     if method_id not in METHODS:
         raise BankError(f"unknown bank method {method_id!r}")
     p = Path(path) if path is not None else ROOT / RULING_PATH
@@ -130,11 +308,7 @@ def load_production_authorization(method_id: str, path: str | Path | None = None
     if not p.is_file():
         blocked(f"no approved owner ruling at {RULING_PATH}")
     raw = p.read_bytes()
-    try:
-        ruling = json.loads(raw)
-    except ValueError:
-        import yaml
-        ruling = yaml.safe_load(raw)
+    ruling = _load_json_or_yaml(raw)
     if not isinstance(ruling, dict) or ruling.get("schema_version") != RULING_SCHEMA:
         blocked("ruling schema_version mismatch")
     if ruling.get("approved") is not True or ruling.get("status") != "OWNER_APPROVED":
@@ -152,15 +326,131 @@ def load_production_authorization(method_id: str, path: str | Path | None = None
         blocked(f"Q2 {ordinal} differs from the owner-approved {APPROVED_E01_ORDINAL} (position % 8, never the pair_id suffix)")
     if method_id == "E02" and decisions.get("Q3_e02_uint8_quantization") != E02_QUANTIZATION:
         blocked("Q3 E02 quantization not confirmed as the implemented clip->rint")
-    smoke = ruling.get("smoke_test_record") or {}
-    sp = ROOT / str(smoke.get("path", ""))
-    if not smoke.get("path") or not sp.is_file() or sha256_file(sp) != smoke.get("sha256"):
-        blocked("option A requires a committed, hash-verified M8 deterministic smoke-test record", M8_SMOKE_GATE_STATUS)
-    if (json.loads(sp.read_text()) if sp.suffix == ".json" else {}).get("smoke_test_passed") is not True:
-        blocked("smoke-test record does not state smoke_test_passed true", M8_SMOKE_GATE_STATUS)
+    binding = _verified_smoke_binding(method_id, ruling, sha256_bytes(raw), binding_path, seed)
     return Authorization(mode="PRODUCTION", e01_round_robin_ordinal=ordinal if method_id == "E01" else None,
                          milestone_option=option, ruling_path=str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p),
-                         ruling_sha256=sha256_bytes(raw), label="production")
+                         ruling_sha256=sha256_bytes(raw), label="production", binding=tuple(sorted(binding.items())))
+
+
+def filesystem_identity(path: str | Path) -> dict:
+    """Device, mount point and filesystem UUID of `path` from stat + /proc/self/mountinfo + /dev/disk/by-uuid (all
+    read-only; no privilege needed)."""
+    st = os.stat(path)
+    dev = f"{os.major(st.st_dev)}:{os.minor(st.st_dev)}"
+    mount = source = fstype = options = None
+    best = -1
+    rp = os.path.realpath(path)
+    for line in Path("/proc/self/mountinfo").read_text().splitlines():
+        left, right = line.split(" - ", 1)
+        f = left.split()
+        if f[2] != dev:
+            continue
+        mp = f[4].replace("\\040", " ")
+        if (rp == mp or rp.startswith(mp.rstrip("/") + "/")) and len(mp) > best:
+            best, mount, options = len(mp), mp, f[5]
+            fstype, source = right.split()[0], right.split()[1]
+    uuid = None
+    by_uuid = Path("/dev/disk/by-uuid")
+    if by_uuid.is_dir():
+        for link in sorted(by_uuid.iterdir()):
+            try:
+                if os.stat(link).st_rdev == st.st_dev:
+                    uuid = link.name
+                    break
+            except OSError:
+                continue
+    vfs = os.statvfs(path)
+    return {"path": str(path), "device": dev, "source": source, "fstype": fstype, "mount_point": mount,
+            "mount_options": options, "filesystem_uuid": uuid, "free_bytes": vfs.f_bavail * vfs.f_frsize,
+            "free_inodes": vfs.f_favail, "total_bytes": vfs.f_blocks * vfs.f_frsize}
+
+
+def verify_production_launch(method_id: str, seed: int, auth: Authorization, runtime_root: str | Path, *,
+                             authority_path: str | Path | None = None) -> dict:
+    """Launch gate (gate items 12, 14-16), run after load_production_authorization and before any face is opened.
+    Refuses with PRODUCTION_AUTHORITY_STATUS unless the owner-approved production authority record names a candidate
+    commit that is an ancestor of this clean checkout whose authority files are byte-identical to that commit; with
+    PRODUCTION_PREFLIGHT_STATUS unless this is the approved host and locked gpat-m5 interpreter with CUDA hidden, the
+    runtime root is the approved one on the approved filesystem UUID with enough free bytes/inodes, and the run
+    directory does not exist."""
+    def authority(why):
+        raise BankBlocked(f"{PRODUCTION_AUTHORITY_STATUS}: {why}", PRODUCTION_AUTHORITY_STATUS)
+
+    def preflight(why):
+        raise BankBlocked(f"{PRODUCTION_PREFLIGHT_STATUS}: {why}", PRODUCTION_PREFLIGHT_STATUS)
+
+    from .runlog import git_commit, git_dirty
+    if method_id not in METHODS or seed not in PRODUCTION_SEEDS:
+        authority(f"{method_id} seed {seed} is not a bound production bank")
+    if auth.mode != "PRODUCTION" or auth.binding is None:
+        authority("a verified PRODUCTION authorization (with the M8 binding) is required")
+    ap = Path(authority_path) if authority_path is not None else ROOT / PRODUCTION_AUTHORITY_PATH
+    if not ap.is_file() or ap.is_symlink():
+        authority(f"no production authority record at {PRODUCTION_AUTHORITY_PATH}")
+    araw = ap.read_bytes()
+    try:
+        rec = json.loads(araw)
+    except ValueError:
+        authority("production authority record is not JSON")
+    if rec.get("schema_version") != PRODUCTION_AUTHORITY_SCHEMA or rec.get("status") != "OWNER_APPROVED" \
+            or rec.get("approved") is not True:
+        authority("production authority record is not owner-approved")
+    binding = dict(auth.binding)
+    if rec.get("binding_sha256") != binding["binding_sha256"] or rec.get("ruling_sha256") != auth.ruling_sha256 \
+            or rec.get("smoke_record_sha256") != APPROVED_SMOKE_RECORD_SHA256:
+        authority("production authority record does not name this binding, ruling and smoke record")
+    if (rec.get("scope") or {}).get("methods") != list(METHODS) or (rec.get("scope") or {}).get("seeds") != list(PRODUCTION_SEEDS):
+        authority("production authority scope is not E01/E02 x 42/1337/2026")
+    cand = rec.get("candidate_commit", "")
+    if not _is_ancestor(cand):
+        authority("the production candidate commit is not an ancestor of this checkout")
+    files = rec.get("authority_files") or {}
+    missing = sorted(set(AUTHORITY_FILES) - set(files))
+    if missing:
+        authority(f"authority record does not pin {missing[:3]}")
+    for rel, digest in sorted(files.items()):
+        blob = _git("show", f"{cand}:{rel}")
+        if blob.returncode != 0 or sha256_bytes(blob.stdout) != digest:
+            authority(f"{rel} at the candidate commit differs from the authority record")
+        p = ROOT / rel
+        if not p.is_file() or p.is_symlink() or sha256_file(p) != digest:
+            authority(f"{rel} in this checkout differs from the production candidate commit")
+    if git_dirty():
+        authority("git worktree is dirty")
+    ex = rec.get("execution") or {}
+    machine_id = Path("/etc/machine-id").read_text().strip() if Path("/etc/machine-id").is_file() else None
+    if not machine_id or machine_id != ex.get("machine_id"):
+        preflight("this is not the approved execution host")
+    try:
+        live = verify_locked_environment()
+    except BankError as exc:
+        preflight(f"execution environment: {exc}")
+    if os.environ.get("CUDA_VISIBLE_DEVICES") != "":
+        preflight("CUDA_VISIBLE_DEVICES must be set and empty (CPU-only bank)")
+    st = rec.get("storage") or {}
+    rr = Path(runtime_root)
+    import yaml
+    exec_cfg = yaml.safe_load((ROOT / EXECUTION_CONFIG_PATH).read_text())
+    approved_root = str((exec_cfg.get("storage") or {}).get("runtime_root") or "")
+    if str(rr) != st.get("runtime_root") or str(rr) != approved_root or not rr.is_dir() or rr.is_symlink() \
+            or os.path.realpath(rr) != str(rr):
+        preflight(f"runtime root {rr} is not the approved, non-symlinked {st.get('runtime_root')}")
+    fs = filesystem_identity(rr)
+    if not fs["filesystem_uuid"] or fs["filesystem_uuid"] != st.get("filesystem_uuid") \
+            or fs["mount_point"] != st.get("mount_point"):
+        preflight(f"output filesystem {fs['filesystem_uuid']} at {fs['mount_point']} is not the approved storage")
+    if not isinstance(st.get("min_free_bytes_before_bank"), int) or fs["free_bytes"] < st["min_free_bytes_before_bank"]:
+        preflight(f"free bytes {fs['free_bytes']} below the approved floor {st.get('min_free_bytes_before_bank')}")
+    if not isinstance(st.get("min_free_inodes_before_bank"), int) or fs["free_inodes"] < st["min_free_inodes_before_bank"]:
+        preflight(f"free inodes {fs['free_inodes']} below the approved floor {st.get('min_free_inodes_before_bank')}")
+    run_dir = rr / "runs" / "m6" / method_id / f"seed_{seed}"
+    if os.path.lexists(run_dir):
+        preflight(f"run directory exists: {run_dir}")
+    parent = rr / "runs" / "m6"
+    if not parent.is_dir() or parent.is_symlink() or os.stat(parent).st_dev != os.stat(rr).st_dev:
+        preflight("runs/m6 must be a real directory on the runtime filesystem")
+    return {"head_commit": git_commit(), "candidate_commit": cand, "authority_record_sha256": sha256_bytes(araw),
+            "machine_id": machine_id, "environment": live, "filesystem": fs, "run_dir": str(run_dir)}
 
 
 def qualification_authorization(label: str, e01_round_robin_ordinal: str = "MANIFEST_POSITION_ZERO_BASED") -> Authorization:
@@ -245,6 +535,7 @@ class BankInputs:
         self.sample_dataset = dict(sample_dataset)
         self.provenance = dict(provenance)
         self.opened: list[str] = []
+        self.atime_checked_reads = 0
 
     def face_path(self, sample_id: str) -> Path:
         p = self.faces_root / self.sample_dataset[sample_id] / f"{sample_id}.png"
@@ -256,10 +547,14 @@ class BankInputs:
         from PIL import Image
         require(sample_id in self.face_sha256, f"sample {sample_id} is outside the verified population")
         p = self.face_path(sample_id)
-        try:
-            raw = read_bytes_noatime(p) if self.smoke else p.read_bytes()
+        try:        # every mode: O_NOATIME, never a plain read (protects atime-based firewalls such as E04 H.val_zero)
+            a0 = os.stat(p).st_atime_ns
+            raw = read_bytes_noatime(p)
+            a1 = os.stat(p).st_atime_ns
         except OSError as exc:
             raise BankError(f"face unreadable {sample_id}: {exc}") from exc
+        require(a0 == a1, f"atime of {sample_id} changed across an O_NOATIME read")
+        self.atime_checked_reads += 1
         self.opened.append(sample_id)
         digest = sha256_bytes(raw)
         require(digest == self.face_sha256[sample_id], f"face sha256 mismatch {sample_id}")

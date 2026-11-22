@@ -86,6 +86,8 @@ class TestAuthorizationGate(unittest.TestCase):
                        "028b5c1d4b3e86270c22eb8db54360ece5daaaca"):
             r = subprocess.run(["git", "cat-file", "-e", f"{commit}:{bw.RULING_PATH}"], cwd=ROOT, capture_output=True)
             self.assertNotEqual(r.returncode, 0, commit)
+        if getattr(bw, "SMOKE_BINDING_PATH", None) and (ROOT / bw.SMOKE_BINDING_PATH).is_file():
+            return      # bound later by the additive owner binding; see tests/test_e01_e02_production_gate.py
         for m in bw.METHODS:
             with self.assertRaises(bw.BankBlocked):
                 bw.load_production_authorization(m)
@@ -115,6 +117,14 @@ class TestAuthorizationGate(unittest.TestCase):
             self.assertBlocked("E01", self.ruling(td, smoke_test_record=self.smoke_record(td, passed=False)), m8)
 
     def test_04_complete_ruling_yields_production_authorization(self):
+        if getattr(bw, "SMOKE_BINDING_PATH", None) and (ROOT / bw.SMOKE_BINDING_PATH).is_file():
+            # Re-scoped with the M8 binding: the approved ruling plus the additive binding yields PRODUCTION; a smoke
+            # record placed inline in a ruling is no longer authority (bound gate: tests/test_e01_e02_production_gate.py).
+            for m in bw.METHODS:
+                self.assertEqual(bw.load_production_authorization(m).mode, "PRODUCTION")
+            with tempfile.TemporaryDirectory() as td:
+                self.assertBlocked("E01", self.ruling(td), bw.M8_SMOKE_GATE_STATUS)
+            return
         with tempfile.TemporaryDirectory() as td:
             a = bw.load_production_authorization("E01", self.ruling(td))
             self.assertEqual((a.mode, a.e01_round_robin_ordinal), ("PRODUCTION", "MANIFEST_POSITION_ZERO_BASED"))
@@ -129,7 +139,9 @@ class TestAuthorizationGate(unittest.TestCase):
                 with contextlib.redirect_stdout(out):
                     rc = cli.main(["--method", m, "--seed", "42", "--runtime-root", td])
                 self.assertEqual(rc, cli.EXIT_BLOCKED)
-                self.assertEqual(json.loads(out.getvalue())["status"], bw.M8_SMOKE_GATE_STATUS)  # approved ruling
+                expected = ({bw.PRODUCTION_AUTHORITY_STATUS, bw.PRODUCTION_PREFLIGHT_STATUS} if getattr(bw, "SMOKE_BINDING_PATH", None) and (ROOT / bw.SMOKE_BINDING_PATH).is_file()
+                            else {bw.M8_SMOKE_GATE_STATUS})                                   # approved ruling
+                self.assertIn(json.loads(out.getvalue())["status"], expected)
             self.assertEqual(os.listdir(td), [])
 
     def test_06_locked_environment_check(self):

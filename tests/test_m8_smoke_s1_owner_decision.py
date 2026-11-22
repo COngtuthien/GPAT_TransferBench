@@ -52,7 +52,8 @@ class M8SmokeS1OwnerDecision(unittest.TestCase):
             self.assertTrue(p.is_file())
 
     def test_05_e01_e02_production_refused_while_unbound(self):
-        if json.loads((ROOT / bw.RULING_PATH).read_text())["smoke_test_record"] is not None:
+        if json.loads((ROOT / bw.RULING_PATH).read_text())["smoke_test_record"] is not None or \
+                getattr(bw, "SMOKE_BINDING_PATH", None) and (ROOT / bw.SMOKE_BINDING_PATH).is_file():
             self.skipTest("smoke record bound by a later owner approval")
         for m in bw.METHODS:
             with self.assertRaises(bw.BankBlocked) as cm:

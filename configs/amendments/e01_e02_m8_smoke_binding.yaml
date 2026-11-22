@@ -1,0 +1,70 @@
+{
+  "schema_version": "e01_e02_m8_smoke_binding_v1",
+  "amendment_id": "E01_E02_M8_SMOKE_BINDING",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "approval_date": "2026-11-22",
+  "owner_authorization": "Owner directive 2026-11-22 'GPAT-TransferBench v1.0 - M8 Production Binding, GPU-Host Storage Discovery, and E01/E02 Full Bank Generation', section 7: the owner approves binding the verified passing M8 smoke record to E01/E02 production authorization.",
+  "governance_procedure": "Additive. The owner-approved ruling configs/amendments/e01_e02_bank_milestone_ruling.yaml stays byte-unchanged; its smoke_test_record stays null, and seven committed evidence files pin its SHA256. This file supplies the binding that the ruling's Q1 option A requires. methods/common/bank_writer.load_production_authorization reads the ruling and this binding together and refuses any smoke record placed inline in the ruling.",
+  "ruling": {
+    "path": "configs/amendments/e01_e02_bank_milestone_ruling.yaml",
+    "sha256": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e"
+  },
+  "smoke_test_record": {
+    "path": "outputs/audit/M8_SMOKE_TEST_RECORD.json",
+    "sha256": "6eaa865aaff168ba1aeb8ec8fdd915eba45142a4bb4f3608fb008b5ee71d1db2",
+    "evidence_commit": "fec7370d39baca2f04d3df2f3f361a5043b884ed",
+    "smoke_test_passed": true
+  },
+  "smoke_contract": {
+    "path": "configs/amendments/m8_smoke_test_contract.yaml",
+    "sha256": "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb"
+  },
+  "evaluator_contract": {
+    "path": "configs/amendments/m8_downstream_evaluator_contract.yaml",
+    "sha256": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0"
+  },
+  "smoke_source_commit": "dd893016ddb0e6e828d867a69c2d7c18ba363834",
+  "scope": {
+    "methods": ["E01", "E02"],
+    "seeds": [42, 1337, 2026],
+    "split": "TRAIN",
+    "pair_manifest": "manifests/pairs_train_v1.parquet",
+    "pairs_per_seed": 8838
+  },
+  "method_configs": {
+    "E01": {"path": "configs/methods/e01_fas_aug.yaml", "sha256": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0"},
+    "E02": {"path": "configs/methods/e02_freqsub.yaml", "sha256": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0"}
+  },
+  "independent_verification_before_binding": {
+    "date": "2026-11-22",
+    "record_sha256_recomputed": "6eaa865aaff168ba1aeb8ec8fdd915eba45142a4bb4f3608fb008b5ee71d1db2 (worktree and git show fec7370 agree)",
+    "strict_validator": "gpatbench/downstream/smoke_evidence.validate_smoke_record: admissible true, passed true, problems []",
+    "mode_label": "real / SMOKE_NON_SCIENTIFIC",
+    "stages": "generator, bank, evaluator, metrics, plots: executed true, simulated false, PASS, every gate true",
+    "bank_coverage": "E01 and E02 x seeds 42/1337/2026: 186 rows = 186 outputs, 0 failures; per method/seed both runs pass completed_no_failures, file_verification, full_replay, rows_equal_toy_pairs and operator_is_position_mod_8 (E01) or k40_n159_residual (E02)",
+    "evaluators": "E00, E01, E02 executed (6 steps each)",
+    "independent_replay": "1721 artifacts, 0 differences",
+    "rederivation": "ok, independent implementation (tools/m8_smoke_audit.py)",
+    "test_firewall": "violations 0, test_rows_used 0, listing_attempts 0, atime_changed_files 0",
+    "source": "dd893016 clean worktree; dd893016 is an ancestor of the binding commit"
+  },
+  "production_authority": "Named in a separate, later record (configs/amendments/e01_e02_production_authority.yaml), so that no file has to name the commit that contains it.",
+  "authorizes": {
+    "e01_e02_production_bank_generation": true,
+    "test_split_access": false,
+    "test_evaluation": false,
+    "scientific_downstream_training": false,
+    "learned_method_banks": false,
+    "gpat": false,
+    "method_status_update": false,
+    "package_installation": false
+  },
+  "unchanged_by_this_binding": [
+    "configs/amendments/e01_e02_bank_milestone_ruling.yaml (byte-unchanged; Q1-Q4 decisions)",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml (historical O3 record; completion is recorded additively in configs/amendments/m8_o3_smoke_completion.yaml)",
+    "outputs/audit/M8_SMOKE_TEST_RECORD.json and all M8 smoke evidence",
+    "frozen spec, configs/methods/e01_fas_aug.yaml, configs/methods/e02_freqsub.yaml and every frozen manifest",
+    "outputs/audit/method_status.csv"
+  ]
+}
