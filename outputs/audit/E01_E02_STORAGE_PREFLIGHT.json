@@ -1,0 +1,204 @@
+{
+ "answer_approximately_5tb_ssd_present": false,
+ "answer_detail": "No. The host has two disks: a Samsung SSD 980 1TB NVMe (system/root) and a Seagate One Touch w/PW 4.0 TB USB disk that reports rotational=1 (HDD). No ~5 TB SSD is installed, mounted or unmounted.",
+ "boot_id": "5c3d5b94-1cc9-40a1-8ddf-b5a105433743",
+ "candidates": [
+  {
+   "device": "/dev/nvme0n1p3",
+   "disk_model": "Samsung SSD 980 1TB",
+   "filesystem": "ext4",
+   "filesystem_uuid": "227ce2f6-373e-4f13-9cdb-84b911775706",
+   "free_bytes": 43421634560,
+   "free_inodes": 58027778,
+   "local": true,
+   "mount_options": "rw,relatime",
+   "mount_point": "/",
+   "overlaps_scientific_storage": "holds the runtime root: faces_256 inputs (read-only) and the E01-E07 run roots, including the running E04 seed 2026",
+   "persistent": "fstab UUID 227ce2f6 at / (defaults)",
+   "reason": "the only filesystem that satisfies the frozen execution contract (configs/execution/m5_gpu_3090.yaml: runtime_root, 'containment: all physical roots must resolve inside runtime_root', symlinks_used false) with no path change; the estimated need is ~13% of free space and a hard per-bank floor protects E04 and other users",
+   "selected": true,
+   "ssd_nvme": true,
+   "state": "MOUNTED_AND_WRITABLE",
+   "suitable": true,
+   "total_bytes": 983366017024,
+   "writable_by_scientific_user": true
+  },
+  {
+   "device": "/dev/sda2",
+   "disk_model": "Seagate One Touch w/PW (USB usb, rotational)",
+   "filesystem": "ext4",
+   "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+   "free_bytes": 3452186398720,
+   "free_inodes": 244037552,
+   "local": "local USB-attached disk",
+   "mode": "0o2775",
+   "mount_options": "rw,relatime",
+   "mount_point": "/media/ext_data (also auto-mounted at /media/student20261/608647d2-9cb0-45b0-b999-73c080ba909b)",
+   "overlaps_scientific_storage": false,
+   "persistent": "fstab UUID 608647d2 at /media/ext_data (defaults); the /media/student20261 auto-mount is transient",
+   "reason": "not an SSD (rotational HDD over USB) and not ~5 TB (4.0 TB decimal / 3.64 TiB); a group-writable setgid directory shared with other accounts; outside the runtime_root containment contract, so using it would need a path-contract change, which the directive says needs further owner approval. No write test was performed on this shared disk.",
+   "selected": false,
+   "shared_with_other_users": [
+    "root",
+    "student20261",
+    "2 other user accounts (names redacted)"
+   ],
+   "ssd_nvme": false,
+   "state": "MOUNTED_BUT_UNSUITABLE_FOR_THIS_PRODUCTION",
+   "suitable": false,
+   "total_bytes": 3936655294464,
+   "writable_by_scientific_user": true
+  },
+  {
+   "device": "/dev/sda1",
+   "filesystem": "vfat",
+   "label": "EFI",
+   "reason": "200 MiB EFI partition of the USB disk; unmounted (not mounted by this work)",
+   "selected": false,
+   "state": "INSTALLED_BUT_UNMOUNTED",
+   "suitable": false
+  },
+  {
+   "device": "/dev/nvme0n1p1",
+   "filesystem": "vfat",
+   "mount_point": "/boot/efi",
+   "reason": "512 MiB EFI system partition",
+   "selected": false,
+   "state": "MOUNTED_SYSTEM_PARTITION",
+   "suitable": false
+  },
+  {
+   "device": "/dev/loop*",
+   "filesystem": "squashfs",
+   "reason": "read-only snap images",
+   "selected": false,
+   "state": "MOUNTED_READ_ONLY",
+   "suitable": false
+  }
+ ],
+ "capacity_plan": {
+  "basis": "on-disk bytes of the passing M8 smoke banks (186 pairs per bank, the same writer and encoding), scaled by 8838/186; logs and manifests included",
+  "deterministic_replay": "in memory; no extra disk",
+  "e02_edit_maps": "included (PNG L, ~0.9 KB each)",
+  "e04_seed_2026_remaining_bytes_estimate": 420548608,
+  "estimated_bytes_per_bank": {
+   "E01": 856549309,
+   "E02": 866864491
+  },
+  "estimated_bytes_six_banks": 5170241403,
+  "estimated_files_per_bank": {
+   "E01": 9313,
+   "E02": 18151
+  },
+  "free_bytes_now": 43421634560,
+  "free_inodes_now": 58027778,
+  "future_previous_work_banks": "learned-method banks (E03-E06) of similar size would fit above the floor; if not, the 4 TB USB disk would need an owner path-contract decision",
+  "min_free_bytes_before_bank": 25769803776,
+  "min_free_inodes_before_bank": 1000000,
+  "projected_free_after_six_banks": 38251393156,
+  "quota": "no quota tool installed; ext4 root without user quotas",
+  "temporary_space": "none in the runtime root (create-only, direct writes)"
+ },
+ "collected_utc": "2026-11-22T12:09:10Z",
+ "decision": {
+  "bank_paths": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/<E01|E02>/seed_<42|1337|2026>/ (frozen M6B layout; unchanged)",
+  "device": "/dev/nvme0n1p3",
+  "evidence_paths": "/home/student20261/workdir/e01_e02_production/ (outside the runtime root)",
+  "filesystem_uuid": "227ce2f6-373e-4f13-9cdb-84b911775706",
+  "mount_point": "/",
+  "path_contract_changed": false,
+  "selected_runtime_root": "/home/student20261/workdir/GPAT_TransferBench_runtime",
+  "status": "STORAGE_SELECTED_EXISTING_RUNTIME_FILESYSTEM",
+  "symlinks_or_bind_mounts_introduced": false
+ },
+ "forbidden_actions_performed": [],
+ "hostname": "nd-System-Product-Name",
+ "machine_id": "5f377406fb984da1910693eb0538e138",
+ "method": "read-only lsblk/df/findmnt/fstab/udevadm/sysfs/mountinfo collection; sudo -n nvme list refused (password required; not prompted); one 1 MiB create/read/hash/delete probe in a new user-owned directory outside the runtime root",
+ "physical_disks": [
+  {
+   "device": "/dev/sda",
+   "model": "One Touch w/PW",
+   "partitions": [
+    {
+     "device": "/dev/sda1",
+     "fstype": "vfat",
+     "label": "EFI",
+     "mountpoints": [],
+     "size_bytes": 209715200,
+     "uuid": "67E3-17ED"
+    },
+    {
+     "device": "/dev/sda2",
+     "fstype": "ext4",
+     "label": null,
+     "mountpoints": [
+      "/media/ext_data",
+      "/media/student20261/608647d2-9cb0-45b0-b999-73c080ba909b"
+     ],
+     "size_bytes": 4000575389696,
+     "uuid": "608647d2-9cb0-45b0-b999-73c080ba909b"
+    }
+   ],
+   "rotational": true,
+   "size_bytes": 4000787029504,
+   "size_decimal_tb": 4.001,
+   "size_tib": 3.639,
+   "transport": "usb"
+  },
+  {
+   "device": "/dev/nvme0n1",
+   "model": "Samsung SSD 980 1TB",
+   "partitions": [
+    {
+     "device": "/dev/nvme0n1p1",
+     "fstype": "vfat",
+     "label": null,
+     "mountpoints": [
+      "/boot/efi"
+     ],
+     "size_bytes": 536870912,
+     "uuid": "F34A-A7FB"
+    },
+    {
+     "device": "/dev/nvme0n1p3",
+     "fstype": "ext4",
+     "label": null,
+     "mountpoints": [
+      "/"
+     ],
+     "size_bytes": 999666221056,
+     "uuid": "227ce2f6-373e-4f13-9cdb-84b911775706"
+    }
+   ],
+   "rotational": false,
+   "size_bytes": 1000204886016,
+   "size_decimal_tb": 1.0,
+   "size_tib": 0.91,
+   "transport": "nvme"
+  }
+ ],
+ "probe": {
+  "bytes": 1048576,
+  "deleted": true,
+  "dir": "/home/student20261/workdir/e01_e02_production/storage_probe_1795349350",
+  "filesystem": {
+   "device": "259:2",
+   "filesystem_uuid": "227ce2f6-373e-4f13-9cdb-84b911775706",
+   "free_bytes": 43420581888,
+   "free_inodes": 58027776,
+   "fstype": "ext4",
+   "mount_options": "rw,relatime",
+   "mount_point": "/",
+   "path": "/home/student20261/workdir/e01_e02_production/storage_probe_1795349350",
+   "source": "/dev/nvme0n1p3",
+   "total_bytes": 983366017024,
+   "total_inodes": 61022208,
+   "user_writable": true
+  },
+  "roundtrip_identical": true,
+  "sha256_read": "ace6a95263a36f7fae2ef65c5a8d6d7d3d03bce94a7cf8063b0fff5028333065",
+  "sha256_written": "ace6a95263a36f7fae2ef65c5a8d6d7d3d03bce94a7cf8063b0fff5028333065"
+ },
+ "record": "E01_E02_STORAGE_PREFLIGHT"
+}

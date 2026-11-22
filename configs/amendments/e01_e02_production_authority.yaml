@@ -1,0 +1,96 @@
+{
+  "schema_version": "e01_e02_production_authority_v1",
+  "amendment_id": "E01_E02_PRODUCTION_AUTHORITY",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "approval_date": "2026-11-22",
+  "owner_authorization": "Owner directive 2026-11-22 'GPAT-TransferBench v1.0 - M8 Production Binding, GPU-Host Storage Discovery, and E01/E02 Full Bank Generation', sections 3, 7, 8 and 10: record a production authority commit containing the approved smoke and evaluator contracts, the smoke implementation, the passing smoke record, the owner-approved binding and the hardened production authorization implementation; use the verified storage.",
+  "two_stage_procedure": "The candidate commit holds all authority content. This record is added in a later commit, so no file names the commit that contains it. tools/e01_e02_bank.py (verify_production_launch) requires the candidate to be an ancestor of the launch checkout and every authority file to be byte-identical to the candidate's blob.",
+  "candidate_commit": "d995f556a8adcc5a032ba266a022b470117d1c1c",
+  "candidate_contains": {
+    "smoke_contract": "configs/amendments/m8_smoke_test_contract.yaml",
+    "evaluator_contract": "configs/amendments/m8_downstream_evaluator_contract.yaml",
+    "smoke_implementation_commit": "dd893016ddb0e6e828d867a69c2d7c18ba363834",
+    "smoke_record": "outputs/audit/M8_SMOKE_TEST_RECORD.json",
+    "binding": "configs/amendments/e01_e02_m8_smoke_binding.yaml",
+    "o3_completion": "configs/amendments/m8_o3_smoke_completion.yaml",
+    "hardened_gate": "methods/common/bank_writer.py (load_production_authorization, verify_production_launch)"
+  },
+  "binding_sha256": "a61dde6c9b538a7c50f7b738fd63e3217ad2fea88796b095dc1861ea0ce85b9b",
+  "ruling_sha256": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e",
+  "smoke_record_sha256": "6eaa865aaff168ba1aeb8ec8fdd915eba45142a4bb4f3608fb008b5ee71d1db2",
+  "scope": {
+    "methods": [
+      "E01",
+      "E02"
+    ],
+    "seeds": [
+      42,
+      1337,
+      2026
+    ],
+    "split": "TRAIN",
+    "pairs_per_seed": 8838
+  },
+  "authority_files": {
+    "methods/common/bank_writer.py": "57679a9db0ba50634f74bd20b50fc21c1d644fa3863c61f88892d9d971e73c23",
+    "methods/common/config.py": "815a39cc3dd11d3a5dde738971b7eaa0092b97cca68a684e02e519be33b0bcb7",
+    "methods/common/runlog.py": "867bd73d90bbe2b5f1bed274fd33dbbc13fd8a440ed9de07e117f7e21b2dc3f0",
+    "methods/common/interface.py": "89f2241af61c754f852929042c0c7312378ab2040558b30a2d314d645c9599ce",
+    "methods/fas_aug/e01.py": "c896d5b65dc3c719d1d81cc003b702aa5b77fb3b3a9653a3261aa8787ca00d70",
+    "methods/fas_aug/official.py": "909ece16ca2bb2df05e10c10804efd74b193baa39bd881693468d5c715ae5f7a",
+    "methods/freq_sub/e02.py": "7c2a539efa296e83e0e0d8d93cd94b877efe59dc86271b8e009563cbf7c07c78",
+    "tools/e01_e02_bank.py": "ea94db6b68db342bf61630ac8a27dd7d25eaf252b43441ff1d33f64848154450",
+    "gpatbench/downstream/smoke_evidence.py": "cc0a4790a885155d7d42a863bc1f349b31944b114eb5ded3d1412c1add7cfac4",
+    "gpatbench/downstream/audit_hook.py": "ff5fc970c53ec5f89f38e54fe52ee0e9f0b17c1a7da6c9a97c6f9b4c5bb25758",
+    "configs/methods/e01_fas_aug.yaml": "87012ea73ab4195ae01898d2be9558b95713e2dca4cc340b5e38cf8936dbc9e0",
+    "configs/methods/e02_freqsub.yaml": "fdf74776cc100d5b5c1ed5f58b84ebb0dfd534782fbb7fc34382919d38d67bf0",
+    "configs/run_logging_v1.yaml": "d33622947d1951d71bbda4cf86b96c6500943d354fe607beb6cbc47f51c3de15",
+    "outputs/audit/M6B_CONFIG_FREEZE.json": "5ee1105e1037176f5375d85fe056b7d8daab5fab048264779e3d60e4a45213d2",
+    "configs/execution/m5_gpu_3090.yaml": "c9d22abf1b5e284593bfed21500e8113df7f14ff564b7434e3eda43cb7e7eb70",
+    "configs/amendments/e01_e02_bank_milestone_ruling.yaml": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e",
+    "configs/amendments/e01_e02_m8_smoke_binding.yaml": "a61dde6c9b538a7c50f7b738fd63e3217ad2fea88796b095dc1861ea0ce85b9b",
+    "configs/amendments/m8_o3_smoke_completion.yaml": "200c29332aa7c3f7fe898e29c69b5d19b964de6e562d3d30a2911168ad74dc31",
+    "configs/amendments/m8_smoke_test_contract.yaml": "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0",
+    "outputs/audit/M8_SMOKE_TEST_RECORD.json": "6eaa865aaff168ba1aeb8ec8fdd915eba45142a4bb4f3608fb008b5ee71d1db2",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "manifests/m2_sample_accounting.parquet": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+    "environments/m6_core_gpu.lock.json": "53d4910a17c541ad7ac57a1ac410c0fef8c2d1c63399b423c97e490817b335eb",
+    "third_party/source_pins.json": "b7475fda12697591717321c318b90f2044b67f31fec6ed41dcdbc5e9a7074167"
+  },
+  "execution": {
+    "hostname": "nd-System-Product-Name",
+    "machine_id": "5f377406fb984da1910693eb0538e138",
+    "python": "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
+    "environment_lock": "environments/m6_core_gpu.lock.json",
+    "isolated_clone": "fresh clone of the launch commit under /home/student20261/workdir/e01_e02_production/clones/ (never the E04 checkout); third_party/source_cache/fas_aug copied as regular files (no symlink) and verified by OfficialFASAugBackend.prepare() against third_party/source_pins.json",
+    "process": "CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 PYTHONHASHSEED=0 PYTHONDONTWRITEBYTECODE=1 nice -n 19 ionice -c3 <python> -B tools/e01_e02_bank.py --method M --seed S --runtime-root <runtime_root>",
+    "sequence": "one bank at a time: E01 42, 1337, 2026, then E02 42, 1337, 2026; --check-only first; no automatic rerun"
+  },
+  "storage": {
+    "runtime_root": "/home/student20261/workdir/GPAT_TransferBench_runtime",
+    "filesystem_uuid": "227ce2f6-373e-4f13-9cdb-84b911775706",
+    "mount_point": "/",
+    "device": "/dev/nvme0n1p3",
+    "min_free_bytes_before_bank": 25769803776,
+    "min_free_inodes_before_bank": 1000000,
+    "evidence": "outputs/audit/E01_E02_STORAGE_PREFLIGHT.json"
+  },
+  "qualification": {
+    "read_path": "outputs/audit/E01_E02_PRODUCTION/read_path_qualification_d995f55.json",
+    "result": "all 28 gates pass: the six smoke toy banks regenerated at the candidate under gpat-m5 are row-identical (and bank-manifest-identical) to the passing dd89301 smoke banks; 1674 O_NOATIME face opens, 0 firewall violations, 0 atime changes",
+    "unit_tests": "tests/test_e01_e02_production_gate.py (18) plus the E01/E02/M8 modules"
+  },
+  "authorizes": {
+    "e01_e02_production_bank_generation": true,
+    "test_split_access": false,
+    "test_evaluation": false,
+    "scientific_downstream_training": false,
+    "learned_method_banks": false,
+    "gpat": false,
+    "method_status_update": false,
+    "e04_interaction": false
+  }
+}
