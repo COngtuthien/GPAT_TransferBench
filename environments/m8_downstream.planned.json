@@ -1,0 +1,57 @@
+{
+  "schema_version": "m8_downstream_environment_plan_v1",
+  "status": "PLANNED_NOT_CREATED",
+  "note": "planning record only; NOT a lock. The lock environments/m8_downstream.lock.json is written only from a created environment (pip freeze + hashes). Creating the environment needs explicit owner approval of package installation.",
+  "environment_name": "gpat-m8-downstream",
+  "host": "GPU host nd-System-Product-Name (student20261), CPU use only (CUDA_VISIBLE_DEVICES empty)",
+  "base": {
+    "environment": "gpat-m5 (unchanged; qualified E01/E02 environment, environments/m6_core_gpu.lock.json 53d4910a...; M5 probe lock environments/m5_probe_gpu.lock.txt 8f1e3d16...)",
+    "python": "3.11.16 x86_64, glibc 2.39",
+    "reused_packages": {"torch": "2.12.1+cu130", "torchvision": "0.27.1+cu130", "numpy": "2.4.6", "pillow": "12.3.0",
+                        "pyarrow": "25.0.1", "pandas": "3.0.6", "PyYAML": "6.0.3", "packaging": "26.3",
+                        "python-dateutil": "2.9.0.post0", "six": "1.17.0", "opencv-python-headless": "5.0.0.93"}
+  },
+  "added_wheels": [
+    {"name": "matplotlib", "version": "3.11.2", "file": "matplotlib-3.11.2-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", "sha256": "07d9b9fa60cd4c393692f50d0bb03123242ddf61c99bb0e95e75feb354e7c1a8", "released": "2026-09-11"},
+    {"name": "contourpy", "version": "1.3.3", "file": "contourpy-1.3.3-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", "sha256": "51e79c1f7470158e838808d4a996fa9bac72c498e93d8ebe5119bc1e6becb0db", "released": "2025-07-26", "why_not_newest": "contourpy 1.4.0 requires Python >= 3.12"},
+    {"name": "cycler", "version": "0.12.1", "file": "cycler-0.12.1-py3-none-any.whl", "sha256": "85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30", "released": "2023-10-07"},
+    {"name": "fonttools", "version": "4.68.0", "file": "fonttools-4.68.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", "sha256": "4b9c89b5876f1a74b1341632dfaf4c4c2be565d76c060445df401ebe7a4ceefa", "released": "2026-10-27"},
+    {"name": "kiwisolver", "version": "1.5.1", "file": "kiwisolver-1.5.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", "sha256": "95a02752aa032eef4aed01cda6d9b687c669bd0396bf4519eef8bba22a286720", "released": "2026-08-28"},
+    {"name": "pyparsing", "version": "3.3.3", "file": "pyparsing-3.3.3-py3-none-any.whl", "sha256": "ece8c00a69cf01b45d0b1dedabb469c90d8caf996d4fda40f147627a122849a4", "released": "2026-09-20"}
+  ],
+  "constraint_check": "matplotlib 3.11.2 requires python>=3.11, contourpy>=1.0.1, cycler>=0.10, fonttools>=4.28.2, kiwisolver>=1.3.1, numpy>=1.25, packaging>=20.0, pillow>=9, pyparsing>=3, python-dateutil>=2.7; every reused gpat-m5 version satisfies these, so no gpat-m5 package is upgraded or replaced",
+  "hash_source": "public PyPI JSON API metadata read 2026-11-22; each wheel is re-hashed after download before use",
+  "construction_options": {
+    "A_VENV_OVERLAY": {
+      "steps": [
+        "download the six wheels on the laptop (pip download --no-deps --only-binary=:all: --python-version 3.11 --platform manylinux_2_28_x86_64), verify each sha256, copy to ~/workdir/m8_wheels/",
+        "~/miniconda3/envs/gpat-m5/bin/python -m venv --system-site-packages ~/workdir/envs/gpat-m8-downstream",
+        "~/workdir/envs/gpat-m8-downstream/bin/pip install --no-index --no-deps --require-hashes --only-binary=:all: --find-links ~/workdir/m8_wheels -r requirements_m8_downstream.txt"
+      ],
+      "footprint": "about 60 MB; gpat-m5 site-packages are read-only to it",
+      "risk": "depends on gpat-m5 staying byte-unchanged (it is a frozen, qualified environment); verified before every smoke run by its pip-freeze SHA256"
+    },
+    "B_CONDA_CLONE": {
+      "steps": ["conda create -n gpat-m8-downstream --clone gpat-m5 --offline", "same pip install into the clone"],
+      "footprint": "about 5.4 GB on a root filesystem at 96 % (42 GB free) while E04 writes checkpoints",
+      "risk": "disk pressure on the shared E04 host"
+    },
+    "recommended": "A_VENV_OVERLAY"
+  },
+  "requirements_m8_downstream_txt": [
+    "matplotlib==3.11.2 --hash=sha256:07d9b9fa60cd4c393692f50d0bb03123242ddf61c99bb0e95e75feb354e7c1a8",
+    "contourpy==1.3.3 --hash=sha256:51e79c1f7470158e838808d4a996fa9bac72c498e93d8ebe5119bc1e6becb0db",
+    "cycler==0.12.1 --hash=sha256:85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30",
+    "fonttools==4.68.0 --hash=sha256:4b9c89b5876f1a74b1341632dfaf4c4c2be565d76c060445df401ebe7a4ceefa",
+    "kiwisolver==1.5.1 --hash=sha256:95a02752aa032eef4aed01cda6d9b687c669bd0396bf4519eef8bba22a286720",
+    "pyparsing==3.3.3 --hash=sha256:ece8c00a69cf01b45d0b1dedabb469c90d8caf996d4fda40f147627a122849a4"
+  ],
+  "verification_procedure": [
+    "V1 gpat-m5 unchanged: SHA256 of `gpat-m5/bin/python -m pip list --format=freeze` before and after creation are equal, and environments/m6_core_gpu.lock.json still verifies (verify_locked_environment)",
+    "V2 imports and versions: torch, torchvision, numpy, PIL, pyarrow, matplotlib (Agg backend) and the six added packages at the exact versions above; torch.cuda not used",
+    "V3 ResNet-18 weights: resnet18-f37072fd.pth sha256 f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec loaded on CPU into torchvision resnet18; fc.in_features == 512",
+    "V4 S9 CPU determinism (precondition of BITWISE_ALL_STAGES): two separate processes, CUDA_VISIBLE_DEVICES empty, torch.set_num_threads(8), torch.set_num_interop_threads(1), torch.use_deterministic_algorithms(True), each running 6 optimizer steps of the frozen ResNet-18 recipe (AdamW, two LR groups, D6 schedule, clip 1.0, D14 augmentation from a dedicated generator) on synthetic 64-image batches; the final state_dict SHA256, every step's loss bytes and VAL-like logits must be identical. Failure stops the smoke (S9 is not weakened)",
+    "V5 plot determinism: render one synthetic-table figure twice in separate processes with matplotlib Agg and savefig(metadata={'Software': None}); PNG bytes identical (otherwise plot identity is checked on the plotted input tables and the failure is reported)",
+    "V6 capture environments/m8_downstream.lock.json: pip freeze, python -VV, torch.__config__.show(), torch.get_num_threads(), wheel sha256s; record its SHA256"
+  ]
+}

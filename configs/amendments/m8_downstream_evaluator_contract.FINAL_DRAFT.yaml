@@ -1,0 +1,69 @@
+{
+  "schema_version": "m8_downstream_evaluator_contract_v1",
+  "status": "DRAFT_FOR_OWNER_FINAL_APPROVAL",
+  "approved": false,
+  "date_prepared": "2026-11-22",
+  "document": "outputs/audit/M8_CONTRACT_FINALIZATION.md",
+  "based_on": {
+    "configs/amendments/m8_downstream_evaluator_contract.DRAFT.yaml": "210964d2c9f097e3de860232e5ab0cb669204fe29705479d0c649df583d57cc6",
+    "configs/frozen/downstream_resnet18.yaml": "f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b",
+    "resnet18_weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+  },
+  "precedence": "every value fixed in spec section 14-16 and configs/frozen/downstream_resnet18.yaml wins over anything here; these decisions only fill execution details the frozen text leaves open",
+  "decisions": {
+    "D1_epoch_and_sampler": "LIVE_PASS",
+    "D2_eval_preprocessing": "RESIZE_FULL_BICUBIC",
+    "D3_target_and_score": "SPOOF_IS_ONE",
+    "D4_decision_operator": "SPOOF_IF_SCORE_GE_THRESHOLD",
+    "D5_checkpoint_metric": "EPOCH_OWN_VAL_THRESHOLD",
+    "D6_lr_schedule_details": "PER_STEP_FROM_ZERO",
+    "D7_eer_convention": "LINEAR_INTERPOLATION",
+    "D8_positive_class_secondary": "SPOOF_POSITIVE",
+    "D9_frame_level_threshold": "VIDEO_THRESHOLD",
+    "D10_siwmv2_raw_coverage": "RAW_TYPE_COVERAGE_V1 (proposed below; requires owner approval)",
+    "D11_dinov3": "RESNET18_ONLY_IN_SMOKE",
+    "D12_synthetic_input": "SEED_MATCHED_RAW",
+    "D13_determinism_and_device": "CPU_NO_AMP_SMOKE_GPU_AMP_SCIENCE",
+    "D14_augmentation_order": "CROP_FLIP_JITTER_NORMALIZE"
+  },
+  "pinned_execution_details": {
+    "D1": "an epoch is floor(N_live / 32) full batches over a fresh permutation of the TRAIN live frames (tail dropped). Real-spoof and synthetic pools are consumed sequentially from their own permutations without replacement; when fewer items remain than a batch needs, the remainder is discarded and the next permutation is drawn (never duplicates inside a batch). Batch tensor order: live, real spoof, synthetic. E00 uses 32 live + 32 real spoof",
+    "D2": "VAL/TEST/holdout: torchvision.transforms.functional.resize on the PIL 256x256 RGB image to [224, 224], InterpolationMode.BICUBIC (PIL path), then to_tensor and Normalize(mean [0.485, 0.456, 0.406], std [0.229, 0.224, 0.225])",
+    "D3": "BCEWithLogitsLoss target = label_binary (1 spoof, 0 live; synthetic = 1); p_frame = sigmoid(logit) = P(spoof)",
+    "D4": "predicted spoof iff score >= threshold, for frames and videos, VAL and holdout/TEST",
+    "D5": "VAL video metrics after every epoch; epoch ACER at that epoch's own section-15 threshold; select the minimum ACER, then maximum VAL video AUC, then the earliest epoch; the selected epoch's threshold is the frozen threshold",
+    "D6": "S = steps per epoch, W = warmup_epochs*S, T = epochs*S; optimizer step k = 0..T-1; for k < W: lr_g(k) = base_g * k / W (first step lr 0, disclosed); for k >= W: lr_g(k) = 1e-6 + (base_g - 1e-6) * 0.5 * (1 + cos(pi * (k - W) / (T - W))). Groups: head = fc.weight, fc.bias (base 5e-4); backbone = all other parameters (base 1e-4); weight decay 1e-4 on all parameters; AdamW betas (0.9, 0.999), eps 1e-8 (torch defaults); clip_grad_norm_ over all parameters to 1.0 before each step; LR set before each step",
+    "D7": "EER over section-15 candidates: if APCER = BPCER at a candidate, that value; otherwise linear interpolation of APCER and BPCER between the adjacent candidates where APCER - BPCER changes sign, value at the crossing (implemented: gpatbench/downstream/metrics.eer_linear_interpolation)",
+    "D8": "spoof is positive: TPR = 1 - APCER, FPR = BPCER; F1 = spoof-class F1 (implemented: metrics.f1_spoof); TPR@FPR=x = max over section-15 candidates of (1 - APCER) subject to BPCER <= x, no interpolation (proposed pin, requires confirmation)",
+    "D9": "frame-level diagnostics use the frozen video threshold (implemented: metrics.frame_level_rates)",
+    "D11": "the smoke evaluator stage is ResNet-18 only; DINOv3 needs its frozen config (spec 23), pinned revision and weights, license and environment before M11",
+    "D12": "detector seed s uses the bank of generator seed s; synthetic pool = all valid outputs of that bank (RAW-MATCHED), generation failures excluded and counted; for E01/E02 QUALITY-MATCHED equals RAW-MATCHED unless the M8 N_common rule forces deterministic subsampling",
+    "D13": "smoke: CPU, AMP off, torch.use_deterministic_algorithms(True), torch.set_num_threads(8), torch.set_num_interop_threads(1), DataLoader num_workers 0. Science: CUDA with AMP; the AMP dtype and GradScaler policy must be pinned before M10 (not needed for the smoke)",
+    "D14": "train transform: RandomResizedCrop(224, scale (0.92, 1.00), ratio (0.95, 1.05), BICUBIC) -> RandomHorizontalFlip(0.5) -> RandomApply([ColorJitter(0.05, 0.05, 0.05, 0.01)], p 0.5) -> to_tensor -> Normalize (ImageNet); all random parameters drawn from the dedicated augmentation generator in sample order",
+    "rng_scheme": {
+      "model": "torch.manual_seed(seed) immediately before building the model (initializes the new fc head; the backbone comes from the hash-verified weights)",
+      "sampler": "per pool p in {live, real_spoof, synthetic} and pass index i: numpy Generator(PCG64(int.from_bytes(SHA256(UTF-8('gpatbench.downstream.sampler.v1|resnet18|'+method_id+'|'+str(seed)+'|'+p+'|'+str(i))), 'big'))).permutation(n)",
+      "augmentation": "torch.Generator().manual_seed(int.from_bytes(SHA256(UTF-8('gpatbench.downstream.augment.v1|resnet18|'+method_id+'|'+str(seed))), 'big') % 2**63)"
+    },
+    "inputs": "real frames read from <runtime_root>/data/processed/faces_256 with bytes verified against the M2 face_png_sha256 before decoding (as methods/common/bank_writer.py); synthetic images read through gpatbench/downstream/bank_reader.read_verified_bank"
+  },
+  "D10_RAW_TYPE_COVERAGE_V1_proposed": {
+    "scope": "SiW-Mv2 raw 14-type APCER (spec 16, T13) on the evaluated split's spoof videos at the frozen threshold",
+    "label_validity_gate": "the raw table is reported only if every SiW-Mv2 spoof video in the evaluated prediction set has exactly one non-null attack_raw, constant over its frames, that is one of the 14 configs/frozen/attack_map_v1.yaml siwmv2 tokens and maps to the video's attack_macro; otherwise the whole raw table is N/A with reason RAW_LABEL_COVERAGE_INVALID (no partial table)",
+    "per_type": "APCER(type) = spoof videos of that type predicted live / spoof videos of that type, always reported with its numerator and denominator; a type with 0 videos in the evaluated split is N/A with reason ABSENT_IN_SPLIT; no pooling, imputation, borrowing from another split or minimum-support filtering",
+    "listing": "all 14 tokens are always listed so missing categories are visible",
+    "support_counts_train_val_videos": {"Makeup_Cosmetic": [36, 8], "Makeup_Impersonation": [43, 9], "Makeup_Obfuscation": [16, 3], "Mannequin": [28, 6], "Mask_HalfMask": [50, 11], "Mask_PaperMask": [12, 3], "Mask_TransparentMask": [42, 9], "Paper": [95, 20], "Partial_Eye": [40, 8], "Partial_FunnyeyeGlasses": [125, 27], "Partial_Mouth": [21, 4], "Partial_PaperGlasses": [53, 12], "Replay": [68, 15], "Silicone": [12, 2]},
+    "missing_categories_train_val": [],
+    "label_defects_train_val": "0 null attack_raw, 0 videos with more than one raw token",
+    "test_support": "not inspected (TEST firewall); computed only at final TEST evaluation from the prediction file",
+    "toy_holdout_support": {"Replay": 2, "Makeup_Impersonation": 1, "other 12 types": "0 -> N/A ABSENT_IN_SPLIT"}
+  },
+  "items_requiring_explicit_confirmation_at_final_approval": [
+    "D10 RAW_TYPE_COVERAGE_V1",
+    "D6 warmup form lr = base * k / W (first optimizer step at lr 0) versus base * (k + 1) / W",
+    "D8 TPR@FPR rule (max TPR with BPCER <= x over the section-15 candidates, no interpolation)",
+    "D1 remainder-discard rule and the rng_scheme",
+    "D13 science-time AMP dtype/GradScaler is deferred to before M10"
+  ],
+  "activation": "the owner approves by committing configs/amendments/m8_downstream_evaluator_contract.yaml with this content and status OWNER_APPROVED, approved true (governance fields only changed)"
+}
