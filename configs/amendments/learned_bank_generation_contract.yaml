@@ -1,0 +1,146 @@
+{
+  "schema_version": "learned_bank_generation_contract_v1",
+  "amendment_id": "LEARNED_BANK_GENERATION_CONTRACT",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "approval_date": "2026-11-22",
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_Learned_Bank_Generation_Owner_Ruling_Addendum.md",
+  "scope": {
+    "methods": ["E03", "E05", "E06b", "E06c"],
+    "seeds": [42, 1337, 2026],
+    "covers": "how each trained generator is turned into a synthetic bank: inference mode, weight source, inference augmentation, auxiliary outputs, generator noise / latent seeding, DSDG output half and row identity, E06b N_syn, float->uint8 conversion, file encoding, device and reproducibility standard, S7 bank-stage acceptance and GPU timing"
+  },
+  "approved_draft": {
+    "path": "configs/amendments/learned_bank_generation_contract.DRAFT.yaml",
+    "commit": "5f6aabb168767ee91912be5ec8a909384b573ac0",
+    "sha256": "217e5145a5a09349f3191e42f3990c7d3f5f7bd4931829c09615a3fb630c1aad",
+    "assessment": "outputs/audit/LEARNED_BANK_AUTHORITY_ASSESSMENT.md",
+    "assessment_sha256": "7b46a71f1fcbe608c0f999adf5d84f18c3ad9de2f963309056ab4276ead0cc58",
+    "assessment_json_sha256": "c88cafb737853688da76ddab2177aa77dc8bc7337dd4b200905660c85863e1eb",
+    "assessment_commit": "3433ad040df88af5d0a61f6d1ce9198d087b35c9",
+    "consistency": "Before activation every owner decision below was compared with the DRAFT: each is an option identifier that exists in the DRAFT for that question, and each equals the DRAFT's recommended option. No materially different scientific choice was introduced. The DRAFT stays byte-unchanged."
+  },
+  "decisions": {
+    "E03-Q1_inference_mode": "A_OFFICIAL_TEST_MODE",
+    "E03-Q2_weight_source": "A_RAW_VARIABLES",
+    "E03-Q3_inference_augmentation": "A_NONE",
+    "E03-Q5_auxiliary_outputs": "A_NONE",
+    "E05-Q1_stylegan_noise": "A_PER_PAIR_SEEDED",
+    "DSDG-Q1_latent_stream": "A_OFFICIAL_BATCHES_SEEDED",
+    "DSDG-Q2_output_half": "A_SPOOF_ONLY",
+    "DSDG-Q4_bank_identity": "A_SYNTHETIC_ID",
+    "E06b-Q0_n_syn": "A_POOLED_8838",
+    "Q4_float_to_uint8": "A_SOURCE_IMAGE_WRITER",
+    "C-Q1_encoding": "A_PNG_LOSSLESS",
+    "C-Q2_device_and_reproducibility": "A_GPU_FP32_BITWISE_REPLAY",
+    "C-Q3_s7_bank_stage_acceptance": "A_TOY_TWO_RUN_BITWISE",
+    "C-Q5_gpu_timing": "A_AFTER_E04_COMPLETES"
+  },
+  "owner_ruling": {
+    "E03": {
+      "decisions": ["E03-Q1 A_OFFICIAL_TEST_MODE", "E03-Q2 A_RAW_VARIABLES", "E03-Q3 A_NONE", "E03-Q5 A_NONE"],
+      "text": "Use the official inference entrypoint behaviour: Gen(x, training_nn=False) with the moving batch-normalization statistics of ckpt-50 (test.py:55), raw trainable checkpoint variables restored with tf.train.Saver (test.py:58), never the weight-EMA shadow variables (model.py:122). No training brightness augmentation and no random horizontal flip. Inputs are canonical RGB256 faces / 255 (dataset.py:144) and the existing frozen e03_feed_pack_v1 landmarks_px256 / 256, unflipped. The bank holds only the resulting synthetic spoof image; no trace sidecar.",
+      "frozen_graph": "Gen is applied to the source spoof image at batch 1 (test.py:49); then, verbatim, recon1 = (1-s)*img - b - tf.image.resize_images(C, [imsize, imsize]) - T (train.py:47), trace = img - recon1 (train.py:48), trace_warp = warping(trace, reg, imsize) (train.py:49, the spoof half of the training batch), synth1 = img_live + trace_warp (train.py:50), with reg = generate_offset_map(lm_sp, lm_li) (dataset.py:142). The generator graph, the spoof-trace synthesis equation, STDN training and the checkpoints are unchanged."
+    },
+    "E05": {
+      "decisions": ["E05-Q1 A_PER_PAIR_SEEDED"],
+      "text": "Immediately before the single official mix forward of each frozen pair, establish its deterministic generator noise state with torch.manual_seed(pair_seed); then mix = G(E(x_src).spatial, E(x_tgt).global) with x_src = source_spoof (spatial pattern) and x_tgt = target_live (global content). No zero-noise substitution, no new stochastic augmentation, no change to the architecture, checkpoint (iteration_4000.pth) or the approved input mapping (x/255 - 0.5)/0.5 without resize, crop or flip.",
+      "pair_seed": "pair_seed = int.from_bytes(sha256(b'GPAT_TRANSFERBENCH|E05|BANK|' + str(seed) + '|' + pair_id).digest()[:8], 'big') mod (2^31 - 1)"
+    },
+    "DSDG": {
+      "decisions": ["DSDG-Q1 A_OFFICIAL_BATCHES_SEEDED", "DSDG-Q2 A_SPOOF_ONLY", "DSDG-Q4 A_SYNTHETIC_ID"],
+      "applies_to": ["E06b", "E06c"],
+      "text": "Independently for E06b and E06c: g = torch.Generator().manual_seed(bank_seed); per batch of the official size 100: noise = randn(100, 128, generator=g) (identity noise first), noise_s = randn(100, 128, generator=g) (spoof noise second), z = cat(noise_s, noise, noise) (the frozen latent layout of generated.py:49); fake = netG(z) with the official Decoder_s and the frozen epoch-200 checkpoint; ceil(N/100) batches; keep the first N samples in stream order and record the discarded final-batch samples in provenance. Only the spoof RGB half (channels 0:3, generated.py:54) is retained; the live half is not stored. Row identity synthetic_id = '<method>_S<seed>_<index:06d>' with a zero-based stream index; pair_id, target_live_id and source_spoof_id are null; a pairs_train_v1 identifier is never assigned to a DSDG output. E06b and E06c keep distinct method identities, checkpoints and bank-seed domains.",
+      "bank_seed": "bank_seed = int.from_bytes(sha256(b'GPAT_TRANSFERBENCH|' + method + b'|BANK|' + str(seed)).digest()[:8], 'big') mod (2^31 - 1), method in {'E06b', 'E06c'}"
+    },
+    "E06b": {
+      "decisions": ["E06b-Q0 A_POOLED_8838"],
+      "text": "The primary comparison bank of E06b has N_syn = 8838, the pooled synthetic budget of every other method (spec 7 / 8.6). The Track B coverage distinction (E06b was trained on the CASIA+MSU TRAIN spoof coverage, 3720 rows; SiW-Mv2 NOT_INSTANTIABLE_MISSING_SUBJECT_ID) is preserved and must be disclosed in the method report. E06b's training coverage, frozen training dataset and scientific identity are not redefined."
+    },
+    "common_output": {
+      "decisions": ["Q4 A_SOURCE_IMAGE_WRITER", "C-Q1 A_PNG_LOSSLESS"],
+      "text": "Each method's float output becomes uint8 exactly by its pinned source's own writer, with its clipping, scaling and truncation; E02's numpy.rint rule is not substituted. The resulting canonical 256x256x3 uint8 RGB pixels are stored as lossless PNG with the E01/E02 bank writer settings (PIL, compress_level 6, optimize False, no metadata chunks). The PNG container may differ from the source's file container; the approved pre-encoding uint8 pixels are unchanged. Pixel-level and file-level SHA256 are recorded for every row. No JPEG is a production bank artifact.",
+      "conversions": {
+        "E03": "fig = tf.clip_by_value(synth1, 0.0, 1.0) (model/utils.py:24); img = tf.cast(fig * 255, tf.uint8) (model/utils.py:37), in-graph in float32",
+        "E05": "util.tensor2im(mix[0]) of the pinned basis: (np.transpose(x, (1, 2, 0)) + 1) / 2.0 * 255.0 (util.py:125), np.clip(x, 0, 255) (util.py:128), .astype(np.uint8) (util.py:131)",
+        "E06b": "np.transpose((255 * spoof[i]).astype('uint8'), (1, 2, 0)) on the sigmoid output, no clip (generated.py:63)",
+        "E06c": "as E06b"
+      },
+      "non_material_notes": [
+        "E03 utils.plotResults also applies tf.image.resize_images(fig, [256, 256]), which TF1 skips when the static size is already 256x256, and an RGB->BGR channel swap that only compensates cv2.imwrite channel order; neither changes the stored RGB values, so the approved rule is clip then cast.",
+        "NaN/Inf raw outputs are never cast: such a row is a counted failure (spec 7 RAW-MATCHED / 27), never substituted or duplicated."
+      ]
+    },
+    "device_and_reproducibility": {
+      "decisions": ["C-Q2 A_GPU_FP32_BITWISE_REPLAY"],
+      "text": "S7 toy inference and production inference run on the approved RTX 3090 in each method's locked environment (E03 gpat-m6-e03; E05 gpat-m6-e05; E06b/E06c gpat-m6-e06c) in FP32 with the deterministic settings below. Acceptance requires a bitwise-identical replay. If TF1 or PyTorch GPU execution cannot satisfy bitwise replay: preserve all failure evidence and stop for owner review; do not weaken the requirement, and do not change architectures, checkpoints, graph operations or model output values to force determinism.",
+      "settings": {
+        "E03": "the qualified M6D2b E03 precision environment (environments/e03_stdn.lock.json precision_env: TF_DETERMINISTIC_OPS=1, TF_CUDNN_DETERMINISTIC=1, NVIDIA_TF32_OVERRIDE=0, TF_ENABLE_*_TENSOR_OP_MATH_FP32=0, auto mixed precision off, XLA off, CUBLAS_WORKSPACE_CONFIG=:4096:8) and methods.stdn.production_runner.session_config (allow_growth, meta-optimizer off, single intra/inter-op thread)",
+        "E05": "methods.pcgan.production_runner.configure_precision flags (FP32 default dtype, matmul and cuDNN TF32 off, cudnn.benchmark False, cudnn.deterministic True, matmul precision highest, no autocast; NVIDIA_TF32_OVERRIDE=0, CUBLAS_WORKSPACE_CONFIG=:4096:8), as qualified for E05 training",
+        "E06b_E06c": "the same PyTorch flags; the official generated.py cudnn.benchmark = True is overridden to False as a determinism control only"
+      },
+      "disclosure": "All listed settings select deterministic kernels or disable reduced-precision math; none changes an architecture, checkpoint, graph operation or the mathematical definition of an output. Any further determinism configuration must be disclosed to the owner before activation."
+    },
+    "s7_bank_stage_acceptance": {
+      "decisions": ["C-Q3 A_TOY_TWO_RUN_BITWISE"],
+      "population": {
+        "E03_E05": "the 186 approved S6 toy pairs of outputs/audit/M8_SMOKE_EVIDENCE/run_a/select/toy_manifest.json (sha256 50ac8fb8b9fc6938ba630d0853523d358250137c8fbbc62704d2a73830f7f690) at their original canonical global positions",
+        "E06b_E06c": "synthetic stream indices 0..185 of the production stream (two official batches of 100; 14 samples of the second batch discarded and counted)"
+      },
+      "runs": "per method and seed 42/1337/2026: two independent toy generations in fresh immutable roots on the approved device and environment",
+      "gates": ["exact checkpoint SHA256 (before and after)", "frozen config identity", "correct inference graph", "correct input population", "256x256x3 uint8 outputs", "zero unexpected failures", "finite raw tensors", "deterministic manifest and file hashes", "bank-reader verification", "bitwise replay between the two runs", "no checkpoint mutation", "no optimizer construction or step and no gradient", "TRAIN-only inputs", "O_NOATIME for every real face read", "zero VAL and TEST access", "toy outputs later equal the corresponding production rows byte for byte (checked by each production audit)"],
+      "not_substitutable": "synthetic-fixture qualification never substitutes for this real toy acceptance"
+    },
+    "gpu_timing": {
+      "decisions": ["C-Q5 A_AFTER_E04_COMPLETES"],
+      "text": "No learned-method GPU inference while E04 seed 2026 trains. GPU inference requires (1) genuine E04 runner completion, (2) the E04 seed-2026 completion audit PASS, (3) formal E04 three-seed family closure, or documented authority sufficient under the frozen roadmap, and (4) a resource preflight. tmux disappearance or a final checkpoint alone is not E04 completion. Learned inference never interferes with E04 or unrelated GPU jobs."
+    }
+  },
+  "byte_level_interpretation": {
+    "seed_preimages": "The DRAFT writes the preimages as byte and str concatenations. They are the UTF-8 (= ASCII) bytes of the concatenated string; seed is the decimal experiment seed without padding; pair_id is the frozen pairs_train_v1 id (PTRnnnnnn); method is 'E06b' or 'E06c' exactly as cased. No alternative encoding exists for these ASCII strings.",
+    "test_vectors": {
+      "E05": {"42|PTR000001": 858815672, "42|PTR008838": 776429802, "1337|PTR000001": 49475546, "1337|PTR008838": 318411140, "2026|PTR000001": 887296311, "2026|PTR008838": 556782267},
+      "E06b": {"42": 492027736, "1337": 825501606, "2026": 1539980013},
+      "E06c": {"42": 1660457813, "1337": 203456175, "2026": 1718284219}
+    },
+    "dsdg_stream_n8838": {"batches": 89, "kept_in_final_batch": 38, "discarded_final_batch_samples": 62},
+    "dsdg_stream_toy186": {"batches": 2, "kept_in_final_batch": 86, "discarded_final_batch_samples": 14}
+  },
+  "frozen_not_changed": [
+    "generator architectures, graphs and the twelve approved final checkpoints (E03 ckpt-50; E05 iteration_4000.pth; E06b/E06c netG_model_epoch_200_iter_0.pth of seeds 42/1337/2026)",
+    "bank seed s uses generator seed s (m8_downstream_evaluator_contract.yaml D12 SEED_MATCHED_RAW)",
+    "E03/E05 population: all 8838 frozen pairs_train_v1 rows in canonical 0-based global position order; E06c 8838; E06b 8838 (E06b-Q0)",
+    "TEST firewall: TRAIN rows only; VAL and TEST are never read for bank generation",
+    "methods/common/bank_writer.py and every E01/E02 production authority and bank",
+    "outputs/audit/method_status.csv"
+  ],
+  "frozen_authorities": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "configs/methods/e03_stdn.yaml": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0",
+    "configs/methods/e05_pcgan.yaml": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de",
+    "configs/methods/e06b_dsdg_native.yaml": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f",
+    "configs/methods/e06c_dsdg_bin_idfree.yaml": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0",
+    "configs/amendments/m8_smoke_test_contract.yaml": "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "outputs/audit/M8_SMOKE_EVIDENCE/run_a/select/toy_manifest.json": "50ac8fb8b9fc6938ba630d0853523d358250137c8fbbc62704d2a73830f7f690",
+    "outputs/audit/method_status.csv": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723"
+  },
+  "storage": "The bank root is governed separately by configs/amendments/learned_bank_storage_location.*; this contract does not make any storage root usable.",
+  "authorizes": {
+    "adapter_and_bank_infrastructure_implementation": true,
+    "cpu_synthetic_fixture_qualification": true,
+    "s7_preparation": true,
+    "s7_gpu_execution": false,
+    "s7_gpu_execution_note": "gated by gpu_timing (E04 completion and audit, E04 family closure or documented roadmap authority, resource preflight) and a separate S7 launch authority record",
+    "production_bank_generation": false,
+    "production_bank_generation_note": "each future production family (method) requires its own separate owner authorization after its S7 acceptance passes",
+    "generator_retraining": false,
+    "checkpoint_change": false,
+    "val_or_test_access": false,
+    "downstream_scientific_training": false,
+    "gpat": false,
+    "method_status_update": false,
+    "package_installation": false
+  }
+}
