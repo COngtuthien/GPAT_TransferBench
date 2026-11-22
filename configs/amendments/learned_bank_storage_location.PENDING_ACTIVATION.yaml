@@ -1,0 +1,58 @@
+{
+  "schema_version": "learned_bank_storage_location_v1",
+  "record": "OWNER_SELECTION_PENDING_ACTIVATION",
+  "status": "OWNER_SELECTED_PENDING_ACTIVATION",
+  "approved": false,
+  "usable_for_banks": false,
+  "date": "2026-11-22",
+  "draft": {
+    "path": "configs/amendments/learned_bank_storage_location.DRAFT.yaml",
+    "commit": "5f6aabb168767ee91912be5ec8a909384b573ac0",
+    "sha256": "622ba385a1f5a4e3ec9586b5af31c57155d7976713a2300ab6f2a81fc990f2cb",
+    "unchanged": true
+  },
+  "owner_selection": {
+    "L1_bank_root": "B_EXTERNAL_HDD_ADDITIVE_ROOT",
+    "text": "The owner selects L1 = B_EXTERNAL_HDD_ADDITIVE_ROOT as the intended location of future learned-method production banks (E03, E05, E06b, E06c), conditional on an owner-created private directory and successful filesystem verification. A separate physical root is allowed only for learned production banks; E01/E02 production roots, all checkpoints and every runtime_root contract stay unchanged.",
+    "consistent_with_draft": "B_EXTERNAL_HDD_ADDITIVE_ROOT is the DRAFT's option for L1 and its recommendation"
+  },
+  "why_pending": "The DRAFT requires the owner, not an agent, to create the private directory before activation. On 2026-11-22T15:3xZ /media/ext_data/student20261_gpat_m8_banks does not exist, so no storage authority can be OWNER_APPROVED yet. This record is therefore NOT named learned_bank_storage_location.yaml and methods.common.learned_bank.load_storage_authority refuses it (LEARNED_BANK_BLOCKED_BY_STORAGE_AUTHORITY). Production stays refused.",
+  "target": {
+    "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+    "mount_point": "/media/ext_data",
+    "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+    "fstype": "ext4",
+    "device": "Seagate One Touch w/PW 4 TB USB HDD (sda2, transport usb)",
+    "owner": "student20261",
+    "mode": "0700 (exactly; no setgid bit)",
+    "never_used_path_prefix": "/media/student20261/ (the duplicate udisks mount of the same filesystem)",
+    "layout": "<bank_root>/<method>/seed_<seed>/ (bank/, bank_manifest.jsonl, bank_manifest.sha256, bank_provenance.json)"
+  },
+  "observed_2026_11_22": {
+    "collected_utc": "2026-11-22T15:0xZ (read-only: findmnt, lsblk, stat, ls; nothing created or changed)",
+    "mount": "/media/ext_data <- /dev/sda2 ext4 UUID 608647d2-9cb0-45b0-b999-73c080ba909b rw,relatime,errors=remount-ro",
+    "duplicate_mount": "/media/student20261/608647d2-9cb0-45b0-b999-73c080ba909b <- /dev/sda2 (udisks)",
+    "by_uuid": "/dev/disk/by-uuid/608647d2-9cb0-45b0-b999-73c080ba909b -> ../../sda2",
+    "mount_point_owner_mode": "root:shared 2775 (setgid, shared with other accounts)",
+    "free_bytes": 3450619547648,
+    "private_directory_exists": false,
+    "agent_user": "uid 1002 student20261, groups student20261, users, shared"
+  },
+  "required_owner_action": {
+    "commands_run_by_the_owner_on_the_gpu_host": [
+      "mkdir /media/ext_data/student20261_gpat_m8_banks",
+      "chmod 00700 /media/ext_data/student20261_gpat_m8_banks",
+      "stat -c '%U %a %F' /media/ext_data/student20261_gpat_m8_banks   # expect: student20261 700 directory"
+    ],
+    "setgid_note": "/media/ext_data is setgid (2775), so a new subdirectory inherits the setgid bit; GNU chmod keeps a directory's setgid bit under a plain 'chmod 0700' (result 2700). Use 'chmod 00700' (or 'chmod g-s' afterwards) so the mode is exactly 0700; the activation check refuses 2700.",
+    "never": "no mount/remount, fstab, format, partition, ownership change of existing paths, symlink, or moving of E01/E02 banks or checkpoints"
+  },
+  "activation_procedure": [
+    "1. Owner creates the directory as above and reports it.",
+    "2. Agent runs, read-only on the GPU host from a clean clone: python3 -B tools/learned_bank.py storage-preflight -> every check true (exists, not_symlink, is_directory, realpath_equals_path, owner, mode_0700_no_setgid, not_udisks_duplicate, mount_point /media/ext_data, filesystem_uuid 608647d2-..., fstype_ext4).",
+    "3. Owner approves; agent commits configs/amendments/learned_bank_storage_location.yaml: schema learned_bank_storage_location_v1, status OWNER_APPROVED, approved true, decisions.L1_bank_root B_EXTERNAL_HDD_ADDITIVE_ROOT, bank_root_registry {bank_root, mount_point, filesystem_uuid, fstype, layout}, activation_verification {ok: true, preflight JSON, utc}, this pending record and the DRAFT by path + sha256.",
+    "4. Every production launch and every production audit re-runs the live preflight (UUID, mount, owner, mode, no symlink); a USB disconnect or remount refuses the bank. Downstream readers resolve banks only through methods.common.learned_bank.resolve_registered_bank (the registry), never a symlink."
+  ],
+  "does_not_block": "adapter implementation, CPU synthetic qualification and S7 toy acceptance (S7 roots live under ~/workdir/m8_learned_banks/s7/, never on the HDD)",
+  "capacity": "12 banks x 8838 PNGs: typical ~9.1 GiB, worst case ~19.7 GiB (assessment 3433ad0); the HDD has ~3.2 TiB free"
+}

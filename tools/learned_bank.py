@@ -117,6 +117,11 @@ def generate_real(auth, method, seed, runtime_root, run_dir, kind):
     prov = lb.write_bank(adapter, pop, auth, run_dir, reader=reader)
     lb.recheck_checkpoint_unchanged(ckpt)
     prov['checkpoint_unchanged_after'] = True
+    if method != 'E03':                    # profiling gate (S7 run A): peak allocator memory of this process
+        import torch
+        prov['peak_cuda_memory_allocated_bytes'] = torch.cuda.max_memory_allocated()
+    else:
+        prov['peak_cuda_memory_allocated_bytes'] = None   # TF1: sampled with nvidia-smi during run A (S7 plan)
     return prov
 
 
@@ -138,7 +143,8 @@ def cmd_s7(args):
     results = {}
     for seed in lb.SEEDS:
         prov = generate_real(auth, args.method, seed, rt, method_dir / ('seed_%d' % seed), 'S7_TOY_POPULATION')
-        results[seed] = {k: prov.get(k) for k in ('status', 'rows', 'outputs', 'failure_count', 'manifest_sha256')}
+        results[seed] = {k: prov.get(k) for k in ('status', 'rows', 'outputs', 'failure_count', 'manifest_sha256',
+                                                  'checkpoint_unchanged_after', 'peak_cuda_memory_allocated_bytes')}
     emit({'command': 's7', 'method': args.method, 'label': args.label, 'results': results})
     return 0
 

@@ -557,3 +557,34 @@ class FixtureQualificationEvidence(unittest.TestCase):
             self.assertEqual(d['environment']['cuda_visible_devices'], '')
             self.assertEqual(d['gates']['zero_opens_under_runtime_data']['detail']['runtime_data'], 0)
             self.assertIsNone(d['error'])
+
+
+class ReadinessRecords(unittest.TestCase):
+    def test_storage_pending_record_is_not_usable(self):
+        rec = json.loads((ROOT / lb.STORAGE_PENDING_PATH).read_text())
+        self.assertEqual((rec['status'], rec['approved'], rec['usable_for_banks']),
+                         ('OWNER_SELECTED_PENDING_ACTIVATION', False, False))
+        self.assertEqual(rec['owner_selection']['L1_bank_root'], 'B_EXTERNAL_HDD_ADDITIVE_ROOT')
+        draft = json.loads((ROOT / rec['draft']['path']).read_text())
+        self.assertIn('B_EXTERNAL_HDD_ADDITIVE_ROOT', draft['questions']['L1_bank_root']['options'])
+        self.assertEqual(sha(ROOT / rec['draft']['path']), rec['draft']['sha256'])
+        self.assertEqual(rec['target']['bank_root'], lb.HDD['bank_root'])
+        self.assertEqual(rec['target']['filesystem_uuid'], lb.HDD['filesystem_uuid'])
+        self.assertIn('chmod 00700 /media/ext_data/student20261_gpat_m8_banks',
+                      rec['required_owner_action']['commands_run_by_the_owner_on_the_gpu_host'])
+        self.assertFalse((ROOT / lb.STORAGE_AUTHORITY_PATH).exists())
+
+    def test_s7_plan_and_snapshot(self):
+        plan = json.loads((ROOT / 'outputs/audit/LEARNED_BANK_S7_ACCEPTANCE_PLAN.json').read_text())
+        self.assertEqual(plan['status'], 'PREPARED_NOT_EXECUTED')
+        self.assertEqual(sorted(plan['methods']), sorted(lb.METHODS))
+        for m, p in plan['methods'].items():
+            for s in lb.SEEDS:
+                c = p['checkpoints'][str(s)]
+                self.assertEqual(c['checkpoint_identity_sha256'], lb.checkpoint_identity_sha256(m, s))
+                self.assertEqual(sorted(c['files'].values()), sorted(lb.CHECKPOINTS[(m, s)]['sha256'].values()))
+        snap = json.loads((ROOT / 'outputs/audit/LEARNED_BANK_READINESS_SNAPSHOT.json').read_text())
+        self.assertTrue(snap['checkpoints_all_equal_approved'])
+        self.assertEqual(snap['collected']['sha256'], sha(ROOT / snap['collected']['path']))
+        self.assertEqual(snap['e04_seed2026']['status'], 'RUNNING_NOT_COMPLETE')
+        self.assertFalse(snap['learned_gpu_inference_run'])

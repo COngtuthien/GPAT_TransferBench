@@ -1,0 +1,349 @@
+{
+ "audit_gates": [
+  "checkpoint SHA256 equal to the approved table before run A and after run B (lb.verify_checkpoint / recheck_checkpoint_unchanged)",
+  "frozen config SHA256",
+  "pinned source digests",
+  "correct inference graph (E03: graph structure record; E05: runtime closure + strict state load; DSDG: define_G/load_model coverage)",
+  "population: E03/E05 positions == toy manifest positions and rows equal the frozen relation; DSDG indices 0..185 with synthetic ids and null lineage",
+  "186 rows, 186 files, 0 failures per seed and run; all raw outputs finite",
+  "reader: lb.read_bank ok with expect_mode S7_TOY, expect_rows 186, expect_checkpoint_identity",
+  "bitwise replay: lb.compare_runs(run_A, run_B) bitwise_identical (manifest bytes + every PNG byte)",
+  "no optimizer/backward/save counters (torch) / finalized graph (TF)",
+  "TRAIN-only allowlist; reader record reads == 2 x 186 atime-checked O_NOATIME reads (E03/E05); 0 for DSDG",
+  "atime ledger: no VAL/TEST face atime changed; TRAIN atimes unchanged (O_NOATIME)",
+  "provenance: authorization mode S7_TOY bound to the S7 launch authority, contract and E04 record SHA256",
+  "later (production audit): every toy row equals the corresponding production row byte for byte"
+ ],
+ "code_authority": "the commit that adds the S7 launch authority (>= the commit of this plan); clean clone ~/workdir/m8_learned_banks/clones/s7_<commit>; pinned source caches copied read-only from the E04 checkout with mkdir -p third_party/source_cache first",
+ "contract": {
+  "decision": "C-Q3 A_TOY_TWO_RUN_BITWISE, C-Q2 A_GPU_FP32_BITWISE_REPLAY, C-Q5 A_AFTER_E04_COMPLETES",
+  "path": "configs/amendments/learned_bank_generation_contract.yaml"
+ },
+ "date": "2026-11-22",
+ "execution": "one GPU job at a time; per method: tmux m8s7_<method>_A (remain-on-exit, pipe-pane log, exit code to ~/workdir/m8s7_<method>_A.exit), wait for exit, then m8s7_<method>_B, then s7-compare; never concurrent with E04 or with each other",
+ "failure_behavior": [
+  "any gate failure: STOP that method, keep both roots and logs untouched, never rerun into an existing root, report to the owner",
+  "non-bitwise replay: STOP and report for owner review (C-Q2); do not weaken the criterion; do not change architecture, checkpoint, graph or outputs; any further determinism setting must be disclosed to the owner before activation",
+  "non-finite rows: counted failures; S7 requires 0, so any failure stops the method for owner review",
+  "E04 or other-user GPU contention discovered mid-run: do not interfere; S7 of that method is repeated later in new roots only"
+ ],
+ "method_order": [
+  "E06c",
+  "E05",
+  "E03",
+  "E06b"
+ ],
+ "methods": {
+  "E03": {
+   "checkpoints": {
+    "1337": {
+     "checkpoint_identity_sha256": "cab2d359906c36807473c2e6941782544e15456af8c5c7c466152c5ee4d58248",
+     "files": {
+      "checkpoints/ckpt-50.data-00000-of-00001": "316c94c066c32314c6819bc105d0043e1ddc7b27329afd48ddcfb8bc8d181551",
+      "checkpoints/ckpt-50.index": "29b36079f28c557ab9a44daa8dedb85770ed9d32c5cd0b04d002f39ae386ab70",
+      "checkpoints/ckpt-50.meta": "a6119bdc1f830fdf0b968054ea929dce6e6e5838050ffbe06826d8e499a40e1c"
+     },
+     "run_id": "e8c85cc378e778f5",
+     "run_root": "<runtime_root>/runs/m6/E03/seed_1337"
+    },
+    "2026": {
+     "checkpoint_identity_sha256": "e3936f9ba96ee858ea76f730f86ff6d4130117161c7ae122d4dae24027a10013",
+     "files": {
+      "checkpoints/ckpt-50.data-00000-of-00001": "9dbd463cb3eb56c9ecc578dd275e0c2507a1e6d5f8b9b4876406d5011bd52cb3",
+      "checkpoints/ckpt-50.index": "42107c3d56f1ec2892def0840eea520e1950ced453ffa09981899ded11ed96dc",
+      "checkpoints/ckpt-50.meta": "504845f926c1940a4aa0ba647dada611dba79044cb247dc11410614464f75543"
+     },
+     "run_id": "237887eebab18637",
+     "run_root": "<runtime_root>/runs/m6/E03/seed_2026"
+    },
+    "42": {
+     "checkpoint_identity_sha256": "fec00faf1bc9da819a134d04afa567a6e273fd5fc1f523e04fdfc8c0ce2f1267",
+     "files": {
+      "checkpoints/ckpt-50.data-00000-of-00001": "5b337a63db63e405bf35bceefdacc101060cb7d1625b5a4d2d389b963e311753",
+      "checkpoints/ckpt-50.index": "b6b9a0c4cfd6470959453cdb861341bcacff7047b66fb414f8dff504452dc899",
+      "checkpoints/ckpt-50.meta": "dbcf372027172396c616ba19f7d76475363d34e8bac0f438c0c7f5b97fae5f97"
+     },
+     "run_id": "a565b76bc7349532",
+     "run_root": "<runtime_root>/runs/m6/E03/seed_42"
+    }
+   },
+   "commands": {
+    "compare": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py s7-compare --method E03 --out-root $S7",
+    "run_A": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py s7 --method E03 --label A --out-root $S7 --runtime-root $RT",
+    "run_B": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py s7 --method E03 --label B --out-root $S7 --runtime-root $RT   # separate process, after A exits"
+   },
+   "config": {
+    "path": "configs/methods/e03_stdn.yaml",
+    "sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0"
+   },
+   "determinism": "M6D2b precision_env (TF_DETERMINISTIC_OPS=1, TF_CUDNN_DETERMINISTIC=1, TF32 off, AMP/XLA off) + session_config",
+   "environment": {
+    "launch_env": "env -i HOME=$HOME PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0",
+    "lock": {
+     "path": "environments/e03_stdn.lock.json",
+     "sha256": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62"
+    },
+    "name": "gpat-m6-e03",
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python"
+   },
+   "expected_outputs": {
+    "failures": 0,
+    "files_per_seed": 186,
+    "image": "256x256x3 uint8 RGB PNG",
+    "rows_per_seed": 186,
+    "runs": [
+     "A",
+     "B"
+    ],
+    "seeds": [
+     42,
+     1337,
+     2026
+    ]
+   },
+   "gpu_memory_estimate": "TF1 graph, batch 1, allow_growth: provisional <= 2 GiB",
+   "population": "186 toy pairs of outputs/audit/M8_SMOKE_EVIDENCE/run_a/select/toy_manifest.json (sha256 50ac8fb8b9fc6938ba630d0853523d358250137c8fbbc62704d2a73830f7f690) at their canonical global pairs_train_v1 positions; faces TRAIN-only via TrainFaceReader (O_NOATIME, M2 sha256)",
+   "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+   "runtime_estimate": "~1-3 min per seed (matplotlib offset map per pair on CPU)"
+  },
+  "E05": {
+   "checkpoints": {
+    "1337": {
+     "checkpoint_identity_sha256": "f3a687d8672e8d589a61c080fd129288bc44895fe1abb75045dac340d35dd544",
+     "files": {
+      "checkpoints/iteration_4000.pth": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+     },
+     "run_id": "036c806bb2f339b7",
+     "run_root": "<runtime_root>/runs/m6/E05/seed_1337"
+    },
+    "2026": {
+     "checkpoint_identity_sha256": "ee10a3b4ee1c66ecc1096b8cbe4ec2d56a4a49ade06f4c14b304488d98c1820f",
+     "files": {
+      "checkpoints/iteration_4000.pth": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+     },
+     "run_id": "b739351daf9779bc",
+     "run_root": "<runtime_root>/runs/m6/E05/seed_2026"
+    },
+    "42": {
+     "checkpoint_identity_sha256": "2b55dcf2ecc4d6fbc11e34fe4514a167807489049438b561992eaaef7b51ae68",
+     "files": {
+      "checkpoints/iteration_4000.pth": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+     },
+     "run_id": "18463bf5cd471e55",
+     "run_root": "<runtime_root>/runs/m6/E05/seed_42"
+    }
+   },
+   "commands": {
+    "compare": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7-compare --method E05 --out-root $S7",
+    "run_A": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label A --out-root $S7 --runtime-root $RT",
+    "run_B": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label B --out-root $S7 --runtime-root $RT   # separate process, after A exits"
+   },
+   "config": {
+    "path": "configs/methods/e05_pcgan.yaml",
+    "sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de"
+   },
+   "determinism": "production_runner.configure_precision (FP32, TF32 off, cudnn deterministic, benchmark off, highest matmul)",
+   "environment": {
+    "launch_env": "env -i HOME=$HOME PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1",
+    "lock": {
+     "path": "environments/e05.lock.json",
+     "sha256": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50"
+    },
+    "name": "gpat-m6-e05",
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python"
+   },
+   "expected_outputs": {
+    "failures": 0,
+    "files_per_seed": 186,
+    "image": "256x256x3 uint8 RGB PNG",
+    "rows_per_seed": 186,
+    "runs": [
+     "A",
+     "B"
+    ],
+    "seeds": [
+     42,
+     1337,
+     2026
+    ]
+   },
+   "gpu_memory_estimate": "Encoder+Generator only, batch 1, no D/grad: provisional <= 3 GiB (training peak 3.08-3.7 GB incl. D)",
+   "population": "186 toy pairs of outputs/audit/M8_SMOKE_EVIDENCE/run_a/select/toy_manifest.json (sha256 50ac8fb8b9fc6938ba630d0853523d358250137c8fbbc62704d2a73830f7f690) at their canonical global pairs_train_v1 positions; faces TRAIN-only via TrainFaceReader (O_NOATIME, M2 sha256)",
+   "rule": "BASELINE_FINAL_STATE_V1",
+   "runtime_estimate": "< 1 min per seed"
+  },
+  "E06b": {
+   "checkpoints": {
+    "1337": {
+     "checkpoint_identity_sha256": "ad74128648dc20f6c9dcc0ed895db6e3d683c3534a6a170e989e0cc441924f93",
+     "files": {
+      "checkpoints/netG_model_epoch_200_iter_0.pth": "645538e866a6d835a1bc35240c2f15c27296742850df96d722fd4d38609b4f53"
+     },
+     "run_id": "9ffda3ea3f6cc767",
+     "run_root": "<runtime_root>/runs/m6/E06b/seed_1337"
+    },
+    "2026": {
+     "checkpoint_identity_sha256": "b9a0465c4759f7448d2a3fa0d2b87505c01464026af571da95d07042c3db374c",
+     "files": {
+      "checkpoints/netG_model_epoch_200_iter_0.pth": "e8d0d01cfdb59b92d0f24318ab4fec042188bf0a72f9c59054ea10204a326cad"
+     },
+     "run_id": "ec71778b28479de5",
+     "run_root": "<runtime_root>/runs/m6/E06b/seed_2026"
+    },
+    "42": {
+     "checkpoint_identity_sha256": "7f805bf0f2da4f2f3b74d66ce61ccfcdfc55f1d78fa53479ebe6126b353c1d5b",
+     "files": {
+      "checkpoints/netG_model_epoch_200_iter_0.pth": "d56122e0cf363a6c870e29b394998732f4bcdaf35a96a6110e937905b64ff8aa"
+     },
+     "run_id": "aa96129289d080ba",
+     "run_root": "<runtime_root>/runs/m6/E06b/seed_42"
+    }
+   },
+   "commands": {
+    "compare": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py s7-compare --method E06b --out-root $S7",
+    "run_A": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py s7 --method E06b --label A --out-root $S7 --runtime-root $RT",
+    "run_B": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py s7 --method E06b --label B --out-root $S7 --runtime-root $RT   # separate process, after A exits"
+   },
+   "config": {
+    "path": "configs/methods/e06b_dsdg_native.yaml",
+    "sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f"
+   },
+   "determinism": "bank_adapter.configure_determinism (same flags; official cudnn.benchmark=True overridden to False)",
+   "environment": {
+    "launch_env": "env -i HOME=$HOME PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1",
+    "lock": {
+     "path": "environments/e06c.lock.json",
+     "sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95"
+    },
+    "name": "gpat-m6-e06c",
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python"
+   },
+   "expected_outputs": {
+    "failures": 0,
+    "files_per_seed": 186,
+    "image": "256x256x3 uint8 RGB PNG",
+    "rows_per_seed": 186,
+    "runs": [
+     "A",
+     "B"
+    ],
+    "seeds": [
+     42,
+     1337,
+     2026
+    ]
+   },
+   "gpu_memory_estimate": "Decoder_s batch 100 (+ transient define_G encoders, freed): provisional 2-4 GiB",
+   "population": "synthetic stream indices 0..185 (E06b_S<seed>_000000..000185); 2 official batches of 100, 14 discarded; stream seeds {42: 492027736, 1337: 825501606, 2026: 1539980013}; no face read",
+   "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+   "runtime_estimate": "seconds per seed"
+  },
+  "E06c": {
+   "checkpoints": {
+    "1337": {
+     "checkpoint_identity_sha256": "576b7737935a62e600cd0208ffa176f6b16023a67f34b2b63dc487a63f31dcf3",
+     "files": {
+      "checkpoints/netG_model_epoch_200_iter_0.pth": "43ffa30dc7eaa568bc0b573a34978f897f46156232ee1a7e71d7f994beb8f336"
+     },
+     "run_id": "49a179a4dca77f41",
+     "run_root": "<runtime_root>/runs/m6/E06c/seed_1337"
+    },
+    "2026": {
+     "checkpoint_identity_sha256": "b8143768e7a96652616becd2fe4304145733631560644c858019a2785f7953dd",
+     "files": {
+      "checkpoints/netG_model_epoch_200_iter_0.pth": "dc6c54b4357a51546c3abab3b957dd4b19044ae0188dde417df03446fc951878"
+     },
+     "run_id": "86b631403e3c4ee1",
+     "run_root": "<runtime_root>/runs/m6/E06c/seed_2026"
+    },
+    "42": {
+     "checkpoint_identity_sha256": "1f7b03e23ffcbcb4fe1ecb226139361d44b455242170fc1fcf4d3a4752a8c495",
+     "files": {
+      "checkpoints/netG_model_epoch_200_iter_0.pth": "665684fddf11ec28b95e2a98122c85bfc5352bb8ea69ecb60caac9418c0871d9"
+     },
+     "run_id": "27dcaf23aac18d7a",
+     "run_root": "<runtime_root>/runs/m6/E06c/seed_42"
+    }
+   },
+   "commands": {
+    "compare": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py s7-compare --method E06c --out-root $S7",
+    "run_A": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py s7 --method E06c --label A --out-root $S7 --runtime-root $RT",
+    "run_B": "$LAUNCH_ENV nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py s7 --method E06c --label B --out-root $S7 --runtime-root $RT   # separate process, after A exits"
+   },
+   "config": {
+    "path": "configs/methods/e06c_dsdg_bin_idfree.yaml",
+    "sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002"
+   },
+   "determinism": "as E06b",
+   "environment": {
+    "launch_env": "env -i HOME=$HOME PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1",
+    "lock": {
+     "path": "environments/e06c.lock.json",
+     "sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95"
+    },
+    "name": "gpat-m6-e06c",
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python"
+   },
+   "expected_outputs": {
+    "failures": 0,
+    "files_per_seed": 186,
+    "image": "256x256x3 uint8 RGB PNG",
+    "rows_per_seed": 186,
+    "runs": [
+     "A",
+     "B"
+    ],
+    "seeds": [
+     42,
+     1337,
+     2026
+    ]
+   },
+   "gpu_memory_estimate": "as E06b",
+   "population": "synthetic stream indices 0..185 (E06c_S<seed>_000000..000185); 2 official batches of 100, 14 discarded; stream seeds {42: 1660457813, 1337: 203456175, 2026: 1718284219}; no face read",
+   "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+   "runtime_estimate": "seconds per seed"
+  }
+ },
+ "preconditions": [
+  {
+   "gate": "E04 seed 2026 genuine runner completion: exit marker ~/workdir/e04_s2026.exit with code 0 written by the runner wrapper, final global_step 150000, final checkpoint present; tmux disappearance or a checkpoint alone is not completion",
+   "id": "P1"
+  },
+  {
+   "gate": "outputs/audit/E04_SEED2026_COMPLETION.json committed with status E04_SEED2026_COMPLETED_CLEANLY, failed_gates [], run_id e7100eb9a5ab0537",
+   "id": "P2"
+  },
+  {
+   "gate": "outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json committed with status SCIENTIFIC_TRAINING_COMPLETED_3_OF_3_SEEDS (or an owner-approved documented roadmap authority named in the S7 launch authority)",
+   "id": "P3"
+  },
+  {
+   "gate": "owner commits configs/amendments/learned_bank_s7_launch_authority.yaml: schema learned_bank_s7_launch_authority_v1, status OWNER_APPROVED, approved true, methods [...], contract_sha256 = sha256 of the approved contract, e04_seed_2026_completion_sha256, resource_preflight.required true, code authority commit",
+   "id": "P4"
+  },
+  {
+   "gate": "resource preflight per method immediately before run A: no tools/run_e04.py process; GPU UUID GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7; nvidia-smi free memory >= method estimate + 2 GiB margin; report (not stop) unrelated user processes and their memory; >= 2 GiB free on the S7 filesystem; all 12 checkpoints re-hashed (tools/learned_bank.py gates + lb.verify_checkpoint)",
+   "id": "P5"
+  },
+  {
+   "gate": "atime ledger (stat only) of every canonical face (TRAIN, VAL, TEST) under <runtime_root>/data/processed/faces_256 taken before run A and after run B of each pair method",
+   "id": "P6"
+  }
+ ],
+ "production_unlock": [
+  "S7 record PASS for the method (all three seeds)",
+  "owner commits configs/amendments/learned_bank_production_<method>.yaml (schema learned_bank_production_authority_v1) binding the S7 record by path + sha256 and the contract SHA256",
+  "storage activated: owner-created /media/ext_data/student20261_gpat_m8_banks (0700), live preflight PASS, configs/amendments/learned_bank_storage_location.yaml OWNER_APPROVED with the bank-root registry",
+  "per-bank launch preflight (UUID/mount/owner/mode, free space, checkpoint re-hash, no E04 / no competing learned job)",
+  "each family separately; production audit includes toy-row byte equality"
+ ],
+ "profiling_gate": "GPU memory and runtime above are provisional. Run A of each PyTorch method reports torch.cuda.max_memory_allocated per seed in the tools/learned_bank.py s7 JSON line (captured by the tmux pipe-pane log); for E03 the operator samples nvidia-smi --query-compute-apps every 2 s during run A. The measured peak + 2 GiB becomes the production preflight floor.",
+ "record": "outputs/audit/LEARNED_BANK_S7_<METHOD>.json with method, seeds [42, 1337, 2026], gates, failed_gates [], s7_acceptance_passed true (the field load_production_authority requires); built on the laptop from host-collected evidence",
+ "roots": {
+  "S7": "~/workdir/m8_learned_banks/s7/<commit>/ (fresh; outside <runtime_root> and outside the HDD bank root)",
+  "layout": "$S7/run_{A,B}/<method>/seed_<seed>/ (each run label directory is created by the run and must not pre-exist)"
+ },
+ "schema": "learned_bank_s7_acceptance_plan_v1",
+ "status": "PREPARED_NOT_EXECUTED"
+}
