@@ -1,0 +1,46 @@
+{
+ "argv": [
+  "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+  "metrics",
+  "--mode",
+  "real",
+  "--root",
+  "/home/student20261/workdir/m8_smoke/real_A",
+  "--weights",
+  "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth",
+  "--faces-root",
+  "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256"
+ ],
+ "contracts": {
+  "configs/amendments/m8_downstream_evaluator_contract.yaml": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0",
+  "configs/amendments/m8_smoke_test_contract.yaml": "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb"
+ },
+ "firewall": {
+  "distinct_files_opened": 0,
+  "listing_attempts": 0,
+  "opens_under_faces_root": 0,
+  "violation_count": 0
+ },
+ "gates": {
+  "E00.holdout_predictions_schema": true,
+  "E01.holdout_predictions_schema": true,
+  "E02.holdout_predictions_schema": true,
+  "tables_written": true
+ },
+ "info": {
+  "tables": {
+   "T06_smoke_downstream_resnet18_video.csv": "98971fe987d92aabde7493025f75e0394dd9d2c85a66c05cfe7e266a9387e776",
+   "T08_smoke_downstream_frame.csv": "524e2c09c3059ce083e767e546853d83e837b496f0c9ad64779246eea393e7d9",
+   "T13_smoke_attackwise_apcer.csv": "69b147065e8e3c6f3e5b88a069b8100758e1b2903214bb3bdda06bd1e5cbf5f2",
+   "T13b_smoke_siwmv2_raw_type_apcer.csv": "c06a06fee8d7500f12f0656f0a32718538db97f2b98be317fb045ccbad170d9a",
+   "T14_smoke_datasetwise_metrics.csv": "168bd5412be881fe49ed89bababc8e0e8683eab4b50be58ef6334ae915c2f36b",
+   "curves_roc_det_points.csv": "cb86b1d2949f844d290b8b798e87717d8cd7050c26087838021c08735185fc9f",
+   "training_curves.csv": "667c35330465d9ce12fa0c428fdbe9cc389eb7c8e40bff9451683b34e0add0f1"
+  }
+ },
+ "label": "SMOKE_NON_SCIENTIFIC",
+ "mode": "real",
+ "ok": true,
+ "python": "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+ "stage": "metrics"
+}

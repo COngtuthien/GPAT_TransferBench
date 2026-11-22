@@ -1,0 +1,664 @@
+{
+ "contract_sha256": "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb",
+ "coverage": {
+  "banks": {
+   "E01.seed_1337": {
+    "bank_manifest_sha256": "43b89a2bac9a8d3c7ab9e5cc7bd02127710e77455c1a03e8e859fcf989bc451a",
+    "failures": 0,
+    "outputs": 20,
+    "rows": 20,
+    "run_id": "35782022c90b3052"
+   },
+   "E01.seed_2026": {
+    "bank_manifest_sha256": "ab46f4b44586aa6edd55426ea8cf63d1c14c1bfa71f061c9e27ea75e9576804c",
+    "failures": 0,
+    "outputs": 20,
+    "rows": 20,
+    "run_id": "d86f689b0ea30419"
+   },
+   "E01.seed_42": {
+    "bank_manifest_sha256": "bf2674842ba2ad052c8b62cb87fe5480f456b09d66b92f7c9db03bdab01d05eb",
+    "failures": 0,
+    "outputs": 20,
+    "rows": 20,
+    "run_id": "d8d8e18b64924f62"
+   },
+   "E02.seed_1337": {
+    "bank_manifest_sha256": "0a05c90e7324bc2daaa6a4fc03126945ac90d9fbacc82779c535594c1c023d14",
+    "failures": 0,
+    "outputs": 20,
+    "rows": 20,
+    "run_id": "957b46fca2604ea0"
+   },
+   "E02.seed_2026": {
+    "bank_manifest_sha256": "32efa11f8c267fceabe28c6637200937fa942b7febb6633209968b84a5788f04",
+    "failures": 0,
+    "outputs": 20,
+    "rows": 20,
+    "run_id": "7c20eaa195992173"
+   },
+   "E02.seed_42": {
+    "bank_manifest_sha256": "3d97d61b2bb64f91d73ca8bc0161104aaf776092637650b9f983e13532ccdcf2",
+    "failures": 0,
+    "outputs": 20,
+    "rows": 20,
+    "run_id": "dfb7f5df21907097"
+   }
+  },
+  "detectors": {
+   "E00": {
+    "holdout_predictions_sha256": "859375ae9d501241fcf630d5d27fa33c59be3839985c8502dc3414068a49cc5b",
+    "selected_epoch": 1,
+    "total_steps": 6
+   },
+   "E01": {
+    "holdout_predictions_sha256": "e2607b9c3fc5a534285a99ad2b8ecce701bff3cbd33443ad6eee6fba19fed8d3",
+    "selected_epoch": 1,
+    "total_steps": 6
+   },
+   "E02": {
+    "holdout_predictions_sha256": "cf10ce4911bed82c9027a51303e083d9a0094d85143c75cac53f755c50661f54",
+    "selected_epoch": 1,
+    "total_steps": 6
+   }
+  }
+ },
+ "environment": {
+  "gates": {
+   "V1_gpat_m5_unchanged": true,
+   "V2_added_packages_in_overlay_only": true,
+   "V2_versions": true,
+   "V3_resnet18_weights": true,
+   "V4_cpu_training_bitwise_two_processes": true,
+   "V5_png_bytes_identical": true,
+   "V6_lock_captured": true
+  },
+  "lock_sha256": "70202661f1de3188aa7a6460a640982cea98074e1c41146ff516ac6fef3d7b9c"
+ },
+ "evaluator_contract_sha256": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0",
+ "gates": {
+  "bank_rows_equal_toy_pairs": true,
+  "banks_all_methods_seeds": true,
+  "clean_source_tree": true,
+  "cpu_no_amp": true,
+  "detectors_E00_E01_E02_seed42": true,
+  "environment_V1_V6": true,
+  "firewall_clean": true,
+  "frozen_batch_composition": true,
+  "rederivation_ok": true,
+  "replay_identical": true,
+  "run_a_stages_ok": true,
+  "run_b_stages_ok": true,
+  "six_steps_each": true,
+  "toy_pairs_186": true
+ },
+ "independent_replay": {
+  "artifacts_compared": 603,
+  "differences": [],
+  "identical": true
+ },
+ "label": "SMOKE_NON_SCIENTIFIC",
+ "mode": "synthetic",
+ "not_authorized_by_this_record": [
+  "production banks",
+  "binding of smoke_test_record",
+  "O3 completion",
+  "scientific downstream training",
+  "TEST access"
+ ],
+ "qualification_all_gates_pass": true,
+ "record": "M8_SMOKE_TEST_RECORD",
+ "rederivation": {
+  "detectors": {
+   "E00": {
+    "ACER": "19/48",
+    "AUC": "41/48",
+    "EER": "1/4",
+    "gates": {
+     "decisions_follow_D4": true,
+     "epoch_rederivations_consistent": true,
+     "holdout_uses_frozen_threshold": true,
+     "holdout_video_scores_consistent": true,
+     "selected_epoch_matches": true,
+     "t06_values_match": true
+    },
+    "selected_epoch": 1,
+    "t06_comparison": {
+     "ACER": true,
+     "APCER": true,
+     "AUC": true,
+     "BPCER": true,
+     "EER": true,
+     "F1_spoof": true,
+     "TPR@FPR=1%": true,
+     "TPR@FPR=5%": true,
+     "accuracy": true,
+     "balanced_accuracy": true
+    },
+    "threshold": 0.38546582452712574
+   },
+   "E01": {
+    "ACER": "23/48",
+    "AUC": "5/6",
+    "EER": "1/6",
+    "gates": {
+     "decisions_follow_D4": true,
+     "epoch_rederivations_consistent": true,
+     "holdout_uses_frozen_threshold": true,
+     "holdout_video_scores_consistent": true,
+     "selected_epoch_matches": true,
+     "t06_values_match": true
+    },
+    "selected_epoch": 1,
+    "t06_comparison": {
+     "ACER": true,
+     "APCER": true,
+     "AUC": true,
+     "BPCER": true,
+     "EER": true,
+     "F1_spoof": true,
+     "TPR@FPR=1%": true,
+     "TPR@FPR=5%": true,
+     "accuracy": true,
+     "balanced_accuracy": true
+    },
+    "threshold": 0.36263270683846904
+   },
+   "E02": {
+    "ACER": "1/2",
+    "AUC": "17/24",
+    "EER": "3/8",
+    "gates": {
+     "decisions_follow_D4": true,
+     "epoch_rederivations_consistent": true,
+     "holdout_uses_frozen_threshold": true,
+     "holdout_video_scores_consistent": true,
+     "selected_epoch_matches": true,
+     "t06_values_match": true
+    },
+    "selected_epoch": 1,
+    "t06_comparison": {
+     "ACER": true,
+     "APCER": true,
+     "AUC": true,
+     "BPCER": true,
+     "EER": true,
+     "F1_spoof": true,
+     "TPR@FPR=1%": true,
+     "TPR@FPR=5%": true,
+     "accuracy": true,
+     "balanced_accuracy": true
+    },
+    "threshold": 0.401237253605782
+   }
+  },
+  "implementation": "independent (tools/m8_smoke_audit.py; no gpatbench metrics import)",
+  "ok": true
+ },
+ "schema_version": "m8_smoke_test_record_v1",
+ "scientific_results_produced": false,
+ "smoke_test_passed": false,
+ "source": {
+  "git_commit": "dd893016ddb0e6e828d867a69c2d7c18ba363834",
+  "worktree_dirty": false
+ },
+ "stages": {
+  "bank": {
+   "commands": [
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "banks",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_A",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "A",
+     "wall_seconds": 7.09
+    },
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "banks",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_B",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "B",
+     "wall_seconds": 7.08
+    }
+   ],
+   "executed": true,
+   "gates": {
+    "A.banks.E01.seed_1337.file_verification": true,
+    "A.banks.E01.seed_1337.full_replay": true,
+    "A.banks.E01.seed_1337.rows_equal_toy_pairs": true,
+    "A.banks.E01.seed_2026.file_verification": true,
+    "A.banks.E01.seed_2026.full_replay": true,
+    "A.banks.E01.seed_2026.rows_equal_toy_pairs": true,
+    "A.banks.E01.seed_42.file_verification": true,
+    "A.banks.E01.seed_42.full_replay": true,
+    "A.banks.E01.seed_42.rows_equal_toy_pairs": true,
+    "A.banks.E02.seed_1337.file_verification": true,
+    "A.banks.E02.seed_1337.full_replay": true,
+    "A.banks.E02.seed_1337.rows_equal_toy_pairs": true,
+    "A.banks.E02.seed_2026.file_verification": true,
+    "A.banks.E02.seed_2026.full_replay": true,
+    "A.banks.E02.seed_2026.rows_equal_toy_pairs": true,
+    "A.banks.E02.seed_42.file_verification": true,
+    "A.banks.E02.seed_42.full_replay": true,
+    "A.banks.E02.seed_42.rows_equal_toy_pairs": true,
+    "B.banks.E01.seed_1337.file_verification": true,
+    "B.banks.E01.seed_1337.full_replay": true,
+    "B.banks.E01.seed_1337.rows_equal_toy_pairs": true,
+    "B.banks.E01.seed_2026.file_verification": true,
+    "B.banks.E01.seed_2026.full_replay": true,
+    "B.banks.E01.seed_2026.rows_equal_toy_pairs": true,
+    "B.banks.E01.seed_42.file_verification": true,
+    "B.banks.E01.seed_42.full_replay": true,
+    "B.banks.E01.seed_42.rows_equal_toy_pairs": true,
+    "B.banks.E02.seed_1337.file_verification": true,
+    "B.banks.E02.seed_1337.full_replay": true,
+    "B.banks.E02.seed_1337.rows_equal_toy_pairs": true,
+    "B.banks.E02.seed_2026.file_verification": true,
+    "B.banks.E02.seed_2026.full_replay": true,
+    "B.banks.E02.seed_2026.rows_equal_toy_pairs": true,
+    "B.banks.E02.seed_42.file_verification": true,
+    "B.banks.E02.seed_42.full_replay": true,
+    "B.banks.E02.seed_42.rows_equal_toy_pairs": true,
+    "replay_identical": true
+   },
+   "simulated": false,
+   "status": "PASS"
+  },
+  "evaluator": {
+   "commands": [
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "evaluator",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_A",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "A",
+     "wall_seconds": 79.73
+    },
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "evaluator",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_B",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "B",
+     "wall_seconds": 79.0
+    }
+   ],
+   "executed": true,
+   "gates": {
+    "A.evaluator.E00.batch_composition": true,
+    "A.evaluator.E00.cpu_no_amp_deterministic": true,
+    "A.evaluator.E00.first_step_lr_zero": true,
+    "A.evaluator.E00.holdout_predicted_once": true,
+    "A.evaluator.E00.steps": true,
+    "A.evaluator.E01.batch_composition": true,
+    "A.evaluator.E01.cpu_no_amp_deterministic": true,
+    "A.evaluator.E01.first_step_lr_zero": true,
+    "A.evaluator.E01.holdout_predicted_once": true,
+    "A.evaluator.E01.steps": true,
+    "A.evaluator.E02.batch_composition": true,
+    "A.evaluator.E02.cpu_no_amp_deterministic": true,
+    "A.evaluator.E02.first_step_lr_zero": true,
+    "A.evaluator.E02.holdout_predicted_once": true,
+    "A.evaluator.E02.steps": true,
+    "A.evaluator.faces_atime_unchanged": true,
+    "B.evaluator.E00.batch_composition": true,
+    "B.evaluator.E00.cpu_no_amp_deterministic": true,
+    "B.evaluator.E00.first_step_lr_zero": true,
+    "B.evaluator.E00.holdout_predicted_once": true,
+    "B.evaluator.E00.steps": true,
+    "B.evaluator.E01.batch_composition": true,
+    "B.evaluator.E01.cpu_no_amp_deterministic": true,
+    "B.evaluator.E01.first_step_lr_zero": true,
+    "B.evaluator.E01.holdout_predicted_once": true,
+    "B.evaluator.E01.steps": true,
+    "B.evaluator.E02.batch_composition": true,
+    "B.evaluator.E02.cpu_no_amp_deterministic": true,
+    "B.evaluator.E02.first_step_lr_zero": true,
+    "B.evaluator.E02.holdout_predicted_once": true,
+    "B.evaluator.E02.steps": true,
+    "B.evaluator.faces_atime_unchanged": true,
+    "bank_rows_equal_toy_pairs": true,
+    "banks_all_methods_seeds": true,
+    "cpu_no_amp": true,
+    "detectors_E00_E01_E02_seed42": true,
+    "frozen_batch_composition": true,
+    "six_steps_each": true,
+    "toy_pairs_186": true
+   },
+   "simulated": false,
+   "status": "PASS"
+  },
+  "generator": {
+   "commands": [
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "select",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_A",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "A",
+     "wall_seconds": 5.21
+    },
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "select",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_B",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "B",
+     "wall_seconds": 5.24
+    },
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "banks",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_A",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "A",
+     "wall_seconds": 7.09
+    },
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/miniconda3/envs/gpat-m5/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "banks",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_B",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "B",
+     "wall_seconds": 7.08
+    }
+   ],
+   "executed": true,
+   "gates": {
+    "A.banks.E01.seed_1337.completed_no_failures": true,
+    "A.banks.E01.seed_1337.operator_is_position_mod_8": true,
+    "A.banks.E01.seed_2026.completed_no_failures": true,
+    "A.banks.E01.seed_2026.operator_is_position_mod_8": true,
+    "A.banks.E01.seed_42.completed_no_failures": true,
+    "A.banks.E01.seed_42.operator_is_position_mod_8": true,
+    "A.banks.E02.seed_1337.completed_no_failures": true,
+    "A.banks.E02.seed_1337.k40_n159_residual": true,
+    "A.banks.E02.seed_2026.completed_no_failures": true,
+    "A.banks.E02.seed_2026.k40_n159_residual": true,
+    "A.banks.E02.seed_42.completed_no_failures": true,
+    "A.banks.E02.seed_42.k40_n159_residual": true,
+    "A.select.roles_nonempty": true,
+    "A.select.synthetic_world_built": true,
+    "A.select.test_rows_read_zero": true,
+    "B.banks.E01.seed_1337.completed_no_failures": true,
+    "B.banks.E01.seed_1337.operator_is_position_mod_8": true,
+    "B.banks.E01.seed_2026.completed_no_failures": true,
+    "B.banks.E01.seed_2026.operator_is_position_mod_8": true,
+    "B.banks.E01.seed_42.completed_no_failures": true,
+    "B.banks.E01.seed_42.operator_is_position_mod_8": true,
+    "B.banks.E02.seed_1337.completed_no_failures": true,
+    "B.banks.E02.seed_1337.k40_n159_residual": true,
+    "B.banks.E02.seed_2026.completed_no_failures": true,
+    "B.banks.E02.seed_2026.k40_n159_residual": true,
+    "B.banks.E02.seed_42.completed_no_failures": true,
+    "B.banks.E02.seed_42.k40_n159_residual": true,
+    "B.select.roles_nonempty": true,
+    "B.select.synthetic_world_built": true,
+    "B.select.test_rows_read_zero": true
+   },
+   "simulated": false,
+   "status": "PASS"
+  },
+  "metrics": {
+   "commands": [
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "metrics",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_A",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "A",
+     "wall_seconds": 0.34
+    },
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "metrics",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_B",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "B",
+     "wall_seconds": 0.34
+    }
+   ],
+   "executed": true,
+   "gates": {
+    "A.metrics.E00.holdout_predictions_schema": true,
+    "A.metrics.E01.holdout_predictions_schema": true,
+    "A.metrics.E02.holdout_predictions_schema": true,
+    "A.metrics.tables_written": true,
+    "B.metrics.E00.holdout_predictions_schema": true,
+    "B.metrics.E01.holdout_predictions_schema": true,
+    "B.metrics.E02.holdout_predictions_schema": true,
+    "B.metrics.tables_written": true,
+    "independent_rederivation": true
+   },
+   "simulated": false,
+   "status": "PASS"
+  },
+  "plots": {
+   "commands": [
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "plots",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_A",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "A",
+     "wall_seconds": 1.07
+    },
+    {
+     "argv": [
+      "nice",
+      "-n",
+      "19",
+      "ionice",
+      "-c3",
+      "/home/student20261/workdir/envs/gpat-m8-downstream/bin/python",
+      "-B",
+      "/home/student20261/workdir/m8_smoke_clone_dd89301/tools/m8_smoke_stage.py",
+      "plots",
+      "--mode",
+      "synthetic",
+      "--root",
+      "/home/student20261/workdir/m8_smoke/qual_B",
+      "--weights",
+      "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth"
+     ],
+     "exit_code": 0,
+     "run": "B",
+     "wall_seconds": 1.1
+    }
+   ],
+   "executed": true,
+   "gates": {
+    "A.plots.eight_figures": true,
+    "A.plots.inputs_have_no_placeholders": true,
+    "B.plots.eight_figures": true,
+    "B.plots.inputs_have_no_placeholders": true
+   },
+   "simulated": false,
+   "status": "PASS"
+  }
+ },
+ "test_firewall": {
+  "allowlist_size": 376,
+  "atime_changed_files": 0,
+  "faces_files_read_run_a": 376,
+  "listing_attempts": 0,
+  "method": "parquet TRAIN/VAL row filter + allowlist audit hook (opens outside the allowlist and directory listings under faces_256 raise) + O_NOATIME reads",
+  "test_rows_used": 0,
+  "violations": 0
+ },
+ "toy_selection": {
+  "frames": {
+   "train_live": 96,
+   "train_spoof": 56,
+   "val_holdout_live": 48,
+   "val_holdout_spoof": 64,
+   "val_select_live": 48,
+   "val_select_spoof": 64
+  },
+  "siwmv2_unit_disclosure": "synthetic world",
+  "toy_manifest_sha256": "d4a72769270926f83bb033a82c6f40e885cf5ab8ce70131b4a3f3f3da3461abf",
+  "toy_pairs": 20
+ },
+ "validator": {
+  "admissible": true,
+  "passed": false,
+  "problems": [
+   "gates failed"
+  ]
+ }
+}
