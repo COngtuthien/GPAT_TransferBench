@@ -1,0 +1,33 @@
+{
+  "schema_version": "learned_bank_storage_location_v1",
+  "status": "DRAFT_PENDING_OWNER_DECISION",
+  "approved": false,
+  "date_prepared": "2026-11-22",
+  "document": "Additive storage-location amendment proposal for the M8 learned-method banks (E03, E05, E06b, E06c)",
+  "assessment": "outputs/audit/LEARNED_BANK_AUTHORITY_ASSESSMENT.md section 4",
+  "observed_2026_11_22": {
+    "root_ssd": "Samsung SSD 980 1 TB, /dev/nvme0n1p3 ext4 UUID 227ce2f6-373e-4f13-9cdb-84b911775706, mounted /, holds the runtime root; ~37.3 GB free (97% used) while E04 seed 2026 runs",
+    "external_hdd": "Seagate One Touch w/PW 4 TB USB HDD (tran usb), /dev/sda2 ext4 UUID 608647d2-9cb0-45b0-b999-73c080ba909b, ~3.45 TB free; mounted TWICE: /media/ext_data (root:shared 2775 setgid, shared with other accounts) and a udisks mount /media/student20261/608647d2-9cb0-45b0-b999-73c080ba909b",
+    "runtime_contract": "all physical roots must resolve inside runtime_root (no symlinks); /media/ext_data is outside it",
+    "e01_e02_precedent": "E01/E02 banks were written under <runtime_root>/runs/m6/E0{1,2}/seed_* with a hard 24 GiB free-space floor before every bank (tools/e01_e02_storage_preflight_record.py)"
+  },
+  "need": {
+    "outputs": "12 banks x 8838 = 106056 PNGs (if E06b-Q0 = 8838)",
+    "typical": "~9.1 GiB (E01 measured mean 90 KB/PNG)",
+    "worst_case": "~19.7 GiB (incompressible 256x256x3 PNG); ~4.9 GiB per family",
+    "root_headroom_above_floor": "~10.3 GiB after reserving E04 seed-2026 checkpoint/metrics growth"
+  },
+  "questions": {
+    "L1_bank_root": {
+      "question": "Where are the learned banks written?",
+      "options": {
+        "A_ROOT_SSD_ONE_FAMILY_AT_A_TIME": "keep the existing runtime_root contract unchanged: <runtime_root>/banks/m8/<method>/seed_<s>/ (training run roots stay immutable); before every bank require free >= 24 GiB + that bank's worst-case size and >= 1,000,000 free inodes, else stop BLOCKED_BY_STORAGE. Fits one family in the worst case today; later families depend on free space at the time (the disk is shared with other users)",
+        "B_EXTERNAL_HDD_ADDITIVE_ROOT": "add a second approved physical root for M8 learned banks only: a new owner-created directory /media/ext_data/student20261_gpat_m8_banks (mode 0700, owned by student20261, created by the owner, not by an agent), resolved through the /media/ext_data mount point and verified by filesystem UUID 608647d2-9cb0-45b0-b999-73c080ba909b at every launch (the udisks duplicate mount is never used as a bank path) (refuse if unmounted, different UUID, not ext4, a symlink, or not 0700 owned by student20261); runtime_root keeps its contract for everything else; bank manifests record the physical root, filesystem UUID and device model; downstream bank resolution goes through an explicit bank-root registry file, never a symlink"
+      },
+      "recommended": "B_EXTERNAL_HDD_ADDITIVE_ROOT",
+      "risks_B": "USB HDD can disconnect (a launch and audit gate re-checks UUID and mount); slower writes (~8838 small PNGs per bank are fine on HDD); shared mount (a 0700 private subdirectory isolates the files)"
+    }
+  },
+  "never_authorized_by_this_draft": "mounting, remounting, fstab or permission changes, symlinks, moving existing artifacts, copying E04 checkpoints, deleting other users' files, formatting or partitioning",
+  "activation": "the owner approves by committing configs/amendments/learned_bank_storage_location.yaml with the chosen option, status OWNER_APPROVED, approved true; for option B the owner creates the directory first. This DRAFT stays byte-unchanged."
+}

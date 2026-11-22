@@ -1,0 +1,140 @@
+{
+  "schema_version": "learned_bank_generation_contract_v1",
+  "status": "DRAFT_PENDING_OWNER_DECISION",
+  "approved": false,
+  "date_prepared": "2026-11-22",
+  "document": "M8 learned-method bank-generation contract for E03 STDN, E05 PCGAN, E06b DSDG-NATIVE and E06c DSDG-BIN-IDFREE",
+  "assessment": "outputs/audit/LEARNED_BANK_AUTHORITY_ASSESSMENT.md",
+  "why_this_exists": "The frozen spec (sections 6-8), Amendments A1/A2, the method configs and the approved M8 contracts fix each method's checkpoint, generator graph, inputs and budget (except E06b), but not how a trained generator is turned into a bank: inference mode, latent/noise seeding, float->uint8 conversion, file encoding, the non-pair bank schema for DSDG, the device/reproducibility standard and the S7 bank-stage acceptance. Each choice changes bank pixels. Per M6A1 and the owner directive, none is chosen without an owner ruling.",
+  "already_frozen_not_asked": {
+    "checkpoint_identity": "the approved final checkpoint of generator seed s, hash-verified before use: E03 ckpt-50 (A2-06 clause 1), E05 iteration_4000 (BASELINE_FINAL_STATE_V1), E06b/E06c netG epoch 200 (generated.py:23; A2-06 clause 1). No VAL/TEST-based choice.",
+    "seed_pairing": "bank seed s uses generator seed s (m8_downstream_evaluator_contract.yaml D12 SEED_MATCHED_RAW)",
+    "pair_population": "E03/E05: all 8838 frozen pairs_train_v1 rows in canonical 0-based global position order (spec 6/7; A1 N_syn). E06c: 8838 samples (A1; config n_syn_intended 8838). E06b: see E06b-Q0.",
+    "output_geometry": "one canonical 256x256 RGB uint8 spoof-labelled image per row (spec 7); RAW-MATCHED keeps every finite decodable output; failures are counted, never substituted or duplicated (spec 7, 27)",
+    "e03_graph": "synth = x_live + warping(trace(x_spoof), generate_offset_map(lm_spoof, lm_live)), trace = s*x + b + resize(C) + T (train.py:44-50, dataset.py:142)",
+    "e05_graph": "mix = G(E(x_src).spatial, E(x_tgt).global), x_src = source_spoof, x_tgt = target_live (spec 8.5; methods/pcgan/training_runner.py:63)",
+    "dsdg_graph": "netG = Decoder_s(hdim=128), z = cat(noise_s, noise, noise), sigmoid RGB 256x256 (generated.py:47-54; networks/generator.py:150)",
+    "test_firewall": "TRAIN rows only; TEST rows, files and metadata never read; VAL not read by any bank",
+    "bank_writer_separation": "methods/common/bank_writer.py stays byte-identical (E01/E02 production authority file); learned writers live in a new module"
+  },
+  "questions": {
+    "E03-Q1_inference_mode": {
+      "question": "Which batch-norm mode does STDN Gen use when writing the bank?",
+      "options": {
+        "A_OFFICIAL_TEST_MODE": "Gen(x, training_nn=False): moving statistics from ckpt-50, batch-independent output (official test.py:55, the only official inference entrypoint)",
+        "B_TRAINING_SYNTHESIS_MODE": "Gen(x, training_nn=True) as in the training-time synthesis (train.py:44): batch statistics, output depends on batch composition"
+      },
+      "recommended": "A_OFFICIAL_TEST_MODE"
+    },
+    "E03-Q2_weight_source": {
+      "question": "Restore raw trainable variables or the weight-EMA shadow variables maintained during training (model.py:122)?",
+      "options": {
+        "A_RAW_VARIABLES": "tf.train.Saver() restore of the raw variables, exactly as official test.py:58",
+        "B_EMA_SHADOW": "restore ExponentialMovingAverage shadows; no official code path does this"
+      },
+      "recommended": "A_RAW_VARIABLES"
+    },
+    "E03-Q3_inference_augmentation": {
+      "question": "Are the training-time brightness change and horizontal flip applied to bank inputs?",
+      "options": {
+        "A_NONE": "canonical RGB256/255 inputs unchanged; landmarks from e03_feed_pack_v1 unflipped",
+        "B_TRAINING_AUGMENTATION": "replay the training parser randomness (needs its own seed rule)"
+      },
+      "recommended": "A_NONE"
+    },
+    "E03-Q5_auxiliary_outputs": {
+      "question": "Write STDN trace maps alongside the bank?",
+      "options": {
+        "A_NONE": "bank holds only the synthetic spoof (spec 8.3 'output only the synthetic spoof direction')",
+        "B_TRACE_DIAGNOSTICS": "also write the warped trace as a float16 .npy edit map per row (~0.4 MB each, ~3.5 GB per bank)"
+      },
+      "recommended": "A_NONE"
+    },
+    "E05-Q1_stylegan_noise": {
+      "question": "The PCGAN generator (StyleGAN2 basis) draws fresh Gaussian noise on every forward (stylegan2_layers.py:342). How is it seeded at bank time?",
+      "options": {
+        "A_PER_PAIR_SEEDED": "immediately before each pair's single mix forward, torch.manual_seed(pair_seed) with pair_seed = int.from_bytes(sha256(b'GPAT_TRANSFERBENCH|E05|BANK|' + str(seed) + '|' + pair_id).digest()[:8], 'big') mod (2^31 - 1); order-independent and resumable",
+        "B_SEQUENTIAL_STREAM": "torch.manual_seed(seed) once, pairs in global position order; byte identity depends on processing order",
+        "C_ZERO_NOISE": "pass zero noise; changes the trained generator's behaviour (not recommended)"
+      },
+      "recommended": "A_PER_PAIR_SEEDED"
+    },
+    "DSDG-Q1_latent_stream": {
+      "question": "Official generated.py samples unseeded CPU noise in batches of 100 (identity noise first, then spoof noise). How is the bank latent stream defined?",
+      "options": {
+        "A_OFFICIAL_BATCHES_SEEDED": "g = torch.Generator().manual_seed(bank_seed) with bank_seed = int.from_bytes(sha256(b'GPAT_TRANSFERBENCH|<E06b|E06c>|BANK|' + str(seed)).digest()[:8], 'big') mod (2^31 - 1); per batch of 100: noise = randn(100,128, generator=g), noise_s = randn(100,128, generator=g), z = cat(noise_s, noise, noise); ceil(N/100) batches; keep the first N samples in order (the discarded tail is counted in provenance)",
+        "B_PER_SAMPLE_SEEDED": "one generator per synthetic index i (seed from sha256 of method|seed|i), same draw order inside the sample; batch-composition independent but not the official stream structure"
+      },
+      "recommended": "A_OFFICIAL_BATCHES_SEEDED"
+    },
+    "DSDG-Q2_output_half": {
+      "question": "Decoder_s emits a (spoof, live) pair. Which half enters the bank?",
+      "options": {
+        "A_SPOOF_ONLY": "channels 0:3 (generated.py:54 'spoof'), labelled spoof; the live half is discarded and not stored",
+        "B_SPOOF_PLUS_LIVE_SIDECAR": "store the live half too as a non-bank diagnostic"
+      },
+      "recommended": "A_SPOOF_ONLY"
+    },
+    "DSDG-Q4_bank_identity": {
+      "question": "DSDG does not consume the pair manifest (spec 6, 8.6). What identifies a bank row?",
+      "options": {
+        "A_SYNTHETIC_ID": "synthetic_id = '<method>_S<seed>_<index:06d>' (0-based stream index); pair_id, target_live_id and source_spoof_id are null; pairwise metrics N/A; N_common subsampling hashes synthetic_id (spec 7)",
+        "B_POSITIONAL_PAIR_ID": "label sample i with pairs_train_v1 position i's pair_id although the pair is not consumed (misleading; not recommended)"
+      },
+      "recommended": "A_SYNTHETIC_ID"
+    },
+    "E06b-Q0_n_syn": {
+      "question": "E06b's budget was deferred to M8 (configs/methods/e06b_dsdg_native.yaml generation.n_syn_intended = DEFERRED_TO_M8). Which N_syn?",
+      "options": {
+        "A_POOLED_8838": "spec 7 / 8.6 'generate exactly N_syn samples', N_syn = TRAIN spoof frames = 8838, the same budget as every other method",
+        "B_NATIVE_COVERAGE_3720": "the CASIA+MSU TRAIN spoof rows E06b was trained on (Track B coverage); a different budget from the primary table"
+      },
+      "recommended": "A_POOLED_8838",
+      "note": "Track B is secondary and its rows always carry a track column (A1)."
+    },
+    "Q4_float_to_uint8": {
+      "question": "How is each generator's float output turned into canonical uint8?",
+      "options": {
+        "A_SOURCE_IMAGE_WRITER": "use each pinned source's own image writer, which clips then truncates: E03 clip [0,1], cast(x*255, uint8) (model/utils.py:24,37); E05 clip((x+1)/2*255, 0, 255).astype(uint8) (swapping_autoencoder util/util.py:125-131); E06b/E06c (255*x).astype(uint8) on the sigmoid output (generated.py:63)",
+        "B_CLIP_THEN_RINT": "the E02 benchmark rule (owner-approved Q3 CONFIRM_CLIP_THEN_RINT for E02): clip to the valid range, scale, numpy.rint, cast"
+      },
+      "recommended": "A_SOURCE_IMAGE_WRITER",
+      "note": "The two differ by at most 1 LSB per channel. Pick one per method; the recommendation follows the source-of-truth hierarchy in spec 8."
+    },
+    "C-Q1_encoding": {
+      "question": "Output file encoding?",
+      "options": {
+        "A_PNG_LOSSLESS": "PNG via the same writer settings as the E01/E02 banks; pixel SHA256 and file SHA256 recorded (canonical uint8 preserved exactly)",
+        "B_OFFICIAL_JPEG_FOR_DSDG": "JPEG as in generated.py:65 for E06b/E06c (lossy; changes stored pixels)"
+      },
+      "recommended": "A_PNG_LOSSLESS"
+    },
+    "C-Q2_device_and_reproducibility": {
+      "question": "Where does inference run and what reproducibility is required?",
+      "options": {
+        "A_GPU_FP32_BITWISE_REPLAY": "the 3090 in each method's locked environment; FP32, TF32 off, cudnn.benchmark False / deterministic (overrides the official DSDG cudnn.benchmark=True as a determinism control only); acceptance requires a bitwise-identical replay of the S7 toy bank in a fresh root. If the replay is not bitwise: STOP, no weakening",
+        "B_GPU_PROCEDURAL": "as A, but accept procedural reproducibility (identical inputs, seeds, checkpoints and code; pixel differences bounded and disclosed), as E03/E04 training did",
+        "C_CPU": "CPU inference; slower and a different numeric path from the training device"
+      },
+      "recommended": "A_GPU_FP32_BITWISE_REPLAY"
+    },
+    "C-Q3_s7_bank_stage_acceptance": {
+      "question": "What is each learned method's S7 bank-stage acceptance (m8_smoke_test_contract.yaml S7)?",
+      "options": {
+        "A_TOY_TWO_RUN_BITWISE": "per method and seed 42/1337/2026: E03/E05 generate the 186 S6 toy pairs at their frozen global positions; E06b/E06c generate stream indices 0..185 of the production stream; run twice in fresh roots on the production device and environment; gates: checkpoint and config hashes, 0 failures, finite, 256x256x3 uint8, manifest schema, file and pixel hashes, bank-reader verification, bitwise replay (C-Q2), TRAIN-only O_NOATIME reads, no VAL/TEST access, checkpoints unmodified (hash before and after), no optimizer and no gradient. The toy outputs must later equal the corresponding production rows byte for byte (checked by each production audit)",
+        "B_SYNTHETIC_FIXTURE_ONLY": "no real faces before production; acceptance = synthetic fixtures only"
+      },
+      "recommended": "A_TOY_TWO_RUN_BITWISE"
+    },
+    "C-Q5_gpu_timing": {
+      "question": "When may learned-bank GPU inference (S7 acceptance, then production) run?",
+      "options": {
+        "A_AFTER_E04_COMPLETES": "only after E04 seed 2026 exits and its completion audit is closed; one GPU job at a time (roadmap rule)",
+        "B_CONCURRENT_LOW_PRIORITY": "allow inference beside E04 (each inference process is expected to use ~1-4 GB; the 3090 is already shared by 3 unrelated jobs)"
+      },
+      "recommended": "A_AFTER_E04_COMPLETES"
+    }
+  },
+  "unblocks_on_approval": "implementation of the four inference adapters and the learned bank writer/reader in new modules, CPU synthetic-fixture qualification, then (per C-Q5) the S7 toy acceptance runs. It never authorizes full production banks, downstream training, TEST access or GPAT; each production family needs its own later authority record.",
+  "activation": "the owner approves by committing configs/amendments/learned_bank_generation_contract.yaml with one option per question, status OWNER_APPROVED, approved true. This DRAFT stays byte-unchanged."
+}
