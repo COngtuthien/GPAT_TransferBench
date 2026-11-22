@@ -24,8 +24,10 @@ DISCLOSURES = {
     "E01": [
         "Official RizhaoCai/FAS-Aug@0da1dd79 operators, round-robin operator_set[position % 8] over the frozen pair order "
         "(owner ruling Q2), per-pair operator seed SHA256(pair_id + seed) mod 2^31 (A2-05), NUM_MAG 10 grid.",
-        "Magnitude level 0 is retained: some outputs are unchanged copies of the live target (counts per seed below); "
-        "they are not substituted or removed.",
+        "Magnitude level 0 is retained: some outputs are unchanged copies of the live target (per_seed "
+        "level_zero_noop_count; each was verified pixel-identical to its target); they are not substituted or removed.",
+        "Duplicate output pixels: frozen pairs reuse live targets, so level-0 copies of the same target are identical "
+        "(per_seed duplicate_output_pixel_groups); every row is kept, as spec section 7 requires.",
         "Cross-environment variation: in M6 qualification 3/72 synthetic Hand_Trembling outputs differed by <= 1 LSB "
         "between the laptop .venv and gpat-m5. These banks were generated and replayed only under gpat-m5, and "
         "byte identity on other stacks is not claimed.",
@@ -134,6 +136,9 @@ def main(argv=None) -> int:
           "| seed | run_id | outputs | bank manifest SHA256 | audit |", "|---|---|---|---|---|"]
     md += [f"| {s} | `{v['run_id']}` | {v['output_count']} | `{v['bank_manifest_sha256']}` | {v['audit_gates']} |"
            for s, v in seeds.items()]
+    if m == "E01":
+        md += ["", "| seed | level-0 no-op copies | duplicate-pixel groups |", "|---|---|---|"] + \
+            [f"| {s} | {v['level_zero_noop_count']} | {v['duplicate_output_pixel_groups']} |" for s, v in seeds.items()]
     md += ["", "Disclosures:"] + [f"- {d}" for d in DISCLOSURES[m]] + ["", "Remaining:"] + [f"- {x}" for x in REMAINING]
     prefix.with_suffix(".md").write_text("\n".join(md) + "\n")
     print(json.dumps({"status": record["status"], "total_outputs": record["total_outputs"]}))
