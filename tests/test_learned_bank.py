@@ -537,3 +537,23 @@ class CLI(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class FixtureQualificationEvidence(unittest.TestCase):
+    """Pins the committed CPU fixture-qualification evidence (b09a1cc); never a substitute for S7."""
+    EXPECTED = {'DSDG': 60, 'E05': 33, 'E03': 32}
+
+    def test_evidence(self):
+        sums = (ROOT / 'outputs/audit/LEARNED_BANK_FIXTURE_QUALIFICATION_SHA256.txt').read_text().split('\n')
+        listed = dict(reversed(line.split('  ')) for line in sums if line.strip())
+        for fam, n in self.EXPECTED.items():
+            rel = 'outputs/audit/LEARNED_BANK_FIXTURE_QUALIFICATION_%s.json' % fam
+            self.assertEqual(sha(ROOT / rel), listed[rel])
+            d = json.loads((ROOT / rel).read_text())
+            self.assertEqual((d['gates_passed'], d['gates_total'], d['failed_gates']), (n, n, []))
+            self.assertEqual(d['label'], 'SYNTHETIC_FIXTURE_QUALIFICATION_NOT_S7_NOT_BENCHMARK')
+            self.assertIs(d['gpu_bitwise_reproducibility_proven'], False)
+            self.assertTrue(d['git_head'].startswith('b09a1cc'))
+            self.assertEqual(d['environment']['cuda_visible_devices'], '')
+            self.assertEqual(d['gates']['zero_opens_under_runtime_data']['detail']['runtime_data'], 0)
+            self.assertIsNone(d['error'])
