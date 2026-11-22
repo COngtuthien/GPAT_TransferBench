@@ -19,14 +19,23 @@ class TestFirewallViolation(RuntimeError):
     __test__ = False   # not a unittest case
 
 
-def load_split_lookup(root: str | Path) -> dict[str, str]:
-    """sample_id -> split from the frozen split manifest, hash-checked before parsing (two columns only)."""
+def read_permitted_rows(root: str | Path, columns: list[str]) -> list[dict]:
+    """TRAIN/VAL rows of the frozen split manifest, hash-checked before parsing. TEST rows are removed by the parquet
+    reader's row filter, so no TEST row or TEST metadata value reaches Python code."""
     import pyarrow.parquet as pq
     p = Path(root) / SPLIT_MANIFEST
     if hashlib.sha256(p.read_bytes()).hexdigest() != SPLIT_MANIFEST_SHA256:
         raise TestFirewallViolation("split manifest SHA256 differs from the frozen value")
-    t = pq.read_table(p, columns=["sample_id", "split"]).to_pydict()
-    return dict(zip(t["sample_id"], t["split"]))
+    cols = list(dict.fromkeys(list(columns) + ["split"]))
+    rows = pq.read_table(p, columns=cols, filters=[("split", "in", sorted(PERMITTED))]).to_pylist()
+    if {r["split"] for r in rows} - PERMITTED:
+        raise TestFirewallViolation("row filter let a non-permitted split through")
+    return rows
+
+
+def load_split_lookup(root: str | Path) -> dict[str, str]:
+    """sample_id -> split for TRAIN/VAL samples only (allowlist). A TEST sample is simply unknown and refused."""
+    return {r["sample_id"]: r["split"] for r in read_permitted_rows(root, ["sample_id"])}
 
 
 def assert_allowed(sample_ids: Iterable[str], lookup: dict[str, str], allowed: Iterable[str]) -> dict:

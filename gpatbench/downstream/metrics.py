@@ -12,8 +12,11 @@ Conventions fixed by the spec or by the frozen data contract:
 
 The scores passed here are SPOOF scores (higher = more spoof-like). Which network output is the spoof score is part
 of the evaluator contract, not of this module. The comparison at the threshold (>= or >) is not fixed by the spec:
-every function that turns a score into a decision takes `rule` explicitly and has no default. ACER comparisons use
-exact rationals so that ties are decided exactly; a tie the spec does not break raises UnresolvedThresholdTie.
+every function that turns a score into a decision takes `rule` explicitly and has no default (the owner-selected D4
+value is supplied by the approved evaluator contract, never by this module). ACER comparisons use exact rationals so
+that ties are decided exactly; a tie the spec does not break raises UnresolvedThresholdTie. EER (D7), spoof F1 (D8)
+and frame-level rates at the video threshold (D9) follow the owner-selected evaluator directions; TPR@FPR and the
+SiW-Mv2 raw-type rule are not implemented until their exact rules are approved.
 """
 from __future__ import annotations
 
@@ -192,6 +195,48 @@ def apply_frozen_threshold(videos: Sequence[dict], threshold: float, *, rule: st
     for m in sorted({v.get("attack_macro") for v in videos if v["y_true"] == SPOOF}, key=str):
         idx = [i for i, v in enumerate(videos) if v["y_true"] == SPOOF and v.get("attack_macro") == m]
         out["apcer_by_attack_macro"][m] = Fraction(sum(1 for i in idx if pred[i] == LIVE), len(idx))
+    return out
+
+
+def eer_linear_interpolation(y_true: Sequence[int], scores: Sequence[float], *, rule: str) -> Fraction:
+    """EER, owner-selected D7 LINEAR_INTERPOLATION (final contract approval pending).
+
+    Over the section-15 threshold candidates in ascending order, APCER is non-decreasing and BPCER non-increasing,
+    so d = APCER - BPCER is non-decreasing. If some candidate has d = 0, EER = APCER there (all such candidates
+    share that value). Otherwise take the adjacent candidates i, i+1 with d_i < 0 < d_{i+1}, interpolate APCER and BPCER
+    linearly between the two operating points and return the value at their crossing. Exact rationals."""
+    pts = curve_points(y_true, scores, rule=rule)
+    if any(p["APCER"] is None or p["BPCER"] is None for p in pts):
+        raise MetricError("EER needs live and spoof samples")
+    d = [p["APCER"] - p["BPCER"] for p in pts]
+    if any(b < a for a, b in zip(d, d[1:])):
+        raise MetricError("APCER - BPCER is not monotone over the candidates")
+    zero = {p["APCER"] for p, di in zip(pts, d) if di == 0}
+    if zero:
+        if len(zero) != 1:
+            raise MetricError("several EER values at d = 0")
+        return zero.pop()
+    for (p0, d0), (p1, d1) in zip(zip(pts, d), zip(pts[1:], d[1:])):
+        if d0 < 0 < d1:
+            alpha = (p0["BPCER"] - p0["APCER"]) / ((p1["APCER"] - p0["APCER"]) - (p1["BPCER"] - p0["BPCER"]))
+            return p0["APCER"] + alpha * (p1["APCER"] - p0["APCER"])
+    raise MetricError("APCER and BPCER do not cross over the candidates")
+
+
+def f1_spoof(y_true: Sequence[int], pred: Sequence[int]):
+    """F1 of the spoof class (owner-selected D8 SPOOF_POSITIVE): 2TP / (2TP + FP + FN); None (N/A) if undefined."""
+    c = confusion_counts(y_true, pred)
+    tp = c["n_spoof"] - c["spoof_pred_live"]
+    denom = 2 * tp + c["live_pred_spoof"] + c["spoof_pred_live"]
+    return Fraction(2 * tp, denom) if denom else None
+
+
+def frame_level_rates(frames: Sequence[dict], video_threshold: float, *, rule: str) -> dict:
+    """Frame-level diagnostics (T08) at the frozen VIDEO threshold (owner-selected D9 VIDEO_THRESHOLD)."""
+    y = [f["y_true"] for f in frames]
+    pred = predict_spoof([f["p_frame"] for f in frames], video_threshold, rule=rule)
+    out = rates_from_counts(confusion_counts(y, pred))
+    out["F1_spoof"] = f1_spoof(y, pred)
     return out
 
 

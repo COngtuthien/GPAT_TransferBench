@@ -11,7 +11,8 @@ the downstream contract the frozen spec resolves:
 - `plots`: the §26 rule that plot inputs must not hold unmeasured placeholders;
 - `smoke_evidence`: the validator a future M8 smoke-test record must pass.
 
-Unresolved choices are never defaulted. The decision operator at the threshold is a required argument; EER, TPR@FPR,
-F1, the frame-level threshold and the SiW-Mv2 raw-type coverage rule are not implemented because the spec does not
-fix them (see outputs/audit/M8_DOWNSTREAM_READINESS_ASSESSMENT.md).
+Unresolved choices are never defaulted. The decision operator at the threshold is a required argument. EER (D7),
+spoof F1 (D8) and frame-level rates at the video threshold (D9) follow the owner-selected evaluator directions;
+TPR@FPR and the SiW-Mv2 raw-type coverage rule (D10) wait for their exact rules to be approved
+(outputs/audit/M8_CONTRACT_FINALIZATION.md). `toy_subset` plans the toy subset from TRAIN/VAL metadata only.
 """
