@@ -1,0 +1,121 @@
+{
+  "schema_version": "m8_smoke_test_contract_v1",
+  "status": "OWNER_APPROVED",
+  "approved": true,
+  "date_prepared": "2026-11-22",
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_M8_Smoke_Test_Contract_Owner_Approval_Addendum.md",
+  "based_on": {
+    "configs/amendments/m8_smoke_test_contract.DRAFT.yaml": "1e3eef541be642a08b871409a1c09f4187c83d6990c14e7da86df41e4a4eb2a7",
+    "configs/amendments/m8_smoke_test_s1_owner_decision.yaml": "b07796b171b75ced06ea452049b6e992a0e344a9f92f2abc03c872bf0da8b66c",
+    "outputs/audit/M8_TOY_SUBSET_FEASIBILITY.json": "33d4533af4b151fba3ef0a3c9514c99f43d8b3d5b3efa0ed4e09a33bfb160718",
+    "evaluator_contract": "configs/amendments/m8_downstream_evaluator_contract.FINAL_DRAFT.yaml (approved together)"
+  },
+  "decisions": {
+    "S1_scope": "A_GLOBAL_END_TO_END",
+    "S2_class_definition": "BINARY_LABEL_PER_DATASET",
+    "S3_siwmv2_subject_unit": "CONTENT_GROUP_ID",
+    "S4_selection_rule": "HASH_RANK",
+    "S5_splits_and_test": "TRAIN_VAL_ONLY_TEST_PROXY",
+    "S6_bank_pair_population": "FROZEN_PAIRS_TARGET_IN_TOY",
+    "S7_methods_covered": "ALL_METHODS_WITH_BANK_WRITERS",
+    "S8_evaluator_budget_and_environment": "SMOKE_SCHEDULE_CPU",
+    "S9_determinism_criterion": "BITWISE_ALL_STAGES",
+    "S10_seeds": "ALL_THREE_BANK_SEED42_EVALUATOR"
+  },
+  "pinned_execution_details": {
+    "S2": "class = label_binary (0 live, 1 spoof) within each of casia_fasd, msu_mfsd, siwmv2; a selected unit contributes only the frames of the class it was selected for",
+    "S3": "siwmv2 unit = content_group_id (DEV-012 video-content allocation unit). DISCLOSURE: a SiW-Mv2 content group is NOT a subject identity; every smoke record and table calls it 'content group'. casia_fasd/msu_mfsd unit = subject_id_global (must be non-null)",
+    "S4": "within (dataset, split, label_binary) units ascend by SHA256(UTF-8('gpatbench.smoke.v1|'+dataset+'|'+split+'|'+str(label_binary)+'|'+unit_id)) hex. TRAIN: first 2 eligible per class; a live unit is eligible only if it is the target of >= 1 frozen pairs_train_v1 pair (skips recorded). VAL select: first 2 per class. Any shortfall is a blocker; no fallback or substitution",
+    "S5": "VAL holdout (simulated TEST stage) = first 2 units per class in the same order excluding every unit in VAL select of either class, so select and holdout share no unit. VAL select is used only for checkpoint and threshold selection; VAL holdout is scored exactly once with the frozen threshold. TEST rows, files and metadata are never read: split rows are read through a TRAIN/VAL parquet row filter (gpatbench/downstream/firewall.read_permitted_rows)",
+    "S6": "toy pairs = frozen pairs_train_v1 rows whose target unit is a TRAIN live toy unit, with canonical 0-based global positions (E01 operator = position % 8); sources may lie outside the toy units and are TRAIN by construction. Feasibility record: 186 pairs (casia 141, msu 27, siwmv2 18), all 8 E01 operators covered",
+    "S7": "the initial global smoke uses the implemented E01 and E02 bank writers only. Each learned method (E03-E06c) must pass its own bank-stage acceptance before its full production bank. GPAT is not authorized",
+    "S8": "CPU smoke schedule below (SMOKE_NON_SCIENTIFIC); banks in gpat-m5 (Q4), evaluator/metrics/plots in gpat-m8-downstream; isolated clean clone on the GPU host at the smoke authority commit; nice 19, ionice idle, CUDA_VISIBLE_DEVICES empty; never the E04 checkout",
+    "S9": "BITWISE_ALL_STAGES applies only if environment check V4 (two-process CPU training determinism) passes. Then the full smoke runs twice in fresh roots and every bank file, bank manifest, prediction file, metrics table and plot input table must be byte-identical (PNG bytes too if V5 passed). If V4 or the replay fails: STOP and report the reproducibility limitation; the criterion is not weakened without a new owner decision",
+    "S10": "banks: E01 and E02 for seeds 42, 1337, 2026 over the 186 toy pairs; evaluator: detector seed 42 only (E00 real-only, E01 with bank seed 42, E02 with bank seed 42)"
+  },
+  "smoke_schedule_SMOKE_NON_SCIENTIFIC": {
+    "label": "SMOKE_NON_SCIENTIFIC; never reported as a result; outputs only under a dedicated smoke root",
+    "detectors": [
+      "E00 real-only (32 live + 32 real spoof)",
+      "E01 mixed (32 live + 16 real spoof + 16 E01 synthetic, bank seed 42)",
+      "E02 mixed (same with E02 synthetic, bank seed 42)"
+    ],
+    "batch_composition": "unchanged frozen full batches; feasibility shows 3 full LIVE_PASS batches per epoch with no replacement needed (96 live, 256 real spoof, 186 synthetic per bank)",
+    "epochs": 2,
+    "steps_per_epoch": 3,
+    "warmup": "1 epoch (3 steps) under the D6 formula; cosine over steps 3-5 to min_lr 1e-6",
+    "exceptions_to_frozen_config": {
+      "epochs": "2 instead of 40",
+      "warmup_epochs": "1 instead of 3",
+      "amp": "off (CPU; D13)"
+    },
+    "unchanged": "architecture, ImageNet weights f37072fd..., loss, batch composition, AdamW, both learning rates, weight decay, gradient clip, augmentation, D2 eval resize, checkpoint and threshold rules",
+    "val_protocol": "VAL select (12 live / 32 spoof videos) evaluated after each epoch; checkpoint by D5; threshold by section 15 on the selected epoch's VAL-select video scores; VAL holdout (12 live / 33 spoof videos) predicted once",
+    "restoration": "production and scientific runs use the frozen 40 epochs, 3 warmup epochs and AMP on CUDA; the exception has no effect outside the smoke root"
+  },
+  "acceptance_gates": {
+    "preconditions": [
+      "this contract and the evaluator contract OWNER_APPROVED",
+      "gpat-m8-downstream created and V1-V6 passed (environments/m8_downstream.planned.json)",
+      "the toy plan re-derived at run time equals outputs/audit/M8_TOY_SUBSET_FEASIBILITY.json in roles, pooled, toy_pairs and feasibility",
+      "clean isolated clone; source and config hashes recorded"
+    ],
+    "generator_bank": [
+      "E01 and E02 x 3 seeds: 186 rows each, 0 failures, bank file verification and full replay pass",
+      "E01 operator = position % 8 and A2-05 seeds; E02 k = 40, n_eligible = 159, residual <= 1e-8",
+      "every face read is TRAIN and hash-verified against M2"
+    ],
+    "evaluator": [
+      "frozen config and weight hashes",
+      "every optimizer step has exactly the frozen batch composition",
+      "6 steps per detector; per-step learning rates equal the D6 formula",
+      "losses and logits finite",
+      "VAL select evaluated after each epoch; checkpoint and threshold selected per D5 and section 15",
+      "VAL holdout predicted exactly once; prediction files pass gpatbench/downstream/schemas.validate_prediction_rows"
+    ],
+    "metrics": [
+      "video and frame tables computed only from prediction files; an independent recomputation path gives identical values",
+      "APCER/BPCER/ACER/AUC/EER/F1/accuracy/balanced accuracy/TPR@FPR per the evaluator contract; dataset-wise and attack_macro tables; SiW-Mv2 raw-type table per D10; undefined cells N/A, never filled"
+    ],
+    "plots": [
+      "fig14-fig20 and fig24 rendered from those tables only",
+      "gpatbench/downstream/plots.validate_plot_table(template_mode=False) passes for every input"
+    ],
+    "global": [
+      "S9 replay identity",
+      "TEST firewall: 0 TEST rows, ids or files (row filter, allowlist and an audit hook over file opens)",
+      "the record passes gpatbench/downstream/smoke_evidence.validate_smoke_record",
+      "independent re-derivation of the record from raw outputs"
+    ]
+  },
+  "out_of_smoke_scope": {
+    "subject_bootstrap_CI": "section 18 / M13 statistics; CI cells are N/A in smoke tables",
+    "dinov3": "D11 RESNET18_ONLY_IN_SMOKE; M11",
+    "learned_method_banks": "S7"
+  },
+  "authorizes_on_approval": "implementation of the remaining smoke components and, after V1-V6, one smoke execution plus its replay; it never authorizes production banks, scientific training, TEST access or binding",
+  "activation": "the owner approves by committing configs/amendments/m8_smoke_test_contract.yaml with this content and status OWNER_APPROVED, approved true (governance fields only changed)",
+  "approval_date": "2026-11-22",
+  "approved_final_draft": {
+    "path": "configs/amendments/m8_smoke_test_contract.FINAL_DRAFT.yaml",
+    "commit": "60b50efea6c3f7a71ad7a5bf3e3cff7de1340614",
+    "sha256": "2f96f8a8b7e737c3ada09554ae0cc8a1d4a07f4e0601479cf101e9499ecb7dc4"
+  },
+  "owner_ruling": "The owner approves the smoke FINAL_DRAFT at 60b50ef exactly: S1-S10 as listed, the pinned execution details (rank key bytes, frozen global positions, live-unit eligibility, skip/shortfall rules, disjoint VAL select/holdout, no TEST access, SiW-Mv2 content-group disclosure, 186 toy pairs subject to re-derivation, E01/E02 toy banks at three seeds, E00/E01/E02 at detector seed 42, 2 epochs x 3 steps, 1 warmup epoch, frozen full batches, CPU without AMP, separate runtime roots, SMOKE_NON_SCIENTIFIC, bootstrap CI out of scope). The smoke schedule never replaces the frozen 40-epoch schedule; S7 does not authorize learned-method production banks.",
+  "confirmed_items": [
+    "the S8 smoke schedule (2 epochs, 1 warmup epoch, detectors E00/E01/E02 at seed 42)",
+    "the S4/S5 pins (rank key bytes, live-unit eligibility, holdout exclusion across classes, shortfall = blocker)",
+    "subject bootstrap CI out of smoke scope"
+  ],
+  "authorizes": {
+    "smoke_implementation": true,
+    "smoke_environment_gpat_m8_downstream_six_wheels": true,
+    "one_smoke_execution_and_one_replay": true,
+    "production_banks": false,
+    "scientific_downstream_training": false,
+    "test_access": false,
+    "gpat": false,
+    "dinov3_execution": false,
+    "production_binding": false
+  }
+}
