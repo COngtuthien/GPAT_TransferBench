@@ -28,11 +28,11 @@ class SyntheticSample:
     y_true: int = 1
 
 
-def read_verified_bank(run_dir: str | Path, method_id: str, seed: int) -> dict:
+def read_verified_bank(run_dir: str | Path, method_id: str, seed: int, *, global_positions: bool = False) -> dict:
     run_dir = Path(run_dir)
     if method_id not in bw.METHODS:
         raise BankReadError(f"no bank reader contract for {method_id!r}")
-    integrity = bw.verify_bank_files(run_dir, method_id)
+    integrity = bw.verify_bank_files(run_dir, method_id, global_positions=global_positions)
     if not integrity["ok"]:
         raise BankReadError(f"bank verification failed: {integrity['problems'][:5]}")
     rows = bw.read_manifest(run_dir)

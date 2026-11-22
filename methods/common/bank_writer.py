@@ -11,7 +11,10 @@ file is absent, unapproved, incomplete or deviates from the approved decisions, 
 raises `BankBlocked` with status `E01_E02_BLOCKED_BY_MILESTONE_RULING`. With the approved ruling, it raises
 `BankBlocked` with status `E01_E02_BLOCKED_BY_M8_SMOKE_GATE` until a committed, hash-verified M8 deterministic
 smoke-test record with smoke_test_passed true is bound in the ruling (M6D6jR O3). QUALIFICATION authorizations exist
-only for synthetic fixtures and never accept the production faces root.
+only for synthetic fixtures and never accept the production faces root. SMOKE authorizations (M8 global smoke) need
+the owner-approved configs/amendments/m8_smoke_test_contract.yaml; they accept only the toy population or a synthetic
+smoke fixture, keep canonical global pair positions, read faces with O_NOATIME and write only under a separate smoke
+root. The production CLI (tools/e01_e02_bank.py) never constructs a SMOKE authorization.
 
 Inputs. Pairs come from the frozen `manifests/pairs_train_v1.parquet` (SHA256 checked before parse, every row TRAIN,
 pair_ids ascending and unique, N rows = n_syn_intended). Every referenced sample must be TRAIN in `split_v1` and
@@ -60,6 +63,8 @@ E02_QUANTIZATION = "CONFIRM_CLIP_THEN_RINT"
 APPROVED_MILESTONE_OPTION = "A_M8_SMOKE_GATED"
 APPROVED_E01_ORDINAL = "MANIFEST_POSITION_ZERO_BASED"
 METHODS = ("E01", "E02")
+SMOKE_CONTRACT_PATH = "configs/amendments/m8_smoke_test_contract.yaml"
+SMOKE_KINDS = ("SMOKE_TOY_POPULATION", "SMOKE_SYNTHETIC_FIXTURE")
 PAIR_ID_RE = re.compile(r"^PTR\d{6}$")
 CANONICAL = 256
 PNG_COMPRESS_LEVEL = 6
@@ -168,6 +173,38 @@ def qualification_authorization(label: str, e01_round_robin_ordinal: str = "MANI
                          milestone_option=None, ruling_path=None, ruling_sha256=None, label=label)
 
 
+def smoke_authorization(path: str | Path | None = None) -> Authorization:
+    """M8 smoke authorization from the owner-approved smoke contract (S6 frozen pairs, S7 implemented bank writers)."""
+    p = Path(path) if path is not None else ROOT / SMOKE_CONTRACT_PATH
+    if p.name.endswith((".DRAFT.yaml", ".FINAL_DRAFT.yaml")) or not p.is_file():
+        raise BankBlocked(f"M8_SMOKE_CONTRACT_NOT_APPROVED: no approved contract at {p}", "M8_SMOKE_CONTRACT_NOT_APPROVED")
+    raw = p.read_bytes()
+    c = json.loads(raw)
+    d = c.get("decisions") or {}
+    if (c.get("status") != "OWNER_APPROVED" or c.get("approved") is not True
+            or d.get("S6_bank_pair_population") != "FROZEN_PAIRS_TARGET_IN_TOY"
+            or d.get("S7_methods_covered") != "ALL_METHODS_WITH_BANK_WRITERS"):
+        raise BankBlocked("M8_SMOKE_CONTRACT_NOT_APPROVED: contract not approved or not the approved decisions",
+                          "M8_SMOKE_CONTRACT_NOT_APPROVED")
+    return Authorization(mode="SMOKE", e01_round_robin_ordinal=APPROVED_E01_ORDINAL, milestone_option=None,
+                         ruling_path=str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p),
+                         ruling_sha256=sha256_bytes(raw), label="m8_smoke")
+
+
+def read_bytes_noatime(path: Path) -> bytes:
+    """Read a file without updating its atime (O_NOATIME), so smoke reads never disturb atime-based firewalls."""
+    fd = os.open(path, os.O_RDONLY | os.O_NOATIME)
+    try:
+        chunks = []
+        while True:
+            b = os.read(fd, 1 << 20)
+            if not b:
+                return b"".join(chunks)
+            chunks.append(b)
+    finally:
+        os.close(fd)
+
+
 # ============================================================== inputs
 @dataclasses.dataclass(frozen=True)
 class PairRow:
@@ -184,13 +221,19 @@ class BankInputs:
     def __init__(self, *, pairs: list[PairRow], faces_root: str | Path, face_sha256: dict[str, str],
                  sample_split: dict[str, str], sample_dataset: dict[str, str], provenance: dict):
         self.faces_root = Path(faces_root)
+        self.smoke = provenance.get("kind") in SMOKE_KINDS
         require(self.faces_root.is_dir() and not self.faces_root.is_symlink(), f"faces root {self.faces_root}")
         self.pairs = list(pairs)
         require(self.pairs, "empty pair population")
         ids = [r.pair_id for r in self.pairs]
         require(len(set(ids)) == len(ids), "duplicate pair_id")
         require(ids == sorted(ids), "pairs are not in ascending pair_id order")
-        require([r.position for r in self.pairs] == list(range(len(self.pairs))), "positions are not 0..N-1")
+        positions = [r.position for r in self.pairs]
+        if self.smoke:      # canonical global positions of a frozen sub-population (S6)
+            require(all(isinstance(x, int) and x >= 0 for x in positions)
+                    and all(a < b for a, b in zip(positions, positions[1:])), "smoke positions not strictly increasing")
+        else:
+            require(positions == list(range(len(self.pairs))), "positions are not 0..N-1")
         for r in self.pairs:
             require(PAIR_ID_RE.match(r.pair_id) is not None, f"non-TRAIN pair id {r.pair_id!r}")
             for sid in (r.target_live_id, r.source_spoof_id):
@@ -214,7 +257,7 @@ class BankInputs:
         require(sample_id in self.face_sha256, f"sample {sample_id} is outside the verified population")
         p = self.face_path(sample_id)
         try:
-            raw = p.read_bytes()
+            raw = read_bytes_noatime(p) if self.smoke else p.read_bytes()
         except OSError as exc:
             raise BankError(f"face unreadable {sample_id}: {exc}") from exc
         self.opened.append(sample_id)
@@ -268,6 +311,47 @@ def production_inputs(runtime_root: str | Path, config: dict) -> BankInputs:
                                   "split_manifest": SPLIT_PATH, "split_manifest_sha256": data["split_manifest_sha256"],
                                   "m2_accounting": M2_ACCOUNTING_PATH, "m2_accounting_sha256": M2_ACCOUNTING_SHA256,
                                   "faces_root": str(faces_root), "pairs": n, "referenced_samples": len(referenced)})
+
+
+def smoke_toy_inputs(runtime_root: str | Path, config: dict, positions: list[int]) -> BankInputs:
+    """The frozen TRAIN pairs at the toy positions (S6), faces read with O_NOATIME. Every manifest is hash-checked before
+    parsing and read with a parquet row filter restricted to the referenced TRAIN samples, so no TEST row reaches Python."""
+    import pyarrow.parquet as pq
+    data = config["data"]
+    require(data["pair_manifest"] == PAIRS_PATH and data["split_manifest"] == SPLIT_PATH, "frozen manifest paths")
+    require(len(set(positions)) == len(positions) and positions == sorted(positions) and positions, "toy positions")
+    require(sha256_file(ROOT / PAIRS_PATH) == data["pair_manifest_sha256"], "pairs_train_v1 SHA256")
+    p = pq.read_table(ROOT / PAIRS_PATH, columns=["pair_id", "target_live_id", "source_spoof_id", "dataset", "split",
+                                                  "split_manifest_sha256"]).to_pydict()
+    n = len(p["pair_id"])
+    require(n == int(config["generation"]["n_syn_intended"]) and set(p["split"]) == {"TRAIN"}, "frozen pair relation")
+    require(set(p["split_manifest_sha256"]) == {data["split_manifest_sha256"]}, "pair manifest split binding")
+    require(p["pair_id"] == sorted(p["pair_id"]) and positions[-1] < n, "toy positions outside the frozen relation")
+    pairs = [PairRow(i, p["pair_id"][i], p["target_live_id"][i], p["source_spoof_id"][i], p["dataset"][i]) for i in positions]
+    used = sorted({r.target_live_id for r in pairs} | {r.source_spoof_id for r in pairs})
+    require(sha256_file(ROOT / SPLIT_PATH) == data["split_manifest_sha256"], "split_v1 SHA256")
+    sp = pq.read_table(ROOT / SPLIT_PATH, columns=["sample_id", "split", "dataset"],
+                       filters=[("sample_id", "in", used)]).to_pydict()
+    require(sha256_file(ROOT / M2_ACCOUNTING_PATH) == M2_ACCOUNTING_SHA256, "M2 accounting SHA256")
+    m2 = pq.read_table(ROOT / M2_ACCOUNTING_PATH, columns=["sample_id", "face_png_sha256", "final_status"],
+                       filters=[("sample_id", "in", used)]).to_pydict()
+    split = dict(zip(sp["sample_id"], sp["split"]))
+    dataset = dict(zip(sp["sample_id"], sp["dataset"]))
+    face = {}
+    for sid, digest, status in zip(m2["sample_id"], m2["face_png_sha256"], m2["final_status"]):
+        require(status == "COMPLETE", f"M2 face not COMPLETE: {sid}")
+        face[sid] = digest
+    require(set(split) == set(used) == set(face) and set(split.values()) == {"TRAIN"}, "toy samples must be TRAIN, M2 COMPLETE")
+    faces_root = Path(runtime_root) / "data" / "processed" / "faces_256"
+    require(faces_root.resolve() == faces_root, "faces root must be a resolved, non-symlinked path")
+    return BankInputs(pairs=pairs, faces_root=faces_root, face_sha256=face, sample_split=split, sample_dataset=dataset,
+                      provenance={"kind": "SMOKE_TOY_POPULATION", "pair_manifest": PAIRS_PATH,
+                                  "pair_manifest_sha256": data["pair_manifest_sha256"], "split_manifest": SPLIT_PATH,
+                                  "split_manifest_sha256": data["split_manifest_sha256"], "m2_accounting": M2_ACCOUNTING_PATH,
+                                  "m2_accounting_sha256": M2_ACCOUNTING_SHA256, "faces_root": str(faces_root),
+                                  "pairs": len(pairs), "referenced_samples": len(used),
+                                  "toy_positions_sha256": sha256_bytes(json.dumps(positions).encode()),
+                                  "test_rows_read": 0})
 
 
 # ============================================================== environment
@@ -430,6 +514,19 @@ def write_bank(method_id: str, seed: int, inputs: BankInputs, auth: Authorizatio
         require(inputs.provenance.get("kind") == "PRODUCTION_FROZEN_TRAIN_POPULATION", "production needs frozen inputs")
         require(len(inputs.pairs) == int(config["generation"]["n_syn_intended"]), "production population count")
         require(inputs.faces_root == runtime_root / "data" / "processed" / "faces_256", "faces root under runtime root")
+    elif auth.mode == "SMOKE":
+        kind = inputs.provenance.get("kind")
+        require(kind in SMOKE_KINDS, "smoke needs the toy population or a synthetic smoke fixture")
+        if kind == "SMOKE_TOY_POPULATION":
+            require(environment_lock is not None and environment_lock.get("verified") is True,
+                    "smoke toy banks require the verified gpat-m5 environment lock")
+        rr = runtime_root.resolve()
+        fr = inputs.faces_root.resolve()
+        require(not (rr / "data" / "processed" / "faces_256").exists(), "smoke root may not hold benchmark faces")
+        require(not fr.is_relative_to(rr) and not rr.is_relative_to(fr), "smoke root and faces root must be disjoint")
+        if kind == "SMOKE_TOY_POPULATION":     # faces root = <production runtime root>/data/processed/faces_256
+            require(fr.parts[-3:] == ("data", "processed", "faces_256") and not rr.is_relative_to(fr.parents[2]),
+                    "smoke root must lie outside the production runtime root")
     else:
         require(auth.mode == "QUALIFICATION", "unknown authorization mode")
         require(inputs.provenance.get("kind") == "SYNTHETIC_QUALIFICATION_FIXTURE", "qualification needs a synthetic fixture")
@@ -478,7 +575,7 @@ def write_bank(method_id: str, seed: int, inputs: BankInputs, auth: Authorizatio
             if progress is not None:
                 progress(i + 1, len(inputs.pairs))
         manifest_sha = _write_manifest(run_dir / BANK_MANIFEST, rows)
-        integrity = verify_bank_files(run_dir, method_id)
+        integrity = verify_bank_files(run_dir, method_id, global_positions=inputs.smoke)
         require(integrity["ok"], f"post-write integrity failed: {integrity}")
         summary = bank_summary(method_id, rows, generator.finalize())
         summary.update(output_manifest_path=str(run_dir / BANK_MANIFEST), bank_manifest_sha256=manifest_sha,
@@ -532,8 +629,9 @@ def read_manifest(run_dir: str | Path) -> list[dict]:
     return pq.read_table(Path(run_dir) / BANK_MANIFEST).to_pylist()
 
 
-def verify_bank_files(run_dir: str | Path, method_id: str) -> dict:
-    """Manifest <-> files: every success row has exactly its file with its hashes; no extra or missing file."""
+def verify_bank_files(run_dir: str | Path, method_id: str, *, global_positions: bool = False) -> dict:
+    """Manifest <-> files: every success row has exactly its file with its hashes; no extra or missing file.
+    `global_positions` (smoke banks only) accepts strictly increasing canonical positions instead of 0..N-1."""
     run_dir = Path(run_dir)
     rows = read_manifest(run_dir)
     problems = []
@@ -543,7 +641,11 @@ def verify_bank_files(run_dir: str | Path, method_id: str) -> dict:
     ids = [r["pair_id"] for r in rows]
     if len(set(ids)) != len(ids):
         problems.append("duplicate pair_id rows")
-    if [r["position"] for r in rows] != list(range(len(rows))):
+    pos = [r["position"] for r in rows]
+    if global_positions:
+        if not all(a < b for a, b in zip(pos, pos[1:])) or (pos and pos[0] < 0):
+            problems.append("positions not strictly increasing")
+    elif pos != list(range(len(rows))):
         problems.append("positions not 0..N-1")
     expected = {r["synthetic_output_path"] for r in rows if r["generation_status"] == "success"}
     actual = {f"{BANK_DIR}/{p.name}" for p in (run_dir / BANK_DIR).iterdir()}

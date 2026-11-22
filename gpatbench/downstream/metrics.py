@@ -15,8 +15,8 @@ of the evaluator contract, not of this module. The comparison at the threshold (
 every function that turns a score into a decision takes `rule` explicitly and has no default (the owner-selected D4
 value is supplied by the approved evaluator contract, never by this module). ACER comparisons use exact rationals so
 that ties are decided exactly; a tie the spec does not break raises UnresolvedThresholdTie. EER (D7), spoof F1 (D8)
-and frame-level rates at the video threshold (D9) follow the owner-selected evaluator directions; TPR@FPR and the
-SiW-Mv2 raw-type rule are not implemented until their exact rules are approved.
+and frame-level rates at the video threshold (D9), TPR@FPR (D8) and the SiW-Mv2 raw-type table (D10) follow the
+owner-approved evaluator contract (configs/amendments/m8_downstream_evaluator_contract.yaml).
 """
 from __future__ import annotations
 
@@ -238,6 +238,43 @@ def frame_level_rates(frames: Sequence[dict], video_threshold: float, *, rule: s
     out = rates_from_counts(confusion_counts(y, pred))
     out["F1_spoof"] = f1_spoof(y, pred)
     return out
+
+
+def tpr_at_fpr(y_true: Sequence[int], scores: Sequence[float], target: str, *, rule: str):
+    """D8 (owner-approved): max TPR = 1 - APCER over the section-15 candidates with BPCER <= target, no interpolation.
+    `target` is a decimal string ("0.01", "0.05") so the comparison is exact. None (N/A) if no candidate qualifies."""
+    x = Fraction(target)
+    ok = [1 - p["APCER"] for p in curve_points(y_true, scores, rule=rule)
+          if p["APCER"] is not None and p["BPCER"] is not None and p["BPCER"] <= x]
+    return max(ok) if ok else None
+
+
+def siw_raw_type_table(videos: Sequence[dict], threshold: float, token_to_macro: dict, *, rule: str) -> dict:
+    """D10 RAW_TYPE_COVERAGE_V1 (owner-approved) over the evaluated siwmv2 spoof videos at the frozen threshold.
+
+    Gate: every siwmv2 spoof video has one non-null attack_raw that is a known token mapping to its attack_macro
+    (constancy within a video is enforced by aggregate_videos). Any violation -> the whole table is N/A with reason
+    RAW_LABEL_COVERAGE_INVALID. Otherwise every token is listed: APCER with numerator/denominator, or N/A
+    ABSENT_IN_SPLIT. No pooling, imputation or minimum-support filter."""
+    tokens = sorted(token_to_macro)
+    spoof = [v for v in videos if v["dataset"] == "siwmv2" and v["y_true"] == SPOOF]
+    bad = [v["video_id"] for v in spoof if v.get("attack_raw") not in token_to_macro
+           or token_to_macro[v["attack_raw"]] != v.get("attack_macro")]
+    if bad:
+        return {"status": "N/A", "reason": "RAW_LABEL_COVERAGE_INVALID", "invalid_videos": len(bad),
+                "rows": [{"attack_raw": t, "APCER": None, "numerator": None, "denominator": None,
+                          "reason": "RAW_LABEL_COVERAGE_INVALID"} for t in tokens]}
+    pred = predict_spoof([v["video_score"] for v in spoof], threshold, rule=rule)
+    rows = []
+    for t in tokens:
+        idx = [i for i, v in enumerate(spoof) if v["attack_raw"] == t]
+        if not idx:
+            rows.append({"attack_raw": t, "APCER": None, "numerator": None, "denominator": 0, "reason": "ABSENT_IN_SPLIT"})
+        else:
+            num = sum(1 for i in idx if pred[i] == LIVE)
+            rows.append({"attack_raw": t, "APCER": Fraction(num, len(idx)), "numerator": num, "denominator": len(idx),
+                         "reason": None})
+    return {"status": "VALID", "reason": None, "invalid_videos": 0, "rows": rows}
 
 
 def seed_mean_std(values: Sequence[float]) -> dict:

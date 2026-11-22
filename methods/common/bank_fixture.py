@@ -47,3 +47,15 @@ def build_fixture(directory: str | Path, n_pairs: int, *, fixture_seed: int = 20
                       provenance={"kind": "SYNTHETIC_QUALIFICATION_FIXTURE", "fixture_seed": fixture_seed,
                                   "pairs": n_pairs, "faces_root": str(root),
                                   "note": "synthetic images; never benchmark evidence"})
+
+
+def build_smoke_fixture(directory: str | Path, positions: list[int], *, fixture_seed: int = 20261122) -> BankInputs:
+    """Synthetic SMOKE fixture: like build_fixture, but pairs carry the given canonical global positions (strictly
+    increasing) and pair ids PTR<position+1>, as the M8 toy sub-population does. Never benchmark evidence."""
+    base = build_fixture(directory, len(positions), fixture_seed=fixture_seed)
+    pairs = [PairRow(pos, f"PTR{pos + 1:06d}", r.target_live_id, r.source_spoof_id, r.dataset)
+             for pos, r in zip(positions, base.pairs)]
+    split = {sid: "TRAIN" for sid in base.face_sha256}
+    return BankInputs(pairs=pairs, faces_root=base.faces_root, face_sha256=base.face_sha256, sample_split=split,
+                      sample_dataset=base.sample_dataset,
+                      provenance={**base.provenance, "kind": "SMOKE_SYNTHETIC_FIXTURE", "positions": list(positions)})

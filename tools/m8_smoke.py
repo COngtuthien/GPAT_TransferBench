@@ -20,7 +20,7 @@ S1_RECORD = "configs/amendments/m8_smoke_test_s1_owner_decision.yaml"
 CONTRACT = "configs/amendments/m8_smoke_test_contract.yaml"
 EVALUATOR_CONTRACT = "configs/amendments/m8_downstream_evaluator_contract.yaml"
 COMPONENTS = {"toy_selector": "gpatbench/downstream/toy_subset.py",
-              "evaluator_runner": "gpatbench/downstream/evaluator.py",
+              "evaluator_runner": "gpatbench/downstream/resnet_runner.py",
               "plot_renderer": "gpatbench/downstream/render.py",
               "evaluator_environment_lock": "environments/m8_downstream.lock.json"}
 
