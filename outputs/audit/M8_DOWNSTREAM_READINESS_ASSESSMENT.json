@@ -1,0 +1,270 @@
+{
+  "record": "M8_DOWNSTREAM_READINESS_ASSESSMENT",
+  "date": "2026-11-22",
+  "branch": "m6-baselines",
+  "starting_commit": "025d9e8993ff18ca7b7b16e23a15411f45f44683",
+  "status": "M8_SMOKE_CONTRACT_PARTIALLY_RESOLVED",
+  "s1": {
+    "record": "configs/amendments/m8_smoke_test_s1_owner_decision.yaml",
+    "sha256": "b07796b171b75ced06ea452049b6e992a0e344a9f92f2abc03c872bf0da8b66c",
+    "option": "A_GLOBAL_END_TO_END",
+    "commit": "550d5cc"
+  },
+  "s_matrix": {
+    "S2_class_definition": {
+      "question": "What is a 'class' in '2-subject-per-class'?",
+      "options": [
+        "ATTACK_MACRO_PER_DATASET",
+        "BINARY_LABEL_PER_DATASET",
+        "BINARY_LABEL_POOLED"
+      ],
+      "recommended": "BINARY_LABEL_PER_DATASET",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "toy selector",
+      "blocks_smoke_execution": true
+    },
+    "S3_siwmv2_subject_unit": {
+      "question": "SiW-Mv2 has no subject_id_global (all 9507 TRAIN rows null; split is video-disjoint by content_group_id, DEV-012). Which unit stands in for 'subject'?",
+      "options": [
+        "CONTENT_GROUP_ID",
+        "EXCLUDE_SIWMV2"
+      ],
+      "recommended": "CONTENT_GROUP_ID",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "toy selector",
+      "blocks_smoke_execution": true
+    },
+    "S4_selection_rule": {
+      "question": "How are the toy subjects chosen deterministically?",
+      "options": [
+        "HASH_RANK",
+        "OWNER_LIST"
+      ],
+      "recommended": "HASH_RANK",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "toy selector",
+      "blocks_smoke_execution": true
+    },
+    "S5_splits_and_test": {
+      "question": "Which splits does the smoke use, and may it touch TEST?",
+      "options": [
+        "TOY_TEST",
+        "TRAIN_VAL_ONLY_TEST_PROXY"
+      ],
+      "recommended": "TRAIN_VAL_ONLY_TEST_PROXY",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "firewall configuration",
+      "blocks_smoke_execution": true
+    },
+    "S6_bank_pair_population": {
+      "question": "Whether any frozen pairs_train_v1 pair lies entirely inside the toy subjects depends on which subjects are chosen (the first 2 CASIA/MSU subject ids contain 0; the best 2-subject sets contain at most 24 CASIA / 38 MSU pairs; SiW-Mv2 depends on S3). Which pairs feed the bank stage?",
+      "options": [
+        "FROZEN_PAIRS_FIRST_N",
+        "FROZEN_PAIRS_TARGET_IN_TOY",
+        "REBUILD_PAIRS_ON_TOY"
+      ],
+      "recommended": "FROZEN_PAIRS_TARGET_IN_TOY",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "bank-writer SMOKE mode",
+      "blocks_smoke_execution": true
+    },
+    "S7_methods_covered": {
+      "question": "Which generators must the smoke exercise?",
+      "options": [
+        "ALL_ACTIVE_METHODS",
+        "ALL_METHODS_WITH_BANK_WRITERS"
+      ],
+      "recommended": "ALL_METHODS_WITH_BANK_WRITERS",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "smoke scope",
+      "blocks_smoke_execution": true
+    },
+    "S8_evaluator_budget_and_environment": {
+      "question": "configs/frozen/downstream_resnet18.yaml fixes 40 epochs, AMP and ImageNet weights; no evaluator code, no torchvision weights and no evaluator environment exist (PLANNED_ENVIRONMENT_REQUIREMENTS env-core NOT CREATED). What smoke budget, device and environment apply?",
+      "options": [
+        "SMOKE_SCHEDULE_CPU",
+        "SMOKE_SCHEDULE_GPU_AFTER_E04"
+      ],
+      "recommended": "owner choice; no default (package installation and evaluator implementation are explicit authorizations)",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "evaluator runner and environment",
+      "blocks_smoke_execution": true
+    },
+    "S9_determinism_criterion": {
+      "question": "What does 'deterministic' require?",
+      "options": [
+        "BITWISE_ALL_STAGES",
+        "BITWISE_BANK_PROCEDURAL_EVALUATOR"
+      ],
+      "recommended": "BITWISE_BANK_PROCEDURAL_EVALUATOR if the evaluator runs on GPU; BITWISE_ALL_STAGES if CPU",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "acceptance gates",
+      "blocks_smoke_execution": true
+    },
+    "S10_seeds": {
+      "question": "Which seeds?",
+      "options": [
+        "ALL_THREE_BANK_SEED42_EVALUATOR",
+        "SEED42_ONLY"
+      ],
+      "recommended": "ALL_THREE_BANK_SEED42_EVALUATOR",
+      "changes_scientific_semantics": false,
+      "requires_new_amendment": "configs/amendments/m8_smoke_test_contract.yaml (owner ruling)",
+      "resolvable_by_existing_authority": false,
+      "blocks_implementation_of": "acceptance gates",
+      "blocks_smoke_execution": true
+    }
+  },
+  "evaluator_contract_draft": {
+    "path": "configs/amendments/m8_downstream_evaluator_contract.DRAFT.yaml",
+    "open_questions": [
+      "D10_siwmv2_raw_coverage",
+      "D11_dinov3",
+      "D12_synthetic_input",
+      "D13_determinism_and_device",
+      "D14_augmentation_order",
+      "D1_epoch_and_sampler",
+      "D2_eval_preprocessing",
+      "D3_target_and_score",
+      "D4_decision_operator",
+      "D5_checkpoint_metric",
+      "D6_lr_schedule_details",
+      "D7_eer_convention",
+      "D8_positive_class_secondary",
+      "D9_frame_level_threshold"
+    ],
+    "recommended": {
+      "D1_epoch_and_sampler": "LIVE_PASS",
+      "D2_eval_preprocessing": "RESIZE_FULL_BICUBIC",
+      "D3_target_and_score": "SPOOF_IS_ONE",
+      "D4_decision_operator": "SPOOF_IF_SCORE_GE_THRESHOLD",
+      "D5_checkpoint_metric": "EPOCH_OWN_VAL_THRESHOLD",
+      "D6_lr_schedule_details": "PER_STEP_FROM_ZERO",
+      "D7_eer_convention": "owner choice",
+      "D8_positive_class_secondary": "SPOOF_POSITIVE",
+      "D9_frame_level_threshold": "owner choice",
+      "D10_siwmv2_raw_coverage": "owner choice",
+      "D11_dinov3": "RESNET18_ONLY_IN_SMOKE",
+      "D12_synthetic_input": "SEED_MATCHED_RAW",
+      "D13_determinism_and_device": "CPU_NO_AMP_SMOKE_GPU_AMP_SCIENCE",
+      "D14_augmentation_order": "CROP_FLIP_JITTER_NORMALIZE"
+    }
+  },
+  "authority_sha256": {
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "docs/spec/spec_extracted_text.txt": "0bf6b1607d2f39db1f091df772c1da82c1e76539fa7859f627d115da706e5d83",
+    "configs/frozen/downstream_resnet18.yaml": "f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b",
+    "configs/frozen/artifact_probe.yaml": "3f6c4fbbc1e9f380ad0b550110dbc2e09be8b3c932c0b232652d6c378d1a3ffe",
+    "configs/frozen/split_v1.yaml": "9dc04edeedbde9b52f301e4648f6a365e96fc5ddf373ea6b85ef0a2096737499",
+    "models/registry.yaml": "f2499729cb0fe2ed1179af071ab9583b02c5c08248ec37bbabf2e3bcc7033e7b",
+    "environments/m5_probe_gpu.lock.txt": "8f1e3d162f28e96810886cdf6b00eb48e57cfcc10f96a0caefac42303bb8e1bc",
+    "environments/m6_core_gpu.lock.json": "53d4910a17c541ad7ac57a1ac410c0fef8c2d1c63399b423c97e490817b335eb",
+    "manifests/split_v1.parquet": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d",
+    "manifests/pairs_train_v1.parquet": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243",
+    "configs/amendments/e07c_m6d6jr_science_launch_decision.yaml": "2f7e5460314664fd0006b0b00a74707f79df5b427a6ccce084ec8dac3ddca830",
+    "configs/amendments/e01_e02_bank_milestone_ruling.yaml": "4a89b4e1817a970b21ba9b005fdf0edf8d19e7fc236f542ddcd1c9cd93b6a19e",
+    "configs/amendments/m8_smoke_test_contract.DRAFT.yaml": "1e3eef541be642a08b871409a1c09f4187c83d6990c14e7da86df41e4a4eb2a7",
+    "outputs/audit/method_status.csv": "fd97e7cbac35af1ef02fd495d21ad3cfcebffb47702907ab01afd2d447003723"
+  },
+  "resnet18_weights": {
+    "enum": "ResNet18_Weights.IMAGENET1K_V1",
+    "file": "resnet18-f37072fd.pth",
+    "sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+    "registry_status": "VERIFIED",
+    "gpu_host_cache_present": true
+  },
+  "dinov3": {
+    "frozen_config_present": false,
+    "required_by": "spec 23 configs/frozen/downstream_dinov3_vits16.yaml",
+    "registry_status": "NOT_DOWNLOADED",
+    "revision": null,
+    "weight_sha256": null,
+    "transformers_in_project_env": false,
+    "milestone": "M11 after M10 passes (spec 25)"
+  },
+  "toy_facts_train_val_only": {
+    "casia_msu_train_live_subjects_pair_target": [
+      60,
+      60
+    ],
+    "siwmv2_train_live_groups_pair_target": [
+      543,
+      549
+    ],
+    "msu_val_subjects": 5,
+    "casia_val_subjects": 8,
+    "siwmv2_null_subject_rows": {
+      "TRAIN": 9507,
+      "VAL": 2033
+    }
+  },
+  "environments": {
+    "laptop_venv": {
+      "python": "3.12.3",
+      "torch": false,
+      "torchvision": false,
+      "matplotlib": false
+    },
+    "gpat-m5": {
+      "python": "3.11.16",
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "matplotlib": false,
+      "transformers": false,
+      "role": "qualified E01/E02 env; do not modify"
+    },
+    "project_env_with_torch_torchvision_matplotlib_pyarrow": null,
+    "proposed": "gpat-m8-downstream = clone of gpat-m5 + pinned matplotlib; lock environments/m8_downstream.lock.json; needs installation approval"
+  },
+  "implemented": [
+    "gpatbench/downstream/metrics.py",
+    "gpatbench/downstream/schemas.py",
+    "gpatbench/downstream/firewall.py",
+    "gpatbench/downstream/bank_reader.py",
+    "gpatbench/downstream/plots.py",
+    "gpatbench/downstream/smoke_evidence.py",
+    "tools/m8_smoke.py"
+  ],
+  "infrastructure_commit": "cfc65b2",
+  "missing_components": [
+    "toy selector",
+    "bank-writer SMOKE mode",
+    "ResNet-18 evaluator runner",
+    "plot renderer (matplotlib)",
+    "evaluator environment lock",
+    "EER/TPR@FPR/F1/frame threshold/SiW raw coverage (D7-D10)",
+    "DINOv3 frozen config, pins, environment (M11)"
+  ],
+  "executed": {
+    "smoke": false,
+    "toy_selection": false,
+    "detector_training": false,
+    "banks": false,
+    "test_access": false,
+    "package_installation": false
+  },
+  "e04_observation": {
+    "utc": "2026-11-22T00:06:53Z",
+    "pid": 435565,
+    "global_step": 12257,
+    "exit_marker": false,
+    "checkout": "18ba00e94813f005876c8d6235b0b848226b2c1d",
+    "checkout_clean": true
+  }
+}
