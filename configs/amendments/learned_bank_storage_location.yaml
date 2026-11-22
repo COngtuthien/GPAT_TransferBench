@@ -1,0 +1,90 @@
+{
+ "schema_version": "learned_bank_storage_location_v1",
+ "record": "LEARNED_BANK_STORAGE_AUTHORITY",
+ "status": "OWNER_APPROVED",
+ "approved": true,
+ "date": "2026-11-22",
+ "approval": "Owner explicit authorization of 2026-11-22 to verify the HDD, create the private directory and activate the previously selected L1 option after every gate passed (agent-created directory explicitly authorized by the owner).",
+ "decisions": {
+  "L1_bank_root": "B_EXTERNAL_HDD_ADDITIVE_ROOT"
+ },
+ "bank_root_registry": {
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "mount_point": "/media/ext_data",
+  "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+  "fstype": "ext4",
+  "device": "Seagate One Touch w/PW ~4 TB USB HDD, /dev/sda2",
+  "owner": "student20261",
+  "mode": "0700",
+  "layout": "<bank_root>/<method>/seed_<seed>/",
+  "methods": [
+   "E03",
+   "E05",
+   "E06b",
+   "E06c"
+  ],
+  "seeds": [
+   42,
+   1337,
+   2026
+  ],
+  "forbidden_path_prefix": "/media/student20261/",
+  "resolution": "downstream readers resolve banks only via methods.common.learned_bank.resolve_registered_bank / production_bank_dir (this registry); no symlink, bind mount or path redirection is ever used"
+ },
+ "scope": {
+  "covers": "future M8 learned-method production bank artifacts only (E03, E05, E06b, E06c)",
+  "unchanged": [
+   "E01/E02 production banks, readers and their runtime_root storage (configs/amendments/e01_e02_production_authority.yaml)",
+   "E04 training runtime, checkpoints and run roots",
+   "every runtime_root contract and the active scientific runtime root",
+   "S7 toy-acceptance roots (~/workdir/m8_learned_banks/s7/, never on the HDD)"
+  ],
+  "not_authorized": [
+   "full bank production (needs per-method learned_bank_production_<M>.yaml binding a passed S7 record)",
+   "S7 acceptance (needs E04 completion + closure + learned_bank_s7_launch_authority.yaml)",
+   "generator inference, downstream training, TEST evaluation, GPAT",
+   "mount/remount, fstab, permission changes outside the bank root, symlinks, moving existing artifacts"
+  ]
+ },
+ "required_checks_before_every_s7_or_production_run": [
+  "live methods.common.learned_bank.storage_preflight() all true: exists, not_symlink, is_directory, realpath_equals_path, owner student20261, mode exactly 0700 (no setgid), not_udisks_duplicate, mount_point /media/ext_data, filesystem_uuid 608647d2-9cb0-45b0-b999-73c080ba909b, fstype ext4, mount_read_write (per-mount and superblock), user_rwx_access, no_unexpected_contents",
+  "load_production_authority re-runs the live preflight; every production audit re-runs it; a USB disconnect, remount or UUID change refuses the bank (LEARNED_BANK_BLOCKED_BY_STORAGE_AUTHORITY)",
+  "bank manifests/provenance record the physical root, filesystem UUID and device model"
+ ],
+ "activation_verification": {
+  "ok": true,
+  "utc": "2026-11-22T16:30:57Z",
+  "verifier_commit": "d163106a3a25ee450f68d6d29a76bd3c3fad964f",
+  "preflight_checks": {
+   "exists": true,
+   "filesystem_uuid": true,
+   "fstype_ext4": true,
+   "is_directory": true,
+   "mode_0700_no_setgid": true,
+   "mount_point": true,
+   "mount_read_write": true,
+   "no_unexpected_contents": true,
+   "not_symlink": true,
+   "not_udisks_duplicate": true,
+   "owner": true,
+   "realpath_equals_path": true,
+   "user_rwx_access": true
+  },
+  "evidence": {
+   "path": "outputs/audit/LEARNED_BANK_HDD_STORAGE_VERIFICATION.json",
+   "sha256": "eedb7562fb414a4d03d00fc05585ce8a57097b57387ff208bb731f62259fc417"
+  }
+ },
+ "supersedes_nothing": {
+  "draft": {
+   "path": "configs/amendments/learned_bank_storage_location.DRAFT.yaml",
+   "sha256": "622ba385a1f5a4e3ec9586b5af31c57155d7976713a2300ab6f2a81fc990f2cb",
+   "unchanged": true
+  },
+  "pending_activation": {
+   "path": "configs/amendments/learned_bank_storage_location.PENDING_ACTIVATION.yaml",
+   "sha256": "9dc946669b0dd2bf09194757ed038e99c4a710be925e5e741c27974d14a47a8d",
+   "unchanged": true
+  }
+ }
+}

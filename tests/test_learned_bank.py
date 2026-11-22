@@ -252,14 +252,15 @@ class Gates(unittest.TestCase):
                 with self.assertRaises(lb.LearnedBankBlocked) as cm:
                     lb.load_production_authority(m, s)
                 self.assertIn(cm.exception.status, (lb.STATUS_E04, lb.STATUS_PRODUCTION))
-        with self.assertRaises(lb.LearnedBankBlocked) as cm:
-            lb.load_storage_authority()
-        self.assertEqual(cm.exception.status, lb.STATUS_STORAGE)
-        with self.assertRaises(lb.LearnedBankBlocked):
-            lb.resolve_registered_bank('E05', 42)
+        # storage authority is activated (L1 B) but is never itself a production authorization
+        storage = lb.load_storage_authority()
+        self.assertEqual(storage['bank_root'], lb.HDD['bank_root'])
+        self.assertEqual(lb.resolve_registered_bank('E05', 42),
+                         Path('/media/ext_data/student20261_gpat_m8_banks/E05/seed_42'))
         self.assertFalse((ROOT / lb.S7_AUTHORITY_PATH).exists())
-        self.assertFalse((ROOT / lb.STORAGE_AUTHORITY_PATH).exists())
         self.assertFalse((ROOT / lb.E04_COMPLETION_RECORD).exists())
+        for m in lb.METHODS:
+            self.assertFalse((ROOT / lb.PRODUCTION_AUTHORITY_TEMPLATE.format(method=m)).exists())
 
     def _e04(self, family=True):
         e = {lb.E04_COMPLETION_RECORD: {'status': lb.E04_COMPLETION_STATUS, 'failed_gates': [], 'seed': 2026,
@@ -333,6 +334,158 @@ class Gates(unittest.TestCase):
         os.symlink(d, link)
         self.assertFalse(lb.storage_preflight(str(link))['checks']['not_symlink'])
         self.assertFalse(lb.storage_preflight('/media/student20261/x/y')['ok'])
+
+
+def activated_storage(**patch):
+    reg = {'bank_root': lb.HDD['bank_root'], 'mount_point': lb.HDD['mount_point'],
+           'filesystem_uuid': lb.HDD['filesystem_uuid'], 'fstype': 'ext4', 'owner': 'student20261', 'mode': '0700',
+           'layout': lb.BANK_ROOT_LAYOUT, 'methods': list(lb.METHODS)}
+    rec = {'schema_version': lb.STORAGE_AUTHORITY_SCHEMA, 'status': 'OWNER_APPROVED', 'approved': True,
+           'decisions': {'L1_bank_root': 'B_EXTERNAL_HDD_ADDITIVE_ROOT'}, 'bank_root_registry': reg,
+           'activation_verification': {'ok': True}}
+    for k, v in patch.items():
+        if k in reg:
+            reg[k] = v
+        else:
+            rec[k] = v
+    return rec
+
+
+class StoragePreflight(unittest.TestCase):
+    """Live-check semantics on a local temp directory (expected identity patched to the temp filesystem)."""
+
+    def setUp(self):
+        self.d = Path(tempfile.mkdtemp(prefix='lbhdd_')) / 'student20261_gpat_m8_banks'
+        os.mkdir(self.d, 0o700)
+        os.chmod(self.d, 0o700)
+        self.fs = lb.filesystem_identity(str(self.d))
+        import pwd
+        self.exp = {'mount_point': self.fs['mount_point'], 'filesystem_uuid': self.fs['filesystem_uuid'],
+                    'fstype': self.fs['fstype'], 'owner': pwd.getpwuid(os.getuid()).pw_name}
+
+    def pf(self, root=None, **exp):
+        return lb.storage_preflight(str(root or self.d), dict(self.exp, **exp))
+
+    def test_correct_identity_passes(self):
+        if self.fs['filesystem_uuid'] is None:
+            self.skipTest('temp filesystem has no /dev/disk/by-uuid entry')
+        r = self.pf()
+        self.assertTrue(r['ok'], r['checks'])
+        self.assertEqual(r['unexpected_entries'], [])
+
+    def test_wrong_uuid_refused(self):
+        r = self.pf(filesystem_uuid='00000000-0000-0000-0000-000000000000')
+        self.assertFalse(r['checks']['filesystem_uuid'])
+        self.assertFalse(r['ok'])
+        # the real approved UUID is not the temp filesystem's
+        self.assertFalse(lb.storage_preflight(str(self.d), {k: v for k, v in self.exp.items()
+                                                            if k != 'filesystem_uuid'})['checks']['filesystem_uuid'])
+
+    def test_missing_mount_refused(self):
+        r = self.pf(mount_point='/media/ext_data')         # directory exists but not under the approved mount
+        self.assertFalse(r['checks']['mount_point'])
+        self.assertFalse(r['ok'])
+        r = lb.storage_preflight(lb.HDD['bank_root'] + '_absent_mount_probe')
+        self.assertEqual((r['exists'], r['ok']), (False, False))
+
+    def test_read_only_mount_refused(self):
+        real = lb.filesystem_identity
+        for key, val in (('mount_options', 'ro,relatime'), ('super_options', 'ro,errors=remount-ro')):
+            def fake(path, key=key, val=val):
+                out = real(path)
+                out[key] = val
+                return out
+            lb.filesystem_identity = fake
+            try:
+                r = self.pf()
+            finally:
+                lb.filesystem_identity = real
+            self.assertFalse(r['checks']['mount_read_write'], key)
+            self.assertFalse(r['ok'])
+
+    def test_symlink_refused(self):
+        link = self.d.parent / 'link_root'
+        os.symlink(self.d, link)
+        r = self.pf(link)
+        self.assertFalse(r['checks']['not_symlink'])
+        self.assertFalse(r['checks']['realpath_equals_path'])
+        self.assertFalse(r['ok'])
+
+    def test_incorrect_owner_refused(self):
+        r = self.pf(owner='root' if os.getuid() != 0 else 'nobody')
+        self.assertFalse(r['checks']['owner'])
+        self.assertFalse(r['ok'])
+
+    def test_incorrect_mode_refused(self):
+        for mode in (0o2700, 0o750, 0o755, 0o770, 0o1700):
+            os.chmod(self.d, mode)
+            r = self.pf()
+            self.assertFalse(r['checks']['mode_0700_no_setgid'], oct(mode))
+            self.assertFalse(r['ok'])
+        os.chmod(self.d, 0o700)
+
+    def test_unexpected_contents_refused(self):
+        (self.d / 'stray.txt').write_bytes(b'x')
+        r = self.pf()
+        self.assertEqual(r['unexpected_entries'], ['stray.txt'])
+        self.assertFalse(r['ok'])
+        os.unlink(self.d / 'stray.txt')
+        os.symlink('/tmp', self.d / 'E05')                  # a method name that is a symlink
+        self.assertFalse(self.pf()['checks']['no_unexpected_contents'])
+        os.unlink(self.d / 'E05')
+        os.mkdir(self.d / 'E05')
+        os.mkdir(self.d / 'E05' / 'seed_42')
+        self.assertTrue(self.pf()['checks']['no_unexpected_contents'])     # the registered layout is expected
+        os.mkdir(self.d / 'E05' / 'seed_7')
+        self.assertEqual(self.pf()['unexpected_entries'], ['E05/seed_7'])
+        os.rmdir(self.d / 'E05' / 'seed_7')
+        os.mkdir(self.d / 'E99')
+        self.assertEqual(self.pf()['unexpected_entries'], ['E99'])
+
+
+class BankRootRegistry(unittest.TestCase):
+    def test_registry_correctness(self):
+        root = make_root({lb.STORAGE_AUTHORITY_PATH: activated_storage()})
+        st = lb.load_storage_authority(root)
+        for m in lb.METHODS:
+            for s in lb.SEEDS:
+                p = lb.resolve_registered_bank(m, s, root)
+                self.assertEqual(p, Path(lb.HDD['bank_root']) / m / ('seed_%d' % s))
+                self.assertEqual(lb.production_bank_dir(m, s, st), p)
+                self.assertFalse(str(p).startswith('/media/student20261/'))
+                self.assertTrue(str(p).startswith('/media/ext_data/student20261_gpat_m8_banks/'))
+
+    def test_registry_mismatch_refused(self):
+        for patch in ({'bank_root': '/media/student20261/608647d2-9cb0-45b0-b999-73c080ba909b/x'},
+                      {'bank_root': '/home/student20261/workdir/GPAT_TransferBench_runtime/banks'},
+                      {'filesystem_uuid': '227ce2f6-373e-4f13-9cdb-84b911775706'}, {'mount_point': '/'},
+                      {'fstype': 'ntfs'}, {'mode': '2700'}, {'owner': 'alex'}, {'methods': ['E05']},
+                      {'layout': '<bank_root>/<seed>/<method>/'}, {'approved': False}, {'status': 'DRAFT'},
+                      {'activation_verification': {'ok': False}},
+                      {'decisions': {'L1_bank_root': 'A_ROOT_SSD_ONE_FAMILY_AT_A_TIME'}}):
+            root = make_root({lb.STORAGE_AUTHORITY_PATH: activated_storage(**patch)})
+            with self.assertRaises(lb.LearnedBankBlocked, msg=str(patch)) as cm:
+                lb.load_storage_authority(root)
+            self.assertEqual(cm.exception.status, lb.STATUS_STORAGE)
+
+    def test_path_traversal_refused(self):
+        st = {'bank_root': lb.HDD['bank_root']}
+        for m, s in (('..', 42), ('../E05', 42), ('E05/../../x', 42), ('/etc', 42), ('E05', -1), ('E05', '42'),
+                     ('E05', 43), ('e05', 42), ('E01', 42), ('E02', 42)):
+            with self.assertRaises(lb.LearnedBankError, msg=(m, s)):
+                lb.production_bank_dir(m, s, st)
+        for bad_root in (lb.HDD['bank_root'] + '/../x', lb.HDD['bank_root'] + '/', 'media/ext_data/x',
+                         '/media/student20261/608647d2-9cb0-45b0-b999-73c080ba909b/student20261_gpat_m8_banks',
+                         '/home/student20261/workdir/GPAT_TransferBench_runtime'):
+            with self.assertRaises(lb.LearnedBankError, msg=bad_root):
+                lb.production_bank_dir('E05', 42, {'bank_root': bad_root})
+
+    def test_production_still_refused_with_storage_activated(self):
+        root = make_root({lb.STORAGE_AUTHORITY_PATH: activated_storage()})
+        for m in lb.METHODS:
+            with self.assertRaises(lb.LearnedBankBlocked) as cm:
+                lb.load_production_authority(m, 42, root)
+            self.assertEqual(cm.exception.status, lb.STATUS_E04)
 
 
 class WriterReader(unittest.TestCase):
@@ -532,7 +685,8 @@ class CLI(unittest.TestCase):
                            capture_output=True, text=True)
         rep = json.loads(p.stdout)
         self.assertTrue(rep['contract']['ok'])
-        self.assertFalse(rep['s7']['ok'] or rep['production']['ok'] or rep['storage_authority']['ok'])
+        self.assertFalse(rep['s7']['ok'] or rep['production']['ok'])
+        self.assertTrue(rep['storage_authority']['ok'])         # activated L1 B record; never a production grant
 
 
 if __name__ == '__main__':
@@ -572,7 +726,46 @@ class ReadinessRecords(unittest.TestCase):
         self.assertEqual(rec['target']['filesystem_uuid'], lb.HDD['filesystem_uuid'])
         self.assertIn('chmod 00700 /media/ext_data/student20261_gpat_m8_banks',
                       rec['required_owner_action']['commands_run_by_the_owner_on_the_gpu_host'])
-        self.assertFalse((ROOT / lb.STORAGE_AUTHORITY_PATH).exists())
+        # pinned to history (not HEAD): at 2892533 no activated authority existed, and both earlier records are
+        # byte-unchanged since then
+        r = subprocess.run(['git', '-C', str(ROOT), 'cat-file', '-e', '2892533:' + lb.STORAGE_AUTHORITY_PATH],
+                           capture_output=True)
+        self.assertNotEqual(r.returncode, 0)
+        r = subprocess.run(['git', '-C', str(ROOT), 'diff', '--name-only', '28925330e1481b6c6ebdef8d6eaad6f40b0bed4c',
+                            '--', lb.STORAGE_PENDING_PATH, rec['draft']['path']], capture_output=True, text=True)
+        self.assertEqual((r.returncode, r.stdout.strip()), (0, ''))
+
+    def test_activated_storage_authority_binds_verification(self):
+        rec = json.loads((ROOT / lb.STORAGE_AUTHORITY_PATH).read_text())
+        self.assertEqual((rec['status'], rec['approved'], rec['decisions']['L1_bank_root']),
+                         ('OWNER_APPROVED', True, 'B_EXTERNAL_HDD_ADDITIVE_ROOT'))
+        reg = rec['bank_root_registry']
+        self.assertEqual((reg['bank_root'], reg['mount_point'], reg['filesystem_uuid'], reg['fstype'], reg['mode']),
+                         ('/media/ext_data/student20261_gpat_m8_banks', '/media/ext_data',
+                          '608647d2-9cb0-45b0-b999-73c080ba909b', 'ext4', '0700'))
+        for k in ('draft', 'pending_activation'):
+            self.assertEqual(sha(ROOT / rec['supersedes_nothing'][k]['path']), rec['supersedes_nothing'][k]['sha256'])
+        act = rec['activation_verification']
+        self.assertTrue(act['ok'])
+        self.assertTrue(all(act['preflight_checks'].values()))
+        self.assertEqual(len(act['preflight_checks']), 13)
+        ev_path = ROOT / act['evidence']['path']
+        self.assertEqual(sha(ev_path), act['evidence']['sha256'])
+        ev = json.loads(ev_path.read_text())
+        self.assertEqual((ev['status'], ev['ok']), ('PASSED', True))
+        self.assertTrue(ev['storage_preflight']['result']['ok'])
+        self.assertEqual(ev['storage_preflight']['result']['checks'], act['preflight_checks'])
+        self.assertEqual(ev['physical_device']['filesystem_uuid'], lb.HDD['filesystem_uuid'])
+        pr = ev['permission_probe']
+        self.assertTrue(pr['ok'] and pr['hash_match'] and pr['probe_removed'] and pr['dir_unchanged'])
+        self.assertEqual((pr['contents_after'], ev['final_directory_state']['contents']), ([], []))
+        self.assertEqual(ev['directory_creation']['final']['mode'], '0o700')
+        self.assertEqual(ev['git_source_authority']['verifier_commit'], act['verifier_commit'])
+        r = subprocess.run(['git', '-C', str(ROOT), 'merge-base', '--is-ancestor', act['verifier_commit'], 'HEAD'])
+        self.assertEqual(r.returncode, 0)
+        for m in lb.METHODS:
+            self.assertEqual(ev['registry_preview'][m],
+                             [str(lb.resolve_registered_bank(m, s)) for s in lb.SEEDS])
 
     def test_s7_plan_and_snapshot(self):
         plan = json.loads((ROOT / 'outputs/audit/LEARNED_BANK_S7_ACCEPTANCE_PLAN.json').read_text())
