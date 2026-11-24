@@ -294,6 +294,8 @@ def collect(method, repo, s7_root):
     mp = marker_paths(method)
     doc['cli_compare'] = {'stdout': read_text(mp['compare']), 'rc': read_text(mp['compare_rc'])}
     doc['atime'] = atime_ledger(method, repo)
+    gs = '%s/m8s7_%s_A.gpu_samples.tsv' % (WORKDIR, method)
+    doc['gpu_samples_run_A'] = read_text(gs).splitlines() if Path(gs).is_file() else None
     doc['processes_after'] = processes()
     doc['gpu_after'] = gpu_state()
     doc['run_roots_unchanged_during_collect'] = all(listing(out_root / ('run_' + L)) == before[L] for L in LABELS)
@@ -550,6 +552,7 @@ def build(c, repo_root):
                              'run_A_dir': c['runs']['A'][str(s)]['dir'], 'run_B_dir': c['runs']['B'][str(s)]['dir'],
                              'bitwise_identical': c['compare'][str(s)]['bitwise_identical']} for s in SEEDS},
         'profiling': {'peak_cuda_memory_allocated_bytes': peak,
+                      **({'nvidia_smi_samples_run_A': c['gpu_samples_run_A']} if c.get('gpu_samples_run_A') else {}),
                       'note': 'torch.cuda.max_memory_allocated per process after each seed (cumulative within the run); '
                               'E03 (TF1) reports none'},
         'reproduction': {
