@@ -1,0 +1,343 @@
+{
+ "conclusions": {
+  "b1_resolves_pinned_tensor2im": true,
+  "extensions_verified_no_jit": true,
+  "o2_source_identity_still_passes": true,
+  "other_seed_checkpoint_refused": true,
+  "scientific_code_unchanged": "mix/generate/finalize/conversion/RNG/checkpoint loading byte-identical (tests/test_e05_s7_b1_b2.py B1NarrowChange)",
+  "second_load_in_one_process_still_refused": true
+ },
+ "date": "2026-11-25",
+ "execution_authority": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+ "probe_source": "\"\"\"E05 B1/B2 real-runtime qualification probe for ONE seed per process (load-only; no generation, no face read).\"\"\"\nimport json, os, sys, time, traceback\nfrom pathlib import Path\nsys.path.insert(0, os.getcwd())\nSEED = int(os.environ['PROBE_SEED'])\nOTHER = {42: 1337, 1337: 2026, 2026: 42}[SEED]\nRT = '/home/student20261/workdir/GPAT_TransferBench_runtime'\nout = {'seed': SEED, 'pid': os.getpid(), 'utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}\nimport torch\nfrom methods.common import learned_bank as lb\nfrom methods.pcgan import production_io as pio\nfrom methods.pcgan.bank_adapter import load_real\nout['torch'] = [torch.__version__, torch.version.cuda, torch.backends.cudnn.version(), torch.cuda.get_device_name(0)]\ntry:\n    a, ck = load_real(torch, SEED, Path(RT) / 'runs/m6/E05' / ('seed_%d' % SEED), pio.build_root(RT))\n    i = a.identity()\n    bc = i['runtime_closure']['build_closure']\n    out['load'] = {'ok': True, 'checkpoint_identity': ck['checkpoint_identity_sha256'],\n                   'checkpoint_files': {k: v['sha256'] for k, v in ck['files'].items()},\n                   'tensor2im_runtime': i['tensor2im_runtime'], 'tensor2im_segment_sha256': i['tensor2im_segment_sha256'],\n                   'source_identity': bc['source_identity'], 'import_resolution': bc['import_resolution'],\n                   'extensions': bc['extensions'], 'manifest_sha256': bc['manifest_sha256'],\n                   'jit_build_invoked': bc['jit_build_invoked'], 'precision': i['precision'], 'guards': i['training_guards'],\n                   'eval_mode': [not a.E.training, not a.G.training], 'device': str(a.device),\n                   'params': {'E': sum(p.numel() for p in a.E.parameters()), 'G': sum(p.numel() for p in a.G.parameters())}}\n    del a\n    torch.cuda.empty_cache()\nexcept Exception as exc:\n    out['load'] = {'ok': False, 'error': '%s: %s' % (type(exc).__name__, exc), 'traceback': traceback.format_exc()[-1500:]}\ntry:\n    load_real(torch, OTHER, Path(RT) / 'runs/m6/E05' / ('seed_%d' % OTHER), pio.build_root(RT))\n    out['second_seed_in_same_process'] = {'refused': False}\nexcept Exception as exc:\n    out['second_seed_in_same_process'] = {'refused': True, 'error': '%s: %s' % (type(exc).__name__, exc)}\ntry:\n    lb.verify_checkpoint('E05', SEED, Path(RT) / 'runs/m6/E05' / ('seed_%d' % OTHER))\n    out['other_seed_checkpoint_path'] = {'refused': False}\nexcept Exception as exc:\n    out['other_seed_checkpoint_path'] = {'refused': True, 'error': '%s: %s' % (type(exc).__name__, exc)}\nout['peak_cuda_memory_allocated_bytes'] = torch.cuda.max_memory_allocated()\nprint(json.dumps(out, sort_keys=True, default=str))\n",
+ "qualification_clone": "/home/student20261/workdir/m8_learned_banks/clones/e05q2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521 (clean before and after)",
+ "real_runtime_probes": {
+  "note": "one fresh OS process per seed in the S7 launch environment; genuine load_real (verified runtime, B1 at util.util, strict E/G state load of that seed); then a second runtime load in the same process and another seed checkpoint path, both must be refused; no generation, no face read, nothing written",
+  "results": {
+   "42": {
+    "load": {
+     "checkpoint_files": {
+      "pth": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+     },
+     "checkpoint_identity": "2b55dcf2ecc4d6fbc11e34fe4514a167807489049438b561992eaaef7b51ae68",
+     "device": "cuda",
+     "eval_mode": [
+      true,
+      true
+     ],
+     "extensions": {
+      "fused_bias_act": {
+       "build_ninja_sha256": "5d24d1e2184e415423aed8fda990d21ddf641e8be59fdc89a7fe34804fb00619",
+       "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so",
+        "sha256": "5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab"
+       }
+      },
+      "upfirdn2d": {
+       "build_ninja_sha256": "69d2fe7143d094caf8b6314bd8dd2f15124c97bff4db9139cd170f1ab7c73542",
+       "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so",
+        "sha256": "40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081"
+       }
+      }
+     },
+     "guards": {
+      "backward_passes": 0,
+      "optimizer_constructions": 0,
+      "optimizer_steps": 0,
+      "torch_saves": 0
+     },
+     "import_resolution": {
+      "models.networks.discriminator": "models/networks/discriminator.py",
+      "models.networks.encoder": "models/networks/encoder.py",
+      "models.networks.generator": "models/networks/generator.py",
+      "models.networks.patch_discriminator": "models/networks/patch_discriminator.py",
+      "models.networks.stylegan2_op.fused_act": "models/networks/stylegan2_op/fused_act.py",
+      "models.networks.stylegan2_op.upfirdn2d": "models/networks/stylegan2_op/upfirdn2d.py",
+      "util": "util/__init__.py"
+     },
+     "jit_build_invoked": false,
+     "manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+     "ok": true,
+     "params": {
+      "E": 929960,
+      "G": 3699233
+     },
+     "precision": {
+      "amp": false,
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+     },
+     "source_identity": {
+      "code_files_verified": 67,
+      "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+      "differing_fields": [
+       "root"
+      ],
+      "files_verified": 23,
+      "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+      "relocated": true,
+      "root": "/home/student20261/workdir/m8_learned_banks/clones/e05q2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/third_party/source_cache/swapping_autoencoder",
+      "ruling": {
+       "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+       "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257"
+      },
+      "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+      "unexpected_executable_files": 0
+     },
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "tensor2im_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+    },
+    "other_seed_checkpoint_path": {
+     "error": "LearnedBankError: run root /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_1337 is not runs/m6/E05/seed_42",
+     "refused": true
+    },
+    "peak_cuda_memory_allocated_bytes": 471932928,
+    "pid": 3378568,
+    "second_seed_in_same_process": {
+     "error": "RuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild",
+     "refused": true
+    },
+    "seed": 42,
+    "torch": [
+     "2.12.1+cu130",
+     "13.0",
+     92000,
+     "NVIDIA GeForce RTX 3090"
+    ],
+    "utc": "2026-11-24T19:25:34Z"
+   },
+   "1337": {
+    "load": {
+     "checkpoint_files": {
+      "pth": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+     },
+     "checkpoint_identity": "f3a687d8672e8d589a61c080fd129288bc44895fe1abb75045dac340d35dd544",
+     "device": "cuda",
+     "eval_mode": [
+      true,
+      true
+     ],
+     "extensions": {
+      "fused_bias_act": {
+       "build_ninja_sha256": "5d24d1e2184e415423aed8fda990d21ddf641e8be59fdc89a7fe34804fb00619",
+       "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so",
+        "sha256": "5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab"
+       }
+      },
+      "upfirdn2d": {
+       "build_ninja_sha256": "69d2fe7143d094caf8b6314bd8dd2f15124c97bff4db9139cd170f1ab7c73542",
+       "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so",
+        "sha256": "40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081"
+       }
+      }
+     },
+     "guards": {
+      "backward_passes": 0,
+      "optimizer_constructions": 0,
+      "optimizer_steps": 0,
+      "torch_saves": 0
+     },
+     "import_resolution": {
+      "models.networks.discriminator": "models/networks/discriminator.py",
+      "models.networks.encoder": "models/networks/encoder.py",
+      "models.networks.generator": "models/networks/generator.py",
+      "models.networks.patch_discriminator": "models/networks/patch_discriminator.py",
+      "models.networks.stylegan2_op.fused_act": "models/networks/stylegan2_op/fused_act.py",
+      "models.networks.stylegan2_op.upfirdn2d": "models/networks/stylegan2_op/upfirdn2d.py",
+      "util": "util/__init__.py"
+     },
+     "jit_build_invoked": false,
+     "manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+     "ok": true,
+     "params": {
+      "E": 929960,
+      "G": 3699233
+     },
+     "precision": {
+      "amp": false,
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+     },
+     "source_identity": {
+      "code_files_verified": 67,
+      "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+      "differing_fields": [
+       "root"
+      ],
+      "files_verified": 23,
+      "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+      "relocated": true,
+      "root": "/home/student20261/workdir/m8_learned_banks/clones/e05q2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/third_party/source_cache/swapping_autoencoder",
+      "ruling": {
+       "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+       "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257"
+      },
+      "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+      "unexpected_executable_files": 0
+     },
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "tensor2im_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+    },
+    "other_seed_checkpoint_path": {
+     "error": "LearnedBankError: run root /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_2026 is not runs/m6/E05/seed_1337",
+     "refused": true
+    },
+    "peak_cuda_memory_allocated_bytes": 471932928,
+    "pid": 3379432,
+    "second_seed_in_same_process": {
+     "error": "RuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild",
+     "refused": true
+    },
+    "seed": 1337,
+    "torch": [
+     "2.12.1+cu130",
+     "13.0",
+     92000,
+     "NVIDIA GeForce RTX 3090"
+    ],
+    "utc": "2026-11-24T19:25:40Z"
+   },
+   "2026": {
+    "load": {
+     "checkpoint_files": {
+      "pth": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+     },
+     "checkpoint_identity": "ee10a3b4ee1c66ecc1096b8cbe4ec2d56a4a49ade06f4c14b304488d98c1820f",
+     "device": "cuda",
+     "eval_mode": [
+      true,
+      true
+     ],
+     "extensions": {
+      "fused_bias_act": {
+       "build_ninja_sha256": "5d24d1e2184e415423aed8fda990d21ddf641e8be59fdc89a7fe34804fb00619",
+       "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so",
+        "sha256": "5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab"
+       }
+      },
+      "upfirdn2d": {
+       "build_ninja_sha256": "69d2fe7143d094caf8b6314bd8dd2f15124c97bff4db9139cd170f1ab7c73542",
+       "extension": {
+        "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so",
+        "sha256": "40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081"
+       }
+      }
+     },
+     "guards": {
+      "backward_passes": 0,
+      "optimizer_constructions": 0,
+      "optimizer_steps": 0,
+      "torch_saves": 0
+     },
+     "import_resolution": {
+      "models.networks.discriminator": "models/networks/discriminator.py",
+      "models.networks.encoder": "models/networks/encoder.py",
+      "models.networks.generator": "models/networks/generator.py",
+      "models.networks.patch_discriminator": "models/networks/patch_discriminator.py",
+      "models.networks.stylegan2_op.fused_act": "models/networks/stylegan2_op/fused_act.py",
+      "models.networks.stylegan2_op.upfirdn2d": "models/networks/stylegan2_op/upfirdn2d.py",
+      "util": "util/__init__.py"
+     },
+     "jit_build_invoked": false,
+     "manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+     "ok": true,
+     "params": {
+      "E": 929960,
+      "G": 3699233
+     },
+     "precision": {
+      "amp": false,
+      "autocast_cpu": false,
+      "autocast_cuda": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "cudnn_tf32": false,
+      "default_dtype": "torch.float32",
+      "matmul_precision": "highest",
+      "matmul_tf32": false
+     },
+     "source_identity": {
+      "code_files_verified": 67,
+      "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+      "differing_fields": [
+       "root"
+      ],
+      "files_verified": 23,
+      "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+      "relocated": true,
+      "root": "/home/student20261/workdir/m8_learned_banks/clones/e05q2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/third_party/source_cache/swapping_autoencoder",
+      "ruling": {
+       "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+       "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257"
+      },
+      "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+      "unexpected_executable_files": 0
+     },
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "tensor2im_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+    },
+    "other_seed_checkpoint_path": {
+     "error": "LearnedBankError: run root /home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E05/seed_42 is not runs/m6/E05/seed_2026",
+     "refused": true
+    },
+    "peak_cuda_memory_allocated_bytes": 471932928,
+    "pid": 3380219,
+    "second_seed_in_same_process": {
+     "error": "RuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild",
+     "refused": true
+    },
+    "seed": 2026,
+    "torch": [
+     "2.12.1+cu130",
+     "13.0",
+     92000,
+     "NVIDIA GeForce RTX 3090"
+    ],
+    "utc": "2026-11-24T19:25:45Z"
+   }
+  }
+ },
+ "ruling": {
+  "path": "configs/amendments/e05_s7_b1_b2_ruling.yaml",
+  "sha256": "63e8ae7edfef982c4b0606dfb27a4d3f749fe5b1393800d89320861d207c93f9"
+ },
+ "schema": "e05_s7_b1_b2_qualification_v1",
+ "status": "E05_B1_B2_QUALIFIED_FOR_S7_ATTEMPT_2",
+ "tests": {
+  "exclusions": "the B1 unit tests compile tensor2im from the real pinned file without torch; the genuine CUDA runtime is qualified by the per-seed probes below (no generation)",
+  "gpu_host_gpat_m6_e05_cuda_hidden": "test_e05_s7_b1_b2, test_e05_source_relocation, test_learned_bank_s7_acceptance, test_learned_bank, test_e05_production_runner, test_e05_production_qualification_evidence, test_e05_three_seed_training_closure: 121 OK",
+  "laptop_python3": "test_learned_bank_s7_acceptance, test_e05_source_relocation, test_e05_s7_b1_b2, test_learned_bank: 76 OK; test_e04_*, E03/E06b/E06c closures OK",
+  "laptop_venv": "tests/test_e05_*, test_learned_bank*, test_m8_*, test_e04_three_seed*, test_e01*, test_m6d4*: 390 OK (22 torch/GPU-only skipped)"
+ }
+}
