@@ -31,6 +31,9 @@ sys.path.insert(0, str(ROOT))
 from methods.common import learned_bank as lb  # noqa: E402
 
 EXIT_BLOCKED = 3
+# owner ruling B2 P2_ONE_PROCESS_PER_SEED (configs/amendments/e05_s7_b1_b2_ruling.yaml): `s7 --seed S` runs exactly
+# one generator seed in this OS process (E05 only; its CUDA runtime is initialised and verified once per process)
+SEED_SELECTABLE = ('E05',)
 
 
 def emit(obj):
@@ -141,17 +144,18 @@ def cmd_s7(args):
     method_dir = label_dir / args.method
     os.mkdir(str(method_dir))
     results = {}
-    for seed in lb.SEEDS:
+    for seed in (lb.SEEDS if args.seed is None else (args.seed,)):
         prov = generate_real(auth, args.method, seed, rt, method_dir / ('seed_%d' % seed), 'S7_TOY_POPULATION')
         results[seed] = {k: prov.get(k) for k in ('status', 'rows', 'outputs', 'failure_count', 'manifest_sha256',
                                                   'checkpoint_unchanged_after', 'peak_cuda_memory_allocated_bytes')}
-    emit({'command': 's7', 'method': args.method, 'label': args.label, 'results': results})
+    emit(dict({'command': 's7', 'method': args.method, 'label': args.label, 'results': results},
+              **({} if args.seed is None else {'seed': args.seed, 'process_seeds': sorted(results)})))
     return 0
 
 
 def cmd_s7_compare(args):
     out = {}
-    for seed in lb.SEEDS:
+    for seed in (lb.SEEDS if args.seed is None else (args.seed,)):
         a = Path(args.out_root) / 'run_A' / args.method / ('seed_%d' % seed)
         b = Path(args.out_root) / 'run_B' / args.method / ('seed_%d' % seed)
         ra = lb.read_bank(a, expect_method=args.method, expect_seed=seed, expect_mode='S7_TOY', expect_rows=lb.TOY_N,
@@ -160,7 +164,8 @@ def cmd_s7_compare(args):
                           expect_checkpoint_identity=lb.checkpoint_identity_sha256(args.method, seed))
         out[seed] = {'run_A_reader_ok': ra['ok'], 'run_B_reader_ok': rb['ok'], 'failures': [ra.get('failures'),
                      rb.get('failures')], 'replay': lb.compare_runs(a, b)}
-    emit({'command': 's7-compare', 'method': args.method, 'seeds': out})
+    emit(dict({'command': 's7-compare', 'method': args.method, 'seeds': out},
+              **({} if args.seed is None else {'seed': args.seed})))
     return 0 if all(v['run_A_reader_ok'] and v['run_B_reader_ok'] and v['replay']['bitwise_identical']
                     and v['failures'] == [0, 0] for v in out.values()) else 1
 
@@ -196,14 +201,19 @@ def main(argv=None):
     s.add_argument('--label', required=True, choices=('A', 'B'))
     s.add_argument('--out-root', required=True)
     s.add_argument('--runtime-root', required=True)
+    s.add_argument('--seed', type=int, choices=lb.SEEDS, default=None)
     c = sub.add_parser('s7-compare')
     c.add_argument('--method', required=True, choices=lb.METHODS)
     c.add_argument('--out-root', required=True)
+    c.add_argument('--seed', type=int, choices=lb.SEEDS, default=None)
     p = sub.add_parser('production')
     p.add_argument('--method', required=True, choices=lb.METHODS)
     p.add_argument('--seed', required=True, type=int, choices=lb.SEEDS)
     p.add_argument('--runtime-root', required=True)
     args = ap.parse_args(argv)
+    if getattr(args, 'seed', None) is not None and args.cmd in ('s7', 's7-compare') \
+            and args.method not in SEED_SELECTABLE:
+        ap.error('--seed is approved only for %s (owner ruling B2 P2_ONE_PROCESS_PER_SEED)' % ', '.join(SEED_SELECTABLE))
     if args.cmd == 'gates':
         emit(gate_report(args.method, args.seed))
         return 0

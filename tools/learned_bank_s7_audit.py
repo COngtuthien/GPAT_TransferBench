@@ -120,6 +120,9 @@ def processes():
 
 
 TAG = None                       # attempt tag (e.g. E05_a2): marker/tmux prefix m8s7_<tag>; None = m8s7_<method>
+PER_SEED = False                 # owner ruling B2 P2: one OS process per (seed, run); <S7>/<M>/seed_<s>/run_<L>/<M>/seed_<s>
+B1B2_RULING_PATH = 'configs/amendments/e05_s7_b1_b2_ruling.yaml'
+MEM_FLOOR_GIB = 4
 RULING_PATH = 'configs/amendments/e05_source_relocation_ruling.yaml'
 E05_FAILURE = 'outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json'
 
@@ -133,7 +136,14 @@ def m8s7_panes():
 
 
 # ------------------------------------------------------------------------------------------------------- preflight
-def preflight(method, repo, s7_root):
+def mem_available_bytes():
+    for line in Path('/proc/meminfo').read_text().splitlines():
+        if line.startswith('MemAvailable:'):
+            return int(line.split()[1]) * 1024
+    return None
+
+
+def preflight(method, repo, s7_root, seed=None, label=None):
     lb = lb_module(repo)
     out_root = Path(s7_root) / method
     doc = {'phase': 'preflight', 'method': method, 'utc': utc_now(), 'repo': str(repo), 'git': git_state(repo),
@@ -171,6 +181,14 @@ def preflight(method, repo, s7_root):
     doc['environment'] = {'name': env['name'], 'python': env['python'], 'present': Path(env['python']).is_file(),
                           'probe_rc': r.returncode, 'probe': r.stdout.strip()}
     doc['hdd_storage_preflight'] = lb.storage_preflight()
+    if seed is not None:
+        seed_root = out_root / ('seed_%d' % seed)
+        doc['memory'] = {'mem_available_bytes': mem_available_bytes(), 'floor_bytes': MEM_FLOOR_GIB << 30}
+        doc['per_seed'] = {'seed': seed, 'label': label, 'seed_root': str(seed_root),
+                           'seed_root_exists': seed_root.exists(),
+                           'run_dir_exists': (seed_root / ('run_' + label)).exists(),
+                           'run_A_completed': (seed_root / 'run_A' / method / ('seed_%d' % seed) /
+                                               lb.PROVENANCE).is_file()}
     print(json.dumps(doc, sort_keys=True, default=str))
 
 
@@ -255,11 +273,22 @@ def collect(method, repo, s7_root):
            'out_root': str(out_root), 'out_root_entries': sorted(os.listdir(out_root)), 'runs': {}}
     if TAG:
         doc['tag'] = TAG
-    before = {L: listing(out_root / ('run_' + L)) for L in LABELS}
+    if PER_SEED:
+        doc['layout'] = 'per_seed_process'
+        doc['s7_root'] = str(s7_root)
+        doc['seed_root_entries'] = {str(s): sorted(os.listdir(out_root / ('seed_%d' % s))) for s in SEEDS}
+
+    def label_root(L, s):
+        return (out_root / ('seed_%d' % s) if PER_SEED else out_root) / ('run_' + L)
+
+    def run_dir(L, s):
+        return label_root(L, s) / method / ('seed_%d' % s)
+    watched = sorted({str(label_root(L, s)) for L in LABELS for s in SEEDS})
+    before = {w: listing(w) for w in watched}
     for L in LABELS:
         doc['runs'][L] = {}
         for s in SEEDS:
-            d = out_root / ('run_' + L) / method / ('seed_%d' % s)
+            d = run_dir(L, s)
             prov_p = d / lb.PROVENANCE
             rb = lb.read_bank(d, expect_method=method, expect_seed=s, expect_mode='S7_TOY', expect_rows=TOY_N,
                               expect_checkpoint_identity=lb.checkpoint_identity_sha256(method, s))
@@ -274,8 +303,7 @@ def collect(method, repo, s7_root):
                 rec['manifest_fields'] = list(lb.MANIFEST_FIELDS)
                 rec['manifest_rows'] = [[r[k] for k in lb.MANIFEST_FIELDS] for r in rows]
             doc['runs'][L][str(s)] = rec
-    doc['compare'] = {str(s): lb.compare_runs(out_root / 'run_A' / method / ('seed_%d' % s),
-                                              out_root / 'run_B' / method / ('seed_%d' % s)) for s in SEEDS}
+    doc['compare'] = {str(s): lb.compare_runs(run_dir('A', s), run_dir('B', s)) for s in SEEDS}
     after = {}
     for s in SEEDS:
         try:
@@ -286,27 +314,41 @@ def collect(method, repo, s7_root):
         except Exception as exc:
             after[str(s)] = {'ok': False, 'error': '%s: %s' % (type(exc).__name__, exc)}
     doc['checkpoints_after_run_B'] = after
-    doc['markers'] = {}
-    for L in LABELS:
-        mp = marker_paths(method, L, TAG)
-        doc['markers'][L] = {'command': read_text(mp['command']),
-                             'command_sha256': sha256_file(mp['command']) if Path(mp['command']).is_file() else None,
-                             'launch_time': (read_text(mp['launch_time']) or '').strip(),
-                             'exit_raw': read_text(mp['exit']), 'end_time': (read_text(mp['end_time']) or '').strip(),
-                             'pane': pane_summary(mp['pane.log']),
-                             'tmux_pane': sh('tmux', 'list-panes', '-t', 'm8s7_%s_%s' % (TAG or method, L), '-F',
-                                             '#{pane_dead} #{pane_dead_status}')}
-    pf = marker_paths(method, tag=TAG)['preflight']
-    doc['preflight'] = json.loads(read_text(pf)) if Path(pf).is_file() else None
-    doc['preflight_sha256'] = sha256_file(pf) if Path(pf).is_file() else None
-    mp = marker_paths(method, tag=TAG)
-    doc['cli_compare'] = {'stdout': read_text(mp['compare']), 'rc': read_text(mp['compare_rc'])}
+    def markers(tag, L):
+        mp = marker_paths(method, L, tag)
+        return {'command': read_text(mp['command']),
+                'command_sha256': sha256_file(mp['command']) if Path(mp['command']).is_file() else None,
+                'launch_time': (read_text(mp['launch_time']) or '').strip(),
+                'exit_raw': read_text(mp['exit']), 'end_time': (read_text(mp['end_time']) or '').strip(),
+                'pane': pane_summary(mp['pane.log']),
+                'tmux_pane': sh('tmux', 'list-panes', '-t', 'm8s7_%s_%s' % (tag or method, L), '-F',
+                                '#{pane_dead} #{pane_dead_status}')}
+
+    def json_file(path):
+        return (json.loads(read_text(path)) if Path(path).is_file() else None,
+                sha256_file(path) if Path(path).is_file() else None)
+    if PER_SEED:
+        doc['markers_per_seed'], doc['preflights'], doc['preflights_sha256'], doc['cli_compare_per_seed'] = {}, {}, {}, {}
+        for s in SEEDS:
+            t = '%s_s%d' % (TAG, s)
+            doc['markers_per_seed'][str(s)] = {L: markers(t, L) for L in LABELS}
+            pfs = {L: json_file(marker_paths(method, tag='%s_%s' % (t, L))['preflight']) for L in LABELS}
+            doc['preflights'][str(s)] = {L: v[0] for L, v in pfs.items()}
+            doc['preflights_sha256'][str(s)] = {L: v[1] for L, v in pfs.items()}
+            mp = marker_paths(method, tag=t)
+            doc['cli_compare_per_seed'][str(s)] = {'stdout': read_text(mp['compare']), 'rc': read_text(mp['compare_rc'])}
+    else:
+        doc['markers'] = {L: markers(TAG, L) for L in LABELS}
+        pf = marker_paths(method, tag=TAG)['preflight']
+        doc['preflight'], doc['preflight_sha256'] = json_file(pf)
+        mp = marker_paths(method, tag=TAG)
+        doc['cli_compare'] = {'stdout': read_text(mp['compare']), 'rc': read_text(mp['compare_rc'])}
     doc['atime'] = atime_ledger(method, repo)
     gs = '%s/m8s7_%s_A.gpu_samples.tsv' % (WORKDIR, TAG or method)
     doc['gpu_samples_run_A'] = read_text(gs).splitlines() if Path(gs).is_file() else None
     doc['processes_after'] = processes()
     doc['gpu_after'] = gpu_state()
-    doc['run_roots_unchanged_during_collect'] = all(listing(out_root / ('run_' + L)) == before[L] for L in LABELS)
+    doc['run_roots_unchanged_during_collect'] = all(listing(w) == before[w] for w in watched)
     print(json.dumps(doc, sort_keys=True, default=str))
 
 
@@ -329,6 +371,74 @@ def evidence_paths(method):
     return {'record': a + '.json', 'report': a + '.md', 'sha256': a + '_SHA256.txt'}
 
 
+def per_seed_process_gates(G, c, M, commit, ckout_ok, auth_sha, env, lb):
+    """Owner ruling B2 (P2_ONE_PROCESS_PER_SEED): six OS processes (seed x run), each with its own preflight, wrapper,
+    tmux session, exit marker and `s7 --seed S` result line, strictly sequential (one GPU job at a time)."""
+    est = ESTIMATE_GIB[M] + MARGIN_GIB
+    procs = [(s, L) for s in SEEDS for L in LABELS]
+    mks, pfs = c['markers_per_seed'], c['preflights']
+    G('P.execution_checkout', ckout_ok and all((pfs[str(s)][L] or {}).get('git', {}).get('head') == commit
+                                               and pfs[str(s)][L]['git']['status_porcelain'] == '' for s, L in procs),
+      commit)
+    for s, L in procs:
+        pf, m = pfs[str(s)][L] or {}, mks[str(s)][L]
+        g, ps = pf.get('gpu', {}), pf.get('per_seed', {})
+        pre = 'P.seed%d.run%s.' % (s, L)
+        G(pre + 'resources', pf.get('processes') == [] and all(v == '1 0' for v in pf.get('m8s7_panes', {}).values())
+          and g.get('uuid') == GPU_UUID and g.get('name') == GPU_NAME and g.get('driver') == DRIVER
+          and g.get('free_mib', 0) >= est * 1024 and pf.get('disk', {}).get('free_bytes', 0) >= DISK_FLOOR_GIB << 30
+          and (pf.get('memory', {}).get('mem_available_bytes') or 0) >= MEM_FLOOR_GIB << 30,
+          {'gpu_free_mib': g.get('free_mib'), 'required_mib': est * 1024, 'unrelated_gpu_processes': g.get('compute_apps'),
+           'disk_free_gib': round(pf.get('disk', {}).get('free_bytes', 0) / 2 ** 30, 1),
+           'mem_available_gib': round((pf.get('memory', {}).get('mem_available_bytes') or 0) / 2 ** 30, 1)})
+        G(pre + 'fresh_run_root', ps.get('seed') == s and ps.get('label') == L and ps.get('run_dir_exists') is False
+          and ps.get('seed_root') == '%s/seed_%d' % (c['out_root'], s)
+          and ((L == 'A' and ps.get('seed_root_exists') is False) or
+               (L == 'B' and ps.get('seed_root_exists') is True and ps.get('run_A_completed') is True))
+          and pf['s7_root']['path'] == c['s7_root'] and pf['s7_root']['within_runtime_root'] is False
+          and pf['s7_root']['within_hdd_bank_root'] is False and pf.get('utc', '9') <= m['launch_time'], ps)
+        G(pre + 'checkpoints_and_authority', len(pf.get('checkpoints', {})) == 12 and all(
+            v['ok'] and v['identity'] == lb.checkpoint_identity_sha256(k.split('|')[0], int(k.split('|')[1]))
+            for k, v in pf['checkpoints'].items()) and pf.get('authority', {}).get('ok') is True
+          and pf['authority']['record']['records'].get(AUTHORITY_PATH) == auth_sha)
+        G(pre + 'environment', pf.get('environment', {}).get('present') is True and pf['environment']['probe_rc'] == 0
+          and pf['environment']['python'] == env['python'], pf.get('environment'))
+        res = (m['pane'] or {}).get('s7_result') or {}
+        pre = 'R.seed%d.run%s.' % (s, L)
+        G(pre + 'exit_zero', m['exit_raw'] == '0\n' and m['tmux_pane'] in ('1 0', ''), m['exit_raw'])
+        G(pre + 'command', m['command'] is not None and (
+            'tools/learned_bank.py s7 --method %s --label %s --out-root %s/seed_%d --runtime-root %s --seed %d\n'
+            % (M, L, c['out_root'], s, RUNTIME, s)) in m['command'] and m['command'].count('--seed ') == 1
+          and env['python'] in m['command'] and ('cd %s ' % c['repo']) in m['command'] and 'env -i ' in m['command']
+          and 'CUDA_VISIBLE_DEVICES=0' in m['command'])
+        r = (res.get('results') or {}).get(str(s), {})
+        G(pre + 'result_line', res.get('label') == L and res.get('method') == M and res.get('seed') == s
+          and res.get('process_seeds') == [s] and sorted(res.get('results', {})) == [str(s)]
+          and r.get('status') == 'completed' and r.get('rows') == TOY_N and r.get('outputs') == TOY_N
+          and r.get('failure_count') == 0 and r.get('checkpoint_unchanged_after') is True
+          and not any(m['pane']['fail_hits'].values()), (m['pane'] or {}).get('fail_hits'))
+    win = [(epoch(mks[str(s)][L]['launch_time']), epoch(mks[str(s)][L]['end_time'])) for s, L in procs]
+    G('R.one_process_per_seed_run_sequential', all(a <= b for a, b in win) and all(
+        win[i][1] <= win[i + 1][0] for i in range(len(win) - 1))
+      and len({mks[str(s)][L]['command_sha256'] for s, L in procs}) == len(procs),
+      [[mks[str(s)][L][k] for k in ('launch_time', 'end_time')] for s, L in procs])
+    G('R.out_root_layout', c['out_root_entries'] == sorted('seed_%d' % s for s in SEEDS)
+      and all(c['seed_root_entries'][str(s)] == ['run_A', 'run_B'] for s in SEEDS)
+      and c['out_root'] == '%s/%s' % (c['s7_root'], M))
+    G('R.no_process_left', c['processes_after'] == [])
+    for s in SEEDS:
+        cc = c['cli_compare_per_seed'][str(s)]
+        try:
+            cli = json.loads((cc.get('stdout') or '').strip().splitlines()[-1])
+        except (ValueError, IndexError):
+            cli = {}
+        v = (cli.get('seeds') or {}).get(str(s), {})
+        G('S.seed%d.cli_s7_compare' % s, cc.get('rc') == '0\n' and cli.get('command') == 's7-compare'
+          and cli.get('method') == M and cli.get('seed') == s and sorted(cli.get('seeds', {})) == [str(s)]
+          and v.get('replay', {}).get('bitwise_identical') is True and v.get('failures') == [0, 0]
+          and v.get('run_A_reader_ok') is True and v.get('run_B_reader_ok') is True, cc.get('rc'))
+
+
 def build(c, repo_root):
     sys.path.insert(0, str(repo_root))
     from methods.common import learned_bank as lb
@@ -342,7 +452,14 @@ def build(c, repo_root):
     e04_sha = sha256_bytes((repo / lb.E04_COMPLETION_RECORD).read_bytes())
     plan = json.loads((repo / PLAN_PATH).read_text())
     commit = c['git']['head']
-    pf = c['preflight'] or {}
+    per_seed = c.get('layout') == 'per_seed_process'
+    pf = (c['preflights']['42']['A'] if per_seed else c['preflight']) or {}
+    if per_seed:
+        procs = [(s, L) for s in SEEDS for L in LABELS]
+        proc_markers = [c['markers_per_seed'][str(s)][L] for s, L in procs]
+    else:
+        proc_markers = [c['markers'][L] for L in LABELS]
+    first_launch, last_end = proc_markers[0]['launch_time'], proc_markers[-1]['end_time']
     toy = lb.load_toy_manifest(repo)
     sources = json.loads((repo / lb.SOURCES_PATH).read_text())['families']
     env = lb.ENVIRONMENTS[M]
@@ -352,50 +469,57 @@ def build(c, repo_root):
       and auth['seeds'] == list(SEEDS) and auth['contract_sha256'] == contract_sha
       and auth['e04_seed_2026_completion_sha256'] == e04_sha and auth['authorizes']['production_bank_generation'] is False
       and auth['resource_preflight']['required'] is True)
-    G('P.execution_checkout', commit == pf.get('git', {}).get('head') and c['git']['status_porcelain'] == ''
-      and pf.get('git', {}).get('status_porcelain') == '' and c['git']['branch'] == 'm6-baselines'
-      and subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'HEAD'], cwd=repo).returncode == 0
-      and subprocess.run(['git', 'show', '%s:%s' % (commit, AUTHORITY_PATH)], cwd=repo,
-                         capture_output=True).stdout == auth_raw, commit)
-    est = ESTIMATE_GIB[M] + MARGIN_GIB
-    g = pf.get('gpu', {})
-    G('P.preflight_resources', pf.get('processes') == [] and all(v == '1 0' for v in pf.get('m8s7_panes', {}).values())
-      and g.get('uuid') == GPU_UUID and g.get('name') == GPU_NAME and g.get('free_mib', 0) >= est * 1024
-      and pf.get('disk', {}).get('free_bytes', 0) >= DISK_FLOOR_GIB << 30,
-      {'gpu_free_mib': g.get('free_mib'), 'required_mib': est * 1024, 'unrelated_gpu_processes': g.get('compute_apps'),
-       'disk_free_gib': round(pf.get('disk', {}).get('free_bytes', 0) / 2 ** 30, 1)})
-    G('P.preflight_fresh_roots', pf.get('s7_root', {}).get('method_out_root_exists') is False
-      and pf['s7_root']['within_runtime_root'] is False and pf['s7_root']['within_hdd_bank_root'] is False
-      and pf.get('utc', '9') <= c['markers']['A']['launch_time'])
-    G('P.preflight_12_checkpoints', len(pf.get('checkpoints', {})) == 12 and all(
-        v['ok'] and v['identity'] == lb.checkpoint_identity_sha256(k.split('|')[0], int(k.split('|')[1]))
-        for k, v in pf['checkpoints'].items()))
-    G('P.preflight_authority_loads', pf.get('authority', {}).get('ok') is True
-      and pf['authority']['record']['records'].get(AUTHORITY_PATH) == auth_sha)
-    G('P.preflight_environment', pf.get('environment', {}).get('present') is True
-      and pf['environment']['probe_rc'] == 0 and pf['environment']['python'] == env['python'], pf.get('environment'))
+    ckout_ok = (c['git']['status_porcelain'] == '' and c['git']['branch'] == 'm6-baselines'
+                and subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'HEAD'], cwd=repo).returncode == 0
+                and subprocess.run(['git', 'show', '%s:%s' % (commit, AUTHORITY_PATH)], cwd=repo,
+                                   capture_output=True).stdout == auth_raw)
+    if per_seed:
+        per_seed_process_gates(G, c, M, commit, ckout_ok, auth_sha, env, lb)
+    else:
+        G('P.execution_checkout', commit == pf.get('git', {}).get('head') and c['git']['status_porcelain'] == ''
+          and pf.get('git', {}).get('status_porcelain') == '' and c['git']['branch'] == 'm6-baselines'
+          and subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'HEAD'], cwd=repo).returncode == 0
+          and subprocess.run(['git', 'show', '%s:%s' % (commit, AUTHORITY_PATH)], cwd=repo,
+                             capture_output=True).stdout == auth_raw, commit)
+        est = ESTIMATE_GIB[M] + MARGIN_GIB
+        g = pf.get('gpu', {})
+        G('P.preflight_resources', pf.get('processes') == [] and all(v == '1 0' for v in pf.get('m8s7_panes', {}).values())
+          and g.get('uuid') == GPU_UUID and g.get('name') == GPU_NAME and g.get('free_mib', 0) >= est * 1024
+          and pf.get('disk', {}).get('free_bytes', 0) >= DISK_FLOOR_GIB << 30,
+          {'gpu_free_mib': g.get('free_mib'), 'required_mib': est * 1024, 'unrelated_gpu_processes': g.get('compute_apps'),
+           'disk_free_gib': round(pf.get('disk', {}).get('free_bytes', 0) / 2 ** 30, 1)})
+        G('P.preflight_fresh_roots', pf.get('s7_root', {}).get('method_out_root_exists') is False
+          and pf['s7_root']['within_runtime_root'] is False and pf['s7_root']['within_hdd_bank_root'] is False
+          and pf.get('utc', '9') <= c['markers']['A']['launch_time'])
+        G('P.preflight_12_checkpoints', len(pf.get('checkpoints', {})) == 12 and all(
+            v['ok'] and v['identity'] == lb.checkpoint_identity_sha256(k.split('|')[0], int(k.split('|')[1]))
+            for k, v in pf['checkpoints'].items()))
+        G('P.preflight_authority_loads', pf.get('authority', {}).get('ok') is True
+          and pf['authority']['record']['records'].get(AUTHORITY_PATH) == auth_sha)
+        G('P.preflight_environment', pf.get('environment', {}).get('present') is True
+          and pf['environment']['probe_rc'] == 0 and pf['environment']['python'] == env['python'], pf.get('environment'))
 
-    # R. run lifecycle: A then B, separate processes, exit 0
-    mk = c['markers']
-    for L in LABELS:
-        m = mk[L]
-        res = (m['pane'] or {}).get('s7_result') or {}
-        G('R.run%s.exit_zero' % L, m['exit_raw'] == '0\n' and m['tmux_pane'] in ('1 0', ''), m['exit_raw'])
-        G('R.run%s.command' % L, m['command'] is not None and (
-            'tools/learned_bank.py s7 --method %s --label %s --out-root %s --runtime-root %s'
-            % (M, L, c['out_root'], RUNTIME)) in m['command'] and env['python'] in m['command']
-          and ('cd %s ' % c['repo']) in m['command'] and 'env -i ' in m['command']
-          and 'CUDA_VISIBLE_DEVICES=0' in m['command'])
-        G('R.run%s.result_line' % L, res.get('label') == L and res.get('method') == M and all(
-            res['results'][str(s)]['status'] == 'completed' and res['results'][str(s)]['rows'] == TOY_N
-            and res['results'][str(s)]['outputs'] == TOY_N and res['results'][str(s)]['failure_count'] == 0
-            and res['results'][str(s)]['checkpoint_unchanged_after'] is True for s in SEEDS)
-          and not any(m['pane']['fail_hits'].values()), (m['pane'] or {}).get('fail_hits'))
-    G('R.B_after_A', epoch(mk['A']['launch_time']) <= epoch(mk['A']['end_time']) <= epoch(mk['B']['launch_time'])
-      <= epoch(mk['B']['end_time']), [mk[L][k] for L in LABELS for k in ('launch_time', 'end_time')])
-    G('R.out_root_exactly_two_runs', c['out_root_entries'] == ['run_A', 'run_B']
-      and c['out_root'] == '%s/%s' % (pf.get('s7_root', {}).get('path'), M))
-    G('R.no_process_left', c['processes_after'] == [])
+        # R. run lifecycle: A then B, separate processes, exit 0
+        mk = c['markers']
+        for L in LABELS:
+            m = mk[L]
+            res = (m['pane'] or {}).get('s7_result') or {}
+            G('R.run%s.exit_zero' % L, m['exit_raw'] == '0\n' and m['tmux_pane'] in ('1 0', ''), m['exit_raw'])
+            G('R.run%s.command' % L, m['command'] is not None and (
+                'tools/learned_bank.py s7 --method %s --label %s --out-root %s --runtime-root %s'
+                % (M, L, c['out_root'], RUNTIME)) in m['command'] and env['python'] in m['command']
+              and ('cd %s ' % c['repo']) in m['command'] and 'env -i ' in m['command']
+              and 'CUDA_VISIBLE_DEVICES=0' in m['command'])
+            G('R.run%s.result_line' % L, res.get('label') == L and res.get('method') == M and all(
+                res['results'][str(s)]['status'] == 'completed' and res['results'][str(s)]['rows'] == TOY_N
+                and res['results'][str(s)]['outputs'] == TOY_N and res['results'][str(s)]['failure_count'] == 0
+                and res['results'][str(s)]['checkpoint_unchanged_after'] is True for s in SEEDS)
+              and not any(m['pane']['fail_hits'].values()), (m['pane'] or {}).get('fail_hits'))
+        G('R.B_after_A', epoch(mk['A']['launch_time']) <= epoch(mk['A']['end_time']) <= epoch(mk['B']['launch_time'])
+          <= epoch(mk['B']['end_time']), [mk[L][k] for L in LABELS for k in ('launch_time', 'end_time')])
+        G('R.out_root_exactly_two_runs', c['out_root_entries'] == ['run_A', 'run_B']
+          and c['out_root'] == '%s/%s' % (pf.get('s7_root', {}).get('path'), M))
+        G('R.no_process_left', c['processes_after'] == [])
 
     # S. per seed and run
     rows_by_seed = {}
@@ -523,6 +647,15 @@ def build(c, repo_root):
                              capture_output=True).stdout == rul_raw
           and rul['resolves']['failure_record_sha256'] == sha256_bytes(fail_raw) and c.get('tag') == 'E05_a2'
           and c['out_root'] != json.loads(fail_raw)['raw']['out_root'])
+        if per_seed:
+            b12_raw = (repo / B1B2_RULING_PATH).read_bytes()
+            b12 = json.loads(b12_raw)
+            G('P.e05_b1_b2_ruling_in_execution_commit', b12['status'] == 'OWNER_APPROVED' and b12['approved'] is True
+              and b12['decisions'] == {'B1': 'TENSOR2IM_CHECK_AT_DEFINING_MODULE', 'B2': 'P2_ONE_PROCESS_PER_SEED'}
+              and subprocess.run(['git', 'show', '%s:%s' % (commit, B1B2_RULING_PATH)], cwd=repo,
+                                 capture_output=True).stdout == b12_raw)
+            manifest = json.loads((repo / 'environments/e05.compatibility_patch_manifest.json').read_text())
+            t2i_file = manifest['generated_files_sha256']['util/util.py']
         src_root = '%s/third_party/source_cache/swapping_autoencoder' % c['repo']
         for s in SEEDS:
             for L in LABELS:
@@ -537,13 +670,20 @@ def build(c, repo_root):
                   and si.get('ruling') == {'path': RULING_PATH, 'sha256': sha256_bytes(rul_raw)}
                   and len(imp) == 7 and bc.get('jit_build_invoked') is False
                   and len(bc.get('extensions', {})) == 2, {'source_identity': si, 'imports': imp})
+                if per_seed:
+                    ad = c['runs'][L][str(s)]['provenance']['adapter']
+                    t2 = ad.get('tensor2im_runtime') or {}
+                    G('S.seed%d.run%s.e05_tensor2im_runtime' % (s, L), t2 == {
+                        'module': 'util.util', 'file': 'util/util.py', 'file_sha256': t2i_file,
+                        'segment_sha256': ad.get('tensor2im_segment_sha256')}
+                      and ad.get('tensor2im_segment_sha256') == b12['tensor2im']['pinned_segment_sha256'], t2)
 
     cc = c.get('cli_compare') or {}
     try:
         cli = json.loads((cc.get('stdout') or '').strip().splitlines()[-1])
     except (ValueError, IndexError):
         cli = {}
-    G('S.cli_s7_compare', cc.get('rc') == '0\n' and cli.get('command') == 's7-compare' and cli.get('method') == M
+    per_seed or G('S.cli_s7_compare', cc.get('rc') == '0\n' and cli.get('command') == 's7-compare' and cli.get('method') == M
       and all(cli['seeds'][str(s)]['replay']['bitwise_identical'] is True and cli['seeds'][str(s)]['failures'] == [0, 0]
               and cli['seeds'][str(s)]['run_A_reader_ok'] and cli['seeds'][str(s)]['run_B_reader_ok'] for s in SEEDS),
       cc.get('rc'))
@@ -555,7 +695,7 @@ def build(c, repo_root):
     else:
         by = at['by_split']
         G('F.atime_ledger', at['same_paths'] and at['files_pre'] == at['files_post'] > 0
-          and at['pre_utc'] <= c['markers']['A']['launch_time'] and at['post_utc'] >= c['markers']['B']['end_time']
+          and at['pre_utc'] <= first_launch and at['post_utc'] >= last_end
           and all(v['atime_changed'] == 0 and v['mtime_changed'] == 0 and v['missing_post'] == 0 for v in by.values())
           and {'TRAIN', 'VAL', 'TEST'} <= set(by), by)
     G('F.no_val_test_inputs', all(
@@ -566,7 +706,9 @@ def build(c, repo_root):
 
     failed = G.failed
     status = 'S7_ACCEPTANCE_PASSED' if not failed else 'S7_FAILED_NEEDS_OWNER_REVIEW'
-    peak = {L: {s: ((c['markers'][L]['pane'] or {}).get('s7_result') or {}).get('results', {}).get(str(s), {}).get(
+    def mk_of(L, s):
+        return c['markers_per_seed'][str(s)][L] if per_seed else c['markers'][L]
+    peak = {L: {s: ((mk_of(L, s)['pane'] or {}).get('s7_result') or {}).get('results', {}).get(str(s), {}).get(
         'peak_cuda_memory_allocated_bytes') for s in SEEDS} for L in LABELS}
     doc = {
         'schema': 'learned_bank_s7_acceptance_record_v1', 'method': M, 'seeds': list(SEEDS), 'status': status,
@@ -605,11 +747,19 @@ def build(c, repo_root):
                     'randn noise_s, z = cat(noise_s, noise, noise); 2 batches, 14 discarded'),
             'conversion_rule': lb.CONVERSION_RULES[M],
             'working_directory': c['repo'],
-            'commands': {L: c['markers'][L]['command'] for L in LABELS},
-            'compare_command': '%s -B tools/learned_bank.py s7-compare --method %s --out-root %s'
-                               % (env['python'], M, c['out_root']),
-            'windows': {L: [c['markers'][L]['launch_time'], c['markers'][L]['end_time']] for L in LABELS},
-            'exit_status': {L: c['markers'][L]['exit_raw'] for L in LABELS},
+            **({'commands': {L: c['markers'][L]['command'] for L in LABELS},
+                'compare_command': '%s -B tools/learned_bank.py s7-compare --method %s --out-root %s'
+                                   % (env['python'], M, c['out_root']),
+                'windows': {L: [c['markers'][L]['launch_time'], c['markers'][L]['end_time']] for L in LABELS},
+                'exit_status': {L: c['markers'][L]['exit_raw'] for L in LABELS}} if not per_seed else {
+                'layout': 'P2_ONE_PROCESS_PER_SEED: one OS process per (seed, run), strictly sequential',
+                'commands': {str(s): {L: mk_of(L, s)['command'] for L in LABELS} for s in SEEDS},
+                'compare_commands': {str(s): '%s -B tools/learned_bank.py s7-compare --method %s --out-root %s/seed_%d '
+                                             '--seed %d' % (env['python'], M, c['out_root'], s, s) for s in SEEDS},
+                'windows': {str(s): {L: [mk_of(L, s)['launch_time'], mk_of(L, s)['end_time']] for L in LABELS}
+                            for s in SEEDS},
+                'exit_status': {str(s): {L: mk_of(L, s)['exit_raw'] for L in LABELS} for s in SEEDS},
+                'preflights_sha256': c['preflights_sha256']}),
             'output_root': c['out_root'],
             'atime_ledger': {k: (at or {}).get(k) for k in ('pre_utc', 'post_utc', 'pre_sha256', 'post_sha256')},
             'known_limitations': ['S7 outputs live only on the GPU host S7 root; git holds hashes, not image bytes',
@@ -648,9 +798,13 @@ def report(doc):
         '- Environment `%s` (`%s`), framework %s, GPU %s `%s`, driver %s.' % (
             r['environment']['name'], r['environment']['python'], r['environment']['framework'], r['gpu']['name'],
             r['gpu']['uuid'], r['gpu']['driver']),
-        '- Run A %s → %s; run B %s → %s; exit status A %s, B %s.' % (
+        ('- Run A %s → %s; run B %s → %s; exit status A %s, B %s.' % (
             r['windows']['A'][0], r['windows']['A'][1], r['windows']['B'][0], r['windows']['B'][1],
-            r['exit_status']['A'].strip(), r['exit_status']['B'].strip()),
+            r['exit_status']['A'].strip(), r['exit_status']['B'].strip()) if 'layout' not in r else
+         '- One OS process per seed and run (owner ruling B2, P2), strictly sequential: %s.' % '; '.join(
+             'seed %s run %s %s → %s exit %s' % (s, L, r['windows'][s][L][0], r['windows'][s][L][1],
+                                                 r['exit_status'][s][L].strip())
+             for s in sorted(r['windows'], key=int) for L in ('A', 'B'))),
         '- Population: %s.' % r['population'],
         '- RNG: %s.' % r['rng'],
         '- Conversion: `%s`.' % r['conversion_rule'],
@@ -673,14 +827,24 @@ def main(argv=None):
         a.add_argument('--repo', required=True)
         a.add_argument('--s7-root', required=True)
         a.add_argument('--tag', default=None)
+        a.add_argument('--per-seed', action='store_true')
+        if name == 'preflight':
+            a.add_argument('--seed', type=int, choices=SEEDS, default=None)
+            a.add_argument('--label', choices=LABELS, default=None)
     b = sub.add_parser('build')
     b.add_argument('--collected', required=True)
     b.add_argument('--repo-root', default=str(Path(globals().get('__file__', 'tools/x')).resolve().parents[1]))
     args = ap.parse_args(argv)
-    global TAG
+    global TAG, PER_SEED
     TAG = getattr(args, 'tag', None)
+    PER_SEED = bool(getattr(args, 'per_seed', False))
+    if PER_SEED and not TAG:
+        ap.error('--per-seed needs --tag')
     if args.cmd == 'preflight':
-        return preflight(args.method, args.repo, args.s7_root)
+        if PER_SEED and (args.seed is None or args.label is None):
+            ap.error('--per-seed preflight needs --seed and --label')
+        return preflight(args.method, args.repo, args.s7_root, args.seed if PER_SEED else None,
+                         args.label if PER_SEED else None)
     if args.cmd == 'collect':
         return collect(args.method, args.repo, args.s7_root)
     c = json.loads(Path(args.collected).read_text())

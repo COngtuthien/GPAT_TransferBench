@@ -230,7 +230,7 @@ class RulingCorrectionAndHistory(unittest.TestCase):
     def test_02_compatibility_manifest_and_production_code_unchanged(self):
         for rel in ('environments/e05.compatibility_patch_manifest.json', 'environments/e05.lock.json',
                     'methods/pcgan/production_io.py', 'methods/pcgan/production_runner.py', 'tools/run_e05.py',
-                    'methods/pcgan/production_qualification.py', 'methods/pcgan/bank_adapter.py',
+                    'methods/pcgan/production_qualification.py',   # bank_adapter.py: owner-approved B1 (test_e05_s7_b1_b2)
                     'methods/pcgan/runtime_qualification.py', 'configs/methods/e05_pcgan.yaml'):
             self.assertEqual(git_show('f291b34', rel), (ROOT / rel).read_bytes(), rel)
 

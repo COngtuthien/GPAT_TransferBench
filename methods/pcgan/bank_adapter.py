@@ -17,6 +17,7 @@ kernels, methods.pcgan.production_runner.build_models); they cannot execute on C
 qualify seeding placement, order independence, conversion and the bank path; the real forward is S7 (GPU) work.
 """
 import ast
+import json
 from pathlib import Path
 
 import numpy as np
@@ -57,6 +58,35 @@ def pinned_tensor2im(repo_root=None):
     namespace = {'np': np, 'torch': torch, 'tile_images': None}
     exec(compile(segment, str(Path(src['root']) / TENSOR2IM_SOURCE), 'exec'), namespace)
     return namespace['tensor2im'], lb.sha256_bytes(segment.encode())
+
+
+def runtime_tensor2im(modules, generated_root, closure, pinned_segment_sha):
+    """Owner ruling B1 (configs/amendments/e05_s7_b1_b2_ruling.yaml): verify the tensor2im the runtime will call at its
+    defining module. `util` is a package; tensor2im must be defined in util.util, whose file must be the qualified
+    generated-closure util/util.py (sha256 from the compatibility-patch manifest), the function's code must come from
+    that file, and its source segment must equal the pinned basis segment. Returns (function, record)."""
+    util = modules.get('util')
+    fn = getattr(util, 'tensor2im', None)
+    require(callable(fn), 'runtime util.tensor2im missing')
+    name = getattr(fn, '__module__', None)
+    require(name == 'util.util', 'runtime tensor2im is defined in %r, not util.util' % (name,))
+    mod = modules.get(name)
+    require(mod is not None and getattr(mod, 'tensor2im', None) is fn, 'util.tensor2im is not util.util.tensor2im')
+    generated = Path(generated_root).resolve()
+    path = Path(mod.__file__).resolve()
+    require(path.is_relative_to(generated) and path.relative_to(generated).as_posix() == TENSOR2IM_SOURCE,
+            'runtime tensor2im module %s is not the generated-closure %s' % (path, TENSOR2IM_SOURCE))
+    require(Path(fn.__code__.co_filename).resolve() == path, 'tensor2im code does not come from %s' % path)
+    raw = path.read_bytes()
+    digest = lb.sha256_bytes(raw)
+    require(closure.get(TENSOR2IM_SOURCE) == digest, 'runtime %s sha256 %s is not the qualified closure file'
+            % (TENSOR2IM_SOURCE, digest))
+    text = raw.decode('utf-8')
+    node = next((n for n in ast.parse(text).body if isinstance(n, ast.FunctionDef) and n.name == 'tensor2im'), None)
+    require(node is not None, 'no tensor2im definition in %s' % TENSOR2IM_SOURCE)
+    segment = lb.sha256_bytes(ast.get_source_segment(text, node).encode())
+    require(segment == pinned_segment_sha, 'runtime tensor2im differs from pinned')
+    return fn, {'module': name, 'file': TENSOR2IM_SOURCE, 'file_sha256': digest, 'segment_sha256': segment}
 
 
 class PCGANBankAdapter:
@@ -158,10 +188,10 @@ def load_real(torch, seed, run_root, build_root, *, device='cuda'):
     import sys
     util = sys.modules['util']
     _, pinned_segment_sha = pinned_tensor2im()
-    live_segment = ast.get_source_segment(Path(util.__file__).read_text(), next(
-        n for n in ast.parse(Path(util.__file__).read_text()).body
-        if isinstance(n, ast.FunctionDef) and n.name == 'tensor2im'))
-    require(lb.sha256_bytes(live_segment.encode()) == pinned_segment_sha, 'runtime tensor2im differs from pinned')
+    generated_root = json.loads((lb.ROOT / 'environments/e05.compatibility_patch_manifest.json').read_text())[
+        'generated_root']
+    _, t2i = runtime_tensor2im(sys.modules, generated_root, runtime['build_closure']['generated_files_sha256'],
+                               pinned_segment_sha)
     state = load_checkpoint_state(torch, ckpt['files']['pth']['path'], 'cuda')
     E, G = models['Encoder'], models['Generator']
     E.load_state_dict(state['models']['Encoder'], strict=True)
@@ -179,7 +209,8 @@ def load_real(torch, seed, run_root, build_root, *, device='cuda'):
                                identity_extra={'checkpoint': ckpt, 'source': src, 'precision': precision,
                                                'runtime_closure': {k: runtime.get(k) for k in ('build_closure',)},
                                                'training_guards': guards, 'tensor2im_segment_sha256':
-                                               pinned_segment_sha, 'framework': 'torch ' + torch.__version__})
+                                               pinned_segment_sha, 'tensor2im_runtime': t2i,
+                                               'framework': 'torch ' + torch.__version__})
     return adapter, ckpt
 
 

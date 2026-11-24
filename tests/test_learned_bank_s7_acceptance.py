@@ -69,9 +69,29 @@ class S7Records(unittest.TestCase):
                     c['atime']['by_split']['VAL']['atime_changed'] = 1
                 self.assertIn('F.atime_ledger', self.tampered(m, val_atime))
 
+                per_seed = self.docs[m]['collected'].get('layout') == 'per_seed_process'
+
                 def exit_b(c):
-                    c['markers']['B']['exit_raw'] = '1\n'
-                self.assertIn('R.runB.exit_zero', self.tampered(m, exit_b))
+                    (c['markers_per_seed']['1337'] if per_seed else c['markers'])['B']['exit_raw'] = '1\n'
+                self.assertIn('R.seed1337.runB.exit_zero' if per_seed else 'R.runB.exit_zero', self.tampered(m, exit_b))
+                if per_seed:
+                    def two_seeds_in_one_process(c):
+                        res = c['markers_per_seed']['42']['A']['pane']['s7_result']
+                        res['process_seeds'] = [42, 1337]
+                    self.assertIn('R.seed42.runA.result_line', self.tampered(m, two_seeds_in_one_process))
+
+                    def overlapping_processes(c):
+                        mk = c['markers_per_seed']
+                        mk['1337']['A']['launch_time'] = mk['42']['B']['launch_time']
+                    self.assertIn('R.one_process_per_seed_run_sequential', self.tampered(m, overlapping_processes))
+
+                    def missing_preflight(c):
+                        c['preflights']['2026']['B'] = None
+                    self.assertIn('P.execution_checkout', self.tampered(m, missing_preflight))
+
+                    def wrong_tensor2im(c):
+                        c['runs']['B']['2026']['provenance']['adapter']['tensor2im_runtime']['module'] = 'util'
+                    self.assertIn('S.seed2026.runB.e05_tensor2im_runtime', self.tampered(m, wrong_tensor2im))
 
                 def nonfinite(c):
                     r = c['runs']['A']['42']

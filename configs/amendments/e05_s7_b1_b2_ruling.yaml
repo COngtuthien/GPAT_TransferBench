@@ -1,0 +1,75 @@
+{
+ "schema_version": "e05_s7_b1_b2_ruling_v1",
+ "record": "E05_S7_B1_B2_OWNER_RULING",
+ "status": "OWNER_APPROVED",
+ "approved": true,
+ "date": "2026-11-25",
+ "approval": "Owner session instruction 2026-11-25 'E05 S7 B1/B2 Owner Ruling and Attempt-2 GPU Acceptance': B1 approved; B2 approved as option P2 (one OS process per seed), deliberately not P1, to preserve process-level isolation and avoid reliance on already-imported CUDA extension state across seeds.",
+ "decisions": {
+  "B1": "TENSOR2IM_CHECK_AT_DEFINING_MODULE",
+  "B2": "P2_ONE_PROCESS_PER_SEED"
+ },
+ "rejected": {
+  "B2_P1_process_idempotent_runtime": "not approved; existing_runtime keeps refusing a second load in one process"
+ },
+ "resolves": {
+  "qualification_record": "outputs/audit/E05_SOURCE_RELOCATION_QUALIFICATION.json",
+  "qualification_record_sha256": "19f094c9d9d6ed4837755ff170e93070a53b20359986ac515b73a0b984131646",
+  "qualification_commit": "ef96fcbafb609c95ba930ec0754931c6e35be257",
+  "o2_ruling": {
+   "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+   "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257",
+   "commit": "5f81d704b6da24165c4d9fe466afaf5da239046a"
+  },
+  "attempt_1_failure": {
+   "path": "outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json",
+   "sha256": "bdaa88abd6221bf31dbb1014e7c1126f4beef9addc87ea7f99b927b061a6f836",
+   "commit": "2d430e98825adcd388d0c3152222aa62efb43c2c"
+  }
+ },
+ "tensor2im": {
+  "defining_module": "util.util",
+  "file": "util/util.py",
+  "qualified_file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+  "pinned_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952",
+  "check": "methods/pcgan/bank_adapter.py::runtime_tensor2im: util.tensor2im.__module__ == 'util.util' and is util.util.tensor2im; its file is the generated-closure util/util.py with the manifest sha256; its code object comes from that file; its source segment equals the pinned basis segment. The function object passed to the adapter is unchanged (util.tensor2im)."
+ },
+ "process_isolation": {
+  "cli": "tools/learned_bank.py s7 --seed S and s7-compare --seed S (E05 only; without --seed every method behaves as before)",
+  "processes": "6 OS processes, strictly sequential: seed 42 A, 42 B, 1337 A, 1337 B, 2026 A, 2026 B; each initialises and verifies the qualified runtime (source identity, closure, both CUDA extensions, imports, tensor2im) itself and loads only its own seed's checkpoint",
+  "layout": "<S7>/E05/seed_<s>/run_<A|B>/E05/seed_<s>/ (each --out-root is <S7>/E05/seed_<s>; run_<L> is created exclusively by its process)",
+  "markers": "~/workdir/m8s7_E05_a2_s<s>_<A|B>.{command,launch_time,exit,end_time,pane.log}, tmux m8s7_E05_a2_s<s>_<A|B>, preflight ~/workdir/m8s7_E05_a2_s<s>_<A|B>_preflight.json, compare ~/workdir/m8s7_E05_a2_s<s>_compare.{json,rc}, atime ~/workdir/m8s7_E05_a2_atime_{pre,post}.tsv",
+  "audit": "tools/learned_bank_s7_audit.py --tag E05_a2 --per-seed: per-process preflight/lifecycle gates, the unchanged per-seed/per-run S gates, bitwise A/B per seed; one method-level record outputs/audit/LEARNED_BANK_S7_E05.json"
+ },
+ "unchanged": [
+  "PCGAN architecture, weights and checkpoints",
+  "official mix, per-pair seeded noise, one forward per pair",
+  "tensor2im conversion and lossless PNG",
+  "toy population (186 pairs)",
+  "source-relocation (O2), compatibility-patch, generated-closure and CUDA-extension checks",
+  "the bitwise A/B acceptance standard",
+  "E06c/E03/E06b S7 records",
+  "attempt-1 roots and evidence"
+ ],
+ "s7_attempt_2": {
+  "execution_commit": "the commit that adds this record and the B1/B2 code",
+  "execution_checkout": "fresh clean clone ~/workdir/m8_learned_banks/clones/s7e05a2_<execution_commit>",
+  "s7_root": "~/workdir/m8_learned_banks/s7/<execution_commit>/ (fresh; attempt-1 roots never reused)",
+  "seeds": [
+   42,
+   1337,
+   2026
+  ]
+ },
+ "authorizes": {
+  "b1_correction": true,
+  "b2_p2_process_isolation": true,
+  "e05_s7_attempt_2": true,
+  "production_bank_generation": false,
+  "generator_retraining": false,
+  "downstream_training": false,
+  "test_evaluation": false,
+  "dinov3": false,
+  "gpat": false
+ }
+}
