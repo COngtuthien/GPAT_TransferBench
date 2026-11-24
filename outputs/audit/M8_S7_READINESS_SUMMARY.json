@@ -1,0 +1,239 @@
+{
+ "authority": {
+  "commit": "a5e31322fd99bb6c4b6361b8b6a96790bb0d8f18",
+  "path": "configs/amendments/learned_bank_s7_launch_authority.yaml",
+  "sha256": "0be8f0e1457887a568d11895f30df7076bf1f843ff919c0dbe00f014cf81645e"
+ },
+ "blocked_methods": [
+  "E05"
+ ],
+ "contract_sha256": "3554577185a9faad76ce527971e75d85e4a107809a7da91c270196c899f339a9",
+ "date": "2026-11-25",
+ "e04": {
+  "family_closure": {
+   "commit": "eeff32db62699eacef5d65e871b11ecf0359ad5f",
+   "path": "outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json",
+   "sha256": "a14d98fdf5a9a0e279ef09ca231d01261a349b9e7b86fc86d7d69c9b8734c55d"
+  },
+  "seed_2026_completion": {
+   "commit": "0e3f1d1a373d3e60130fd472a4e1799e2a622487",
+   "path": "outputs/audit/E04_SEED2026_COMPLETION.json",
+   "sha256": "47a4e4974d86b1eff7e9fd9130d6e787724082954c62f6c8fb5eb4b241fdcdb5"
+  }
+ },
+ "execution": {
+  "clone": "/home/student20261/workdir/m8_learned_banks/clones/s7_a5e31322fd99bb6c4b6361b8b6a96790bb0d8f18",
+  "commit": "a5e31322fd99bb6c4b6361b8b6a96790bb0d8f18",
+  "gpu": "NVIDIA GeForce RTX 3090 GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7, driver 580.178.04",
+  "one_gpu_job_at_a_time": true,
+  "s7_root": "/home/student20261/workdir/m8_learned_banks/s7/a5e31322fd99bb6c4b6361b8b6a96790bb0d8f18",
+  "unrelated_gpu_job": "one same-account board_val.py job (4.7-5.5 GiB) recorded, never touched"
+ },
+ "methods": {
+  "E03": {
+   "commit": "cd9c294c8fcc06f0e3a6e4a824640887df1f9e8d",
+   "environment": "gpat-m6-e03",
+   "gates": "98/98",
+   "production_readiness": "READY_FOR_SEPARATELY_AUTHORIZED_PRODUCTION (needs owner configs/amendments/learned_bank_production_E03.yaml binding this record by path + sha256)",
+   "record": "outputs/audit/LEARNED_BANK_S7_E03.json",
+   "record_sha256": "c2d089ce62c37101a3ceab64b5bb74259ea858d14da0b13d20502a8f0d26365d",
+   "s7_acceptance_passed": true,
+   "seeds": {
+    "1337": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "cab2d359906c36807473c2e6941782544e15456af8c5c7c466152c5ee4d58248",
+     "manifest_sha256": "39a10b84e9fa3977e2b1bb17de11ef23be62c71bf0563d73a8c7c197d409c3d3",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    },
+    "2026": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "e3936f9ba96ee858ea76f730f86ff6d4130117161c7ae122d4dae24027a10013",
+     "manifest_sha256": "cd4568a4189e69ebae0511497b16710feac162181e4d43004eabf3655e1a3a52",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    },
+    "42": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "fec00faf1bc9da819a134d04afa567a6e273fd5fc1f523e04fdfc8c0ce2f1267",
+     "manifest_sha256": "5522f105975a2e955528e794a1a97916d529d3b1325ef03979051f91499df770",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    }
+   },
+   "status": "S7_ACCEPTANCE_PASSED",
+   "windows": {
+    "A": [
+     "2026-11-24T18:52:51Z",
+     "2026-11-24T18:53:28Z"
+    ],
+    "B": [
+     "2026-11-24T18:53:55Z",
+     "2026-11-24T18:54:32Z"
+    ]
+   }
+  },
+  "E05": {
+   "commit": "2d430e98825adcd388d0c3152222aa62efb43c2c",
+   "diagnosis": "environments/e05.compatibility_patch_manifest.json (the qualified M6D4a runtime closure) records the upstream source root as an absolute path inside the main GPU checkout; source_identity() derives root from the executing checkout, so the isolated S7 clone required by the S7 plan cannot pass this exact-equality gate. The CPU fixture qualification never reached build_models (CUDA-only).",
+   "effects": {
+    "atime_changed_faces": 0,
+    "atime_files": 20615,
+    "checkpoint_identities_after": {
+     "1337": "f3a687d8672e8d589a61c080fd129288bc44895fe1abb75045dac340d35dd544",
+     "2026": "ee10a3b4ee1c66ecc1096b8cbe4ec2d56a4a49ade06f4c14b304488d98c1820f",
+     "42": "2b55dcf2ecc4d6fbc11e34fe4514a167807489049438b561992eaaef7b51ae68"
+    },
+    "checkpoints_unchanged": true,
+    "face_reads": 0,
+    "other_methods_affected": "no: E05-specific runtime closure; E06c/E03/E06b use separate code paths and E05 checkpoints were only hashed",
+    "out_root_tree": [
+     [
+      "run_A",
+      "dir"
+     ],
+     [
+      "run_A/E05",
+      "dir"
+     ]
+    ],
+    "outputs_written": 0,
+    "retry": "NOT_ATTEMPTED (fail-closed; needs owner decision)",
+    "run_B": "NOT_STARTED"
+   },
+   "failed_gate": "methods/pcgan/training_qualification.py::existing_runtime require(manifest[\"source\"] == source, \"source identity\") via methods/pcgan/production_runner.py::build_models, called by methods/pcgan/bank_adapter.py::load_real (seed 42, before any generation)",
+   "failure_class": "EXECUTION_PATH_BINDING_IN_QUALIFIED_RUNTIME_GATE (not a scientific, numerical or integrity failure)",
+   "owner_options": [
+    "O1: execute E05 S7 (runs A and B, new roots) from the main GPU checkout path /home/student20261/workdir/GPAT_TransferBench after fast-forwarding it from 18ba00e to the S7 execution commit (E04 is closed, so the checkout is no longer an active training authority; this deviates from the S7 plan rule \"never use the E04 checkout\" and must be authorized)",
+    "O2: authorize a narrow gate amendment that accepts a byte-identical pinned source at a different root (all other source-identity fields exact), with regression tests, then rerun E05 S7 in new roots from the isolated clone",
+    "O3: keep E05 blocked"
+   ],
+   "production_readiness": "BLOCKED (S7 not passed; owner decision O1/O2/O3 required)",
+   "record": "outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json",
+   "record_sha256": "bdaa88abd6221bf31dbb1014e7c1126f4beef9addc87ea7f99b927b061a6f836",
+   "s7_acceptance_passed": false,
+   "seeds": {
+    "1337": {
+     "bitwise_replay": null,
+     "run_A": "NOT_REACHED",
+     "run_B": "NOT_STARTED"
+    },
+    "2026": {
+     "bitwise_replay": null,
+     "run_A": "NOT_REACHED",
+     "run_B": "NOT_STARTED"
+    },
+    "42": {
+     "bitwise_replay": null,
+     "run_A": "FAILED (seed 42 load, before generation)",
+     "run_B": "NOT_STARTED"
+    }
+   },
+   "status": "S7_FAILED_NEEDS_OWNER_REVIEW"
+  },
+  "E06b": {
+   "commit": "f84f05f965ea8f81eda0ade4c0438cc400d1fe65",
+   "environment": "gpat-m6-e06c",
+   "gates": "98/98",
+   "production_readiness": "READY_FOR_SEPARATELY_AUTHORIZED_PRODUCTION (needs owner configs/amendments/learned_bank_production_E06b.yaml binding this record by path + sha256)",
+   "record": "outputs/audit/LEARNED_BANK_S7_E06b.json",
+   "record_sha256": "9d7ec5a3d0115e34ca194426fc2a55558753aa0ca61f9b2be9f8a173cf112857",
+   "s7_acceptance_passed": true,
+   "seeds": {
+    "1337": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "ad74128648dc20f6c9dcc0ed895db6e3d683c3534a6a170e989e0cc441924f93",
+     "manifest_sha256": "48f18f685577ad71e1f8bf188cdd9444933eebce9afe3726ef778109077b95d6",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    },
+    "2026": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "b9a0465c4759f7448d2a3fa0d2b87505c01464026af571da95d07042c3db374c",
+     "manifest_sha256": "c10872c8084c5877e207ea5bc7b0448eff29daffd134323b17f599ef8b25d866",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    },
+    "42": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "7f805bf0f2da4f2f3b74d66ce61ccfcdfc55f1d78fa53479ebe6126b353c1d5b",
+     "manifest_sha256": "02c4d3cabbe54ffa282495dc1ce992d7410a3167b70a9c01e5155cbe912fdf50",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    }
+   },
+   "status": "S7_ACCEPTANCE_PASSED",
+   "windows": {
+    "A": [
+     "2026-11-24T18:55:44Z",
+     "2026-11-24T18:56:06Z"
+    ],
+    "B": [
+     "2026-11-24T18:56:13Z",
+     "2026-11-24T18:56:35Z"
+    ]
+   }
+  },
+  "E06c": {
+   "commit": "8fb5bacbc4ec3e65ca18d8fabc0de1c8d9723229",
+   "environment": "gpat-m6-e06c",
+   "gates": "98/98",
+   "production_readiness": "READY_FOR_SEPARATELY_AUTHORIZED_PRODUCTION (needs owner configs/amendments/learned_bank_production_E06c.yaml binding this record by path + sha256)",
+   "record": "outputs/audit/LEARNED_BANK_S7_E06c.json",
+   "record_sha256": "42b1aef1c6283eae866cb6dff5944147f71950cc8b1e4bec811462432d0bc773",
+   "s7_acceptance_passed": true,
+   "seeds": {
+    "1337": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "576b7737935a62e600cd0208ffa176f6b16023a67f34b2b63dc487a63f31dcf3",
+     "manifest_sha256": "afa28386da1c1f532bdc99d305de2a390c87186558b552f1b868ad1bebe0d191",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    },
+    "2026": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "b8143768e7a96652616becd2fe4304145733631560644c858019a2785f7953dd",
+     "manifest_sha256": "52099a8b3ce4d0661b5ede1261ccbe556bac57777efec06b10373d3f66fcf5d1",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    },
+    "42": {
+     "bitwise_replay": true,
+     "checkpoint_identity_sha256": "1f7b03e23ffcbcb4fe1ecb226139361d44b455242170fc1fcf4d3a4752a8c495",
+     "manifest_sha256": "57a4d9faedd1503ff9e7c6c4cf0b2108e6c77bdd16c0b4339a7092994fe074dd",
+     "run_A": "PASS",
+     "run_B": "PASS"
+    }
+   },
+   "status": "S7_ACCEPTANCE_PASSED",
+   "windows": {
+    "A": [
+     "2026-11-24T18:46:43Z",
+     "2026-11-24T18:47:05Z"
+    ],
+    "B": [
+     "2026-11-24T18:47:18Z",
+     "2026-11-24T18:47:40Z"
+    ]
+   }
+  }
+ },
+ "not_done": [
+  "learned-bank production banks",
+  "downstream ResNet-18 training",
+  "TEST evaluation",
+  "DINOv3",
+  "GPAT"
+ ],
+ "owner_decisions_required": [
+  "E05 S7 path-binding failure: choose O1 / O2 / O3 (LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.md)",
+  "per-method production authorities for E06c, E03, E06b (separately)"
+ ],
+ "qualified_methods": [
+  "E06c",
+  "E03",
+  "E06b"
+ ],
+ "schema": "m8_learned_bank_s7_readiness_summary_v1",
+ "status": "E04_FAMILY_CLOSED_S7_PARTIALLY_QUALIFIED"
+}
