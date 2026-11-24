@@ -1,0 +1,326 @@
+{
+ "schema_version": "learned_bank_s7_launch_authority_v1",
+ "record": "LEARNED_BANK_S7_LAUNCH_AUTHORITY",
+ "status": "OWNER_APPROVED",
+ "approved": true,
+ "date": "2026-11-25",
+ "approval": "Owner conditional authorization of 2026-11-25 (session instruction 'E04 Final Completion Audit, Three-Seed Family Closure, and Conditional M8 S7 GPU Acceptance'): activate a narrowly scoped M8 S7 GPU launch authority only after the E04 seed-2026 completion audit and the E04 three-seed family closure pass, then execute method-specific S7 toy-bank acceptance for E06c, E05, E03 and E06b. Both conditions are met: E04 seed 2026 closed at 0e3f1d1 (90/90) and the E04 family closed at eeff32d (74/74). This record does not authorize waiving any gate, retraining, specification changes or full production banks.",
+ "methods": [
+  "E06c",
+  "E05",
+  "E03",
+  "E06b"
+ ],
+ "method_order": [
+  "E06c",
+  "E05",
+  "E03",
+  "E06b"
+ ],
+ "seeds": [
+  42,
+  1337,
+  2026
+ ],
+ "runs_per_method": [
+  "A",
+  "B"
+ ],
+ "contract_path": "configs/amendments/learned_bank_generation_contract.yaml",
+ "contract_sha256": "3554577185a9faad76ce527971e75d85e4a107809a7da91c270196c899f339a9",
+ "contract_decisions_bound": {
+  "C-Q2_device_and_reproducibility": "A_GPU_FP32_BITWISE_REPLAY",
+  "C-Q3_s7_bank_stage_acceptance": "A_TOY_TWO_RUN_BITWISE",
+  "C-Q5_gpu_timing": "A_AFTER_E04_COMPLETES"
+ },
+ "e04_seed_2026_completion_record": "outputs/audit/E04_SEED2026_COMPLETION.json",
+ "e04_seed_2026_completion_sha256": "47a4e4974d86b1eff7e9fd9130d6e787724082954c62f6c8fb5eb4b241fdcdb5",
+ "e04_seed_2026_completion_commit": "0e3f1d1a373d3e60130fd472a4e1799e2a622487",
+ "e04_family_closure": {
+  "path": "outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json",
+  "sha256": "a14d98fdf5a9a0e279ef09ca231d01261a349b9e7b86fc86d7d69c9b8734c55d",
+  "commit": "eeff32db62699eacef5d65e871b11ecf0359ad5f",
+  "status": "SCIENTIFIC_TRAINING_COMPLETED_3_OF_3_SEEDS"
+ },
+ "s7_plan": {
+  "path": "outputs/audit/LEARNED_BANK_S7_ACCEPTANCE_PLAN.json",
+  "sha256": "95482a4769cbc74405f404062381590daec7c6577ae968c8c7810eb851d84bc8",
+  "commit": "2892533"
+ },
+ "m8_smoke_authority": {
+  "note": "M8 global smoke PASSED (fec7370, record 6eaa865a); the toy population below is its approved S6 selection",
+  "toy_manifest": "outputs/audit/M8_SMOKE_EVIDENCE/run_a/select/toy_manifest.json",
+  "toy_manifest_sha256": "50ac8fb8b9fc6938ba630d0853523d358250137c8fbbc62704d2a73830f7f690"
+ },
+ "code_authority": {
+  "source_commit": "eeff32db62699eacef5d65e871b11ecf0359ad5f",
+  "execution_commit": "the commit that adds this record; its only change against source_commit is this file",
+  "inference_code_qualified": "b09a1cc adapters (CPU fixture qualification fe57530, 125/125); since b09a1cc only storage-preflight hardening (d163106) and two S7 reporting fields changed",
+  "execution_checkout": "~/workdir/m8_learned_banks/clones/s7_<execution_commit> (fresh clean clone from a git bundle; never the E04 checkout 18ba00e); third_party/source_cache copied from the GPU checkout after mkdir -p",
+  "pinned_sources": {
+   "path": "methods/common/learned_bank_sources.json",
+   "sha256": "758371a55e8413b58f1631789866d1f3140654277a457707eec5c57dfb39da11"
+  }
+ },
+ "checkpoints": {
+  "E06c": {
+   "42": {
+    "run_id": "27dcaf23aac18d7a",
+    "sha256": {
+     "pth": "665684fddf11ec28b95e2a98122c85bfc5352bb8ea69ecb60caac9418c0871d9"
+    },
+    "checkpoint_identity_sha256": "1f7b03e23ffcbcb4fe1ecb226139361d44b455242170fc1fcf4d3a4752a8c495",
+    "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "seed_closure_commit": "cf5ed6cbd4fbc7f989136e33577ee298619fe6a4",
+    "family_closure_commit": "24f7049"
+   },
+   "1337": {
+    "run_id": "49a179a4dca77f41",
+    "sha256": {
+     "pth": "43ffa30dc7eaa568bc0b573a34978f897f46156232ee1a7e71d7f994beb8f336"
+    },
+    "checkpoint_identity_sha256": "576b7737935a62e600cd0208ffa176f6b16023a67f34b2b63dc487a63f31dcf3",
+    "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "seed_closure_commit": "9281c79d1c1f8e2b34199ff5434a6731d6e8bc9a",
+    "family_closure_commit": "24f7049"
+   },
+   "2026": {
+    "run_id": "86b631403e3c4ee1",
+    "sha256": {
+     "pth": "dc6c54b4357a51546c3abab3b957dd4b19044ae0188dde417df03446fc951878"
+    },
+    "checkpoint_identity_sha256": "b8143768e7a96652616becd2fe4304145733631560644c858019a2785f7953dd",
+    "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "seed_closure_commit": "81a8ef6d1e1dec97452b32955c17d4e8718abcb7",
+    "family_closure_commit": "24f7049"
+   }
+  },
+  "E05": {
+   "42": {
+    "run_id": "18463bf5cd471e55",
+    "sha256": {
+     "pth": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+    },
+    "checkpoint_identity_sha256": "2b55dcf2ecc4d6fbc11e34fe4514a167807489049438b561992eaaef7b51ae68",
+    "rule": "BASELINE_FINAL_STATE_V1",
+    "seed_closure_commit": "072ce7d68cbdb0fab7f6d6d85ebce5b4ac1f4cfa",
+    "family_closure_commit": "7677c3a"
+   },
+   "1337": {
+    "run_id": "036c806bb2f339b7",
+    "sha256": {
+     "pth": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+    },
+    "checkpoint_identity_sha256": "f3a687d8672e8d589a61c080fd129288bc44895fe1abb75045dac340d35dd544",
+    "rule": "BASELINE_FINAL_STATE_V1",
+    "seed_closure_commit": "023beb4d69c63a29e504f4497945ac1da1bb6985",
+    "family_closure_commit": "7677c3a"
+   },
+   "2026": {
+    "run_id": "b739351daf9779bc",
+    "sha256": {
+     "pth": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+    },
+    "checkpoint_identity_sha256": "ee10a3b4ee1c66ecc1096b8cbe4ec2d56a4a49ade06f4c14b304488d98c1820f",
+    "rule": "BASELINE_FINAL_STATE_V1",
+    "seed_closure_commit": "21d47c24fbe827d296c6b67db1f28393f819c9c9",
+    "family_closure_commit": "7677c3a"
+   }
+  },
+  "E03": {
+   "42": {
+    "run_id": "a565b76bc7349532",
+    "sha256": {
+     "data-00000-of-00001": "5b337a63db63e405bf35bceefdacc101060cb7d1625b5a4d2d389b963e311753",
+     "index": "b6b9a0c4cfd6470959453cdb861341bcacff7047b66fb414f8dff504452dc899",
+     "meta": "dbcf372027172396c616ba19f7d76475363d34e8bac0f438c0c7f5b97fae5f97"
+    },
+    "checkpoint_identity_sha256": "fec00faf1bc9da819a134d04afa567a6e273fd5fc1f523e04fdfc8c0ce2f1267",
+    "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+    "seed_closure_commit": "b95c127e394d9b2ea644573d317b44405652039e",
+    "family_closure_commit": "374de40"
+   },
+   "1337": {
+    "run_id": "e8c85cc378e778f5",
+    "sha256": {
+     "data-00000-of-00001": "316c94c066c32314c6819bc105d0043e1ddc7b27329afd48ddcfb8bc8d181551",
+     "index": "29b36079f28c557ab9a44daa8dedb85770ed9d32c5cd0b04d002f39ae386ab70",
+     "meta": "a6119bdc1f830fdf0b968054ea929dce6e6e5838050ffbe06826d8e499a40e1c"
+    },
+    "checkpoint_identity_sha256": "cab2d359906c36807473c2e6941782544e15456af8c5c7c466152c5ee4d58248",
+    "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+    "seed_closure_commit": "5cdb65db0a75fcdcddb64b1b5af040364a057723",
+    "family_closure_commit": "374de40"
+   },
+   "2026": {
+    "run_id": "237887eebab18637",
+    "sha256": {
+     "data-00000-of-00001": "9dbd463cb3eb56c9ecc578dd275e0c2507a1e6d5f8b9b4876406d5011bd52cb3",
+     "index": "42107c3d56f1ec2892def0840eea520e1950ced453ffa09981899ded11ed96dc",
+     "meta": "504845f926c1940a4aa0ba647dada611dba79044cb247dc11410614464f75543"
+    },
+    "checkpoint_identity_sha256": "e3936f9ba96ee858ea76f730f86ff6d4130117161c7ae122d4dae24027a10013",
+    "rule": "OFFICIAL_LATEST_FINAL_CKPT_50",
+    "seed_closure_commit": "15bfc84dd4cf1d68427d85d867188b702a847b65",
+    "family_closure_commit": "374de40"
+   }
+  },
+  "E06b": {
+   "42": {
+    "run_id": "aa96129289d080ba",
+    "sha256": {
+     "pth": "d56122e0cf363a6c870e29b394998732f4bcdaf35a96a6110e937905b64ff8aa"
+    },
+    "checkpoint_identity_sha256": "7f805bf0f2da4f2f3b74d66ce61ccfcdfc55f1d78fa53479ebe6126b353c1d5b",
+    "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "seed_closure_commit": "1f546c9fab1e284efd9deaef18ab7d415ff2c2ee",
+    "family_closure_commit": "3b0d308"
+   },
+   "1337": {
+    "run_id": "9ffda3ea3f6cc767",
+    "sha256": {
+     "pth": "645538e866a6d835a1bc35240c2f15c27296742850df96d722fd4d38609b4f53"
+    },
+    "checkpoint_identity_sha256": "ad74128648dc20f6c9dcc0ed895db6e3d683c3534a6a170e989e0cc441924f93",
+    "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "seed_closure_commit": "a8a7b5dd9a1fd5cd8e82b870162732163b2859f9",
+    "family_closure_commit": "3b0d308"
+   },
+   "2026": {
+    "run_id": "ec71778b28479de5",
+    "sha256": {
+     "pth": "e8d0d01cfdb59b92d0f24318ab4fec042188bf0a72f9c59054ea10204a326cad"
+    },
+    "checkpoint_identity_sha256": "b9a0465c4759f7448d2a3fa0d2b87505c01464026af571da95d07042c3db374c",
+    "rule": "OFFICIAL_GENERATOR_EPOCH_200",
+    "seed_closure_commit": "1729333197c5caab7a0d4d9302f1d3274ac90d98",
+    "family_closure_commit": "3b0d308"
+   }
+  }
+ },
+ "frozen_configs": {
+  "E06c": {
+   "path": "configs/methods/e06c_dsdg_bin_idfree.yaml",
+   "sha256": "7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002"
+  },
+  "E05": {
+   "path": "configs/methods/e05_pcgan.yaml",
+   "sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de"
+  },
+  "E03": {
+   "path": "configs/methods/e03_stdn.yaml",
+   "sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0"
+  },
+  "E06b": {
+   "path": "configs/methods/e06b_dsdg_native.yaml",
+   "sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f"
+  }
+ },
+ "environments": {
+  "E06c": {
+   "name": "gpat-m6-e06c",
+   "python": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+   "lock": {
+    "path": "environments/e06c.lock.json",
+    "sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95"
+   }
+  },
+  "E05": {
+   "name": "gpat-m6-e05",
+   "python": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+   "lock": {
+    "path": "environments/e05.lock.json",
+    "sha256": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50"
+   }
+  },
+  "E03": {
+   "name": "gpat-m6-e03",
+   "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+   "lock": {
+    "path": "environments/e03_stdn.lock.json",
+    "sha256": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62"
+   }
+  },
+  "E06b": {
+   "name": "gpat-m6-e06c",
+   "python": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python",
+   "lock": {
+    "path": "environments/e06c.lock.json",
+    "sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95"
+   }
+  }
+ },
+ "inputs": {
+  "E03": "the 186 toy pairs of the toy manifest at their canonical pairs_train_v1 positions; TRAIN faces only via TrainFaceReader (O_NOATIME, M2 sha256); landmarks from e03_feed_pack_v1 TRAIN side; pairs_val never opened",
+  "E05": "the 186 toy pairs of the toy manifest at their canonical pairs_train_v1 positions; TRAIN faces only via TrainFaceReader (O_NOATIME, M2 sha256)",
+  "E06b": "synthetic stream indices 0..185 (E06b_S<seed>_000000..000185); 2 official batches of 100, 14 discarded; stream seeds {42: 492027736, 1337: 825501606, 2026: 1539980013}; no face read",
+  "E06c": "synthetic stream indices 0..185 (E06c_S<seed>_000000..000185); 2 official batches of 100, 14 discarded; stream seeds {42: 1660457813, 1337: 203456175, 2026: 1718284219}; no face read",
+  "val_test_inputs": "none; VAL and TEST faces are never read"
+ },
+ "gpu": {
+  "model": "NVIDIA GeForce RTX 3090",
+  "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+  "driver_observed": "580.178.04",
+  "cuda_visible_devices": "0",
+  "note": "the same GPU and driver that trained all 12 generators; inference precision per method is the approved FP32 policy (C-Q2)"
+ },
+ "storage": {
+  "s7_root": "~/workdir/m8_learned_banks/s7/<execution_commit>/ (fresh; outside the runtime root; never on the HDD bank root)",
+  "layout": "$S7/run_{A,B}/<method>/seed_<seed>/ (each run label directory is created by its run and must not pre-exist)",
+  "hdd_storage_authority": {
+   "path": "configs/amendments/learned_bank_storage_location.yaml",
+   "sha256": "f0df1b08c2ff5206285fa193b6be8b7652e0347560972f3173df4583ab8d7ef9",
+   "use": "not used by S7; production only"
+  },
+  "label": "S7_TOY (S7_NON_SCIENTIFIC toy acceptance outputs; never a production bank)"
+ },
+ "reproducibility": {
+  "standard": "A_GPU_FP32_BITWISE_REPLAY + A_TOY_TWO_RUN_BITWISE: runs A and B are separate processes in fresh roots and must be bitwise identical (manifest bytes and every PNG byte)",
+  "procedural_fallback": "NOT AUTHORIZED; a non-bitwise replay stops the method for owner review"
+ },
+ "test_firewall": {
+  "val_test_reads": 0,
+  "reader": "TrainFaceReader TRAIN allowlist, O_NOATIME with atime check per read",
+  "atime_ledger": "stat-only ledger of every canonical face (TRAIN, VAL, TEST) before run A and after run B of each method; no face atime may change"
+ },
+ "run_naming": {
+  "tmux": "m8s7_<method>_<A|B>",
+  "markers": "~/workdir/m8s7_<method>_<A|B>.{command,launch_time,exit,end_time,pane.log}",
+  "preflight": "~/workdir/m8s7_<method>_preflight.json",
+  "atime": "~/workdir/m8s7_<method>_atime_{pre,post}.tsv"
+ },
+ "resource_preflight": {
+  "required": true,
+  "checks": [
+   "no tools/run_e04.py or other learned-bank process; no other S7 job (one GPU job at a time)",
+   "GPU UUID GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+   "free GPU memory >= method estimate + 2 GiB; unrelated processes recorded and never touched",
+   ">= 2 GiB free on the S7 filesystem",
+   "all 12 approved checkpoints re-hash correctly (lb.verify_checkpoint); tools/learned_bank.py gates reports S7 ok",
+   "clean execution clone at the execution commit; method environment python present"
+  ]
+ },
+ "fail_closed": [
+  "any gate failure: stop that method, keep both roots and logs untouched, never rerun into an existing root, report to the owner",
+  "non-bitwise replay: stop for owner review; no determinism, architecture, checkpoint, graph or output change",
+  "non-finite rows are failures; S7 requires 0",
+  "a mandatory integrity failure that could affect later methods stops the remaining methods",
+  "GPU contention or OOM: never touch other jobs; a repeat needs new roots"
+ ],
+ "authorizes": {
+  "s7_toy_acceptance": true,
+  "production_bank_generation": false,
+  "generator_retraining": false,
+  "downstream_training": false,
+  "test_evaluation": false,
+  "dinov3": false,
+  "gpat": false
+ },
+ "not_authorized": [
+  "full learned-bank production (needs per-method learned_bank_production_<M>.yaml binding a passed S7 record)",
+  "changing seeds, checkpoints, configs, inference semantics or the toy population",
+  "procedural reproducibility substitution for S7",
+  "VAL/TEST reads, downstream ResNet-18, TEST evaluation, DINOv3, GPAT"
+ ],
+ "acceptance_record": "outputs/audit/LEARNED_BANK_S7_<METHOD>.json (method, seeds [42, 1337, 2026], gates, failed_gates [], s7_acceptance_passed true)"
+}
