@@ -1,0 +1,475 @@
+{
+ "atime_ledger": {
+  "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+  "post_utc": "2026-11-24T19:29:58Z",
+  "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+  "pre_utc": "2026-11-24T19:27:36Z"
+ },
+ "authorities": {
+  "b1_b2_ruling": {
+   "path": "configs/amendments/e05_s7_b1_b2_ruling.yaml",
+   "sha256": "63e8ae7edfef982c4b0606dfb27a4d3f749fe5b1393800d89320861d207c93f9"
+  },
+  "contract_sha256": "3554577185a9faad76ce527971e75d85e4a107809a7da91c270196c899f339a9",
+  "e04_seed_2026_completion_sha256": "47a4e4974d86b1eff7e9fd9130d6e787724082954c62f6c8fb5eb4b241fdcdb5",
+  "o2_ruling": {
+   "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+   "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257"
+  },
+  "qualification": {
+   "path": "outputs/audit/E05_S7_B1_B2_QUALIFICATION.json",
+   "sha256": "7f250d8d1df77332137e1f14dfb28c6cd1c615c3bb9b3b73cad0d73a8539da3b"
+  },
+  "s7_launch": {
+   "path": "configs/amendments/learned_bank_s7_launch_authority.yaml",
+   "sha256": "0be8f0e1457887a568d11895f30df7076bf1f843ff919c0dbe00f014cf81645e"
+  }
+ },
+ "backup": "NOT BACKED UP: the PNGs and bank manifests exist only on the GPU host output root; git holds their hashes",
+ "branch": "m6-baselines",
+ "config": {
+  "path": "configs/methods/e05_pcgan.yaml",
+  "sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de"
+ },
+ "conversion_rule": "util.tensor2im(mix[0]): clip((x+1)/2*255, 0, 255).astype(uint8) [swapping_autoencoder util/util.py:125-131]",
+ "environment": {
+  "framework": "torch 2.12.1+cu130",
+  "lock": {
+   "path": "environments/e05.lock.json",
+   "sha256": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50"
+  },
+  "name": "gpat-m6-e05",
+  "probe": "3.11.16 torch 2.12.1+cu130",
+  "python": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+  "run_environment": {
+   "cuda_visible_devices": "0",
+   "host": "nd-System-Product-Name",
+   "numpy": "2.4.6",
+   "pillow": "12.3.0",
+   "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+   "python_version": "3.11.16"
+  }
+ },
+ "execution_commit": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+ "firewall": {
+  "TEST": {
+   "atime_changed": 0,
+   "files": 3027,
+   "missing_post": 0,
+   "mtime_changed": 0
+  },
+  "TRAIN": {
+   "atime_changed": 0,
+   "files": 14467,
+   "missing_post": 0,
+   "mtime_changed": 0
+  },
+  "VAL": {
+   "atime_changed": 0,
+   "files": 3121,
+   "missing_post": 0,
+   "mtime_changed": 0
+  }
+ },
+ "gates": "145/145",
+ "gpu": {
+  "driver": "580.178.04",
+  "name": "NVIDIA GeForce RTX 3090",
+  "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"
+ },
+ "layout": "<output_root>/seed_<s>/run_<A|B>/E05/seed_<s>/{bank/*.png, bank_manifest.jsonl, bank_manifest.sha256, bank_provenance.json}",
+ "method": "E05",
+ "output_root": "/home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05",
+ "output_statistics_disclosure": {
+  "note": "descriptive only, not an S7 gate and never used for any choice: raw mix outputs lie in [-0.251, 0.036]; PNG pixel values 95-132 (seed 42), 113-130 (1337), 97-132 (2026); mean per-image std 8.0 / 5.19 / 7.65; all 186 images distinct per seed (read-only statistics of run A)"
+ },
+ "prior_attempts": [
+  {
+   "attempt": 1,
+   "record": "outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json",
+   "sha256": "bdaa88abd6221bf31dbb1014e7c1126f4beef9addc87ea7f99b927b061a6f836",
+   "status": "S7_FAILED_NEEDS_OWNER_REVIEW (source-root path binding; resolved by O2)"
+  }
+ ],
+ "reproduce": {
+  "host_copies_sha256": {
+   "e05a2_compare.sh": "92b682bc61e703f4ba4e5330684e137faa797435060f1d36e4642e16e0b8a8d8",
+   "e05a2_launch.sh": "7eb6811ce0634af5681acff1293bb0a79c13a9d5654c235ce4a10b3fdf84f550"
+  },
+  "procedure": [
+   "git clone the execution commit into a fresh directory; mkdir -p third_party/source_cache; copy stdn, swapping_autoencoder and facexzoo from the pinned source caches",
+   "for seed in 42 1337 2026, for run in A B: preflight (tools/learned_bank_s7_audit.py preflight --method E05 --tag E05_a2 --per-seed --seed S --label L) then e05a2_launch.sh S L (one tmux session and one OS process per run, strictly sequential); after B: e05a2_compare.sh S",
+   "atime ledger before 42 A and after 2026 B; collect (--tag E05_a2 --per-seed) on the host; build on the laptop",
+   "the scripts hard-code this attempt's commit and paths; a reproduction uses a new commit-named S7 root and new marker names (never reuse these roots)"
+  ],
+  "scripts": {
+   "e05_b12_probe.py": {
+    "path": "outputs/audit/E05_S7_ATTEMPT2_SCRIPTS/e05_b12_probe.py",
+    "sha256": "65c56810991a73dd9a9acb515e3eb31dd81aec8db5456860ba663f0fc6d9496c"
+   },
+   "e05a2_compare.sh": {
+    "path": "outputs/audit/E05_S7_ATTEMPT2_SCRIPTS/e05a2_compare.sh",
+    "sha256": "adc6fcb4c097230be25311e5e14236696de203a0e21788b8af1c126195a4d3dd"
+   },
+   "e05a2_launch.sh": {
+    "path": "outputs/audit/E05_S7_ATTEMPT2_SCRIPTS/e05a2_launch.sh",
+    "sha256": "7eb6811ce0634af5681acff1293bb0a79c13a9d5654c235ce4a10b3fdf84f550"
+   },
+   "e05a2_step.sh": {
+    "path": "outputs/audit/E05_S7_ATTEMPT2_SCRIPTS/e05a2_step.sh",
+    "sha256": "b3e5a13ba387e6b76ae17a39df53d2882f8ae8d78b9d06c54e0ad0d637733bb9"
+   }
+  },
+  "tested": "these exact scripts produced the six runs recorded here"
+ },
+ "rng": "E05: torch.manual_seed(e05_pair_seed(seed, pair_id)) before each mix forward",
+ "schema": "e05_s7_attempt2_reproduction_manifest_v1",
+ "seeds": {
+  "1337": {
+   "bitwise_replay": {
+    "bitwise_identical": true,
+    "file_set_equal": true,
+    "files_compared": 186,
+    "files_differing": [],
+    "manifest_equal": true
+   },
+   "checkpoint_identity_sha256": "f3a687d8672e8d589a61c080fd129288bc44895fe1abb75045dac340d35dd544",
+   "checkpoint_sha256": {
+    "pth": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+   },
+   "cli_compare": {
+    "command": "s7-compare",
+    "method": "E05",
+    "seed": 1337,
+    "seeds": {
+     "1337": {
+      "failures": [
+       0,
+       0
+      ],
+      "replay": {
+       "bitwise_identical": true,
+       "file_set_equal": true,
+       "files_compared": 186,
+       "files_differing": [],
+       "manifest_equal": true
+      },
+      "run_A_reader_ok": true,
+      "run_B_reader_ok": true
+     }
+    }
+   },
+   "per_image_hashes": {
+    "source": "LEARNED_BANK_S7_E05.json collected.runs.A.1337.manifest_rows (output_sha256, output_pixel_sha256) and listing (file sha256) for A and B"
+   },
+   "run_id": "036c806bb2f339b7",
+   "runs": {
+    "A": {
+     "checkpoint": {
+      "pth": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+     },
+     "command": "#!/bin/bash\n# M8 S7 E05 attempt 2 (owner rulings O2 + B1/B2 P2): seed 1337 run A, one OS process -- execution authority 7ff4d36f74cd64d6c405944d3b9fa4aee1fae521\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s1337_A.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/s7e05a2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521 || { echo 97 > /home/student20261/workdir/m8s7_E05_a2_s1337_A.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label A --out-root /home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime --seed 1337\necho $? > /home/student20261/workdir/m8s7_E05_a2_s1337_A.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s1337_A.end_time\n",
+     "command_file_sha256": "92b682bc61e703f4ba4e5330684e137faa797435060f1d36e4642e16e0b8a8d8",
+     "environment": {
+      "cuda_visible_devices": "0",
+      "host": "nd-System-Product-Name",
+      "numpy": "2.4.6",
+      "pillow": "12.3.0",
+      "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+      "python_version": "3.11.16"
+     },
+     "exit": "0",
+     "git_head": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+     "listing_sha256": "48d47b7be45a7244abac25b17db16d620d8bcc830deaf9e47185402b1f008b5b",
+     "manifest_sha256": "6ad2de476fb3daba7ea14b9cd7179e2f62ab6fa439c929ebc9763352a5943dea",
+     "output_dir": "/home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_1337/run_A/E05/seed_1337",
+     "png_files": 186,
+     "preflight_sha256": "1c341c415f21ff6d8960c60b0b0f9e3dc486f03d681f8aedc8f2e41a0f935390",
+     "process": "m8s7_E05_a2_s1337_A",
+     "source_identity_relocated": true,
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "window": [
+      "2026-11-24T19:28:32Z",
+      "2026-11-24T19:28:40Z"
+     ]
+    },
+    "B": {
+     "checkpoint": {
+      "pth": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+     },
+     "command": "#!/bin/bash\n# M8 S7 E05 attempt 2 (owner rulings O2 + B1/B2 P2): seed 1337 run B, one OS process -- execution authority 7ff4d36f74cd64d6c405944d3b9fa4aee1fae521\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s1337_B.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/s7e05a2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521 || { echo 97 > /home/student20261/workdir/m8s7_E05_a2_s1337_B.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label B --out-root /home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime --seed 1337\necho $? > /home/student20261/workdir/m8s7_E05_a2_s1337_B.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s1337_B.end_time\n",
+     "command_file_sha256": "86ca24a4baf87d60cb8bc219658bfce4a54dc1860a27892bb117bf1a52331b04",
+     "environment": {
+      "cuda_visible_devices": "0",
+      "host": "nd-System-Product-Name",
+      "numpy": "2.4.6",
+      "pillow": "12.3.0",
+      "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+      "python_version": "3.11.16"
+     },
+     "exit": "0",
+     "git_head": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+     "listing_sha256": "e315d57ffb2a06d1463bb03311c7601a8fe28ddfeca108f1aa0eb4aa7d5676a0",
+     "manifest_sha256": "6ad2de476fb3daba7ea14b9cd7179e2f62ab6fa439c929ebc9763352a5943dea",
+     "output_dir": "/home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_1337/run_B/E05/seed_1337",
+     "png_files": 186,
+     "preflight_sha256": "a0754ffe76be03c888f7ae333cd9992eca3e143c6c6b9abd01170cdb213f7d02",
+     "process": "m8s7_E05_a2_s1337_B",
+     "source_identity_relocated": true,
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "window": [
+      "2026-11-24T19:28:49Z",
+      "2026-11-24T19:28:57Z"
+     ]
+    }
+   },
+   "seed": 1337
+  },
+  "2026": {
+   "bitwise_replay": {
+    "bitwise_identical": true,
+    "file_set_equal": true,
+    "files_compared": 186,
+    "files_differing": [],
+    "manifest_equal": true
+   },
+   "checkpoint_identity_sha256": "ee10a3b4ee1c66ecc1096b8cbe4ec2d56a4a49ade06f4c14b304488d98c1820f",
+   "checkpoint_sha256": {
+    "pth": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+   },
+   "cli_compare": {
+    "command": "s7-compare",
+    "method": "E05",
+    "seed": 2026,
+    "seeds": {
+     "2026": {
+      "failures": [
+       0,
+       0
+      ],
+      "replay": {
+       "bitwise_identical": true,
+       "file_set_equal": true,
+       "files_compared": 186,
+       "files_differing": [],
+       "manifest_equal": true
+      },
+      "run_A_reader_ok": true,
+      "run_B_reader_ok": true
+     }
+    }
+   },
+   "per_image_hashes": {
+    "source": "LEARNED_BANK_S7_E05.json collected.runs.A.2026.manifest_rows (output_sha256, output_pixel_sha256) and listing (file sha256) for A and B"
+   },
+   "run_id": "b739351daf9779bc",
+   "runs": {
+    "A": {
+     "checkpoint": {
+      "pth": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+     },
+     "command": "#!/bin/bash\n# M8 S7 E05 attempt 2 (owner rulings O2 + B1/B2 P2): seed 2026 run A, one OS process -- execution authority 7ff4d36f74cd64d6c405944d3b9fa4aee1fae521\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s2026_A.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/s7e05a2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521 || { echo 97 > /home/student20261/workdir/m8s7_E05_a2_s2026_A.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label A --out-root /home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime --seed 2026\necho $? > /home/student20261/workdir/m8s7_E05_a2_s2026_A.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s2026_A.end_time\n",
+     "command_file_sha256": "ae0854d2f8c6c29fa2650d892bb1c80dd63d1bb01f1acb1eb3cfc6f19504b0bd",
+     "environment": {
+      "cuda_visible_devices": "0",
+      "host": "nd-System-Product-Name",
+      "numpy": "2.4.6",
+      "pillow": "12.3.0",
+      "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+      "python_version": "3.11.16"
+     },
+     "exit": "0",
+     "git_head": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+     "listing_sha256": "df041732c86110760075c18fe729cfa05b833d6a9634f32c5a68f0d3d00d0861",
+     "manifest_sha256": "522d6fd1ad83f0173374438bc6520f0c0ce2583f526d0d55ea834ca108502645",
+     "output_dir": "/home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_2026/run_A/E05/seed_2026",
+     "png_files": 186,
+     "preflight_sha256": "6042b62d1226036e97540f2db733b8cb1ae3ab8a6673c71c8985356ac77cfe7e",
+     "process": "m8s7_E05_a2_s2026_A",
+     "source_identity_relocated": true,
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "window": [
+      "2026-11-24T19:29:16Z",
+      "2026-11-24T19:29:25Z"
+     ]
+    },
+    "B": {
+     "checkpoint": {
+      "pth": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+     },
+     "command": "#!/bin/bash\n# M8 S7 E05 attempt 2 (owner rulings O2 + B1/B2 P2): seed 2026 run B, one OS process -- execution authority 7ff4d36f74cd64d6c405944d3b9fa4aee1fae521\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s2026_B.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/s7e05a2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521 || { echo 97 > /home/student20261/workdir/m8s7_E05_a2_s2026_B.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label B --out-root /home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime --seed 2026\necho $? > /home/student20261/workdir/m8s7_E05_a2_s2026_B.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s2026_B.end_time\n",
+     "command_file_sha256": "6364870473d1f11c79008f9738f89705a4a1eb8fd41f93c38291e481dc2a4f43",
+     "environment": {
+      "cuda_visible_devices": "0",
+      "host": "nd-System-Product-Name",
+      "numpy": "2.4.6",
+      "pillow": "12.3.0",
+      "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+      "python_version": "3.11.16"
+     },
+     "exit": "0",
+     "git_head": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+     "listing_sha256": "f52a3d13bf3f1d8b604072922b339b39922373dc00316fb1962290d24679a499",
+     "manifest_sha256": "522d6fd1ad83f0173374438bc6520f0c0ce2583f526d0d55ea834ca108502645",
+     "output_dir": "/home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_2026/run_B/E05/seed_2026",
+     "png_files": 186,
+     "preflight_sha256": "fc0ae92f4369bf29ac31600fba642a1bf06a18014f0fe3b8cb57f3e1333cb9aa",
+     "process": "m8s7_E05_a2_s2026_B",
+     "source_identity_relocated": true,
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "window": [
+      "2026-11-24T19:29:33Z",
+      "2026-11-24T19:29:42Z"
+     ]
+    }
+   },
+   "seed": 2026
+  },
+  "42": {
+   "bitwise_replay": {
+    "bitwise_identical": true,
+    "file_set_equal": true,
+    "files_compared": 186,
+    "files_differing": [],
+    "manifest_equal": true
+   },
+   "checkpoint_identity_sha256": "2b55dcf2ecc4d6fbc11e34fe4514a167807489049438b561992eaaef7b51ae68",
+   "checkpoint_sha256": {
+    "pth": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+   },
+   "cli_compare": {
+    "command": "s7-compare",
+    "method": "E05",
+    "seed": 42,
+    "seeds": {
+     "42": {
+      "failures": [
+       0,
+       0
+      ],
+      "replay": {
+       "bitwise_identical": true,
+       "file_set_equal": true,
+       "files_compared": 186,
+       "files_differing": [],
+       "manifest_equal": true
+      },
+      "run_A_reader_ok": true,
+      "run_B_reader_ok": true
+     }
+    }
+   },
+   "per_image_hashes": {
+    "source": "LEARNED_BANK_S7_E05.json collected.runs.A.42.manifest_rows (output_sha256, output_pixel_sha256) and listing (file sha256) for A and B"
+   },
+   "run_id": "18463bf5cd471e55",
+   "runs": {
+    "A": {
+     "checkpoint": {
+      "pth": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+     },
+     "command": "#!/bin/bash\n# M8 S7 E05 attempt 2 (owner rulings O2 + B1/B2 P2): seed 42 run A, one OS process -- execution authority 7ff4d36f74cd64d6c405944d3b9fa4aee1fae521\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s42_A.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/s7e05a2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521 || { echo 97 > /home/student20261/workdir/m8s7_E05_a2_s42_A.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label A --out-root /home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime --seed 42\necho $? > /home/student20261/workdir/m8s7_E05_a2_s42_A.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s42_A.end_time\n",
+     "command_file_sha256": "89c62f5e1b3355fa9c8ebdde063dc8117287c1db6f8c6fd476a7b7178a413c84",
+     "environment": {
+      "cuda_visible_devices": "0",
+      "host": "nd-System-Product-Name",
+      "numpy": "2.4.6",
+      "pillow": "12.3.0",
+      "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+      "python_version": "3.11.16"
+     },
+     "exit": "0",
+     "git_head": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+     "listing_sha256": "976dea3ceac542cdf77332b636268286da085b486e56bb66b3397869c88d40d2",
+     "manifest_sha256": "8c622e2a0d037e4148c7b7d983246607fb904f4cc1c56ec6ca721cd1ad76f863",
+     "output_dir": "/home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_42/run_A/E05/seed_42",
+     "png_files": 186,
+     "preflight_sha256": "bbe5220d61e597e8d808613f75d9be0abe46f52b19a92b7492e1beeceefa6f2c",
+     "process": "m8s7_E05_a2_s42_A",
+     "source_identity_relocated": true,
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "window": [
+      "2026-11-24T19:27:38Z",
+      "2026-11-24T19:27:48Z"
+     ]
+    },
+    "B": {
+     "checkpoint": {
+      "pth": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+     },
+     "command": "#!/bin/bash\n# M8 S7 E05 attempt 2 (owner rulings O2 + B1/B2 P2): seed 42 run B, one OS process -- execution authority 7ff4d36f74cd64d6c405944d3b9fa4aee1fae521\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s42_B.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/s7e05a2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521 || { echo 97 > /home/student20261/workdir/m8s7_E05_a2_s42_B.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py s7 --method E05 --label B --out-root /home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime --seed 42\necho $? > /home/student20261/workdir/m8s7_E05_a2_s42_B.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8s7_E05_a2_s42_B.end_time\n",
+     "command_file_sha256": "724302ed131a715989b3c23dfc485a0d9dd1b455759445693cc5d959c5695cef",
+     "environment": {
+      "cuda_visible_devices": "0",
+      "host": "nd-System-Product-Name",
+      "numpy": "2.4.6",
+      "pillow": "12.3.0",
+      "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python",
+      "python_version": "3.11.16"
+     },
+     "exit": "0",
+     "git_head": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+     "listing_sha256": "3686137ce9654a7b55cc5542989ff3fd7c5f6294978232a07d7200000d6851cf",
+     "manifest_sha256": "8c622e2a0d037e4148c7b7d983246607fb904f4cc1c56ec6ca721cd1ad76f863",
+     "output_dir": "/home/student20261/workdir/m8_learned_banks/s7/7ff4d36f74cd64d6c405944d3b9fa4aee1fae521/E05/seed_42/run_B/E05/seed_42",
+     "png_files": 186,
+     "preflight_sha256": "1e477c207d2fc1754efef7b6361e40e423beff711e5aabbe0150b03b438a3e9c",
+     "process": "m8s7_E05_a2_s42_B",
+     "source_identity_relocated": true,
+     "tensor2im_runtime": {
+      "file": "util/util.py",
+      "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+      "module": "util.util",
+      "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+     },
+     "window": [
+      "2026-11-24T19:28:05Z",
+      "2026-11-24T19:28:13Z"
+     ]
+    }
+   },
+   "seed": 42
+  }
+ },
+ "source": {
+  "compatibility_patch_manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+  "generated_closure_files": 67,
+  "tensor2im": {
+   "file_sha256": "bd5346192b482d20c00233252b0fdcc3aadbf8d34f901fbb9af258ee80d50b6b",
+   "segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952"
+  },
+  "upstream": "swapping-autoencoder-pytorch 6baa180f1184ee79a6b967f9d80ee0e02a979ac7 tree 25a434f1282a0177d6afdcc68ebfcf40bd805621"
+ },
+ "status": "S7_ACCEPTANCE_PASSED",
+ "toy_population": {
+  "manifest": "outputs/audit/M8_SMOKE_EVIDENCE/run_a/select/toy_manifest.json",
+  "rows_per_seed": 186,
+  "sha256": "50ac8fb8b9fc6938ba630d0853523d358250137c8fbbc62704d2a73830f7f690"
+ },
+ "working_directory": "/home/student20261/workdir/m8_learned_banks/clones/s7e05a2_7ff4d36f74cd64d6c405944d3b9fa4aee1fae521"
+}
