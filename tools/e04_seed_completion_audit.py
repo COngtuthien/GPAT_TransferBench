@@ -56,7 +56,7 @@ D12_RULING_COMMIT = 'c60481b91922c1c72c73a603219585ec4a78c1e4'
 D12_ACTIVATION_COMMIT = 'c676459'
 D12_CRITERIA_SHA = '9f1a2471f0c9e6ad24b9cc4727779361b763ec84b7e43dc221fc6b411c199d0d'
 CONFIG_SHA = '418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a'
-RUN_IDS = {42: '40befa6004aee85c', 1337: 'a42fdd2a2accaf0a'}
+RUN_IDS = {42: '40befa6004aee85c', 1337: 'a42fdd2a2accaf0a', 2026: 'e7100eb9a5ab0537'}
 DERIVED = {42: (679869707, 320493565), 1337: (1349475396, 35554372), 2026: (692890966, 1053992267)}
 FIDELITY = 'CONTROLLED_ADAPTATION'
 REPORTING_LABEL = 'Physics-STD (controlled geometry/depth reconstruction)'
@@ -622,6 +622,18 @@ def host_state(seed):
     pane = sh('tmux', 'list-panes', '-t', p['tmux'], '-F', '#{pane_dead} #{pane_dead_status}').split()
     procs = [x for x in sh('ps', '-eo', 'pid,args').splitlines() if 'python' in x and 'tools/run_e04.py' in x]
     pane_log = Path(p['pane_log']).read_bytes().decode('utf-8', errors='replace').splitlines()
+    others = sorted(x for x in sh('tmux', 'ls', '-F', '#{session_name}').splitlines()
+                    if x.startswith('e04_') and x != p['tmux'])
+    siblings = {}
+    for x in others:                      # evidence that a leftover E04 session is a finished, earlier sibling seed
+        sp = sh('tmux', 'list-panes', '-t', x, '-F', '#{pane_dead} #{pane_dead_status}').split()
+        sib = [s for s in sorted(RUN_IDS) if s != seed and paths(s)['tmux'] == x]
+        q = paths(sib[0]) if sib else None
+        siblings[x] = {'seed': sib[0] if sib else None, 'panes': [sp] if sp else [],
+                       'exit_file_raw': (Path(q['exit']).read_bytes().decode('utf-8', errors='replace')
+                                         if q and Path(q['exit']).is_file() else None),
+                       'end_time': (Path(q['end_time']).read_text().strip()
+                                    if q and Path(q['end_time']).is_file() else None)}
     return {'tmux_pane_dead': pane[0] == '1' if pane else None,
             'tmux_pane_dead_status': int(pane[1]) if len(pane) > 1 and pane[0] == '1' else None,
             'runner_processes': procs, 'exit_file': Path(p['exit']).read_text().strip(),
@@ -634,6 +646,7 @@ def host_state(seed):
             'pane_log_fail_hits': {k: sum(k in x for x in pane_log) for k in PANE_FAIL_PATTERNS},
             'other_e04_tmux': sorted(x for x in sh('tmux', 'ls', '-F', '#{session_name}').splitlines()
                                      if x.startswith('e04_')),
+            'sibling_e04_sessions': siblings,
             'gpu_query': sh('nvidia-smi', '--query-gpu=name,driver_version,uuid', '--format=csv,noheader'),
             'marker_files': {k: marker_file(p[k]) for k in ('command', 'launch_time', 'pane_log', 'exit', 'end_time')},
             'boot': boot_provenance()}
@@ -806,6 +819,27 @@ def boot_continuity(c):
                 'current_boot_id': rp.get('boot_id'), 'current_btime_utc': utc(rp['btime']),
                 'kernel_release_now': rp.get('kernel_release'),
                 'shutdowns_after_end': [r[0] for r in recs if r[1] == 'shutdown' and r[2] > end]}
+
+
+def finished_siblings(host, seed):
+    """Every e04_* tmux session other than this seed's must be (a) the session of another registered E04 seed, (b) a
+    single dead pane with exit status 0, (c) backed by that seed's durable exit marker '0\\n' and (d) an end marker
+    strictly before this seed's launch -- i.e. a finished earlier run that cannot have overlapped this one. Any other
+    leftover session fails. A document without sibling evidence keeps the original rule (only this seed's session)."""
+    own, launch = paths(seed)['tmux'], epoch_seconds(host['launch_time'])
+    others = [x for x in host['other_e04_tmux'] if x != own]
+    if not others:
+        return True, {}
+    ev = host.get('sibling_e04_sessions') or {}
+    out, ok = {}, True
+    for x in others:
+        e = ev.get(x)
+        good = (e is not None and e['seed'] in RUN_IDS and e['seed'] != seed and paths(e['seed'])['tmux'] == x and
+                e['panes'] == [['1', '0']] and e['exit_file_raw'] == '0\n' and e['end_time'] is not None and
+                epoch_seconds(e['end_time']) < launch)
+        ok = ok and good
+        out[x] = {'finished_before_launch': good, 'seed': e and e['seed'], 'end_time': e and e['end_time']}
+    return ok, out
 
 
 def build(c, t, repo_root):
@@ -1096,8 +1130,9 @@ def build(c, t, repo_root):
     G('J.run_root_files', c['run_root_file_count'] == len(c['run_root_sha_listing']) == RUN_ROOT_FILES,
       c['run_root_file_count'])
     G('J.metrics_sha_in_listing', lines.get('metrics.jsonl', {}).get('sha256') == c['metrics_sha256'])
-    G('J.no_other_e04_runner', host['runner_processes'] == [] and
-      all(x == paths(seed)['tmux'] for x in host['other_e04_tmux']), host['other_e04_tmux'])
+    sib_ok, sib = finished_siblings(host, seed)
+    G('J.no_other_e04_runner', host['runner_processes'] == [] and sib_ok,
+      host['other_e04_tmux'] if not sib else {'sessions': host['other_e04_tmux'], 'finished_earlier_siblings': sib})
 
     failed = G.failed
     status = 'E04_SEED%d_COMPLETED_CLEANLY' % seed if not failed else 'E04_SEED%d_NEEDS_REVIEW' % seed
