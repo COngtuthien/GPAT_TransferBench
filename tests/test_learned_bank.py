@@ -242,11 +242,27 @@ class Governance(unittest.TestCase):
         self.assertEqual(rows[0]['pair_id'], 'PTR%06d' % (pos[0] + 1))
 
 
+def live_s7_expectation():
+    """The refusal the live repository state must give for S7 (None = S7 authorised). The state only moves forward:
+    E04 open -> BLOCKED_BY_E04; E04 seed 2026 + family closed (0e3f1d1 + family closure) but no owner S7 launch
+    authority -> BLOCKED_BY_S7; S7 authority committed -> S7 loads."""
+    if not lb.e04_completion_state()['ok']:
+        return lb.STATUS_E04
+    if not (ROOT / lb.S7_AUTHORITY_PATH).exists():
+        return lb.STATUS_S7
+    return None
+
+
 class Gates(unittest.TestCase):
     def test_s7_and_production_refuse_now(self):
-        with self.assertRaises(lb.LearnedBankBlocked) as cm:
-            lb.load_s7_authority('E06c')
-        self.assertEqual(cm.exception.status, lb.STATUS_E04)
+        want = live_s7_expectation()
+        if want is None:
+            auth = lb.load_s7_authority('E06c')
+            self.assertEqual((auth.mode, auth.methods, auth.seeds), ('S7_TOY', ('E06c',), lb.SEEDS))
+        else:
+            with self.assertRaises(lb.LearnedBankBlocked) as cm:
+                lb.load_s7_authority('E06c')
+            self.assertEqual(cm.exception.status, want)
         for m in lb.METHODS:
             for s in lb.SEEDS:
                 with self.assertRaises(lb.LearnedBankBlocked) as cm:
@@ -257,8 +273,8 @@ class Gates(unittest.TestCase):
         self.assertEqual(storage['bank_root'], lb.HDD['bank_root'])
         self.assertEqual(lb.resolve_registered_bank('E05', 42),
                          Path('/media/ext_data/student20261_gpat_m8_banks/E05/seed_42'))
-        self.assertFalse((ROOT / lb.S7_AUTHORITY_PATH).exists())
-        self.assertFalse((ROOT / lb.E04_COMPLETION_RECORD).exists())
+        self.assertEqual((ROOT / lb.S7_AUTHORITY_PATH).exists(), want is None)
+        self.assertEqual((ROOT / lb.E04_COMPLETION_RECORD).exists(), want != lb.STATUS_E04)
         for m in lb.METHODS:
             self.assertFalse((ROOT / lb.PRODUCTION_AUTHORITY_TEMPLATE.format(method=m)).exists())
 
@@ -673,19 +689,25 @@ class NonRegression(unittest.TestCase):
 class CLI(unittest.TestCase):
     def test_s7_and_production_refuse_before_any_work(self):
         out = Path(tempfile.mkdtemp())
-        for argv in (['s7', '--method', 'E06c', '--label', 'A', '--out-root', str(out), '--runtime-root', '/nonexistent'],
-                     ['production', '--method', 'E03', '--seed', '42', '--runtime-root', '/nonexistent']):
+        want = live_s7_expectation()
+        cases = [(['production', '--method', 'E03', '--seed', '42', '--runtime-root', '/nonexistent'],
+                  lb.STATUS_E04 if want == lb.STATUS_E04 else lb.STATUS_PRODUCTION)]
+        if want is not None:            # once S7 is authorised the s7 command proceeds; production still refuses
+            cases.insert(0, (['s7', '--method', 'E06c', '--label', 'A', '--out-root', str(out),
+                              '--runtime-root', '/nonexistent'], want))
+        for argv, status in cases:
             p = subprocess.run([sys.executable, '-B', str(ROOT / 'tools/learned_bank.py')] + argv,
                                capture_output=True, text=True)
             self.assertEqual(p.returncode, 3, p.stderr)
             rec = json.loads(p.stdout.strip().splitlines()[-1])
-            self.assertEqual(rec['status'], lb.STATUS_E04)
+            self.assertEqual(rec['status'], status)
         self.assertEqual(list(out.iterdir()), [])
         p = subprocess.run([sys.executable, '-B', str(ROOT / 'tools/learned_bank.py'), 'gates', '--method', 'E05'],
                            capture_output=True, text=True)
         rep = json.loads(p.stdout)
         self.assertTrue(rep['contract']['ok'])
-        self.assertFalse(rep['s7']['ok'] or rep['production']['ok'])
+        self.assertEqual(rep['s7']['ok'], want is None)
+        self.assertFalse(rep['production']['ok'])
         self.assertTrue(rep['storage_authority']['ok'])         # activated L1 B record; never a production grant
 
 
