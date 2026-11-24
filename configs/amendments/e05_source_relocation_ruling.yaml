@@ -1,0 +1,111 @@
+{
+ "schema_version": "e05_source_relocation_ruling_v1",
+ "record": "E05_PCGAN_SOURCE_RELOCATION_OWNER_RULING",
+ "status": "OWNER_APPROVED",
+ "approved": true,
+ "date": "2026-11-25",
+ "decision": "O2_PATH_INDEPENDENT_SOURCE_IDENTITY",
+ "approval": "Owner selection of option O2 (session instruction 2026-11-25 'E05 PCGAN S7 Path-Binding Owner Ruling and Conditional Qualification'): approve a narrowly scoped compatibility correction allowing the pinned PCGAN upstream source to reside at a different absolute checkout path, provided its scientific identity, pinned source tree, all required file hashes, approved compatibility patches and runtime behaviour are independently verified.",
+ "resolves": {
+  "failure_record": "outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json",
+  "failure_record_sha256": "bdaa88abd6221bf31dbb1014e7c1126f4beef9addc87ea7f99b927b061a6f836",
+  "failure_commit": "2d430e98825adcd388d0c3152222aa62efb43c2c",
+  "failed_gate": "methods/pcgan/training_qualification.py::existing_runtime require(manifest['source'] == source, 'source identity')",
+  "root_cause": "the qualified manifest binds source.root to the original GPU checkout path; source_identity() derives root from the executing checkout; only 'root' differed in the isolated S7 clone (read-only probe at the time of failure)"
+ },
+ "relocatable_fields": [
+  "root"
+ ],
+ "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+ "historical_root_note": "kept as documented provenance in the unchanged qualified manifest; no longer the only permitted execution location",
+ "required_identity": [
+  "upstream repository https://github.com/taesungp/swapping-autoencoder-pytorch, commit 6baa180f1184ee79a6b967f9d80ee0e02a979ac7, tree 25a434f1282a0177d6afdcc68ebfcf40bd805621 (exact, via the unchanged source_identity())",
+  "every manifest identity field except root exactly equal: repository, commit, tree, verification PASS, worktree_status '', files_sha256 (23 files), code_files (67 files, sha256 + git blob)",
+  "independent re-hash from disk of every files_sha256 and code_files entry (methods/pcgan/source_relocation.py)",
+  "no executable file in the pinned source outside the code_files inventory; no symlink anywhere in the pinned source; no '..' traversal",
+  "the pinned source is the real directory <execution checkout>/third_party/source_cache/swapping_autoencoder (no symlink between checkout and source)",
+  "the compatibility-patch manifest is byte-identical to environments/e05.compatibility_patch_manifest.json (unchanged gate), and every generated patched file equals its qualified sha256 (unchanged gate)",
+  "each imported upstream module (util, encoder, generator, discriminators, fused_act, upfirdn2d) resolves to its qualified generated-closure file (new gate)",
+  "both CUDA extensions: source inputs, binary location inside the qualified build root, binary sha256 and build.ninja equal the M6D4a record (unchanged checks, factored into verify_extension)",
+  "clean execution checkout at the execution commit (S7 preflight/audit P.execution_checkout)"
+ ],
+ "unchanged": {
+  "compatibility_patch_manifest": {
+   "path": "environments/e05.compatibility_patch_manifest.json",
+   "sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac"
+  },
+  "environment_lock": {
+   "path": "environments/e05.lock.json",
+   "sha256": "849a100430e36048acde80d58801ae8908c15ae43719e97f4dcb90d77564ac50"
+  },
+  "frozen_config": {
+   "path": "configs/methods/e05_pcgan.yaml",
+   "sha256": "478756e150c427832315800acba954cedf778bac520eee3bde8cabf7359e71de"
+  },
+  "checkpoints": {
+   "42": {
+    "sha256": {
+     "pth": "4ad80b35e759154f741d249db8c6e43622cab916e13dc785ad9273bd65113cb1"
+    },
+    "checkpoint_identity_sha256": "2b55dcf2ecc4d6fbc11e34fe4514a167807489049438b561992eaaef7b51ae68",
+    "run_id": "18463bf5cd471e55"
+   },
+   "1337": {
+    "sha256": {
+     "pth": "b6a4cb2c61b1b582f1acd1eb3514f6a15ea49e544e1dac48415004c6ce4f7b34"
+    },
+    "checkpoint_identity_sha256": "f3a687d8672e8d589a61c080fd129288bc44895fe1abb75045dac340d35dd544",
+    "run_id": "036c806bb2f339b7"
+   },
+   "2026": {
+    "sha256": {
+     "pth": "b7f0575f1e061936175ac04d2ac333e1008577bdd3654566c009a2f72bf0b166"
+    },
+    "checkpoint_identity_sha256": "ee10a3b4ee1c66ecc1096b8cbe4ec2d56a4a49ade06f4c14b304488d98c1820f",
+    "run_id": "b739351daf9779bc"
+   }
+  },
+  "family_closure_commit": "7677c3a",
+  "inference": "PCGAN architecture, official mix (source-spoof spatial + target-live global), per-pair seeded noise, one forward per pair, tensor2im conversion, lossless PNG, RNG, preprocessing and the 186-pair toy population are unchanged",
+  "production_code_pinned_at_head": [
+   "methods/pcgan/production_io.py",
+   "methods/pcgan/production_runner.py",
+   "tools/run_e05.py",
+   "methods/pcgan/production_qualification.py"
+  ]
+ },
+ "code_change": {
+  "files": [
+   "methods/pcgan/source_relocation.py (new, stdlib)",
+   "methods/pcgan/training_qualification.py (existing_runtime: exact-equality line replaced by verify_source_identity; extension checks factored into verify_extension; new import-resolution check; build_closure records source_identity)"
+  ],
+  "weakening": "none: the only accepted difference is the absolute root, which is re-validated as the real checkout-relative source directory"
+ },
+ "s7": {
+  "launch_authority": {
+   "path": "configs/amendments/learned_bank_s7_launch_authority.yaml",
+   "sha256": "0be8f0e1457887a568d11895f30df7076bf1f843ff919c0dbe00f014cf81645e"
+  },
+  "contract_sha256": "3554577185a9faad76ce527971e75d85e4a107809a7da91c270196c899f339a9",
+  "execution_commit": "the commit that adds this record and the code change; E05 S7 only (E06c, E03, E06b records stay bound to a5e3132)",
+  "execution_checkout": "fresh clean clone ~/workdir/m8_learned_banks/clones/s7_<execution_commit>; never the GPU training checkout",
+  "s7_root": "~/workdir/m8_learned_banks/s7/<execution_commit>/E05 (fresh); the attempt-1 root ~/workdir/m8_learned_banks/s7/a5e3132.../E05 is retained untouched and never reused",
+  "markers": "~/workdir/m8s7_E05_a2_<A|B>.* and tmux m8s7_E05_a2_<A|B> (attempt 2)",
+  "seeds": [
+   42,
+   1337,
+   2026
+  ],
+  "acceptance": "bitwise A/B replay + every S7 audit gate; record outputs/audit/LEARNED_BANK_S7_E05.json"
+ },
+ "authorizes": {
+  "path_independent_source_identity": true,
+  "e05_s7_attempt_2": true,
+  "production_bank_generation": false,
+  "generator_retraining": false,
+  "downstream_training": false,
+  "test_evaluation": false,
+  "dinov3": false,
+  "gpat": false
+ }
+}

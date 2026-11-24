@@ -78,6 +78,14 @@ class S7Records(unittest.TestCase):
                     r['manifest_rows'][5][r['manifest_fields'].index('raw_output_finite')] = False
                 self.assertIn('S.seed42.rows_finite_rgb_uint8', self.tampered(m, nonfinite))
 
+                def wrong_checkout(c):
+                    c['git']['head'] = '18ba00e94813f005876c8d6235b0b848226b2c1d'   # the GPU training checkout
+                self.assertIn('P.execution_checkout', self.tampered(m, wrong_checkout))
+
+                def dirty_checkout(c):
+                    c['git']['status_porcelain'] = ' M methods/pcgan/training_qualification.py'
+                self.assertIn('P.execution_checkout', self.tampered(m, dirty_checkout))
+
                 def wrong_checkpoint(c):
                     c['runs']['A']['42']['provenance']['adapter']['checkpoint_identity_sha256'] = '1' * 64
                 self.assertIn('S.seed42.runA.checkpoint_before', self.tampered(m, wrong_checkpoint))

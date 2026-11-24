@@ -16,6 +16,7 @@ import traceback
 from types import SimpleNamespace
 
 from .runtime_qualification import ROOT, Firewall, source_identity, environment, sha
+from . import source_relocation as relocation
 from .training_runner import TrainingRunner, COUNTS, OVERLAY_SHA, require, explicit_pair
 from .training_losses import generator_losses, discriminator_losses, G_TERMS, D_TERMS
 from . import training_diagnostics as diag
@@ -45,7 +46,11 @@ def existing_runtime(build, result):
     require(manifest_raw == (ROOT / 'environments/e05.compatibility_patch_manifest.json').read_bytes(),
             'exact M6D4a compatibility manifest')
     manifest = json.loads(manifest_raw)
-    require(manifest['source'] == source, 'source identity')
+    # owner ruling O2 (configs/amendments/e05_source_relocation_ruling.yaml): content identity, root may be relocated
+    try:
+        source_check = relocation.verify_source_identity(manifest['source'], source, ROOT)
+    except relocation.SourceIdentityError as exc:
+        require(False, 'source identity (%s)' % exc)
     generated = Path(manifest['generated_root'])
     closure = {rel: sha((generated / rel).read_bytes()) for rel in manifest['generated_files_sha256']}
     require(closure == manifest['generated_files_sha256'], 'generated source closure')
@@ -56,13 +61,11 @@ def existing_runtime(build, result):
     def load_existing(name, sources, **kwargs):
         require(name in binaries, 'only qualified extension')
         expected = binaries[name]
-        for path in sources:
-            rel = str(Path(path).relative_to(generated))
-            require(sha(Path(path).read_bytes()) == closure[rel], 'extension source input')
         path = Path(expected['extension']['path'])
-        require(path.is_relative_to(build), 'qualified binary location')
-        require(sha(path.read_bytes()) == expected['extension']['sha256'], 'qualified binary hash')
-        require((path.parent / 'build.ninja').read_text() == expected['build_ninja'], 'Ninja identity')
+        try:
+            relocation.verify_extension(path, expected, build, generated, closure, sources)
+        except relocation.SourceIdentityError as exc:
+            require(False, 'qualified extension (%s)' % exc)
         spec = importlib.util.spec_from_file_location(name, path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
@@ -80,10 +83,15 @@ def existing_runtime(build, result):
     up = importlib.import_module('models.networks.stylegan2_op.upfirdn2d')
     require(act.use_custom_kernel and up.use_custom_kernel and sorted(loads) == ['fused', 'upfirdn2d'],
             'both real CUDA extensions loaded, no fallback/rebuild')
+    try:
+        imports = relocation.verify_import_resolution(sys.modules, generated, closure)
+    except relocation.SourceIdentityError as exc:
+        require(False, 'import resolution (%s)' % exc)
     result['source_before'] = source
     result['build_closure'] = dict(manifest_sha256=sha(manifest_raw), generated_files_sha256=closure,
         extensions={k: dict(extension=v['extension'], build_ninja_sha256=sha(v['build_ninja'].encode()))
-                    for k, v in previous['custom_ops'].items()}, jit_build_invoked=False)
+                    for k, v in previous['custom_ops'].items()}, jit_build_invoked=False,
+        source_identity=source_check, import_resolution=imports)
     from .architecture import architecture_mapping
     arch = architecture_mapping(adapter.config, source)
     options = {k: v['value'] for k, v in arch['inherited_source_defaults'].items()}

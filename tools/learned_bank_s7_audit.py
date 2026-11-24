@@ -74,8 +74,8 @@ def sh(*a, cwd=None):
     return r.stdout.strip()
 
 
-def marker_paths(method, label=None):
-    base = '%s/m8s7_%s' % (WORKDIR, method)
+def marker_paths(method, label=None, tag=None):
+    base = '%s/m8s7_%s' % (WORKDIR, tag or method)
     if label is None:
         return {'preflight': base + '_preflight.json', 'atime_pre': base + '_atime_pre.tsv',
                 'atime_post': base + '_atime_post.tsv', 'compare': base + '_compare.json',
@@ -119,6 +119,11 @@ def processes():
     return out
 
 
+TAG = None                       # attempt tag (e.g. E05_a2): marker/tmux prefix m8s7_<tag>; None = m8s7_<method>
+RULING_PATH = 'configs/amendments/e05_source_relocation_ruling.yaml'
+E05_FAILURE = 'outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json'
+
+
 def m8s7_panes():
     out = {}
     for s in sh('tmux', 'ls', '-F', '#{session_name}').splitlines():
@@ -132,6 +137,7 @@ def preflight(method, repo, s7_root):
     lb = lb_module(repo)
     out_root = Path(s7_root) / method
     doc = {'phase': 'preflight', 'method': method, 'utc': utc_now(), 'repo': str(repo), 'git': git_state(repo),
+           **({'tag': TAG} if TAG else {}),
            'collector': {'python': sys.version.split()[0], 'executable': sys.executable},
            'processes': processes(), 'm8s7_panes': m8s7_panes(), 'gpu': gpu_state(),
            'estimate_gib': ESTIMATE_GIB[method], 'margin_gib': MARGIN_GIB}
@@ -210,7 +216,7 @@ def read_text(path):
 
 def atime_ledger(method, repo):
     import pyarrow.parquet as pq
-    p = marker_paths(method)
+    p = marker_paths(method, tag=TAG)
 
     def load(f):
         out = {}
@@ -247,6 +253,8 @@ def collect(method, repo, s7_root):
     doc = {'phase': 'collect', 'method': method, 'utc': utc_now(), 'repo': str(repo), 'git': git_state(repo),
            'collector': {'python': sys.version.split()[0], 'executable': sys.executable},
            'out_root': str(out_root), 'out_root_entries': sorted(os.listdir(out_root)), 'runs': {}}
+    if TAG:
+        doc['tag'] = TAG
     before = {L: listing(out_root / ('run_' + L)) for L in LABELS}
     for L in LABELS:
         doc['runs'][L] = {}
@@ -280,21 +288,21 @@ def collect(method, repo, s7_root):
     doc['checkpoints_after_run_B'] = after
     doc['markers'] = {}
     for L in LABELS:
-        mp = marker_paths(method, L)
+        mp = marker_paths(method, L, TAG)
         doc['markers'][L] = {'command': read_text(mp['command']),
                              'command_sha256': sha256_file(mp['command']) if Path(mp['command']).is_file() else None,
                              'launch_time': (read_text(mp['launch_time']) or '').strip(),
                              'exit_raw': read_text(mp['exit']), 'end_time': (read_text(mp['end_time']) or '').strip(),
                              'pane': pane_summary(mp['pane.log']),
-                             'tmux_pane': sh('tmux', 'list-panes', '-t', 'm8s7_%s_%s' % (method, L), '-F',
+                             'tmux_pane': sh('tmux', 'list-panes', '-t', 'm8s7_%s_%s' % (TAG or method, L), '-F',
                                              '#{pane_dead} #{pane_dead_status}')}
-    pf = marker_paths(method)['preflight']
+    pf = marker_paths(method, tag=TAG)['preflight']
     doc['preflight'] = json.loads(read_text(pf)) if Path(pf).is_file() else None
     doc['preflight_sha256'] = sha256_file(pf) if Path(pf).is_file() else None
-    mp = marker_paths(method)
+    mp = marker_paths(method, tag=TAG)
     doc['cli_compare'] = {'stdout': read_text(mp['compare']), 'rc': read_text(mp['compare_rc'])}
     doc['atime'] = atime_ledger(method, repo)
-    gs = '%s/m8s7_%s_A.gpu_samples.tsv' % (WORKDIR, method)
+    gs = '%s/m8s7_%s_A.gpu_samples.tsv' % (WORKDIR, TAG or method)
     doc['gpu_samples_run_A'] = read_text(gs).splitlines() if Path(gs).is_file() else None
     doc['processes_after'] = processes()
     doc['gpu_after'] = gpu_state()
@@ -505,6 +513,31 @@ def build(c, repo_root):
             c['runs'][L][str(s)]['provenance']['adapter']['checkpoint']['files'][k]['mtime_ns']
             == af['files'][k]['mtime_ns'] for L in LABELS for k in auth_ck['sha256']))
 
+    if M == 'E05':
+        rul_raw = (repo / RULING_PATH).read_bytes()
+        rul = json.loads(rul_raw)
+        fail_raw = (repo / E05_FAILURE).read_bytes()
+        G('P.e05_o2_ruling_in_execution_commit', rul['status'] == 'OWNER_APPROVED' and rul['approved'] is True
+          and rul['decision'] == 'O2_PATH_INDEPENDENT_SOURCE_IDENTITY' and rul['relocatable_fields'] == ['root']
+          and subprocess.run(['git', 'show', '%s:%s' % (commit, RULING_PATH)], cwd=repo,
+                             capture_output=True).stdout == rul_raw
+          and rul['resolves']['failure_record_sha256'] == sha256_bytes(fail_raw) and c.get('tag') == 'E05_a2'
+          and c['out_root'] != json.loads(fail_raw)['raw']['out_root'])
+        src_root = '%s/third_party/source_cache/swapping_autoencoder' % c['repo']
+        for s in SEEDS:
+            for L in LABELS:
+                bc = c['runs'][L][str(s)]['provenance']['adapter'].get('runtime_closure', {}).get('build_closure', {})
+                si, imp = bc.get('source_identity') or {}, bc.get('import_resolution') or {}
+                G('S.seed%d.run%s.e05_source_identity' % (s, L), si.get('relocated') is True and si.get('root') == src_root
+                  and si.get('differing_fields') == ['root'] and si.get('historical_root') == rul['historical_root']
+                  and si.get('commit') == '6baa180f1184ee79a6b967f9d80ee0e02a979ac7'
+                  and si.get('tree') == '25a434f1282a0177d6afdcc68ebfcf40bd805621'
+                  and si.get('files_verified') == 23 and si.get('code_files_verified') == 67
+                  and si.get('unexpected_executable_files') == 0
+                  and si.get('ruling') == {'path': RULING_PATH, 'sha256': sha256_bytes(rul_raw)}
+                  and len(imp) == 7 and bc.get('jit_build_invoked') is False
+                  and len(bc.get('extensions', {})) == 2, {'source_identity': si, 'imports': imp})
+
     cc = c.get('cli_compare') or {}
     try:
         cli = json.loads((cc.get('stdout') or '').strip().splitlines()[-1])
@@ -583,6 +616,12 @@ def build(c, repo_root):
                                   'toy population (186 rows per seed); production equivalence is checked later']},
         'collected': c,
     }
+    if c.get('tag'):
+        doc['execution_tag'] = c['tag']
+    if M == 'E05':
+        doc['source_relocation_ruling'] = {'path': RULING_PATH, 'sha256': sha256_bytes((repo / RULING_PATH).read_bytes())}
+        doc['prior_attempts'] = [{'attempt': 1, 'record': E05_FAILURE, 'sha256': sha256_bytes((repo / E05_FAILURE).read_bytes()),
+                                  'status': 'S7_FAILED_NEEDS_OWNER_REVIEW (source-root path binding; resolved by O2)'}]
     return doc
 
 
@@ -633,10 +672,13 @@ def main(argv=None):
         a.add_argument('--method', required=True, choices=sorted(ESTIMATE_GIB))
         a.add_argument('--repo', required=True)
         a.add_argument('--s7-root', required=True)
+        a.add_argument('--tag', default=None)
     b = sub.add_parser('build')
     b.add_argument('--collected', required=True)
     b.add_argument('--repo-root', default=str(Path(globals().get('__file__', 'tools/x')).resolve().parents[1]))
     args = ap.parse_args(argv)
+    global TAG
+    TAG = getattr(args, 'tag', None)
     if args.cmd == 'preflight':
         return preflight(args.method, args.repo, args.s7_root)
     if args.cmd == 'collect':
