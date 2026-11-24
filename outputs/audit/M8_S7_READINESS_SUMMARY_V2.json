@@ -1,0 +1,121 @@
+{
+ "date": "2026-11-25",
+ "disclosures": [
+  "E05 S7 outputs are low-contrast (pixels 95-132, mean per-image std 5-8; descriptive, not a gate) -- worth owner attention before production/downstream",
+  "S7 toy outputs exist only on the GPU host; git holds hashes"
+ ],
+ "e05_history": [
+  {
+   "attempt": 1,
+   "commit": "2d430e9",
+   "outcome": "source-root path binding",
+   "record": "outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json"
+  },
+  {
+   "commit": "5f81d70",
+   "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+   "ruling": "O2"
+  },
+  {
+   "commit": "ef96fcb",
+   "outcome": "B1/B2 found",
+   "qualification": "outputs/audit/E05_SOURCE_RELOCATION_QUALIFICATION.json"
+  },
+  {
+   "commit": "7ff4d36",
+   "path": "configs/amendments/e05_s7_b1_b2_ruling.yaml",
+   "ruling": "B1 + B2 P2"
+  },
+  {
+   "commit": "d571650",
+   "qualification": "outputs/audit/E05_S7_B1_B2_QUALIFICATION.json"
+  },
+  {
+   "attempt": 2,
+   "commit": "1e65064",
+   "outcome": "PASSED 145/145",
+   "record": "outputs/audit/LEARNED_BANK_S7_E05.json"
+  }
+ ],
+ "methods": {
+  "E03": {
+   "bitwise_identical": true,
+   "commit": "cd9c294c8fcc06f0e3a6e4a824640887df1f9e8d",
+   "execution_commit": "a5e31322fd99bb6c4b6361b8b6a96790bb0d8f18",
+   "gates": "98/98",
+   "layout": "single_process_three_seeds",
+   "manifest_sha256": {
+    "1337": "39a10b84e9fa3977e2b1bb17de11ef23be62c71bf0563d73a8c7c197d409c3d3",
+    "2026": "cd4568a4189e69ebae0511497b16710feac162181e4d43004eabf3655e1a3a52",
+    "42": "5522f105975a2e955528e794a1a97916d529d3b1325ef03979051f91499df770"
+   },
+   "production_readiness": "READY_FOR_SEPARATELY_AUTHORIZED_PRODUCTION",
+   "record": "outputs/audit/LEARNED_BANK_S7_E03.json",
+   "record_sha256": "c2d089ce62c37101a3ceab64b5bb74259ea858d14da0b13d20502a8f0d26365d",
+   "status": "S7_ACCEPTANCE_PASSED"
+  },
+  "E05": {
+   "bitwise_identical": true,
+   "commit": "1e650644a45b895eaa9b7532198392ffbd68108e",
+   "execution_commit": "7ff4d36f74cd64d6c405944d3b9fa4aee1fae521",
+   "gates": "145/145",
+   "layout": "per_seed_process",
+   "manifest_sha256": {
+    "1337": "6ad2de476fb3daba7ea14b9cd7179e2f62ab6fa439c929ebc9763352a5943dea",
+    "2026": "522d6fd1ad83f0173374438bc6520f0c0ce2583f526d0d55ea834ca108502645",
+    "42": "8c622e2a0d037e4148c7b7d983246607fb904f4cc1c56ec6ca721cd1ad76f863"
+   },
+   "production_readiness": "E05_S7_QUALIFIED_PRODUCTION_AUTHORITY_PENDING",
+   "record": "outputs/audit/LEARNED_BANK_S7_E05.json",
+   "record_sha256": "295776e56814eef17a08d46de860fa4978d79254d534eb3807cdd733c589fd84",
+   "status": "S7_ACCEPTANCE_PASSED"
+  },
+  "E06b": {
+   "bitwise_identical": true,
+   "commit": "f84f05f965ea8f81eda0ade4c0438cc400d1fe65",
+   "execution_commit": "a5e31322fd99bb6c4b6361b8b6a96790bb0d8f18",
+   "gates": "98/98",
+   "layout": "single_process_three_seeds",
+   "manifest_sha256": {
+    "1337": "48f18f685577ad71e1f8bf188cdd9444933eebce9afe3726ef778109077b95d6",
+    "2026": "c10872c8084c5877e207ea5bc7b0448eff29daffd134323b17f599ef8b25d866",
+    "42": "02c4d3cabbe54ffa282495dc1ce992d7410a3167b70a9c01e5155cbe912fdf50"
+   },
+   "production_readiness": "READY_FOR_SEPARATELY_AUTHORIZED_PRODUCTION",
+   "record": "outputs/audit/LEARNED_BANK_S7_E06b.json",
+   "record_sha256": "9d7ec5a3d0115e34ca194426fc2a55558753aa0ca61f9b2be9f8a173cf112857",
+   "status": "S7_ACCEPTANCE_PASSED"
+  },
+  "E06c": {
+   "bitwise_identical": true,
+   "commit": "8fb5bacbc4ec3e65ca18d8fabc0de1c8d9723229",
+   "execution_commit": "a5e31322fd99bb6c4b6361b8b6a96790bb0d8f18",
+   "gates": "98/98",
+   "layout": "single_process_three_seeds",
+   "manifest_sha256": {
+    "1337": "afa28386da1c1f532bdc99d305de2a390c87186558b552f1b868ad1bebe0d191",
+    "2026": "52099a8b3ce4d0661b5ede1261ccbe556bac57777efec06b10373d3f66fcf5d1",
+    "42": "57a4d9faedd1503ff9e7c6c4cf0b2108e6c77bdd16c0b4339a7092994fe074dd"
+   },
+   "production_readiness": "READY_FOR_SEPARATELY_AUTHORIZED_PRODUCTION",
+   "record": "outputs/audit/LEARNED_BANK_S7_E06c.json",
+   "record_sha256": "42b1aef1c6283eae866cb6dff5944147f71950cc8b1e4bec811462432d0bc773",
+   "status": "S7_ACCEPTANCE_PASSED"
+  }
+ },
+ "not_done": [
+  "learned-bank production banks",
+  "downstream ResNet-18",
+  "TEST evaluation",
+  "DINOv3",
+  "GPAT"
+ ],
+ "production_requirements": "per method, an owner configs/amendments/learned_bank_production_<M>.yaml (learned_bank_production_authority_v1) binding its S7 record by path + sha256 and the contract sha256; the HDD storage authority is active (live preflight at launch); E05 production additionally runs one seed per process (B2) and must use the O2/B1 code",
+ "schema": "m8_learned_bank_s7_readiness_summary_v2",
+ "status": "ALL_FOUR_LEARNED_METHODS_S7_QUALIFIED",
+ "supersedes_status_of": {
+  "note": "kept unchanged as history (E05 was blocked then)",
+  "path": "outputs/audit/M8_S7_READINESS_SUMMARY.json",
+  "sha256": "500d515b0c30aa1aae29dd771a0995832369475a2b9295abbd42a1e1fbeeb5e7"
+ }
+}
