@@ -1,0 +1,518 @@
+{
+ "additional_blockers": [
+  {
+   "cause": "the check parses sys.modules[\"util\"].__file__ = generated util/__init__.py (a package); tensor2im is defined in util/util.py (util.tensor2im.__module__ == \"util.util\")",
+   "evidence": {
+    "generated_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952",
+    "pinned_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952",
+    "pinned_source_file": "util/util.py",
+    "tensor2im_def_in_util_init": false,
+    "tensor2im_defined_in": "util.util",
+    "util_file": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/util/__init__.py",
+    "util_is_package": true,
+    "util_util_file": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/util/util.py"
+   },
+   "id": "B1_TENSOR2IM_CHECK_TARGETS_PACKAGE_INIT",
+   "observed": "StopIteration (seed 42, after build_models succeeded, before the checkpoint state load)",
+   "proposed_fix": "locate the defining module sys.modules[util.tensor2im.__module__], require its file is the generated-closure util/util.py, and compare its tensor2im segment with the pinned segment (one-line target change in bank_adapter.load_real)",
+   "scientific_impact": "none on the conversion: the generated util/util.py tensor2im segment sha256 equals the pinned segment (9973b640...); only the check location is wrong",
+   "where": "methods/pcgan/bank_adapter.py::load_real lines 159-163"
+  },
+  {
+   "cause": "fused_act/upfirdn2d call cpp_extension.load at import; on a second existing_runtime call in the same process the modules are cached, no load happens and the per-call loads list is empty. The E05 training runner built the runtime once per process, so this was never exercised.",
+   "id": "B2_SECOND_RUNTIME_LOAD_IN_ONE_PROCESS_REFUSED",
+   "observed": {
+    "error": "RuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild",
+    "ok": false
+   },
+   "proposed_fixes": [
+    "P1 (recommended): make existing_runtime process-idempotent: on a repeat call re-run every verification (manifest bytes, source identity, generated closure, import resolution, binary sha/location/Ninja) and accept the extensions verified and loaded by the first call of this process, recording the call count; models are still constructed fresh per seed",
+    "P2: run E05 S7 as one process per seed (needs a --seed option in tools/learned_bank.py s7 and matching S7-audit changes)"
+   ],
+   "where": "methods/pcgan/training_qualification.py::existing_runtime \"both real CUDA extensions loaded\" gate, reached by tools/learned_bank.py s7 (three seeds per process)"
+  }
+ ],
+ "code_authority": "5f81d704b6da24165c4d9fe466afaf5da239046a",
+ "date": "2026-11-25",
+ "final_s7_status": "E05_S7_FAILED_NEEDS_OWNER_REVIEW (pre-launch qualification; no E05 S7 run was started)",
+ "not_done": [
+  "no E05 S7 run A/B was launched; no new S7 output root was created",
+  "no checkpoint state was loaded in the probes (only read-only hashing by verify_checkpoint in probe 1)",
+  "no fix for B1/B2 was implemented (outside the O2 scope)",
+  "no production bank, retraining, downstream, TEST, DINOv3 or GPAT"
+ ],
+ "o2_verification": {
+  "environment": {
+   "gpu": "NVIDIA GeForce RTX 3090 GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7, driver 580.178.04",
+   "launch_env": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "CUDA_VISIBLE_DEVICES": "0",
+    "NVIDIA_TF32_OVERRIDE": "0"
+   },
+   "torch": [
+    "2.12.1+cu130",
+    "13.0",
+    92000,
+    "NVIDIA GeForce RTX 3090"
+   ]
+  },
+  "gpu_host_build_models_from_isolated_clone": {
+   "extensions": {
+    "fused_bias_act": {
+     "build_ninja_sha256": "5d24d1e2184e415423aed8fda990d21ddf641e8be59fdc89a7fe34804fb00619",
+     "extension": {
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so",
+      "sha256": "5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab"
+     }
+    },
+    "upfirdn2d": {
+     "build_ninja_sha256": "69d2fe7143d094caf8b6314bd8dd2f15124c97bff4db9139cd170f1ab7c73542",
+     "extension": {
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so",
+      "sha256": "40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081"
+     }
+    }
+   },
+   "generated_files": 67,
+   "import_resolution": {
+    "models.networks.discriminator": "models/networks/discriminator.py",
+    "models.networks.encoder": "models/networks/encoder.py",
+    "models.networks.generator": "models/networks/generator.py",
+    "models.networks.patch_discriminator": "models/networks/patch_discriminator.py",
+    "models.networks.stylegan2_op.fused_act": "models/networks/stylegan2_op/fused_act.py",
+    "models.networks.stylegan2_op.upfirdn2d": "models/networks/stylegan2_op/upfirdn2d.py",
+    "util": "util/__init__.py"
+   },
+   "jit_build_invoked": false,
+   "manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+   "models": {
+    "Encoder": {
+     "class_name": "StyleGAN2ResnetEncoder",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 929960
+    },
+    "Generator": {
+     "class_name": "StyleGAN2ResnetGenerator",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 3699233
+    },
+    "ImageD": {
+     "class_name": "StyleGAN2Discriminator",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 28859521
+    },
+    "PatchD": {
+     "class_name": "StyleGAN2PatchDiscriminator",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 24522145
+    }
+   },
+   "ok": true,
+   "source_identity": {
+    "code_files_verified": 67,
+    "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+    "differing_fields": [
+     "root"
+    ],
+    "files_verified": 23,
+    "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+    "relocated": true,
+    "root": "/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/third_party/source_cache/swapping_autoencoder",
+    "ruling": {
+     "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+     "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257"
+    },
+    "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+    "unexpected_executable_files": 0
+   }
+  },
+  "original_location_read_only": {
+   "code_files_verified": 67,
+   "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+   "differing_fields": [],
+   "files_verified": 23,
+   "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+   "relocated": false,
+   "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+   "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+   "unexpected_executable_files": 0
+  },
+  "tests": {
+   "gpu_host_gpat_m6_e05_cuda_hidden": "test_e05_source_relocation, test_learned_bank_s7_acceptance, test_learned_bank, test_e05_production_runner, test_e05_production_qualification_evidence, test_e05_three_seed_training_closure: 105 OK",
+   "laptop_python3": "tests.test_learned_bank_s7_acceptance + tests.test_e05_source_relocation + tests.test_learned_bank: 60 OK",
+   "laptop_venv": "30 modules (E05/E04-family/learned-bank/M8/E01/E02/M6D4): 374 OK, 22 skipped (torch/GPU-only)"
+  }
+ },
+ "original_failure_reverified": {
+  "commit": "2d430e9",
+  "failure_point": "bank_adapter.load_real line 157 -> build_models -> existing_runtime line 48 (source identity); before checkpoint state load, model construction, write_bank, generation or any face read",
+  "host_evidence_unchanged": "command 80e18351..., pane log 583ef287..., preflight 48533c4f..., atime pre/post a8aed5c4... equal the committed record; root holds only empty run_A/E05; exit 1",
+  "record": "outputs/audit/LEARNED_BANK_S7_E05_ATTEMPT1_FAILURE.json",
+  "root_cause": "only source.root differed (absolute original GPU checkout path vs isolated clone)"
+ },
+ "owner_decision_required": "authorize fixes for B1 and B2 (P1 or P2), after which E05 S7 attempt 2 can run from a fresh clone of the fixing commit",
+ "probe_1": {
+  "1337": {
+   "error": "RuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild",
+   "ok": false,
+   "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 21, in <module>\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/bank_adapter.py\", line 157, in load_real\n    models, _crop, runtime = build_models(build_root)\n                             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/production_runner.py\", line 268, in build_models\n    models, crop, _ = m6d4d.existing_runtime(Path(build), runtime)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/training_qualification.py\", line 84, in existing_runtime\n    require(act.use_custom_kernel and up.use_custom_kernel and sorted(loads) == ['fused', 'upfirdn2d'],\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/training_runner.py\", line 20, in require\n    raise RuntimeError('M6D4d: ' + message)\nRuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild\n"
+  },
+  "2026": {
+   "error": "RuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild",
+   "ok": false,
+   "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 21, in <module>\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/bank_adapter.py\", line 157, in load_real\n    models, _crop, runtime = build_models(build_root)\n                             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/production_runner.py\", line 268, in build_models\n    models, crop, _ = m6d4d.existing_runtime(Path(build), runtime)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/training_qualification.py\", line 84, in existing_runtime\n    require(act.use_custom_kernel and up.use_custom_kernel and sorted(loads) == ['fused', 'upfirdn2d'],\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/training_runner.py\", line 20, in require\n    raise RuntimeError('M6D4d: ' + message)\nRuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild\n"
+  },
+  "42": {
+   "error": "StopIteration: ",
+   "ok": false,
+   "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 21, in <module>\n  File \"/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/methods/pcgan/bank_adapter.py\", line 161, in load_real\n    live_segment = ast.get_source_segment(Path(util.__file__).read_text(), next(\n                                                                           ^^^^^\nStopIteration\n"
+  },
+  "cwd": "/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a",
+  "env": {
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+   "CUDA_VISIBLE_DEVICES": "0",
+   "NVIDIA_TF32_OVERRIDE": "0"
+  },
+  "original_location": {
+   "code_files_verified": 67,
+   "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+   "differing_fields": [],
+   "files_verified": 23,
+   "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+   "relocated": false,
+   "root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+   "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+   "unexpected_executable_files": 0
+  },
+  "peak_cuda_memory_allocated_bytes": 234622976,
+  "torch": [
+   "2.12.1+cu130",
+   "13.0",
+   92000,
+   "NVIDIA GeForce RTX 3090"
+  ],
+  "utc": "2026-11-24T19:12:13Z"
+ },
+ "probe_2": {
+  "first_build_models": {
+   "extensions": {
+    "fused_bias_act": {
+     "build_ninja_sha256": "5d24d1e2184e415423aed8fda990d21ddf641e8be59fdc89a7fe34804fb00619",
+     "extension": {
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/fused/fused.so",
+      "sha256": "5afdb2369817ffea68530b1e88d75596a77ed08a397f83122b618a18225718ab"
+     }
+    },
+    "upfirdn2d": {
+     "build_ninja_sha256": "69d2fe7143d094caf8b6314bd8dd2f15124c97bff4db9139cd170f1ab7c73542",
+     "extension": {
+      "path": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/torch_extensions/upfirdn2d/upfirdn2d.so",
+      "sha256": "40ba9db73e1790cd3d904a1fed09c5441180c6995a9a396030cfaa52efd1d081"
+     }
+    }
+   },
+   "generated_files": 67,
+   "import_resolution": {
+    "models.networks.discriminator": "models/networks/discriminator.py",
+    "models.networks.encoder": "models/networks/encoder.py",
+    "models.networks.generator": "models/networks/generator.py",
+    "models.networks.patch_discriminator": "models/networks/patch_discriminator.py",
+    "models.networks.stylegan2_op.fused_act": "models/networks/stylegan2_op/fused_act.py",
+    "models.networks.stylegan2_op.upfirdn2d": "models/networks/stylegan2_op/upfirdn2d.py",
+    "util": "util/__init__.py"
+   },
+   "jit_build_invoked": false,
+   "manifest_sha256": "b5d4d279c3332e6a3e3044e526d0b1304e0084cfc1450b38ce1a368a578052ac",
+   "models": {
+    "Encoder": {
+     "class_name": "StyleGAN2ResnetEncoder",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 929960
+    },
+    "Generator": {
+     "class_name": "StyleGAN2ResnetGenerator",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 3699233
+    },
+    "ImageD": {
+     "class_name": "StyleGAN2Discriminator",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 28859521
+    },
+    "PatchD": {
+     "class_name": "StyleGAN2PatchDiscriminator",
+     "options": {
+      "crop_size": 256,
+      "global_code_ch": 2048,
+      "max_num_tiles": 8,
+      "netD": "StyleGAN2",
+      "netD_scale_capacity": 1.0,
+      "netE": "StyleGAN2Resnet",
+      "netE_nc_steepness": 2.0,
+      "netE_num_downsampling_gl": 2,
+      "netE_num_downsampling_sp": 1,
+      "netE_scale_capacity": 1.0,
+      "netG": "StyleGAN2Resnet",
+      "netG_num_base_resnet_layers": 2,
+      "netG_resnet_ch": 256,
+      "netG_scale_capacity": 1.0,
+      "netG_use_noise": true,
+      "netPatchD": "StyleGAN2",
+      "netPatchD_max_nc": 384,
+      "netPatchD_scale_capacity": 4.0,
+      "num_classes": 0,
+      "patch_max_scale": 0.25,
+      "patch_min_scale": 0.125,
+      "patch_num_crops": 8,
+      "patch_random_transformation": false,
+      "patch_size": 128,
+      "patch_use_aggregation": true,
+      "spatial_code_ch": 8,
+      "use_antialias": true
+     },
+     "parameter_count": 24522145
+    }
+   },
+   "ok": true,
+   "source_identity": {
+    "code_files_verified": 67,
+    "commit": "6baa180f1184ee79a6b967f9d80ee0e02a979ac7",
+    "differing_fields": [
+     "root"
+    ],
+    "files_verified": 23,
+    "historical_root": "/home/student20261/workdir/GPAT_TransferBench/third_party/source_cache/swapping_autoencoder",
+    "relocated": true,
+    "root": "/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a/third_party/source_cache/swapping_autoencoder",
+    "ruling": {
+     "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+     "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257"
+    },
+    "tree": "25a434f1282a0177d6afdcc68ebfcf40bd805621",
+    "unexpected_executable_files": 0
+   }
+  },
+  "fused_act_loads_at_import": true,
+  "second_build_models": {
+   "error": "RuntimeError: M6D4d: both real CUDA extensions loaded, no fallback/rebuild",
+   "ok": false
+  },
+  "tensor2im": {
+   "generated_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952",
+   "pinned_segment_sha256": "9973b640471e66d35613677070de8436ea0652fa481b308ea385ccc409425952",
+   "pinned_source_file": "util/util.py",
+   "tensor2im_def_in_util_init": false,
+   "tensor2im_defined_in": "util.util",
+   "util_file": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/util/__init__.py",
+   "util_is_package": true,
+   "util_util_file": "/home/student20261/workdir/GPAT_TransferBench_runtime/builds/e05_pcgan/source/util/util.py"
+  }
+ },
+ "probe_sources": {
+  "e05_o2_probe.py": "\"\"\"E05 O2 qualification probe (load-only; no generation, no face read, nothing written).\"\"\"\nimport json, os, sys, time, traceback\nfrom pathlib import Path\nsys.path.insert(0, os.getcwd())\nRT = '/home/student20261/workdir/GPAT_TransferBench_runtime'\nout = {'utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'cwd': os.getcwd(),\n       'env': {k: os.environ.get(k) for k in ('CUDA_VISIBLE_DEVICES', 'NVIDIA_TF32_OVERRIDE', 'CUBLAS_WORKSPACE_CONFIG')}}\nfrom methods.pcgan import source_relocation as sr\nm = json.loads(Path('environments/e05.compatibility_patch_manifest.json').read_text())['source']\ntry:\n    out['original_location'] = sr.verify_source_identity(m, m, Path('/home/student20261/workdir/GPAT_TransferBench'))\nexcept Exception as exc:\n    out['original_location'] = {'error': repr(exc)}\nimport torch\nfrom methods.common import learned_bank as lb\nfrom methods.pcgan import production_io as pio\nfrom methods.pcgan.bank_adapter import load_real\nout['torch'] = [torch.__version__, torch.version.cuda, torch.backends.cudnn.version(), torch.cuda.get_device_name(0)]\nfor s in lb.SEEDS:\n    try:\n        a, ck = load_real(torch, s, Path(RT) / 'runs/m6/E05' / ('seed_%d' % s), pio.build_root(RT))\n        i = a.identity()\n        bc = i['runtime_closure']['build_closure']\n        out[str(s)] = {'ok': True, 'checkpoint_identity': ck['checkpoint_identity_sha256'],\n                       'source_identity': bc.get('source_identity'), 'import_resolution': bc.get('import_resolution'),\n                       'extensions': bc.get('extensions'), 'manifest_sha256': bc.get('manifest_sha256'),\n                       'generated_files': len(bc.get('generated_files_sha256', {})),\n                       'precision': i.get('precision'), 'guards': i.get('training_guards'),\n                       'tensor2im': i.get('tensor2im_segment_sha256'),\n                       'params': {n: sum(p.numel() for p in mod.parameters()) for n, mod in (('E', a.E), ('G', a.G))}}\n        del a\n        torch.cuda.empty_cache()\n    except Exception as exc:\n        out[str(s)] = {'ok': False, 'error': '%s: %s' % (type(exc).__name__, exc), 'traceback': traceback.format_exc()[-1500:]}\nout['peak_cuda_memory_allocated_bytes'] = torch.cuda.max_memory_allocated()\nprint(json.dumps(out, sort_keys=True, default=str))\n",
+  "e05_o2_probe2.py": "\"\"\"E05 O2 diagnosis probe 2 (read-only; no checkpoint, no generation, nothing written).\"\"\"\nimport ast, hashlib, json, os, sys, traceback\nfrom pathlib import Path\nsys.path.insert(0, os.getcwd())\nRT = '/home/student20261/workdir/GPAT_TransferBench_runtime'\nout = {}\nimport torch\nfrom methods.pcgan import production_io as pio\nfrom methods.pcgan.production_runner import build_models\nfrom methods.pcgan import bank_adapter as ba\nmodels, _crop, runtime = build_models(pio.build_root(RT))\nbc = runtime['build_closure']\nout['first_build_models'] = {'ok': True, 'source_identity': bc['source_identity'], 'import_resolution': bc['import_resolution'],\n                             'extensions': bc['extensions'], 'manifest_sha256': bc['manifest_sha256'],\n                             'generated_files': len(bc['generated_files_sha256']), 'jit_build_invoked': bc['jit_build_invoked'],\n                             'models': runtime.get('models')}\nu = sys.modules['util']\nuu = sys.modules.get('util.util')\ntxt = Path(u.__file__).read_text()\nout['tensor2im'] = {'util_file': u.__file__, 'util_is_package': hasattr(u, '__path__'),\n                    'tensor2im_def_in_util_init': any(isinstance(n, ast.FunctionDef) and n.name == 'tensor2im' for n in ast.parse(txt).body),\n                    'util_util_file': getattr(uu, '__file__', None),\n                    'tensor2im_defined_in': getattr(u.tensor2im, '__module__', None),\n                    'pinned_source_file': ba.TENSOR2IM_SOURCE}\nif uu is not None:\n    t2 = Path(uu.__file__).read_text()\n    node = next(n for n in ast.parse(t2).body if isinstance(n, ast.FunctionDef) and n.name == 'tensor2im')\n    seg = ast.get_source_segment(t2, node)\n    out['tensor2im']['generated_segment_sha256'] = hashlib.sha256(seg.encode()).hexdigest()\n    out['tensor2im']['pinned_segment_sha256'] = ba.pinned_tensor2im()[1]\nfa = sys.modules['models.networks.stylegan2_op.fused_act']\nout['fused_act_loads_at_import'] = 'load(' in Path(fa.__file__).read_text()\ndel models\ntorch.cuda.empty_cache()\ntry:\n    build_models(pio.build_root(RT))\n    out['second_build_models'] = {'ok': True}\nexcept Exception as exc:\n    out['second_build_models'] = {'ok': False, 'error': '%s: %s' % (type(exc).__name__, exc)}\nprint(json.dumps(out, sort_keys=True, default=str))\n"
+ },
+ "qualification_clone": "/home/student20261/workdir/m8_learned_banks/clones/e05q_5f81d704b6da24165c4d9fe466afaf5da239046a (clean before and after)",
+ "ruling": {
+  "path": "configs/amendments/e05_source_relocation_ruling.yaml",
+  "sha256": "8a20cdb66c2632a668f47fdc6e01344dc2d8285562c6a3b5ae016e9d07203257"
+ },
+ "schema": "e05_source_relocation_qualification_v1",
+ "status": "E05_O2_CORRECTION_QUALIFIED_S7_BLOCKED_BY_ADDITIONAL_DEFECTS"
+}
