@@ -1513,10 +1513,11 @@ def build_e04(c, repo_root, view=None):
             and v.show(E04_PREP_COMMIT, E04_AUTHORITY_DRAFT_PATH) == draft_raw
             and auth == derive_e04_s7_authority(draft_raw, auth['approval'])
             and auth['approval']['owner_authorized'] is True and auth['approval']['scope'] == 'E04 S7 toy-bank acceptance')
-    G.check('P.e04_authority_in_execution_commit', lambda: v.show(commit, E04_AUTHORITY_PATH) == auth_raw)
+    G.check('P.e04_authority_in_execution_commit', lambda: auth_raw is not None
+            and v.show(commit, E04_AUTHORITY_PATH) == auth_raw)
     G.check('P.e04_input_allowlist_ruling', lambda: ruling['status'] == 'OWNER_APPROVED' and ruling['approved'] is True
             and ruling['decision'] == E04_RULING_DECISION and v.show(commit, E04_RULING_PATH) == ruling_raw
-            and ruling['allowlist_source'] == E04_ALLOWLIST_SOURCE)
+            and ruling['allowlist_source'] == E04_ALLOWLIST_SOURCE and ruling_raw is not None)
     G.check('P.e04_code_change_scope', lambda: top_level_changes(
         v.show(E04_QUALIFIED_ADAPTER_COMMIT, E04_ADAPTER_PATH).decode(),
         v.show(commit, E04_ADAPTER_PATH).decode()) == E04_ALLOWED_ADAPTER_CHANGES

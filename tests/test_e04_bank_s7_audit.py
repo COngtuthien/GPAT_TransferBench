@@ -324,7 +324,8 @@ class Builder(unittest.TestCase):
     # ---------------------------------------------------------------- owner negative cases
     def test_10_missing_launch_authority(self):
         v = View({M.E04_AUTHORITY_PATH: None})
-        f = self.assertFails(['P.e04_authority_activated', 'P.e04_authority_derived_from_draft'], view=v)
+        f = self.assertFails(['P.e04_authority_activated', 'P.e04_authority_derived_from_draft',
+                              'P.e04_authority_in_execution_commit'], view=v)
         self.assertEqual(self.run_build(view=v)['status'], 'E04_S7_BLOCKED_BY_AUTHORITY')
         self.assertTrue(f)
 
