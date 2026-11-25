@@ -1,0 +1,77 @@
+{
+ "schema_version": "m10_detector_storage_location_v1",
+ "record": "M10_DETECTOR_STORAGE_AUTHORITY",
+ "status": "OWNER_APPROVED",
+ "approved": true,
+ "date": "2026-11-26",
+ "approval": "Owner decision O3 A_SELECTED_ONLY_HDD_NEW_ROOT (configs/amendments/m10_resnet18_owner_decisions.yaml) authorizes creating this dedicated directory after every storage identity and safety gate passes; agent-created on 2026-11-26 after the parent gates passed.",
+ "decision": "O3_checkpoint_retention_and_run_root = A_SELECTED_ONLY_HDD_NEW_ROOT",
+ "detector_root_registry": {
+  "root": "/media/ext_data/student20261_gpat_m10_detectors",
+  "mount_point": "/media/ext_data",
+  "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+  "fstype": "ext4",
+  "device": "Seagate One Touch w/PW ~4 TB USB HDD, /dev/sda2 (8:2)",
+  "owner": "student20261",
+  "group": "shared (inherited from the setgid mount point; mode 0700 grants it nothing)",
+  "mode": "0700",
+  "layout": "<m10_root>/<group>/seed_<seed>/",
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "separate_from_bank_root": true,
+  "forbidden_path_prefix": "/media/student20261/",
+  "resolution": "the M10 launcher and auditor use only this canonical path (gpatbench.downstream.m10_storage); no symlink, bind mount or redirection"
+ },
+ "scope": {
+  "covers": "M10 ResNet-18 scientific detector run roots only (selected checkpoint, VAL predictions, logs, manifests)",
+  "not_covered": [
+   "synthetic banks (bank root unchanged)",
+   "generator checkpoints",
+   "TEST outputs",
+   "qualification fixtures (kept under ~/workdir/m10_qualification)"
+  ],
+  "never": [
+   "sudo",
+   "mount/remount/format",
+   "parent permission changes",
+   "symlinks",
+   "unrelated data modification"
+  ]
+ },
+ "required_checks_before_every_run": "gpatbench.downstream.m10_storage.preflight(): canonical path, not udisks duplicate, separate from bank root, exists, not symlink, directory, realpath, owner, owner = process user, mode exactly 0700, mount point, UUID, ext4, rw (per-mount, superblock, statvfs), user rwx, free bytes >= 20 GiB, free inodes, only <group>/seed_<s>/ 0700 directories",
+ "activation_verification": {
+  "ok": true,
+  "utc": "2026-11-25T18:13:43Z",
+  "verifier_commit": "7b1c9e456878dc8cf753eac9c75a6a132d15b4fe",
+  "created_in_this_invocation": true,
+  "preflight_checks": {
+   "exists": true,
+   "filesystem_uuid": true,
+   "free_bytes": true,
+   "free_inodes": true,
+   "fstype": true,
+   "is_directory": true,
+   "mode_exact": true,
+   "mount_point": true,
+   "mount_read_write": true,
+   "no_unexpected_contents": true,
+   "not_symlink": true,
+   "not_udisks_duplicate": true,
+   "owner": true,
+   "owner_is_process_user": true,
+   "path_is_canonical": true,
+   "realpath_equals_path": true,
+   "separate_from_bank_root": true,
+   "user_rwx_access": true
+  },
+  "free_bytes": 3209234599936,
+  "evidence": {
+   "path": "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/storage_verification.json",
+   "sha256": "60e40bb829b7d2bd5e491ed2b9f0afc075ddb2186424a37385ca9e4315a74200"
+  },
+  "read_only_precheck": {
+   "path": "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/storage_readonly_precheck.json",
+   "sha256": "4fb272a3d49ad7ecfa3e455c48f621ed58e3d88b4bf1085cc80308726be67e7c"
+  },
+  "bank_root_unchanged": true
+ }
+}
