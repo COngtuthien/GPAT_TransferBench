@@ -156,9 +156,18 @@ class ProductionRecords(unittest.TestCase):
     def test_rebuild_and_sha(self):
         for (m, s), d in self.docs.items():
             with self.subTest(method=m, seed=s):
-                doc = self.tool.build(self.evidence(m, s), ROOT)
-                self.assertEqual(json.loads(json.dumps(doc)), d)
+                doc = json.loads(json.dumps(self.tool.build(self.evidence(m, s), ROOT)))
+                # every field re-derives with the current tool; 'audit_tool' names the tool that BUILT the record:
+                # it must equal the tool blob in the commit that added the record
+                self.assertEqual({k: v for k, v in doc.items() if k != 'audit_tool'},
+                                 {k: v for k, v in d.items() if k != 'audit_tool'})
                 out = self.tool.RECORD.format(M=m, S=s)
+                added = subprocess.run(['git', 'log', '--format=%H', '--diff-filter=A', '--', out + '.json'], cwd=ROOT,
+                                       capture_output=True, text=True).stdout.split()
+                if added:                                   # committed record (not a fresh local build)
+                    blob = subprocess.run(['git', 'show', '%s:%s' % (added[0], d['audit_tool']['path'])], cwd=ROOT,
+                                          capture_output=True).stdout
+                    self.assertEqual(hashlib.sha256(blob).hexdigest(), d['audit_tool']['sha256'])
                 self.assertEqual(self.tool.report(doc), (ROOT / (out + '.md')).read_text())
                 for line in (ROOT / (out + '_SHA256.txt')).read_text().splitlines():
                     digest, name = line.split('  ')
