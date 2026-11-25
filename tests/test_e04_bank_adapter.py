@@ -104,9 +104,18 @@ class Checkpoints(unittest.TestCase):
 
 class Governance(unittest.TestCase):
     def test_s7_production_storage_refuse_e04(self):
-        with self.assertRaises(lb.LearnedBankBlocked) as cm:
-            lb.load_s7_authority('E04')
-        self.assertEqual(cm.exception.status, lb.STATUS_S7)
+        # history scope (owner decision B1): at this test's commit 92ef74c no E04 S7 authority existed; the owner
+        # activated it later (learned_bank_s7_launch_authority_E04.yaml). S7 then binds exactly the E04 records.
+        self.assertNotEqual(subprocess.run(['git', 'cat-file', '-e', '92ef74c:' + lb.E04_S7_AUTHORITY_PATH],
+                                           cwd=str(ROOT), stderr=subprocess.DEVNULL).returncode, 0)
+        if (ROOT / lb.E04_S7_AUTHORITY_PATH).exists():
+            a = lb.load_s7_authority('E04')
+            self.assertEqual((a.mode, a.methods, sorted(a.record()['records'])), ('S7_TOY', ('E04',), sorted([
+                lb.E04_CONTRACT_PATH, lb.E04_S7_AUTHORITY_PATH, lb.E04_FAMILY_CLOSURE_RECORD])))
+        else:
+            with self.assertRaises(lb.LearnedBankBlocked) as cm:
+                lb.load_s7_authority('E04')
+            self.assertEqual(cm.exception.status, lb.STATUS_S7)
         for s in lb.SEEDS:
             with self.assertRaises(lb.LearnedBankBlocked) as cm:
                 lb.load_production_authority('E04', s, live_storage=False)
@@ -114,7 +123,7 @@ class Governance(unittest.TestCase):
         with self.assertRaises(lb.LearnedBankBlocked) as cm:
             lb.load_storage_authority(method_id='E04')
         self.assertEqual(cm.exception.status, lb.STATUS_STORAGE)
-        for p in (lb.E04_S7_AUTHORITY_PATH, lb.E04_STORAGE_EXTENSION_PATH, 'configs/amendments/learned_bank_production_E04.yaml'):
+        for p in (lb.E04_STORAGE_EXTENSION_PATH, 'configs/amendments/learned_bank_production_E04.yaml'):
             self.assertFalse((ROOT / p).exists(), p)
 
     def test_existing_methods_unaffected(self):
@@ -315,18 +324,21 @@ class CLI(unittest.TestCase):
         r = self.run_cli('gates', '--method', 'E04')
         self.assertEqual(r.returncode, 0)
         g = json.loads(r.stdout)
-        self.assertEqual((g['contract']['ok'], g['s7']['status'], g['production']['status'],
-                          g['storage_authority']['status']),
-                         (True, lb.STATUS_S7, lb.STATUS_PRODUCTION, lb.STATUS_STORAGE))
-        with tempfile.TemporaryDirectory() as t:
-            r = self.run_cli('s7', '--method', 'E04', '--label', 'A', '--out-root', t, '--runtime-root', '/nonexistent')
-            self.assertEqual((r.returncode, json.loads(r.stdout)['status']), (3, lb.STATUS_S7))
-            self.assertEqual(os.listdir(t), [])
+        activated = (ROOT / lb.E04_S7_AUTHORITY_PATH).exists()    # owner-activated after this test's commit
+        self.assertEqual((g['contract']['ok'], g['s7'].get('ok') if activated else g['s7']['status'],
+                          g['production']['status'], g['storage_authority']['status']),
+                         (True, True if activated else lb.STATUS_S7, lb.STATUS_PRODUCTION, lb.STATUS_STORAGE))
+        if not activated:
+            with tempfile.TemporaryDirectory() as t:
+                r = self.run_cli('s7', '--method', 'E04', '--label', 'A', '--out-root', t, '--runtime-root', '/nonexistent')
+                self.assertEqual((r.returncode, json.loads(r.stdout)['status']), (3, lb.STATUS_S7))
+                self.assertEqual(os.listdir(t), [])
         r = self.run_cli('production', '--method', 'E04', '--seed', '42', '--runtime-root', '/nonexistent')
         self.assertEqual((r.returncode, json.loads(r.stdout)['status']), (3, lb.STATUS_PRODUCTION))
-        r = self.run_cli('s7', '--method', 'E04', '--label', 'A', '--out-root', '/x', '--runtime-root', '/y',
+        # per-seed selection: E05 (owner ruling B2) and, since the owner E04 S7 authorization, E04; never E03/DSDG
+        r = self.run_cli('s7', '--method', 'E03', '--label', 'A', '--out-root', '/x', '--runtime-root', '/y',
                          '--seed', '42')
-        self.assertNotEqual(r.returncode, 0)                  # per-seed selection stays E05-only (owner ruling B2)
+        self.assertEqual(r.returncode, 2)
 
 
 if __name__ == '__main__':

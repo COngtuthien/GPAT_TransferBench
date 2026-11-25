@@ -173,7 +173,10 @@ class LearnedBankRefusesE04(unittest.TestCase):
         r = subprocess.run([sys.executable, str(ROOT / 'tools/learned_bank.py'), 'gates', '--method', 'E04'],
                            cwd=str(ROOT), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         g = json.loads(r.stdout)
-        self.assertEqual((g['s7']['ok'], g['production']['ok'], g['storage_authority']['ok']), (False, False, False))
+        # since the owner E04 S7 authority (learned_bank_s7_launch_authority_E04.yaml) S7_TOY loads; production and
+        # storage still refuse E04 (history scope, owner decision B1)
+        s7_activated = (ROOT / lb.E04_S7_AUTHORITY_PATH).exists()
+        self.assertEqual((g['s7']['ok'], g['production']['ok'], g['storage_authority']['ok']), (s7_activated, False, False))
 
 
 class E05ReportingDecision(unittest.TestCase):

@@ -1,5 +1,6 @@
 """E04 S7 plan, governance DRAFTs and reproduction manifest: byte-identical rebuild; DRAFTs never unlock anything."""
 import json
+import subprocess
 import shutil
 import sys
 import tempfile
@@ -28,8 +29,18 @@ class Prep(unittest.TestCase):
             d = json.loads((ROOT / rel).read_text())
             self.assertIs(d['approved'], False, rel)
             self.assertNotEqual(d['status'], 'OWNER_APPROVED', rel)
-        for rel in (lb.E04_S7_AUTHORITY_PATH, lb.E04_STORAGE_EXTENSION_PATH, 'configs/amendments/learned_bank_production_E04.yaml'):
+        for rel in (lb.E04_STORAGE_EXTENSION_PATH, 'configs/amendments/learned_bank_production_E04.yaml'):
             self.assertFalse((ROOT / rel).exists(), rel)
+        # history scope (owner decision B1): no E04 S7 authority at this milestone (2caff0d); a later owner activation
+        # must keep every DRAFT field unchanged
+        self.assertNotEqual(subprocess.run(['git', 'cat-file', '-e', '2caff0d:' + lb.E04_S7_AUTHORITY_PATH],
+                                           cwd=str(ROOT), stderr=subprocess.DEVNULL).returncode, 0)
+        if (ROOT / lb.E04_S7_AUTHORITY_PATH).exists():
+            a, d = (json.loads((ROOT / rel).read_text()) for rel in (lb.E04_S7_AUTHORITY_PATH, prep.S7_DRAFT))
+            self.assertEqual((a['status'], a['approved']), ('OWNER_APPROVED', True))
+            for k, v in d.items():
+                if k not in ('status', 'approved', 'launch_preconditions'):
+                    self.assertEqual(a[k], v, k)
         self.assertEqual(lb.registered_bank_methods(), lb.METHODS)
 
     def test_s7_draft_activates_only_when_owner_flips_status(self):
