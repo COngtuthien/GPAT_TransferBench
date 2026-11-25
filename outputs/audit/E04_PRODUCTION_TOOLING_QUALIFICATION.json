@@ -1,0 +1,133 @@
+{
+ "date": "2026-11-25",
+ "defects_found_and_fixed": [
+  "tools/learned_bank.py production refused E04 unconditionally (storage resolved without method_id)",
+  "independent_verification raised on an undecodable PNG instead of recording a problem (still fail-closed, now recorded)",
+  "tests/test_e04_bank_adapter CLI test would have invoked a real E04 production on the GPU host after activation; it now invokes the CLI only where refusal is guaranteed"
+ ],
+ "focused_tests": {
+  "exit_code": 0,
+  "log": "outputs/audit/E04_PRODUCTION_TOOLING_QUALIFICATION/focused_tests.log",
+  "log_sha256": "bd8ba90f29b54e4e5d8f403146a0fb98ecae9cc576db428e8d715edb93883397",
+  "modules": [
+   "tests.test_e04_bank_production",
+   "tests.test_learned_bank_production",
+   "tests.test_e04_bank_s7_audit",
+   "tests.test_e04_bank_adapter",
+   "tests.test_e04_bank_s7_prep",
+   "tests.test_e04_bank_readiness",
+   "tests.test_learned_bank",
+   "tests.test_learned_bank_s7_acceptance"
+  ],
+  "ran": 165,
+  "result": "OK (skipped=2)",
+  "skipped": [
+   "committed E04 storage activation / production authority checks (not yet activated at ce16e3a)"
+  ]
+ },
+ "full_suite": {
+  "baseline_5214363": {
+   "failing_ids": 74,
+   "file": "outputs/audit/E04_PRODUCTION_TOOLING_QUALIFICATION/fullsuite_5214363_baseline_failing_ids.txt"
+  },
+  "ce16e3a_clean_worktree": {
+   "exit_code": 1,
+   "failing_ids": 74,
+   "identical_to_baseline": true,
+   "log": "outputs/audit/E04_PRODUCTION_TOOLING_QUALIFICATION/fullsuite_ce16e3a.log.gz",
+   "ran": 2588
+  },
+  "ce16e3a_simulated_activation": {
+   "exit_code": 1,
+   "failing_ids": 74,
+   "identical_to_baseline": true,
+   "log": "outputs/audit/E04_PRODUCTION_TOOLING_QUALIFICATION/fullsuite_ce16e3a_simulated_activation.log.gz",
+   "note": "throwaway worktree with a synthetic activated E04 storage extension and a derived E04 authority committed on top (never pushed): no test breaks on activation",
+   "ran": 2588
+  },
+  "note": "the 74 failures pre-exist (M0-M5 laptop environment / stale stage-state tests); unittest exit code 1 is theirs"
+ },
+ "history_rescoping_B1": [
+  "tests/test_e04_bank_s7_audit.py View: synthetic S7 execution commit serves adapter/CLI/library at d5d0cb3",
+  "tests/test_e04_bank_adapter.py, test_e04_bank_s7_prep.py, test_e04_bank_readiness.py: absence of the E04 storage extension / production authority pinned to 92ef74c / 2caff0d; live state checked both ways",
+  "tools/learned_bank_production_summary.py: four-family host-script comparison pinned to its verification commit"
+ ],
+ "host_preflight_before_activation": {
+  "authority": {
+   "error": "LearnedBankBlocked: LEARNED_BANK_BLOCKED_BY_PRODUCTION_AUTHORITY: no owner production authority at configs/amendments/learned_bank_production_E04.yaml",
+   "ok": false
+  },
+  "checkpoints_ok": 15,
+  "environment_probe_rc": 0,
+  "evidence": "outputs/audit/E04_PRODUCTION_TOOLING_QUALIFICATION/preflight_s42_before_activation.json",
+  "gpu_free_mib": 21341,
+  "precision_errors": [],
+  "python": "3.8.20",
+  "sha256": "b57140ac429c63cec572bd69e3b755550868be8645165181f8ca6193769f616d",
+  "tensorflow": "1.15.5"
+ },
+ "host_qualification": {
+  "all_expected": true,
+  "auditor_python": "3.11.16",
+  "clone": "/home/student20261/workdir/m8_learned_banks/clones/e04prodq_ce16e3a6e825ae39120ae739cec9ad7ad6ecea4d",
+  "commit": "ce16e3a6e825ae39120ae739cec9ad7ad6ecea4d",
+  "evidence": "outputs/audit/E04_PRODUCTION_TOOLING_QUALIFICATION/host_qualification.json",
+  "expectations": {
+   "checkpoints_15_ok": true,
+   "feed_pack_crosscheck": true,
+   "independent_clean": true,
+   "png_structure_canonical": true,
+   "s7_equivalence_bytes_and_pixels": true,
+   "s7_equivalence_rejects_non_production_mode": true
+  },
+  "sha256": "b9bcf7953458f756c047d001af1f680a0a4c3beba9fefcbcf7772842d2a9a5f7"
+ },
+ "mandatory_cases": {
+  "VAL/TEST metadata access refused": "Auditor.test_val_test_access",
+  "checkpoint mutation rejected": "Auditor.test_training_and_checkpoint_integrity",
+  "family closure with fewer than three PASS banks refused": "Auditor.test_family_closure_needs_three_passed_banks",
+  "historical authority and audit tampering rejected": "Auditor.test_historical_authority_and_audit_tampering; tests/test_learned_bank_production.ProductionRecords.test_fail_closed",
+  "incorrect S7-to-production correspondence rejected": "Auditor.test_s7_correspondence; host qualification s7_equivalence_rejects_non_production_mode",
+  "incorrect TRAIN allowlist refused": "Auditor.test_face_lineage_allowlist_and_split_crosscheck",
+  "missing authority refused": "ProductionAuthority.test_missing_authority_storage_or_s7_refused; host preflight (authority refused)",
+  "missing or altered PNG rejected": "CollectorHelpers.test_altered_missing_and_extra_png_detected; Auditor.test_output_population",
+  "missing or duplicate pair ID rejected": "Auditor.test_output_population",
+  "modified or missing face hashes refused": "Auditor.test_face_lineage_allowlist_and_split_crosscheck",
+  "nonzero optimizer activity rejected": "Auditor.test_training_and_checkpoint_integrity",
+  "partial or failed execution refused": "Auditor.test_partial_or_failed_execution; Auditor.test_01_empty_collection_never_passes",
+  "positive: synthetic full bank passes all 43 gates": "Auditor.test_00_synthetic_bank_passes_every_gate",
+  "split_v1/M2 cross-check failure refused": "Auditor.test_face_lineage_allowlist_and_split_crosscheck",
+  "symlink/path traversal refused": "StorageExtension.test_symlink_traversal_and_unexpected_contents_refused",
+  "unexpected storage contents refused": "StorageExtension.test_symlink_traversal_and_unexpected_contents_refused; test_prerequisite_failures_are_refused",
+  "valid production authority accepted": "ProductionAuthority.test_valid_authority_accepted",
+  "wrong GPU environment refused": "Auditor.test_wrong_gpu_environment",
+  "wrong HDD UUID refused": "StorageExtension.test_prerequisite_failures_are_refused; test_tampered_extension_record_refused; Auditor.test_wrong_hdd_or_storage",
+  "wrong S7 record refused": "ProductionAuthority.test_tampered_authority_refused[s7 record sha/path]; test_wrong_or_altered_records_refused",
+  "wrong checkpoint refused": "ProductionAuthority.test_tampered_authority_refused[checkpoint sha/run id/identity/iteration/seed swap]",
+  "wrong contract hash refused": "ProductionAuthority.test_tampered_authority_refused[contract hash]; test_wrong_or_altered_records_refused",
+  "wrong inference config refused": "ProductionAuthority.test_tampered_authority_refused[config, BN decision, conversion decision]; Auditor.test_training_and_checkpoint_integrity",
+  "wrong method/seed refused": "ProductionAuthority.test_tampered_authority_refused[method, seeds, seed order]",
+  "wrong output count rejected": "Auditor.test_output_population"
+ },
+ "nothing_activated": [
+  "no E04 storage extension",
+  "no E04 production authority",
+  "no E04 bank directory",
+  "no inference"
+ ],
+ "regression": {
+  "e01_e02": "E01/E02 records and bank_writer unchanged by this commit",
+  "four_learned_families": "tests/test_learned_bank_production rebuilds all 12 bank records (all fields but the builder tool sha) and the 4 closures byte-identically; committed authorities re-derive",
+  "program_summary": "M8_LEARNED_PRODUCTION_SUMMARY rebuilds (host-script check pinned to the verification clone commit 5893fbe)",
+  "s7_records_rebuild_byte_identical": [
+   "E04 180/180",
+   "E03 98/98",
+   "E05 145/145",
+   "E06b 98/98",
+   "E06c 98/98"
+  ]
+ },
+ "schema": "e04_production_tooling_qualification_v1",
+ "status": "E04_PRODUCTION_TOOLING_QUALIFIED",
+ "tooling_commit": "ce16e3a6e825ae39120ae739cec9ad7ad6ecea4d"
+}
