@@ -1,0 +1,84 @@
+{
+ "activation_verification": {
+  "note": "set only by the owner activation after a live preflight",
+  "ok": null
+ },
+ "approval_procedure": "The owner activates by committing configs/amendments/learned_bank_storage_location_E04.yaml with this content, status OWNER_APPROVED, approved true and activation_verification.ok true (a live lb.storage_preflight on the host at activation), after the E04 S7 record passes. The base authority is never edited.",
+ "approved": false,
+ "base_storage_authority": {
+  "methods": [
+   "E03",
+   "E05",
+   "E06b",
+   "E06c"
+  ],
+  "path": "configs/amendments/learned_bank_storage_location.yaml",
+  "sha256": "f0df1b08c2ff5206285fa193b6be8b7652e0347560972f3173df4583ab8d7ef9",
+  "unchanged": true
+ },
+ "code_support": {
+  "commit": "92ef74c99765109158432fb713a68b3ad238f431",
+  "loader": "methods.common.learned_bank.load_e04_storage_extension (reads only the activated name)",
+  "production_path": "load_storage_authority(method_id=\"E04\") requires the extension; production_bank_dir accepts E04 only then; tools/learned_bank.py production creates <bank_root>/E04 (mode 0700) at the first authorized E04 launch, never earlier",
+  "root_checker": "registered_bank_methods() returns E03/E05/E06b/E06c unless this extension is activated; storage_preflight passes that set to bank_root_contents_ok, so an E04 directory is unexpected (refusing every learned bank) until activation",
+  "tests": "tests/test_e04_bank_adapter.py Governance.test_registry_accepts_e04_only_when_extension_activated"
+ },
+ "date": "2026-11-25",
+ "estimate": {
+  "basis": "E03 seed-42 PNG total for 8838 synthetic faces (estimate only)",
+  "family_bytes": 2425703322,
+  "per_seed_bytes": 808567774
+ },
+ "methods": [
+  "E04"
+ ],
+ "not_changed": [
+  "mount options",
+  "filesystem permissions",
+  "existing bank paths",
+  "existing banks",
+  "the base storage authority"
+ ],
+ "record": "E04_STORAGE_EXTENSION",
+ "registry_extension": {
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+  "fstype": "ext4",
+  "layout": "<bank_root>/E04/seed_<seed>/",
+  "mount_point": "/media/ext_data",
+  "seeds": [
+   42,
+   1337,
+   2026
+  ]
+ },
+ "schema_version": "learned_bank_storage_extension_v1",
+ "status": "DRAFT_PENDING_OWNER_DECISION",
+ "verified_state": {
+  "checks": {
+   "exists": true,
+   "filesystem_uuid": true,
+   "fstype_ext4": true,
+   "is_directory": true,
+   "mode_0700_no_setgid": true,
+   "mount_point": true,
+   "mount_read_write": true,
+   "no_unexpected_contents": true,
+   "not_symlink": true,
+   "not_udisks_duplicate": true,
+   "owner": true,
+   "realpath_equals_path": true,
+   "user_rwx_access": true
+  },
+  "e04_directory_exists": false,
+  "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+  "free_bytes": 3211666866176,
+  "free_inodes": 243606747,
+  "mode": "0o700",
+  "ok": true,
+  "record": "outputs/audit/E04_BANK_S7_PREP/storage_preflight.json",
+  "record_sha256": "8aac8238786ceade00fa3b0a1ffcfbcef247ce566a9a7c95caf3675bd0d335b7",
+  "unexpected_entries": [],
+  "utc": "2026-11-25T12:57:14Z"
+ }
+}

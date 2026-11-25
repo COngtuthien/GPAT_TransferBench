@@ -1,0 +1,38 @@
+{
+ "approved": false,
+ "checkpoint_identities": {
+  "1337": "4f183d2143d27d1d35326212f9ff9c0fb36e9d0d933e59c1df79436cc3492f2f",
+  "2026": "9b0b391bacfece7b1e4be3fb395f13f1c53e18b138ee7fda487df7a037a38d20",
+  "42": "96e89630150779848cc92c4c2756d01cbfeb48e6b0e8b87b815122e47dc2d30f"
+ },
+ "contract_sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f",
+ "method": "E04",
+ "one_bank_per_process": "tools/learned_bank.py production --method E04 --seed S, seeds 42 -> 1337 -> 2026",
+ "population": {
+  "family_rows": 26514,
+  "rows_per_seed": 8838
+ },
+ "record": "E04_PRODUCTION_AUTHORITY_TEMPLATE",
+ "requirements": [
+  "every S7 toy row equals its production row byte for byte",
+  "independent full-population production audit per bank before the next launch",
+  "family closure only after all three banks pass"
+ ],
+ "s7_acceptance_record": {
+  "path": "outputs/audit/LEARNED_BANK_S7_E04.json",
+  "required": "s7_acceptance_passed true, failed_gates [], seeds [42, 1337, 2026]",
+  "sha256": null
+ },
+ "schema_version": "learned_bank_production_authority_v1",
+ "seeds": [
+  42,
+  1337,
+  2026
+ ],
+ "status": "DRAFT_TEMPLATE_NOT_APPROVABLE_BEFORE_S7",
+ "storage_extension": {
+  "path": "configs/amendments/learned_bank_storage_location_E04.yaml",
+  "required_status": "OWNER_APPROVED"
+ },
+ "tooling_gap": "tools/learned_bank_production_authority.py and tools/learned_bank_production_audit.py have no E04 branch at 92ef74c; both must be extended before production"
+}

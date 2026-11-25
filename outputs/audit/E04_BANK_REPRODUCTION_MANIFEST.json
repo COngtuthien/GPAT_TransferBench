@@ -1,0 +1,155 @@
+{
+ "checkpoints": {
+  "1337": {
+   "checkpoint_identity_sha256": "4f183d2143d27d1d35326212f9ff9c0fb36e9d0d933e59c1df79436cc3492f2f",
+   "files": {
+    "checkpoints/iteration_150000.data-00000-of-00001": "fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5",
+    "checkpoints/iteration_150000.index": "1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560",
+    "checkpoints/iteration_150000.meta": "bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233"
+   },
+   "run_id": "a42fdd2a2accaf0a",
+   "run_root": "<runtime_root>/runs/m6/E04/seed_1337"
+  },
+  "2026": {
+   "checkpoint_identity_sha256": "9b0b391bacfece7b1e4be3fb395f13f1c53e18b138ee7fda487df7a037a38d20",
+   "files": {
+    "checkpoints/iteration_150000.data-00000-of-00001": "089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2",
+    "checkpoints/iteration_150000.index": "af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a",
+    "checkpoints/iteration_150000.meta": "b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090"
+   },
+   "run_id": "e7100eb9a5ab0537",
+   "run_root": "<runtime_root>/runs/m6/E04/seed_2026"
+  },
+  "42": {
+   "checkpoint_identity_sha256": "96e89630150779848cc92c4c2756d01cbfeb48e6b0e8b87b815122e47dc2d30f",
+   "files": {
+    "checkpoints/iteration_150000.data-00000-of-00001": "55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6",
+    "checkpoints/iteration_150000.index": "f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02",
+    "checkpoints/iteration_150000.meta": "fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933"
+   },
+   "run_id": "40befa6004aee85c",
+   "run_root": "<runtime_root>/runs/m6/E04/seed_42"
+  }
+ },
+ "date": "2026-11-25",
+ "environment_lock": {
+  "interpreter": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+  "path": "environments/e04_training.lock.json",
+  "sha256": "a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd",
+  "tensorflow": "1.15.5"
+ },
+ "fidelity": "CONTROLLED_ADAPTATION",
+ "frozen_config": {
+  "path": "configs/methods/e04_physics_std.yaml",
+  "sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a"
+ },
+ "future_production_generation": {
+  "expected_images": {
+   "family": 26514,
+   "per_seed": 8838
+  },
+  "status": "PLANNED_NOT_EXECUTED",
+  "storage_extension_draft": "configs/amendments/learned_bank_storage_location_E04.DRAFT.yaml",
+  "template": "configs/amendments/learned_bank_production_E04.DRAFT.yaml"
+ },
+ "future_s7_execution": {
+  "authority_draft": "configs/amendments/learned_bank_s7_launch_authority_E04.DRAFT.yaml",
+  "expected_images": 1116,
+  "plan": "outputs/audit/E04_BANK_S7_ACCEPTANCE_PLAN.json",
+  "status": "PLANNED_NOT_EXECUTED"
+ },
+ "git": {
+  "adapter_commit": "92ef74c99765109158432fb713a68b3ad238f431",
+  "contract_commit": "3753ea4",
+  "fixture_evidence_commit": "e495cc7",
+  "start_commit": "6f73eed298ecdd27bf1d7773e42a3b083f33b463"
+ },
+ "inference_graph_identity": {
+  "batch_size": 1,
+  "bn_moving_statistics": 30,
+  "bn_statistics_reads_sha256": "06fec8d0d018e6b1ca09fa4d7b5b40e0ac9e747b53ddbae0ae2871fa2785be4c",
+  "fused_batch_norm": 15,
+  "global_variables": 102,
+  "reachable_op_types_sha256": "bff90cd25018fa5b1fdb418075902658e89c9c999be2cd8d6a354589aa77f2f5",
+  "trainable_variables": 72,
+  "variable_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+  "variable_shapes_sha256": "32b4f58be4b11b7ab866de50ca121ec724e8d190a7c0b9cd4257825361e370d1"
+ },
+ "limitations": [
+  "bank inference uses stored moving statistics; training-time synthesis used 8-image batch statistics (controlled adaptation, not official Physics-STD test-time behaviour)",
+  "clip-truncate conversion follows the ECCV20-STDN predecessor (reference only where PhySTD is silent)",
+  "CPU fixture qualification proves neither GPU bitwise replay nor GPU numerical equality",
+  "no real-weight forward has been run; real inputs (feed pack, faces) enter only at S7",
+  "S7 audit, production authority and production audit tools have no E04 branch yet"
+ ],
+ "method": "E04",
+ "owner_ruling": {
+  "decisions": {
+   "E04-Q1_normalization_statistics": "A_MOVING_STATISTICS_PER_PAIR",
+   "E04-Q2_synthesis_variant": "A_PAPER_SPOOF_SYNTHESIS",
+   "E04-Q3_float_to_uint8": "A_PREDECESSOR_CLIP_TRUNCATE",
+   "E04-Q4_auxiliary_outputs": "A_NONE",
+   "E04-Q5_device_and_reproducibility": "A_GPU_FP32_BITWISE_REPLAY",
+   "E04-Q6_governance_inclusion": "A_ADDITIVE_E04_EXTENSION"
+  },
+  "draft": {
+   "path": "configs/amendments/e04_bank_generation_contract.DRAFT.yaml",
+   "sha256": "dc04e4845524f7388ccf7136fe8ec710dee88ccdadac2de9c164c2f3f1502c23"
+  },
+  "path": "configs/amendments/e04_bank_generation_contract.yaml",
+  "sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f"
+ },
+ "reporting_label": "Physics-STD (controlled geometry/depth reconstruction)",
+ "rules": {
+  "conversion": "E04-Q3: (np.clip(out, 0.0, 1.0) * 255.0).astype(np.uint8); non-finite = counted failure",
+  "encoding": "E04-Q6: lossless PNG, PIL compress_level 6, optimize False, no metadata",
+  "geometry_and_offsets": "e04_feed_pack_v1 Q140 xy (frozen CPU pre-pass); offsets = dense_offsets(source_xy=spoof Q140, target_xy=live Q140), scipy 1.10.1",
+  "input_preprocessing": "D8: canonical RGB uint8 PNG (SHA256-checked, TRAIN-only O_NOATIME) -> float32(uint8)/255 once; no augmentation (D5)",
+  "normalization": "E04-Q1 A_MOVING_STATISTICS_PER_PAIR: BN training=False with the restored moving statistics, batch 1",
+  "rng": "none; the experiment seed selects only the checkpoint",
+  "synthesis": "E04-Q2: out = (1-P_w)*(I_live + B~_w + C~_w + T_w) + P_w*I_source_w (training_graph.py:32-39 operations and operand order)"
+ },
+ "schema": "e04_bank_reproduction_manifest_v1",
+ "source_sha256_at_adapter_commit": {
+  "methods/common/learned_bank.py": "55f89237eb403e56d4a03879100d454a1fa1cf7373a74bd18d0575baf2e89ec6",
+  "methods/physics_std/bank_adapter.py": "4baec3cb61610746184028e09fed05ab20aeadad99e5b7507705f822487b0a0f",
+  "methods/physics_std/feed_pack.py": "1472abf97e90e1e2d26031aae1eb9d7f8ac7c9481e56eedb32fc2824d576e9de",
+  "methods/physics_std/network.py": "9d691809d487c5c9c27b5c9e08389225f606f8d72f1017d2991cd71e6214da21",
+  "methods/physics_std/production_io.py": "a6a17f948283a74f71048b8e8412f2f8c4fab6fd98fe39fa7e3a1fed95c205c0",
+  "methods/physics_std/production_runner.py": "68047bd5b08476755541f222b86645cda87e1e3aeb0405c18268763b693c85bd",
+  "methods/physics_std/trace_transfer.py": "8152a7643858cb523344dcfa8fbe1a84168082d545d6ca68f7435cf2a06882cd",
+  "methods/physics_std/training_graph.py": "af17ab2789f203834d9fd9121b357dd3e44e49689fccac6be25024926bf69f51",
+  "tools/e04_bank_fixture_qualification.py": "415526b6bf16b35447b3c1bd82eaa6f998195a7bb38b4747338ec56b1872972a",
+  "tools/e04_bank_scripts/e04_fixture_qualification.sh": "f48cf6103f24ce4349a122005ef4bd7bcbc4763a33d01b0108e3126ac35f044a",
+  "tools/learned_bank.py": "6e147488e554853fcc5ef042e679b671962697e99203c4dc8bc83adec962d7db"
+ },
+ "synthetic_fixture_qualification": {
+  "contract_evidence": {
+   "path": "outputs/audit/E04_BANK_CONTRACT_EVIDENCE.json",
+   "sha256": "dca04aecba3740116d3fe663fd2b789258c1826125ef4d4e188cd5e0eb02d9e5"
+  },
+  "evidence_files_sha256": {
+   "host_evidence.json": "947899532e1eed2eb60d494d22bf7e73f898bb49f44fc088a98ef8616b977d73",
+   "host_stderr.txt": "f69c15d7250a3d6e15d79602d00e4e131e2aba22170aacaae24c67f186a2f231",
+   "host_stdout.txt": "28f80a5542d045a1f072cdfb733e6623e08190b9ff7f15edb96c4a5f4acde8b9",
+   "laptop_tests.txt": "4b2a32e28119b6d6f0cb097c7e9a0a36443c1190a7688f82ac04fb7a7a291faa"
+  },
+  "host_command": "bash ~/workdir/m8_learned_banks/e04_bank_prep/e04_fixture_qualification_92ef74c99765109158432fb713a68b3ad238f431.sh 92ef74c99765109158432fb713a68b3ad238f431 (copy of tools/e04_bank_scripts/e04_fixture_qualification.sh; setsid nohup, CUDA hidden)",
+  "host_gates": [
+   45,
+   45
+  ],
+  "laptop_command": "python3 -m unittest -v tests.test_e04_bank_adapter tests.test_e04_bank_readiness",
+  "laptop_tests": 33,
+  "record": "outputs/audit/E04_BANK_FIXTURE_QUALIFICATION.json",
+  "record_sha256": "1bde71086a4a6ddb6c78afbc73ebcf29be160685f8d65675e6b3791c58a3b973",
+  "status": "EXECUTED_PASSED"
+ },
+ "training_reproduction": {
+  "closure": "outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json",
+  "closure_sha256": "a14d98fdf5a9a0e279ef09ca231d01261a349b9e7b86fc86d7d69c9b8734c55d",
+  "manifest": "outputs/audit/E04_THREE_SEED_REPRODUCTION_MANIFEST.json",
+  "manifest_sha256": "a10ea91431f951b5026c262117fd3ec628f3569f0af9f1e4d11394239f9ed312",
+  "status": "COMPLETED_AND_CLOSED"
+ }
+}
