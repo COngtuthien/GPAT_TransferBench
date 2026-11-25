@@ -1,4 +1,5 @@
-"""M8 learned-method synthetic-bank infrastructure (E03 STDN, E05 PCGAN, E06b DSDG-NATIVE, E06c DSDG-BIN-IDFREE).
+"""M8 learned-method synthetic-bank infrastructure (E03 STDN, E05 PCGAN, E06b DSDG-NATIVE, E06c DSDG-BIN-IDFREE;
+E04 Physics-STD added additively under configs/amendments/e04_bank_generation_contract.yaml).
 
 Scope. A new module, separate from the hash-pinned E01/E02 writer `methods/common/bank_writer.py`, which stays
 byte-unchanged. It holds the framework-free parts of learned-bank generation under the owner-approved contract
@@ -51,6 +52,12 @@ SCHEMA = 'gpat_learned_bank_v1'
 METHODS = ('E03', 'E05', 'E06b', 'E06c')
 PAIR_METHODS = ('E03', 'E05')
 DSDG_METHODS = ('E06b', 'E06c')
+# E04 Physics-STD joins additively (configs/amendments/e04_bank_generation_contract.yaml, E04-Q6
+# A_ADDITIVE_E04_EXTENSION): METHODS / PAIR_METHODS / CHECKPOINTS and every rule of the four original methods stay
+# unchanged; E04 has its own contract, checkpoint table, S7 authority and storage extension.
+E04_METHODS = ('E04',)
+BANK_METHODS = METHODS + E04_METHODS
+PAIR_BANK_METHODS = PAIR_METHODS + E04_METHODS
 SEEDS = (42, 1337, 2026)
 N_SYN = 8838
 TOY_N = 186
@@ -85,6 +92,20 @@ PRODUCTION_AUTHORITY_SCHEMA = 'learned_bank_production_authority_v1'
 STORAGE_AUTHORITY_PATH = 'configs/amendments/learned_bank_storage_location.yaml'
 STORAGE_AUTHORITY_SCHEMA = 'learned_bank_storage_location_v1'
 STORAGE_PENDING_PATH = 'configs/amendments/learned_bank_storage_location.PENDING_ACTIVATION.yaml'
+E04_CONTRACT_PATH = 'configs/amendments/e04_bank_generation_contract.yaml'
+E04_CONTRACT_SCHEMA = 'e04_bank_generation_contract_v1'
+E04_DRAFT_PATH = 'configs/amendments/e04_bank_generation_contract.DRAFT.yaml'
+E04_DRAFT_SHA256 = 'dc04e4845524f7388ccf7136fe8ec710dee88ccdadac2de9c164c2f3f1502c23'
+E04_APPROVED_DECISIONS = {
+    'E04-Q1_normalization_statistics': 'A_MOVING_STATISTICS_PER_PAIR',
+    'E04-Q2_synthesis_variant': 'A_PAPER_SPOOF_SYNTHESIS', 'E04-Q3_float_to_uint8': 'A_PREDECESSOR_CLIP_TRUNCATE',
+    'E04-Q4_auxiliary_outputs': 'A_NONE', 'E04-Q5_device_and_reproducibility': 'A_GPU_FP32_BITWISE_REPLAY',
+    'E04-Q6_governance_inclusion': 'A_ADDITIVE_E04_EXTENSION'}
+E04_S7_AUTHORITY_PATH = 'configs/amendments/learned_bank_s7_launch_authority_E04.yaml'
+E04_S7_AUTHORITY_SCHEMA = 'learned_bank_s7_launch_authority_e04_v1'
+E04_STORAGE_EXTENSION_PATH = 'configs/amendments/learned_bank_storage_location_E04.yaml'
+E04_STORAGE_EXTENSION_SCHEMA = 'learned_bank_storage_extension_v1'
+E04_BANK_LAYOUT = '<bank_root>/E04/seed_<seed>/'
 E04_RUN_ID = 'e7100eb9a5ab0537'
 E04_COMPLETION_RECORD = 'outputs/audit/E04_SEED2026_COMPLETION.json'
 E04_COMPLETION_STATUS = 'E04_SEED2026_COMPLETED_CLEANLY'
@@ -115,6 +136,7 @@ METHOD_CONFIGS = {
     'E06b': ('configs/methods/e06b_dsdg_native.yaml', '9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f'),
     'E06c': ('configs/methods/e06c_dsdg_bin_idfree.yaml',
              '7176dd4cd49007320ab0c44519e7efde60568098503077303218bd913b6b5002'),
+    'E04': ('configs/methods/e04_physics_std.yaml', '418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a'),
 }
 ENVIRONMENTS = {
     'E03': {'name': 'gpat-m6-e03', 'python': '/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python',
@@ -126,18 +148,25 @@ ENVIRONMENTS = {
              'lock': ('environments/e06c.lock.json', '91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95')},
     'E06c': {'name': 'gpat-m6-e06c', 'python': '/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python',
              'lock': ('environments/e06c.lock.json', '91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95')},
+    # E04-Q5: the E04 training lock (gpat-m6-e03 interpreter) with the D9 driver-version-only policy
+    'E04': {'name': 'gpat-m6-e03', 'python': '/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python',
+            'lock': ('environments/e04_training.lock.json',
+                     'a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd')},
 }
 
 # The twelve approved final checkpoints (outputs/audit/LEARNED_BANK_AUTHORITY_ASSESSMENT.json, 3433ad0; re-hashed on
 # the host 2026-11-22T22:01Z). Full SHA256 only; nothing is inferred from a prefix.
 CHECKPOINT_RULES = {'E03': 'OFFICIAL_LATEST_FINAL_CKPT_50', 'E05': 'BASELINE_FINAL_STATE_V1',
-                    'E06b': 'OFFICIAL_GENERATOR_EPOCH_200', 'E06c': 'OFFICIAL_GENERATOR_EPOCH_200'}
+                    'E06b': 'OFFICIAL_GENERATOR_EPOCH_200', 'E06c': 'OFFICIAL_GENERATOR_EPOCH_200',
+                    'E04': 'BASELINE_FINAL_STATE_V1'}
 CHECKPOINT_FILES = {
     'E03': {'data-00000-of-00001': 'checkpoints/ckpt-50.data-00000-of-00001', 'index': 'checkpoints/ckpt-50.index',
             'meta': 'checkpoints/ckpt-50.meta'},
     'E05': {'pth': 'checkpoints/iteration_4000.pth'},
     'E06b': {'pth': 'checkpoints/netG_model_epoch_200_iter_0.pth'},
     'E06c': {'pth': 'checkpoints/netG_model_epoch_200_iter_0.pth'},
+    'E04': {'data-00000-of-00001': 'checkpoints/iteration_150000.data-00000-of-00001',
+            'index': 'checkpoints/iteration_150000.index', 'meta': 'checkpoints/iteration_150000.meta'},
 }
 CHECKPOINTS = {
     ('E03', 42): {'run_id': 'a565b76bc7349532', 'seed_closure_commit': 'b95c127e394d9b2ea644573d317b44405652039e',
@@ -193,6 +222,30 @@ CHECKPOINTS = {
     ('E06c', 2026): {'run_id': '86b631403e3c4ee1', 'seed_closure_commit': '81a8ef6d1e1dec97452b32955c17d4e8718abcb7',
                    'family_closure_commit': '24f7049', 'sha256': {
         'pth': 'dc6c54b4357a51546c3abab3b957dd4b19044ae0188dde417df03446fc951878',
+    }},
+}
+
+# The three E04 final checkpoints (BASELINE_FINAL_STATE_V1 iteration_150000; E04_THREE_SEED_TRAINING_CLOSURE.json,
+# closure eeff32d; re-hashed on the host 2026-11-25T12:19Z, E04_BANK_CONTRACT_EVIDENCE.json). Kept apart from CHECKPOINTS
+# so the twelve-checkpoint table of the four original methods is unchanged.
+E04_CHECKPOINTS = {
+    ('E04', 42): {'run_id': '40befa6004aee85c', 'seed_closure_commit': 'ea533db43dc3b9d0a4108364d68b2e8217c7c835',
+                  'family_closure_commit': 'eeff32d', 'sha256': {
+        'data-00000-of-00001': '55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6',
+        'index': 'f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02',
+        'meta': 'fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933',
+    }},
+    ('E04', 1337): {'run_id': 'a42fdd2a2accaf0a', 'seed_closure_commit': '6da67199b32710c728b9f16f89c32b0a26cad84f',
+                    'family_closure_commit': 'eeff32d', 'sha256': {
+        'data-00000-of-00001': 'fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5',
+        'index': '1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560',
+        'meta': 'bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233',
+    }},
+    ('E04', 2026): {'run_id': 'e7100eb9a5ab0537', 'seed_closure_commit': '0e3f1d1a373d3e60130fd472a4e1799e2a622487',
+                    'family_closure_commit': 'eeff32d', 'sha256': {
+        'data-00000-of-00001': '089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2',
+        'index': 'af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a',
+        'meta': 'b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090',
     }},
 }
 
@@ -302,6 +355,12 @@ def reference_dsdg_uint8(chw_float32):
     return np.transpose((255 * x).astype('uint8'), (1, 2, 0))
 
 
+def reference_e04_uint8(synth_hwc_float32):
+    """E04-Q3 A_PREDECESSOR_CLIP_TRUNCATE, recomputed independently of methods.physics_std.bank_adapter."""
+    x = np.asarray(synth_hwc_float32, dtype=np.float32)
+    return (np.clip(x, np.float32(0.0), np.float32(1.0)) * np.float32(255.0)).astype(np.uint8)
+
+
 # ================================================================== authority gates
 @dataclasses.dataclass(frozen=True)
 class Authorization:
@@ -353,6 +412,42 @@ def load_generation_contract(root=None):
     return rec, digest
 
 
+def load_e04_generation_contract(root=None):
+    """The owner-approved E04 bank-generation contract with exactly the six approved decisions, binding the unchanged
+    DRAFT; otherwise STATUS_SCIENTIFIC. Never authorizes S7, production, storage or retraining by itself."""
+    def blocked(why):
+        raise LearnedBankBlocked(why, STATUS_SCIENTIFIC)
+    rec, digest = _read_record(E04_CONTRACT_PATH, root)
+    if rec is None:
+        blocked('no approved E04 contract at %s' % E04_CONTRACT_PATH)
+    if rec.get('schema_version') != E04_CONTRACT_SCHEMA or rec.get('status') != 'OWNER_APPROVED' \
+            or rec.get('approved') is not True or rec.get('method_id') != 'E04':
+        blocked('E04 contract is not OWNER_APPROVED')
+    if rec.get('decisions') != E04_APPROVED_DECISIONS:
+        blocked('E04 contract decisions differ from the approved owner rulings')
+    draft = rec.get('approved_draft') or {}
+    if draft.get('path') != E04_DRAFT_PATH or draft.get('sha256') != E04_DRAFT_SHA256:
+        blocked('E04 contract does not bind the approved DRAFT')
+    d, dsha = _read_record(E04_DRAFT_PATH, root)
+    if d is None or dsha != E04_DRAFT_SHA256:
+        blocked('the E04 DRAFT is missing or changed')
+    auth = rec.get('authorizes') or {}
+    if auth.get('production_bank_generation') is not False or auth.get('generator_retraining') is not False \
+            or auth.get('s7_gpu_inference') is not False or auth.get('storage_directory_creation') is not False:
+        blocked('E04 contract authorizes more than the approved scope')
+    ck = (rec.get('checkpoints') or {}).get('per_seed') or {}
+    for seed in SEEDS:
+        if (ck.get(str(seed)) or {}).get('sha256') != E04_CHECKPOINTS[('E04', seed)]['sha256']:
+            blocked('E04 contract checkpoint table differs for seed %d' % seed)
+    return rec, digest
+
+
+def load_method_contract(method_id, root=None):
+    """(record, sha256) of the generation contract that governs `method_id`."""
+    require(method_id in BANK_METHODS, 'unknown learned method %r' % (method_id,))
+    return load_e04_generation_contract(root) if method_id in E04_METHODS else load_generation_contract(root)
+
+
 def e04_completion_state(root=None, s7_record=None):
     """C-Q5: the E04 seed-2026 completion audit PASS and the family closure (or documented roadmap authority)."""
     comp, comp_sha = _read_record(E04_COMPLETION_RECORD, root)
@@ -375,6 +470,8 @@ def e04_completion_state(root=None, s7_record=None):
 
 def load_s7_authority(method_id, root=None):
     """S7_TOY authorization for one method (all three seeds); refuses unless every C-Q5 / C-Q3 precondition holds."""
+    if method_id in E04_METHODS:
+        return _load_e04_s7_authority(root)
     require(method_id in METHODS, 'unknown learned method %r' % (method_id,))
     _, contract_sha = load_generation_contract(root)
     s7, s7_sha = _read_record(S7_AUTHORITY_PATH, root)
@@ -401,11 +498,38 @@ def load_s7_authority(method_id, root=None):
                              E04_COMPLETION_RECORD: e04['seed_2026_completion_sha256']}.items())))
 
 
+def _load_e04_s7_authority(root=None):
+    """E04 S7_TOY authorization: the approved E04 contract plus its own owner S7 launch authority
+    (learned_bank_s7_launch_authority_E04.yaml) binding that contract, the E04 family closure and the three approved
+    checkpoint identities. The original four-method S7 authority never covers E04."""
+    _, contract_sha = load_e04_generation_contract(root)
+    fam, fam_sha = _read_record(E04_FAMILY_CLOSURE_RECORD, root)
+    if not (fam and fam.get('status') == E04_FAMILY_CLOSURE_STATUS and fam.get('failed_gates') == []):
+        raise LearnedBankBlocked('E04 family closure missing', STATUS_E04)
+    s7, s7_sha = _read_record(E04_S7_AUTHORITY_PATH, root)
+    if s7 is None:
+        raise LearnedBankBlocked('no owner E04 S7 launch authority at %s' % E04_S7_AUTHORITY_PATH, STATUS_S7)
+    if s7.get('schema_version') != E04_S7_AUTHORITY_SCHEMA or s7.get('status') != 'OWNER_APPROVED' \
+            or s7.get('approved') is not True:
+        raise LearnedBankBlocked('E04 S7 launch authority is not OWNER_APPROVED', STATUS_S7)
+    idents = {str(s): checkpoint_identity_sha256('E04', s) for s in SEEDS}
+    if s7.get('methods') != ['E04'] or s7.get('contract_sha256') != contract_sha \
+            or s7.get('e04_family_closure_sha256') != fam_sha or s7.get('checkpoint_identities') != idents:
+        raise LearnedBankBlocked('E04 S7 launch authority does not bind this contract, closure and checkpoints',
+                                 STATUS_S7)
+    if not (s7.get('resource_preflight') or {}).get('required') is True:
+        raise LearnedBankBlocked('E04 S7 launch authority must require a resource preflight', STATUS_S7)
+    return Authorization(mode='S7_TOY', methods=E04_METHODS, seeds=SEEDS, contract_sha256=contract_sha,
+                         label='s7_toy', records=tuple(sorted({
+                             E04_CONTRACT_PATH: contract_sha, E04_S7_AUTHORITY_PATH: s7_sha,
+                             E04_FAMILY_CLOSURE_RECORD: fam_sha}.items())))
+
+
 def load_production_authority(method_id, seed, root=None, *, live_storage=True):
     """PRODUCTION authorization for (method, seed); refuses unless contract, E04, S7 acceptance binding, per-family
     owner production authority and an activated, live-verified storage authority all hold."""
-    require(method_id in METHODS and seed in SEEDS, 'unknown production bank %r seed %r' % (method_id, seed))
-    _, contract_sha = load_generation_contract(root)
+    require(method_id in BANK_METHODS and seed in SEEDS, 'unknown production bank %r seed %r' % (method_id, seed))
+    _, contract_sha = load_method_contract(method_id, root)
     rel = PRODUCTION_AUTHORITY_TEMPLATE.format(method=method_id)
     prod, prod_sha = _read_record(rel, root)
     e04 = e04_completion_state(root, prod)
@@ -425,14 +549,17 @@ def load_production_authority(method_id, seed, root=None, *, live_storage=True):
             or sorted(s7_rec.get('seeds') or []) != sorted(SEEDS):
         raise LearnedBankBlocked('production authority does not bind a passed S7 acceptance record for %s'
                                  % method_id, STATUS_PRODUCTION)
-    storage = load_storage_authority(root)
+    storage = load_storage_authority(root, method_id=method_id)
     if live_storage:
         verify_storage_root(storage)
+    records = {CONTRACT_PATH: contract_sha, rel: prod_sha, s7['path']: s7_sha,
+               STORAGE_AUTHORITY_PATH: storage['_sha256'], E04_COMPLETION_RECORD: e04['seed_2026_completion_sha256']}
+    if method_id in E04_METHODS:
+        del records[CONTRACT_PATH]
+        records[E04_CONTRACT_PATH] = contract_sha
+        records[E04_STORAGE_EXTENSION_PATH] = storage['_extension_sha256']
     return Authorization(mode='PRODUCTION', methods=(method_id,), seeds=(seed,), contract_sha256=contract_sha,
-                         label='production', records=tuple(sorted({
-                             CONTRACT_PATH: contract_sha, rel: prod_sha, s7['path']: s7_sha,
-                             STORAGE_AUTHORITY_PATH: storage['_sha256'],
-                             E04_COMPLETION_RECORD: e04['seed_2026_completion_sha256']}.items())))
+                         label='production', records=tuple(sorted(records.items())))
 
 
 def fixture_authorization(label, root=None):
@@ -441,6 +568,14 @@ def fixture_authorization(label, root=None):
     _, contract_sha = load_generation_contract(root)
     return Authorization(mode='FIXTURE', methods=METHODS, seeds=(), contract_sha256=contract_sha, label=label,
                          records=((CONTRACT_PATH, contract_sha),))
+
+
+def e04_fixture_authorization(label, root=None):
+    """E04 synthetic-fixture authorization under the approved E04 contract; never benchmark evidence."""
+    require(isinstance(label, str) and re.match(r'^[a-z0-9_-]+$', label) is not None, 'label must be [a-z0-9_-]+')
+    _, contract_sha = load_e04_generation_contract(root)
+    return Authorization(mode='FIXTURE', methods=E04_METHODS, seeds=(), contract_sha256=contract_sha, label=label,
+                         records=((E04_CONTRACT_PATH, contract_sha),))
 
 
 # ================================================================== storage (L1 B_EXTERNAL_HDD_ADDITIVE_ROOT)
@@ -490,15 +625,16 @@ def _read_write(options):
     return 'rw' in opts and 'ro' not in opts
 
 
-def bank_root_contents_ok(root, owner_uid):
+def bank_root_contents_ok(root, owner_uid, allowed_methods=METHODS):
     """The private root holds only <method>/seed_<s>/ real directories owned by the bank user (empty at activation).
-    Anything else (files, symlinks, foreign directories, other names) is unexpected and refuses the root."""
+    Anything else (files, symlinks, foreign directories, other names) is unexpected and refuses the root.
+    `allowed_methods` is METHODS unless an activated E04 storage extension registers E04 (registered_bank_methods)."""
     bad = []
     seeds = {'seed_%d' % s for s in SEEDS}
     for name in sorted(os.listdir(root)):
         p = os.path.join(root, name)
         st = os.lstat(p)
-        if name not in METHODS or not stat.S_ISDIR(st.st_mode) or st.st_uid != owner_uid:
+        if name not in allowed_methods or not stat.S_ISDIR(st.st_mode) or st.st_uid != owner_uid:
             bad.append(name)
             continue
         for sub in sorted(os.listdir(p)):
@@ -508,8 +644,10 @@ def bank_root_contents_ok(root, owner_uid):
     return bad
 
 
-def storage_preflight(bank_root=None, expected=None):
+def storage_preflight(bank_root=None, expected=None, allowed_methods=None):
     """Read-only checks of the owner-created private bank root. Never creates, chmods or mounts anything."""
+    if allowed_methods is None:
+        allowed_methods = registered_bank_methods()
     exp = dict(HDD, **(expected or {}))
     root = bank_root or exp['bank_root']
     checks = {}
@@ -533,15 +671,16 @@ def storage_preflight(bank_root=None, expected=None):
     checks['mount_read_write'] = _read_write(fs.get('mount_options')) and _read_write(fs.get('super_options'))
     checks['user_rwx_access'] = bool(checks['is_directory'] and lst.st_uid == os.getuid()
                                      and os.access(root, os.R_OK | os.W_OK | os.X_OK))
-    unexpected = bank_root_contents_ok(root, lst.st_uid) if checks['is_directory'] and checks['not_symlink'] else ['?']
+    unexpected = bank_root_contents_ok(root, lst.st_uid, allowed_methods) \
+        if checks['is_directory'] and checks['not_symlink'] else ['?']
     checks['no_unexpected_contents'] = unexpected == []
     return {'bank_root': root, 'exists': True, 'mode_octal': oct(stat.S_IMODE(lst.st_mode)), 'filesystem': fs,
             'unexpected_entries': unexpected, 'checks': checks, 'ok': all(checks.values())}
 
 
-def load_storage_authority(root=None):
+def load_storage_authority(root=None, method_id=None):
     """The ACTIVATED storage authority (OWNER_APPROVED, option B, the owner-created directory verified at activation).
-    A pending-activation record is never accepted."""
+    A pending-activation record is never accepted. For method_id E04 the activated E04 extension is also required."""
     rec, digest = _read_record(STORAGE_AUTHORITY_PATH, root)
     if rec is None:
         raise LearnedBankBlocked('no activated storage authority at %s (a pending-activation record is not usable)'
@@ -561,7 +700,43 @@ def load_storage_authority(root=None):
         raise LearnedBankBlocked('storage activation verification did not pass', STATUS_STORAGE)
     out = dict(reg)
     out['_sha256'] = digest
+    if method_id in E04_METHODS:
+        _, ext_sha = load_e04_storage_extension(root)
+        out['methods'] = list(reg['methods']) + ['E04']
+        out['_extension_sha256'] = ext_sha
     return out
+
+
+def load_e04_storage_extension(root=None):
+    """The ACTIVATED additive E04 storage extension: OWNER_APPROVED, method E04 only, the same HDD root, UUID and
+    layout, binding the unchanged base storage authority by sha256, with a passed activation verification. A DRAFT
+    (learned_bank_storage_location_E04.DRAFT.yaml) is never read."""
+    rec, digest = _read_record(E04_STORAGE_EXTENSION_PATH, root)
+    if rec is None:
+        raise LearnedBankBlocked('no activated E04 storage extension at %s' % E04_STORAGE_EXTENSION_PATH,
+                                 STATUS_STORAGE)
+    _, base_sha = _read_record(STORAGE_AUTHORITY_PATH, root)
+    reg = rec.get('registry_extension') or {}
+    if rec.get('schema_version') != E04_STORAGE_EXTENSION_SCHEMA or rec.get('status') != 'OWNER_APPROVED' \
+            or rec.get('approved') is not True or rec.get('methods') != ['E04'] \
+            or (rec.get('base_storage_authority') or {}).get('path') != STORAGE_AUTHORITY_PATH \
+            or (rec.get('base_storage_authority') or {}).get('sha256') != base_sha \
+            or reg.get('bank_root') != HDD['bank_root'] or reg.get('filesystem_uuid') != HDD['filesystem_uuid'] \
+            or reg.get('layout') != E04_BANK_LAYOUT or reg.get('seeds') != list(SEEDS) \
+            or (rec.get('activation_verification') or {}).get('ok') is not True:
+        raise LearnedBankBlocked('E04 storage extension is not an activated approval on the registered HDD root',
+                                 STATUS_STORAGE)
+    return rec, digest
+
+
+def registered_bank_methods(root=None):
+    """Top-level names the bank root may hold: the four original methods, plus E04 only while an activated E04
+    storage extension exists. Any other state (absent, DRAFT, malformed) keeps E04 unexpected (fail closed)."""
+    try:
+        load_e04_storage_extension(root)
+    except LearnedBankError:
+        return METHODS
+    return BANK_METHODS
 
 
 def verify_storage_root(storage):
@@ -578,7 +753,8 @@ def production_bank_dir(method_id, seed, storage):
     """The single registered location of a production bank: <bank_root>/<method>/seed_<seed>. Only the approved HDD
     root is accepted (never the udisks duplicate, never a relative or redirected root), and the result must stay
     inside it (no traversal: method and seed come from the closed METHODS / SEEDS sets)."""
-    require(method_id in METHODS and seed in SEEDS and type(seed) is int, 'unknown production bank')
+    require((method_id in METHODS or (method_id in E04_METHODS and method_id in storage.get('methods', ())))
+            and seed in SEEDS and type(seed) is int, 'unknown production bank')
     root = storage['bank_root']
     require(root == HDD['bank_root'] and os.path.isabs(root) and os.path.normpath(root) == root,
             'bank root is not the registered HDD root')
@@ -591,7 +767,7 @@ def production_bank_dir(method_id, seed, storage):
 
 def resolve_registered_bank(method_id, seed, root=None):
     """Downstream readers resolve a learned production bank only through the activated registry (never a symlink)."""
-    storage = load_storage_authority(root)
+    storage = load_storage_authority(root, method_id=method_id)
     return production_bank_dir(method_id, seed, storage)
 
 
@@ -607,8 +783,9 @@ def verify_config_identity(method_id, root=None):
 
 
 def checkpoint_authority(method_id, seed):
-    require((method_id, seed) in CHECKPOINTS, 'no approved checkpoint for %s seed %r' % (method_id, seed))
-    return CHECKPOINTS[(method_id, seed)]
+    table = E04_CHECKPOINTS if method_id in E04_METHODS else CHECKPOINTS
+    require((method_id, seed) in table, 'no approved checkpoint for %s seed %r' % (method_id, seed))
+    return table[(method_id, seed)]
 
 
 def checkpoint_identity_sha256(method_id, seed):
@@ -712,7 +889,7 @@ class BankRow:
 
 class Population:
     def __init__(self, method_id, seed, kind, rows, provenance):
-        require(method_id in METHODS, 'unknown method')
+        require(method_id in BANK_METHODS, 'unknown method')
         require(kind in POPULATION_KINDS.values(), 'unknown population kind %r' % (kind,))
         self.method_id, self.seed, self.kind = method_id, seed, kind
         self.rows = tuple(rows)
@@ -721,7 +898,7 @@ class Population:
         idx = [r.index for r in self.rows]
         require(all(a < b for a, b in zip(idx, idx[1:])) and idx[0] >= 0, 'row indices not strictly increasing')
         require(len({r.row_id for r in self.rows}) == len(self.rows), 'duplicate row ids')
-        if method_id in PAIR_METHODS:
+        if method_id in PAIR_BANK_METHODS:
             for r in self.rows:
                 require(r.synthetic_id is None and r.row_id == r.pair_id, 'pair rows are identified by pair_id')
                 require(isinstance(r.pair_id, str) and PAIR_ID_RE.match(r.pair_id) is not None,
@@ -772,7 +949,7 @@ def pair_population(method_id, seed, kind, relation, *, positions=None, provenan
     """`relation`: the frozen pairs_train_v1 rows in canonical order as (pair_id, target_live_id, source_spoof_id,
     dataset). PRODUCTION takes every row; S7_TOY takes the toy positions (each toy row must equal the relation row at
     its global position)."""
-    require(method_id in PAIR_METHODS, 'pair populations exist only for E03/E05')
+    require(method_id in PAIR_BANK_METHODS, 'pair populations exist only for E03/E05/E04')
     relation = [tuple(r) for r in relation]
     ids = [r[0] for r in relation]
     require(ids == sorted(ids) and len(set(ids)) == len(ids), 'relation not in ascending unique pair_id order')
@@ -906,6 +1083,8 @@ CONVERSION_RULES = {
     'E05': 'util.tensor2im(mix[0]): clip((x+1)/2*255, 0, 255).astype(uint8) [swapping_autoencoder util/util.py:125-131]',
     'E06b': "np.transpose((255 * spoof).astype('uint8'), (1, 2, 0)) [DSDG generated.py:63]",
     'E06c': "np.transpose((255 * spoof).astype('uint8'), (1, 2, 0)) [DSDG generated.py:63]",
+    'E04': '(np.clip(out, 0.0, 1.0) * 255.0).astype(np.uint8) float32 [E04-Q3 A_PREDECESSOR_CLIP_TRUNCATE; '
+           'reference stdn model/utils.py:24,37]',
 }
 
 
@@ -979,7 +1158,7 @@ def _check_mode(adapter, population, auth, run_dir):
                                                                               population.seed))
     require(adapter.generator_seed == population.seed, 'bank seed s must use generator seed s (D12)')
     if auth.mode == 'PRODUCTION':
-        storage = load_storage_authority()
+        storage = load_storage_authority(method_id=population.method_id)
         require(Path(run_dir) == production_bank_dir(population.method_id, population.seed, storage),
                 'production banks are written only at their registered location')
 
@@ -1091,7 +1270,7 @@ def read_bank(run_dir, *, expect_method=None, expect_seed=None, expect_mode=None
         problems.append('rows %d != expected %d' % (len(rows), expect_rows))
     for r in rows:
         m = r['method_id']
-        if r['schema'] != SCHEMA or r['label'] != 'spoof' or m not in METHODS:
+        if r['schema'] != SCHEMA or r['label'] != 'spoof' or m not in BANK_METHODS:
             problems.append('%s: schema/label/method' % r['row_id'])
             continue
         if (expect_method and m != expect_method) or (expect_seed is not None and r['bank_seed'] != expect_seed) \
@@ -1101,15 +1280,15 @@ def read_bank(run_dir, *, expect_method=None, expect_seed=None, expect_mode=None
             problems.append('%s: checkpoint identity' % r['row_id'])
         if r['conversion_rule'] != CONVERSION_RULES[m]:
             problems.append('%s: conversion rule' % r['row_id'])
-        if m in PAIR_METHODS:
+        if m in PAIR_BANK_METHODS:
             if not (isinstance(r['pair_id'], str) and PAIR_ID_RE.match(r['pair_id']) and r['row_id'] == r['pair_id']
                     and r['synthetic_id'] is None and r['target_live_id'] and r['source_spoof_id']
                     and r['dataset'] in DATASETS and r['dsdg_batch_index'] is None):
                 problems.append('%s: pair lineage' % r['row_id'])
             if m == 'E05' and r['deterministic_noise_seed'] != e05_pair_seed(r['generator_seed'], r['pair_id']):
                 problems.append('%s: E05 pair seed' % r['row_id'])
-            if m == 'E03' and r['deterministic_noise_seed'] is not None:
-                problems.append('%s: E03 is not stochastic at inference' % r['row_id'])
+            if m in ('E03', 'E04') and r['deterministic_noise_seed'] is not None:
+                problems.append('%s: %s is not stochastic at inference' % (r['row_id'], m))
         else:
             pat = FIXTURE_SYNTHETIC_ID_RE if r['mode'] == 'FIXTURE' else SYNTHETIC_ID_RE
             if not (r['pair_id'] is None and r['target_live_id'] is None and r['source_spoof_id'] is None

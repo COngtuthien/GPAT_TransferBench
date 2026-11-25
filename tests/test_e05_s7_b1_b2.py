@@ -24,6 +24,8 @@ from methods.pcgan import bank_adapter as ba  # noqa: E402
 RULING = json.loads((ROOT / 'configs/amendments/e05_s7_b1_b2_ruling.yaml').read_text())
 PINNED_SRC = ROOT / 'third_party/source_cache/swapping_autoencoder/util/util.py'
 BASE = 'ef96fcbafb609c95ba930ec0754931c6e35be257'          # last commit before B1/B2
+# learned_bank.py was extended additively for E04 after the E05 work closed (7eefb5d); B1/B2 left it unchanged
+PINNED_TO_RANGE = {'methods/common/learned_bank.py': '7eefb5d8ef04d78371d93e1f87649d44752379d5'}
 
 
 def sha(raw):
@@ -155,6 +157,9 @@ class B1NarrowChange(unittest.TestCase):
                     'configs/methods/e05_pcgan.yaml', 'configs/amendments/learned_bank_generation_contract.yaml',
                     'configs/amendments/learned_bank_s7_launch_authority.yaml',
                     'configs/amendments/e05_source_relocation_ruling.yaml', lb.TOY_MANIFEST_PATH):
+            if rel in PINNED_TO_RANGE:          # later additive change outside B1/B2: pin to the B1/B2 era instead of HEAD
+                self.assertEqual(git_show(BASE, rel), git_show(PINNED_TO_RANGE[rel], rel), rel)
+                continue
             self.assertEqual(git_show(BASE, rel), (ROOT / rel).read_bytes(), rel)
 
     def test_03_rng_and_conversion_unchanged(self):

@@ -264,6 +264,9 @@ class FamilyClosures(unittest.TestCase):
 
 
 
+SUMMARY_COMMIT = '7eefb5d8ef04d78371d93e1f87649d44752379d5'    # commit that built M8_LEARNED_PRODUCTION_SUMMARY
+
+
 class ProgramSummary(unittest.TestCase):
     def test_rebuild(self):
         tool = load('lbsum', 'tools/learned_bank_production_summary.py')
@@ -273,7 +276,16 @@ class ProgramSummary(unittest.TestCase):
         v = json.loads((ROOT / tool.VERIFIED).read_text())
         doc, repro = tool.build(v, ROOT)
         self.assertEqual(json.loads(json.dumps(doc)), json.loads(out.read_text()))
-        self.assertEqual(json.loads(json.dumps(repro)), json.loads((ROOT / tool.REPRO).read_text()))
+        # 'tools' records the tool sha256 at the summary commit; later additive changes (E04 bank extension) are
+        # checked against that commit's blobs instead of HEAD (history pinned to its commit, not to HEAD)
+        want = json.loads((ROOT / tool.REPRO).read_text())
+        got = json.loads(json.dumps(repro))
+        self.assertEqual({k: v for k, v in got.items() if k != 'tools'}, {k: v for k, v in want.items() if k != 'tools'})
+        self.assertEqual(sorted(got['tools']), sorted(want['tools']))
+        for rel, digest in want['tools'].items():
+            blob = subprocess.run(['git', '-C', str(ROOT), 'show', '%s:%s' % (SUMMARY_COMMIT, rel)],
+                                  stdout=subprocess.PIPE, check=True).stdout
+            self.assertEqual(hashlib.sha256(blob).hexdigest(), digest, rel)
         self.assertEqual(tool.report(doc), (ROOT / (tool.OUT + '.md')).read_text())
         for line in (ROOT / (tool.OUT + '_SHA256.txt')).read_text().splitlines():
             digest, name = line.split('  ')

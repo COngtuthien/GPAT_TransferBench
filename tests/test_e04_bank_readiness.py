@@ -169,10 +169,11 @@ class LearnedBankRefusesE04(unittest.TestCase):
         self.assertNotIn('E04', lb.METHODS)
         storage = json.loads((ROOT / readiness.STORAGE_AUTHORITY).read_text())
         self.assertNotIn('E04', storage['bank_root_registry']['methods'])
+        # since the E04 contract approval (3753ea4) the CLI accepts E04 and the authority gates refuse it
         r = subprocess.run([sys.executable, str(ROOT / 'tools/learned_bank.py'), 'gates', '--method', 'E04'],
                            cwd=str(ROOT), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        self.assertNotEqual(r.returncode, 0)
-        self.assertIn(b"invalid choice: 'E04'", r.stderr)
+        g = json.loads(r.stdout)
+        self.assertEqual((g['s7']['ok'], g['production']['ok'], g['storage_authority']['ok']), (False, False, False))
 
 
 class E05ReportingDecision(unittest.TestCase):

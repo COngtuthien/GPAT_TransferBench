@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Learned-method bank CLI (E03 / E05 / E06b / E06c), fail-closed.
+"""Learned-method bank CLI (E03 / E05 / E06b / E06c; E04 additively under its own contract), fail-closed.
 
     python -B tools/learned_bank.py gates   --method M [--seed S]          # read-only authority report (any host)
     python -B tools/learned_bank.py storage-preflight                     # read-only HDD bank-root checks
@@ -44,7 +44,7 @@ def emit(obj):
 def gate_report(method, seed=None):
     out = {'method': method}
     try:
-        _, sha = lb.load_generation_contract()
+        _, sha = lb.load_method_contract(method)
         out['contract'] = {'ok': True, 'sha256': sha}
     except lb.LearnedBankBlocked as exc:
         out['contract'] = {'ok': False, 'status': exc.status, 'reason': str(exc)}
@@ -56,7 +56,7 @@ def gate_report(method, seed=None):
         except lb.LearnedBankBlocked as exc:
             out[name] = {'ok': False, 'status': exc.status, 'reason': str(exc)}
     try:
-        lb.load_storage_authority()
+        lb.load_storage_authority(method_id=method)
         out['storage_authority'] = {'ok': True}
     except lb.LearnedBankBlocked as exc:
         out['storage_authority'] = {'ok': False, 'status': exc.status, 'reason': str(exc)}
@@ -92,8 +92,26 @@ def e05_inputs(runtime_root, seed, kind):
     return pop, reader
 
 
+def e04_inputs(runtime_root, seed, kind):
+    """E04: the frozen e04_feed_pack_v1 relation and Q140 geometry, cross-checked with split_v1 / M2 (TRAIN only)."""
+    from methods.physics_std.bank_adapter import load_e04_inputs
+    inp = load_e04_inputs(runtime_root)
+    pop = lb.pair_population('E04', seed, kind, inp['relation'],
+                             provenance={'relation_source': 'e04_feed_pack_v1 pairs_train.json',
+                                         'pack_manifest_sha256': inp['pack_manifest_sha256']})
+    used = {r.target_live_id for r in pop.rows} | {r.source_spoof_id for r in pop.rows}
+    reader = lb.TrainFaceReader(Path(runtime_root) / 'data' / 'processed' / 'faces_256',
+                                {sid: inp['allowlist'][sid] for sid in sorted(used)})
+    return pop, reader, inp['q140']
+
+
 def real_adapter(method, seed, runtime_root, landmark_source=None):
     run_root = Path(runtime_root) / 'runs' / 'm6' / method / ('seed_%d' % seed)
+    if method == 'E04':
+        import tensorflow as tf
+        from methods.physics_std.bank_adapter import load_real
+        tf.reset_default_graph()
+        return load_real(tf, seed, run_root, landmark_source)
     if method == 'E03':
         import tensorflow as tf
         from methods.stdn.bank_adapter import load_real
@@ -112,6 +130,8 @@ def generate_real(auth, method, seed, runtime_root, run_dir, kind):
     landmark_source = reader = None
     if method == 'E03':
         pop, reader, landmark_source = e03_inputs(runtime_root, seed, kind)
+    elif method == 'E04':
+        pop, reader, landmark_source = e04_inputs(runtime_root, seed, kind)     # Q140 lookup in the landmark slot
     elif method == 'E05':
         pop, reader = e05_inputs(runtime_root, seed, kind)
     else:
@@ -120,7 +140,7 @@ def generate_real(auth, method, seed, runtime_root, run_dir, kind):
     prov = lb.write_bank(adapter, pop, auth, run_dir, reader=reader)
     lb.recheck_checkpoint_unchanged(ckpt)
     prov['checkpoint_unchanged_after'] = True
-    if method != 'E03':                    # profiling gate (S7 run A): peak allocator memory of this process
+    if method not in ('E03', 'E04'):       # profiling gate (S7 run A): peak allocator memory of this process
         import torch
         prov['peak_cuda_memory_allocated_bytes'] = torch.cuda.max_memory_allocated()
     else:
@@ -193,21 +213,21 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='cmd', required=True)
     g = sub.add_parser('gates')
-    g.add_argument('--method', required=True, choices=lb.METHODS)
+    g.add_argument('--method', required=True, choices=lb.BANK_METHODS)
     g.add_argument('--seed', type=int, choices=lb.SEEDS)
     sub.add_parser('storage-preflight')
     s = sub.add_parser('s7')
-    s.add_argument('--method', required=True, choices=lb.METHODS)
+    s.add_argument('--method', required=True, choices=lb.BANK_METHODS)
     s.add_argument('--label', required=True, choices=('A', 'B'))
     s.add_argument('--out-root', required=True)
     s.add_argument('--runtime-root', required=True)
     s.add_argument('--seed', type=int, choices=lb.SEEDS, default=None)
     c = sub.add_parser('s7-compare')
-    c.add_argument('--method', required=True, choices=lb.METHODS)
+    c.add_argument('--method', required=True, choices=lb.BANK_METHODS)
     c.add_argument('--out-root', required=True)
     c.add_argument('--seed', type=int, choices=lb.SEEDS, default=None)
     p = sub.add_parser('production')
-    p.add_argument('--method', required=True, choices=lb.METHODS)
+    p.add_argument('--method', required=True, choices=lb.BANK_METHODS)
     p.add_argument('--seed', required=True, type=int, choices=lb.SEEDS)
     p.add_argument('--runtime-root', required=True)
     args = ap.parse_args(argv)
