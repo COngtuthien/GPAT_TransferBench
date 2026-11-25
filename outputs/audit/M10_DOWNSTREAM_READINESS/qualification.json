@@ -1,0 +1,135 @@
+{
+ "Q1_augmentation_equivalence": {
+  "generator_states_equal": true,
+  "images": 300,
+  "mismatches": 0,
+  "pass": true
+ },
+ "Q2_cpu_equivalence_with_smoke_runner": {
+  "E00_w0": {
+   "epoch_states_equal": true,
+   "logits_equal": true,
+   "selected_epoch_equal": true,
+   "steps": 6,
+   "steps_equal": true,
+   "thresholds_equal": true
+  },
+  "E00_w4": {
+   "epoch_states_equal": true,
+   "logits_equal": true,
+   "selected_epoch_equal": true,
+   "steps": 6,
+   "steps_equal": true,
+   "thresholds_equal": true
+  },
+  "EQ1_w0": {
+   "epoch_states_equal": true,
+   "logits_equal": true,
+   "selected_epoch_equal": true,
+   "steps": 6,
+   "steps_equal": true,
+   "thresholds_equal": true
+  },
+  "EQ1_w4": {
+   "epoch_states_equal": true,
+   "logits_equal": true,
+   "selected_epoch_equal": true,
+   "steps": 6,
+   "steps_equal": true,
+   "thresholds_equal": true
+  },
+  "fixture_seeds_skipped_for_threshold_tie": [],
+  "pass": true
+ },
+ "Q3_cuda_policies_replay": {
+  "CUDA_AMP_BF16_DETERMINISTIC": {
+   "checkpoint_file_sha256_equal": true,
+   "checkpoint_reloaded": true,
+   "finite": true,
+   "fixture_seed": 20261125,
+   "grad_scale_last": null,
+   "label": "NON_SCIENTIFIC_QUALIFICATION",
+   "non_finite_grad_steps": 0,
+   "replay_states_bitwise": true,
+   "replay_steps_bitwise": true,
+   "replay_val_logits_bitwise": true,
+   "selected_epoch": 0
+  },
+  "CUDA_AMP_FP16_GRADSCALER_DETERMINISTIC": {
+   "checkpoint_file_sha256_equal": true,
+   "checkpoint_reloaded": true,
+   "finite": true,
+   "fixture_seed": 20261125,
+   "grad_scale_last": 65536.0,
+   "label": "NON_SCIENTIFIC_QUALIFICATION",
+   "non_finite_grad_steps": 0,
+   "replay_states_bitwise": true,
+   "replay_steps_bitwise": true,
+   "replay_val_logits_bitwise": true,
+   "selected_epoch": 0
+  },
+  "CUDA_FP32_DETERMINISTIC": {
+   "checkpoint_file_sha256_equal": true,
+   "checkpoint_reloaded": true,
+   "finite": true,
+   "fixture_seed": 20261125,
+   "grad_scale_last": null,
+   "label": "NON_SCIENTIFIC_QUALIFICATION",
+   "non_finite_grad_steps": 0,
+   "replay_states_bitwise": true,
+   "replay_steps_bitwise": true,
+   "replay_val_logits_bitwise": true,
+   "selected_epoch": 0
+  },
+  "cuda_device": "NVIDIA GeForce RTX 3090",
+  "fixture_seeds_skipped_for_threshold_tie": [],
+  "pass": true
+ },
+ "Q4_throughput": {
+  "cpu_batch64_decode_augment_seconds": {
+   "0": 0.2226975200464949,
+   "4": 0.1367980089271441,
+   "8": 0.12411094596609473
+  },
+  "gpu_eval_64_seconds": {
+   "CUDA_AMP_BF16_DETERMINISTIC": 0.013679631403647363,
+   "CUDA_AMP_FP16_GRADSCALER_DETERMINISTIC": 0.01234770540613681,
+   "CUDA_FP32_DETERMINISTIC": 0.023021874006371946
+  },
+  "gpu_train_step_seconds": {
+   "CUDA_AMP_BF16_DETERMINISTIC": {
+    "median_after_10": 0.044707783963531256,
+    "peak_allocated_mib": 1004
+   },
+   "CUDA_AMP_FP16_GRADSCALER_DETERMINISTIC": {
+    "median_after_10": 0.040407799009699374,
+    "peak_allocated_mib": 1001
+   },
+   "CUDA_FP32_DETERMINISTIC": {
+    "median_after_10": 0.08447383646853268,
+    "peak_allocated_mib": 1643
+   }
+  },
+  "note": "synthetic tensors / PNGs; shared GPU (unrelated jobs recorded); provisional resource evidence only",
+  "note_noise": "random-noise PNGs compress worse than faces; real decode cost is lower or equal"
+ },
+ "Q5_plots": {
+  "pass": true,
+  "plots": [
+   "qualification_val_curves.png",
+   "qualification_val_roc.png"
+  ]
+ },
+ "Q6_threshold_tie_finding": {
+  "constant": "UnresolvedThresholdTie: thresholds [0.0, 1.0] tie on ACER 1/2 and distance to 0.5",
+  "finding": "spec 15 / selection.threshold gives no tie-break beyond 'closest to 0.5'; a degenerate epoch aborts the run (fail closed) until the owner pins a rule",
+  "inverted": "UnresolvedThresholdTie: thresholds [0.0, 1.0] tie on ACER 1/2 and distance to 0.5",
+  "pass": true
+ },
+ "cublas_workspace_config": ":4096:8",
+ "cuda": "13.0",
+ "label": "NON_SCIENTIFIC_QUALIFICATION (synthetic fixtures; no real or bank image, no VAL/TEST data)",
+ "pass": true,
+ "torch": "2.12.1+cu130",
+ "torchvision": "0.27.1+cu130"
+}
