@@ -263,5 +263,26 @@ class FamilyClosures(unittest.TestCase):
                     self.assertEqual(sha(ROOT / name), digest)
 
 
+
+class ProgramSummary(unittest.TestCase):
+    def test_rebuild(self):
+        tool = load('lbsum', 'tools/learned_bank_production_summary.py')
+        out = ROOT / (tool.OUT + '.json')
+        if not out.exists():
+            self.skipTest('summary not yet built')
+        v = json.loads((ROOT / tool.VERIFIED).read_text())
+        doc, repro = tool.build(v, ROOT)
+        self.assertEqual(json.loads(json.dumps(doc)), json.loads(out.read_text()))
+        self.assertEqual(json.loads(json.dumps(repro)), json.loads((ROOT / tool.REPRO).read_text()))
+        self.assertEqual(tool.report(doc), (ROOT / (tool.OUT + '.md')).read_text())
+        for line in (ROOT / (tool.OUT + '_SHA256.txt')).read_text().splitlines():
+            digest, name = line.split('  ')
+            self.assertEqual(sha(ROOT / name), digest)
+        bad = copy.deepcopy(v)
+        k = sorted(bad['banks'])[0]
+        bad['banks'][k]['manifest_sha256'] = '0' * 64
+        self.assertFalse(tool.build(bad, ROOT)[0]['checks']['all_banks_present_and_unchanged'])
+
+
 if __name__ == '__main__':
     unittest.main()
