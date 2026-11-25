@@ -1,0 +1,72 @@
+{
+ "environment_keys": [
+  "name",
+  "python",
+  "lock_path",
+  "lock_sha256",
+  "torch",
+  "torchvision",
+  "cuda"
+ ],
+ "field_types": {
+  "audit": "dict",
+  "backup": "str",
+  "bank_seed": "int | NoneType",
+  "checkpoint": "dict",
+  "command": "str",
+  "detector_seed": "int",
+  "end_utc": "str",
+  "environment": "dict",
+  "epochs": "int",
+  "evaluator_contract_sha256": "str",
+  "execution_commit": "str",
+  "frozen_config_sha256": "str",
+  "gpu": "dict",
+  "label": "str",
+  "logs": "dict",
+  "m2_accounting_sha256": "str",
+  "method_id": "str",
+  "pool_sha256": "dict",
+  "precision_policy": "dict",
+  "reproduction": "list",
+  "rng": "dict",
+  "schema": "str",
+  "selection": "dict",
+  "source_commit": "str",
+  "split_manifest_sha256": "str",
+  "start_utc": "str",
+  "steps_per_epoch": "int",
+  "synthetic_bank": "dict | NoneType",
+  "test_accessed": "bool",
+  "total_steps": "int",
+  "val_predictions": "list",
+  "warmup_epochs": "int",
+  "working_directory": "str"
+ },
+ "gpu_keys": [
+  "name",
+  "uuid",
+  "driver"
+ ],
+ "rules": [
+  "E00: bank_seed null, synthetic_bank null",
+  "other groups: bank_seed = detector_seed, synthetic_bank = {method_id, seed, manifest_sha256, path, audit_record}",
+  "SCIENTIFIC: epochs 40, warmup 3",
+  "one VAL prediction parquet (sha256) per epoch",
+  "test_accessed false; selection_source VAL only",
+  "backup states whether an independent copy exists"
+ ],
+ "schema": "m10_resnet18_run_manifest_v1",
+ "selection_keys": [
+  "selected_epoch",
+  "checkpoint_state_sha256",
+  "checkpoint_file_sha256",
+  "val_acer",
+  "val_auc",
+  "frozen_val_threshold_hex",
+  "selection_rule",
+  "threshold_rule",
+  "selection_source"
+ ],
+ "validator": "gpatbench.downstream.science_manifest.validate"
+}

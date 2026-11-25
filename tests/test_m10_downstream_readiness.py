@@ -325,6 +325,24 @@ class PrecisionPin(unittest.TestCase):
         self.assertEqual(pa.report(d), (ROOT / (pa.OUT + ".md")).read_text())
         self.assertEqual(d["matrix"]["runs"], 24)
 
+    def test_readiness_record_and_draft_rebuild(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("rd", str(ROOT / "tools/m10_downstream_readiness.py"))
+        rd = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(rd)
+        p = ROOT / (rd.OUT + ".json")
+        if not p.exists():
+            self.skipTest("readiness record not built")
+        d = rd.build()
+        self.assertEqual(json.loads(json.dumps(d)), json.loads(p.read_text()))
+        self.assertEqual(rd.report(d), (ROOT / (rd.OUT + ".md")).read_text())
+        if (ROOT / rd.DRAFT).exists():
+            dr = json.loads((ROOT / rd.DRAFT).read_text())
+            self.assertEqual(dr, json.loads(json.dumps(rd.draft(d))))
+            self.assertEqual((dr["approved"], dr["authorizes"]["scientific_downstream_training"]), (False, False))
+        self.assertFalse((ROOT / "configs/amendments/m10_resnet18_science_launch_authority.yaml").exists())
+        self.assertEqual(json.loads((ROOT / rd.TEMPLATE).read_text()), json.loads(json.dumps(rd.template())))
+
     def test_policies(self):
         self.assertEqual(SR.POLICIES["CPU_FP32_DETERMINISTIC"].record(),
                          {"name": "CPU_FP32_DETERMINISTIC", "device": "cpu", "autocast_dtype": None, "grad_scaler": False,
