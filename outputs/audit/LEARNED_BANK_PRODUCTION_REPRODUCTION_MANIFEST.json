@@ -1,0 +1,257 @@
+{
+ "backup": "the 12 image banks exist only on the approved HDD; git holds manifests (gzip), per-image file and pixel SHA256 and the audits, not image bytes; no independent binary backup was made or verified",
+ "banks": {
+  "E03|1337": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E03_s1337/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E03 --seed 1337 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E03 seed 1337, one OS process -- authority configs/amendments/learned_bank_production_E03.yaml at 4c43b5182b3a14211f8ac5fdefdbed093bd755af\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s1337.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af || { echo 97 > /home/student20261/workdir/m8prod_E03_s1337.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py production --method E03 --seed 1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E03_s1337.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s1337.end_time\n",
+   "command_sha256": "27208a166e76a26a0d2cea19f99c9c30c0b15927791029d12b046a163d5a7d54",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E03_s1337/",
+   "execution_commit": "4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E03 1337 4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+   "manifest_sha256": "c414758d373de2461a805cc785a6bd0767fdd18071132039d6d8b725f49121a3",
+   "output_sha256_list_sha256": "edd489af188b283919c1da80af95a9d52c0aa5a19d9defcb97b67102dd43a3e3",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E03/seed_1337",
+   "pixel_sha256_list_sha256": "bcaa5f6fbc500b987e896ed59b1d94d1db89fe28db83199f773a0780c6f32b3d",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E03 1337",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E03_SEED1337.json",
+   "run_id": "db67fcf77751b4ed"
+  },
+  "E03|2026": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E03_s2026/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E03 --seed 2026 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E03 seed 2026, one OS process -- authority configs/amendments/learned_bank_production_E03.yaml at 4c43b5182b3a14211f8ac5fdefdbed093bd755af\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s2026.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af || { echo 97 > /home/student20261/workdir/m8prod_E03_s2026.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py production --method E03 --seed 2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E03_s2026.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s2026.end_time\n",
+   "command_sha256": "54c3571efd539257e9725f6da5bfeb2ffec170f743aa80ebc786d67edf30ed48",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E03_s2026/",
+   "execution_commit": "4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E03 2026 4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+   "manifest_sha256": "51fa6bafdf7ea1fd039fbfbb531024b5c5ac689b206117c03749df5595320202",
+   "output_sha256_list_sha256": "d4769d8005f39dbce4418f7a9ca41a680c665e65ef59f4b9c0ad198403dd1197",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E03/seed_2026",
+   "pixel_sha256_list_sha256": "da30279a2816ed505b9ca15bd8ce6d33a12a20fe9d833612db873e91c181ebda",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E03 2026",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E03_SEED2026.json",
+   "run_id": "a58f890bb30eda7b"
+  },
+  "E03|42": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E03_s42/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E03 --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E03 seed 42, one OS process -- authority configs/amendments/learned_bank_production_E03.yaml at 4c43b5182b3a14211f8ac5fdefdbed093bd755af\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s42.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af || { echo 97 > /home/student20261/workdir/m8prod_E03_s42.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py production --method E03 --seed 42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E03_s42.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s42.end_time\n",
+   "command_sha256": "997e97d5b0cae34f942d9cd4152cb672a1cc56d80321a4d8bc4cf41ab81ff041",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E03_s42/",
+   "execution_commit": "4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E03 42 4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+   "manifest_sha256": "5cc8b9e26c4f56791acad3f6d586b4e9f9a6633b4f4dbb7af5f823994a5a558f",
+   "output_sha256_list_sha256": "f6f7d363736d56ba8975071e7d97e05bf3e2e10a81940bc5f5ffd9524a1fb3e2",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E03/seed_42",
+   "pixel_sha256_list_sha256": "5d27040add0452b9ce16f985c78c10ca8ebeb7c458c9846320231ed2a0c28d0b",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E03 42",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E03_SEED42.json",
+   "run_id": "bacbbec2e367fa33"
+  },
+  "E05|1337": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E05_s1337/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E05 --seed 1337 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E05_125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E05 seed 1337, one OS process -- authority configs/amendments/learned_bank_production_E05.yaml at 125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E05_s1337.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E05_125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3 || { echo 97 > /home/student20261/workdir/m8prod_E05_s1337.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py production --method E05 --seed 1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E05_s1337.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E05_s1337.end_time\n",
+   "command_sha256": "21b5d5d80f78d5e467e7228d67f5348b1399ee87f1dd8b39abf4fc8ee07d9cae",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E05_s1337/",
+   "execution_commit": "125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E05 1337 125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3",
+   "manifest_sha256": "f8e9ff6782058c7487fb86e20c424d130a9bdee2214955dacaaa647e63d60fa8",
+   "output_sha256_list_sha256": "49200b72623e4f4aa54500d4ad62dfbd59ee8784b8fa61138599763f1be780d6",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E05/seed_1337",
+   "pixel_sha256_list_sha256": "deb5de61bb3552bdc0438481bdd224693d198131d8e7943028ff81e3c455b450",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E05 1337",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E05_SEED1337.json",
+   "run_id": "d1105c1fbf6d7487"
+  },
+  "E05|2026": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E05_s2026/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E05 --seed 2026 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E05_125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E05 seed 2026, one OS process -- authority configs/amendments/learned_bank_production_E05.yaml at 125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E05_s2026.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E05_125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3 || { echo 97 > /home/student20261/workdir/m8prod_E05_s2026.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py production --method E05 --seed 2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E05_s2026.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E05_s2026.end_time\n",
+   "command_sha256": "e56d21c918ee539092bcd34a16252ad2337fb74e84620c037f3347a6cab55b28",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E05_s2026/",
+   "execution_commit": "125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E05 2026 125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3",
+   "manifest_sha256": "e2407a9ce312e3493cdb991af8d879e5ddefaaf85077e2fca0c7d35d31af30f8",
+   "output_sha256_list_sha256": "03b62675e28794677e0e93dac325fbb19acb6ff9ecaf96f0dae66bea1e1a2736",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E05/seed_2026",
+   "pixel_sha256_list_sha256": "a5d835f153b7c05513edd2c2814868cb5ae5af954018aafff4784450e492118f",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E05 2026",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E05_SEED2026.json",
+   "run_id": "6674eba825de2426"
+  },
+  "E05|42": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E05_s42/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E05 --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E05_125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E05 seed 42, one OS process -- authority configs/amendments/learned_bank_production_E05.yaml at 125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E05_s42.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E05_125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3 || { echo 97 > /home/student20261/workdir/m8prod_E05_s42.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -B tools/learned_bank.py production --method E05 --seed 42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E05_s42.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E05_s42.end_time\n",
+   "command_sha256": "f74fdd82e521ee7f9c914c2cabd9cc8004fa1e22525d78cad3dd1f079703d1d4",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E05_s42/",
+   "execution_commit": "125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E05 42 125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3",
+   "manifest_sha256": "079077c86c12a5624b3f2b8117188a0db2466187376b38a5c1432720bc1000a3",
+   "output_sha256_list_sha256": "77184959b244a3ffdd41fb1af69dd61230ab996a7783502987124b47b623eafa",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E05/seed_42",
+   "pixel_sha256_list_sha256": "9b2de4a28afc76a311e7652c22d5fa0a05fdf651d86abc97059f5792d9dc4f77",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E05 42",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E05_SEED42.json",
+   "run_id": "3351ac8fe9ea606b"
+  },
+  "E06b|1337": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s1337/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06b --seed 1337 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06b seed 1337, one OS process -- authority configs/amendments/learned_bank_production_E06b.yaml at 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s1337.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 || { echo 97 > /home/student20261/workdir/m8prod_E06b_s1337.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06b --seed 1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06b_s1337.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s1337.end_time\n",
+   "command_sha256": "d669f7db90eeeb32f1392612c3a75eb6354128ebb02dd83e8206d3ba47724a4c",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s1337/",
+   "execution_commit": "99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E06b 1337 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "manifest_sha256": "40564cd58982eae4415c8ac5ea173c96bb40c36a41471e2bc476854cfbacb099",
+   "output_sha256_list_sha256": "f44f9fa9bc3087cf29dfd2df3d2a3320c2a461fb8a276dd3ec73a3ab1c564a42",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_1337",
+   "pixel_sha256_list_sha256": "9097b4cb587954042da6ee5024b2e77ffba21156f371cdf45e3aebedaa3572bb",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E06b 1337",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED1337.json",
+   "run_id": "2037be09ba25acdc"
+  },
+  "E06b|2026": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s2026/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06b --seed 2026 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06b seed 2026, one OS process -- authority configs/amendments/learned_bank_production_E06b.yaml at 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s2026.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 || { echo 97 > /home/student20261/workdir/m8prod_E06b_s2026.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06b --seed 2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06b_s2026.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s2026.end_time\n",
+   "command_sha256": "e5c09c4438b443487eeb7e3450e161d37e357bd30fcec1bbef3d28cb914966b5",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s2026/",
+   "execution_commit": "99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E06b 2026 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "manifest_sha256": "e1dd3a2eaa990b05c54fa6bf2939e40a77697eb58ae19e7964ffa9aba042f88c",
+   "output_sha256_list_sha256": "5912f0e56c5f1e00c1e2563bfd97272fbefc5a20e7f97e418ba6885a6170c4fe",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_2026",
+   "pixel_sha256_list_sha256": "b9dded64e33183d70c7bb170c8a8cb49f518b22afac0d0c0ed8975761e5d10d6",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E06b 2026",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED2026.json",
+   "run_id": "e2d2ba62af40de21"
+  },
+  "E06b|42": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s42/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06b --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06b seed 42, one OS process -- authority configs/amendments/learned_bank_production_E06b.yaml at 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s42.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 || { echo 97 > /home/student20261/workdir/m8prod_E06b_s42.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06b --seed 42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06b_s42.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s42.end_time\n",
+   "command_sha256": "d80e3298995f36909856d2dba460c9527a6afb946f962bc47f5b8a6757209fbb",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s42/",
+   "execution_commit": "99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E06b 42 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "manifest_sha256": "882017b8fadc532691c43699360147e036fa464e6b7bb0b6d8794e38f1568691",
+   "output_sha256_list_sha256": "f1c6d624ba78e8c5af87a181855d1332fcb41883ac7636b63365730cc862acd5",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_42",
+   "pixel_sha256_list_sha256": "043fd0963829430d3fd9576cb7d3d25a8965ca815d39573d922b3dd4d47da31b",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E06b 42",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED42.json",
+   "run_id": "07e64f33b19310b4"
+  },
+  "E06c|1337": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06c_s1337/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06c --seed 1337 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06c_4f5d13b3177748922470bf11599a4e7f677d7b04 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06c seed 1337, one OS process -- authority configs/amendments/learned_bank_production_E06c.yaml at 4f5d13b3177748922470bf11599a4e7f677d7b04\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06c_s1337.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06c_4f5d13b3177748922470bf11599a4e7f677d7b04 || { echo 97 > /home/student20261/workdir/m8prod_E06c_s1337.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06c --seed 1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06c_s1337.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06c_s1337.end_time\n",
+   "command_sha256": "2dd17053d2f7e5ecc0360118818a64577e73b96c1e978c4e335a7445ccd83ab2",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06c_s1337/",
+   "execution_commit": "4f5d13b3177748922470bf11599a4e7f677d7b04",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E06c 1337 4f5d13b3177748922470bf11599a4e7f677d7b04",
+   "manifest_sha256": "e88e1ca631bd5e63717342816046477bb588d916b3a7008be2f0b8027aa5e23a",
+   "output_sha256_list_sha256": "4eecadc42e99de89686713cb55e447b4a1db2e33d52875f4f8217c18251781c9",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E06c/seed_1337",
+   "pixel_sha256_list_sha256": "10c7b3f1020051f0d085cdb18b70a241c7a3cb5d2a42333cb8a499c3f2dcc989",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E06c 1337",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06c_SEED1337.json",
+   "run_id": "219f27730e3025c0"
+  },
+  "E06c|2026": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06c_s2026/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06c --seed 2026 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06c_4f5d13b3177748922470bf11599a4e7f677d7b04 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06c seed 2026, one OS process -- authority configs/amendments/learned_bank_production_E06c.yaml at 4f5d13b3177748922470bf11599a4e7f677d7b04\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06c_s2026.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06c_4f5d13b3177748922470bf11599a4e7f677d7b04 || { echo 97 > /home/student20261/workdir/m8prod_E06c_s2026.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06c --seed 2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06c_s2026.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06c_s2026.end_time\n",
+   "command_sha256": "095c40004e4ebd65521135a84cccd05b74c253e7cfb7e93c12c134fa8b88cce4",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06c_s2026/",
+   "execution_commit": "4f5d13b3177748922470bf11599a4e7f677d7b04",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E06c 2026 4f5d13b3177748922470bf11599a4e7f677d7b04",
+   "manifest_sha256": "d30ad186264074a670962e46d535e8a6c6b471004803017027b265fab4f18bee",
+   "output_sha256_list_sha256": "a80ceb86dd3da6a316ae96a274543f6b97af261742847b7cb4985198107ce1df",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E06c/seed_2026",
+   "pixel_sha256_list_sha256": "408727911138440471440e11c9053410093adc256422469bc701d2d9712cdc22",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E06c 2026",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06c_SEED2026.json",
+   "run_id": "bfc0e4a6a947c9c4"
+  },
+  "E06c|42": {
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06c_s42/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06c --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06c_4f5d13b3177748922470bf11599a4e7f677d7b04 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06c seed 42, one OS process -- authority configs/amendments/learned_bank_production_E06c.yaml at 4f5d13b3177748922470bf11599a4e7f677d7b04\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06c_s42.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06c_4f5d13b3177748922470bf11599a4e7f677d7b04 || { echo 97 > /home/student20261/workdir/m8prod_E06c_s42.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06c --seed 42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06c_s42.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06c_s42.end_time\n",
+   "command_sha256": "ea715d9ec044836e57d41b6053df812394c684f78d1fdb37c11afde43ce145a2",
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06c_s42/",
+   "execution_commit": "4f5d13b3177748922470bf11599a4e7f677d7b04",
+   "launch": "tools/learned_bank_production_scripts/m8prod_launch.sh E06c 42 4f5d13b3177748922470bf11599a4e7f677d7b04",
+   "manifest_sha256": "8da6d40458a2ee420330c92ef3a956d5e06be0560c96f86353d107d48a06ab62",
+   "output_sha256_list_sha256": "b0e2368f8aea8ab83392acf206d690b7ee577057e947c949df1e398a9d9d4ae2",
+   "path": "/media/ext_data/student20261_gpat_m8_banks/E06c/seed_42",
+   "pixel_sha256_list_sha256": "b81cb170ffdd23d46bea1a61726eaa7c51820126524cc8f8eb518a5c4b67173e",
+   "post": "tools/learned_bank_production_scripts/m8prod_post.sh E06c 42",
+   "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06c_SEED42.json",
+   "run_id": "45e035b85c735361"
+  }
+ },
+ "paths_verified_on_host": {
+  "all_present": true,
+  "utc": "2026-11-25T11:00:09Z"
+ },
+ "procedure": [
+  "git bundle of m6-baselines -> host; clone to clones/prod_<M>_<execution_commit>; mkdir -p third_party/source_cache; cp -a facexzoo stdn swapping_autoencoder from the GPU checkout",
+  "per bank: audit preflight (host, stdin) -> ~/workdir/m8prod_<M>_s<S>_preflight.json (a-w)",
+  "m8prod_launch.sh <M> <S> <execution_commit>; m8prod_wait.sh <M> <S> <max_s>; m8prod_post.sh <M> <S>",
+  "audit collect (host, stdin) -> ~/workdir/m8prod_<M>_s<S>_collected.json (a-w) and outputs/audit/LEARNED_BANK_PRODUCTION/<M>_s<S>/collected.json; bank_manifest.jsonl copied and stored as gzip (level 9, mtime 0)",
+  "audit build (laptop) -> LEARNED_BANK_PRODUCTION_<M>_SEED<S>.*; commit and push before the next launch; after three seeds: close -> family closure"
+ ],
+ "schema": "learned_bank_production_reproduction_manifest_v1",
+ "scripts": {
+  "m8prod_launch.sh": {
+   "host_copy": "/home/student20261/workdir/m8_learned_banks/m8prod_launch.sh",
+   "path": "tools/learned_bank_production_scripts/m8prod_launch.sh",
+   "sha256": "a8e2d545e845d0f1517800f53e35912037ade1310c92978e8c69b10683b61d8a"
+  },
+  "m8prod_post.sh": {
+   "host_copy": "/home/student20261/workdir/m8_learned_banks/m8prod_post.sh",
+   "path": "tools/learned_bank_production_scripts/m8prod_post.sh",
+   "sha256": "a1f3781723dcd627d075cb2023114b2893f5f12d9fce56d45e62db4b10e053b8"
+  },
+  "m8prod_wait.sh": {
+   "host_copy": "/home/student20261/workdir/m8_learned_banks/m8prod_wait.sh",
+   "path": "tools/learned_bank_production_scripts/m8prod_wait.sh",
+   "sha256": "7d3d7a6da5b243d484f0856507f451e5a006b4b485c20cc02d40b7088357d570"
+  }
+ },
+ "tools": {
+  "methods/common/learned_bank.py": "cda769b797506ba4914989606d22628776c664bebaeba028e420d9f5f180f79a",
+  "tools/learned_bank.py": "ddddd53c1a777875271a6104fa5a4e9ef8d5fd24621abd3f43ff7401087e405f",
+  "tools/learned_bank_production_audit.py": "618fe19e9106d0731c77f5b3570f6244790b4018a3bf04faf8bd109bf64ba187",
+  "tools/learned_bank_production_authority.py": "7e56a07eb387ea5f6c823573c448686a1c5192cfdcb2dc941834a0cbe23d6ecf",
+  "tools/learned_bank_production_summary.py": "c3b4efc2b219b3483c6283d07dd442c3eb9da5c01e608b19117eadd4c9e1c960"
+ }
+}
