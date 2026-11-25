@@ -945,7 +945,8 @@ def build_closure(repo_root, M):
                               'atime_ledger': d['reproduction']['atime_ledger'],
                               'descriptive_statistics': d['descriptive_statistics'],
                               'command_sha256': d['reproduction']['command_sha256']} for S, d in ds.items()},
-        'rng': a['reproduction']['rng'], 'conversion_rule': a['reproduction']['conversion_rule'],
+        'rng': {str(S): d['reproduction']['rng'] for S, d in ds.items()},
+        'conversion_rule': a['reproduction']['conversion_rule'],
         'population': a['reproduction']['population'],
         'test_firewall': 'TRAIN-only inputs; zero VAL/TEST face atime or mtime change in every bank window',
         'disclosures': disclosures,
@@ -979,7 +980,10 @@ def closure_report(doc):
                                                           doc['environment']['name'], doc['environment']['framework']),
         '- Storage: HDD `%s`, UUID `%s`, layout `<bank_root>/%s/seed_<seed>/`.' % (
             doc['storage']['bank_root'], doc['storage']['filesystem_uuid'], doc['method']),
-        '- Population: %s. RNG: %s.' % (doc['population'], doc['rng']),
+        '- Population: %s.' % doc['population'],
+        '- RNG per seed: %s.' % '; '.join('seed %s: %s' % (s, r) for s, r in sorted(doc['rng'].items(),
+                                                                                   key=lambda x: int(x[0]))),
+        '- Conversion: `%s`.' % doc['conversion_rule'],
         '- TEST firewall: %s.' % doc['test_firewall'],
         '- Disclosures: %s.' % '; '.join(doc['disclosures']),
         '- Backup: %s.' % doc['backup'], ''])
