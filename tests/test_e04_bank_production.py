@@ -758,5 +758,65 @@ class CollectorHelpers(unittest.TestCase):
         self.assertIn('unexpected entry extra.png', TOOL.independent_verification(lb, self.t, self.rows)['problems'])
 
 
+
+class CommittedE04Records(unittest.TestCase):
+    """The committed E04 bank audits and family closure re-derive from their committed evidence (all fields except
+    'audit_tool', which names the tool blob of the commit that added the record) and fail closed on tampering."""
+
+    def records(self):
+        out = {}
+        for s in lb.SEEDS:
+            p = ROOT / (TOOL.RECORD.format(M='E04', S=s) + '.json')
+            if p.exists():
+                out[s] = json.loads(p.read_text())
+        if not out:
+            self.skipTest('no E04 production record at this commit')
+        return out
+
+    def evidence(self, s):
+        return json.loads((ROOT / TOOL.EVIDENCE.format(M='E04', S=s) / 'collected.json').read_text())
+
+    def test_bank_records_rebuild(self):
+        for s, d in self.records().items():
+            with self.subTest(seed=s):
+                doc = json.loads(json.dumps(TOOL.build_e04(self.evidence(s), ROOT)))
+                self.assertEqual({k: v for k, v in doc.items() if k != 'audit_tool'},
+                                 {k: v for k, v in d.items() if k != 'audit_tool'})
+                self.assertEqual((d['status'], d['gates_passed'], d['gates_total']),
+                                 ('LEARNED_BANK_PRODUCTION_PASSED', 43, 43))
+                out = TOOL.RECORD.format(M='E04', S=s)
+                added = subprocess.run(['git', 'log', '--format=%H', '--diff-filter=A', '--', out + '.json'],
+                                       cwd=str(ROOT), capture_output=True, text=True).stdout.split()
+                if added:
+                    blob = subprocess.run(['git', 'show', '%s:%s' % (added[0], d['audit_tool']['path'])],
+                                          cwd=str(ROOT), capture_output=True).stdout
+                    self.assertEqual(sha(blob), d['audit_tool']['sha256'])
+                self.assertEqual(TOOL.report_e04(doc), (ROOT / (out + '.md')).read_text())
+                body = gzip.decompress((ROOT / d['bank']['manifest_evidence']).read_bytes())
+                self.assertEqual((sha(body), len(body.splitlines())), (d['bank']['manifest_sha256'], N))
+
+    def test_bank_records_fail_closed(self):
+        s = sorted(self.records())[0]
+        for gate, fn in (('S.s7_production_equivalence',
+                          lambda c: c['s7_equivalence']['runs']['A'].update(pixel_mismatch_count=1)),
+                         ('F.atime_ledger', lambda c: c['atime']['by_split']['TEST'].update(atime_changed=1)),
+                         ('S.checkpoint_after', lambda c: c['checkpoints_after']['E04|%d' % s]['files']['meta'].update(
+                             sha256='0' * 64)),
+                         ('S.no_training', lambda c: c['provenance']['adapter']['graph'].update(gradient_ops=1))):
+            c = self.evidence(s)
+            fn(c)
+            self.assertIn(gate, TOOL.build_e04(c, ROOT)['failed_gates'])
+
+    def test_family_closure_rebuilds(self):
+        p = ROOT / (TOOL.CLOSURE.format(M='E04') + '.json')
+        if not p.exists():
+            self.skipTest('E04 family not closed at this commit')
+        doc = TOOL.build_closure(ROOT, 'E04')
+        self.assertEqual(json.loads(json.dumps(doc)), json.loads(p.read_text()))
+        self.assertEqual(TOOL.closure_report(doc), (ROOT / (TOOL.CLOSURE.format(M='E04') + '.md')).read_text())
+        self.assertEqual((doc['status'], doc['total_outputs'], doc['fidelity']),
+                         ('LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED', 3 * N, 'CONTROLLED_ADAPTATION'))
+
+
 if __name__ == '__main__':
     unittest.main()
