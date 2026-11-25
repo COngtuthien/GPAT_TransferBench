@@ -311,11 +311,15 @@ def main():
     doc["negatives"] = negatives(good[0], good[1], out / "negatives")
 
     # firewall evidence from the real launcher processes
+    # the on-disk report is written by the audit hook itself (no 'installed' key); the run manifest records installed
     fws = {t: json.loads((Path(runs[t]["run_root"]) / "firewall_report.json").read_text()) for t in runs}
-    doc["firewall"] = {"reports": fws, "decoys_on_disk": json.loads((out / "fixtures/E03_a/fixture.json").read_text())["test_decoys"],
-                       "pass": all(f.get("installed") and f["violation_count"] == 0 and f["listing_attempts"] == 0
-                                   and f["opens_under_faces_root"] > 0 and f["distinct_files_opened"] <= f["allowlist_size"]
-                                   for f in fws.values())}
+    inst = {t: json.loads((Path(runs[t]["run_root"]) / "run_manifest.json").read_text())["firewall"].get("installed")
+            for t in runs}
+    doc["firewall"] = {"reports": fws, "manifest_installed": inst,
+                       "decoys_on_disk": json.loads((out / "fixtures/E03_a/fixture.json").read_text())["test_decoys"],
+                       "pass": all(inst[t] is True and f.get("faces_root") and f["violation_count"] == 0
+                                   and f["listing_attempts"] == 0 and f["opens_under_faces_root"] > 0
+                                   and f["distinct_files_opened"] <= f["allowlist_size"] for t, f in fws.items())}
 
     # F7 resources
     sp = ST.preflight()
