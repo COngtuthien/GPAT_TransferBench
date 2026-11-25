@@ -1,0 +1,130 @@
+{
+ "date": "2026-11-25",
+ "drafts": {
+  "configs/amendments/learned_bank_production_E04.DRAFT.yaml": {
+   "assessment": "S7 has now passed; an activation must set s7_acceptance_record.sha256 to the LEARNED_BANK_S7_E04.json sha256 above. A copy so activated, with the activated storage extension, loads with load_production_authority(\"E04\", seed, live_storage=False) (simulated in a temporary root only); the real repository still refuses (LEARNED_BANK_BLOCKED_BY_PRODUCTION_AUTHORITY).",
+   "sha256": "b78acf7458bafdcc16be52a6ac450052eff691a384dbcf866ef5cbdbd4ad8e2a",
+   "status": "DRAFT_TEMPLATE_NOT_APPROVABLE_BEFORE_S7"
+  },
+  "configs/amendments/learned_bank_storage_location_E04.DRAFT.yaml": {
+   "assessment": "structurally complete: binds the unchanged base storage authority (f0df1b08...), the same HDD root/UUID/ext4 and the <bank_root>/E04/seed_<seed>/ layout; a copy with status OWNER_APPROVED, approved true and activation_verification.ok true loads with methods.common.learned_bank.load_e04_storage_extension (simulated in a temporary root only). Activation needs a live lb.storage_preflight on the host at activation time. Its size estimate (0.81 GB/seed, from E03) exceeds the measured E04 0.65 GiB/seed.",
+   "sha256": "ba202cd5e13c73717460f4e58fd627f2957f127086fbec3df34693e33bbc60b9",
+   "status": "DRAFT_PENDING_OWNER_DECISION"
+  }
+ },
+ "existing_families": {
+  "evidence": "outputs/audit/LEARNED_BANK_S7_E04_EVIDENCE/existing_families_host_verify.json",
+  "git": "no committed record of E01/E02/E03/E05/E06b/E06c and no E04 training/closure record changed since 2caff0d; E05 near-collapse disclosure and RAW-MATCHED decision untouched",
+  "result": "E03/E05/E06b/E06c (12 banks: manifests, 8838 PNGs, provenance, clones, scripts, markers) and the E01/E02 production manifests identical to outputs/audit/LEARNED_BANK_PRODUCTION/final_host_verification.json except repo path, timestamp and HDD free space"
+ },
+ "fidelity": "CONTROLLED_ADAPTATION - not an official Physics-STD inference reproduction",
+ "hdd_state": {
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "e04_directory_exists": false,
+  "entries": {
+   "E03": [
+    "seed_1337",
+    "seed_2026",
+    "seed_42"
+   ],
+   "E05": [
+    "seed_1337",
+    "seed_2026",
+    "seed_42"
+   ],
+   "E06b": [
+    "seed_1337",
+    "seed_2026",
+    "seed_42"
+   ],
+   "E06c": [
+    "seed_1337",
+    "seed_2026",
+    "seed_42"
+   ]
+  },
+  "free_bytes": 3211662196736,
+  "free_tib": 2.92,
+  "note": "HDD free space fell by ~361 MB between 11:00Z and 13:47Z (shared filesystem; nothing of E04 S7 is on the HDD; the bank-root contents check is unchanged)",
+  "observed_utc": "2026-11-25T13:47:46Z",
+  "preflight_ok": true,
+  "unexpected_entries": []
+ },
+ "implementation_remaining": [
+  {
+   "item": "E04 storage registry",
+   "state": "IMPLEMENTED (92ef74c: load_e04_storage_extension, registered_bank_methods, production_bank_dir); needs only the owner activation record"
+  },
+  {
+   "item": "production authority loader",
+   "state": "IMPLEMENTED (load_production_authority E04 records); tools/learned_bank_production_authority.py has no E04 branch (uses CONTRACT_PATH / PAIR_METHODS of the four original methods) and must derive the E04 authority"
+  },
+  {
+   "item": "production writer",
+   "state": "IMPLEMENTED (tools/learned_bank.py production --method E04 --seed S; same adapter/allowlist path qualified by S7); tools/learned_bank_production_scripts/m8prod_launch.sh has no E04 case and lacks the E04 precision environment (load_real refuses without it) - needs an E04 launcher (the S7 launch line generator can be reused)"
+  },
+  {
+   "item": "independent production audit",
+   "state": "MISSING E04 branch in tools/learned_bank_production_audit.py: E04 checkpoints and env probe in preflight; the E04 gate set at 8838 rows (graph/BN/coverage/moving-statistics identity, conversion, PNG structure, lineage); the owner-ruling split_v1/M2 feed-pack cross-check (mandatory per e04_s7_input_allowlist_ruling.yaml)"
+  },
+  {
+   "item": "full-population manifest checks",
+   "state": "MISSING for E04: rows 0..8837 equal e04_feed_pack_v1 / pairs_train_v1, every face TRAIN with its M2 SHA256"
+  },
+  {
+   "item": "S7-to-production byte equivalence",
+   "state": "NEEDS ADAPTATION: s7_equivalence reads outputs[seed].run_A_dir/run_B_dir; the E04 S7 record stores outputs[seed].run_dirs {A, B} (per-seed layout <S7>/E04/seed_<s>/run_<L>/E04/seed_<s>)"
+  },
+  {
+   "item": "E04 family closure",
+   "state": "MISSING E04 branch (close --method E04) and an E04 entry in tools/learned_bank_production_summary.py METHODS"
+  }
+ ],
+ "method": "E04",
+ "not_done": [
+  "no storage extension activated",
+  "no <bank_root>/E04 directory created",
+  "no production authority",
+  "no production bank (0 of 3 x 8838)",
+  "no downstream ResNet-18, TEST evaluation, DINOv3 or GPAT"
+ ],
+ "observations": [
+  "outputs are non-degenerate: 186 distinct images per seed, no identical output across seeds; typical raw range about [0, 1] with clipping on roughly half the rows (expected under E04-Q3)",
+  "seed 42 has one pair with an outlier raw range (min -1.113, max 1.677); seeds 1337/2026 stay within [-0.05, 1.10]. Disclosed, not a contract question; no pixel-level contrast diagnostic was run"
+ ],
+ "owner_decisions_remaining": [
+  "activate configs/amendments/learned_bank_storage_location_E04.yaml (after a live storage preflight)",
+  "authorize implementation and qualification of the E04 production authority / launcher / audit / closure branches",
+  "activate configs/amendments/learned_bank_production_E04.yaml binding the S7 record sha256",
+  "authorize E04 production execution (3 banks x 8838 = 26514 images, one process per seed, 42 -> 1337 -> 2026)"
+ ],
+ "production_status": "E04_PRODUCTION_NOT_AUTHORIZED_PENDING_OWNER_ACTIVATIONS_AND_TOOLING",
+ "resources_measured_in_s7": {
+  "avg_png_bytes": 78761,
+  "estimate_family": {
+   "images": 26514,
+   "png_gib": 1.95
+  },
+  "estimate_per_seed": {
+   "compute_minutes": 10,
+   "note": "production writes fsync each file on the USB HDD; earlier learned banks took ~20 min per bank",
+   "png_gib": 0.65
+  },
+  "gpu_memory_mib_per_process": 582,
+  "seconds_per_186_pairs": [
+   12.1,
+   12.1,
+   11.7,
+   11.6,
+   11.9,
+   11.7
+  ]
+ },
+ "s7_record": {
+  "gates": "180/180",
+  "path": "outputs/audit/LEARNED_BANK_S7_E04.json",
+  "sha256": "138e1ef988970a7c8643f544b26850fbde41f7d1b63a54c86da9ccb5ac4b63a6"
+ },
+ "s7_status": "E04_S7_ALL_THREE_SEEDS_QUALIFIED",
+ "schema": "e04_bank_production_readiness_v1"
+}
