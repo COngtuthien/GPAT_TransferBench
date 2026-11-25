@@ -1,0 +1,170 @@
+{
+ "evidence": {
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/fullsuite_7b1c9e4_failing_ids.txt": "2f1646bd0b3db988a26f7d7bdd877b37c15869133dcf56387b4313718da13eb5",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/host_qualification.json": "1c2afa19d6dc34061091ee4b27fb3691ddc7d7e256a892a80d8d03f50c3be2ee",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/host_tests.json": "fac4369c101c59b254f177673cee7cdc2f4fa2fcc324b254bfa55df3af315bb7",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/host_tests.log": "c79295e094bcb64eff133d5f8c9c230556bca81326a55655b6c58d6b1b23407f",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/laptop_targeted_gpat_m7_cpu.log": "fa58fc1fedbebfcad951f17f845f9de12f14f49621d3e9b7fdc4b47c8fdd2c6f",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/laptop_targeted_venv.log": "d08130c4b0cda8d3fd6bb34bb16bf14ff85261b417f94e97448bdeb5ed452b7f",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/laptop_tests.json": "c863999904882d4ad669b3e85046a756990060cd50f3ac8c9b6d4c92e44f534f",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/qualification_attempt_history.json": "0614784ed36e015c470f2b6b668444f437a714d35c67b51264f768bfaac12c92",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/qualification_outputs_no_checkpoints.tgz": "0045e10d7cf0406e0f27de5903040d2a5fdd6d737a3b7ee626f069bc4a96307b",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/storage_readonly_precheck.json": "4fb272a3d49ad7ecfa3e455c48f621ed58e3d88b4bf1085cc80308726be67e7c",
+  "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/storage_verification.json": "60e40bb829b7d2bd5e491ed2b9f0afc075ddb2186424a37385ca9e4315a74200"
+ },
+ "failed": [],
+ "gates": {
+  "Q01_owner_decisions_recorded": true,
+  "Q02_frozen_files_unchanged": true,
+  "Q03_precision_pin_O1": true,
+  "Q04_storage_root_verified": true,
+  "Q05_environment_and_gpu_verified": true,
+  "Q06_qualified_commit_clean_clone": true,
+  "Q07_fixture_runs_O1": true,
+  "Q08_bitwise_replay": true,
+  "Q09_gradscaler_skip_and_fail_closed": true,
+  "Q10_auditor_pass_on_good_runs": true,
+  "Q11_auditor_detects_injected_failures": true,
+  "Q12_test_firewall": true,
+  "Q13_scientific_dry_preflight_24": true,
+  "Q14_host_tests_cuda": true,
+  "Q15_laptop_tests": true,
+  "Q16_full_regression_no_new_failures": true,
+  "Q17_resources": true
+ },
+ "not_done": [
+  "no scientific detector training",
+  "no TEST access or evaluation",
+  "no DINOv3",
+  "no GPAT",
+  "no generator or bank change"
+ ],
+ "plan": {
+  "note": "throughput is provisional (synthetic fixtures, shared GPU); measure in the first scientific run's audit",
+  "one_at_a_time": true,
+  "order": [
+   [
+    "E00",
+    42
+   ],
+   [
+    "E01",
+    42
+   ],
+   [
+    "E02",
+    42
+   ],
+   [
+    "E03",
+    42
+   ],
+   [
+    "E04",
+    42
+   ],
+   [
+    "E05",
+    42
+   ],
+   [
+    "E06b",
+    42
+   ],
+   [
+    "E06c",
+    42
+   ],
+   [
+    "E00",
+    1337
+   ],
+   [
+    "E01",
+    1337
+   ],
+   [
+    "E02",
+    1337
+   ],
+   [
+    "E03",
+    1337
+   ],
+   [
+    "E04",
+    1337
+   ],
+   [
+    "E05",
+    1337
+   ],
+   [
+    "E06b",
+    1337
+   ],
+   [
+    "E06c",
+    1337
+   ],
+   [
+    "E00",
+    2026
+   ],
+   [
+    "E01",
+    2026
+   ],
+   [
+    "E02",
+    2026
+   ],
+   [
+    "E03",
+    2026
+   ],
+   [
+    "E04",
+    2026
+   ],
+   [
+    "E05",
+    2026
+   ],
+   [
+    "E06b",
+    2026
+   ],
+   [
+    "E06c",
+    2026
+   ]
+  ],
+  "runs": 24,
+  "storage": {
+   "basis": "measured fixture checkpoint (same ResNet-18 state); VAL parquet scaled per row to 3121 frames; steps.jsonl scaled to 7000 lines",
+   "checkpoint_bytes": 44782603,
+   "matrix_24_bytes_estimate": 1898954508,
+   "per_run_bytes_estimate": 79123104
+  },
+  "throughput": {
+   "cpu_decode_augment_batch64_seconds": 0.0672017460456118,
+   "fixture_epoch_wall_seconds": [
+    1.6851489150431007,
+    2.3610346590867266,
+    3.028917800053023
+   ],
+   "gpu_eval_batch64_seconds": 0.010855840391013772,
+   "gpu_peak_allocated_mib": 999,
+   "gpu_train_step_seconds_median": 0.03498220653273165,
+   "matrix_24_hours_estimate": 5.788536916427935,
+   "note": "fixture epochs are tiny (3 steps + 32 VAL frames); see the benchmark for per-step cost",
+   "per_run_seconds_estimate": 868.2805374641903,
+   "status": "PROVISIONAL (random tensors / noise PNGs on a shared GPU; real throughput is measured by the first scientific run's audit)",
+   "val_epoch_seconds_estimate": 3.8248217353946528
+  }
+ },
+ "schema": "m10_scientific_launch_qualification_v1",
+ "source_commit": "a4dd841b4b2a3e636af3bad2818a0effdc87a544",
+ "status": "M10_DOWNSTREAM_SCIENTIFIC_READY_AUTHORITY_ACTIVE"
+}

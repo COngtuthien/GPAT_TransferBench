@@ -1,0 +1,36 @@
+{
+ "targeted": {
+  "venv_no_torch": {
+   "exit_code": 0,
+   "ran": 104,
+   "skipped": 38,
+   "log": "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/laptop_targeted_venv.log"
+  },
+  "gpat_m7_cpu_torch": {
+   "exit_code": 0,
+   "ran": 104,
+   "skipped": 8,
+   "log": "outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/laptop_targeted_gpat_m7_cpu.log"
+  }
+ },
+ "full_suite": {
+  "commit_tree": "7b1c9e4 (identical tracked code)",
+  "command": ".venv/bin/python -m unittest discover -s tests",
+  "ran": 2698,
+  "failures": 19,
+  "errors": 55,
+  "failing_ids": 74,
+  "baseline": "outputs/audit/M10_DOWNSTREAM_READINESS/fullsuite_665bd47_failing_ids.txt (74)",
+  "new_vs_baseline": [
+   "test_smoke_shards_pass_the_same_audit (test_m2b_preflight.TestShardIndexIntegrityAudit.test_smoke_shards_pass_the_same_audit)"
+  ],
+  "fixed_vs_baseline": [
+   "test_13_preflight_writes_nothing_imports_no_torch (test_e05_production_runner.TestE05CLI.test_13_preflight_writes_nothing_imports_no_torch)"
+  ],
+  "new_failures": [],
+  "new_vs_baseline_classification": {
+   "test_smoke_shards_pass_the_same_audit (test_m2b_preflight.TestShardIndexIntegrityAudit.test_smoke_shards_pass_the_same_audit)": "PRE_EXISTING_ENVIRONMENT: reads git-ignored local M2 smoke shards (bad block hashes); fails identically with all M10 tracked changes stashed (git stash, 2026-11-26); unrelated module"
+  },
+  "data_drive": "/media/cong/Data not mounted (as for the baseline)"
+ }
+}
