@@ -1,0 +1,495 @@
+{
+ "auditor_commit": "9e15795cd1ab707ad5ec236cc90b048b37be3c50",
+ "baseline_commit": "2caff0d166d2b347e31e96b9ecf96294aa4ae779",
+ "failed_gates": [],
+ "full_suite": {
+  "baseline_failing_ids": [
+   "setUpClass (test_m4_execution.TestRecomputation)",
+   "setUpClass (test_m6c2a_dsdg.TestDSDG)",
+   "setUpClass (test_m6c2b1_physics_std.TestE04Geometry)",
+   "setUpClass (test_m6c2b1_physics_std.TestE04Plans)",
+   "test_01_one_group_goes_to_exactly_one_split (test_m3_allocator.TestGroupIntegrity.test_01_one_group_goes_to_exactly_one_split)",
+   "test_02_multi_video_group_stays_intact (test_m3_allocator.TestGroupIntegrity.test_02_multi_video_group_stays_intact)",
+   "test_03_subject_disjoint_invariant (test_m3_allocator.TestGroupIntegrity.test_03_subject_disjoint_invariant)",
+   "test_04_siw_duplicate_content_group_stays_together (test_m3_allocator.TestGroupIntegrity.test_04_siw_duplicate_content_group_stays_together)",
+   "test_05_perfect_ratio_case (test_m3_allocator.TestRatios.test_05_perfect_ratio_case)",
+   "test_06_indivisible_group_size_case (test_m3_allocator.TestRatios.test_06_indivisible_group_size_case)",
+   "test_07_p1_beats_p2 (test_m3_allocator.TestPriorityOrder.test_07_p1_beats_p2)",
+   "test_08_p2_beats_p3 (test_m3_allocator.TestPriorityOrder.test_08_p2_beats_p3)",
+   "test_09_p3_beats_p4 (test_m3_allocator.TestPriorityOrder.test_09_p3_beats_p4)",
+   "test_10_11_12_rare_categories_are_handled_not_forced (test_m3_allocator.TestRareCategories.test_10_11_12_rare_categories_are_handled_not_forced)",
+   "test_11_derived_files_rederive (test_m7d1_n4_repair_qualification.EvidenceM7D1N4.test_11_derived_files_rederive)",
+   "test_11_derived_files_rederive (test_m7d1_n5_stage3_qualification.EvidenceM7D1N5.test_11_derived_files_rederive)",
+   "test_13_category_impossible_in_all_three_splits (test_m3_allocator.TestRareCategories.test_13_category_impossible_in_all_three_splits)",
+   "test_13_preflight_writes_nothing_imports_no_torch (test_e05_production_runner.TestE05CLI.test_13_preflight_writes_nothing_imports_no_torch)",
+   "test_14_exact_tie_case (test_m3_allocator.TestDeterminism.test_14_exact_tie_case)",
+   "test_16_permuted_input_gives_identical_assignment (test_m3_allocator.TestDeterminism.test_16_permuted_input_gives_identical_assignment)",
+   "test_17_repeated_execution_is_identical (test_m3_allocator.TestDeterminism.test_17_repeated_execution_is_identical)",
+   "test_18_hash_randomisation_cannot_affect_output (test_m3_allocator.TestDeterminism.test_18_hash_randomisation_cannot_affect_output)",
+   "test_19_20_21_no_unstarted_milestone_artifacts (test_dataset_policy.TestNoLaterArtifacts.test_19_20_21_no_unstarted_milestone_artifacts)",
+   "test_19_m2_failed_rows_never_become_usable_samples (test_m3_allocator.TestGroupIntegrity.test_19_m2_failed_rows_never_become_usable_samples)",
+   "test_20_frame_counts_do_not_influence_video_balancing (test_m3_allocator.TestGroupIntegrity.test_20_frame_counts_do_not_influence_video_balancing)",
+   "test_24_no_unstarted_milestone_artifacts (test_m2a_preprocess.TestIntegrity.test_24_no_unstarted_milestone_artifacts)",
+   "test_abort_removes_the_in_flight_shard (test_m2b_execution.TestShardFinalization.test_abort_removes_the_in_flight_shard)",
+   "test_actual_assets_verified_without_deserialization (test_m6c2b1_physics_std.TestE04SourcesAssets.test_actual_assets_verified_without_deserialization)",
+   "test_artifact_index_hashes (test_m0_bootstrap.TestAuditState.test_artifact_index_hashes)",
+   "test_clean_cache_passes (test_m2b_execution.TestCacheAudit.test_clean_cache_passes)",
+   "test_clean_index_passes_every_check (test_m2b_preflight.TestShardIndexIntegrityAudit.test_clean_index_passes_every_check)",
+   "test_cli_dry_run_reports_the_same_objectives_and_row_count (test_m3_split_execution.TestCliEquivalence.test_cli_dry_run_reports_the_same_objectives_and_row_count)",
+   "test_cli_train_probe_refuses_to_train (test_m5_probe_preflight.TestPreflightEvidence.test_cli_train_probe_refuses_to_train)",
+   "test_cli_uses_the_library_path_and_reproduces_the_frozen_hash (test_m4_execution.TestCli.test_cli_uses_the_library_path_and_reproduces_the_frozen_hash)",
+   "test_codec_provenance_matches_the_frozen_config (test_m2a_preprocess.TestQ23LogitStorage.test_codec_provenance_matches_the_frozen_config)",
+   "test_compression_is_lossless_and_exact (test_m2a_preprocess.TestQ23LogitStorage.test_compression_is_lossless_and_exact)",
+   "test_corrupted_block_and_shard_hash_are_detected (test_m2b_execution.TestCacheAudit.test_corrupted_block_and_shard_hash_are_detected)",
+   "test_corrupted_block_is_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_corrupted_block_is_detected)",
+   "test_decoded_blocks_keep_dtype_shape_and_mask_consistency (test_m2b_preflight.TestShardIndexIntegrityAudit.test_decoded_blocks_keep_dtype_shape_and_mask_consistency)",
+   "test_duplicate_entry_is_detected (test_m2b_execution.TestCacheAudit.test_duplicate_entry_is_detected)",
+   "test_duplicate_sample_id_is_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_duplicate_sample_id_is_detected)",
+   "test_encoding_is_deterministic (test_m2a_preprocess.TestQ23LogitStorage.test_encoding_is_deterministic)",
+   "test_finalize_publishes_shard_and_index_atomically (test_m2b_execution.TestShardFinalization.test_finalize_publishes_shard_and_index_atomically)",
+   "test_finalize_refuses_a_corrupted_in_flight_shard (test_m2b_execution.TestShardFinalization.test_finalize_refuses_a_corrupted_in_flight_shard)",
+   "test_float16_or_mask_only_cannot_silently_replace_the_logits (test_m2a_preprocess.TestQ23LogitStorage.test_float16_or_mask_only_cannot_silently_replace_the_logits)",
+   "test_is_finalized_requires_both_shard_and_index (test_m2b_execution.TestShardFinalization.test_is_finalized_requires_both_shard_and_index)",
+   "test_ledger_jsonl (test_m0_bootstrap.TestAuditState.test_ledger_jsonl)",
+   "test_m5_probe_contract (unittest.loader._FailedTest.test_m5_probe_contract)",
+   "test_m5_probe_trainer (unittest.loader._FailedTest.test_m5_probe_trainer)",
+   "test_m5_remains_not_started (test_m5_probe_preflight.TestMilestoneState.test_m5_remains_not_started)",
+   "test_manifests_are_stage_appropriate (test_m0_bootstrap.TestNoLaterMilestoneArtifacts.test_manifests_are_stage_appropriate)",
+   "test_mask_derives_from_the_stored_logits (test_m2a_preprocess.TestQ23LogitStorage.test_mask_derives_from_the_stored_logits)",
+   "test_missing_shard_and_orphan_bytes_are_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_missing_shard_and_orphan_bytes_are_detected)",
+   "test_no_model_weights_were_downloaded (test_m4_fair_track.TestSourcePins.test_no_model_weights_were_downloaded)",
+   "test_no_raw_npy_sidecar_is_left_behind (test_m2b_preflight.TestBoundedShardConstruction.test_no_raw_npy_sidecar_is_left_behind)",
+   "test_no_unaccounted_or_pair_parquet (test_m0_bootstrap.TestNoLaterMilestoneArtifacts.test_no_unaccounted_or_pair_parquet)",
+   "test_nothing_generated (test_dataset_resolution.TestNoM2M3Artifacts.test_nothing_generated)",
+   "test_objective_is_integer_and_solver_agrees_with_recomputation (test_m3_allocator.TestObjectiveArithmetic.test_objective_is_integer_and_solver_agrees_with_recomputation)",
+   "test_orphan_shard_file_is_detected (test_m2b_execution.TestCacheAudit.test_orphan_shard_file_is_detected)",
+   "test_orphan_shard_file_is_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_orphan_shard_file_is_detected)",
+   "test_p1_matches_brute_force_on_a_single_class (test_m3_allocator.TestRatios.test_p1_matches_brute_force_on_a_single_class)",
+   "test_preflight_record_still_says_it_created_nothing (test_m4_pair_preflight.TestPreflightEvidence.test_preflight_record_still_says_it_created_nothing)",
+   "test_readiness_matches_policy (test_dataset_policy.TestFrozenPolicy.test_readiness_matches_policy)",
+   "test_rebuild_is_byte_identical_with_shuffled_input (test_m3_split_execution.TestDeterminismAndSerialization.test_rebuild_is_byte_identical_with_shuffled_input)",
+   "test_shard_grows_by_exactly_one_compressed_block_per_sample (test_m2b_preflight.TestBoundedShardConstruction.test_shard_grows_by_exactly_one_compressed_block_per_sample)",
+   "test_shard_round_trip_and_random_access (test_m2a_preprocess.TestQ23LogitStorage.test_shard_round_trip_and_random_access)",
+   "test_solver_reports_proven_global_optimum (test_m3_allocator.TestObjectiveArithmetic.test_solver_reports_proven_global_optimum)",
+   "test_source_evidence_guard_is_recorded (test_m4_execution.TestNativeManifests.test_source_evidence_guard_is_recorded)",
+   "test_stage_order_is_respected (test_m3_allocator.TestNoRealSplitArtifact.test_stage_order_is_respected)",
+   "test_stage_state (test_m3_split_execution.TestStageAndNoLaterMilestone.test_stage_state)",
+   "test_stage_state (test_m4_fair_track.TestAuditsAndIntegrity.test_stage_state)",
+   "test_tampered_objective_is_detected (test_m3_allocator.TestObjectiveArithmetic.test_tampered_objective_is_detected)",
+   "test_truncated_shard_is_detected (test_m2b_execution.TestCacheAudit.test_truncated_shard_is_detected)",
+   "test_verify_assignment_rejects_a_split_crossing_video (test_m3_allocator.TestObjectiveArithmetic.test_verify_assignment_rejects_a_split_crossing_video)"
+  ],
+  "candidate_failing_ids": [
+   "setUpClass (test_m4_execution.TestRecomputation)",
+   "setUpClass (test_m6c2a_dsdg.TestDSDG)",
+   "setUpClass (test_m6c2b1_physics_std.TestE04Geometry)",
+   "setUpClass (test_m6c2b1_physics_std.TestE04Plans)",
+   "test_01_one_group_goes_to_exactly_one_split (test_m3_allocator.TestGroupIntegrity.test_01_one_group_goes_to_exactly_one_split)",
+   "test_02_multi_video_group_stays_intact (test_m3_allocator.TestGroupIntegrity.test_02_multi_video_group_stays_intact)",
+   "test_03_subject_disjoint_invariant (test_m3_allocator.TestGroupIntegrity.test_03_subject_disjoint_invariant)",
+   "test_04_siw_duplicate_content_group_stays_together (test_m3_allocator.TestGroupIntegrity.test_04_siw_duplicate_content_group_stays_together)",
+   "test_05_perfect_ratio_case (test_m3_allocator.TestRatios.test_05_perfect_ratio_case)",
+   "test_06_indivisible_group_size_case (test_m3_allocator.TestRatios.test_06_indivisible_group_size_case)",
+   "test_07_p1_beats_p2 (test_m3_allocator.TestPriorityOrder.test_07_p1_beats_p2)",
+   "test_08_p2_beats_p3 (test_m3_allocator.TestPriorityOrder.test_08_p2_beats_p3)",
+   "test_09_p3_beats_p4 (test_m3_allocator.TestPriorityOrder.test_09_p3_beats_p4)",
+   "test_10_11_12_rare_categories_are_handled_not_forced (test_m3_allocator.TestRareCategories.test_10_11_12_rare_categories_are_handled_not_forced)",
+   "test_11_derived_files_rederive (test_m7d1_n4_repair_qualification.EvidenceM7D1N4.test_11_derived_files_rederive)",
+   "test_11_derived_files_rederive (test_m7d1_n5_stage3_qualification.EvidenceM7D1N5.test_11_derived_files_rederive)",
+   "test_13_category_impossible_in_all_three_splits (test_m3_allocator.TestRareCategories.test_13_category_impossible_in_all_three_splits)",
+   "test_13_preflight_writes_nothing_imports_no_torch (test_e05_production_runner.TestE05CLI.test_13_preflight_writes_nothing_imports_no_torch)",
+   "test_14_exact_tie_case (test_m3_allocator.TestDeterminism.test_14_exact_tie_case)",
+   "test_16_permuted_input_gives_identical_assignment (test_m3_allocator.TestDeterminism.test_16_permuted_input_gives_identical_assignment)",
+   "test_17_repeated_execution_is_identical (test_m3_allocator.TestDeterminism.test_17_repeated_execution_is_identical)",
+   "test_18_hash_randomisation_cannot_affect_output (test_m3_allocator.TestDeterminism.test_18_hash_randomisation_cannot_affect_output)",
+   "test_19_20_21_no_unstarted_milestone_artifacts (test_dataset_policy.TestNoLaterArtifacts.test_19_20_21_no_unstarted_milestone_artifacts)",
+   "test_19_m2_failed_rows_never_become_usable_samples (test_m3_allocator.TestGroupIntegrity.test_19_m2_failed_rows_never_become_usable_samples)",
+   "test_20_frame_counts_do_not_influence_video_balancing (test_m3_allocator.TestGroupIntegrity.test_20_frame_counts_do_not_influence_video_balancing)",
+   "test_24_no_unstarted_milestone_artifacts (test_m2a_preprocess.TestIntegrity.test_24_no_unstarted_milestone_artifacts)",
+   "test_abort_removes_the_in_flight_shard (test_m2b_execution.TestShardFinalization.test_abort_removes_the_in_flight_shard)",
+   "test_actual_assets_verified_without_deserialization (test_m6c2b1_physics_std.TestE04SourcesAssets.test_actual_assets_verified_without_deserialization)",
+   "test_artifact_index_hashes (test_m0_bootstrap.TestAuditState.test_artifact_index_hashes)",
+   "test_clean_cache_passes (test_m2b_execution.TestCacheAudit.test_clean_cache_passes)",
+   "test_clean_index_passes_every_check (test_m2b_preflight.TestShardIndexIntegrityAudit.test_clean_index_passes_every_check)",
+   "test_cli_dry_run_reports_the_same_objectives_and_row_count (test_m3_split_execution.TestCliEquivalence.test_cli_dry_run_reports_the_same_objectives_and_row_count)",
+   "test_cli_train_probe_refuses_to_train (test_m5_probe_preflight.TestPreflightEvidence.test_cli_train_probe_refuses_to_train)",
+   "test_cli_uses_the_library_path_and_reproduces_the_frozen_hash (test_m4_execution.TestCli.test_cli_uses_the_library_path_and_reproduces_the_frozen_hash)",
+   "test_codec_provenance_matches_the_frozen_config (test_m2a_preprocess.TestQ23LogitStorage.test_codec_provenance_matches_the_frozen_config)",
+   "test_compression_is_lossless_and_exact (test_m2a_preprocess.TestQ23LogitStorage.test_compression_is_lossless_and_exact)",
+   "test_corrupted_block_and_shard_hash_are_detected (test_m2b_execution.TestCacheAudit.test_corrupted_block_and_shard_hash_are_detected)",
+   "test_corrupted_block_is_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_corrupted_block_is_detected)",
+   "test_decoded_blocks_keep_dtype_shape_and_mask_consistency (test_m2b_preflight.TestShardIndexIntegrityAudit.test_decoded_blocks_keep_dtype_shape_and_mask_consistency)",
+   "test_duplicate_entry_is_detected (test_m2b_execution.TestCacheAudit.test_duplicate_entry_is_detected)",
+   "test_duplicate_sample_id_is_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_duplicate_sample_id_is_detected)",
+   "test_encoding_is_deterministic (test_m2a_preprocess.TestQ23LogitStorage.test_encoding_is_deterministic)",
+   "test_finalize_publishes_shard_and_index_atomically (test_m2b_execution.TestShardFinalization.test_finalize_publishes_shard_and_index_atomically)",
+   "test_finalize_refuses_a_corrupted_in_flight_shard (test_m2b_execution.TestShardFinalization.test_finalize_refuses_a_corrupted_in_flight_shard)",
+   "test_float16_or_mask_only_cannot_silently_replace_the_logits (test_m2a_preprocess.TestQ23LogitStorage.test_float16_or_mask_only_cannot_silently_replace_the_logits)",
+   "test_is_finalized_requires_both_shard_and_index (test_m2b_execution.TestShardFinalization.test_is_finalized_requires_both_shard_and_index)",
+   "test_ledger_jsonl (test_m0_bootstrap.TestAuditState.test_ledger_jsonl)",
+   "test_m5_probe_contract (unittest.loader._FailedTest.test_m5_probe_contract)",
+   "test_m5_probe_trainer (unittest.loader._FailedTest.test_m5_probe_trainer)",
+   "test_m5_remains_not_started (test_m5_probe_preflight.TestMilestoneState.test_m5_remains_not_started)",
+   "test_manifests_are_stage_appropriate (test_m0_bootstrap.TestNoLaterMilestoneArtifacts.test_manifests_are_stage_appropriate)",
+   "test_mask_derives_from_the_stored_logits (test_m2a_preprocess.TestQ23LogitStorage.test_mask_derives_from_the_stored_logits)",
+   "test_missing_shard_and_orphan_bytes_are_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_missing_shard_and_orphan_bytes_are_detected)",
+   "test_no_model_weights_were_downloaded (test_m4_fair_track.TestSourcePins.test_no_model_weights_were_downloaded)",
+   "test_no_raw_npy_sidecar_is_left_behind (test_m2b_preflight.TestBoundedShardConstruction.test_no_raw_npy_sidecar_is_left_behind)",
+   "test_no_unaccounted_or_pair_parquet (test_m0_bootstrap.TestNoLaterMilestoneArtifacts.test_no_unaccounted_or_pair_parquet)",
+   "test_nothing_generated (test_dataset_resolution.TestNoM2M3Artifacts.test_nothing_generated)",
+   "test_objective_is_integer_and_solver_agrees_with_recomputation (test_m3_allocator.TestObjectiveArithmetic.test_objective_is_integer_and_solver_agrees_with_recomputation)",
+   "test_orphan_shard_file_is_detected (test_m2b_execution.TestCacheAudit.test_orphan_shard_file_is_detected)",
+   "test_orphan_shard_file_is_detected (test_m2b_preflight.TestShardIndexIntegrityAudit.test_orphan_shard_file_is_detected)",
+   "test_p1_matches_brute_force_on_a_single_class (test_m3_allocator.TestRatios.test_p1_matches_brute_force_on_a_single_class)",
+   "test_preflight_record_still_says_it_created_nothing (test_m4_pair_preflight.TestPreflightEvidence.test_preflight_record_still_says_it_created_nothing)",
+   "test_readiness_matches_policy (test_dataset_policy.TestFrozenPolicy.test_readiness_matches_policy)",
+   "test_rebuild_is_byte_identical_with_shuffled_input (test_m3_split_execution.TestDeterminismAndSerialization.test_rebuild_is_byte_identical_with_shuffled_input)",
+   "test_shard_grows_by_exactly_one_compressed_block_per_sample (test_m2b_preflight.TestBoundedShardConstruction.test_shard_grows_by_exactly_one_compressed_block_per_sample)",
+   "test_shard_round_trip_and_random_access (test_m2a_preprocess.TestQ23LogitStorage.test_shard_round_trip_and_random_access)",
+   "test_solver_reports_proven_global_optimum (test_m3_allocator.TestObjectiveArithmetic.test_solver_reports_proven_global_optimum)",
+   "test_source_evidence_guard_is_recorded (test_m4_execution.TestNativeManifests.test_source_evidence_guard_is_recorded)",
+   "test_stage_order_is_respected (test_m3_allocator.TestNoRealSplitArtifact.test_stage_order_is_respected)",
+   "test_stage_state (test_m3_split_execution.TestStageAndNoLaterMilestone.test_stage_state)",
+   "test_stage_state (test_m4_fair_track.TestAuditsAndIntegrity.test_stage_state)",
+   "test_tampered_objective_is_detected (test_m3_allocator.TestObjectiveArithmetic.test_tampered_objective_is_detected)",
+   "test_truncated_shard_is_detected (test_m2b_execution.TestCacheAudit.test_truncated_shard_is_detected)",
+   "test_verify_assignment_rejects_a_split_crossing_video (test_m3_allocator.TestObjectiveArithmetic.test_verify_assignment_rejects_a_split_crossing_video)"
+  ]
+ },
+ "fullsuite_candidate_commit": "5fbc6b389db073741603013cbcafec0967c4b7ed",
+ "gates": [
+  {
+   "detail": {
+    "test_e01_e02_bank_owner_ruling.py": "Ran 7 tests in 0.217s OK",
+    "test_e01_e02_bank_writer.py": "Ran 27 tests in 18.919s OK",
+    "test_e01_e02_m6_writer_closure.py": "Ran 6 tests in 0.052s OK",
+    "test_e01_e02_production_authority.py": "Ran 5 tests in 0.137s OK",
+    "test_e01_e02_production_banks.py": "Ran 3 tests in 0.933s OK",
+    "test_e01_e02_production_gate.py": "Ran 18 tests in 0.607s OK",
+    "test_e04_bank_adapter.py": "Ran 18 tests in 0.943s OK",
+    "test_e04_bank_fixture_qualification_record.py": "Ran 2 tests in 0.004s OK",
+    "test_e04_bank_readiness.py": "Ran 15 tests in 0.285s OK",
+    "test_e04_bank_s7_audit.py": "Ran 39 tests in 3.617s OK",
+    "test_e04_bank_s7_prep.py": "Ran 5 tests in 0.031s OK",
+    "test_e04_seed1337_completion.py": "Ran 17 tests in 0.120s OK",
+    "test_e04_seed2026_completion.py": "Ran 21 tests in 0.208s OK",
+    "test_e04_seed42_completion.py": "Ran 12 tests in 0.111s OK",
+    "test_e04_three_seed_training_closure.py": "Ran 9 tests in 5.265s OK",
+    "test_e05_s7_b1_b2.py": "Ran 16 tests in 0.139s OK",
+    "test_e05_s7_contrast_diagnostic.py": "Ran 3 tests in 0.259s OK",
+    "test_learned_bank.py": "Ran 40 tests in 7.422s OK",
+    "test_learned_bank_authority_assessment.py": "Ran 13 tests in 0.033s OK",
+    "test_learned_bank_production.py": "Ran 12 tests in 59.934s OK",
+    "test_learned_bank_s7_acceptance.py": "Ran 4 tests in 1.366s OK",
+    "test_m8_bank_smoke_mode.py": "Ran 6 tests in 3.095s OK",
+    "test_m8_contract_finalization.py": "Ran 6 tests in 0.302s OK",
+    "test_m8_contract_owner_approval.py": "Ran 3 tests in 0.009s OK",
+    "test_m8_downstream_infrastructure.py": "Ran 20 tests in 0.919s OK",
+    "test_m8_downstream_readiness_package.py": "Ran 5 tests in 0.315s OK",
+    "test_m8_smoke_decision_package.py": "Ran 4 tests in 0.211s OK (skipped=1)",
+    "test_m8_smoke_pipeline_units.py": "Ran 7 tests in 11.060s OK",
+    "test_m8_smoke_record.py": "Ran 6 tests in 0.292s OK",
+    "test_m8_smoke_s1_owner_decision.py": "Ran 5 tests in 0.011s OK (skipped=1)",
+    "test_m8_toy_and_metric_resolutions.py": "Ran 9 tests in 0.339s OK"
+   },
+   "gate": "Q.targeted_regression_modules_pass",
+   "pass": true
+  },
+  {
+   "detail": {
+    "log_ok": true,
+    "rc": 0,
+    "summary": "Ran 39 tests in 3.617s OK"
+   },
+   "gate": "Q.new_e04_audit_module_ran",
+   "pass": true
+  },
+  {
+   "detail": [
+    "Ran 39 tests in 10.535s",
+    "",
+    "OK"
+   ],
+   "gate": "Q.host_collector_interpreter_tests",
+   "pass": true
+  },
+  {
+   "detail": {
+    "authority_before_activation": "LearnedBankBlocked: LEARNED_BANK_BLOCKED_BY_S7_LAUNCH_AUTHORITY: no owner E04 S7 launch authority at configs/amendments/learned_bank_s7_launch_authority_E04.yaml",
+    "checkpoint_identities": {
+     "1337": "4f183d2143d27d1d35326212f9ff9c0fb36e9d0d933e59c1df79436cc3492f2f",
+     "2026": "9b0b391bacfece7b1e4be3fb395f13f1c53e18b138ee7fda487df7a037a38d20",
+     "42": "96e89630150779848cc92c4c2756d01cbfeb48e6b0e8b87b815122e47dc2d30f"
+    },
+    "python": "3.8.20",
+    "tensorflow": "1.15.5"
+   },
+   "gate": "Q.host_real_e04_environment_probe",
+   "pass": true
+  },
+  {
+   "detail": {
+    "gates_total": 180,
+    "passed": [
+     "F.collect_did_not_change_roots",
+     "F.feed_pack_allowlist_crosscheck",
+     "P.e04_code_change_scope",
+     "P.e04_contract",
+     "P.e04_family_closure",
+     "P.e04_input_allowlist_ruling",
+     "R.no_process_left"
+    ],
+    "status": "E04_S7_BLOCKED_BY_AUTHORITY"
+   },
+   "gate": "Q.dry_collection_fail_closed",
+   "pass": true
+  },
+  {
+   "detail": {
+    "manifest_sha256": "db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b",
+    "pairs": 8838,
+    "pairs_equal_pairs_train_v1": true,
+    "pairs_split": "TRAIN",
+    "payload_sha_ok": true,
+    "samples": 12668,
+    "samples_mismatching": [],
+    "samples_mismatching_count": 0
+   },
+   "gate": "Q.real_feed_pack_allowlist_crosscheck",
+   "pass": true
+  },
+  {
+   "detail": {
+    "E03": true,
+    "E05": true,
+    "E06b": true,
+    "E06c": true
+   },
+   "gate": "Q.existing_s7_records_rebuild_byte_for_byte",
+   "pass": true
+  },
+  {
+   "detail": {
+    "baseline_commit": "2caff0d166d2b347e31e96b9ecf96294aa4ae779",
+    "baseline_failing": 74,
+    "candidate_commit": "5fbc6b389db073741603013cbcafec0967c4b7ed",
+    "candidate_failing": 74,
+    "fixed": [],
+    "new_failures": [],
+    "summaries": {
+     "base": "Ran 2517 tests in 191.262s FAILED (failures=18, errors=56, skipped=213) rc=1",
+     "cand": "Ran 2556 tests in 198.805s FAILED (failures=18, errors=56, skipped=213) rc=1"
+    }
+   },
+   "gate": "Q.full_suite_no_new_failures",
+   "pass": true
+  }
+ ],
+ "gates_passed": 8,
+ "gates_total": 8,
+ "method": "E04",
+ "modules": {
+  "test_e01_e02_bank_owner_ruling.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 7 tests in 0.217s OK"
+  },
+  "test_e01_e02_bank_writer.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 27 tests in 18.919s OK"
+  },
+  "test_e01_e02_m6_writer_closure.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 6 tests in 0.052s OK"
+  },
+  "test_e01_e02_production_authority.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 5 tests in 0.137s OK"
+  },
+  "test_e01_e02_production_banks.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 3 tests in 0.933s OK"
+  },
+  "test_e01_e02_production_gate.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 18 tests in 0.607s OK"
+  },
+  "test_e04_bank_adapter.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 18 tests in 0.943s OK"
+  },
+  "test_e04_bank_fixture_qualification_record.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 2 tests in 0.004s OK"
+  },
+  "test_e04_bank_readiness.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 15 tests in 0.285s OK"
+  },
+  "test_e04_bank_s7_audit.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 39 tests in 3.617s OK"
+  },
+  "test_e04_bank_s7_prep.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 5 tests in 0.031s OK"
+  },
+  "test_e04_seed1337_completion.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 17 tests in 0.120s OK"
+  },
+  "test_e04_seed2026_completion.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 21 tests in 0.208s OK"
+  },
+  "test_e04_seed42_completion.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 12 tests in 0.111s OK"
+  },
+  "test_e04_three_seed_training_closure.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 9 tests in 5.265s OK"
+  },
+  "test_e05_s7_b1_b2.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 16 tests in 0.139s OK"
+  },
+  "test_e05_s7_contrast_diagnostic.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 3 tests in 0.259s OK"
+  },
+  "test_learned_bank.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 40 tests in 7.422s OK"
+  },
+  "test_learned_bank_authority_assessment.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 13 tests in 0.033s OK"
+  },
+  "test_learned_bank_production.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 12 tests in 59.934s OK"
+  },
+  "test_learned_bank_s7_acceptance.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 4 tests in 1.366s OK"
+  },
+  "test_m8_bank_smoke_mode.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 6 tests in 3.095s OK"
+  },
+  "test_m8_contract_finalization.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 6 tests in 0.302s OK"
+  },
+  "test_m8_contract_owner_approval.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 3 tests in 0.009s OK"
+  },
+  "test_m8_downstream_infrastructure.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 20 tests in 0.919s OK"
+  },
+  "test_m8_downstream_readiness_package.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 5 tests in 0.315s OK"
+  },
+  "test_m8_smoke_decision_package.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 4 tests in 0.211s OK (skipped=1)"
+  },
+  "test_m8_smoke_pipeline_units.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 7 tests in 11.060s OK"
+  },
+  "test_m8_smoke_record.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 6 tests in 0.292s OK"
+  },
+  "test_m8_smoke_s1_owner_decision.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 5 tests in 0.011s OK (skipped=1)"
+  },
+  "test_m8_toy_and_metric_resolutions.py": {
+   "log_ok": true,
+   "rc": 0,
+   "summary": "Ran 9 tests in 0.339s OK"
+  }
+ },
+ "raw_evidence_sha256": {
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/fullsuite/base.log": "ae90ae0899ed60e6c0b12ee8023f458f73f3e1a73eff838f5b97ef896381f0f8",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/fullsuite/base_failures.txt": "895e90bef1ccabc7ea636b79be869d94291ec73d18a82077e528e354a344e318",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/fullsuite/base_summary.txt": "b096e3e34110e030b404769f64763083ed66ad84c39b67da07aa67d13632eb02",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/fullsuite/cand.log": "f404e42891d0b2324ece1badcb988ffb3e5ce89e2b80e2adbd9922ec5d9d8835",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/fullsuite/cand_failures.txt": "895e90bef1ccabc7ea636b79be869d94291ec73d18a82077e528e354a344e318",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/fullsuite/cand_summary.txt": "9e88b5adf88ee71e21f5d3069b2f4fa26b9a50cd67ab9a19e1d55a5bd5031e4c",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/host/collect_dry.json": "759e94bc23f5810d89ae7a9f699f7134354d78d9e1dbb753f54ad19a59cad222",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/host/host_tests_e05.log": "80898694483acde40e804396517e69b91d1d9f143bc41844bd6694246bac06f8",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/host/host_tests_e05.rc": "5104567c36144c6fe4e2bdc1ee3e6e9e2aa49726ca9ef1fd4285efae482d89e6",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/host/preflight_dry_s42_A.json": "337ff8eeb7ac9ba685a2317b150b6663258a2b324c8df7b673759a6311f128c8",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/summary.tsv": "c1e9e7e004c88f6e7c9270f279812d43a48528ae13e6abdc250c9c0c6531ce59",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e01_e02_bank_owner_ruling.log": "c78751042b70acedd77bd493187ba5d2c792e7f518f1e14f2bc46653f58ce73b",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e01_e02_bank_writer.log": "2b2e29304edef0fe58956e99fa685c78b03927c669b27cea51c334312ce993a4",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e01_e02_m6_writer_closure.log": "8f8e4e58f86619e7607b413465cb7caac673765f4b0726f8e222965e019778be",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e01_e02_production_authority.log": "a313f951d2777a35ddd6eb0a192117cc682272bfa2c24bba9792b87759556e4c",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e01_e02_production_banks.log": "fbd8a4161620f5d12ec4b9909fc99bc7110177bd9be88cc937cb225da742a115",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e01_e02_production_gate.log": "923040610d6c71be2dd52439c81aeef1fa41b2fdac05988b187ff2c2452f800c",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_bank_adapter.log": "6f0d218022878b273d3d9870447ef507d04dd92ab30d207e456e27304f371131",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_bank_fixture_qualification_record.log": "cbe4b84d897ac017db0552ccb3a31855ff0fb172bc344c967c4c4c92eb19e624",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_bank_readiness.log": "577518f468d01215a80c3270df96df910be7e62b29559e6efe0ae2c3a9df028d",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_bank_s7_audit.log": "5010c5983e709b301e7fb5b822461a4b7971d9bc12f6f75b27ce7267835da82e",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_bank_s7_prep.log": "f5b0975bbc76eebbbbfbd9ff17140ccc843d8aa8dd46d365fb85c9b5f5446e84",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_seed1337_completion.log": "800f21d1e5a669e85cc96404ef5905924ab4373b964a02129b8c7151de727729",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_seed2026_completion.log": "5ed9152482f7fbe8fe0c84f2db7ce74e447c60efd41217993816181c2721c3dc",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_seed42_completion.log": "5964604c78ca85cb93d0c1d537ea5cd188977ffbd1555fe5410d1e910841ce93",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e04_three_seed_training_closure.log": "8648cc7f4b89c62c0dc8518fbf8f1b405667c44c986de7e714a6f2d70a910fb2",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e05_s7_b1_b2.log": "976c1a99f11d2ca7fe50a4b1e7a7799518a08c8f8b7e8ab45d8b8fd90921efec",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_e05_s7_contrast_diagnostic.log": "f97ebead02971334f9d4d8a073746f1e6841feb3b7218f1d5c8fd7b0ded4f63f",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_learned_bank.log": "311542e5487eaa07c2ee62f9bfe195cf7f34a802048a6145cec4b7878ba6ba6f",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_learned_bank_authority_assessment.log": "ee1db5279c9a044fc58a4198a02cacb2fa57db913251f82c638f925fa9b4cb77",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_learned_bank_production.log": "64eed5298cbff4f432ffe7d06a835961aa998515204bb5ce55dee074dbaf515d",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_learned_bank_s7_acceptance.log": "e24cf9dfba799feab49446d070ed956971aed2412b96e446508ab629dc78ef3f",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_bank_smoke_mode.log": "3feef8408a6b3d037a5f0eb57dab94d5be3035f4cdf491a8e6897afc042c99ae",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_contract_finalization.log": "d0c280be7accf914b43d98030d61e72ebdcdba2a811c79cc553084e4c243a3a2",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_contract_owner_approval.log": "869ea8047d0ae89dddb808470175fa3bdce5d6007a92e195f2d7e7e762e1f49f",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_downstream_infrastructure.log": "d74e85df1d8f80c19c53b1e1c47024f36131e626496e89a5128b3006686780a9",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_downstream_readiness_package.log": "152cd05d552e28feb0036dc2dd4bf900762749962e8f97a0bed9b88d1c308872",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_smoke_decision_package.log": "bd8565032ef79f3968c1e3efd9fdbcec90513a165b679398d864d088cd531c97",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_smoke_pipeline_units.log": "dc88be77750ec09547ae49cd1e5659563808f875675ce9922f8bc6d976df5251",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_smoke_record.log": "6ae7f27fb527045f3fcfee96bdd97273754578e44ba2f2858377b5cf97febdde",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_smoke_s1_owner_decision.log": "3be854afea9fc4d5e64ca8c03f82fe0885dc7f7870e82d4bb5bf67af6a40ac55",
+  "outputs/audit/E04_BANK_S7_AUDITOR_QUALIFICATION/laptop/test_m8_toy_and_metric_resolutions.log": "ec77e8866bf591f0198473c4f3042e2672396e818a8cb092095c80967014a2eb"
+ },
+ "schema": "e04_bank_s7_auditor_qualification_v1",
+ "scope": "qualifies the E04 branch of tools/learned_bank_s7_audit.py before the E04 S7 launch authority is activated; no GPU inference, no face read, no output was produced",
+ "status": "E04_S7_AUDITOR_QUALIFIED"
+}
