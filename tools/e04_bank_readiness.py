@@ -110,8 +110,11 @@ def build(root=ROOT, out_root=None):
     def gate(gid, ok, detail):
         gates.append({'id': gid, 'pass': bool(ok), 'detail': detail})
 
+    approved_path = root / DRAFT.replace('.DRAFT', '')     # a later approval must bind this unchanged DRAFT
+    approval_ok = not approved_path.exists() or \
+        (json.loads(approved_path.read_text()).get('approved_draft') or {}).get('sha256') == sha_file(root / DRAFT)
     gate('draft_not_approved', draft['status'] == 'DRAFT_PENDING_OWNER_DECISION' and draft['approved'] is False and
-         not (root / DRAFT.replace('.DRAFT', '')).exists(), draft['status'])
+         approval_ok, draft['status'])
     gate('draft_frozen_inputs', all(sha_file(root / k.split(' (')[0]) == v for k, v in
                                     draft['frozen_inputs_sha256'].items()), len(draft['frozen_inputs_sha256']))
     gate('evidence_collected', ev['status'] == 'E04_BANK_CONTRACT_EVIDENCE_COLLECTED' and ev['failed_gates'] == [] and

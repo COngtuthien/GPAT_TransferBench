@@ -87,10 +87,15 @@ class DraftRuling(unittest.TestCase):
     def setUp(self):
         self.d = json.loads(DRAFT.read_text())
 
-    def test_not_approved_and_no_approved_contract(self):
+    def test_draft_unchanged_and_approval_binds_it(self):
+        import hashlib
         self.assertEqual(self.d['status'], 'DRAFT_PENDING_OWNER_DECISION')
         self.assertIs(self.d['approved'], False)
-        self.assertFalse((ROOT / 'configs/amendments/e04_bank_generation_contract.yaml').exists())
+        p = ROOT / 'configs/amendments/e04_bank_generation_contract.yaml'
+        if p.exists():                                      # owner approval (2026-11-25) binds the unchanged DRAFT
+            rec = json.loads(p.read_text())
+            self.assertEqual(rec['approved_draft']['sha256'], hashlib.sha256(DRAFT.read_bytes()).hexdigest())
+            self.assertEqual(rec['decisions'], {q['id']: q['recommended'] for q in self.d['owner_questions']})
 
     def test_questions_complete(self):
         ids = [q['id'] for q in self.d['owner_questions']]
