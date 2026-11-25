@@ -1,0 +1,575 @@
+{
+ "environment": {
+  "cuda_visible_devices": "",
+  "host": "nd-System-Product-Name",
+  "numpy": "1.23.5",
+  "pillow": "10.4.0",
+  "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+  "python_version": "3.8.20"
+ },
+ "error": null,
+ "evidence": {
+  "banks": {
+   "A": "e7a4dbd1eb57f46a1fe67160d0499e4a6e9650588456a0fa822d16a724b250a6",
+   "B": "e7a4dbd1eb57f46a1fe67160d0499e4a6e9650588456a0fa822d16a724b250a6",
+   "nonfinite": "6e4e1791902e9e25553a9d3b31ca36e974a080e1f61b3f4b1017e204a0caac29"
+  },
+  "bn_mode_isolation": {
+   "approved_moving_statistics_max_abs": {
+    "B": 1.5783261582255363,
+    "C": 1.5165189430117607,
+    "P": 0.3322010934352875,
+    "T": 1.7543511465191841,
+    "synth": 1.047970075160265
+   },
+   "equal_statistics_max_abs": {
+    "B": 4.100799560546875e-05,
+    "C": 3.814697265625e-05,
+    "P": 6.3478946685791016e-06,
+    "T": 3.600120544433594e-05,
+    "synth": 2.8848648071289062e-05
+   }
+  },
+  "fixture_checkpoint": {
+   "checkpoint": "6fcae6282c0fbd7e0eeecf6961c9451467c18ecebf7821c11ce034067cee38de",
+   "iteration_fixture.data-00000-of-00001": "c77073fdcfb2daf18d330f8fe310e243ca56bbcc4f0897cccba7c5138f5b7eac",
+   "iteration_fixture.index": "8bebf27eafbdcd5a5b377e76a5f813deb6a9d5baa0ebc98d66fd5b3add5e98c2",
+   "iteration_fixture.meta": "b903ebb65cbfee0abbf182e310efba4f13f1f74c1705ad8a046ffa51c41aa899"
+  },
+  "fixture_synthesis_range": [
+   -0.032559286803007126,
+   1.0110634565353394
+  ],
+  "graph": {
+   "batch_size": 1,
+   "bn_moving_statistics": 30,
+   "bn_statistics_reads_sha256": "06fec8d0d018e6b1ca09fa4d7b5b40e0ac9e747b53ddbae0ae2871fa2785be4c",
+   "cpu_pinned_reachable_ops": 576,
+   "fused_batch_norm": 15,
+   "fused_batch_norm_is_training": false,
+   "global_variables": 102,
+   "gradient_ops": 0,
+   "mutating_reachable_ops": [],
+   "placeholders": [
+    "bank_sampling_offsets",
+    "bank_source_spoof",
+    "bank_target_live"
+   ],
+   "random_reachable_ops": [],
+   "reachable_op_types_sha256": "bff90cd25018fa5b1fdb418075902658e89c9c999be2cd8d6a354589aa77f2f5",
+   "reachable_ops": 855,
+   "reachable_variables": 86,
+   "trainable_variables": 72,
+   "update_ops": 0,
+   "variable_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+   "variable_shapes_sha256": "32b4f58be4b11b7ab866de50ca121ec724e8d190a7c0b9cd4257825361e370d1"
+  },
+  "precision_env": {
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+   "CUDA_VISIBLE_DEVICES": "",
+   "NVIDIA_TF32_OVERRIDE": "0",
+   "PYTHONDONTWRITEBYTECODE": "1",
+   "PYTHONNOUSERSITE": "1",
+   "TF_CUDNN_DETERMINISTIC": "1",
+   "TF_DETERMINISTIC_OPS": "1",
+   "TF_ENABLE_AUTO_MIXED_PRECISION": "0",
+   "TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE": "0",
+   "TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32": "0",
+   "TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32": "0",
+   "TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32": "0",
+   "TF_ENABLE_ONEDNN_OPTS": "0",
+   "TF_XLA_FLAGS": "--tf_xla_auto_jit=0"
+  },
+  "real_checkpoints": {
+   "1337": {
+    "checkpoint_identity_sha256": "4f183d2143d27d1d35326212f9ff9c0fb36e9d0d933e59c1df79436cc3492f2f",
+    "coverage": {
+     "checkpoint_variables": 500,
+     "not_restored": 398,
+     "not_restored_classes": {
+      "discriminator": 104,
+      "optimizer_slots": 288,
+      "other": 6
+     },
+     "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+     "restored_variables": 102
+    },
+    "files": {
+     "data-00000-of-00001": "fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5",
+     "index": "1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560",
+     "meta": "bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233"
+    },
+    "moving_statistics": {
+     "count": 30,
+     "min_moving_variance": 0.00012737543147522956,
+     "ok": true,
+     "values_sha256": "dcac2613dce12ffffc0b39af85939b2389e02c344fe000199a52cd4330ec137f"
+    },
+    "run_id": "a42fdd2a2accaf0a",
+    "unchanged_after": true
+   },
+   "2026": {
+    "checkpoint_identity_sha256": "9b0b391bacfece7b1e4be3fb395f13f1c53e18b138ee7fda487df7a037a38d20",
+    "coverage": {
+     "checkpoint_variables": 500,
+     "not_restored": 398,
+     "not_restored_classes": {
+      "discriminator": 104,
+      "optimizer_slots": 288,
+      "other": 6
+     },
+     "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+     "restored_variables": 102
+    },
+    "files": {
+     "data-00000-of-00001": "089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2",
+     "index": "af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a",
+     "meta": "b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090"
+    },
+    "moving_statistics": {
+     "count": 30,
+     "min_moving_variance": 0.0002369159337831661,
+     "ok": true,
+     "values_sha256": "48739b642edecbe9955e5210381d92eb410796dc72cb9a12ecba98dd3c1ad1f7"
+    },
+    "run_id": "e7100eb9a5ab0537",
+    "unchanged_after": true
+   },
+   "42": {
+    "checkpoint_identity_sha256": "96e89630150779848cc92c4c2756d01cbfeb48e6b0e8b87b815122e47dc2d30f",
+    "coverage": {
+     "checkpoint_variables": 500,
+     "not_restored": 398,
+     "not_restored_classes": {
+      "discriminator": 104,
+      "optimizer_slots": 288,
+      "other": 6
+     },
+     "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+     "restored_variables": 102
+    },
+    "files": {
+     "data-00000-of-00001": "55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6",
+     "index": "f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02",
+     "meta": "fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933"
+    },
+    "moving_statistics": {
+     "count": 30,
+     "min_moving_variance": 0.0002623342734295875,
+     "ok": true,
+     "values_sha256": "96fc9aa3fb41545bacc05dbfdf98d3b2b81c8ca901c49ffcc609772563e6cdc9"
+    },
+    "run_id": "40befa6004aee85c",
+    "unchanged_after": true
+   }
+  },
+  "source": {
+   "files": {
+    "methods/physics_std/network.py": "9d691809d487c5c9c27b5c9e08389225f606f8d72f1017d2991cd71e6214da21",
+    "methods/physics_std/trace_transfer.py": "8152a7643858cb523344dcfa8fbe1a84168082d545d6ca68f7435cf2a06882cd",
+    "methods/physics_std/training_graph.py": "af17ab2789f203834d9fd9121b357dd3e44e49689fccac6be25024926bf69f51"
+   },
+   "predecessor_reference": {
+    "commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+    "lines": [
+     "model/utils.py:24",
+     "model/utils.py:37"
+    ]
+   },
+   "synthesis_lines": [
+    32,
+    36,
+    37,
+    39
+   ]
+  },
+  "tensorflow": "1.15.5"
+ },
+ "failed_gates": [],
+ "fixture_seed": 60912,
+ "gates": {
+  "A.e04_contract_owner_approved": {
+   "detail": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f",
+   "pass": true
+  },
+  "A.e04_production_refused": {
+   "detail": [
+    "LEARNED_BANK_BLOCKED_BY_PRODUCTION_AUTHORITY",
+    "LEARNED_BANK_BLOCKED_BY_PRODUCTION_AUTHORITY",
+    "LEARNED_BANK_BLOCKED_BY_PRODUCTION_AUTHORITY"
+   ],
+   "pass": true
+  },
+  "A.e04_s7_refused": {
+   "detail": "LEARNED_BANK_BLOCKED_BY_S7_LAUNCH_AUTHORITY",
+   "pass": true
+  },
+  "A.existing_four_methods_authorities_unchanged": {
+   "detail": {
+    "E03": true,
+    "E05": true,
+    "E06b": true,
+    "E06c": true
+   },
+   "pass": true
+  },
+  "A.frozen_config": {
+   "detail": null,
+   "pass": true
+  },
+  "A.frozen_training_sources_and_lines": {
+   "detail": {
+    "files": {
+     "methods/physics_std/network.py": "9d691809d487c5c9c27b5c9e08389225f606f8d72f1017d2991cd71e6214da21",
+     "methods/physics_std/trace_transfer.py": "8152a7643858cb523344dcfa8fbe1a84168082d545d6ca68f7435cf2a06882cd",
+     "methods/physics_std/training_graph.py": "af17ab2789f203834d9fd9121b357dd3e44e49689fccac6be25024926bf69f51"
+    },
+    "predecessor_reference": {
+     "commit": "c79f1f8c615d2b8471b3df29da881bb18dd54c90",
+     "lines": [
+      "model/utils.py:24",
+      "model/utils.py:37"
+     ]
+    },
+    "synthesis_lines": [
+     32,
+     36,
+     37,
+     39
+    ]
+   },
+   "pass": true
+  },
+  "A.inference_layers_differ_only_in_bn_mode": {
+   "detail": null,
+   "pass": true
+  },
+  "A.storage_live_ok_without_e04": {
+   "detail": {
+    "exists": true,
+    "filesystem_uuid": true,
+    "fstype_ext4": true,
+    "is_directory": true,
+    "mode_0700_no_setgid": true,
+    "mount_point": true,
+    "mount_read_write": true,
+    "no_unexpected_contents": true,
+    "not_symlink": true,
+    "not_udisks_duplicate": true,
+    "owner": true,
+    "realpath_equals_path": true,
+    "user_rwx_access": true
+   },
+   "pass": true
+  },
+  "C.bn_inference_mode_reads_moving_statistics": {
+   "detail": {
+    "batch_size": 1,
+    "bn_moving_statistics": 30,
+    "bn_statistics_reads_sha256": "06fec8d0d018e6b1ca09fa4d7b5b40e0ac9e747b53ddbae0ae2871fa2785be4c",
+    "cpu_pinned_reachable_ops": 576,
+    "fused_batch_norm": 15,
+    "fused_batch_norm_is_training": false,
+    "global_variables": 102,
+    "gradient_ops": 0,
+    "mutating_reachable_ops": [],
+    "placeholders": [
+     "bank_sampling_offsets",
+     "bank_source_spoof",
+     "bank_target_live"
+    ],
+    "random_reachable_ops": [],
+    "reachable_op_types_sha256": "bff90cd25018fa5b1fdb418075902658e89c9c999be2cd8d6a354589aa77f2f5",
+    "reachable_ops": 855,
+    "reachable_variables": 86,
+    "trainable_variables": 72,
+    "update_ops": 0,
+    "variable_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "variable_shapes_sha256": "32b4f58be4b11b7ab866de50ca121ec724e8d190a7c0b9cd4257825361e370d1"
+   },
+   "pass": true
+  },
+  "C.generator_only_restore": {
+   "detail": {
+    "checkpoint_variables": 500,
+    "not_restored": 398,
+    "not_restored_classes": {
+     "discriminator": 104,
+     "optimizer_slots": 288,
+     "other": 6
+    },
+    "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "restored_variables": 102
+   },
+   "pass": true
+  },
+  "C.no_discriminator": {
+   "detail": null,
+   "pass": true
+  },
+  "C.no_update_optimizer_gradient_random_ops": {
+   "detail": null,
+   "pass": true
+  },
+  "C.restore_exact": {
+   "detail": null,
+   "pass": true
+  },
+  "C.variable_names_shapes_equal_trained_generator": {
+   "detail": {
+    "inference": 102,
+    "trained_generator": 102
+   },
+   "pass": true
+  },
+  "D.conversion_equals_independent_reference": {
+   "detail": [
+    -0.032559286803007126,
+    1.0110634565353394
+   ],
+   "pass": true
+  },
+  "D.cpu_replay_bitwise": {
+   "detail": {
+    "bitwise_identical": true,
+    "file_set_equal": true,
+    "files_compared": 4,
+    "files_differing": [],
+    "manifest_equal": true
+   },
+   "pass": true
+  },
+  "D.create_only_immutable": {
+   "detail": null,
+   "pass": true
+  },
+  "D.input_scale_d8": {
+   "detail": null,
+   "pass": true
+  },
+  "D.lineage_roles": {
+   "detail": null,
+   "pass": true
+  },
+  "D.manifest_e04_identity": {
+   "detail": null,
+   "pass": true
+  },
+  "D.moving_statistics_not_updated": {
+   "detail": null,
+   "pass": true
+  },
+  "D.no_auxiliary_outputs": {
+   "detail": null,
+   "pass": true
+  },
+  "D.o_noatime_reads": {
+   "detail": {
+    "allowlisted_samples": 12,
+    "atime_checked_reads": 8,
+    "distinct_samples_read": 8,
+    "faces_root": "/home/student20261/workdir/m8_learned_banks/e04_bank_prep/fixture_qualification_92ef74c99765109158432fb713a68b3ad238f431/work/faces",
+    "o_noatime": true,
+    "reads": 8,
+    "splits_allowlisted": [
+     "TRAIN"
+    ]
+   },
+   "pass": true
+  },
+  "D.overwrite_refused": {
+   "detail": "run directory exists: /home/student20261/workdir/m8_learned_banks/e04_bank_prep/fixture_qualification_92ef74c99765109158432fb713a68b3ad238f431/work/E04_A (banks are never overwritten)",
+   "pass": true
+  },
+  "D.png_256x256x3_uint8": {
+   "detail": null,
+   "pass": true
+  },
+  "D.reader_ok": {
+   "detail": [],
+   "pass": true
+  },
+  "E.dense_offsets_is_frozen_function": {
+   "detail": null,
+   "pass": true
+  },
+  "E.numpy_reference_decomposition_lowpass_warp_synthesis": {
+   "detail": {
+    "B_low32": 3.14321368932724e-09,
+    "C_low128": 1.3969838619232178e-09,
+    "P_sigmoid_channel_9": 2.9802157075486946e-08,
+    "heads_B_C_T_slices": 0.0,
+    "synth_equals_adapter": 0.0,
+    "synthesis_equation": 1.438454684254964e-07,
+    "warp_B": 4.069128350242535e-09,
+    "warp_C": 1.654704073587865e-08,
+    "warp_P": 7.34063571039556e-08,
+    "warp_T": 9.726252076652786e-08,
+    "warp_source": 8.411545601050285e-06
+   },
+   "pass": true
+  },
+  "E.offsets_direction_source_minus_target": {
+   "detail": [
+    5.0,
+    3.0
+   ],
+   "pass": true
+  },
+  "E.roles_matter": {
+   "detail": 0.5612350990995765,
+   "pass": true
+  },
+  "E.warp_reads_source_at_p_plus_offset": {
+   "detail": null,
+   "pass": true
+  },
+  "F.composition_equals_frozen_synthesized_spoof_bitwise": {
+   "detail": 0.0,
+   "pass": true
+  },
+  "G.bn_mode_is_the_only_difference": {
+   "detail": {
+    "approved_moving_statistics_max_abs": {
+     "B": 1.5783261582255363,
+     "C": 1.5165189430117607,
+     "P": 0.3322010934352875,
+     "T": 1.7543511465191841,
+     "synth": 1.047970075160265
+    },
+    "equal_statistics_max_abs": {
+     "B": 4.100799560546875e-05,
+     "C": 3.814697265625e-05,
+     "P": 6.3478946685791016e-06,
+     "T": 3.600120544433594e-05,
+     "synth": 2.8848648071289062e-05
+    }
+   },
+   "pass": true
+  },
+  "H.clip_truncate_cases": {
+   "detail": {
+    "got": [
+     0,
+     0,
+     0,
+     0,
+     1,
+     127,
+     127,
+     254,
+     254,
+     255,
+     255,
+     255
+    ],
+    "inputs": [
+     -1.0,
+     -0.0,
+     0.0,
+     0.0019607844296842813,
+     0.003921568859368563,
+     0.5,
+     0.5,
+     0.998039186000824,
+     0.9999999403953552,
+     1.0,
+     1.5,
+     3.0
+    ]
+   },
+   "pass": true
+  },
+  "H.fixture_checkpoint_unchanged": {
+   "detail": null,
+   "pass": true
+  },
+  "H.nonfinite_counted_failure_no_file": {
+   "detail": "failure",
+   "pass": true
+  },
+  "H.nonfinite_never_converted": {
+   "detail": null,
+   "pass": true
+  },
+  "H.not_rounding": {
+   "detail": [
+    127,
+    128
+   ],
+   "pass": true
+  },
+  "H.val_test_refused": {
+   "detail": null,
+   "pass": true
+  },
+  "I.E04_seed1337_checkpoint_verified_covered_unchanged": {
+   "detail": {
+    "checkpoint_variables": 500,
+    "not_restored": 398,
+    "not_restored_classes": {
+     "discriminator": 104,
+     "optimizer_slots": 288,
+     "other": 6
+    },
+    "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "restored_variables": 102
+   },
+   "pass": true
+  },
+  "I.E04_seed2026_checkpoint_verified_covered_unchanged": {
+   "detail": {
+    "checkpoint_variables": 500,
+    "not_restored": 398,
+    "not_restored_classes": {
+     "discriminator": 104,
+     "optimizer_slots": 288,
+     "other": 6
+    },
+    "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "restored_variables": 102
+   },
+   "pass": true
+  },
+  "I.E04_seed42_checkpoint_verified_covered_unchanged": {
+   "detail": {
+    "checkpoint_variables": 500,
+    "not_restored": 398,
+    "not_restored_classes": {
+     "discriminator": 104,
+     "optimizer_slots": 288,
+     "other": 6
+    },
+    "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "restored_variables": 102
+   },
+   "pass": true
+  },
+  "cuda_hidden_tf115": {
+   "detail": "1.15.5",
+   "pass": true
+  },
+  "precision_env_cpu": {
+   "detail": [],
+   "pass": true
+  },
+  "zero_opens_under_runtime_data": {
+   "detail": {
+    "paths": [],
+    "runtime_data": 0
+   },
+   "pass": true
+  }
+ },
+ "gates_passed": 45,
+ "gates_total": 45,
+ "git_head": "92ef74c99765109158432fb713a68b3ad238f431",
+ "gpu_bitwise_reproducibility_proven": false,
+ "gpu_numerical_equality_proven": false,
+ "label": "SYNTHETIC_FIXTURE_QUALIFICATION_NOT_S7_NOT_BENCHMARK",
+ "method": "E04",
+ "schema": "e04_bank_fixture_qualification_v1",
+ "started_utc": "2026-11-25T12:54:44Z",
+ "wall_seconds": 15.9,
+ "work": "/home/student20261/workdir/m8_learned_banks/e04_bank_prep/fixture_qualification_92ef74c99765109158432fb713a68b3ad238f431/work"
+}

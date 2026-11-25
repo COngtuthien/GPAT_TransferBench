@@ -1,0 +1,330 @@
+{
+ "contract": {
+  "path": "configs/amendments/e04_bank_generation_contract.yaml",
+  "sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f"
+ },
+ "cpu_fixture_qualification": {
+  "evidence_files": {
+   "host_evidence.json": "947899532e1eed2eb60d494d22bf7e73f898bb49f44fc088a98ef8616b977d73",
+   "host_stderr.txt": "f69c15d7250a3d6e15d79602d00e4e131e2aba22170aacaae24c67f186a2f231",
+   "host_stdout.txt": "28f80a5542d045a1f072cdfb733e6623e08190b9ff7f15edb96c4a5f4acde8b9",
+   "laptop_tests.txt": "4b2a32e28119b6d6f0cb097c7e9a0a36443c1190a7688f82ac04fb7a7a291faa"
+  },
+  "fixture_inputs": "random-init fixture weights saved from the frozen TrainingGraph (seed 60912, randomized generator moving statistics), synthetic noise/gradient PNGs, synthetic Q140; zero opens under <runtime_root>/data",
+  "host_command": "bash ~/workdir/m8_learned_banks/e04_bank_prep/e04_fixture_qualification_92ef74c99765109158432fb713a68b3ad238f431.sh 92ef74c99765109158432fb713a68b3ad238f431 (copy of tools/e04_bank_scripts/e04_fixture_qualification.sh; setsid nohup, CUDA hidden)",
+  "host_environment": {
+   "cuda_visible_devices": "",
+   "host": "nd-System-Product-Name",
+   "numpy": "1.23.5",
+   "pillow": "10.4.0",
+   "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+   "python_version": "3.8.20"
+  },
+  "host_failed_gates": [],
+  "host_gate_categories": {
+   "A": {
+    "meaning": "governance and frozen sources",
+    "passed": 8,
+    "total": 8
+   },
+   "C": {
+    "meaning": "graph integrity and restore",
+    "passed": 6,
+    "total": 6
+   },
+   "D": {
+    "meaning": "bank infrastructure",
+    "passed": 12,
+    "total": 12
+   },
+   "E": {
+    "meaning": "synthesis integrity (numpy references, roles, offsets)",
+    "passed": 5,
+    "total": 5
+   },
+   "F": {
+    "meaning": "frozen-graph comparison",
+    "passed": 1,
+    "total": 1
+   },
+   "G": {
+    "meaning": "BN inference-mode isolation",
+    "passed": 1,
+    "total": 1
+   },
+   "H": {
+    "meaning": "conversion, non-finite accounting, firewall",
+    "passed": 6,
+    "total": 6
+   },
+   "I": {
+    "meaning": "real E04 checkpoints (hash, index, moving statistics; no forward)",
+    "passed": 3,
+    "total": 3
+   },
+   "environment": {
+    "meaning": "environment / data firewall",
+    "passed": 3,
+    "total": 3
+   }
+  },
+  "host_gates_passed": 45,
+  "host_gates_total": 45,
+  "host_started_utc": "2026-11-25T12:54:44Z",
+  "host_wall_seconds": 15.9,
+  "laptop_command": "python3 -m unittest -v tests.test_e04_bank_adapter tests.test_e04_bank_readiness",
+  "laptop_tests_ok": true,
+  "laptop_tests_ran": 33,
+  "status": "PASSED",
+  "tensorflow": "1.15.5"
+ },
+ "failed_gates": [],
+ "gates": [
+  {
+   "detail": "92ef74c99765109158432fb713a68b3ad238f431",
+   "id": "host_run_at_qualification_commit",
+   "pass": true
+  },
+  {
+   "detail": {
+    "cuda_visible_devices": "",
+    "host": "nd-System-Product-Name",
+    "numpy": "1.23.5",
+    "pillow": "10.4.0",
+    "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+    "python_version": "3.8.20"
+   },
+   "id": "host_cpu_only_locked_interpreter",
+   "pass": true
+  },
+  {
+   "detail": [
+    45,
+    45
+   ],
+   "id": "host_all_gates_passed",
+   "pass": true
+  },
+  {
+   "detail": null,
+   "id": "host_stdout_matches",
+   "pass": true
+  },
+  {
+   "detail": null,
+   "id": "no_gpu_claim",
+   "pass": true
+  },
+  {
+   "detail": null,
+   "id": "real_checkpoints_equal_contract",
+   "pass": true
+  },
+  {
+   "detail": 33,
+   "id": "laptop_tests_passed",
+   "pass": true
+  }
+ ],
+ "key_results": {
+  "bn_mode_isolation": {
+   "approved_moving_statistics_max_abs": {
+    "B": 1.5783261582255363,
+    "C": 1.5165189430117607,
+    "P": 0.3322010934352875,
+    "T": 1.7543511465191841,
+    "synth": 1.047970075160265
+   },
+   "equal_statistics_max_abs": {
+    "B": 4.100799560546875e-05,
+    "C": 3.814697265625e-05,
+    "P": 6.3478946685791016e-06,
+    "T": 3.600120544433594e-05,
+    "synth": 2.8848648071289062e-05
+   }
+  },
+  "conversion_cases": {
+   "got": [
+    0,
+    0,
+    0,
+    0,
+    1,
+    127,
+    127,
+    254,
+    254,
+    255,
+    255,
+    255
+   ],
+   "inputs": [
+    -1.0,
+    -0.0,
+    0.0,
+    0.0019607844296842813,
+    0.003921568859368563,
+    0.5,
+    0.5,
+    0.998039186000824,
+    0.9999999403953552,
+    1.0,
+    1.5,
+    3.0
+   ]
+  },
+  "fixture_banks_manifest_sha256": {
+   "A": "e7a4dbd1eb57f46a1fe67160d0499e4a6e9650588456a0fa822d16a724b250a6",
+   "B": "e7a4dbd1eb57f46a1fe67160d0499e4a6e9650588456a0fa822d16a724b250a6",
+   "nonfinite": "6e4e1791902e9e25553a9d3b31ca36e974a080e1f61b3f4b1017e204a0caac29"
+  },
+  "fixture_synthesis_range": [
+   -0.032559286803007126,
+   1.0110634565353394
+  ],
+  "frozen_graph_comparison_max_abs": 0.0,
+  "graph": {
+   "batch_size": 1,
+   "bn_moving_statistics": 30,
+   "bn_statistics_reads_sha256": "06fec8d0d018e6b1ca09fa4d7b5b40e0ac9e747b53ddbae0ae2871fa2785be4c",
+   "cpu_pinned_reachable_ops": 576,
+   "fused_batch_norm": 15,
+   "fused_batch_norm_is_training": false,
+   "global_variables": 102,
+   "gradient_ops": 0,
+   "mutating_reachable_ops": [],
+   "placeholders": [
+    "bank_sampling_offsets",
+    "bank_source_spoof",
+    "bank_target_live"
+   ],
+   "random_reachable_ops": [],
+   "reachable_op_types_sha256": "bff90cd25018fa5b1fdb418075902658e89c9c999be2cd8d6a354589aa77f2f5",
+   "reachable_ops": 855,
+   "reachable_variables": 86,
+   "trainable_variables": 72,
+   "update_ops": 0,
+   "variable_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+   "variable_shapes_sha256": "32b4f58be4b11b7ab866de50ca121ec724e8d190a7c0b9cd4257825361e370d1"
+  },
+  "numpy_reference_max_abs": {
+   "B_low32": 3.14321368932724e-09,
+   "C_low128": 1.3969838619232178e-09,
+   "P_sigmoid_channel_9": 2.9802157075486946e-08,
+   "heads_B_C_T_slices": 0.0,
+   "synth_equals_adapter": 0.0,
+   "synthesis_equation": 1.438454684254964e-07,
+   "warp_B": 4.069128350242535e-09,
+   "warp_C": 1.654704073587865e-08,
+   "warp_P": 7.34063571039556e-08,
+   "warp_T": 9.726252076652786e-08,
+   "warp_source": 8.411545601050285e-06
+  }
+ },
+ "not_done": [
+  "E04 S7 GPU inference",
+  "E04 production banks",
+  "<bank_root>/E04",
+  "downstream evaluation",
+  "TEST access",
+  "DINOv3",
+  "GPAT"
+ ],
+ "qualification_commit": "92ef74c99765109158432fb713a68b3ad238f431",
+ "real_checkpoints": {
+  "1337": {
+   "checkpoint_identity_sha256": "4f183d2143d27d1d35326212f9ff9c0fb36e9d0d933e59c1df79436cc3492f2f",
+   "coverage": {
+    "checkpoint_variables": 500,
+    "not_restored": 398,
+    "not_restored_classes": {
+     "discriminator": 104,
+     "optimizer_slots": 288,
+     "other": 6
+    },
+    "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "restored_variables": 102
+   },
+   "files": {
+    "data-00000-of-00001": "fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5",
+    "index": "1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560",
+    "meta": "bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233"
+   },
+   "moving_statistics": {
+    "count": 30,
+    "min_moving_variance": 0.00012737543147522956,
+    "ok": true,
+    "values_sha256": "dcac2613dce12ffffc0b39af85939b2389e02c344fe000199a52cd4330ec137f"
+   },
+   "run_id": "a42fdd2a2accaf0a",
+   "unchanged_after": true
+  },
+  "2026": {
+   "checkpoint_identity_sha256": "9b0b391bacfece7b1e4be3fb395f13f1c53e18b138ee7fda487df7a037a38d20",
+   "coverage": {
+    "checkpoint_variables": 500,
+    "not_restored": 398,
+    "not_restored_classes": {
+     "discriminator": 104,
+     "optimizer_slots": 288,
+     "other": 6
+    },
+    "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "restored_variables": 102
+   },
+   "files": {
+    "data-00000-of-00001": "089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2",
+    "index": "af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a",
+    "meta": "b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090"
+   },
+   "moving_statistics": {
+    "count": 30,
+    "min_moving_variance": 0.0002369159337831661,
+    "ok": true,
+    "values_sha256": "48739b642edecbe9955e5210381d92eb410796dc72cb9a12ecba98dd3c1ad1f7"
+   },
+   "run_id": "e7100eb9a5ab0537",
+   "unchanged_after": true
+  },
+  "42": {
+   "checkpoint_identity_sha256": "96e89630150779848cc92c4c2756d01cbfeb48e6b0e8b87b815122e47dc2d30f",
+   "coverage": {
+    "checkpoint_variables": 500,
+    "not_restored": 398,
+    "not_restored_classes": {
+     "discriminator": 104,
+     "optimizer_slots": 288,
+     "other": 6
+    },
+    "restored_names_sha256": "2c5ee66ec9c00e54eda57606efda6b496a3b6ffbb3381a0ab9e3baec5351354a",
+    "restored_variables": 102
+   },
+   "files": {
+    "data-00000-of-00001": "55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6",
+    "index": "f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02",
+    "meta": "fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933"
+   },
+   "moving_statistics": {
+    "count": 30,
+    "min_moving_variance": 0.0002623342734295875,
+    "ok": true,
+    "values_sha256": "96fc9aa3fb41545bacc05dbfdf98d3b2b81c8ca901c49ffcc609772563e6cdc9"
+   },
+   "run_id": "40befa6004aee85c",
+   "unchanged_after": true
+  }
+ },
+ "real_device_qualification": {
+  "not_shown_by_cpu": [
+   "GPU kernel outputs of the real checkpoints",
+   "GPU bitwise A/B replay (E04-Q5)",
+   "real TRAIN faces, feed pack and Q140 geometry through load_e04_inputs",
+   "environment-lock verification (production_runner.verify_environment) on the GPU",
+   "production throughput and memory"
+  ],
+  "status": "PENDING_E04_S7"
+ },
+ "record": "E04_BANK_FIXTURE_QUALIFICATION",
+ "schema": "e04_bank_fixture_qualification_record_v1",
+ "status": "E04_BANK_ADAPTER_SYNTHETIC_QUALIFIED_S7_PENDING"
+}
