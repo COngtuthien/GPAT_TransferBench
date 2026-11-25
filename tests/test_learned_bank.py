@@ -253,6 +253,17 @@ def live_s7_expectation():
     return None
 
 
+def live_production_expectation(method):
+    """Production refusal for `method` under the live state (None = authorised). Without the owner's per-method
+    learned_bank_production_<M>.yaml -> BLOCKED_BY_PRODUCTION; with it, the live HDD preflight decides: off the GPU host
+    (no bank root) -> BLOCKED_BY_STORAGE; on the GPU host with the verified HDD -> authorised."""
+    if not lb.e04_completion_state()['ok']:
+        return lb.STATUS_E04
+    if not (ROOT / lb.PRODUCTION_AUTHORITY_TEMPLATE.format(method=method)).exists():
+        return lb.STATUS_PRODUCTION
+    return None if lb.storage_preflight()['ok'] else lb.STATUS_STORAGE
+
+
 class Gates(unittest.TestCase):
     def test_s7_and_production_refuse_now(self):
         want = live_s7_expectation()
@@ -264,10 +275,15 @@ class Gates(unittest.TestCase):
                 lb.load_s7_authority('E06c')
             self.assertEqual(cm.exception.status, want)
         for m in lb.METHODS:
+            pwant = live_production_expectation(m)
             for s in lb.SEEDS:
+                if pwant is None:
+                    auth = lb.load_production_authority(m, s)
+                    self.assertEqual((auth.mode, auth.methods, auth.seeds), ('PRODUCTION', (m,), (s,)))
+                    continue
                 with self.assertRaises(lb.LearnedBankBlocked) as cm:
                     lb.load_production_authority(m, s)
-                self.assertIn(cm.exception.status, (lb.STATUS_E04, lb.STATUS_PRODUCTION))
+                self.assertEqual(cm.exception.status, pwant)
         # storage authority is activated (L1 B) but is never itself a production authorization
         storage = lb.load_storage_authority()
         self.assertEqual(storage['bank_root'], lb.HDD['bank_root'])
@@ -275,8 +291,15 @@ class Gates(unittest.TestCase):
                          Path('/media/ext_data/student20261_gpat_m8_banks/E05/seed_42'))
         self.assertEqual((ROOT / lb.S7_AUTHORITY_PATH).exists(), want is None)
         self.assertEqual((ROOT / lb.E04_COMPLETION_RECORD).exists(), want != lb.STATUS_E04)
-        for m in lb.METHODS:
-            self.assertFalse((ROOT / lb.PRODUCTION_AUTHORITY_TEMPLATE.format(method=m)).exists())
+        for m in lb.METHODS:            # any committed production authority is an owner approval binding a passed S7
+            p = ROOT / lb.PRODUCTION_AUTHORITY_TEMPLATE.format(method=m)
+            if p.exists():
+                rec = json.loads(p.read_text())
+                self.assertEqual((rec['schema_version'], rec['status'], rec['approved'], rec['method']),
+                                 (lb.PRODUCTION_AUTHORITY_SCHEMA, 'OWNER_APPROVED', True, m))
+                s7 = ROOT / rec['s7_acceptance_record']['path']
+                self.assertEqual(sha(s7), rec['s7_acceptance_record']['sha256'])
+                self.assertTrue(json.loads(s7.read_text())['s7_acceptance_passed'])
 
     def _e04(self, family=True):
         e = {lb.E04_COMPLETION_RECORD: {'status': lb.E04_COMPLETION_STATUS, 'failed_gates': [], 'seed': 2026,
@@ -690,8 +713,14 @@ class CLI(unittest.TestCase):
     def test_s7_and_production_refuse_before_any_work(self):
         out = Path(tempfile.mkdtemp())
         want = live_s7_expectation()
-        cases = [(['production', '--method', 'E03', '--seed', '42', '--runtime-root', '/nonexistent'],
-                  lb.STATUS_E04 if want == lb.STATUS_E04 else lb.STATUS_PRODUCTION)]
+        # production is only ever invoked here for a refusal: a method without authority, or (off the GPU host) a
+        # method whose authority exists but whose HDD bank root is absent. Never on a host where it could write.
+        cases = []
+        for m in lb.METHODS:
+            pwant = live_production_expectation(m)
+            if pwant is not None:
+                cases.append((['production', '--method', m, '--seed', '42', '--runtime-root', '/nonexistent'], pwant))
+                break
         if want is not None:            # once S7 is authorised the s7 command proceeds; production still refuses
             cases.insert(0, (['s7', '--method', 'E06c', '--label', 'A', '--out-root', str(out),
                               '--runtime-root', '/nonexistent'], want))
@@ -707,7 +736,7 @@ class CLI(unittest.TestCase):
         rep = json.loads(p.stdout)
         self.assertTrue(rep['contract']['ok'])
         self.assertEqual(rep['s7']['ok'], want is None)
-        self.assertFalse(rep['production']['ok'])
+        self.assertEqual(rep['production']['ok'], live_production_expectation('E05') is None)
         self.assertTrue(rep['storage_authority']['ok'])         # activated L1 B record; never a production grant
 
 
