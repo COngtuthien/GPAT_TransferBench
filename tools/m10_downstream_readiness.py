@@ -34,6 +34,12 @@ def sha(rel):
     return hashlib.sha256((ROOT / rel).read_bytes()).hexdigest()
 
 
+def _sha_at(commit, rel):
+    import subprocess
+    return hashlib.sha256(subprocess.run(["git", "-C", str(ROOT), "show", f"{commit}:{rel}"], check=True,
+                                         capture_output=True).stdout).hexdigest()
+
+
 def load(rel):
     return json.loads((ROOT / rel).read_text())
 
@@ -105,8 +111,9 @@ OWNER_DECISIONS = [
 ]
 
 
-def build(precision_pin_present=None):
-    """precision_pin_present: None = live check; False reproduces the 7d67a7f snapshot (before the O1 pin existed)."""
+def build(precision_pin_present=None, code_at=None):
+    """precision_pin_present: None = live check; False reproduces the 7d67a7f snapshot (before the O1 pin existed).
+    code_at: None = hash the working-tree code; a commit hashes the code as committed there (historical snapshot)."""
     from gpatbench.downstream import science_banks as SB, science_manifest as SM
     pa = load(AUDIT)
     bv = load(EV + "/bank_loader_verification.json")
@@ -180,7 +187,7 @@ def build(precision_pin_present=None):
                       "e00": "real-only (32 live + 32 real spoof)"},
            "evidence": {p.name: sha(str(p.relative_to(ROOT))) for p in sorted((ROOT / EV).glob("*")) if p.is_file()},
            "protocol_audit": {"path": AUDIT, "sha256": sha(AUDIT)},
-           "code": {p: sha(p) for p in CODE},
+           "code": {p: (sha(p) if code_at is None else _sha_at(code_at, p)) for p in CODE},
            "environment_lock": {"path": ENV_LOCK, "sha256": sha(ENV_LOCK)},
            "qualification_summary": {"Q1": q["Q1_augmentation_equivalence"], "Q2": {k: v for k, v in
                                      q["Q2_cpu_equivalence_with_smoke_runner"].items()}, "Q3": q["Q3_cuda_policies_replay"],
