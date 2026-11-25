@@ -98,6 +98,17 @@ def verify(repo):
     print(json.dumps(doc, sort_keys=True))
 
 
+def committed_script_sha(repo, v, name):
+    """sha256 of a launch script as committed at the verification clone's commit (the clone directory is named
+    final_<40-hex commit>): the four-family claim 'host copies equal the committed scripts' is pinned to the commit it
+    was verified at, so later additive launcher changes (E04 case) do not rewrite this historical summary."""
+    commit = Path(v['repo']).name.split('_', 1)[1]
+    assert len(commit) == 40 and all(ch in '0123456789abcdef' for ch in commit), v['repo']
+    blob = subprocess.run(['git', '-C', str(repo), 'show', '%s:tools/learned_bank_production_scripts/%s' % (commit, name)],
+                          capture_output=True, check=True).stdout
+    return sha_bytes(blob)
+
+
 def build(v, repo):
     repo = Path(repo)
     recs = records(repo)
@@ -117,7 +128,7 @@ def build(v, repo):
         v['clones'][r['reproduction']['clone']]['exists'] and v['clones'][r['reproduction']['clone']]['status'] == ''
         and v['clones'][r['reproduction']['clone']]['head'] == r['execution_commit'] for r in recs.values())
     checks['host_scripts_equal_committed'] = all(
-        v['host_scripts'][n] == sha_file(repo / 'tools/learned_bank_production_scripts' / n) for n in SCRIPTS)
+        v['host_scripts'][n] == committed_script_sha(repo, v, n) for n in SCRIPTS)
     checks['all_markers_present'] = all(all(x is not None for x in mk.values()) for mk in v['markers'].values()) \
         and all(v['markers']['%s|%d' % k]['m8prod_%s_s%d.command' % k] == r['reproduction']['command_sha256']
                 for k, r in recs.items())
@@ -158,7 +169,7 @@ def build(v, repo):
                      'pixel SHA256 and the audits, not image bytes; no independent binary backup was made or verified'}
     repro = {'schema': 'learned_bank_production_reproduction_manifest_v1',
              'scripts': {n: {'path': 'tools/learned_bank_production_scripts/' + n,
-                             'sha256': sha_file(repo / 'tools/learned_bank_production_scripts' / n),
+                             'sha256': committed_script_sha(repo, v, n),
                              'host_copy': '%s/m8_learned_banks/%s' % (WORKDIR, n)} for n in SCRIPTS},
              'tools': {p: sha_file(repo / p) for p in ('tools/learned_bank.py', 'tools/learned_bank_production_audit.py',
                                                         'tools/learned_bank_production_authority.py',

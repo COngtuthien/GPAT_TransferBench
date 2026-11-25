@@ -200,7 +200,7 @@ def cmd_production(args):
         emit({'command': 'production', 'method': args.method, 'seed': args.seed, 'status': exc.status,
               'reason': str(exc)})
         return EXIT_BLOCKED
-    storage = lb.load_storage_authority()
+    storage = lb.load_storage_authority(method_id=args.method)     # E04 resolves only through its activated extension
     run_dir = lb.production_bank_dir(args.method, args.seed, storage)
     method_dir = run_dir.parent
     if not method_dir.exists():

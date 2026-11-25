@@ -111,6 +111,12 @@ E04_COMPLETION_RECORD = 'outputs/audit/E04_SEED2026_COMPLETION.json'
 E04_COMPLETION_STATUS = 'E04_SEED2026_COMPLETED_CLEANLY'
 E04_FAMILY_CLOSURE_RECORD = 'outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json'
 E04_FAMILY_CLOSURE_STATUS = 'SCIENTIFIC_TRAINING_COMPLETED_3_OF_3_SEEDS'
+# E04 production (owner authorization 2026-11-25): the E04 production authority must bind these records exactly
+E04_INPUT_RULING_PATH = 'configs/amendments/e04_s7_input_allowlist_ruling.yaml'
+E04_S7_RECORD_PATH = 'outputs/audit/LEARNED_BANK_S7_E04.json'
+E04_S7_RECORD_STATUS = 'E04_S7_ALL_THREE_SEEDS_QUALIFIED'
+E04_FIDELITY = 'CONTROLLED_ADAPTATION'
+E04_REPORTING_LABEL = 'Physics-STD (controlled geometry/depth reconstruction)'
 
 STATUS_SCIENTIFIC = 'LEARNED_BANK_BLOCKED_BY_SCIENTIFIC_AUTHORITY'
 STATUS_E04 = 'LEARNED_BANK_BLOCKED_BY_E04_COMPLETION'
@@ -550,6 +556,8 @@ def load_production_authority(method_id, seed, root=None, *, live_storage=True):
         raise LearnedBankBlocked('production authority does not bind a passed S7 acceptance record for %s'
                                  % method_id, STATUS_PRODUCTION)
     storage = load_storage_authority(root, method_id=method_id)
+    if method_id in E04_METHODS:
+        e04_bound = _verify_e04_production_bindings(prod, s7_rec, storage, root)
     if live_storage:
         verify_storage_root(storage)
     records = {CONTRACT_PATH: contract_sha, rel: prod_sha, s7['path']: s7_sha,
@@ -558,8 +566,58 @@ def load_production_authority(method_id, seed, root=None, *, live_storage=True):
         del records[CONTRACT_PATH]
         records[E04_CONTRACT_PATH] = contract_sha
         records[E04_STORAGE_EXTENSION_PATH] = storage['_extension_sha256']
+        records.update(e04_bound)
     return Authorization(mode='PRODUCTION', methods=(method_id,), seeds=(seed,), contract_sha256=contract_sha,
                          label='production', records=tuple(sorted(records.items())))
+
+
+def _verify_e04_production_bindings(prod, s7_rec, storage, root=None):
+    """E04-specific strict validation of the owner production authority (fail closed): it must bind, by sha256, the
+    E04 S7 launch authority, the input-allowlist ruling, the training family closure and the activated E04 storage
+    extension; the three approved final checkpoints (run ids, every component sha256, identity); the frozen config;
+    the six approved E04 decisions; the CONTROLLED_ADAPTATION fidelity; and authorize E04 bank generation only.
+    Returns the extra {path: sha256} records the PRODUCTION Authorization carries."""
+    def blocked(why):
+        raise LearnedBankBlocked('E04 production authority: %s' % why, STATUS_PRODUCTION)
+    s7a, s7a_sha = _read_record(E04_S7_AUTHORITY_PATH, root)
+    rul, rul_sha = _read_record(E04_INPUT_RULING_PATH, root)
+    fam, fam_sha = _read_record(E04_FAMILY_CLOSURE_RECORD, root)
+    if s7a is None or s7a.get('status') != 'OWNER_APPROVED' or (prod.get('s7_launch_authority') or {}) \
+            != {'path': E04_S7_AUTHORITY_PATH, 'sha256': s7a_sha}:
+        blocked('does not bind the activated E04 S7 launch authority')
+    if (prod.get('s7_acceptance_record') or {}).get('path') != E04_S7_RECORD_PATH \
+            or s7_rec.get('status') != E04_S7_RECORD_STATUS:
+        blocked('does not bind %s with status %s' % (E04_S7_RECORD_PATH, E04_S7_RECORD_STATUS))
+    if rul is None or rul.get('status') != 'OWNER_APPROVED' or (prod.get('input_allowlist_ruling') or {}).get(
+            'sha256') != rul_sha or (prod.get('input_allowlist_ruling') or {}).get('path') != E04_INPUT_RULING_PATH:
+        blocked('does not bind the owner input-allowlist ruling')
+    if fam is None or ((prod.get('e04_records') or {}).get('family_closure') or {}) \
+            != {'path': E04_FAMILY_CLOSURE_RECORD, 'sha256': fam_sha}:
+        blocked('does not bind the E04 training family closure')
+    if (prod.get('storage_extension') or {}) != {'path': E04_STORAGE_EXTENSION_PATH,
+                                                 'sha256': storage.get('_extension_sha256')}:
+        blocked('does not bind the activated E04 storage extension')
+    ck = prod.get('checkpoints') or {}
+    for s in SEEDS:
+        a, c = E04_CHECKPOINTS[('E04', s)], ck.get(str(s)) or {}
+        if c.get('run_id') != a['run_id'] or c.get('sha256') != a['sha256'] \
+                or c.get('checkpoint_identity_sha256') != checkpoint_identity_sha256('E04', s) \
+                or c.get('iteration') != 150000:
+            blocked('checkpoint binding of seed %d differs from the approved final checkpoint' % s)
+    if sorted(ck) != sorted(str(s) for s in SEEDS):
+        blocked('checkpoint table must name exactly the three approved seeds')
+    if prod.get('frozen_config') != {'path': METHOD_CONFIGS['E04'][0], 'sha256': METHOD_CONFIGS['E04'][1]}:
+        blocked('frozen config differs')
+    if prod.get('decisions') != E04_APPROVED_DECISIONS or prod.get('fidelity') != E04_FIDELITY \
+            or prod.get('display_name') != E04_REPORTING_LABEL:
+        blocked('decisions, fidelity or reporting label differ from the approved contract')
+    if prod.get('seeds') != list(SEEDS):
+        blocked('seeds must be [42, 1337, 2026]')
+    au = prod.get('authorizes') or {}
+    if au.get('production_bank_generation') is not True or au.get('methods') != ['E04'] \
+            or any(v is not False for k, v in au.items() if k not in ('production_bank_generation', 'methods')):
+        blocked('scope must be E04 production bank generation only')
+    return {E04_S7_AUTHORITY_PATH: s7a_sha, E04_INPUT_RULING_PATH: rul_sha, E04_FAMILY_CLOSURE_RECORD: fam_sha}
 
 
 def fixture_authorization(label, root=None):

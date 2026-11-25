@@ -116,15 +116,28 @@ class Governance(unittest.TestCase):
             with self.assertRaises(lb.LearnedBankBlocked) as cm:
                 lb.load_s7_authority('E04')
             self.assertEqual(cm.exception.status, lb.STATUS_S7)
+        # history scope (owner decision B1): at 92ef74c neither the E04 storage extension nor the E04 production
+        # authority existed; the owner activated them later (2026-11-25 production session). Live: each refuses while
+        # absent and, once activated, must load (their derivations are re-checked in tests/test_e04_bank_production.py)
+        prod_rel = 'configs/amendments/learned_bank_production_E04.yaml'
+        for p in (lb.E04_STORAGE_EXTENSION_PATH, prod_rel):
+            self.assertNotEqual(subprocess.run(['git', 'cat-file', '-e', '92ef74c:' + p], cwd=str(ROOT),
+                                               stderr=subprocess.DEVNULL).returncode, 0, p)
         for s in lb.SEEDS:
+            if (ROOT / prod_rel).exists():
+                a = lb.load_production_authority('E04', s, live_storage=False)
+                self.assertEqual((a.mode, a.methods, a.seeds), ('PRODUCTION', ('E04',), (s,)))
+                continue
             with self.assertRaises(lb.LearnedBankBlocked) as cm:
                 lb.load_production_authority('E04', s, live_storage=False)
             self.assertEqual(cm.exception.status, lb.STATUS_PRODUCTION)
-        with self.assertRaises(lb.LearnedBankBlocked) as cm:
-            lb.load_storage_authority(method_id='E04')
-        self.assertEqual(cm.exception.status, lb.STATUS_STORAGE)
-        for p in (lb.E04_STORAGE_EXTENSION_PATH, 'configs/amendments/learned_bank_production_E04.yaml'):
-            self.assertFalse((ROOT / p).exists(), p)
+        if (ROOT / lb.E04_STORAGE_EXTENSION_PATH).exists():
+            self.assertIn('E04', lb.load_storage_authority(method_id='E04')['methods'])
+        else:
+            self.assertFalse((ROOT / prod_rel).exists())
+            with self.assertRaises(lb.LearnedBankBlocked) as cm:
+                lb.load_storage_authority(method_id='E04')
+            self.assertEqual(cm.exception.status, lb.STATUS_STORAGE)
 
     def test_existing_methods_unaffected(self):
         for m in lb.METHODS:
@@ -153,7 +166,9 @@ class Governance(unittest.TestCase):
         Path(t, lb.E04_STORAGE_EXTENSION_PATH).write_text(json.dumps(rec))
 
     def test_registry_accepts_e04_only_when_extension_activated(self):
-        self.assertEqual(lb.registered_bank_methods(), lb.METHODS)
+        # live registry: E04 only once the owner-activated extension exists (B1: absent at this test's commit)
+        self.assertEqual(lb.registered_bank_methods(), lb.BANK_METHODS if (ROOT / lb.E04_STORAGE_EXTENSION_PATH).exists()
+                         else lb.METHODS)
         with tempfile.TemporaryDirectory() as t:
             copy_into(t, [lb.STORAGE_AUTHORITY_PATH])
             self.assertEqual(lb.registered_bank_methods(t), lb.METHODS)
@@ -325,16 +340,33 @@ class CLI(unittest.TestCase):
         self.assertEqual(r.returncode, 0)
         g = json.loads(r.stdout)
         activated = (ROOT / lb.E04_S7_AUTHORITY_PATH).exists()    # owner-activated after this test's commit
-        self.assertEqual((g['contract']['ok'], g['s7'].get('ok') if activated else g['s7']['status'],
-                          g['production']['status'], g['storage_authority']['status']),
-                         (True, True if activated else lb.STATUS_S7, lb.STATUS_PRODUCTION, lb.STATUS_STORAGE))
+        self.assertEqual((g['contract']['ok'], g['s7'].get('ok') if activated else g['s7']['status']),
+                         (True, True if activated else lb.STATUS_S7))
+        # history scope (owner decision B1): production and storage refused E04 at this test's commit; after the owner
+        # activations (2026-11-25) storage loads, and production loads only where the live HDD preflight passes
+        ext = (ROOT / lb.E04_STORAGE_EXTENSION_PATH).exists()
+        prod = (ROOT / lb.PRODUCTION_AUTHORITY_TEMPLATE.format(method='E04')).exists()
+        self.assertEqual(g['storage_authority'].get('ok') if ext else g['storage_authority']['status'],
+                         True if ext else lb.STATUS_STORAGE)
+        if not prod:
+            self.assertEqual(g['production']['status'], lb.STATUS_PRODUCTION)
+        elif lb.storage_preflight()['ok']:
+            self.assertIs(g['production']['ok'], True)
+        else:
+            self.assertEqual(g['production']['status'], lb.STATUS_STORAGE)
         if not activated:
             with tempfile.TemporaryDirectory() as t:
                 r = self.run_cli('s7', '--method', 'E04', '--label', 'A', '--out-root', t, '--runtime-root', '/nonexistent')
                 self.assertEqual((r.returncode, json.loads(r.stdout)['status']), (3, lb.STATUS_S7))
                 self.assertEqual(os.listdir(t), [])
-        r = self.run_cli('production', '--method', 'E04', '--seed', '42', '--runtime-root', '/nonexistent')
-        self.assertEqual((r.returncode, json.loads(r.stdout)['status']), (3, lb.STATUS_PRODUCTION))
+        # the production CLI is invoked only where it must refuse: never where it could be authorized (an activated
+        # authority with a passing live HDD preflight would start a real bank)
+        if not prod:
+            r = self.run_cli('production', '--method', 'E04', '--seed', '42', '--runtime-root', '/nonexistent')
+            self.assertEqual((r.returncode, json.loads(r.stdout)['status']), (3, lb.STATUS_PRODUCTION))
+        elif not lb.storage_preflight()['ok']:
+            r = self.run_cli('production', '--method', 'E04', '--seed', '42', '--runtime-root', '/nonexistent')
+            self.assertEqual((r.returncode, json.loads(r.stdout)['status']), (3, lb.STATUS_STORAGE))
         # per-seed selection: E05 (owner ruling B2) and, since the owner E04 S7 authorization, E04; never E03/DSDG
         r = self.run_cli('s7', '--method', 'E03', '--label', 'A', '--out-root', '/x', '--runtime-root', '/y',
                          '--seed', '42')

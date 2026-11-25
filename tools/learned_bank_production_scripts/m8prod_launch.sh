@@ -1,5 +1,7 @@
 #!/bin/bash
 # M8 learned-bank PRODUCTION: one bank = one OS process.  usage (GPU host): m8prod_launch.sh <METHOD> <SEED> <EXEC_COMMIT>
+# E04 (Physics-STD) runs in the E04 training interpreter gpat-m6-e03 with the E04 precision environment, which is
+# identical to the E03 one (methods/physics_std/production_io.PRECISION_ENV == methods/stdn/production_io.PRECISION_ENV).
 # Refuses unless the host preflight file exists, every marker/ledger/session is fresh, the registered bank directory is
 # absent and the execution clone is clean at EXEC_COMMIT. Takes the stat-only pre atime ledger, writes the read-only
 # command file and starts it in tmux (remain-on-exit, pipe-pane log). Returns after the process has started.
@@ -11,7 +13,7 @@ RT=$W/GPAT_TransferBench_runtime
 BANK=/media/ext_data/student20261_gpat_m8_banks/$M/seed_$S
 T=m8prod_${M}_s$S
 case $M in
-  E03) PY=/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python
+  E03|E04) PY=/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python
        ENVS="PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0" ;;
   E05) PY=/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python
        ENVS="PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1" ;;
@@ -21,7 +23,7 @@ case $M in
 esac
 case $S in 42|1337|2026) ;; *) echo "UNKNOWN SEED"; exit 2 ;; esac
 test -s $W/${T}_preflight.json || { echo "NO PREFLIGHT"; exit 2; }
-for f in command launch_time exit end_time pane.log; do test ! -e $W/$T.$f || { echo "EXISTS $W/$T.$f"; exit 2; }; done
+for f in command launch_time exit end_time pane.log gpu_samples.tsv; do test ! -e $W/$T.$f || { echo "EXISTS $W/$T.$f"; exit 2; }; done
 for f in atime_pre.tsv atime_pre.time atime_post.tsv atime_post.time; do test ! -e $W/${T}_$f || { echo "EXISTS ${T}_$f"; exit 2; }; done
 tmux has-session -t $T 2>/dev/null && { echo "SESSION EXISTS $T"; exit 2; }
 test ! -e $BANK || { echo "BANK DIR EXISTS $BANK"; exit 2; }
@@ -36,9 +38,11 @@ cat > $W/$T.command <<CMD
 # M8 learned-bank production: method $M seed $S, one OS process -- authority configs/amendments/learned_bank_production_$M.yaml at $C
 date -u +%FT%TZ > $W/$T.launch_time
 cd $REPO || { echo 97 > $W/$T.exit; exit 97; }
+( while [ ! -s $W/$T.end_time ]; do nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader,nounits | sed "s/^/\$(date -u +%FT%TZ), /" >> $W/$T.gpu_samples.tsv; sleep 5; done ) &
 env -i HOME=/home/student20261 $ENVS nice -n 10 $PY -B tools/learned_bank.py production --method $M --seed $S --runtime-root $RT
 echo \$? > $W/$T.exit
 date -u +%FT%TZ > $W/$T.end_time
+wait
 CMD
 chmod 0555 $W/$T.command
 tmux new-session -d -s $T -x 200 -y 50 "sleep 2; bash $W/$T.command"

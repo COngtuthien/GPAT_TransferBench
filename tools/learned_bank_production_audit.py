@@ -1,5 +1,14 @@
-"""M8 learned-bank PRODUCTION audit (E06c / E03 / E06b / E05), one bank per (method, seed), under the per-method owner
-authority configs/amendments/learned_bank_production_<M>.yaml, the generation contract and the HDD storage authority.
+"""M8 learned-bank PRODUCTION audit (E06c / E03 / E06b / E05, and E04 Physics-STD in its own branch), one bank per
+(method, seed), under the per-method owner authority configs/amendments/learned_bank_production_<M>.yaml, the generation
+contract (E04: configs/amendments/e04_bank_generation_contract.yaml) and the HDD storage authority (E04: plus the
+activated additive extension configs/amendments/learned_bank_storage_location_E04.yaml).
+
+E04 branch (preflight_e04 / collect_e04 / build_e04 below): the same phases and evidence layout, plus the E04 gates --
+authority re-derived from the committed records, the E04 S7 record rebuilt from its committed evidence, the TF1
+environment-lock probe in gpat-m6-e03, BN inference mode / 102 restored generator variables / zero training ops, an
+independent PNG structure inspection of every output, the owner-ruling split_v1 / M2 cross-check of every used face and
+of the whole e04_feed_pack_v1, and S7-to-production byte AND pixel equivalence of the 186 toy rows matched from the two
+manifests by global position and pair_id (S7 record outputs[seed].run_dirs A and B).
 
 Phases (preflight and collect write nothing but stdout; GPU host, fed on stdin, library imported from the clean
 execution clone --repo, a Python with numpy, Pillow and pyarrow -- gpat-m6-e05 -- and CUDA_VISIBLE_DEVICES=""):
@@ -61,7 +70,7 @@ EVIDENCE = 'outputs/audit/LEARNED_BANK_PRODUCTION/{M}_s{S}'
 RECORD = 'outputs/audit/LEARNED_BANK_PRODUCTION_{M}_SEED{S}'
 CLOSURE = 'outputs/audit/LEARNED_BANK_PRODUCTION_{M}_FAMILY_CLOSURE'
 # the only paths an execution commit may change relative to the authority's bound source commit
-ALLOWED_EXEC_DIFF = (re.compile(r'^configs/amendments/learned_bank_production_(E03|E05|E06b|E06c)\.yaml$'),
+ALLOWED_EXEC_DIFF = (re.compile(r'^configs/amendments/learned_bank_production_(E03|E05|E06b|E06c|E04)\.yaml$'),
                      re.compile(r'^outputs/audit/'))
 FAIL_PATTERNS = ('Traceback', 'Error', 'error:', 'out of memory', 'Killed', 'Segmentation fault', 'core dumped',
                  'TrainingForbidden', 'LearnedBank')
@@ -337,9 +346,13 @@ def independent_verification(lb, d, rows):
         total_bytes += len(raw)
         if sha256_bytes(raw) != r['output_sha256']:
             problems.append('%s: file sha256' % name)
-        with Image.open(io.BytesIO(raw)) as im:
-            fmt, mode, size = im.format, im.mode, im.size
-            a = np.array(im)
+        try:
+            with Image.open(io.BytesIO(raw)) as im:
+                fmt, mode, size = im.format, im.mode, im.size
+                a = np.array(im)
+        except Exception as exc:              # an undecodable output is a recorded problem, never a crash
+            problems.append('%s: decode %s: %s' % (name, type(exc).__name__, exc))
+            continue
         if (fmt, mode, size) != ('PNG', 'RGB', (256, 256)) or a.dtype != np.uint8 or a.shape != (256, 256, 3):
             problems.append('%s: geometry %s %s %s' % (name, fmt, mode, size))
         ph = sha256_bytes(('%s|%s|' % (a.dtype.str, 'x'.join(map(str, a.shape)))).encode() + a.tobytes())
@@ -912,6 +925,12 @@ def build_closure(repo_root, M):
     for name in ('S.s7_production_equivalence', 'F.atime_ledger', 'F.no_val_test_inputs', 'S.checkpoint_after',
                  'S.no_training', 'S.population', 'P.e01_e02_banks_unchanged'):
         G('C.' + name.split('.', 1)[1], all(gate(d, name) for d in ds.values()))
+    if M == E04:            # E04-only closure gates (the four original families' closures are unchanged)
+        for name in ('A.authority_derived', 'A.s7_record_passed_and_rebuilds', 'A.storage_extension_activated',
+                     'S.inference_graph', 'S.stored_bn_statistics', 'S.png_structure', 'S.face_lineage_split_v1_m2',
+                     'F.feed_pack_allowlist_crosscheck'):
+            G('C.' + name.split('.', 1)[1], all(gate(d, name) for d in ds.values()))
+        G('C.same_storage_extension', len({d['storage_extension']['sha256'] for d in ds.values()}) == 1)
     failed = G.failed
     a = ds[42]
     diag = repo / 'outputs/audit/E05_S7_CONTRAST_DIAGNOSTIC.json'
@@ -925,7 +944,8 @@ def build_closure(repo_root, M):
         'E05': ['PCGAN controlled architecture resolution (not a native PCGAN reproduction)',
                 'low-contrast outputs; seed 1337 close to collapse onto a near-constant grey image (see '
                 'outputs/audit/E05_S7_CONTRAST_DIAGNOSTIC.md); retained under RAW-MATCHED; frozen paper budget 4000 '
-                'iterations, lr 1e-6, batch 1']}[M]
+                'iterations, lr 1e-6, batch 1'],
+        'E04': E04_DISCLOSURES}[M]
     doc = {
         'schema': 'learned_bank_production_family_closure_v1', 'method': M, 'seeds': list(SEEDS),
         'status': ('LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED' if not failed
@@ -960,6 +980,22 @@ def build_closure(repo_root, M):
         'not_done': ['no downstream training, TEST evaluation, DINOv3 or GPAT', 'no E04 bank generation',
                      'outputs/audit/method_status.csv unchanged'],
     }
+    if M == E04:
+        doc['not_done'] = ['no generator retraining and no change of the frozen E04 inference semantics',
+                           'no downstream ResNet-18 training, TEST evaluation, DINOv3 or GPAT',
+                           'outputs/audit/method_status.csv unchanged', 'E04 scientific training closure unchanged']
+        doc.update({
+            'display_name': a['display_name'], 'fidelity': a['fidelity'],
+            'fidelity_note': 'CONTROLLED_ADAPTATION; not an official native Physics-STD reproduction',
+            'contract': {'path': 'configs/amendments/e04_bank_generation_contract.yaml', 'sha256': a['contract_sha256']},
+            'storage_extension': a['storage_extension'],
+            'checkpoint_sets': {str(S): d['checkpoint'] for S, d in ds.items()},
+            's7_to_production': {str(S): next(g['detail'] for g in d['gates'] if g['gate'] == 'S.s7_production_equivalence')
+                                 for S, d in ds.items()},
+            'raw_output_observation': {str(S): d['raw_output_observation'] for S, d in ds.items()},
+            'environment_detail': {k: a['reproduction']['environment'].get(k)
+                                   for k in ('python_version', 'tensorflow', 'native_runtime', 'precision_env')},
+            'inputs': a['reproduction']['inputs']})
     return doc
 
 
@@ -989,32 +1025,752 @@ def closure_report(doc):
         '- Backup: %s.' % doc['backup'], ''])
 
 
+# ================================================================================================================ E04
+E04 = 'E04'
+E04_ESTIMATE_GIB = 2                    # S7 measured 582 MiB per process; floor = estimate + margin = 4 GiB (S7 floor)
+E04_FACE_READS = 2 * N
+E04_CONTRACT_SHA256 = '45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f'   # owner-approved (3753ea4)
+E04_S7_STATUS = 'E04_S7_ALL_THREE_SEEDS_QUALIFIED'
+E04_S7_GATES = 180
+E04_PY_VERSION = '3.8.20'
+E04_TF = '1.15.5'
+E04_PYTHON = '/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python'
+E04_PACK_MANIFEST_SHA256 = 'db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b'
+E04_PACK_COUNTS = {'pairs': 8838, 'samples': 12668}
+E04_RUN_IDS = {42: '40befa6004aee85c', 1337: 'a42fdd2a2accaf0a', 2026: 'e7100eb9a5ab0537'}
+E04_CKPT_FILES = {'data-00000-of-00001': 'checkpoints/iteration_150000.data-00000-of-00001',
+                  'index': 'checkpoints/iteration_150000.index', 'meta': 'checkpoints/iteration_150000.meta'}
+E04_ALLOWLIST_SOURCE = ('e04_feed_pack_v1 samples.json (manifest-pinned TRAIN closure; owner ruling '
+                        'configs/amendments/e04_s7_input_allowlist_ruling.yaml)')
+E04_STORAGE_DRAFT = 'configs/amendments/learned_bank_storage_location_E04.DRAFT.yaml'
+E04_FIXTURE_RECORD = 'outputs/audit/E04_BANK_FIXTURE_QUALIFICATION.json'
+E04_RUNTIME_RECORD = 'environments/e04_training.runtime.json'
+E04_DISCLOSURES = [
+    'CONTROLLED_ADAPTATION: Physics-STD (controlled geometry/depth reconstruction); not an official native Physics-STD '
+    'reproduction',
+    'bank inference uses the stored BN moving statistics (batch 1, E04-Q1); training-time synthesis used 8-image batch '
+    'statistics',
+    'float->uint8 clip-truncate (E04-Q3) follows the ECCV20-STDN predecessor (reference only); raw values outside [0, 1] '
+    'are clipped, never rescaled; S7 observed one seed-42 pair with raw range about [-1.11, 1.68]',
+    'RAW-MATCHED: every numerically valid output is included; no quality filter, replacement or threshold',
+    'TRAIN allowlist from the pinned e04_feed_pack_v1 in the inference process (owner ruling); split_v1 / M2 cross-check '
+    'performed by this independent auditor']
+E04_PROD_PROBE = r'''
+import json, os, sys
+repo, runtime, seed = sys.argv[1], sys.argv[2], int(sys.argv[3])
+sys.path.insert(0, repo)
+os.chdir(repo)
+out = {'python': sys.version.split()[0], 'executable': sys.executable}
+def attempt(key, fn):
+    try:
+        out[key] = fn()
+    except BaseException as exc:
+        out[key] = {'error': '%s: %s' % (type(exc).__name__, exc)}
+import tensorflow as tf
+out['tensorflow'] = tf.__version__
+from methods.common import learned_bank as lb
+from methods.physics_std import bank_adapter as ba
+from methods.physics_std.production_runner import verify_environment
+out['precision_errors'] = ba.precision_environment_errors(os.environ, gpu=True)
+def env():
+    live, drv = verify_environment(tf)
+    return {'ok': True, 'driver': drv, 'native_runtime': live['native_runtime'], 'gpu': live['gpu'],
+            'package_versions': live['package_versions'], 'session_config': live['session_config']}
+attempt('environment_lock', env)
+attempt('frozen_sources', ba.verify_frozen_sources)
+attempt('bn_only_difference', ba.inference_layers_differ_only_in_bn_mode)
+attempt('contract_sha256', lambda: lb.load_e04_generation_contract()[1])
+attempt('production_authority', lambda: lb.load_production_authority('E04', seed).record())
+attempt('config', lambda: lb.verify_config_identity('E04'))
+def counters():
+    res = {}
+    for s in (42, 1337, 2026):
+        prefix = '%s/runs/m6/E04/seed_%d/checkpoints/iteration_150000' % (runtime, s)
+        r = tf.train.NewCheckpointReader(prefix)
+        names = sorted(k for k in r.get_variable_to_shape_map() if not k.startswith(('G/', 'D/')) and 'Adam' not in k)
+        res[str(s)] = {k: r.get_tensor(k).tolist() for k in names if r.get_tensor(k).size <= 1}
+    return res
+attempt('checkpoint_counters', counters)
+print(json.dumps(out, sort_keys=True, default=str))
+'''
+
+
+def s7_tool(repo):
+    """The independent PNG / manifest / feed-pack inspectors of the E04 S7 auditor, loaded from the same clean clone
+    (auditor code, never the inference runner)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('learned_bank_s7_audit_e04', str(Path(repo) / 'tools' /
+                                                                                   'learned_bank_s7_audit.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def e04_marker_paths(S):
+    out = marker_paths(E04, S)
+    out['gpu_samples'] = '%s/%s.gpu_samples.tsv' % (WORKDIR, tag(E04, S))
+    return out
+
+
+def checkpoints_all_e04(lb):
+    """The 12 approved checkpoints of the four original methods plus the three E04 final checkpoints (sha256, size,
+    mtime_ns, path)."""
+    ck = checkpoints_all(lb)
+    for s in SEEDS:
+        try:
+            r = lb.verify_checkpoint(E04, s, Path(RUNTIME) / 'runs' / 'm6' / E04 / ('seed_%d' % s))
+            ck['E04|%d' % s] = {'ok': True, 'identity': r['checkpoint_identity_sha256'], 'run_id': r['run_id'],
+                                'files': {k: {'path': v['path'], 'sha256': v['sha256'], 'size': v['size'],
+                                              'mtime_ns': v['mtime_ns']} for k, v in r['files'].items()}}
+        except Exception as exc:
+            ck['E04|%d' % s] = {'ok': False, 'error': '%s: %s' % (type(exc).__name__, exc)}
+    return ck
+
+
+def preflight_e04(S, repo):
+    lb = lb_module(repo)
+    s7 = s7_tool(repo)
+    bank = Path(BANK_ROOT) / E04 / ('seed_%d' % S)
+    mp = e04_marker_paths(S)
+    doc = {'phase': 'preflight', 'method': E04, 'seed': S, 'utc': utc_now(), 'repo': str(repo), 'git': git_state(repo),
+           'collector': {'python': sys.version.split()[0], 'executable': sys.executable},
+           'processes': processes(), 'bank_panes': bank_panes(), 'gpu': gpu_state(),
+           'memory': {'mem_available_bytes': mem_available_bytes(), 'floor_bytes': MEM_FLOOR_GIB << 30},
+           'estimate_gib': E04_ESTIMATE_GIB, 'margin_gib': MARGIN_GIB,
+           'storage': storage_detail(lb), 'bank_dir': str(bank), 'bank_dir_exists': os.path.lexists(str(bank)),
+           'method_dir_exists': (Path(BANK_ROOT) / E04).is_dir(), 'registry': bank_registry_state(lb),
+           'e01_e02_manifests': e01_e02_state(repo), 'checkpoints': checkpoints_all_e04(lb),
+           'markers_absent': {k: not os.path.lexists(v) for k, v in mp.items() if k != 'preflight'},
+           'tmux_session_absent': subprocess.run(['tmux', 'has-session', '-t', tag(E04, S)],
+                                                 capture_output=True).returncode != 0}
+    try:
+        doc['authority'] = {'ok': True, 'record': lb.load_production_authority(E04, S).record()}
+    except Exception as exc:
+        doc['authority'] = {'ok': False, 'error': '%s: %s' % (type(exc).__name__, exc)}
+    toy = Path(repo) / lb.TOY_MANIFEST_PATH
+    pack_m = Path(s7.E04_PACK_DIR) / 'pack_manifest.json'
+    doc['inputs'] = {'toy_manifest_sha256': sha256_file(toy) if toy.is_file() else None,
+                     'feed_pack_manifest_sha256': sha256_file(pack_m) if pack_m.is_file() else None,
+                     'faces_root_is_dir': Path(FACES).is_dir()}
+    env = ['env', '-i', 'HOME=' + os.environ.get('HOME', '/home/student20261'), 'PATH=/usr/bin:/bin', 'LANG=C.UTF-8',
+           'TF_CPP_MIN_LOG_LEVEL=3'] + ['%s=%s' % kv for kv in s7.E04_PRECISION_ENV]
+    r = subprocess.run(env + [E04_PYTHON, '-I', '-B', '-c', E04_PROD_PROBE, str(repo), RUNTIME, str(S)],
+                       capture_output=True, text=True, cwd=str(repo))
+    try:
+        probe = json.loads(r.stdout.strip().splitlines()[-1])
+    except (ValueError, IndexError):
+        probe = None
+    doc['environment'] = {'name': 'gpat-m6-e03', 'python': E04_PYTHON, 'present': Path(E04_PYTHON).is_file(),
+                          'probe_rc': r.returncode, 'probe': probe, 'probe_stderr_tail': r.stderr.strip().splitlines()[-3:]}
+    print(json.dumps(doc, sort_keys=True, default=str))
+
+
+def png_verification_e04(s7, d, rows):
+    """Third, structural decode of every output (PNG signature, chunk sequence and CRCs, IHDR, zlib stream, scanline
+    filters, PIL decode) and the pixel identity recomputed from that decode, against the manifest row reached by its
+    output_path."""
+    by_name = {r['output_path'].split('/', 1)[1]: r for r in rows}
+    structures, problems = {}, []
+    for name in sorted(os.listdir(Path(d) / 'bank')):
+        raw = (Path(d) / 'bank' / name).read_bytes()
+        st, px, _ = s7.png_inspect(raw)
+        key = s7.canonical(st)
+        structures[key] = structures.get(key, 0) + 1
+        r = by_name.get(name)
+        if r is None or px != r['output_pixel_sha256'] or sha256_bytes(raw) != r['output_sha256']:
+            problems.append(name)
+    return {'structures': structures, 'problem_count': len(problems), 'problems': problems[:20]}
+
+
+def s7_equivalence_e04(lb, s7, repo, S, d, rows):
+    """The 186 S7 toy rows (S7 runs A and B, directories from the committed S7 record) against their production rows:
+    each S7 manifest row is matched to the production manifest row with the same global position (row_index) and the
+    same pair_id -- never by file name -- and compared field by field (all but `mode`), byte for byte (PNG) and pixel
+    for pixel (independent decode of both files)."""
+    import numpy as np
+    rel = 'outputs/audit/LEARNED_BANK_S7_E04.json'
+    rec = json.loads((Path(repo) / rel).read_text())
+    o = rec['outputs'][str(S)]
+    by_pos = {r['row_index']: r for r in rows}
+    out = {'s7_record_sha256': sha256_file(Path(repo) / rel), 's7_manifest_sha256_recorded': o['manifest_sha256'],
+           'run_dirs_recorded': o['run_dirs'], 'match_rule': 'row_index (global position) and pair_id from both manifests',
+           'runs': {}}
+    for L in ('A', 'B'):
+        sd = Path(o['run_dirs'][L])
+        body = (sd / lb.MANIFEST).read_bytes()
+        srows = [json.loads(x) for x in body.decode('ascii').splitlines()]
+        missing, id_mm, field_mm, byte_mm, px_mm, px_eq = [], [], [], [], [], 0
+        for r in srows:
+            pr = by_pos.get(r['row_index'])
+            if pr is None:
+                missing.append(r['row_id'])
+                continue
+            if pr['pair_id'] != r['pair_id'] or pr['row_id'] != r['row_id']:
+                id_mm.append([r['row_index'], r['pair_id'], pr['pair_id']])
+                continue
+            diff = sorted(k for k in set(r) | set(pr) if k != 'mode' and r.get(k) != pr.get(k))
+            if diff or r['mode'] != 'S7_TOY' or pr['mode'] != 'PRODUCTION':
+                field_mm.append([r['row_id'], diff])
+            ra, rp = (sd / r['output_path']).read_bytes(), (Path(d) / pr['output_path']).read_bytes()
+            if ra != rp:
+                byte_mm.append(r['row_id'])
+            _, pxa, aa = s7.png_inspect(ra)
+            _, pxp, ap = s7.png_inspect(rp)
+            if aa is None or ap is None or aa.shape != ap.shape or aa.dtype != ap.dtype or not np.array_equal(aa, ap) \
+                    or pxa != pxp:
+                px_mm.append(r['row_id'])
+            else:
+                px_eq += 1
+        out['runs'][L] = {'dir': str(sd), 'manifest_sha256': sha256_bytes(body), 'rows': len(srows),
+                          'rows_matched': len(srows) - len(missing) - len(id_mm), 'missing_in_production': missing[:20],
+                          'identity_mismatches': id_mm[:20], 'field_mismatches': field_mm[:20],
+                          'field_mismatch_count': len(field_mm), 'byte_mismatches': byte_mm[:20],
+                          'byte_mismatch_count': len(byte_mm), 'pixel_mismatches': px_mm[:20],
+                          'pixel_mismatch_count': len(px_mm), 'pixel_arrays_equal': px_eq,
+                          'row_indices': [r['row_index'] for r in srows],
+                          'pair_ids_sha256': sha256_bytes('\n'.join(r['pair_id'] for r in srows).encode())}
+    return out
+
+
+def collect_e04(S, repo):
+    lb = lb_module(repo)
+    s7 = s7_tool(repo)
+    d = Path(BANK_ROOT) / E04 / ('seed_%d' % S)
+    before = {'listing': listing_summary(d, lb), 'bank_names_sha256': sha256_bytes(
+        '\n'.join(sorted(os.listdir(d / lb.BANK_DIR))).encode())}
+    doc = {'phase': 'collect', 'method': E04, 'seed': S, 'utc': utc_now(), 'repo': str(repo), 'git': git_state(repo),
+           'collector': {'python': sys.version.split()[0], 'executable': sys.executable}, 'bank_dir': str(d)}
+    prov_p = d / lb.PROVENANCE
+    doc['provenance'] = json.loads(prov_p.read_text()) if prov_p.is_file() else None
+    doc['aborted'] = (d / ('ABORTED_' + lb.PROVENANCE)).exists()
+    rb = lb.read_bank(d, expect_method=E04, expect_seed=S, expect_mode='PRODUCTION', expect_rows=N,
+                      expect_checkpoint_identity=lb.checkpoint_identity_sha256(E04, S))
+    rows = rb.pop('rows')
+    doc['read_bank'] = rb
+    doc['listing'] = before['listing']
+    doc['independent'] = independent_verification(lb, d, rows)
+    doc['png_verification'] = png_verification_e04(s7, d, rows)
+    man = s7.manifest_inspect(d)
+    doc['manifest_inspect'] = {k: v for k, v in (man or {}).items() if k != 'rows'} if man else None
+    doc['s7_equivalence'] = s7_equivalence_e04(lb, s7, repo, S, d, rows)
+    doc['feed_pack'] = s7.e04_lineage(repo, {})
+    doc['checkpoints_after'] = checkpoints_all_e04(lb)
+    mp = e04_marker_paths(S)
+    doc['markers'] = {'command': read_text(mp['command']),
+                      'command_sha256': sha256_file(mp['command']) if Path(mp['command']).is_file() else None,
+                      'launch_time': (read_text(mp['launch_time']) or '').strip(), 'exit_raw': read_text(mp['exit']),
+                      'end_time': (read_text(mp['end_time']) or '').strip(), 'pane': pane_summary(mp['pane.log']),
+                      'tmux_pane': sh('tmux', 'list-panes', '-t', tag(E04, S), '-F', '#{pane_dead} #{pane_dead_status}'),
+                      'gpu_samples': s7.gpu_samples_summary(mp['gpu_samples'])}
+    pf = Path(mp['preflight'])
+    doc['preflight'] = json.loads(pf.read_text()) if pf.is_file() else None
+    doc['preflight_sha256'] = sha256_file(pf) if pf.is_file() else None
+    doc['atime'] = atime_ledger(E04, S, repo)
+    doc['storage_after'] = storage_detail(lb)
+    doc['registry_after'] = bank_registry_state(lb)
+    doc['e01_e02_manifests_after'] = e01_e02_state(repo)
+    doc['processes_after'] = processes()
+    doc['gpu_after'] = gpu_state()
+    doc['bank_unchanged_during_collect'] = (listing_summary(d, lb) == before['listing'] and sha256_bytes(
+        '\n'.join(sorted(os.listdir(d / lb.BANK_DIR))).encode()) == before['bank_names_sha256'])
+    print(json.dumps(doc, sort_keys=True, default=str))
+
+
+class SafeGates(Gates):
+    """A gate whose predicate raises on missing or malformed evidence fails (never passes vacuously)."""
+
+    def check(self, name, fn, detail=None):
+        try:
+            ok = bool(fn())
+        except Exception as exc:
+            return self(name, False, {'exception': '%s: %s' % (type(exc).__name__, exc)})
+        return self(name, ok, detail)
+
+
+def face_table(repo, ids):
+    """split_v1 (split, dataset) and M2 accounting (face sha256, final status) of the given sample ids (hash-checked)."""
+    import pyarrow.parquet as pq
+    sp_p, m2_p = Path(repo) / 'manifests/split_v1.parquet', Path(repo) / 'manifests/m2_sample_accounting.parquet'
+    assert sha256_file(sp_p) == 'fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d'
+    assert sha256_file(m2_p) == '65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662'
+    ids = sorted(ids)
+    sp = pq.read_table(str(sp_p), columns=['sample_id', 'split', 'dataset'], filters=[('sample_id', 'in', ids)]).to_pylist()
+    m2 = pq.read_table(str(m2_p), columns=['sample_id', 'face_png_sha256', 'final_status'],
+                       filters=[('sample_id', 'in', ids)]).to_pylist()
+    a, b = {r['sample_id']: r for r in sp}, {r['sample_id']: r for r in m2}
+    return {s: (a[s]['split'], a[s]['dataset'], b[s]['face_png_sha256'], b[s]['final_status'])
+            for s in ids if s in a and s in b}
+
+
+def build_e04(c, repo_root):
+    import importlib.util
+    sys.path.insert(0, str(repo_root))
+    from methods.common import learned_bank as lb
+    repo = Path(repo_root)
+
+    def load_tool(name, rel):
+        spec = importlib.util.spec_from_file_location(name, str(repo / rel))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    s7t = load_tool('lb_s7_audit_build', 'tools/learned_bank_s7_audit.py')
+    gen = load_tool('lb_prod_authority_build', 'tools/learned_bank_production_authority.py')
+    M, S = E04, c.get('seed')
+    G = SafeGates()
+
+    def raw(rel):
+        p = repo / rel
+        return p.read_bytes() if p.is_file() else None
+    arel = AUTHORITY.format(M=M)
+    auth_raw = raw(arel)
+    auth = json.loads(auth_raw) if auth_raw else {}
+    auth_sha = sha256_bytes(auth_raw) if auth_raw else None
+    contract_raw, s7_raw = raw(lb.E04_CONTRACT_PATH), raw(lb.E04_S7_RECORD_PATH)
+    contract_sha, s7_sha = sha256_bytes(contract_raw), sha256_bytes(s7_raw)
+    s7 = json.loads(s7_raw)
+    ext_raw = raw(lb.E04_STORAGE_EXTENSION_PATH)
+    ext = json.loads(ext_raw) if ext_raw else {}
+    storage_raw = raw(lb.STORAGE_AUTHORITY_PATH)
+    shas = {p: sha256_bytes(raw(p)) if raw(p) else None for p in (
+        lb.E04_COMPLETION_RECORD, lb.E04_S7_AUTHORITY_PATH, lb.E04_INPUT_RULING_PATH, lb.E04_FAMILY_CLOSURE_RECORD)}
+    expected_records = {lb.E04_CONTRACT_PATH: contract_sha, arel: auth_sha, lb.E04_S7_RECORD_PATH: s7_sha,
+                        lb.STORAGE_AUTHORITY_PATH: sha256_bytes(storage_raw),
+                        lb.E04_STORAGE_EXTENSION_PATH: sha256_bytes(ext_raw) if ext_raw else None, **shas}
+    commit = (c.get('git') or {}).get('head')
+    exec_commit = exec_commit_of(repo, M)
+    src_commit = (auth.get('code_authority') or {}).get('source_commit')
+    pf = c.get('preflight') or {}
+    mk = c.get('markers') or {}
+    prov = c.get('provenance') or {}
+    ad = prov.get('adapter') or {}
+    fin = prov.get('adapter_finalize') or {}
+    ident = lb.checkpoint_identity_sha256(M, S) if S in SEEDS else None
+    auth_ck = lb.E04_CHECKPOINTS.get((M, S)) or {'run_id': None, 'sha256': {}}
+    ev = EVIDENCE.format(M=M, S=S)
+    rid = run_id(M, S or 0, str(commit), str(auth_sha))
+    fixture = json.loads(raw(E04_FIXTURE_RECORD))
+    runtime_rec = json.loads(raw(E04_RUNTIME_RECORD))
+    graph_id = fixture['key_results']['graph']
+    gz = repo / ev / 'bank_manifest.jsonl.gz'
+    body = gzip.decompress(gz.read_bytes()) if gz.is_file() else b''
+    msha = sha256_bytes(body)
+    lines = body.decode('ascii').splitlines() if body else []
+    rows = [json.loads(x) for x in lines]
+    rb = c.get('read_bank') or {}
+    lst = c.get('listing') or {}
+    iv = c.get('independent') or {}
+
+    # ---- A. governance and authority
+    G.check('A.authority_derived', lambda: auth == gen.authority_e04(src_commit, auth['date'])
+            and auth_raw.decode() == json.dumps(auth, indent=1) + '\n', {'path': arel, 'sha256': auth_sha})
+    G.check('A.authority_record', lambda: auth['schema_version'] == AUTHORITY_SCHEMA and auth['status'] == 'OWNER_APPROVED'
+            and auth['approved'] is True and auth['method'] == M and auth['seeds'] == list(SEEDS)
+            and contract_sha == E04_CONTRACT_SHA256 == auth['contract_sha256']
+            and auth['fidelity'] == 'CONTROLLED_ADAPTATION' and auth['display_name'] == lb.E04_REPORTING_LABEL
+            and auth['decisions'] == lb.E04_APPROVED_DECISIONS
+            and auth['authorizes'] == {'production_bank_generation': True, 'methods': [M], 'generator_retraining': False,
+                                       'checkpoint_change': False, 'inference_semantics_change': False,
+                                       'quality_filtering': False, 'val_or_test_access': False,
+                                       'other_method_production': False, 'downstream_training': False,
+                                       'test_evaluation': False, 'dinov3': False, 'gpat': False,
+                                       'method_status_update': False}
+            and dict(lb.load_production_authority(M, S, repo, live_storage=False).record()['records'])
+            == expected_records)
+    G.check('A.s7_record_passed_and_rebuilds', lambda: s7['status'] == E04_S7_STATUS and s7['s7_acceptance_passed'] is True
+            and s7['failed_gates'] == [] and s7['gates_passed'] == s7['gates_total'] == E04_S7_GATES
+            and s7['seeds'] == list(SEEDS)
+            and json.loads(json.dumps(s7t.build_e04(s7['collected'], repo))) == s7
+            and auth['s7_acceptance_record'] == {'path': lb.E04_S7_RECORD_PATH, 'sha256': s7_sha, 'status': E04_S7_STATUS,
+                                                 'execution_commit': s7['execution_commit'],
+                                                 'gates': '%d/%d' % (E04_S7_GATES, E04_S7_GATES)},
+            {'path': lb.E04_S7_RECORD_PATH, 'sha256': s7_sha})
+    draft = json.loads(raw(E04_STORAGE_DRAFT))
+    G.check('A.storage_extension_activated', lambda: ext['status'] == 'OWNER_APPROVED' and ext['approved'] is True
+            and ext['activation_verification']['ok'] is True and ext['methods'] == [M]
+            and ext['base_storage_authority'] == dict(draft['base_storage_authority'])
+            and ext['base_storage_authority']['sha256'] == sha256_bytes(storage_raw)
+            and ext['registry_extension'] == draft['registry_extension']
+            and ext['derived_from'] == {'path': E04_STORAGE_DRAFT, 'sha256': sha256_bytes(raw(E04_STORAGE_DRAFT))}
+            and lb.load_e04_storage_extension(repo)[1] == sha256_bytes(ext_raw)
+            and git(repo, 'merge-base', '--is-ancestor', exec_commit_of_path(repo, lb.E04_STORAGE_EXTENSION_PATH),
+                    src_commit).returncode == 0,
+            {'path': lb.E04_STORAGE_EXTENSION_PATH, 'sha256': expected_records[lb.E04_STORAGE_EXTENSION_PATH]})
+    diff = git(repo, 'diff', '--name-only', src_commit, commit).stdout.decode().split() if src_commit else ['?']
+    G.check('A.execution_checkout', lambda: commit == exec_commit and c['git']['status_porcelain'] == ''
+            and c['git']['branch'] == 'm6-baselines' and pf['git']['head'] == commit
+            and pf['git']['status_porcelain'] == ''
+            and git(repo, 'merge-base', '--is-ancestor', src_commit, commit).returncode == 0
+            and git(repo, 'merge-base', '--is-ancestor', commit, 'HEAD').returncode == 0
+            and git(repo, 'show', '%s:%s' % (commit, arel)).stdout == auth_raw
+            and all(any(p.match(x) for p in ALLOWED_EXEC_DIFF) for x in diff) and arel in diff
+            and c['repo'] == '%s/m8_learned_banks/clones/prod_%s_%s' % (WORKDIR, M, commit),
+            {'execution_commit': commit, 'source_commit': src_commit, 'diff_vs_source': diff})
+    G.check('A.authority_committed_before_launch', lambda: int(
+        git(repo, 'log', '-1', '--format=%ct', commit).stdout.decode().strip()) <= epoch(mk['launch_time']))
+
+    # ---- P. preflight immediately before launch
+    g = pf.get('gpu') or {}
+    st = pf.get('storage') or {}
+    cap = st.get('capacity') or {}
+    G.check('P.resources', lambda: pf['method'] == M and pf['seed'] == S and pf['processes'] == []
+            and all(v == '1 0' for v in pf['bank_panes'].values()) and g['uuid'] == GPU_UUID and g['name'] == GPU_NAME
+            and g['driver'] == DRIVER and g['free_mib'] >= (E04_ESTIMATE_GIB + MARGIN_GIB) * 1024
+            and pf['memory']['mem_available_bytes'] >= MEM_FLOOR_GIB << 30,
+            {'gpu_free_mib': g.get('free_mib'), 'floor_mib': (E04_ESTIMATE_GIB + MARGIN_GIB) * 1024,
+             'unrelated_gpu_processes': g.get('compute_apps')})
+    G.check('P.storage', lambda: st['ok'] is True and st['bank_root'] == BANK_ROOT
+            and st['filesystem']['filesystem_uuid'] == HDD_UUID and st['filesystem']['mount_point'] == '/media/ext_data'
+            and st['filesystem']['fstype'] == 'ext4' and st['mode_octal'] == '0o700'
+            and cap['free_bytes'] >= DISK_FLOOR_GIB << 30 and cap['free_inodes'] >= INODE_FLOOR,
+            {'checks': st.get('checks'), 'capacity': cap})
+    G.check('P.fresh_bank_dir', lambda: pf['bank_dir'] == '%s/%s/seed_%d' % (BANK_ROOT, M, S)
+            and pf['bank_dir_exists'] is False and all(pf['markers_absent'].values())
+            and len(pf['markers_absent']) == 8 and pf['tmux_session_absent'] is True and pf['utc'] <= mk['launch_time']
+            and (S != 42 or pf['method_dir_exists'] is False))
+    pck = pf.get('checkpoints') or {}
+    G.check('P.checkpoints_and_authority', lambda: len(pck) == 15 and all(
+        v['ok'] and v['identity'] == lb.checkpoint_identity_sha256(k.split('|')[0], int(k.split('|')[1]))
+        for k, v in pck.items()) and all(
+        pck['E04|%d' % s]['run_id'] == E04_RUN_IDS[s] and {k: f['sha256'] for k, f in pck['E04|%d' % s]['files'].items()}
+        == lb.E04_CHECKPOINTS[(M, s)]['sha256'] for s in SEEDS)
+        and pf['authority']['ok'] is True and pf['authority']['record']['records'] == expected_records
+        and pf['authority']['record']['mode'] == 'PRODUCTION' and pf['authority']['record']['seeds'] == [S]
+        and pf['authority']['record']['methods'] == [M])
+    pr = (pf.get('environment') or {}).get('probe') or {}
+    G.check('P.environment_lock', lambda: pf['environment']['present'] is True and pf['environment']['probe_rc'] == 0
+            and pr['python'] == E04_PY_VERSION and pr['tensorflow'] == E04_TF and pr['precision_errors'] == []
+            and pr['environment_lock']['ok'] is True and pr['environment_lock']['driver']['gpu_uuid'] == GPU_UUID
+            and pr['environment_lock']['driver']['observed_driver_version'] == DRIVER
+            and pr['environment_lock']['session_config'] == runtime_rec['session_config']
+            and pr['frozen_sources']['files'] == s7t.E04_FROZEN_FILES and pr['bn_only_difference'] is True
+            and pr['contract_sha256'] == E04_CONTRACT_SHA256 and pr['production_authority']['records'] == expected_records
+            and pr['config'] == {'path': lb.METHOD_CONFIGS[M][0], 'sha256': lb.METHOD_CONFIGS[M][1]}
+            and all(pr['checkpoint_counters'][str(x)]['global_iteration'] == 150000 for x in SEEDS),
+            {'probe': {k: pr.get(k) for k in ('python', 'tensorflow', 'precision_errors', 'checkpoint_counters')}})
+    G.check('P.inputs', lambda: pf['inputs'] == {'toy_manifest_sha256': lb.TOY_MANIFEST_SHA256,
+                                                 'feed_pack_manifest_sha256': E04_PACK_MANIFEST_SHA256,
+                                                 'faces_root_is_dir': True})
+    e0102 = e01_e02_expected(repo)
+    G.check('P.e01_e02_banks_unchanged', lambda: pf['e01_e02_manifests'] == e0102
+            and c['e01_e02_manifests_after'] == e0102)
+
+    # ---- R. run lifecycle
+    pane = mk.get('pane') or {}
+    res = pane.get('production_result') or {}
+    rr = res.get('result') or {}
+    want_cd = '\ncd %s || { echo 97 > %s/%s.exit; exit 97; }\n' % (c.get('repo'), WORKDIR, tag(M, S or 0))
+    want_line = ('\nenv -i HOME=/home/student20261 %s nice -n 10 %s -B tools/learned_bank.py production --method %s '
+                 '--seed %s --runtime-root %s\n' % (E03_ENV, E04_PYTHON, M, S, RUNTIME))
+    G.check('R.exit_zero', lambda: mk['exit_raw'] == '0\n' and mk['tmux_pane'] in ('1 0', '') and mk['end_time'] != '',
+            mk.get('exit_raw'))
+    G.check('R.command', lambda: want_cd in mk['command'] and want_line in mk['command']
+            and mk['command'].index(want_cd) < mk['command'].index(want_line)
+            and mk['command'].count('tools/learned_bank.py') == 1
+            and mk['command'].count('nvidia-smi') == 1)
+    G.check('R.result_line', lambda: res['method'] == M and res['seed'] == S and rr['status'] == 'completed'
+            and rr['rows'] == N and rr['outputs'] == N and rr['failure_count'] == 0
+            and rr['manifest_sha256'] == rb['manifest_sha256'] and not any(pane['fail_hits'].values()),
+            pane.get('fail_hits'))
+    G.check('R.window', lambda: epoch(mk['launch_time']) <= epoch(mk['end_time'])
+            and prov['start_utc'] >= mk['launch_time'] and prov['end_utc'] <= mk['end_time'],
+            [mk.get('launch_time'), prov.get('start_utc'), prov.get('end_utc'), mk.get('end_time')])
+    G.check('R.no_process_left', lambda: c['processes_after'] == [])
+    G.check('R.gpu_resource_samples', lambda: mk['gpu_samples']['samples'] > 0, mk.get('gpu_samples'))
+
+    # ---- S. bank content
+    G.check('S.provenance_completed', lambda: prov['status'] == 'completed' and c['aborted'] is False
+            and prov['rows'] == N and prov['outputs'] == N and prov['failure_count'] == 0 and prov['failures'] == []
+            and prov['mode'] == 'PRODUCTION' and prov['method_id'] == M and prov['bank_seed'] == S
+            and prov['run_dir'] == c['bank_dir'] == '%s/%s/seed_%d' % (BANK_ROOT, M, S)
+            and prov['post_write_verification']['ok'] is True and prov['post_write_verification']['files_checked'] == N
+            and prov['git_head'] == commit, prov.get('status'))
+    G.check('S.authorization', lambda: prov['authorization'] == {
+        'mode': 'PRODUCTION', 'methods': [M], 'seeds': [S], 'contract_sha256': E04_CONTRACT_SHA256,
+        'label': 'production', 'records': expected_records})
+    ck = ad.get('checkpoint') or {}
+    G.check('S.checkpoint_before', lambda: ad['is_fixture'] is False and ad['checkpoint_identity_sha256'] == ident
+            and ck['checkpoint_identity_sha256'] == ident and ck['method_id'] == M and ck['seed'] == S
+            and ck['run_id'] == auth_ck['run_id'] == E04_RUN_IDS[S] and ck['rule'] == 'BASELINE_FINAL_STATE_V1'
+            and {k: f['sha256'] for k, f in ck['files'].items()} == auth_ck['sha256']
+            and all(f['path'] == '%s/runs/m6/E04/seed_%d/%s' % (RUNTIME, S, E04_CKPT_FILES[k])
+                    for k, f in ck['files'].items())
+            and ad['generator_seed'] == ad['bank_seed'] == S, ad.get('checkpoint_identity_sha256'))
+    G.check('S.config_contract_decisions', lambda: ad['config_sha256'] == lb.METHOD_CONFIGS[M][1]
+            and ad['contract_sha256'] == E04_CONTRACT_SHA256 and ad['decisions'] == lb.E04_APPROVED_DECISIONS
+            and ad['conversion_rule'] == lb.CONVERSION_RULES[M] and ad['method_id'] == M)
+    G.check('S.frozen_synthesis_sources', lambda: ad['source']['files'] == s7t.E04_FROZEN_FILES
+            and ad['source']['synthesis_lines'] == s7t.E04_SYNTHESIS_LINES
+            and ad['source']['predecessor_reference']['lines'] == s7t.E04_PREDECESSOR['lines']
+            and ad['source']['predecessor_reference']['commit'].startswith(s7t.E04_PREDECESSOR['commit']))
+    G.check('S.inference_graph', lambda: ad['graph'] == graph_id and ad['graph']['fused_batch_norm'] == 15
+            and ad['graph']['fused_batch_norm_is_training'] is False and ad['graph']['update_ops'] == 0
+            and ad['graph']['batch_size'] == 1
+            and fin == {'forwards': N, 'batch_size': 1, 'stochastic_at_inference': False,
+                        'auxiliary_outputs_written': False, 'bn_mode': 'inference_moving_statistics'},
+            {'graph_equals_fixture_qualified': ad.get('graph') == graph_id, 'finalize': fin})
+    G.check('S.stored_bn_statistics', lambda: ad['coverage'] == fixture['real_checkpoints'][str(S)]['coverage']
+            and ad['coverage']['restored_variables'] == 102 and ad['coverage']['checkpoint_variables'] == 500
+            and ad['coverage']['restored_names_sha256'] == ad['graph']['variable_names_sha256']
+            and ad['graph']['trainable_variables'] == 72 and ad['graph']['bn_moving_statistics'] == 30
+            and ad['moving_statistics'] == fixture['real_checkpoints'][str(S)]['moving_statistics']
+            and ad['moving_statistics']['ok'] is True)
+    G.check('S.no_training', lambda: ad['graph']['gradient_ops'] == 0 and ad['graph']['mutating_reachable_ops'] == []
+            and ad['graph']['random_reachable_ops'] == []
+            and ad['coverage']['not_restored_classes']['optimizer_slots'] == 288 and fin['forwards'] == N)
+    rd = prov.get('reader') or {}
+    pop = prov.get('population') or {}
+    G.check('S.train_only_reader', lambda: rd['reads'] == rd['atime_checked_reads'] == E04_FACE_READS
+            and rd['splits_allowlisted'] == ['TRAIN'] and rd['o_noatime'] is True and rd['faces_root'] == FACES
+            and pop['allowlist_source'] == E04_ALLOWLIST_SOURCE and pop['pairs_val_opened'] is False
+            and pop['pack_manifest_sha256'] == E04_PACK_MANIFEST_SHA256
+            and pop['relation_source'] == 'e04_feed_pack_v1 pairs_train.json', rd)
+    env_ = prov.get('environment') or {}
+    G.check('S.environment', lambda: env_['python_executable'] == E04_PYTHON and env_['python_version'] == E04_PY_VERSION
+            and env_['cuda_visible_devices'] == '0' and env_['host'] == 'nd-System-Product-Name'
+            and ad['framework'] == 'tensorflow ' + E04_TF and ad['driver']['gpu_uuid'] == GPU_UUID
+            and ad['driver']['observed_driver_version'] == DRIVER
+            and ad['environment_session_config'] == runtime_rec['session_config'], env_)
+    G.check('S.reader_verification', lambda: rb['ok'] is True and rb['problems'] == [] and rb['files_checked'] == N
+            and rb['failures'] == 0 and rb['provenance_ok'] is True)
+    G.check('S.independent_verification', lambda: iv['files'] == N and iv['files_verified'] == N
+            and iv['problem_count'] == 0 and iv['modes'] == ['0o444'] and lst['dir_mode'] == '0o555'
+            and lst['bank_dir_mode'] == '0o555'
+            and lst['entries'] == sorted([lb.BANK_DIR, lb.MANIFEST, lb.MANIFEST_SHA, lb.PROVENANCE])
+            and all(v['mode'] == '0o444' for v in lst['top_files'].values())
+            and c['bank_unchanged_during_collect'] is True,
+            {k: iv.get(k) for k in ('files', 'files_verified', 'problem_count', 'modes', 'total_png_bytes')})
+    pv = c.get('png_verification') or {}
+    G.check('S.png_structure', lambda: pv['structures'] == {
+        s7t.canonical(dict(s7t.E04_PNG_STRUCTURE, scanline_filters_ok=True)): N} and pv['problem_count'] == 0,
+        {'structures': len(pv.get('structures') or {}), 'problem_count': pv.get('problem_count')})
+    mi = c.get('manifest_inspect') or {}
+    G.check('S.manifest_committed', lambda: msha == rb['manifest_sha256'] == prov['manifest_sha256']
+            == lst['top_files'][lb.MANIFEST]['sha256'] == mi['sha256'] and mi['lines'] == N
+            and mi['canonical_lines'] is True and mi['fields_ok'] is True and mi['ends_with_newline'] is True
+            and mi['sha_file'] == '%s  bank_manifest.jsonl\n' % msha
+            and all(lb.canonical_json(r) == x for r, x in zip(rows, lines)), msha)
+    rel = pair_relation(repo)
+    G.check('S.population', lambda: len(rows) == N and [
+        (r['row_index'], r['pair_id'], r['target_live_id'], r['source_spoof_id'], r['dataset']) for r in rows]
+        == [(i,) + tuple(x) for i, x in enumerate(rel)] and all(
+        r['row_id'] == r['pair_id'] and re.match(r'^PTR\d{6}$', r['pair_id']) and r['synthetic_id'] is None
+        and r['deterministic_noise_seed'] is None and r['dsdg_batch_index'] is None and r['dsdg_batch_offset'] is None
+        for r in rows) and len({r['pair_id'] for r in rows}) == N and pop['rows'] == N
+        and pop['kind'] == 'PRODUCTION_FROZEN_TRAIN_POPULATION')
+    faces = face_table(repo, {r['target_live_id'] for r in rows} | {r['source_spoof_id'] for r in rows})
+    G.check('S.face_lineage_split_v1_m2', lambda: len(rows) == N and all(
+        faces[r[k]] == ('TRAIN', r['dataset'], r[h], 'COMPLETE')
+        for r in rows for k, h in (('target_live_id', 'target_face_sha256'), ('source_spoof_id', 'source_face_sha256'))),
+        {'faces': len(faces)})
+    G.check('S.rows_finite_rgb_uint8', lambda: len(rows) == N and all(
+        r['schema'] == lb.SCHEMA and r['generation_status'] == 'success' and r['raw_output_finite'] is True
+        and r['failure_reason'] is None and r['mode'] == 'PRODUCTION' and r['label'] == 'spoof' and r['method_id'] == M
+        and r['conversion_rule'] == lb.CONVERSION_RULES[M] and r['checkpoint_identity_sha256'] == ident
+        and r['config_sha256'] == lb.METHOD_CONFIGS[M][1] and r['contract_sha256'] == E04_CONTRACT_SHA256
+        and r['generator_seed'] == r['bank_seed'] == S and r['output_path'] == 'bank/%s.png' % r['row_id']
+        and isinstance(r['raw_output_min'], float) and isinstance(r['raw_output_max'], float)
+        and r['raw_output_min'] <= r['raw_output_max'] for r in rows)
+        and len({r['output_path'] for r in rows}) == N)
+    eq = c.get('s7_equivalence') or {}
+    toy = lb.load_toy_manifest(repo)
+    want_idx = [t['position'] for t in toy]
+    G.check('S.s7_production_equivalence', lambda: eq['s7_record_sha256'] == s7_sha
+            and eq['s7_manifest_sha256_recorded'] == s7['outputs'][str(S)]['manifest_sha256']
+            and eq['run_dirs_recorded'] == s7['outputs'][str(S)]['run_dirs'] and sorted(eq['runs']) == ['A', 'B']
+            and all(v['manifest_sha256'] == s7['outputs'][str(S)]['manifest_sha256'][L]
+                    and v['dir'] == s7['outputs'][str(S)]['run_dirs'][L] and v['rows'] == v['rows_matched'] == TOY_N
+                    and v['identity_mismatches'] == [] and v['field_mismatch_count'] == 0
+                    and v['byte_mismatch_count'] == 0 and v['pixel_mismatch_count'] == 0
+                    and v['pixel_arrays_equal'] == TOY_N and v['row_indices'] == want_idx
+                    and v['pair_ids_sha256'] == sha256_bytes('\n'.join(t['pair_id'] for t in toy).encode())
+                    for L, v in eq['runs'].items()),
+            {L: {k: v.get(k) for k in ('rows_matched', 'field_mismatch_count', 'byte_mismatch_count',
+                                        'pixel_mismatch_count', 'pixel_arrays_equal')}
+             for L, v in (eq.get('runs') or {}).items()})
+    af = c.get('checkpoints_after') or {}
+    G.check('S.checkpoint_after', lambda: len(af) == 15 and all(
+        v['ok'] and v['identity'] == lb.checkpoint_identity_sha256(k.split('|')[0], int(k.split('|')[1]))
+        for k, v in af.items()) and all(
+        af['E04|%d' % S]['files'][k]['mtime_ns'] == ck['files'][k]['mtime_ns']
+        and af['E04|%d' % S]['files'][k]['sha256'] == auth_ck['sha256'][k] for k in auth_ck['sha256'])
+        and all(af[k]['files'] == pck[k]['files'] for k in af))
+
+    # ---- F. firewall and storage
+    at = c.get('atime') or {}
+    G.check('F.atime_ledger', lambda: at['same_paths'] is True and at['files_pre'] == at['files_post'] > 0
+            and at['pre_utc'] <= mk['launch_time'] and at['post_utc'] >= mk['end_time']
+            and all(v['atime_changed'] == 0 and v['mtime_changed'] == 0 and v['missing_post'] == 0
+                    for v in at['by_split'].values()) and {'TRAIN', 'VAL', 'TEST'} <= set(at['by_split']),
+            at.get('by_split'))
+    G.check('F.no_val_test_inputs', lambda: pop['pairs_val_opened'] is False and len(rows) == N and all(
+        faces[r[k]][0] == 'TRAIN' for r in rows for k in ('target_live_id', 'source_spoof_id')))
+    fp = (c.get('feed_pack') or {}).get('feed_pack_crosscheck') or {}
+    G.check('F.feed_pack_allowlist_crosscheck', lambda: fp['manifest_sha256'] == E04_PACK_MANIFEST_SHA256
+            and fp['payload_sha_ok'] is True and fp['samples'] == E04_PACK_COUNTS['samples']
+            and fp['samples_mismatching_count'] == 0 and fp['pairs'] == E04_PACK_COUNTS['pairs']
+            and fp['pairs_equal_pairs_train_v1'] is True and fp['pairs_split'] == 'TRAIN'
+            and c['feed_pack']['pairs_splits'] == ['TRAIN'], fp)
+    sa = c.get('storage_after') or {}
+    G.check('F.storage_after', lambda: sa['ok'] is True and sa['filesystem']['filesystem_uuid'] == HDD_UUID
+            and sa['mode_octal'] == '0o700' and sa['unexpected_entries'] == [], sa.get('checks'))
+    reg_before = pf.get('registry') or {}
+    key = '%s/seed_%d' % (M, S)
+    G.check('F.other_banks_unchanged', lambda: all(c['registry_after'].get(k) == v for k, v in reg_before.items())
+            and sorted(c['registry_after']) == sorted(list(reg_before) + [key])
+            and c['registry_after'][key]['manifest_sha256'] == msha and c['registry_after'][key]['provenance'] is True
+            and all(v['provenance'] and not v['aborted'] for v in c['registry_after'].values())
+            and {k.split('/')[0] for k in c['registry_after']} <= set(lb.BANK_METHODS),
+            sorted(c.get('registry_after') or {}))
+
+    failed = G.failed
+    status = 'LEARNED_BANK_PRODUCTION_PASSED' if not failed else 'LEARNED_BANK_PRODUCTION_FAILED_NEEDS_OWNER_REVIEW'
+    raw_min = [r['raw_output_min'] for r in rows if isinstance(r.get('raw_output_min'), float)]
+    raw_max = [r['raw_output_max'] for r in rows if isinstance(r.get('raw_output_max'), float)]
+    extremes = sorted(rows, key=lambda r: (r['raw_output_max'] or 0) - (r['raw_output_min'] or 0), reverse=True)[:5]
+    pr0 = pr or {}
+    gs = mk.get('gpu_samples') or {}
+    base_pids = {str(x['pid']) for x in (pf.get('gpu') or {}).get('compute_apps', [])}
+    doc = {
+        'schema': 'learned_bank_production_audit_record_v1', 'method': M, 'seed': S, 'run_id': rid,
+        'status': status, 'production_audit_passed': not failed, 'failed_gates': failed, 'gates': G.results,
+        'gates_passed': len(G.results) - len(failed), 'gates_total': len(G.results),
+        'display_name': lb.E04_REPORTING_LABEL, 'fidelity': lb.E04_FIDELITY,
+        'authority': {'path': arel, 'sha256': auth_sha}, 'contract_sha256': contract_sha, 'execution_commit': commit,
+        'source_commit': src_commit, 's7_record': {'path': lb.E04_S7_RECORD_PATH, 'sha256': s7_sha},
+        'storage_extension': {'path': lb.E04_STORAGE_EXTENSION_PATH,
+                              'sha256': expected_records[lb.E04_STORAGE_EXTENSION_PATH]},
+        'bank': {'path': c.get('bank_dir'), 'rows': N, 'outputs': rb.get('files_checked'), 'failures': rb.get('failures'),
+                 'manifest_sha256': msha, 'manifest_evidence': ev + '/bank_manifest.jsonl.gz',
+                 'provenance_sha256': (lst.get('top_files') or {}).get(lb.PROVENANCE, {}).get('sha256'),
+                 'total_png_bytes': iv.get('total_png_bytes'),
+                 'output_sha256_list_sha256': sha256_bytes('\n'.join(r['output_sha256'] for r in rows).encode()),
+                 'pixel_sha256_list_sha256': sha256_bytes('\n'.join(r['output_pixel_sha256'] for r in rows).encode())},
+        'checkpoint': {'run_id': auth_ck['run_id'], 'iteration': 150000, 'sha256': auth_ck['sha256'],
+                       'checkpoint_identity_sha256': ident,
+                       'paths': {k: '%s/runs/m6/E04/seed_%s/%s' % (RUNTIME, S, v) for k, v in E04_CKPT_FILES.items()},
+                       'mtime_ns_before_after': {k: [ck.get('files', {}).get(k, {}).get('mtime_ns'),
+                                                     ((af.get('E04|%d' % S) or {}).get('files') or {}).get(k, {})
+                                                     .get('mtime_ns')] for k in E04_CKPT_FILES}},
+        'descriptive_statistics': iv.get('stats'),
+        'raw_output_observation': {
+            'note': 'scientific observation only (E04-Q3 clips to [0, 1] before the uint8 cast); no gate, no filter',
+            'rows_with_raw_min_below_0': sum(x < 0 for x in raw_min), 'rows_with_raw_max_above_1': sum(x > 1 for x in raw_max),
+            'raw_min_min': min(raw_min) if raw_min else None, 'raw_max_max': max(raw_max) if raw_max else None,
+            'widest_raw_range_rows': [[r['pair_id'], r['raw_output_min'], r['raw_output_max']] for r in extremes]},
+        'storage': {'bank_root': BANK_ROOT, 'filesystem_uuid': (sa.get('filesystem') or {}).get('filesystem_uuid'),
+                    'mount_point': (sa.get('filesystem') or {}).get('mount_point'),
+                    'capacity_before': cap, 'capacity_after': sa.get('capacity')},
+        'window': {'launch': mk.get('launch_time'), 'end': mk.get('end_time'),
+                   'wall_time_seconds': prov.get('wall_time_seconds')},
+        'gpu_resources': {'samples': gs.get('samples'), 'samples_sha256': gs.get('sha256'),
+                          'peak_used_mib_new_pids': {p: m for p, m in (gs.get('peak_used_mib_by_pid') or {}).items()
+                                                     if p not in base_pids},
+                          'unrelated_processes_at_preflight': (pf.get('gpu') or {}).get('compute_apps')},
+        'scientific_disclosures': E04_DISCLOSURES,
+        'reproduction': {
+            'method_id': M, 'seed': S, 'execution_commit': commit, 'source_commit': src_commit, 'branch': 'm6-baselines',
+            'clone': c.get('repo'), 'working_directory': c.get('repo'), 'command': mk.get('command'),
+            'command_sha256': mk.get('command_sha256'),
+            'launch_script': 'tools/learned_bank_production_scripts/m8prod_launch.sh %s %s %s' % (M, S, commit),
+            'post_script': 'tools/learned_bank_production_scripts/m8prod_post.sh %s %s' % (M, S),
+            'exit_status': mk.get('exit_raw'), 'contract': {'path': lb.E04_CONTRACT_PATH, 'sha256': contract_sha},
+            'config': {'path': lb.METHOD_CONFIGS[M][0], 'sha256': lb.METHOD_CONFIGS[M][1]},
+            'environment': {'name': 'gpat-m6-e03', 'python': E04_PYTHON,
+                            'lock': {'path': lb.ENVIRONMENTS[M]['lock'][0], 'sha256': lb.ENVIRONMENTS[M]['lock'][1]},
+                            'python_version': pr0.get('python'), 'tensorflow': pr0.get('tensorflow'),
+                            'native_runtime': (pr0.get('environment_lock') or {}).get('native_runtime'),
+                            'package_versions': (pr0.get('environment_lock') or {}).get('package_versions'),
+                            'precision_env': dict(s7t.E04_PRECISION_ENV), 'run_environment': prov.get('environment'),
+                            'framework': ad.get('framework')},
+            'gpu': {'name': g.get('name'), 'uuid': g.get('uuid'), 'driver': g.get('driver'),
+                    'driver_policy': ((pr0.get('environment_lock') or {}).get('driver') or {}).get('driver_policy')},
+            'inputs': {'pairs_train_v1': {'path': lb.PAIRS_PATH, 'sha256': lb.PAIRS_SHA256},
+                       'feed_pack_manifest_sha256': E04_PACK_MANIFEST_SHA256,
+                       'input_allowlist_ruling': {'path': lb.E04_INPUT_RULING_PATH,
+                                                  'sha256': shas[lb.E04_INPUT_RULING_PATH]},
+                       'split_crosscheck': {'split_v1': lb.SPLIT_SHA256, 'm2_accounting': lb.M2_ACCOUNTING_SHA256,
+                                            'faces_checked': len(faces)}},
+            'geometry': 'frozen e04_feed_pack_v1 Q140; dense_offsets(source_xy=spoof Q140, target_xy=live Q140) (D2)',
+            'preprocessing': 'uint8 RGB 256x256 face / 255 -> float32 (D8)',
+            'bn_mode': 'tf.layers.batch_normalization(training=False): restored moving statistics, batch 1 (E04-Q1)',
+            'population': 'all %d frozen pairs_train_v1 rows in canonical 0-based order' % N,
+            'rng': 'none (deterministic inference; no sampling or augmentation)',
+            'conversion_rule': lb.CONVERSION_RULES[M], 'output_root': c.get('bank_dir'),
+            'preflight_sha256': c.get('preflight_sha256'),
+            'atime_ledger': {k: at.get(k) for k in ('pre_utc', 'post_utc', 'pre_sha256', 'post_sha256')},
+            'audit_commands': {
+                'preflight': 'env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= '
+                             '/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - preflight --method E04 '
+                             '--seed %s --repo %s < tools/learned_bank_production_audit.py' % (S, c.get('repo')),
+                'collect': 'env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= '
+                           '/home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E04 '
+                           '--seed %s --repo %s < tools/learned_bank_production_audit.py' % (S, c.get('repo')),
+                'build': 'python3 tools/learned_bank_production_audit.py build --collected %s/collected.json' % ev},
+            'replay_policy': 'E04-Q5: bitwise A/B replay is established by the passed S7 record; this audit requires the '
+                             '186 S7 toy rows to equal their production rows byte for byte and pixel for pixel (runs A '
+                             'and B). A second full production bank is not required by the contract and was not '
+                             'generated.',
+            'backup': 'the image bank exists only on the approved HDD; git holds the manifest (gzip), per-image file and '
+                      'pixel SHA256 and this audit, not the image bytes; no independent binary backup exists'},
+        'collected': {'path': ev + '/collected.json', 'sha256': sha256_file(repo / ev / 'collected.json')
+                      if (repo / ev / 'collected.json').is_file() else None},
+        'audit_tool': {'path': 'tools/learned_bank_production_audit.py',
+                       'sha256': sha256_file(repo / 'tools/learned_bank_production_audit.py')},
+    }
+    return doc
+
+
+def exec_commit_of_path(repo, rel):
+    out = git(repo, 'log', '--format=%H', '--diff-filter=A', '--', rel).stdout.decode().split()
+    return out[0] if len(out) == 1 else 'MISSING'
+
+
+def report_e04(doc):
+    base = report(doc)
+    ro = doc['raw_output_observation']
+    eq = [g for g in doc['gates'] if g['gate'] == 'S.s7_production_equivalence'][0]
+    return base + '\n'.join([
+        '## E04 specifics', '',
+        '- Reporting label: %s. Fidelity: `%s` (not an official native Physics-STD reproduction).' % (
+            doc['display_name'], doc['fidelity']),
+        '- Checkpoint iteration %d, run `%s`; component sha256 before = after; mtimes unchanged.' % (
+            doc['checkpoint']['iteration'], doc['checkpoint']['run_id']),
+        '- S7-to-production (manifest-matched by global position and pair_id): %s.' % json.dumps(eq.get('detail'),
+                                                                                                sort_keys=True),
+        '- Raw-output observation (no gate): %d rows with raw min < 0, %d rows with raw max > 1; extreme raw range '
+        '[%s, %s]; clipped to [0, 1] by the approved conversion.' % (
+            ro['rows_with_raw_min_below_0'], ro['rows_with_raw_max_above_1'], ro['raw_min_min'], ro['raw_max_max']),
+        '- GPU (nvidia-smi samples, new PIDs): %s.' % json.dumps(doc['gpu_resources']['peak_used_mib_new_pids']),
+        '', '## Disclosures', ''] + ['- %s' % x for x in doc['scientific_disclosures']] + [''])
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest='cmd', required=True)
     for name in ('preflight', 'collect'):
         a = sub.add_parser(name)
-        a.add_argument('--method', required=True, choices=METHOD_ORDER)
+        a.add_argument('--method', required=True, choices=METHOD_ORDER + (E04,))
         a.add_argument('--seed', required=True, type=int, choices=SEEDS)
         a.add_argument('--repo', required=True)
     b = sub.add_parser('build')
     b.add_argument('--collected', required=True)
     b.add_argument('--repo-root', default=str(Path(globals().get('__file__', 'tools/x')).resolve().parents[1]))
     cl = sub.add_parser('close')
-    cl.add_argument('--method', required=True, choices=METHOD_ORDER)
+    cl.add_argument('--method', required=True, choices=METHOD_ORDER + (E04,))
     cl.add_argument('--repo-root', default=str(Path(globals().get('__file__', 'tools/x')).resolve().parents[1]))
     args = ap.parse_args(argv)
     if args.cmd == 'preflight':
-        return preflight(args.method, args.seed, args.repo)
+        return (preflight_e04(args.seed, args.repo) if args.method == E04
+                else preflight(args.method, args.seed, args.repo))
     if args.cmd == 'collect':
-        return collect(args.method, args.seed, args.repo)
+        return collect_e04(args.seed, args.repo) if args.method == E04 else collect(args.method, args.seed, args.repo)
     root = Path(args.repo_root)
     if args.cmd == 'build':
         c = json.loads(Path(args.collected).read_text())
         ev = root / EVIDENCE.format(M=c['method'], S=c['seed'])
         if Path(args.collected).resolve() != (ev / 'collected.json').resolve():
             ap.error('build reads the committed evidence %s/collected.json' % ev)
-        doc = build(c, root)
+        doc = build_e04(c, root) if c['method'] == E04 else build(c, root)
         out = RECORD.format(M=doc['method'], S=doc['seed'])
         print(doc['status'], doc['gates_passed'], '/', doc['gates_total'], doc['failed_gates'])
         ok = doc['production_audit_passed']
@@ -1024,7 +1780,8 @@ def main(argv=None):
         print(doc['status'], doc.get('gates_passed'), '/', doc.get('gates_total'), doc['failed_gates'])
         ok = doc['status'] == 'LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED'
     (root / (out + '.json')).write_text(json.dumps(doc, indent=1, sort_keys=True) + '\n')
-    (root / (out + '.md')).write_text(report(doc) if args.cmd == 'build' else closure_report(doc))
+    (root / (out + '.md')).write_text((report_e04(doc) if doc['method'] == E04 else report(doc)) if args.cmd == 'build'
+                                      else closure_report(doc))
     (root / (out + '_SHA256.txt')).write_text(''.join('%s  %s\n' % (sha256_file(root / p), p)
                                                     for p in (out + '.json', out + '.md')))
     return 0 if ok else 1

@@ -176,7 +176,12 @@ class LearnedBankRefusesE04(unittest.TestCase):
         # since the owner E04 S7 authority (learned_bank_s7_launch_authority_E04.yaml) S7_TOY loads; production and
         # storage still refuse E04 (history scope, owner decision B1)
         s7_activated = (ROOT / lb.E04_S7_AUTHORITY_PATH).exists()
-        self.assertEqual((g['s7']['ok'], g['production']['ok'], g['storage_authority']['ok']), (s7_activated, False, False))
+        # after the owner E04 storage-extension and production activations (2026-11-25 production session) storage
+        # loads and production loads only where the live HDD preflight passes (the GPU host)
+        ext = (ROOT / lb.E04_STORAGE_EXTENSION_PATH).exists()
+        prod = (ROOT / lb.PRODUCTION_AUTHORITY_TEMPLATE.format(method='E04')).exists()
+        self.assertEqual((g['s7']['ok'], g['production']['ok'], g['storage_authority']['ok']),
+                         (s7_activated, prod and lb.storage_preflight()['ok'], ext))
 
 
 class E05ReportingDecision(unittest.TestCase):

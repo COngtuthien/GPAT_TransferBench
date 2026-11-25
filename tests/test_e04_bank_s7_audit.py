@@ -40,6 +40,7 @@ def tool():
 
 M = tool()
 FAKE = 'feedface' * 5                       # synthetic execution commit (the overlay view serves the working tree)
+S7_EXECUTION_COMMIT = 'd5d0cb3ea5d2c15aba4d0d2ddb84cade72ef279d'   # real E04 S7 execution commit (LEARNED_BANK_S7_E04.json)
 S7 = '/home/student20261/workdir/m8_learned_banks/s7/' + FAKE
 REPO = '/home/student20261/workdir/m8_learned_banks/clones/s7e04_' + FAKE
 APPROVAL = {'owner_authorized': True, 'scope': 'E04 S7 toy-bank acceptance', 'date': '2026-11-25',
@@ -70,7 +71,16 @@ class View(M.GitView):
         return self.overlay[rel] if rel in self.overlay else super().read(rel)
 
     def show(self, commit, rel):
-        return self.read(rel) if commit == FAKE else super().show(commit, rel)
+        # history scope (owner decision B1): the synthetic S7 execution commit FAKE serves the E04 code paths that the
+        # P.e04_code_change_scope gate inspects (adapter, CLI, library) as they were at the real S7 execution commit
+        # d5d0cb3, never the live tree -- later additive production changes (E04 production branch) are outside S7
+        if commit == FAKE:
+            if rel in self.overlay:
+                return self.overlay[rel]
+            if rel in (M.E04_ADAPTER_PATH, M.E04_CLI_PATH, M.E04_LB_PATH):
+                return super().show(S7_EXECUTION_COMMIT, rel)
+            return self.read(rel)
+        return super().show(commit, rel)
 
     def is_ancestor(self, commit):
         return commit == FAKE or super().is_ancestor(commit)

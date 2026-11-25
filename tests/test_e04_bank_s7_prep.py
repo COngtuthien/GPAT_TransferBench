@@ -29,8 +29,15 @@ class Prep(unittest.TestCase):
             d = json.loads((ROOT / rel).read_text())
             self.assertIs(d['approved'], False, rel)
             self.assertNotEqual(d['status'], 'OWNER_APPROVED', rel)
+        # history scope (owner decision B1): neither activated record existed at this milestone (2caff0d); the owner
+        # activated both in the 2026-11-25 production session; an activation keeps every DRAFT registry field
         for rel in (lb.E04_STORAGE_EXTENSION_PATH, 'configs/amendments/learned_bank_production_E04.yaml'):
-            self.assertFalse((ROOT / rel).exists(), rel)
+            self.assertNotEqual(subprocess.run(['git', 'cat-file', '-e', '2caff0d:' + rel], cwd=str(ROOT),
+                                               stderr=subprocess.DEVNULL).returncode, 0, rel)
+        if (ROOT / lb.E04_STORAGE_EXTENSION_PATH).exists():
+            a, d = (json.loads((ROOT / rel).read_text()) for rel in (lb.E04_STORAGE_EXTENSION_PATH, prep.STORAGE_DRAFT))
+            for k in ('registry_extension', 'base_storage_authority', 'methods', 'schema_version'):
+                self.assertEqual(a[k], d[k], k)
         # history scope (owner decision B1): no E04 S7 authority at this milestone (2caff0d); a later owner activation
         # must keep every DRAFT field unchanged
         self.assertNotEqual(subprocess.run(['git', 'cat-file', '-e', '2caff0d:' + lb.E04_S7_AUTHORITY_PATH],
@@ -41,7 +48,8 @@ class Prep(unittest.TestCase):
             for k, v in d.items():
                 if k not in ('status', 'approved', 'launch_preconditions'):
                     self.assertEqual(a[k], v, k)
-        self.assertEqual(lb.registered_bank_methods(), lb.METHODS)
+        self.assertEqual(lb.registered_bank_methods(), lb.BANK_METHODS if (ROOT / lb.E04_STORAGE_EXTENSION_PATH).exists()
+                         else lb.METHODS)
 
     def test_s7_draft_activates_only_when_owner_flips_status(self):
         """The DRAFT binds exactly what _load_e04_s7_authority checks: a copy with status OWNER_APPROVED is accepted,
