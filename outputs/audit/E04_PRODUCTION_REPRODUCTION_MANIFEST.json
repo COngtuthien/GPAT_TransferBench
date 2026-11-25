@@ -1,0 +1,991 @@
+{
+ "authority": {
+  "path": "configs/amendments/learned_bank_production_E04.yaml",
+  "sha256": "9d714c0978456d0a5333de75115d9cb4b891664c4a3528235efa1d963bb9ac57"
+ },
+ "backup": "the image banks exist only on the approved HDD; git holds manifests, per-image hashes and audits; hashes are not a backup",
+ "contract": {
+  "path": "configs/amendments/e04_bank_generation_contract.yaml",
+  "sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f"
+ },
+ "display_name": "Physics-STD (controlled geometry/depth reconstruction)",
+ "family_closure": {
+  "gates": "24/24",
+  "path": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_FAMILY_CLOSURE.json",
+  "sha256": "2e9aa34f1c0cb574f731fc89e14ab0aa1bde58632aaad6ec141e19b51d00fa98",
+  "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED",
+  "total_outputs": 26514
+ },
+ "fidelity": "CONTROLLED_ADAPTATION",
+ "host_orchestration": {
+  "chain": "~/workdir/m8prod_E04_s<S>_chain.sh (seeds 1337, 2026): wait -> dead pane -> post -> collect; seed 42 ran the same steps by hand (post ledger 90 s after end, first post attempt refused PANE NOT DEAD)",
+  "scripts_copy": "~/workdir/m8_learned_banks/prod_scripts_<execution_commit>/"
+ },
+ "input_allowlist_ruling": {
+  "decision": "FEED_PACK_ALLOWLIST_WITH_INDEPENDENT_AUDITOR_CROSSCHECK",
+  "path": "configs/amendments/e04_s7_input_allowlist_ruling.yaml",
+  "sha256": "c74217624cfa10421532946b36c0dbdfc3d8236aa01be3f8da66476cd6916713"
+ },
+ "method": "E04",
+ "runs": {
+  "1337": {
+   "atime_by_split": {
+    "TEST": {
+     "atime_changed": 0,
+     "files": 3027,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "TRAIN": {
+     "atime_changed": 0,
+     "files": 14467,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "VAL": {
+     "atime_changed": 0,
+     "files": 3121,
+     "missing_post": 0,
+     "mtime_changed": 0
+    }
+   },
+   "atime_ledger": {
+    "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "post_utc": "2026-11-25T15:50:31Z",
+    "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "pre_utc": "2026-11-25T15:25:36Z"
+   },
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E04_s1337/collected.json",
+    "collect": "env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E04 --seed 1337 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 < tools/learned_bank_production_audit.py",
+    "preflight": "env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - preflight --method E04 --seed 1337 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 < tools/learned_bank_production_audit.py"
+   },
+   "audit_record": {
+    "gates": "43/43",
+    "path": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_SEED1337.json",
+    "sha256": "a3e4b87d0282ae603737f3bb3141259a6ae292007008c174e7b9616a3ce27d92",
+    "status": "LEARNED_BANK_PRODUCTION_PASSED"
+   },
+   "bank": {
+    "failures": 0,
+    "manifest_evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E04_s1337/bank_manifest.jsonl.gz",
+    "manifest_sha256": "83993dc73979b8bdfe714b9588ada874a9da7415f8e9f80405e77f75a64b6f34",
+    "output_sha256_list_sha256": "f9f4a4443c4cab3f24eb0298a37f3fcfac9427cbab731c85193498f8bf68313c",
+    "outputs": 8838,
+    "path": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_1337",
+    "pixel_sha256_list_sha256": "3c8d2d136efd5b331a72258e148d9317f46100ad2f493a9e934fc72856a8f8c1",
+    "provenance_sha256": "69629ba2fb996c7d9c5e006942d5d965485e498f10b7d4ea3dfed6a21a436050",
+    "rows": 8838,
+    "total_png_bytes": 749730389
+   },
+   "bn_mode": "tf.layers.batch_normalization(training=False): restored moving statistics, batch 1 (E04-Q1)",
+   "checkpoint": {
+    "checkpoint_identity_sha256": "4f183d2143d27d1d35326212f9ff9c0fb36e9d0d933e59c1df79436cc3492f2f",
+    "iteration": 150000,
+    "mtime_ns_before_after": {
+     "data-00000-of-00001": [
+      1795248579104950373,
+      1795248579104950373
+     ],
+     "index": [
+      1795248579104999830,
+      1795248579104999830
+     ],
+     "meta": [
+      1795248579386570889,
+      1795248579386570889
+     ]
+    },
+    "paths": {
+     "data-00000-of-00001": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_1337/checkpoints/iteration_150000.data-00000-of-00001",
+     "index": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_1337/checkpoints/iteration_150000.index",
+     "meta": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_1337/checkpoints/iteration_150000.meta"
+    },
+    "run_id": "a42fdd2a2accaf0a",
+    "sha256": {
+     "data-00000-of-00001": "fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5",
+     "index": "1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560",
+     "meta": "bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233"
+    }
+   },
+   "checkpoint_integrity_after": true,
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E04 seed 1337, one OS process -- authority configs/amendments/learned_bank_production_E04.yaml at fabc1ef5069c05cd1d39e17057a90148fa296220\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E04_s1337.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 || { echo 97 > /home/student20261/workdir/m8prod_E04_s1337.exit; exit 97; }\n( while [ ! -s /home/student20261/workdir/m8prod_E04_s1337.end_time ]; do nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader,nounits | sed \"s/^/$(date -u +%FT%TZ), /\" >> /home/student20261/workdir/m8prod_E04_s1337.gpu_samples.tsv; sleep 5; done ) &\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py production --method E04 --seed 1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E04_s1337.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E04_s1337.end_time\nwait\n",
+   "command_sha256": "9c57e51e20838c73bd4383d0915780b8b42b6aa62d5bf97759518499bd49fd9d",
+   "config": {
+    "path": "configs/methods/e04_physics_std.yaml",
+    "sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a"
+   },
+   "contract": {
+    "path": "configs/amendments/e04_bank_generation_contract.yaml",
+    "sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f"
+   },
+   "conversion_rule": "(np.clip(out, 0.0, 1.0) * 255.0).astype(np.uint8) float32 [E04-Q3 A_PREDECESSOR_CLIP_TRUNCATE; reference stdn model/utils.py:24,37]",
+   "environment": {
+    "framework": "tensorflow 1.15.5",
+    "lock": {
+     "path": "environments/e04_training.lock.json",
+     "sha256": "a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd"
+    },
+    "name": "gpat-m6-e03",
+    "native_runtime": {
+     "cudaRuntimeGetVersion": 11080,
+     "cuda_query_rc": 0,
+     "cudnnGetVersion": 8907
+    },
+    "package_versions": {
+     "Keras-Applications": "1.0.8",
+     "Keras-Preprocessing": "1.1.2",
+     "Markdown": "3.7",
+     "MarkupSafe": "2.1.5",
+     "PyYAML": "6.0.3",
+     "Werkzeug": "3.0.6",
+     "absl-py": "2.3.1",
+     "astor": "0.8.1",
+     "astunparse": "1.6.3",
+     "contourpy": "1.1.1",
+     "cycler": "0.12.1",
+     "fonttools": "4.57.0",
+     "gast": "0.3.3",
+     "google-pasta": "0.2.0",
+     "grpcio": "1.70.0",
+     "h5py": "2.10.0",
+     "importlib_metadata": "8.5.0",
+     "importlib_resources": "6.4.5",
+     "kiwisolver": "1.4.7",
+     "matplotlib": "3.7.5",
+     "numpy": "1.23.5",
+     "nvidia-cublas-cu11": "11.11.3.6",
+     "nvidia-cublas-cu12": "12.9.2.10",
+     "nvidia-cuda-cupti-cu11": "11.8.87",
+     "nvidia-cuda-nvcc-cu11": "11.8.89",
+     "nvidia-cuda-nvrtc-cu11": "11.8.89",
+     "nvidia-cuda-nvrtc-cu12": "12.9.86",
+     "nvidia-cuda-runtime-cu11": "11.8.89",
+     "nvidia-cuda-runtime-cu12": "12.9.79",
+     "nvidia-cudnn-cu11": "8.9.7.29",
+     "nvidia-cudnn-cu12": "9.26.0.51",
+     "nvidia-cufft-cu11": "10.9.0.58",
+     "nvidia-curand-cu11": "10.3.0.86",
+     "nvidia-cusolver-cu11": "11.4.1.48",
+     "nvidia-cusparse-cu11": "11.7.5.86",
+     "nvidia-dali-cuda110": "1.20.0",
+     "nvidia-dali-nvtf-plugin": "1.20.0+nv22.12",
+     "nvidia-nccl-cu11": "2.21.5",
+     "nvidia-tensorflow": "1.15.5+nv22.12",
+     "opencv-python-headless": "5.0.0.93",
+     "opt_einsum": "3.4.0",
+     "packaging": "26.2",
+     "pillow": "10.4.0",
+     "pip": "24.3.1",
+     "protobuf": "3.20.3",
+     "pyparsing": "3.1.4",
+     "python-dateutil": "2.9.0.post0",
+     "scipy": "1.10.1",
+     "setuptools": "75.3.0",
+     "six": "1.17.0",
+     "tensorboard": "1.15.0",
+     "tensorflow-estimator": "1.15.1",
+     "tensorrt": "8.6.1.post1",
+     "tensorrt-bindings": "8.6.1",
+     "tensorrt-libs": "8.6.1",
+     "termcolor": "2.4.0",
+     "wheel": "0.45.1",
+     "wrapt": "2.0.1",
+     "zipp": "3.20.2"
+    },
+    "precision_env": {
+     "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+     "CUDA_VISIBLE_DEVICES": "0",
+     "NVIDIA_TF32_OVERRIDE": "0",
+     "PYTHONDONTWRITEBYTECODE": "1",
+     "PYTHONNOUSERSITE": "1",
+     "TF_CUDNN_DETERMINISTIC": "1",
+     "TF_DETERMINISTIC_OPS": "1",
+     "TF_ENABLE_AUTO_MIXED_PRECISION": "0",
+     "TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE": "0",
+     "TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_ONEDNN_OPTS": "0",
+     "TF_XLA_FLAGS": "--tf_xla_auto_jit=0"
+    },
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+    "python_version": "3.8.20",
+    "run_environment": {
+     "cuda_visible_devices": "0",
+     "host": "nd-System-Product-Name",
+     "numpy": "1.23.5",
+     "pillow": "10.4.0",
+     "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+     "python_version": "3.8.20"
+    },
+    "tensorflow": "1.15.5"
+   },
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E04_s1337/{collected.json,bank_manifest.jsonl.gz,preflight.json,host_markers.tgz}",
+   "execution_commit": "fabc1ef5069c05cd1d39e17057a90148fa296220",
+   "exit_status": "0\n",
+   "geometry": "frozen e04_feed_pack_v1 Q140; dense_offsets(source_xy=spoof Q140, target_xy=live Q140) (D2)",
+   "gpu": {
+    "driver": "580.178.04",
+    "driver_policy": "OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY (E04 D9, conditional narrow scope)",
+    "name": "NVIDIA GeForce RTX 3090",
+    "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"
+   },
+   "gpu_resources": {
+    "peak_used_mib_new_pids": {
+     "1474231": 4378,
+     "1475452": 582,
+     "1493241": 4384,
+     "1520737": 2484,
+     "1563434": 5650,
+     "1578293": 4680
+    },
+    "samples": 880,
+    "samples_sha256": "2974f918a75245c87ed74defe760e6aed0e524ee005f8c05d54a694f588a4a22",
+    "unrelated_processes_at_preflight": [
+     {
+      "name": "python",
+      "pid": 1391851,
+      "ps": "student+       15:09 python board_gts.py --reviews data/ref23/beauty23_15.json.gz --truth data/ref23/beauty23_15_truth.csv --name beauty23_15 --order file --q 0.9 --model SASRec --seed 2022 --work dat",
+      "used_mib": 4946
+     },
+     {
+      "name": "python",
+      "pid": 1439844,
+      "ps": "student+       06:11 python board_gts.py --reviews data/ref23/toys23_15.json.gz --truth data/ref23/toys23_15_truth.csv --name toys23_15 --order file --q 0.9 --model CORE --seed 2022 --work data/recbol",
+      "used_mib": 5438
+     }
+    ]
+   },
+   "inputs": {
+    "feed_pack_manifest_sha256": "db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b",
+    "input_allowlist_ruling": {
+     "path": "configs/amendments/e04_s7_input_allowlist_ruling.yaml",
+     "sha256": "c74217624cfa10421532946b36c0dbdfc3d8236aa01be3f8da66476cd6916713"
+    },
+    "pairs_train_v1": {
+     "path": "manifests/pairs_train_v1.parquet",
+     "sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243"
+    },
+    "split_crosscheck": {
+     "faces_checked": 12668,
+     "m2_accounting": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+     "split_v1": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+    }
+   },
+   "launch_script": "tools/learned_bank_production_scripts/m8prod_launch.sh E04 1337 fabc1ef5069c05cd1d39e17057a90148fa296220",
+   "output_root": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_1337",
+   "per_image_hashes": "every output_sha256 and output_pixel_sha256 in outputs/audit/LEARNED_BANK_PRODUCTION/E04_s1337/bank_manifest.jsonl.gz",
+   "post_script": "tools/learned_bank_production_scripts/m8prod_post.sh E04 1337",
+   "preprocessing": "uint8 RGB 256x256 face / 255 -> float32 (D8)",
+   "raw_output_observation": {
+    "note": "scientific observation only (E04-Q3 clips to [0, 1] before the uint8 cast); no gate, no filter",
+    "raw_max_max": 2.8766257762908936,
+    "raw_min_min": -1.0828304290771484,
+    "rows_with_raw_max_above_1": 5357,
+    "rows_with_raw_min_below_0": 4401,
+    "widest_raw_range_rows": [
+     [
+      "PTR004762",
+      -1.0828304290771484,
+      2.8766257762908936
+     ],
+     [
+      "PTR004084",
+      -0.08704009652137756,
+      2.022965908050537
+     ],
+     [
+      "PTR006270",
+      -0.18040655553340912,
+      1.694324254989624
+     ],
+     [
+      "PTR004487",
+      -0.21650615334510803,
+      1.4320327043533325
+     ],
+     [
+      "PTR006590",
+      -0.1858120560646057,
+      1.4442665576934814
+     ]
+    ]
+   },
+   "rng": "none (deterministic inference; no sampling or augmentation)",
+   "run_id": "65a3704819bc715a",
+   "s7_to_production": {
+    "A": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "pixel_arrays_equal": 186,
+     "pixel_mismatch_count": 0,
+     "rows_matched": 186
+    },
+    "B": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "pixel_arrays_equal": 186,
+     "pixel_mismatch_count": 0,
+     "rows_matched": 186
+    }
+   },
+   "source_commit": "cc2834ce15df6fff587da7c6e4c81d2328a57562",
+   "window": {
+    "end": "2026-11-25T15:50:22Z",
+    "launch": "2026-11-25T15:25:38Z",
+    "wall_time_seconds": 1465.739714368945
+   },
+   "working_directory": "/home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220"
+  },
+  "2026": {
+   "atime_by_split": {
+    "TEST": {
+     "atime_changed": 0,
+     "files": 3027,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "TRAIN": {
+     "atime_changed": 0,
+     "files": 14467,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "VAL": {
+     "atime_changed": 0,
+     "files": 3121,
+     "missing_post": 0,
+     "mtime_changed": 0
+    }
+   },
+   "atime_ledger": {
+    "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "post_utc": "2026-11-25T16:16:47Z",
+    "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "pre_utc": "2026-11-25T15:53:12Z"
+   },
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E04_s2026/collected.json",
+    "collect": "env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E04 --seed 2026 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 < tools/learned_bank_production_audit.py",
+    "preflight": "env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - preflight --method E04 --seed 2026 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 < tools/learned_bank_production_audit.py"
+   },
+   "audit_record": {
+    "gates": "43/43",
+    "path": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_SEED2026.json",
+    "sha256": "1a969448673c8e7e57946f4b08ab764f7b9581dd255b57ab8a8e718e4843431f",
+    "status": "LEARNED_BANK_PRODUCTION_PASSED"
+   },
+   "bank": {
+    "failures": 0,
+    "manifest_evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E04_s2026/bank_manifest.jsonl.gz",
+    "manifest_sha256": "14569ec629b9dffe4542500ce914f6ba5e5b8372849e4caab5edead803253447",
+    "output_sha256_list_sha256": "348ecebd68b6262de9f09517bf1adb122c47c4580199409ca910a1f62df07ab4",
+    "outputs": 8838,
+    "path": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_2026",
+    "pixel_sha256_list_sha256": "ad8cfa6f4586b73981931aaf0514b66b56cc06ae896240593d36b51db8252aea",
+    "provenance_sha256": "398cab914f639b2d3a9deae722d3f958ce1727fb9f295965f06fdab176294ce0",
+    "rows": 8838,
+    "total_png_bytes": 739271032
+   },
+   "bn_mode": "tf.layers.batch_normalization(training=False): restored moving statistics, batch 1 (E04-Q1)",
+   "checkpoint": {
+    "checkpoint_identity_sha256": "9b0b391bacfece7b1e4be3fb395f13f1c53e18b138ee7fda487df7a037a38d20",
+    "iteration": 150000,
+    "mtime_ns_before_after": {
+     "data-00000-of-00001": [
+      1795536608649119076,
+      1795536608649119076
+     ],
+     "index": [
+      1795536608650475193,
+      1795536608650475193
+     ],
+     "meta": [
+      1795536608883121642,
+      1795536608883121642
+     ]
+    },
+    "paths": {
+     "data-00000-of-00001": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_2026/checkpoints/iteration_150000.data-00000-of-00001",
+     "index": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_2026/checkpoints/iteration_150000.index",
+     "meta": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_2026/checkpoints/iteration_150000.meta"
+    },
+    "run_id": "e7100eb9a5ab0537",
+    "sha256": {
+     "data-00000-of-00001": "089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2",
+     "index": "af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a",
+     "meta": "b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090"
+    }
+   },
+   "checkpoint_integrity_after": true,
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E04 seed 2026, one OS process -- authority configs/amendments/learned_bank_production_E04.yaml at fabc1ef5069c05cd1d39e17057a90148fa296220\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E04_s2026.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 || { echo 97 > /home/student20261/workdir/m8prod_E04_s2026.exit; exit 97; }\n( while [ ! -s /home/student20261/workdir/m8prod_E04_s2026.end_time ]; do nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader,nounits | sed \"s/^/$(date -u +%FT%TZ), /\" >> /home/student20261/workdir/m8prod_E04_s2026.gpu_samples.tsv; sleep 5; done ) &\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py production --method E04 --seed 2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E04_s2026.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E04_s2026.end_time\nwait\n",
+   "command_sha256": "f406f356df6508f5ecbdbba0048f4fa3c93aa79204f71cf48435a4b3469d7910",
+   "config": {
+    "path": "configs/methods/e04_physics_std.yaml",
+    "sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a"
+   },
+   "contract": {
+    "path": "configs/amendments/e04_bank_generation_contract.yaml",
+    "sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f"
+   },
+   "conversion_rule": "(np.clip(out, 0.0, 1.0) * 255.0).astype(np.uint8) float32 [E04-Q3 A_PREDECESSOR_CLIP_TRUNCATE; reference stdn model/utils.py:24,37]",
+   "environment": {
+    "framework": "tensorflow 1.15.5",
+    "lock": {
+     "path": "environments/e04_training.lock.json",
+     "sha256": "a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd"
+    },
+    "name": "gpat-m6-e03",
+    "native_runtime": {
+     "cudaRuntimeGetVersion": 11080,
+     "cuda_query_rc": 0,
+     "cudnnGetVersion": 8907
+    },
+    "package_versions": {
+     "Keras-Applications": "1.0.8",
+     "Keras-Preprocessing": "1.1.2",
+     "Markdown": "3.7",
+     "MarkupSafe": "2.1.5",
+     "PyYAML": "6.0.3",
+     "Werkzeug": "3.0.6",
+     "absl-py": "2.3.1",
+     "astor": "0.8.1",
+     "astunparse": "1.6.3",
+     "contourpy": "1.1.1",
+     "cycler": "0.12.1",
+     "fonttools": "4.57.0",
+     "gast": "0.3.3",
+     "google-pasta": "0.2.0",
+     "grpcio": "1.70.0",
+     "h5py": "2.10.0",
+     "importlib_metadata": "8.5.0",
+     "importlib_resources": "6.4.5",
+     "kiwisolver": "1.4.7",
+     "matplotlib": "3.7.5",
+     "numpy": "1.23.5",
+     "nvidia-cublas-cu11": "11.11.3.6",
+     "nvidia-cublas-cu12": "12.9.2.10",
+     "nvidia-cuda-cupti-cu11": "11.8.87",
+     "nvidia-cuda-nvcc-cu11": "11.8.89",
+     "nvidia-cuda-nvrtc-cu11": "11.8.89",
+     "nvidia-cuda-nvrtc-cu12": "12.9.86",
+     "nvidia-cuda-runtime-cu11": "11.8.89",
+     "nvidia-cuda-runtime-cu12": "12.9.79",
+     "nvidia-cudnn-cu11": "8.9.7.29",
+     "nvidia-cudnn-cu12": "9.26.0.51",
+     "nvidia-cufft-cu11": "10.9.0.58",
+     "nvidia-curand-cu11": "10.3.0.86",
+     "nvidia-cusolver-cu11": "11.4.1.48",
+     "nvidia-cusparse-cu11": "11.7.5.86",
+     "nvidia-dali-cuda110": "1.20.0",
+     "nvidia-dali-nvtf-plugin": "1.20.0+nv22.12",
+     "nvidia-nccl-cu11": "2.21.5",
+     "nvidia-tensorflow": "1.15.5+nv22.12",
+     "opencv-python-headless": "5.0.0.93",
+     "opt_einsum": "3.4.0",
+     "packaging": "26.2",
+     "pillow": "10.4.0",
+     "pip": "24.3.1",
+     "protobuf": "3.20.3",
+     "pyparsing": "3.1.4",
+     "python-dateutil": "2.9.0.post0",
+     "scipy": "1.10.1",
+     "setuptools": "75.3.0",
+     "six": "1.17.0",
+     "tensorboard": "1.15.0",
+     "tensorflow-estimator": "1.15.1",
+     "tensorrt": "8.6.1.post1",
+     "tensorrt-bindings": "8.6.1",
+     "tensorrt-libs": "8.6.1",
+     "termcolor": "2.4.0",
+     "wheel": "0.45.1",
+     "wrapt": "2.0.1",
+     "zipp": "3.20.2"
+    },
+    "precision_env": {
+     "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+     "CUDA_VISIBLE_DEVICES": "0",
+     "NVIDIA_TF32_OVERRIDE": "0",
+     "PYTHONDONTWRITEBYTECODE": "1",
+     "PYTHONNOUSERSITE": "1",
+     "TF_CUDNN_DETERMINISTIC": "1",
+     "TF_DETERMINISTIC_OPS": "1",
+     "TF_ENABLE_AUTO_MIXED_PRECISION": "0",
+     "TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE": "0",
+     "TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_ONEDNN_OPTS": "0",
+     "TF_XLA_FLAGS": "--tf_xla_auto_jit=0"
+    },
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+    "python_version": "3.8.20",
+    "run_environment": {
+     "cuda_visible_devices": "0",
+     "host": "nd-System-Product-Name",
+     "numpy": "1.23.5",
+     "pillow": "10.4.0",
+     "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+     "python_version": "3.8.20"
+    },
+    "tensorflow": "1.15.5"
+   },
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E04_s2026/{collected.json,bank_manifest.jsonl.gz,preflight.json,host_markers.tgz}",
+   "execution_commit": "fabc1ef5069c05cd1d39e17057a90148fa296220",
+   "exit_status": "0\n",
+   "geometry": "frozen e04_feed_pack_v1 Q140; dense_offsets(source_xy=spoof Q140, target_xy=live Q140) (D2)",
+   "gpu": {
+    "driver": "580.178.04",
+    "driver_policy": "OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY (E04 D9, conditional narrow scope)",
+    "name": "NVIDIA GeForce RTX 3090",
+    "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"
+   },
+   "gpu_resources": {
+    "peak_used_mib_new_pids": {
+     "1624593": 582
+    },
+    "samples": 839,
+    "samples_sha256": "110b30523253791864ca8d36211454e4966dc4e079d38847571192a37218c65f",
+    "unrelated_processes_at_preflight": [
+     {
+      "name": "python",
+      "pid": 1563434,
+      "ps": "student+       10:58 python board_gts.py --reviews data/ref23/beauty23_15.json.gz --truth data/ref23/beauty23_15_truth.csv --name beauty23_15 --order file --q 0.9 --model CORE --seed 2022 --work data/",
+      "used_mib": 5650
+     },
+     {
+      "name": "python",
+      "pid": 1578293,
+      "ps": "student+       08:14 python board_gts.py --reviews data/ref23/toys23_15.json.gz --truth data/ref23/toys23_15_truth.csv --name toys23_15 --order file --q 0.9 --model LightSANs --seed 2022 --work data/r",
+      "used_mib": 4680
+     }
+    ]
+   },
+   "inputs": {
+    "feed_pack_manifest_sha256": "db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b",
+    "input_allowlist_ruling": {
+     "path": "configs/amendments/e04_s7_input_allowlist_ruling.yaml",
+     "sha256": "c74217624cfa10421532946b36c0dbdfc3d8236aa01be3f8da66476cd6916713"
+    },
+    "pairs_train_v1": {
+     "path": "manifests/pairs_train_v1.parquet",
+     "sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243"
+    },
+    "split_crosscheck": {
+     "faces_checked": 12668,
+     "m2_accounting": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+     "split_v1": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+    }
+   },
+   "launch_script": "tools/learned_bank_production_scripts/m8prod_launch.sh E04 2026 fabc1ef5069c05cd1d39e17057a90148fa296220",
+   "output_root": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_2026",
+   "per_image_hashes": "every output_sha256 and output_pixel_sha256 in outputs/audit/LEARNED_BANK_PRODUCTION/E04_s2026/bank_manifest.jsonl.gz",
+   "post_script": "tools/learned_bank_production_scripts/m8prod_post.sh E04 2026",
+   "preprocessing": "uint8 RGB 256x256 face / 255 -> float32 (D8)",
+   "raw_output_observation": {
+    "note": "scientific observation only (E04-Q3 clips to [0, 1] before the uint8 cast); no gate, no filter",
+    "raw_max_max": 1.1621030569076538,
+    "raw_min_min": -0.3514673113822937,
+    "rows_with_raw_max_above_1": 5320,
+    "rows_with_raw_min_below_0": 4998,
+    "widest_raw_range_rows": [
+     [
+      "PTR004762",
+      -0.3514673113822937,
+      1.0954633951187134
+     ],
+     [
+      "PTR006270",
+      -0.18725164234638214,
+      1.1171835660934448
+     ],
+     [
+      "PTR004084",
+      -0.024781670421361923,
+      1.1621030569076538
+     ],
+     [
+      "PTR003697",
+      -0.05351705849170685,
+      1.1044528484344482
+     ],
+     [
+      "PTR002750",
+      -0.04766734689474106,
+      1.107138991355896
+     ]
+    ]
+   },
+   "rng": "none (deterministic inference; no sampling or augmentation)",
+   "run_id": "6dc85654ddaf14e2",
+   "s7_to_production": {
+    "A": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "pixel_arrays_equal": 186,
+     "pixel_mismatch_count": 0,
+     "rows_matched": 186
+    },
+    "B": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "pixel_arrays_equal": 186,
+     "pixel_mismatch_count": 0,
+     "rows_matched": 186
+    }
+   },
+   "source_commit": "cc2834ce15df6fff587da7c6e4c81d2328a57562",
+   "window": {
+    "end": "2026-11-25T16:16:37Z",
+    "launch": "2026-11-25T15:53:14Z",
+    "wall_time_seconds": 1385.1183291960042
+   },
+   "working_directory": "/home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220"
+  },
+  "42": {
+   "atime_by_split": {
+    "TEST": {
+     "atime_changed": 0,
+     "files": 3027,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "TRAIN": {
+     "atime_changed": 0,
+     "files": 14467,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "VAL": {
+     "atime_changed": 0,
+     "files": 3121,
+     "missing_post": 0,
+     "mtime_changed": 0
+    }
+   },
+   "atime_ledger": {
+    "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "post_utc": "2026-11-25T15:22:43Z",
+    "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "pre_utc": "2026-11-25T14:55:39Z"
+   },
+   "audit_commands": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E04_s42/collected.json",
+    "collect": "env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E04 --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 < tools/learned_bank_production_audit.py",
+    "preflight": "env -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - preflight --method E04 --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 < tools/learned_bank_production_audit.py"
+   },
+   "audit_record": {
+    "gates": "43/43",
+    "path": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_SEED42.json",
+    "sha256": "fefe415cb4bc3a7bb58c58f04d93f7f55abef4b66d5f0d471c23c1e1b170a4ba",
+    "status": "LEARNED_BANK_PRODUCTION_PASSED"
+   },
+   "bank": {
+    "failures": 0,
+    "manifest_evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E04_s42/bank_manifest.jsonl.gz",
+    "manifest_sha256": "2ffbf95f968d0acd9f0c4828bd715a909628c6f9428ddcc6cee594253af4a218",
+    "output_sha256_list_sha256": "bc2a4632195bf0456dbfa8706906eae290bd13c68c07b8515af295d20d6d2a14",
+    "outputs": 8838,
+    "path": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_42",
+    "pixel_sha256_list_sha256": "24f8cd94c67a15580436d0908fddfecbf9337ad8b55df579f76fe6609f9eb2fb",
+    "provenance_sha256": "9c2682ee66241a5830cd32ce3c135cd3bf14234b82663eb77018a3132bbf5555",
+    "rows": 8838,
+    "total_png_bytes": 781246283
+   },
+   "bn_mode": "tf.layers.batch_normalization(training=False): restored moving statistics, batch 1 (E04-Q1)",
+   "checkpoint": {
+    "checkpoint_identity_sha256": "96e89630150779848cc92c4c2756d01cbfeb48e6b0e8b87b815122e47dc2d30f",
+    "iteration": 150000,
+    "mtime_ns_before_after": {
+     "data-00000-of-00001": [
+      1793561402196175734,
+      1793561402196175734
+     ],
+     "index": [
+      1793561402196432461,
+      1793561402196432461
+     ],
+     "meta": [
+      1793561402414173952,
+      1793561402414173952
+     ]
+    },
+    "paths": {
+     "data-00000-of-00001": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_42/checkpoints/iteration_150000.data-00000-of-00001",
+     "index": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_42/checkpoints/iteration_150000.index",
+     "meta": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E04/seed_42/checkpoints/iteration_150000.meta"
+    },
+    "run_id": "40befa6004aee85c",
+    "sha256": {
+     "data-00000-of-00001": "55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6",
+     "index": "f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02",
+     "meta": "fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933"
+    }
+   },
+   "checkpoint_integrity_after": true,
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E04 seed 42, one OS process -- authority configs/amendments/learned_bank_production_E04.yaml at fabc1ef5069c05cd1d39e17057a90148fa296220\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E04_s42.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220 || { echo 97 > /home/student20261/workdir/m8prod_E04_s42.exit; exit 97; }\n( while [ ! -s /home/student20261/workdir/m8prod_E04_s42.end_time ]; do nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv,noheader,nounits | sed \"s/^/$(date -u +%FT%TZ), /\" >> /home/student20261/workdir/m8prod_E04_s42.gpu_samples.tsv; sleep 5; done ) &\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py production --method E04 --seed 42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E04_s42.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E04_s42.end_time\nwait\n",
+   "command_sha256": "e5c48116fa4cf51b31b950371691ae59e4b9231f0a4a197480c5ae0605ebd7f7",
+   "config": {
+    "path": "configs/methods/e04_physics_std.yaml",
+    "sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a"
+   },
+   "contract": {
+    "path": "configs/amendments/e04_bank_generation_contract.yaml",
+    "sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f"
+   },
+   "conversion_rule": "(np.clip(out, 0.0, 1.0) * 255.0).astype(np.uint8) float32 [E04-Q3 A_PREDECESSOR_CLIP_TRUNCATE; reference stdn model/utils.py:24,37]",
+   "environment": {
+    "framework": "tensorflow 1.15.5",
+    "lock": {
+     "path": "environments/e04_training.lock.json",
+     "sha256": "a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd"
+    },
+    "name": "gpat-m6-e03",
+    "native_runtime": {
+     "cudaRuntimeGetVersion": 11080,
+     "cuda_query_rc": 0,
+     "cudnnGetVersion": 8907
+    },
+    "package_versions": {
+     "Keras-Applications": "1.0.8",
+     "Keras-Preprocessing": "1.1.2",
+     "Markdown": "3.7",
+     "MarkupSafe": "2.1.5",
+     "PyYAML": "6.0.3",
+     "Werkzeug": "3.0.6",
+     "absl-py": "2.3.1",
+     "astor": "0.8.1",
+     "astunparse": "1.6.3",
+     "contourpy": "1.1.1",
+     "cycler": "0.12.1",
+     "fonttools": "4.57.0",
+     "gast": "0.3.3",
+     "google-pasta": "0.2.0",
+     "grpcio": "1.70.0",
+     "h5py": "2.10.0",
+     "importlib_metadata": "8.5.0",
+     "importlib_resources": "6.4.5",
+     "kiwisolver": "1.4.7",
+     "matplotlib": "3.7.5",
+     "numpy": "1.23.5",
+     "nvidia-cublas-cu11": "11.11.3.6",
+     "nvidia-cublas-cu12": "12.9.2.10",
+     "nvidia-cuda-cupti-cu11": "11.8.87",
+     "nvidia-cuda-nvcc-cu11": "11.8.89",
+     "nvidia-cuda-nvrtc-cu11": "11.8.89",
+     "nvidia-cuda-nvrtc-cu12": "12.9.86",
+     "nvidia-cuda-runtime-cu11": "11.8.89",
+     "nvidia-cuda-runtime-cu12": "12.9.79",
+     "nvidia-cudnn-cu11": "8.9.7.29",
+     "nvidia-cudnn-cu12": "9.26.0.51",
+     "nvidia-cufft-cu11": "10.9.0.58",
+     "nvidia-curand-cu11": "10.3.0.86",
+     "nvidia-cusolver-cu11": "11.4.1.48",
+     "nvidia-cusparse-cu11": "11.7.5.86",
+     "nvidia-dali-cuda110": "1.20.0",
+     "nvidia-dali-nvtf-plugin": "1.20.0+nv22.12",
+     "nvidia-nccl-cu11": "2.21.5",
+     "nvidia-tensorflow": "1.15.5+nv22.12",
+     "opencv-python-headless": "5.0.0.93",
+     "opt_einsum": "3.4.0",
+     "packaging": "26.2",
+     "pillow": "10.4.0",
+     "pip": "24.3.1",
+     "protobuf": "3.20.3",
+     "pyparsing": "3.1.4",
+     "python-dateutil": "2.9.0.post0",
+     "scipy": "1.10.1",
+     "setuptools": "75.3.0",
+     "six": "1.17.0",
+     "tensorboard": "1.15.0",
+     "tensorflow-estimator": "1.15.1",
+     "tensorrt": "8.6.1.post1",
+     "tensorrt-bindings": "8.6.1",
+     "tensorrt-libs": "8.6.1",
+     "termcolor": "2.4.0",
+     "wheel": "0.45.1",
+     "wrapt": "2.0.1",
+     "zipp": "3.20.2"
+    },
+    "precision_env": {
+     "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+     "CUDA_VISIBLE_DEVICES": "0",
+     "NVIDIA_TF32_OVERRIDE": "0",
+     "PYTHONDONTWRITEBYTECODE": "1",
+     "PYTHONNOUSERSITE": "1",
+     "TF_CUDNN_DETERMINISTIC": "1",
+     "TF_DETERMINISTIC_OPS": "1",
+     "TF_ENABLE_AUTO_MIXED_PRECISION": "0",
+     "TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE": "0",
+     "TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32": "0",
+     "TF_ENABLE_ONEDNN_OPTS": "0",
+     "TF_XLA_FLAGS": "--tf_xla_auto_jit=0"
+    },
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+    "python_version": "3.8.20",
+    "run_environment": {
+     "cuda_visible_devices": "0",
+     "host": "nd-System-Product-Name",
+     "numpy": "1.23.5",
+     "pillow": "10.4.0",
+     "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+     "python_version": "3.8.20"
+    },
+    "tensorflow": "1.15.5"
+   },
+   "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E04_s42/{collected.json,bank_manifest.jsonl.gz,preflight.json,host_markers.tgz}",
+   "execution_commit": "fabc1ef5069c05cd1d39e17057a90148fa296220",
+   "exit_status": "0\n",
+   "geometry": "frozen e04_feed_pack_v1 Q140; dense_offsets(source_xy=spoof Q140, target_xy=live Q140) (D2)",
+   "gpu": {
+    "driver": "580.178.04",
+    "driver_policy": "OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY (E04 D9, conditional narrow scope)",
+    "name": "NVIDIA GeForce RTX 3090",
+    "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"
+   },
+   "gpu_resources": {
+    "peak_used_mib_new_pids": {
+     "1313562": 582,
+     "1317359": 4466,
+     "1338021": 4378,
+     "1346694": 6630,
+     "1361380": 4384,
+     "1387961": 2334,
+     "1391851": 4944,
+     "1439844": 5438
+    },
+    "samples": 896,
+    "samples_sha256": "3734d8878fdb24812bd38312f7d7c4bc0509ad86e08e40bac44b8edab25d7e48",
+    "unrelated_processes_at_preflight": [
+     {
+      "name": "python",
+      "pid": 1257612,
+      "ps": "student+       10:10 python board_gts.py --reviews data/ref23/sports23_15.json.gz --truth data/ref23/sports23_15_truth.csv --name sports23_15 --order random --q 0.9 --model CORE --seed 2021 --work dat",
+      "used_mib": 5150
+     },
+     {
+      "name": "python",
+      "pid": 1260966,
+      "ps": "student+       09:34 python board_gts.py --reviews data/ref23/toys23_15.json.gz --truth data/ref23/toys23_15_truth.csv --name toys23_15 --order file --q 0.9 --model SASRec --seed 2022 --work data/recb",
+      "used_mib": 4784
+     }
+    ]
+   },
+   "inputs": {
+    "feed_pack_manifest_sha256": "db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b",
+    "input_allowlist_ruling": {
+     "path": "configs/amendments/e04_s7_input_allowlist_ruling.yaml",
+     "sha256": "c74217624cfa10421532946b36c0dbdfc3d8236aa01be3f8da66476cd6916713"
+    },
+    "pairs_train_v1": {
+     "path": "manifests/pairs_train_v1.parquet",
+     "sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243"
+    },
+    "split_crosscheck": {
+     "faces_checked": 12668,
+     "m2_accounting": "65bb83e69ea7cebcb37373971e5e8f5248609b7963fd9d32aa1c0ba4377c0662",
+     "split_v1": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+    }
+   },
+   "launch_script": "tools/learned_bank_production_scripts/m8prod_launch.sh E04 42 fabc1ef5069c05cd1d39e17057a90148fa296220",
+   "output_root": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_42",
+   "per_image_hashes": "every output_sha256 and output_pixel_sha256 in outputs/audit/LEARNED_BANK_PRODUCTION/E04_s42/bank_manifest.jsonl.gz",
+   "post_script": "tools/learned_bank_production_scripts/m8prod_post.sh E04 42",
+   "preprocessing": "uint8 RGB 256x256 face / 255 -> float32 (D8)",
+   "raw_output_observation": {
+    "note": "scientific observation only (E04-Q3 clips to [0, 1] before the uint8 cast); no gate, no filter",
+    "raw_max_max": 2.4547877311706543,
+    "raw_min_min": -2.5102059841156006,
+    "rows_with_raw_max_above_1": 6100,
+    "rows_with_raw_min_below_0": 5638,
+    "widest_raw_range_rows": [
+     [
+      "PTR003627",
+      -2.508268356323242,
+      2.4547877311706543
+     ],
+     [
+      "PTR005670",
+      -2.5102059841156006,
+      2.2602944374084473
+     ],
+     [
+      "PTR008775",
+      -2.482119560241699,
+      2.182607650756836
+     ],
+     [
+      "PTR004989",
+      -2.1845738887786865,
+      1.9986000061035156
+     ],
+     [
+      "PTR007840",
+      -2.228022813796997,
+      1.8194215297698975
+     ]
+    ]
+   },
+   "rng": "none (deterministic inference; no sampling or augmentation)",
+   "run_id": "fca99d171787cee0",
+   "s7_to_production": {
+    "A": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "pixel_arrays_equal": 186,
+     "pixel_mismatch_count": 0,
+     "rows_matched": 186
+    },
+    "B": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "pixel_arrays_equal": 186,
+     "pixel_mismatch_count": 0,
+     "rows_matched": 186
+    }
+   },
+   "source_commit": "cc2834ce15df6fff587da7c6e4c81d2328a57562",
+   "window": {
+    "end": "2026-11-25T15:21:13Z",
+    "launch": "2026-11-25T14:55:41Z",
+    "wall_time_seconds": 1514.1037776010344
+   },
+   "working_directory": "/home/student20261/workdir/m8_learned_banks/clones/prod_E04_fabc1ef5069c05cd1d39e17057a90148fa296220"
+  }
+ },
+ "s7_acceptance_record": {
+  "execution_commit": "d5d0cb3ea5d2c15aba4d0d2ddb84cade72ef279d",
+  "gates": "180/180",
+  "path": "outputs/audit/LEARNED_BANK_S7_E04.json",
+  "sha256": "138e1ef988970a7c8643f544b26850fbde41f7d1b63a54c86da9ccb5ac4b63a6",
+  "status": "E04_S7_ALL_THREE_SEEDS_QUALIFIED"
+ },
+ "schema": "e04_production_reproduction_manifest_v1",
+ "scientific_disclosures": [
+  "CONTROLLED_ADAPTATION: Physics-STD (controlled geometry/depth reconstruction); not an official native Physics-STD reproduction",
+  "bank inference uses the stored BN moving statistics (batch 1); training-time synthesis used 8-image batch statistics",
+  "float->uint8 clip-truncate follows the ECCV20-STDN predecessor (reference only)",
+  "S7 observed one seed-42 pair with raw output about [-1.11, 1.68]; the approved conversion clips to [0, 1] before the uint8 cast; no dynamic rescaling, replacement or quality filter (RAW-MATCHED)"
+ ],
+ "storage_extension": {
+  "path": "configs/amendments/learned_bank_storage_location_E04.yaml",
+  "sha256": "a149abc253fbecbcdc883ad0e27d085a43d1a21c3cd5faee91f0dc15579f8713"
+ },
+ "tooling_at_execution_commit": {
+  "methods/common/learned_bank.py": "5f6e6bc0e88230ae15249fcbe67ea48db7a6bd573ed180c9c378718d3505737d",
+  "methods/physics_std/bank_adapter.py": "fb0901b3d79fbe8d47674b0e6b5232c086d5b8bf776296802f9df166e3f96ad5",
+  "tools/learned_bank.py": "af43a2d7a99c0d7a06edca2979c9b157b613b018349b0e721bd50b01549ef738",
+  "tools/learned_bank_production_audit.py": "7cbd4650c16fb14f610ff8dd66b283fa4fe9ec502d8a78fec1baa39f4477964f",
+  "tools/learned_bank_production_authority.py": "57f80662f6e3b0e927db5424dae8b4434ac23592c3cd3550fd7240b9071e3eb4",
+  "tools/learned_bank_production_scripts/m8prod_launch.sh": "29527f9cef62b76f180cc996780657580f531acfa4cd7838d436d74401f16d96",
+  "tools/learned_bank_production_scripts/m8prod_post.sh": "a1f3781723dcd627d075cb2023114b2893f5f12d9fce56d45e62db4b10e053b8",
+  "tools/learned_bank_production_scripts/m8prod_wait.sh": "7d3d7a6da5b243d484f0856507f451e5a006b4b485c20cc02d40b7088357d570"
+ },
+ "training_closure": {
+  "path": "outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json",
+  "sha256": "a14d98fdf5a9a0e279ef09ca231d01261a349b9e7b86fc86d7d69c9b8734c55d"
+ }
+}

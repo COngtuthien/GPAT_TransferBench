@@ -818,5 +818,13 @@ class CommittedE04Records(unittest.TestCase):
                          ('LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED', 3 * N, 'CONTROLLED_ADAPTATION'))
 
 
+    def test_reproduction_manifest_rebuilds(self):
+        p = ROOT / 'outputs/audit/E04_PRODUCTION_REPRODUCTION_MANIFEST.json'
+        if not p.exists():
+            self.skipTest('reproduction manifest not yet built')
+        rm = load('e04prodrepro', 'tools/e04_production_reproduction_manifest.py')
+        self.assertEqual(json.loads(p.read_text()), json.loads(json.dumps(rm.build())))
+
+
 if __name__ == '__main__':
     unittest.main()
