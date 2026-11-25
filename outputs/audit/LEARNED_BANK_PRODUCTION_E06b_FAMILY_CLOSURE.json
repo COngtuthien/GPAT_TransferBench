@@ -1,0 +1,359 @@
+{
+ "authority": {
+  "path": "configs/amendments/learned_bank_production_E06b.yaml",
+  "sha256": "99c7494531217b250f0ca6005c11ad01b0bf4f521c88e649a50926832af323a8"
+ },
+ "backup": "the image bank exists only on the approved HDD; git holds the manifest (gzip), per-image file and pixel SHA256 and this audit, not the image bytes; no independent binary backup exists",
+ "config": {
+  "path": "configs/methods/e06b_dsdg_native.yaml",
+  "sha256": "9d665dc2c909d421b8e54964407e27bb40d133f11bceec2e2cb29810f268417f"
+ },
+ "contract_sha256": "3554577185a9faad76ce527971e75d85e4a107809a7da91c270196c899f339a9",
+ "conversion_rule": "np.transpose((255 * spoof).astype('uint8'), (1, 2, 0)) [DSDG generated.py:63]",
+ "disclosures": [
+  "DSDG-NATIVE trained on CASIA+MSU TRAIN spoof coverage (3720 rows; SiW-Mv2 NOT_INSTANTIABLE_MISSING_SUBJECT_ID); N_syn = 8838 pooled budget (E06b-Q0); spoof RGB half only; synthetic IDs without pair lineage"
+ ],
+ "e05_contrast_diagnostic": null,
+ "environment": {
+  "framework": "torch 2.12.1+cu130",
+  "lock": {
+   "path": "environments/e06c.lock.json",
+   "sha256": "91416a20fef6eb4bbe550dc0ccdc703163f51d8df9168c1418f7a2de48e64e95"
+  },
+  "name": "gpat-m6-e06c",
+  "python": "/home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python"
+ },
+ "execution_commit": "99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+ "failed_gates": [],
+ "gates": [
+  {
+   "gate": "C.three_banks_passed",
+   "pass": true
+  },
+  {
+   "gate": "C.distinct_run_ids",
+   "pass": true
+  },
+  {
+   "gate": "C.same_authority_and_execution",
+   "pass": true
+  },
+  {
+   "gate": "C.seeds_and_checkpoints",
+   "pass": true
+  },
+  {
+   "detail": [
+    [
+     "2026-11-25T07:45:32Z",
+     "2026-11-25T08:05:54Z"
+    ],
+    [
+     "2026-11-25T08:08:28Z",
+     "2026-11-25T08:28:54Z"
+    ],
+    [
+     "2026-11-25T08:31:31Z",
+     "2026-11-25T08:51:53Z"
+    ]
+   ],
+   "gate": "C.sequential_seed_order",
+   "pass": true
+  },
+  {
+   "detail": {
+    "1337": "eee1225986c625b3f3d8820bc726bb670cd25ac4",
+    "2026": "100f3924314e3141e1de10a5b5feeaff6b07755b",
+    "42": "d0e007db8abdab563f03da93f044cdd5cc55c25e"
+   },
+   "gate": "C.audit_committed_before_next_launch",
+   "pass": true
+  },
+  {
+   "gate": "C.total_outputs",
+   "pass": true
+  },
+  {
+   "gate": "C.registered_paths",
+   "pass": true
+  },
+  {
+   "gate": "C.s7_production_equivalence",
+   "pass": true
+  },
+  {
+   "gate": "C.atime_ledger",
+   "pass": true
+  },
+  {
+   "gate": "C.no_val_test_inputs",
+   "pass": true
+  },
+  {
+   "gate": "C.checkpoint_after",
+   "pass": true
+  },
+  {
+   "gate": "C.no_training",
+   "pass": true
+  },
+  {
+   "gate": "C.population",
+   "pass": true
+  },
+  {
+   "gate": "C.e01_e02_banks_unchanged",
+   "pass": true
+  }
+ ],
+ "gates_passed": 15,
+ "gates_total": 15,
+ "gpu": {
+  "driver": "580.178.04",
+  "name": "NVIDIA GeForce RTX 3090",
+  "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"
+ },
+ "method": "E06b",
+ "not_done": [
+  "no downstream training, TEST evaluation, DINOv3 or GPAT",
+  "no E04 bank generation",
+  "outputs/audit/method_status.csv unchanged"
+ ],
+ "per_seed": {
+  "1337": {
+   "atime_ledger": {
+    "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "post_utc": "2026-11-25T08:29:07Z",
+    "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "pre_utc": "2026-11-25T08:08:26Z"
+   },
+   "audit_commit": "eee1225986c625b3f3d8820bc726bb670cd25ac4",
+   "audit_record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED1337.json",
+   "audit_record_sha256": "b8dcb95f96404ba4e9a246eeeed4669e36db2efcd1d4f1ac09e61aa734b2819c",
+   "bank": {
+    "failures": 0,
+    "manifest_evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s1337/bank_manifest.jsonl.gz",
+    "manifest_sha256": "40564cd58982eae4415c8ac5ea173c96bb40c36a41471e2bc476854cfbacb099",
+    "output_sha256_list_sha256": "f44f9fa9bc3087cf29dfd2df3d2a3320c2a461fb8a276dd3ec73a3ab1c564a42",
+    "outputs": 8838,
+    "path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_1337",
+    "pixel_sha256_list_sha256": "9097b4cb587954042da6ee5024b2e77ffba21156f371cdf45e3aebedaa3572bb",
+    "provenance_sha256": "054efdaeb4f68d70b9a0e72f145d0f841dea18ca8bc20b7db3359201209a2900",
+    "rows": 8838,
+    "total_png_bytes": 559007011
+   },
+   "checkpoint": {
+    "checkpoint_identity_sha256": "ad74128648dc20f6c9dcc0ed895db6e3d683c3534a6a170e989e0cc441924f93",
+    "run_id": "9ffda3ea3f6cc767",
+    "sha256": {
+     "pth": "645538e866a6d835a1bc35240c2f15c27296742850df96d722fd4d38609b4f53"
+    }
+   },
+   "command_sha256": "d669f7db90eeeb32f1392612c3a75eb6354128ebb02dd83e8206d3ba47724a4c",
+   "descriptive_statistics": {
+    "coarse_8x8_luma_signature_groups": 0,
+    "coarse_8x8_luma_signature_rows": 0,
+    "distinct_pixel_sha256": 8838,
+    "exact_duplicate_groups": 0,
+    "exact_duplicate_rows": 0,
+    "note": "descriptive only; coarse signature = 8x8 block-mean luminance rounded to integers",
+    "per_image_max_median": 218,
+    "per_image_mean": {
+     "max": 142.57696533203125,
+     "median": 102.4736328125,
+     "min": 66.61232503255208
+    },
+    "per_image_min_median": 25,
+    "per_image_std": {
+     "max": 79.48870534863526,
+     "median": 30.390095096985682,
+     "min": 17.005853409157638,
+     "p05": 22.373992223251975,
+     "p95": 48.25720254547203
+    }
+   },
+   "gates": "34/34",
+   "run_id": "2037be09ba25acdc",
+   "window": {
+    "end": "2026-11-25T08:28:54Z",
+    "launch": "2026-11-25T08:08:28Z",
+    "wall_time_seconds": 1204.957515166956
+   }
+  },
+  "2026": {
+   "atime_ledger": {
+    "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "post_utc": "2026-11-25T08:51:56Z",
+    "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "pre_utc": "2026-11-25T08:31:29Z"
+   },
+   "audit_commit": "100f3924314e3141e1de10a5b5feeaff6b07755b",
+   "audit_record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED2026.json",
+   "audit_record_sha256": "62d7bf27d065e42a474f3a6643bc3a0f3e620233a9271f27f20f723339133dd9",
+   "bank": {
+    "failures": 0,
+    "manifest_evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s2026/bank_manifest.jsonl.gz",
+    "manifest_sha256": "e1dd3a2eaa990b05c54fa6bf2939e40a77697eb58ae19e7964ffa9aba042f88c",
+    "output_sha256_list_sha256": "5912f0e56c5f1e00c1e2563bfd97272fbefc5a20e7f97e418ba6885a6170c4fe",
+    "outputs": 8838,
+    "path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_2026",
+    "pixel_sha256_list_sha256": "b9dded64e33183d70c7bb170c8a8cb49f518b22afac0d0c0ed8975761e5d10d6",
+    "provenance_sha256": "b191436705bf9cf38e50f6c9f1eb2cf63c14b15a12a8bf0d79d7032b9bea5e78",
+    "rows": 8838,
+    "total_png_bytes": 561652367
+   },
+   "checkpoint": {
+    "checkpoint_identity_sha256": "b9a0465c4759f7448d2a3fa0d2b87505c01464026af571da95d07042c3db374c",
+    "run_id": "ec71778b28479de5",
+    "sha256": {
+     "pth": "e8d0d01cfdb59b92d0f24318ab4fec042188bf0a72f9c59054ea10204a326cad"
+    }
+   },
+   "command_sha256": "e5c09c4438b443487eeb7e3450e161d37e357bd30fcec1bbef3d28cb914966b5",
+   "descriptive_statistics": {
+    "coarse_8x8_luma_signature_groups": 0,
+    "coarse_8x8_luma_signature_rows": 0,
+    "distinct_pixel_sha256": 8838,
+    "exact_duplicate_groups": 0,
+    "exact_duplicate_rows": 0,
+    "note": "descriptive only; coarse signature = 8x8 block-mean luminance rounded to integers",
+    "per_image_max_median": 219,
+    "per_image_mean": {
+     "max": 144.2231648763021,
+     "median": 104.36252339680989,
+     "min": 70.36933898925781
+    },
+    "per_image_min_median": 27,
+    "per_image_std": {
+     "max": 84.8063232872256,
+     "median": 31.0257856844351,
+     "min": 17.624996537079593,
+     "p05": 22.764347875939738,
+     "p95": 48.82989222659903
+    }
+   },
+   "gates": "34/34",
+   "run_id": "e2d2ba62af40de21",
+   "window": {
+    "end": "2026-11-25T08:51:53Z",
+    "launch": "2026-11-25T08:31:31Z",
+    "wall_time_seconds": 1203.9186815100256
+   }
+  },
+  "42": {
+   "atime_ledger": {
+    "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "post_utc": "2026-11-25T08:05:55Z",
+    "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+    "pre_utc": "2026-11-25T07:45:30Z"
+   },
+   "audit_commit": "d0e007db8abdab563f03da93f044cdd5cc55c25e",
+   "audit_record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED42.json",
+   "audit_record_sha256": "6a3149da4b9e3ac1f32740e2260efba2409194a28f220626e446430fb0221357",
+   "bank": {
+    "failures": 0,
+    "manifest_evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s42/bank_manifest.jsonl.gz",
+    "manifest_sha256": "882017b8fadc532691c43699360147e036fa464e6b7bb0b6d8794e38f1568691",
+    "output_sha256_list_sha256": "f1c6d624ba78e8c5af87a181855d1332fcb41883ac7636b63365730cc862acd5",
+    "outputs": 8838,
+    "path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_42",
+    "pixel_sha256_list_sha256": "043fd0963829430d3fd9576cb7d3d25a8965ca815d39573d922b3dd4d47da31b",
+    "provenance_sha256": "15911018e5f612ff24660d9c77ddd379a031862d6e509d29b6795e626e2242c4",
+    "rows": 8838,
+    "total_png_bytes": 568298184
+   },
+   "checkpoint": {
+    "checkpoint_identity_sha256": "7f805bf0f2da4f2f3b74d66ce61ccfcdfc55f1d78fa53479ebe6126b353c1d5b",
+    "run_id": "aa96129289d080ba",
+    "sha256": {
+     "pth": "d56122e0cf363a6c870e29b394998732f4bcdaf35a96a6110e937905b64ff8aa"
+    }
+   },
+   "command_sha256": "d80e3298995f36909856d2dba460c9527a6afb946f962bc47f5b8a6757209fbb",
+   "descriptive_statistics": {
+    "coarse_8x8_luma_signature_groups": 0,
+    "coarse_8x8_luma_signature_rows": 0,
+    "distinct_pixel_sha256": 8838,
+    "exact_duplicate_groups": 0,
+    "exact_duplicate_rows": 0,
+    "note": "descriptive only; coarse signature = 8x8 block-mean luminance rounded to integers",
+    "per_image_max_median": 224,
+    "per_image_mean": {
+     "max": 147.56241353352866,
+     "median": 105.59298706054688,
+     "min": 64.95137023925781
+    },
+    "per_image_min_median": 23,
+    "per_image_std": {
+     "max": 79.02473404930427,
+     "median": 32.471325951894656,
+     "min": 18.449167747827765,
+     "p05": 24.427114708363113,
+     "p95": 49.43444158423462
+    }
+   },
+   "gates": "34/34",
+   "run_id": "07e64f33b19310b4",
+   "window": {
+    "end": "2026-11-25T08:05:54Z",
+    "launch": "2026-11-25T07:45:32Z",
+    "wall_time_seconds": 1203.013807957992
+   }
+  }
+ },
+ "population": "synthetic stream indices 0..8837",
+ "reproduction_commands": {
+  "1337": {
+   "audit": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s1337/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06b --seed 1337 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06b seed 1337, one OS process -- authority configs/amendments/learned_bank_production_E06b.yaml at 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s1337.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 || { echo 97 > /home/student20261/workdir/m8prod_E06b_s1337.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06b --seed 1337 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06b_s1337.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s1337.end_time\n",
+   "launch_script": "tools/learned_bank_production_scripts/m8prod_launch.sh E06b 1337 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "post_script": "tools/learned_bank_production_scripts/m8prod_post.sh E06b 1337"
+  },
+  "2026": {
+   "audit": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s2026/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06b --seed 2026 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06b seed 2026, one OS process -- authority configs/amendments/learned_bank_production_E06b.yaml at 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s2026.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 || { echo 97 > /home/student20261/workdir/m8prod_E06b_s2026.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06b --seed 2026 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06b_s2026.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s2026.end_time\n",
+   "launch_script": "tools/learned_bank_production_scripts/m8prod_launch.sh E06b 2026 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "post_script": "tools/learned_bank_production_scripts/m8prod_post.sh E06b 2026"
+  },
+  "42": {
+   "audit": {
+    "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E06b_s42/collected.json",
+    "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E06b --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 < tools/learned_bank_production_audit.py"
+   },
+   "command": "#!/bin/bash\n# M8 learned-bank production: method E06b seed 42, one OS process -- authority configs/amendments/learned_bank_production_E06b.yaml at 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s42.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E06b_99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6 || { echo 97 > /home/student20261/workdir/m8prod_E06b_s42.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e06c/bin/python -B tools/learned_bank.py production --method E06b --seed 42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E06b_s42.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E06b_s42.end_time\n",
+   "launch_script": "tools/learned_bank_production_scripts/m8prod_launch.sh E06b 42 99ea8268fd0bbfd2cdeb51c1607307b9a1155ef6",
+   "post_script": "tools/learned_bank_production_scripts/m8prod_post.sh E06b 42"
+  }
+ },
+ "rng": {
+  "1337": "torch.Generator().manual_seed(825501606) (dsdg_bank_seed); per batch of 100: noise = randn(100,128), noise_s = randn(100,128), z = cat(noise_s, noise, noise); 89 batches, 8900 drawn, 8838 kept, last 62 of batch 88 discarded",
+  "2026": "torch.Generator().manual_seed(1539980013) (dsdg_bank_seed); per batch of 100: noise = randn(100,128), noise_s = randn(100,128), z = cat(noise_s, noise, noise); 89 batches, 8900 drawn, 8838 kept, last 62 of batch 88 discarded",
+  "42": "torch.Generator().manual_seed(492027736) (dsdg_bank_seed); per batch of 100: noise = randn(100,128), noise_s = randn(100,128), z = cat(noise_s, noise, noise); 89 batches, 8900 drawn, 8838 kept, last 62 of batch 88 discarded"
+ },
+ "s7_record": {
+  "path": "outputs/audit/LEARNED_BANK_S7_E06b.json",
+  "sha256": "9d7ec5a3d0115e34ca194426fc2a55558753aa0ca61f9b2be9f8a173cf112857"
+ },
+ "schema": "learned_bank_production_family_closure_v1",
+ "seeds": [
+  42,
+  1337,
+  2026
+ ],
+ "source_commit": "a1aef39a791cd25ae483c832b658e4f2e1d66c33",
+ "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED",
+ "storage": {
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+  "fstype": "ext4",
+  "mount_point": "/media/ext_data"
+ },
+ "test_firewall": "TRAIN-only inputs; zero VAL/TEST face atime or mtime change in every bank window",
+ "total_outputs": 26514
+}
