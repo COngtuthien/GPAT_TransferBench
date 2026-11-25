@@ -1,0 +1,306 @@
+{
+ "schema_version": "learned_bank_production_authority_v1",
+ "record": "LEARNED_BANK_PRODUCTION_AUTHORITY_E04",
+ "status": "OWNER_APPROVED",
+ "approved": true,
+ "date": "2026-11-25",
+ "approval": "Owner authorization of 2026-11-25 (session instruction 'GPAT-TransferBench v1.0 - E04 Physics-STD Final Production Banks, Independent Audit, and Seven-Baseline Bank Readiness'): full E04 TRAIN synthetic-bank production, seeds 42 -> 1337 -> 2026, 8838 images per seed (26514 in total), only after all preceding qualification and governance gates pass. No generator retraining, no change of the frozen inference semantics, no downstream ResNet-18 training, TEST evaluation, DINOv3 or GPAT.",
+ "conditions": [
+  "E04 S7 180/180 PASS",
+  "approved E04 scientific generation contract",
+  "exact final checkpoints",
+  "qualified production tooling",
+  "approved E04 HDD storage extension",
+  "frozen TRAIN pair population",
+  "correct GPU and environment",
+  "complete data firewall",
+  "independent production audit",
+  "immutable output and provenance policy"
+ ],
+ "derived_from": {
+  "path": "configs/amendments/learned_bank_production_E04.DRAFT.yaml",
+  "sha256": "b78acf7458bafdcc16be52a6ac450052eff691a384dbcf866ef5cbdbd4ad8e2a"
+ },
+ "method": "E04",
+ "display_name": "Physics-STD (controlled geometry/depth reconstruction)",
+ "fidelity": "CONTROLLED_ADAPTATION",
+ "fidelity_note": "controlled geometry/depth reconstruction; not an official native Physics-STD reproduction",
+ "seeds": [
+  42,
+  1337,
+  2026
+ ],
+ "seed_order": [
+  42,
+  1337,
+  2026
+ ],
+ "method_order_in_program": [
+  "E06c",
+  "E03",
+  "E06b",
+  "E05",
+  "E04"
+ ],
+ "contract_path": "configs/amendments/e04_bank_generation_contract.yaml",
+ "contract_sha256": "45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f",
+ "decisions": {
+  "E04-Q1_normalization_statistics": "A_MOVING_STATISTICS_PER_PAIR",
+  "E04-Q2_synthesis_variant": "A_PAPER_SPOOF_SYNTHESIS",
+  "E04-Q3_float_to_uint8": "A_PREDECESSOR_CLIP_TRUNCATE",
+  "E04-Q4_auxiliary_outputs": "A_NONE",
+  "E04-Q5_device_and_reproducibility": "A_GPU_FP32_BITWISE_REPLAY",
+  "E04-Q6_governance_inclusion": "A_ADDITIVE_E04_EXTENSION"
+ },
+ "s7_acceptance_record": {
+  "path": "outputs/audit/LEARNED_BANK_S7_E04.json",
+  "sha256": "138e1ef988970a7c8643f544b26850fbde41f7d1b63a54c86da9ccb5ac4b63a6",
+  "status": "E04_S7_ALL_THREE_SEEDS_QUALIFIED",
+  "execution_commit": "d5d0cb3ea5d2c15aba4d0d2ddb84cade72ef279d",
+  "gates": "180/180"
+ },
+ "s7_launch_authority": {
+  "path": "configs/amendments/learned_bank_s7_launch_authority_E04.yaml",
+  "sha256": "5043a7bfc69de4892f129b597ca21e895f68f25d0350887598f17636bbe66777"
+ },
+ "input_allowlist_ruling": {
+  "path": "configs/amendments/e04_s7_input_allowlist_ruling.yaml",
+  "sha256": "c74217624cfa10421532946b36c0dbdfc3d8236aa01be3f8da66476cd6916713",
+  "decision": "FEED_PACK_ALLOWLIST_WITH_INDEPENDENT_AUDITOR_CROSSCHECK"
+ },
+ "e04_records": {
+  "seed_2026_completion": {
+   "path": "outputs/audit/E04_SEED2026_COMPLETION.json",
+   "sha256": "47a4e4974d86b1eff7e9fd9130d6e787724082954c62f6c8fb5eb4b241fdcdb5"
+  },
+  "family_closure": {
+   "path": "outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json",
+   "sha256": "a14d98fdf5a9a0e279ef09ca231d01261a349b9e7b86fc86d7d69c9b8734c55d"
+  },
+  "final_checkpoints_csv": {
+   "path": "outputs/audit/E04_THREE_SEED_FINAL_CHECKPOINTS.csv",
+   "sha256": "1b20a87abd228a3a19335523183a94fbbc1d9fbce91207bd31e500c6688c9a01"
+  }
+ },
+ "frozen_config": {
+  "path": "configs/methods/e04_physics_std.yaml",
+  "sha256": "418617942ebd87c45cb92bb7dc9ad96a6500a104489a657f9ca3345c3686576a"
+ },
+ "checkpoints": {
+  "42": {
+   "run_id": "40befa6004aee85c",
+   "iteration": 150000,
+   "rule": "BASELINE_FINAL_STATE_V1",
+   "sha256": {
+    "data-00000-of-00001": "55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6",
+    "index": "f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02",
+    "meta": "fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933"
+   },
+   "checkpoint_identity_sha256": "96e89630150779848cc92c4c2756d01cbfeb48e6b0e8b87b815122e47dc2d30f",
+   "seed_closure_commit": "ea533db43dc3b9d0a4108364d68b2e8217c7c835",
+   "family_closure_commit": "eeff32d",
+   "path": "<runtime_root>/runs/m6/E04/seed_42/checkpoints/iteration_150000.data-00000-of-00001|checkpoints/iteration_150000.index|checkpoints/iteration_150000.meta",
+   "restore": "102 generator variables (72 trainable + 30 BN moving statistics) by their trained names; no discriminator variable, optimizer slot or counter is restored"
+  },
+  "1337": {
+   "run_id": "a42fdd2a2accaf0a",
+   "iteration": 150000,
+   "rule": "BASELINE_FINAL_STATE_V1",
+   "sha256": {
+    "data-00000-of-00001": "fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5",
+    "index": "1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560",
+    "meta": "bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233"
+   },
+   "checkpoint_identity_sha256": "4f183d2143d27d1d35326212f9ff9c0fb36e9d0d933e59c1df79436cc3492f2f",
+   "seed_closure_commit": "6da67199b32710c728b9f16f89c32b0a26cad84f",
+   "family_closure_commit": "eeff32d",
+   "path": "<runtime_root>/runs/m6/E04/seed_1337/checkpoints/iteration_150000.data-00000-of-00001|checkpoints/iteration_150000.index|checkpoints/iteration_150000.meta",
+   "restore": "102 generator variables (72 trainable + 30 BN moving statistics) by their trained names; no discriminator variable, optimizer slot or counter is restored"
+  },
+  "2026": {
+   "run_id": "e7100eb9a5ab0537",
+   "iteration": 150000,
+   "rule": "BASELINE_FINAL_STATE_V1",
+   "sha256": {
+    "data-00000-of-00001": "089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2",
+    "index": "af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a",
+    "meta": "b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090"
+   },
+   "checkpoint_identity_sha256": "9b0b391bacfece7b1e4be3fb395f13f1c53e18b138ee7fda487df7a037a38d20",
+   "seed_closure_commit": "0e3f1d1a373d3e60130fd472a4e1799e2a622487",
+   "family_closure_commit": "eeff32d",
+   "path": "<runtime_root>/runs/m6/E04/seed_2026/checkpoints/iteration_150000.data-00000-of-00001|checkpoints/iteration_150000.index|checkpoints/iteration_150000.meta",
+   "restore": "102 generator variables (72 trainable + 30 BN moving statistics) by their trained names; no discriminator variable, optimizer slot or counter is restored"
+  }
+ },
+ "environment": {
+  "name": "gpat-m6-e03",
+  "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+  "tensorflow": "1.15.5",
+  "lock": {
+   "path": "environments/e04_training.lock.json",
+   "sha256": "a9629d46c2464f011fb68e0f071ecd4cc21cf0ede5af68faf9ab0d4595fefbdd"
+  },
+  "precision_env": {
+   "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+   "CUDA_VISIBLE_DEVICES": "0",
+   "NVIDIA_TF32_OVERRIDE": "0",
+   "PYTHONDONTWRITEBYTECODE": "1",
+   "PYTHONNOUSERSITE": "1",
+   "TF_CUDNN_DETERMINISTIC": "1",
+   "TF_DETERMINISTIC_OPS": "1",
+   "TF_ENABLE_AUTO_MIXED_PRECISION": "0",
+   "TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE": "0",
+   "TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32": "0",
+   "TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32": "0",
+   "TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32": "0",
+   "TF_ENABLE_ONEDNN_OPTS": "0",
+   "TF_XLA_FLAGS": "--tf_xla_auto_jit=0"
+  },
+  "session": "methods/physics_std/production_runner.session_config (E04 training session configuration, verified against environments/e04_training.runtime.json)",
+  "generic_python_forbidden": true
+ },
+ "gpu": {
+  "model": "NVIDIA GeForce RTX 3090",
+  "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+  "driver_observed": "580.178.04",
+  "driver_policy": "E04 D9 OWNER_APPROVED_DRIVER_VERSION_ONLY_RUNTIME_COMPATIBILITY",
+  "cuda_visible_devices": "0",
+  "precision": "E04-Q5 A_GPU_FP32_BITWISE_REPLAY (the E04 training precision environment)"
+ },
+ "storage_authority": {
+  "path": "configs/amendments/learned_bank_storage_location.yaml",
+  "sha256": "f0df1b08c2ff5206285fa193b6be8b7652e0347560972f3173df4583ab8d7ef9",
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+  "mount_point": "/media/ext_data",
+  "layout": "<bank_root>/E04/seed_<seed>/",
+  "banks": {
+   "42": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_42",
+   "1337": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_1337",
+   "2026": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_2026"
+  },
+  "live_preflight": "methods.common.learned_bank.storage_preflight() all true before every launch (load_production_authority) and in every audit"
+ },
+ "storage_extension": {
+  "path": "configs/amendments/learned_bank_storage_location_E04.yaml",
+  "sha256": "a149abc253fbecbcdc883ad0e27d085a43d1a21c3cd5faee91f0dc15579f8713"
+ },
+ "inference": {
+  "per_pair": "one source-spoof and one target-live TRAIN face; batch size 1; one OS process per seed",
+  "checkpoint": "the exact iteration_150000 final checkpoint of the matching seed",
+  "generator": "network.generator with InferenceLayers (tf.layers.batch_normalization training=False, the restored moving statistics) [E04-Q1 A_MOVING_STATISTICS_PER_PAIR]",
+  "geometry": "frozen e04_feed_pack_v1 Q140 landmarks; dense_offsets(source_xy=spoof Q140, target_xy=live Q140); no landmark re-estimation",
+  "warp": "methods/physics_std/trace_transfer.py warp on CPU (bilinear, border clamp)",
+  "synthesis": "out = (1-P_w)*(I_live + B~_w + C~_w + T_w) + P_w*I_source_w, training_graph.py:32-39 [E04-Q2 A_PAPER_SPOOF_SYNTHESIS]; no harder-sample augmentation, no stochastic perturbation",
+  "auxiliary_outputs": "none [E04-Q4 A_NONE]",
+  "no_training": "no optimizer, gradient, UPDATE_OPS, assignment or checkpoint write; finalized TF graph"
+ },
+ "population": {
+  "kind": "PRODUCTION_FROZEN_TRAIN_POPULATION",
+  "rows_per_seed": 8838,
+  "family_rows": 26514,
+  "pairs": {
+   "path": "manifests/pairs_train_v1.parquet",
+   "sha256": "a5e4fdaef236f15730c7e3885b537e08e995faffbe654167fc940f44bbc75243"
+  },
+  "feed_pack": {
+   "name": "e04_feed_pack_v1",
+   "manifest_sha256": "db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b"
+  },
+  "order": "every frozen pairs_train_v1 row in canonical ascending pair_id order, global positions 0..8837",
+  "identity": "row_id = pair_id; target_live_id, source_spoof_id and dataset preserved per row",
+  "faces": "TRAIN only via TrainFaceReader (feed-pack TRAIN allowlist, O_NOATIME, atime stat check, M2 face SHA256); 17676 O_NOATIME reads per bank",
+  "cross_check": "split_v1 and M2 accounting of every used face and of the whole feed pack by the independent production auditor (owner ruling)",
+  "no_additional_pairs": true,
+  "pairs_val_opened": false
+ },
+ "rng": "none: E04 bank inference is deterministic (BN inference mode, batch 1, no sampling or augmentation)",
+ "conversion_rule": "(np.clip(out, 0.0, 1.0) * 255.0).astype(np.uint8) float32 [E04-Q3 A_PREDECESSOR_CLIP_TRUNCATE; reference stdn model/utils.py:24,37]",
+ "expected_outputs": {
+  "per_seed": 8838,
+  "family": 26514,
+  "format": "256x256x3 uint8 RGB lossless PNG (PIL compress_level 6, optimize False, no metadata); mode 0444; bank and seed dirs 0555",
+  "label": "spoof",
+  "inclusion": "RAW-MATCHED: every numerically valid result is included",
+  "failures_allowed": "only NaN/Inf raw outputs are counted failures (the frozen rule); production expects 0 (any failure stops the family for owner review)"
+ },
+ "code_authority": {
+  "source_commit": "cc2834ce15df6fff587da7c6e4c81d2328a57562",
+  "execution_commit": "the commit that adds this record; it may differ from source_commit only in configs/amendments/learned_bank_production_E04.yaml and outputs/audit/**",
+  "execution_checkout": "~/workdir/m8_learned_banks/clones/prod_E04_<execution_commit> (fresh clean clone from a git bundle; never the E04 training checkout 18ba00e); third_party/source_cache/stdn copied from the GPU checkout",
+  "cli": "tools/learned_bank.py production --method E04 --seed <S> --runtime-root <runtime_root> (one OS process per bank)",
+  "launch_scripts": "tools/learned_bank_production_scripts/m8prod_{launch,wait,post}.sh",
+  "audit_tool": "tools/learned_bank_production_audit.py (E04 branch)"
+ },
+ "production_audit": {
+  "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_SEED<S>.json",
+  "evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E04_s<S>/{collected.json,bank_manifest.jsonl.gz,preflight.json}",
+  "family_closure": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_FAMILY_CLOSURE.json",
+  "requires": [
+   "exactly 8838 rows and 8838 outputs, 0 failures, no missing or duplicate pair_id",
+   "rows equal pairs_train_v1 in canonical order (row_index = global position)",
+   "every face TRAIN in split_v1 with its M2 face SHA256; whole-feed-pack cross-check",
+   "BN inference mode, 102 restored generator variables, 0 gradient / optimizer / mutating ops",
+   "clip-truncate conversion; PNG structure, file and pixel SHA256 of every output by the library reader AND an independent walk",
+   "finite raw outputs",
+   "checkpoint identity before and after (sha256 + mtime) for all 15 approved checkpoints",
+   "TRAIN-only reads, O_NOATIME, zero VAL/TEST/TRAIN face atime or mtime change",
+   "S7-to-production byte and pixel equivalence of the 186 toy rows against S7 runs A and B, matched by global position and pair_id from the manifests",
+   "host, GPU, environment lock, storage UUID, registered path",
+   "E01/E02 banks unchanged",
+   "every other learned bank unchanged",
+   "audit committed and pushed before the next launch"
+  ]
+ },
+ "reproducibility": {
+  "standard": "E04-Q5 A_GPU_FP32_BITWISE_REPLAY (passed S7, bitwise A/B for all seeds) and byte equality of the 186 S7 toy rows with the production rows",
+  "full_bank_replay": "not required by the contract and not performed; never substituted by a procedural or approximate check",
+  "procedural_fallback": "NOT AUTHORIZED"
+ },
+ "test_firewall": {
+  "val_test_reads": 0,
+  "reader": "TrainFaceReader TRAIN allowlist, O_NOATIME, atime check per read",
+  "atime_ledger": "stat-only ledger of all canonical faces (TRAIN/VAL/TEST) before and after each bank; no change allowed"
+ },
+ "resource_preflight": {
+  "required": true,
+  "gpu_free_floor_gib": 4,
+  "ram_floor_gib": 4,
+  "hdd_free_floor_gib": 20,
+  "one_learned_bank_process_at_a_time": true,
+  "unrelated_gpu_jobs": "recorded, never touched",
+  "measured_s7": "582 MiB GPU per process; about 0.65 GiB PNG per seed"
+ },
+ "fail_closed": [
+  "any gate failure stops the E04 family; evidence and partial outputs are preserved untouched",
+  "no automatic rerun and no rerun into an existing bank directory",
+  "HDD disconnect, remount or UUID change: stop immediately, preserve partial evidence",
+  "S7-to-production mismatch: stop the family; nothing is relaxed and no reference is changed",
+  "GPU contention/OOM: never touch other jobs"
+ ],
+ "scientific_disclosures": [
+  "CONTROLLED_ADAPTATION: Physics-STD (controlled geometry/depth reconstruction); not an official native Physics-STD reproduction",
+  "bank inference uses the stored BN moving statistics (batch 1); training-time synthesis used 8-image batch statistics",
+  "float->uint8 clip-truncate follows the ECCV20-STDN predecessor (reference only)",
+  "S7 observed one seed-42 pair with raw output about [-1.11, 1.68]; the approved conversion clips to [0, 1] before the uint8 cast; no dynamic rescaling, replacement or quality filter (RAW-MATCHED)"
+ ],
+ "not_retroactive": "authorizes only banks launched after this record is committed; no E04 production bank or E04 bank directory existed when it was derived",
+ "authorizes": {
+  "production_bank_generation": true,
+  "methods": [
+   "E04"
+  ],
+  "generator_retraining": false,
+  "checkpoint_change": false,
+  "inference_semantics_change": false,
+  "quality_filtering": false,
+  "val_or_test_access": false,
+  "other_method_production": false,
+  "downstream_training": false,
+  "test_evaluation": false,
+  "dinov3": false,
+  "gpat": false,
+  "method_status_update": false
+ }
+}
