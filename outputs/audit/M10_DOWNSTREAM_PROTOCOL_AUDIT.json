@@ -1,0 +1,540 @@
+{
+ "authorities": {
+  "configs/amendments/m8_downstream_evaluator_contract.yaml": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0",
+  "configs/amendments/m8_smoke_test_contract.yaml": "13704edde0fd56966144063b9f1f66401264eb0e49d6220297591f04bc914ebb",
+  "configs/frozen/downstream_resnet18.yaml": "f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b",
+  "contract_authorizes": {
+   "dinov3_execution": false,
+   "gpat": false,
+   "one_smoke_execution_and_one_replay": true,
+   "production_banks": false,
+   "production_binding": false,
+   "scientific_downstream_training": false,
+   "smoke_environment_gpat_m8_downstream_six_wheels": true,
+   "smoke_implementation": true,
+   "test_access": false
+  },
+  "contract_status": "OWNER_APPROVED",
+  "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+  "docs/spec/spec_extracted_text.txt": "0bf6b1607d2f39db1f091df772c1da82c1e76539fa7859f627d115da706e5d83",
+  "resnet18_weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+ },
+ "date": "2026-11-26",
+ "frozen_protocol": {
+  "architecture": {
+   "source": [
+    "configs/frozen/downstream_resnet18.yaml model",
+    "docs/spec/spec_extracted_text.txt:421"
+   ],
+   "value": "torchvision ResNet-18 IMAGENET1K_V1, fc -> Linear(512, 1), one logit"
+  },
+  "batch_and_composition": {
+   "source": [
+    "configs/frozen/downstream_resnet18.yaml training.mixed_batch/real_only_batch",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D1",
+    "docs/spec/spec_extracted_text.txt:424"
+   ],
+   "value": "batch 64: mixed = 32 live + 16 real spoof + 16 synthetic spoof; E00 = 32 live + 32 real spoof; tensor order live, real spoof, synthetic"
+  },
+  "checkpoint_saving": {
+   "source": [
+    "docs/spec/spec_extracted_text.txt:784"
+   ],
+   "value": "not pinned: D5 needs every epoch evaluated; only the selected checkpoint is required to be kept (frozen before TEST)"
+  },
+  "dataloader_workers": {
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D13, D14"
+   ],
+   "value": "smoke: num_workers 0 (D13); science: not pinned. The science runner draws every D14 augmentation parameter in sample order from the dedicated generator before decoding, so a decode/augment thread pool changes no random draw (qualified bitwise against the smoke runner)"
+  },
+  "device_precision_determinism": {
+   "frozen": "amp: True",
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D13 (confirmed_items: deferred to before M10)",
+    "docs/spec/spec_extracted_text.txt:433"
+   ],
+   "unresolved": "science AMP dtype and GradScaler policy (and CUDA determinism settings) are not pinned",
+   "value": "smoke: CPU, AMP off, torch.use_deterministic_algorithms(True), torch.set_num_threads(8), torch.set_num_interop_threads(1), DataLoader num_workers 0. Science: CUDA with AMP; the AMP dtype and GradScaler policy must be pinned before M10 (not needed for the smoke)"
+  },
+  "epoch_and_sampler": {
+   "rng": {
+    "augmentation": "torch.Generator().manual_seed(int.from_bytes(SHA256(UTF-8('gpatbench.downstream.augment.v1|resnet18|'+method_id+'|'+str(seed))), 'big') % 2**63)",
+    "model": "torch.manual_seed(seed) immediately before building the model (initializes the new fc head; the backbone comes from the hash-verified weights)",
+    "sampler": "per pool p in {live, real_spoof, synthetic} and pass index i: numpy Generator(PCG64(int.from_bytes(SHA256(UTF-8('gpatbench.downstream.sampler.v1|resnet18|'+method_id+'|'+str(seed)+'|'+p+'|'+str(i))), 'big'))).permutation(n)"
+   },
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D1, rng_scheme"
+   ],
+   "value": "an epoch is floor(N_live / 32) full batches over a fresh permutation of the TRAIN live frames (tail dropped). Real-spoof and synthetic pools are consumed sequentially from their own permutations without replacement; when fewer items remain than a batch needs, the remainder is discarded and the next permutation is drawn (never duplicates inside a batch). Batch tensor order: live, real spoof, synthetic. E00 uses 32 live + 32 real spoof"
+  },
+  "initialization": {
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml rng_scheme.model",
+    "docs/spec/spec_extracted_text.txt:419"
+   ],
+   "value": "ImageNet weights resnet18-f37072fd.pth (sha256 f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec, hash-verified); torch.manual_seed(seed) immediately before building the model (new fc head)"
+  },
+  "input_and_normalization": {
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D2, D14",
+    "configs/frozen/downstream_resnet18.yaml augmentation",
+    "docs/spec/spec_extracted_text.txt:438"
+   ],
+   "value": "train: D14 RandomResizedCrop(224, (0.92,1.0), (0.95,1.05), BICUBIC) -> HFlip 0.5 -> ColorJitter(0.05,0.05,0.05,0.01) p 0.5 -> to_tensor -> ImageNet Normalize; eval (VAL/TEST): D2 full bicubic resize 256 -> 224 -> Normalize"
+  },
+  "loss_and_target": {
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D3",
+    "docs/spec/spec_extracted_text.txt:422"
+   ],
+   "value": "BCEWithLogitsLoss target = label_binary (1 spoof, 0 live; synthetic = 1); p_frame = sigmoid(logit) = P(spoof)"
+  },
+  "metrics": {
+   "source": [
+    "docs/spec/spec_extracted_text.txt:468",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D7, D8, D10",
+    "gpatbench/downstream/metrics.py"
+   ],
+   "value": "APCER, BPCER, ACER (exact counts); AUC (Mann-Whitney, spoof positive); EER (D7 linear interpolation); accuracy, balanced accuracy, spoof F1, TPR@FPR 1%/5% (D8, no interpolation); dataset-wise ACER/AUC, attack_macro APCER, SiW-Mv2 raw 14-type APCER (D10)"
+  },
+  "optimizer": {
+   "source": [
+    "configs/frozen/downstream_resnet18.yaml training",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D6"
+   ],
+   "value": "AdamW, betas (0.9, 0.999), eps 1e-8, weight decay 0.0001 on all parameters; backbone lr 0.0001, head (fc) lr 0.0005; clip_grad_norm_ 1.0 before each step"
+  },
+  "quality_matched": {
+   "source": [
+    "docs/spec/spec_extracted_text.txt:218",
+    "docs/spec/spec_extracted_text.txt:219",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D12"
+   ],
+   "value": "QUALITY-MATCHED: N_common = minimum valid/accepted outputs among compared methods, deterministic hash subsample; D12: for E01/E02 equal to RAW-MATCHED unless N_common forces subsampling. All seven previous-work banks have 8838 valid outputs and no native quality filter is part of their frozen generation contracts; N_common across the full comparison depends on the later GPAT banks. Both views are reported; the primary view must be declared before TEST (owner)."
+  },
+  "schedule": {
+   "source": [
+    "configs/frozen/downstream_resnet18.yaml training.epochs/warmup_epochs/scheduler/min_lr",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D6",
+    "docs/spec/spec_extracted_text.txt:426"
+   ],
+   "value": "40 epochs; warmup 3 epochs linear lr = base*k/W from 0; then cosine to 1e-06 per step (D6)"
+  },
+  "seed_aggregation": {
+   "source": [
+    "docs/spec/spec_extracted_text.txt:16"
+   ],
+   "value": "mean +/- sample standard deviation over seeds 42/1337/2026"
+  },
+  "synthetic_budget_and_view": {
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D12",
+    "docs/spec/spec_extracted_text.txt:215",
+    "docs/spec/spec_extracted_text.txt:217"
+   ],
+   "value": "N_syn = N_TRAIN spoof frames = 8838 per bank; RAW-MATCHED: every valid output (all 21 banks: 8838 valid, 0 failures); detector seed s uses the bank of generator seed s (D12 SEED_MATCHED_RAW); no averaging or mixing of banks"
+  },
+  "test_policy": {
+   "source": [
+    "docs/spec/spec_extracted_text.txt:24",
+    "gpatbench/downstream/firewall.py"
+   ],
+   "value": "TEST sealed: never used for training, selection, thresholds, early stopping, quality filtering or inspection; evaluated once with the frozen VAL threshold in a separately authorized stage"
+  },
+  "threshold_selection": {
+   "source": [
+    "docs/spec/spec_extracted_text.txt:465",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D4",
+    "configs/frozen/downstream_resnet18.yaml selection.threshold"
+   ],
+   "unresolved": "no rule when two minimum-ACER thresholds are equally close to 0.5 (e.g. constant or fully inverted VAL scores: thresholds 0 and 1 at ACER 1/2); the implementation fails closed (UnresolvedThresholdTie)",
+   "value": "VAL video scores; minimize ACER over all unique score midpoints plus 0 and 1; tie-break threshold closest to 0.5; D4 spoof iff score >= threshold; frozen per seed/method and applied once to TEST"
+  },
+  "validation_and_checkpoint_selection": {
+   "source": [
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D5",
+    "configs/frozen/downstream_resnet18.yaml selection.checkpoint",
+    "docs/spec/spec_extracted_text.txt:436"
+   ],
+   "value": "VAL video metrics after every epoch; epoch ACER at that epoch's own section-15 threshold; select the minimum ACER, then maximum VAL video AUC, then the earliest epoch; the selected epoch's threshold is the frozen threshold"
+  },
+  "video_aggregation": {
+   "source": [
+    "docs/spec/spec_extracted_text.txt:463",
+    "configs/amendments/m8_downstream_evaluator_contract.yaml D9"
+   ],
+   "value": "video score = arithmetic mean of that canonical video's frame probabilities; video-level metrics primary, frame-level diagnostic at the video threshold (D9)"
+  }
+ },
+ "implementation_gaps": [
+  {
+   "item": "smoke runner is CPU-only, no AMP, deterministic CPU settings",
+   "resolution": "gpatbench/downstream/science_runner.py: named PrecisionPolicy (CUDA AMP fp16+GradScaler / bf16 candidates); SCIENTIFIC mode refuses without the owner precision pin",
+   "status": "IMPLEMENTED_PENDING_OWNER_PIN"
+  },
+  {
+   "item": "smoke runner scores a VAL holdout stand-in for TEST at the end of training",
+   "resolution": "science runner has no TEST / holdout input at all; it ends at the frozen VAL selection",
+   "status": "IMPLEMENTED"
+  },
+  {
+   "item": "smoke runner keeps epoch states in memory and writes no checkpoint",
+   "resolution": "selected checkpoint written, reloaded (weights_only) and re-hashed; ALL_EPOCHS retention optional",
+   "status": "IMPLEMENTED_RETENTION_PENDING_OWNER"
+  },
+  {
+   "item": "bank_reader reads E01/E02 banks only",
+   "resolution": "gpatbench/downstream/science_banks.py resolves all seven methods through their audited bindings and family readers (bank_writer / learned_bank registry) with full verification",
+   "status": "IMPLEMENTED"
+  },
+  {
+   "item": "synthetic sample id is pair_id only (DSDG banks have none)",
+   "resolution": "sample_id = pair_id or DSDG synthetic_id",
+   "status": "IMPLEMENTED"
+  },
+  {
+   "item": "prediction rows carry track_id 'binary' for every method",
+   "resolution": "science runner sets the A1 track from method_status.csv (E06b B_NATIVE_FULL_SECONDARY)",
+   "status": "IMPLEMENTED_CONFIRMATION_REQUESTED"
+  },
+  {
+   "item": "single-threaded decode/augmentation (D13 smoke workers 0)",
+   "resolution": "parameters pre-drawn in sample order; optional thread pool; bitwise equal to the smoke runner",
+   "status": "IMPLEMENTED"
+  },
+  {
+   "item": "no full-population input builder",
+   "resolution": "gpatbench/downstream/science_inputs.py (TRAIN/VAL only, M2 face sha256, M3 grouping disjointness)",
+   "status": "IMPLEMENTED"
+  },
+  {
+   "item": "no scientific run manifest",
+   "resolution": "gpatbench/downstream/science_manifest.py",
+   "status": "IMPLEMENTED"
+  },
+  {
+   "item": "no M10 launcher / orchestration and no scientific launch authority",
+   "resolution": "launch-authority DRAFT only (not activated); launcher to be qualified after the owner decisions",
+   "status": "NOT_IMPLEMENTED_BY_DESIGN"
+  }
+ ],
+ "matrix": {
+  "dinov3": "M11, not in this matrix (D11; frozen config missing)",
+  "excluded": {
+   "E06a": "superseded by A1 (E06c DSDG-BIN-IDFREE is the Track-A DSDG row)",
+   "E07a/E07b/E07c": "DiffFAS family: superseded (E07a) / owner-excluded by A9"
+  },
+  "groups": [
+   "E00",
+   "E01",
+   "E02",
+   "E03",
+   "E04",
+   "E05",
+   "E06b",
+   "E06c"
+  ],
+  "rows": [
+   {
+    "batch": "32 live + 32 real spoof",
+    "detector_seed": 42,
+    "fidelity": "REAL_ONLY_LOWER_BOUND",
+    "group": "E00",
+    "synthetic": null,
+    "track_id": "binary"
+   },
+   {
+    "batch": "32 live + 32 real spoof",
+    "detector_seed": 1337,
+    "fidelity": "REAL_ONLY_LOWER_BOUND",
+    "group": "E00",
+    "synthetic": null,
+    "track_id": "binary"
+   },
+   {
+    "batch": "32 live + 32 real spoof",
+    "detector_seed": 2026,
+    "fidelity": "REAL_ONLY_LOWER_BOUND",
+    "group": "E00",
+    "synthetic": null,
+    "track_id": "binary"
+   },
+   {
+    "bank_audit": "outputs/audit/E01_PRODUCTION_BANK_SEED42.json",
+    "bank_manifest_sha256": "abd93be76b2659563599fb3cbcb5afaa72b56a7465b52db1e9e75bc1d6873e5f",
+    "bank_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E01/seed_42",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 42,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION",
+    "group": "E01",
+    "synthetic": "bank E01 seed 42 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/E01_PRODUCTION_BANK_SEED1337.json",
+    "bank_manifest_sha256": "38a8c6c5caa7735da475862636ce856dafb91660ba8b1cb43431e23e69017a4b",
+    "bank_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E01/seed_1337",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 1337,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION",
+    "group": "E01",
+    "synthetic": "bank E01 seed 1337 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/E01_PRODUCTION_BANK_SEED2026.json",
+    "bank_manifest_sha256": "ff7361426c6af222b11db0c86e7ac71c5601ae4f06f83180119525350ec35933",
+    "bank_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E01/seed_2026",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 2026,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_DETERMINISM_CLARIFICATION",
+    "group": "E01",
+    "synthetic": "bank E01 seed 2026 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/E02_PRODUCTION_BANK_SEED42.json",
+    "bank_manifest_sha256": "0b0aa41d714316601f0d9e2120a7d107f5a58d414a9475ab9f0e83feac284d1b",
+    "bank_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E02/seed_42",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 42,
+    "fidelity": "SPEC_DEFINED",
+    "group": "E02",
+    "synthetic": "bank E02 seed 42 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/E02_PRODUCTION_BANK_SEED1337.json",
+    "bank_manifest_sha256": "cd34bc02e94ddcb7ef6097260d1d22d1492b9b5b0a3afab9a46e5557e8628cd8",
+    "bank_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E02/seed_1337",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 1337,
+    "fidelity": "SPEC_DEFINED",
+    "group": "E02",
+    "synthetic": "bank E02 seed 1337 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/E02_PRODUCTION_BANK_SEED2026.json",
+    "bank_manifest_sha256": "9eb09bae542d37b769da25e1216031c7bcd4b365983ec4699532d6304c6fa485",
+    "bank_path": "/home/student20261/workdir/GPAT_TransferBench_runtime/runs/m6/E02/seed_2026",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 2026,
+    "fidelity": "SPEC_DEFINED",
+    "group": "E02",
+    "synthetic": "bank E02 seed 2026 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E03_SEED42.json",
+    "bank_manifest_sha256": "5cc8b9e26c4f56791acad3f6d586b4e9f9a6633b4f4dbb7af5f823994a5a558f",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E03/seed_42",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 42,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "group": "E03",
+    "synthetic": "bank E03 seed 42 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E03_SEED1337.json",
+    "bank_manifest_sha256": "c414758d373de2461a805cc785a6bd0767fdd18071132039d6d8b725f49121a3",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E03/seed_1337",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 1337,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "group": "E03",
+    "synthetic": "bank E03 seed 1337 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E03_SEED2026.json",
+    "bank_manifest_sha256": "51fa6bafdf7ea1fd039fbfbb531024b5c5ac689b206117c03749df5595320202",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E03/seed_2026",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 2026,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "group": "E03",
+    "synthetic": "bank E03 seed 2026 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_SEED42.json",
+    "bank_manifest_sha256": "2ffbf95f968d0acd9f0c4828bd715a909628c6f9428ddcc6cee594253af4a218",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_42",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 42,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E04",
+    "synthetic": "bank E04 seed 42 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_SEED1337.json",
+    "bank_manifest_sha256": "83993dc73979b8bdfe714b9588ada874a9da7415f8e9f80405e77f75a64b6f34",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_1337",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 1337,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E04",
+    "synthetic": "bank E04 seed 1337 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E04_SEED2026.json",
+    "bank_manifest_sha256": "14569ec629b9dffe4542500ce914f6ba5e5b8372849e4caab5edead803253447",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E04/seed_2026",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 2026,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E04",
+    "synthetic": "bank E04 seed 2026 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E05_SEED42.json",
+    "bank_manifest_sha256": "079077c86c12a5624b3f2b8117188a0db2466187376b38a5c1432720bc1000a3",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E05/seed_42",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 42,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E05",
+    "synthetic": "bank E05 seed 42 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E05_SEED1337.json",
+    "bank_manifest_sha256": "f8e9ff6782058c7487fb86e20c424d130a9bdee2214955dacaaa647e63d60fa8",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E05/seed_1337",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 1337,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E05",
+    "synthetic": "bank E05 seed 1337 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E05_SEED2026.json",
+    "bank_manifest_sha256": "e2407a9ce312e3493cdb991af8d879e5ddefaaf85077e2fca0c7d35d31af30f8",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E05/seed_2026",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 2026,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E05",
+    "synthetic": "bank E05 seed 2026 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED42.json",
+    "bank_manifest_sha256": "882017b8fadc532691c43699360147e036fa464e6b7bb0b6d8794e38f1568691",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_42",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 42,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "group": "E06b",
+    "synthetic": "bank E06b seed 42 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "B_NATIVE_FULL_SECONDARY"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED1337.json",
+    "bank_manifest_sha256": "40564cd58982eae4415c8ac5ea173c96bb40c36a41471e2bc476854cfbacb099",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_1337",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 1337,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "group": "E06b",
+    "synthetic": "bank E06b seed 1337 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "B_NATIVE_FULL_SECONDARY"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_SEED2026.json",
+    "bank_manifest_sha256": "e1dd3a2eaa990b05c54fa6bf2939e40a77697eb58ae19e7964ffa9aba042f88c",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E06b/seed_2026",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 2026,
+    "fidelity": "FAITHFUL_OFFICIAL_WITH_RUNTIME_COMPATIBILITY",
+    "group": "E06b",
+    "synthetic": "bank E06b seed 2026 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "B_NATIVE_FULL_SECONDARY"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E06c_SEED42.json",
+    "bank_manifest_sha256": "8da6d40458a2ee420330c92ef3a956d5e06be0560c96f86353d107d48a06ab62",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E06c/seed_42",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 42,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E06c",
+    "synthetic": "bank E06c seed 42 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E06c_SEED1337.json",
+    "bank_manifest_sha256": "e88e1ca631bd5e63717342816046477bb588d916b3a7008be2f0b8027aa5e23a",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E06c/seed_1337",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 1337,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E06c",
+    "synthetic": "bank E06c seed 1337 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   },
+   {
+    "bank_audit": "outputs/audit/LEARNED_BANK_PRODUCTION_E06c_SEED2026.json",
+    "bank_manifest_sha256": "d30ad186264074a670962e46d535e8a6c6b471004803017027b265fab4f18bee",
+    "bank_path": "/media/ext_data/student20261_gpat_m8_banks/E06c/seed_2026",
+    "batch": "32 live + 16 real spoof + 16 synthetic",
+    "detector_seed": 2026,
+    "fidelity": "CONTROLLED_ADAPTATION",
+    "group": "E06c",
+    "synthetic": "bank E06c seed 2026 (D12 seed-matched, RAW-MATCHED 8838)",
+    "track_id": "A_FAIR_COMMON_IDENTITY_FREE"
+   }
+  ],
+  "runs": 24,
+  "seeds": [
+   42,
+   1337,
+   2026
+  ]
+ },
+ "populations": {
+  "arithmetic": {
+   "live_frames_dropped_per_epoch": 29,
+   "passes_over_pool_in_40_epochs": {
+    "real_spoof_E00": 25.345,
+    "real_spoof_mixed": 12.673,
+    "synthetic": 12.673
+   },
+   "per_epoch_images": {
+    "live": 5600,
+    "real_spoof_E00": 5600,
+    "real_spoof_mixed": 2800,
+    "synthetic": 2800
+   },
+   "steps_per_epoch": 175,
+   "total_steps": 7000,
+   "warmup_steps": 525
+  },
+  "counts": {
+   "train_live": 5629,
+   "train_real_spoof": 8838,
+   "val": 3121,
+   "val_videos": 391
+  },
+  "grouping": {
+   "casia_fasd": "subject_id_global",
+   "msu_mfsd": "subject_id_global",
+   "siwmv2": "content_group_id"
+  },
+  "pool_sha256": {
+   "train_live": "8ab3b3a75021f42274fa071727b9da8b89d04dcc2d019be871f8f7f7dc894a93",
+   "train_real_spoof": "3946fb79ce034247573212050634a0d3b886a22f523d31939468b37e9233dce7",
+   "val": "50047511aba7f9892c9af749779d4f88b97e0e69e3b04e062173dfcaf92bfa2d"
+  },
+  "siwmv2_subject_note": "SiW-Mv2 rows have no subject identity (owner Q-14); SiW-Mv2 is content-group / video-disjoint, never claimed subject-disjoint",
+  "split_manifest_sha256": "fb9aeb369a124fc96ba855ef2ce269236c4a743fe960e73ab739412c9cb5092d"
+ },
+ "schema": "m10_downstream_protocol_audit_v1"
+}

@@ -1,0 +1,47 @@
+# M10 downstream ResNet-18 protocol audit
+
+Evaluator contract `configs/amendments/m8_downstream_evaluator_contract.yaml` (`67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0`), frozen config `configs/frozen/downstream_resnet18.yaml` (`f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b`). Contract scope: smoke only; scientific downstream training is not authorized by it.
+
+## Frozen rules
+
+- **architecture**: torchvision ResNet-18 IMAGENET1K_V1, fc -> Linear(512, 1), one logit (configs/frozen/downstream_resnet18.yaml model; docs/spec/spec_extracted_text.txt:421)
+- **initialization**: ImageNet weights resnet18-f37072fd.pth (sha256 f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec, hash-verified); torch.manual_seed(seed) immediately before building the model (new fc head) (configs/amendments/m8_downstream_evaluator_contract.yaml rng_scheme.model; docs/spec/spec_extracted_text.txt:419)
+- **input_and_normalization**: train: D14 RandomResizedCrop(224, (0.92,1.0), (0.95,1.05), BICUBIC) -> HFlip 0.5 -> ColorJitter(0.05,0.05,0.05,0.01) p 0.5 -> to_tensor -> ImageNet Normalize; eval (VAL/TEST): D2 full bicubic resize 256 -> 224 -> Normalize (configs/amendments/m8_downstream_evaluator_contract.yaml D2, D14; configs/frozen/downstream_resnet18.yaml augmentation; docs/spec/spec_extracted_text.txt:438)
+- **loss_and_target**: BCEWithLogitsLoss target = label_binary (1 spoof, 0 live; synthetic = 1); p_frame = sigmoid(logit) = P(spoof) (configs/amendments/m8_downstream_evaluator_contract.yaml D3; docs/spec/spec_extracted_text.txt:422)
+- **optimizer**: AdamW, betas (0.9, 0.999), eps 1e-8, weight decay 0.0001 on all parameters; backbone lr 0.0001, head (fc) lr 0.0005; clip_grad_norm_ 1.0 before each step (configs/frozen/downstream_resnet18.yaml training; configs/amendments/m8_downstream_evaluator_contract.yaml D6)
+- **schedule**: 40 epochs; warmup 3 epochs linear lr = base*k/W from 0; then cosine to 1e-06 per step (D6) (configs/frozen/downstream_resnet18.yaml training.epochs/warmup_epochs/scheduler/min_lr; configs/amendments/m8_downstream_evaluator_contract.yaml D6; docs/spec/spec_extracted_text.txt:426)
+- **batch_and_composition**: batch 64: mixed = 32 live + 16 real spoof + 16 synthetic spoof; E00 = 32 live + 32 real spoof; tensor order live, real spoof, synthetic (configs/frozen/downstream_resnet18.yaml training.mixed_batch/real_only_batch; configs/amendments/m8_downstream_evaluator_contract.yaml D1; docs/spec/spec_extracted_text.txt:424)
+- **epoch_and_sampler**: an epoch is floor(N_live / 32) full batches over a fresh permutation of the TRAIN live frames (tail dropped). Real-spoof and synthetic pools are consumed sequentially from their own permutations without replacement; when fewer items remain than a batch needs, the remainder is discarded and the next permutation is drawn (never duplicates inside a batch). Batch tensor order: live, real spoof, synthetic. E00 uses 32 live + 32 real spoof (configs/amendments/m8_downstream_evaluator_contract.yaml D1, rng_scheme)
+- **synthetic_budget_and_view**: N_syn = N_TRAIN spoof frames = 8838 per bank; RAW-MATCHED: every valid output (all 21 banks: 8838 valid, 0 failures); detector seed s uses the bank of generator seed s (D12 SEED_MATCHED_RAW); no averaging or mixing of banks (configs/amendments/m8_downstream_evaluator_contract.yaml D12; docs/spec/spec_extracted_text.txt:215; docs/spec/spec_extracted_text.txt:217)
+- **quality_matched**: QUALITY-MATCHED: N_common = minimum valid/accepted outputs among compared methods, deterministic hash subsample; D12: for E01/E02 equal to RAW-MATCHED unless N_common forces subsampling. All seven previous-work banks have 8838 valid outputs and no native quality filter is part of their frozen generation contracts; N_common across the full comparison depends on the later GPAT banks. Both views are reported; the primary view must be declared before TEST (owner). (docs/spec/spec_extracted_text.txt:218; docs/spec/spec_extracted_text.txt:219; configs/amendments/m8_downstream_evaluator_contract.yaml D12)
+- **device_precision_determinism**: smoke: CPU, AMP off, torch.use_deterministic_algorithms(True), torch.set_num_threads(8), torch.set_num_interop_threads(1), DataLoader num_workers 0. Science: CUDA with AMP; the AMP dtype and GradScaler policy must be pinned before M10 (not needed for the smoke) (configs/amendments/m8_downstream_evaluator_contract.yaml D13 (confirmed_items: deferred to before M10); docs/spec/spec_extracted_text.txt:433) — UNRESOLVED: science AMP dtype and GradScaler policy (and CUDA determinism settings) are not pinned
+- **dataloader_workers**: smoke: num_workers 0 (D13); science: not pinned. The science runner draws every D14 augmentation parameter in sample order from the dedicated generator before decoding, so a decode/augment thread pool changes no random draw (qualified bitwise against the smoke runner) (configs/amendments/m8_downstream_evaluator_contract.yaml D13, D14)
+- **validation_and_checkpoint_selection**: VAL video metrics after every epoch; epoch ACER at that epoch's own section-15 threshold; select the minimum ACER, then maximum VAL video AUC, then the earliest epoch; the selected epoch's threshold is the frozen threshold (configs/amendments/m8_downstream_evaluator_contract.yaml D5; configs/frozen/downstream_resnet18.yaml selection.checkpoint; docs/spec/spec_extracted_text.txt:436)
+- **threshold_selection**: VAL video scores; minimize ACER over all unique score midpoints plus 0 and 1; tie-break threshold closest to 0.5; D4 spoof iff score >= threshold; frozen per seed/method and applied once to TEST (docs/spec/spec_extracted_text.txt:465; configs/amendments/m8_downstream_evaluator_contract.yaml D4; configs/frozen/downstream_resnet18.yaml selection.threshold) — UNRESOLVED: no rule when two minimum-ACER thresholds are equally close to 0.5 (e.g. constant or fully inverted VAL scores: thresholds 0 and 1 at ACER 1/2); the implementation fails closed (UnresolvedThresholdTie)
+- **checkpoint_saving**: not pinned: D5 needs every epoch evaluated; only the selected checkpoint is required to be kept (frozen before TEST) (docs/spec/spec_extracted_text.txt:784)
+- **video_aggregation**: video score = arithmetic mean of that canonical video's frame probabilities; video-level metrics primary, frame-level diagnostic at the video threshold (D9) (docs/spec/spec_extracted_text.txt:463; configs/amendments/m8_downstream_evaluator_contract.yaml D9)
+- **metrics**: APCER, BPCER, ACER (exact counts); AUC (Mann-Whitney, spoof positive); EER (D7 linear interpolation); accuracy, balanced accuracy, spoof F1, TPR@FPR 1%/5% (D8, no interpolation); dataset-wise ACER/AUC, attack_macro APCER, SiW-Mv2 raw 14-type APCER (D10) (docs/spec/spec_extracted_text.txt:468; configs/amendments/m8_downstream_evaluator_contract.yaml D7, D8, D10; gpatbench/downstream/metrics.py)
+- **seed_aggregation**: mean +/- sample standard deviation over seeds 42/1337/2026 (docs/spec/spec_extracted_text.txt:16)
+- **test_policy**: TEST sealed: never used for training, selection, thresholds, early stopping, quality filtering or inspection; evaluated once with the frozen VAL threshold in a separately authorized stage (docs/spec/spec_extracted_text.txt:24; gpatbench/downstream/firewall.py)
+
+## Matrix
+
+24 runs: E00, E01, E02, E03, E04, E05, E06b, E06c x seeds [42, 1337, 2026]; E00 real-only; detector seed s uses bank seed s.
+
+## Populations
+
+TRAIN live 5629, TRAIN real spoof 8838, VAL 3121 frames / 391 videos.
+Steps per epoch 175, total 7000, warmup 525; live frames dropped per epoch 29; passes over the pools in 40 epochs: {"real_spoof_mixed": 12.673, "real_spoof_E00": 25.345, "synthetic": 12.673}.
+
+## Implementation gaps
+
+- smoke runner is CPU-only, no AMP, deterministic CPU settings → gpatbench/downstream/science_runner.py: named PrecisionPolicy (CUDA AMP fp16+GradScaler / bf16 candidates); SCIENTIFIC mode refuses without the owner precision pin (`IMPLEMENTED_PENDING_OWNER_PIN`)
+- smoke runner scores a VAL holdout stand-in for TEST at the end of training → science runner has no TEST / holdout input at all; it ends at the frozen VAL selection (`IMPLEMENTED`)
+- smoke runner keeps epoch states in memory and writes no checkpoint → selected checkpoint written, reloaded (weights_only) and re-hashed; ALL_EPOCHS retention optional (`IMPLEMENTED_RETENTION_PENDING_OWNER`)
+- bank_reader reads E01/E02 banks only → gpatbench/downstream/science_banks.py resolves all seven methods through their audited bindings and family readers (bank_writer / learned_bank registry) with full verification (`IMPLEMENTED`)
+- synthetic sample id is pair_id only (DSDG banks have none) → sample_id = pair_id or DSDG synthetic_id (`IMPLEMENTED`)
+- prediction rows carry track_id 'binary' for every method → science runner sets the A1 track from method_status.csv (E06b B_NATIVE_FULL_SECONDARY) (`IMPLEMENTED_CONFIRMATION_REQUESTED`)
+- single-threaded decode/augmentation (D13 smoke workers 0) → parameters pre-drawn in sample order; optional thread pool; bitwise equal to the smoke runner (`IMPLEMENTED`)
+- no full-population input builder → gpatbench/downstream/science_inputs.py (TRAIN/VAL only, M2 face sha256, M3 grouping disjointness) (`IMPLEMENTED`)
+- no scientific run manifest → gpatbench/downstream/science_manifest.py (`IMPLEMENTED`)
+- no M10 launcher / orchestration and no scientific launch authority → launch-authority DRAFT only (not activated); launcher to be qualified after the owner decisions (`NOT_IMPLEMENTED_BY_DESIGN`)
