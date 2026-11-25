@@ -19,6 +19,7 @@ for a mechanical inconsistency with the frozen contract (conversion rule, finite
 import argparse
 import hashlib
 import json
+import math
 import os
 import sys
 from datetime import datetime, timezone
@@ -220,7 +221,7 @@ def pct(xs, q):
 
 def dist(xs):
     return {'min': min(xs), 'p05': pct(xs, 5), 'p25': pct(xs, 25), 'median': pct(xs, 50), 'p75': pct(xs, 75),
-            'p95': pct(xs, 95), 'max': max(xs), 'mean': sum(xs) / len(xs), 'n': len(xs)}
+            'p95': pct(xs, 95), 'max': max(xs), 'mean': math.fsum(xs) / len(xs), 'n': len(xs)}
 
 
 def build(c, repo_root):
@@ -272,8 +273,8 @@ def build(c, repo_root):
                   'per_image_min': dist([r['min'] for r in rows]), 'per_image_max': dist([r['max'] for r in rows]),
                   'per_image_p01': dist([r['p01'] for r in rows]), 'per_image_p99': dist([r['p99'] for r in rows]),
                   'per_image_mean': dist([r['mean'] for r in rows]),
-                  'channel_mean_mean': [sum(r['channel_mean'][k] for r in rows) / len(rows) for k in range(3)],
-                  'channel_std_mean': [sum(r['channel_std'][k] for r in rows) / len(rows) for k in range(3)],
+                  'channel_mean_mean': [math.fsum(r['channel_mean'][k] for r in rows) / len(rows) for k in range(3)],
+                  'channel_std_mean': [math.fsum(r['channel_std'][k] for r in rows) / len(rows) for k in range(3)],
                   'saturated_pixels_0': sum(r['sat0'] for r in rows), 'saturated_pixels_255': sum(r['sat255'] for r in rows),
                   'frac_within_5_of_mean': dist([r['frac_within_5_of_mean'] for r in rows]),
                   'distinct_pixel_sha256_per_seed': {str(s): c['methods'][m][str(s)]['distinct_pixel_sha256'] for s in SEEDS},
