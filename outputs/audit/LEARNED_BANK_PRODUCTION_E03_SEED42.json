@@ -1,0 +1,455 @@
+{
+ "audit_tool": {
+  "path": "tools/learned_bank_production_audit.py",
+  "sha256": "618fe19e9106d0731c77f5b3570f6244790b4018a3bf04faf8bd109bf64ba187"
+ },
+ "authority": {
+  "path": "configs/amendments/learned_bank_production_E03.yaml",
+  "sha256": "235b1dd2b1c99f40302f1e9133d3a17fd311d5d7bb137e944cde4300248d9b76"
+ },
+ "bank": {
+  "failures": 0,
+  "manifest_evidence": "outputs/audit/LEARNED_BANK_PRODUCTION/E03_s42/bank_manifest.jsonl.gz",
+  "manifest_sha256": "5cc8b9e26c4f56791acad3f6d586b4e9f9a6633b4f4dbb7af5f823994a5a558f",
+  "output_sha256_list_sha256": "f6f7d363736d56ba8975071e7d97e05bf3e2e10a81940bc5f5ffd9524a1fb3e2",
+  "outputs": 8838,
+  "path": "/media/ext_data/student20261_gpat_m8_banks/E03/seed_42",
+  "pixel_sha256_list_sha256": "5d27040add0452b9ce16f985c78c10ca8ebeb7c458c9846320231ed2a0c28d0b",
+  "provenance_sha256": "1f2234e5fa74309d6e59361e4c53f5d68e7bbecc71816cebfbbc0e3a091a723e",
+  "rows": 8838,
+  "total_png_bytes": 808567774
+ },
+ "checkpoint": {
+  "checkpoint_identity_sha256": "fec00faf1bc9da819a134d04afa567a6e273fd5fc1f523e04fdfc8c0ce2f1267",
+  "run_id": "a565b76bc7349532",
+  "sha256": {
+   "data-00000-of-00001": "5b337a63db63e405bf35bceefdacc101060cb7d1625b5a4d2d389b963e311753",
+   "index": "b6b9a0c4cfd6470959453cdb861341bcacff7047b66fb414f8dff504452dc899",
+   "meta": "dbcf372027172396c616ba19f7d76475363d34e8bac0f438c0c7f5b97fae5f97"
+  }
+ },
+ "collected": {
+  "path": "outputs/audit/LEARNED_BANK_PRODUCTION/E03_s42/collected.json",
+  "sha256": "dee33d66984dea130869e810c86b8cdd3a431e1d1f9421041227249d927c19fe"
+ },
+ "contract_sha256": "3554577185a9faad76ce527971e75d85e4a107809a7da91c270196c899f339a9",
+ "descriptive_statistics": {
+  "coarse_8x8_luma_signature_groups": 0,
+  "coarse_8x8_luma_signature_rows": 0,
+  "distinct_pixel_sha256": 8838,
+  "exact_duplicate_groups": 0,
+  "exact_duplicate_rows": 0,
+  "note": "descriptive only; coarse signature = 8x8 block-mean luminance rounded to integers",
+  "per_image_max_median": 255,
+  "per_image_mean": {
+   "max": 217.98485310872397,
+   "median": 114.26969909667969,
+   "min": 39.068817138671875
+  },
+  "per_image_min_median": 0,
+  "per_image_std": {
+   "max": 96.47614018088471,
+   "median": 58.494986752165026,
+   "min": 22.097383650123067,
+   "p05": 33.740892197396846,
+   "p95": 78.69144383185213
+  }
+ },
+ "execution_commit": "4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+ "failed_gates": [],
+ "gates": [
+  {
+   "detail": "configs/amendments/learned_bank_production_E03.yaml",
+   "gate": "A.authority_record",
+   "pass": true
+  },
+  {
+   "detail": {
+    "diff_vs_source": [
+     "configs/amendments/learned_bank_production_E03.yaml"
+    ],
+    "execution_commit": "4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+    "source_commit": "6549ff76e4567b89f4d598279e21fdff90c23acd"
+   },
+   "gate": "A.execution_checkout",
+   "pass": true
+  },
+  {
+   "gate": "A.authority_committed_before_launch",
+   "pass": true
+  },
+  {
+   "detail": {
+    "gpu_free_mib": 24061,
+    "mem_available_gib": 28.7,
+    "unrelated_gpu_processes": []
+   },
+   "gate": "P.resources",
+   "pass": true
+  },
+  {
+   "detail": {
+    "capacity": {
+     "free_bytes": 3216933654528,
+     "free_inodes": 243686829,
+     "total_bytes": 3936655294464,
+     "total_inodes": 244178944,
+     "used_bytes": 519676096512
+    },
+    "checks": {
+     "exists": true,
+     "filesystem_uuid": true,
+     "fstype_ext4": true,
+     "is_directory": true,
+     "mode_0700_no_setgid": true,
+     "mount_point": true,
+     "mount_read_write": true,
+     "no_unexpected_contents": true,
+     "not_symlink": true,
+     "not_udisks_duplicate": true,
+     "owner": true,
+     "realpath_equals_path": true,
+     "user_rwx_access": true
+    }
+   },
+   "gate": "P.storage",
+   "pass": true
+  },
+  {
+   "gate": "P.fresh_bank_dir",
+   "pass": true
+  },
+  {
+   "gate": "P.checkpoints_and_authority",
+   "pass": true
+  },
+  {
+   "detail": {
+    "name": "gpat-m6-e03",
+    "present": true,
+    "probe": "3.8.20 tensorflow 1.15.5",
+    "probe_rc": 0,
+    "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python"
+   },
+   "gate": "P.environment",
+   "pass": true
+  },
+  {
+   "gate": "P.e01_e02_banks_unchanged",
+   "pass": true
+  },
+  {
+   "detail": "0\n",
+   "gate": "R.exit_zero",
+   "pass": true
+  },
+  {
+   "gate": "R.command",
+   "pass": true
+  },
+  {
+   "detail": {
+    "Error": 0,
+    "Killed": 0,
+    "LearnedBank": 0,
+    "Segmentation fault": 0,
+    "Traceback": 0,
+    "TrainingForbidden": 0,
+    "core dumped": 0,
+    "error:": 0,
+    "out of memory": 0
+   },
+   "gate": "R.result_line",
+   "pass": true
+  },
+  {
+   "detail": [
+    "2026-11-25T06:20:45Z",
+    "2026-11-25T06:20:47Z",
+    "2026-11-25T06:42:02Z",
+    "2026-11-25T06:42:18Z"
+   ],
+   "gate": "R.window",
+   "pass": true
+  },
+  {
+   "gate": "R.no_process_left",
+   "pass": true
+  },
+  {
+   "detail": "completed",
+   "gate": "S.provenance_completed",
+   "pass": true
+  },
+  {
+   "gate": "S.authorization",
+   "pass": true
+  },
+  {
+   "gate": "S.checkpoint_before",
+   "pass": true
+  },
+  {
+   "gate": "S.config_contract",
+   "pass": true
+  },
+  {
+   "gate": "S.pinned_source",
+   "pass": true
+  },
+  {
+   "detail": {
+    "coverage": {
+     "checkpoint_variables": 747,
+     "ema_in_checkpoint": 170,
+     "ema_restored": 0,
+     "graph_variables_covered": 134
+    },
+    "finalize": {
+     "batch_size": 1,
+     "forwards": 8838,
+     "stochastic_at_inference": false,
+     "trace_sidecar_written": false
+    },
+    "graph": {
+     "batch_size": 1,
+     "bn_moving_statistics": 36,
+     "ema_variables": 0,
+     "global_variables": 134,
+     "mutating_reachable_ops": [],
+     "random_reachable_ops": [],
+     "reachable_ops": 676,
+     "trainable_variables": 54,
+     "training_nn": false,
+     "update_ops": 0,
+     "variable_names_sha256": "e151c8d7066093b0b818ef35c79f49b0dc7683a77ba94ff30a7c95c7b8c07d28"
+    }
+   },
+   "gate": "S.inference_graph",
+   "pass": true
+  },
+  {
+   "gate": "S.no_training",
+   "pass": true
+  },
+  {
+   "detail": {
+    "allowlisted_samples": 12668,
+    "atime_checked_reads": 17676,
+    "distinct_samples_read": 12668,
+    "faces_root": "/home/student20261/workdir/GPAT_TransferBench_runtime/data/processed/faces_256",
+    "o_noatime": true,
+    "reads": 17676,
+    "splits_allowlisted": [
+     "TRAIN"
+    ]
+   },
+   "gate": "S.train_only_reader",
+   "pass": true
+  },
+  {
+   "detail": {
+    "cuda_visible_devices": "0",
+    "host": "nd-System-Product-Name",
+    "numpy": "1.23.5",
+    "pillow": "10.4.0",
+    "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+    "python_version": "3.8.20"
+   },
+   "gate": "S.environment",
+   "pass": true
+  },
+  {
+   "gate": "S.reader_verification",
+   "pass": true
+  },
+  {
+   "detail": {
+    "files": 8838,
+    "files_verified": 8838,
+    "modes": [
+     "0o444"
+    ],
+    "problem_count": 0,
+    "total_png_bytes": 808567774
+   },
+   "gate": "S.independent_verification",
+   "pass": true
+  },
+  {
+   "detail": "5cc8b9e26c4f56791acad3f6d586b4e9f9a6633b4f4dbb7af5f823994a5a558f",
+   "gate": "S.manifest_committed",
+   "pass": true
+  },
+  {
+   "gate": "S.population",
+   "pass": true
+  },
+  {
+   "gate": "S.rows_finite_rgb_uint8",
+   "pass": true
+  },
+  {
+   "detail": {
+    "A": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "rows_matched": 186
+    },
+    "B": {
+     "byte_mismatch_count": 0,
+     "field_mismatch_count": 0,
+     "rows_matched": 186
+    }
+   },
+   "gate": "S.s7_production_equivalence",
+   "pass": true
+  },
+  {
+   "gate": "S.checkpoint_after",
+   "pass": true
+  },
+  {
+   "detail": {
+    "TEST": {
+     "atime_changed": 0,
+     "files": 3027,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "TRAIN": {
+     "atime_changed": 0,
+     "files": 14467,
+     "missing_post": 0,
+     "mtime_changed": 0
+    },
+    "VAL": {
+     "atime_changed": 0,
+     "files": 3121,
+     "missing_post": 0,
+     "mtime_changed": 0
+    }
+   },
+   "gate": "F.atime_ledger",
+   "pass": true
+  },
+  {
+   "gate": "F.no_val_test_inputs",
+   "pass": true
+  },
+  {
+   "detail": {
+    "exists": true,
+    "filesystem_uuid": true,
+    "fstype_ext4": true,
+    "is_directory": true,
+    "mode_0700_no_setgid": true,
+    "mount_point": true,
+    "mount_read_write": true,
+    "no_unexpected_contents": true,
+    "not_symlink": true,
+    "not_udisks_duplicate": true,
+    "owner": true,
+    "realpath_equals_path": true,
+    "user_rwx_access": true
+   },
+   "gate": "F.storage_after",
+   "pass": true
+  },
+  {
+   "detail": [
+    "E03/seed_42",
+    "E06c/seed_1337",
+    "E06c/seed_2026",
+    "E06c/seed_42"
+   ],
+   "gate": "F.other_banks_unchanged",
+   "pass": true
+  }
+ ],
+ "gates_passed": 34,
+ "gates_total": 34,
+ "method": "E03",
+ "production_audit_passed": true,
+ "reproduction": {
+  "atime_ledger": {
+   "post_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+   "post_utc": "2026-11-25T06:42:19Z",
+   "pre_sha256": "a8aed5c4ed71f010842ffbb5d766ea0d56bb6d464809ad3f80ce0f8be60c389e",
+   "pre_utc": "2026-11-25T06:20:43Z"
+  },
+  "audit_commands": {
+   "build": "python3 tools/learned_bank_production_audit.py build --collected outputs/audit/LEARNED_BANK_PRODUCTION/E03_s42/collected.json",
+   "collect": "CUDA_VISIBLE_DEVICES= /home/student20261/miniconda3/envs/gpat-m6-e05/bin/python -I -B - collect --method E03 --seed 42 --repo /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af < tools/learned_bank_production_audit.py"
+  },
+  "backup": "the image bank exists only on the approved HDD; git holds the manifest (gzip), per-image file and pixel SHA256 and this audit, not the image bytes; no independent binary backup exists",
+  "branch": "m6-baselines",
+  "clone": "/home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+  "command": "#!/bin/bash\n# M8 learned-bank production: method E03 seed 42, one OS process -- authority configs/amendments/learned_bank_production_E03.yaml at 4c43b5182b3a14211f8ac5fdefdbed093bd755af\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s42.launch_time\ncd /home/student20261/workdir/m8_learned_banks/clones/prod_E03_4c43b5182b3a14211f8ac5fdefdbed093bd755af || { echo 97 > /home/student20261/workdir/m8prod_E03_s42.exit; exit 97; }\nenv -i HOME=/home/student20261 PATH=/usr/bin:/bin LANG=C.UTF-8 CUBLAS_WORKSPACE_CONFIG=:4096:8 CUDA_VISIBLE_DEVICES=0 NVIDIA_TF32_OVERRIDE=0 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 TF_CUDNN_DETERMINISTIC=1 TF_DETERMINISTIC_OPS=1 TF_ENABLE_AUTO_MIXED_PRECISION=0 TF_ENABLE_AUTO_MIXED_PRECISION_GRAPH_REWRITE=0 TF_ENABLE_CUBLAS_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_RNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_CUDNN_TENSOR_OP_MATH_FP32=0 TF_ENABLE_ONEDNN_OPTS=0 TF_XLA_FLAGS=--tf_xla_auto_jit=0 nice -n 10 /home/student20261/miniconda3/envs/gpat-m6-e03/bin/python -B tools/learned_bank.py production --method E03 --seed 42 --runtime-root /home/student20261/workdir/GPAT_TransferBench_runtime\necho $? > /home/student20261/workdir/m8prod_E03_s42.exit\ndate -u +%FT%TZ > /home/student20261/workdir/m8prod_E03_s42.end_time\n",
+  "command_sha256": "997e97d5b0cae34f942d9cd4152cb672a1cc56d80321a4d8bc4cf41ab81ff041",
+  "config": {
+   "path": "configs/methods/e03_stdn.yaml",
+   "sha256": "08dde851bc9e8ac688c794a6a6999204a7e5b75fb244fcd97e46b22dcb302fe0"
+  },
+  "conversion_rule": "tf.cast(tf.clip_by_value(synth1, 0.0, 1.0) * 255, tf.uint8) [stdn model/utils.py:24,37]",
+  "environment": {
+   "framework": "tensorflow 1.15.5",
+   "lock": {
+    "path": "environments/e03_stdn.lock.json",
+    "sha256": "b2c6c2eadca1b93a0bdf6798990821cb889e199643a5bdb5368ed0b12fdc8c62"
+   },
+   "name": "gpat-m6-e03",
+   "probe": "3.8.20 tensorflow 1.15.5",
+   "python": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+   "run_environment": {
+    "cuda_visible_devices": "0",
+    "host": "nd-System-Product-Name",
+    "numpy": "1.23.5",
+    "pillow": "10.4.0",
+    "python_executable": "/home/student20261/miniconda3/envs/gpat-m6-e03/bin/python",
+    "python_version": "3.8.20"
+   }
+  },
+  "execution_commit": "4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+  "exit_status": "0\n",
+  "gpu": {
+   "driver": "580.178.04",
+   "name": "NVIDIA GeForce RTX 3090",
+   "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"
+  },
+  "launch_script": "tools/learned_bank_production_scripts/m8prod_launch.sh E03 42 4c43b5182b3a14211f8ac5fdefdbed093bd755af",
+  "method_id": "E03",
+  "population": "all 8838 frozen pairs_train_v1 rows in canonical 0-based order",
+  "post_script": "tools/learned_bank_production_scripts/m8prod_post.sh E03 42",
+  "preflight_sha256": "170c40aa1412874e9fe1369c24e0ead1748265e36e0934958496b804f84d95de",
+  "replay_policy": "C-Q2/C-Q3: bitwise A/B replay is established by the passed S7 record; the production audit requires the 186 S7 toy rows to equal their production rows byte for byte (runs A and B). A second full production bank is not required by the contract and was not generated.",
+  "rng": "none (E03 inference is deterministic; no sampling)",
+  "seed": 42
+ },
+ "run_id": "bacbbec2e367fa33",
+ "s7_record": {
+  "path": "outputs/audit/LEARNED_BANK_S7_E03.json",
+  "sha256": "c2d089ce62c37101a3ceab64b5bb74259ea858d14da0b13d20502a8f0d26365d"
+ },
+ "schema": "learned_bank_production_audit_record_v1",
+ "seed": 42,
+ "source_commit": "6549ff76e4567b89f4d598279e21fdff90c23acd",
+ "status": "LEARNED_BANK_PRODUCTION_PASSED",
+ "storage": {
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "capacity_after": {
+   "free_bytes": 3216080523264,
+   "free_inodes": 243677985,
+   "total_bytes": 3936655294464,
+   "total_inodes": 244178944,
+   "used_bytes": 520529227776
+  },
+  "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+  "mount_point": "/media/ext_data"
+ },
+ "window": {
+  "end": "2026-11-25T06:42:18Z",
+  "launch": "2026-11-25T06:20:45Z",
+  "wall_time_seconds": 1274.4743907480733
+ }
+}
