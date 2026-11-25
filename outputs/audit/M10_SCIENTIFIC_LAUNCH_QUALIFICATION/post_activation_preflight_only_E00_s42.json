@@ -1,0 +1,164 @@
+{
+ "failed": [],
+ "gates": {
+  "bank_identity": {
+   "expected": null,
+   "manifest_sha256": null,
+   "ok": true
+  },
+  "environment": {
+   "expected": {
+    "cuda": "13.0",
+    "cudnn": 92000,
+    "name": "gpat-m8-downstream",
+    "python": "3.11.16",
+    "sys_prefix": "/home/student20261/workdir/envs/gpat-m8-downstream",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+   },
+   "observed": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "PYTHONHASHSEED": "0",
+    "cuda": "13.0",
+    "cudnn": 92000,
+    "name": "gpat-m8-downstream",
+    "python": "3.11.16",
+    "sys_prefix": "/home/student20261/workdir/envs/gpat-m8-downstream",
+    "torch": "2.12.1+cu130",
+    "torchvision": "0.27.1+cu130"
+   },
+   "ok": true
+  },
+  "frozen_hashes": {
+   "files": {
+    "configs/amendments/m8_downstream_evaluator_contract.yaml": "67e4b62ddc6b81b8b9a8657e71b3979f6e6a186827183b052ae3d29b587fcbe0",
+    "configs/frozen/downstream_resnet18.yaml": "f117c57380404bccfdc42370290c4bd2141b69346d3ee3f044d020f8b90a447b",
+    "docs/spec/GPAT_TransferBench_v1_0_Frozen_Specification_2026.docx": "f7d2371682ad9504f59f0c6984e4b1a741f855f1b1f60838f9d60b160281489e",
+    "environments/m8_downstream.lock.json": "70202661f1de3188aa7a6460a640982cea98074e1c41146ff516ac6fef3d7b9c"
+   },
+   "ok": true
+  },
+  "gpu": {
+   "free_floor_mib": 4096,
+   "observed": {
+    "driver": "580.178.04",
+    "free_mib": 19543,
+    "index": 0,
+    "name": "NVIDIA GeForce RTX 3090",
+    "total_mib": 24576,
+    "used_mib": 4579,
+    "utilization_pct": 68,
+    "uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7"
+   },
+   "ok": true,
+   "unrelated_compute_apps": [
+    {
+     "cmdline": "python board_gts.py --reviews data/ref23/sports23_15.json.gz --truth data/ref23/sports23_15_truth.csv --name sports23_15 --order random --q 0.9 --model LightSANs --seed 2022 --work data/recbole --out ",
+     "gpu_uuid": "GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+     "pid": 2519222,
+     "used_mib": 4466
+    }
+   ]
+  },
+  "launch_authority": {
+   "ok": true,
+   "sha256": "7c096eab4736f91eefc19bd55d6b02e6ce9e3a7ada2f67e93726b38d02d73b36"
+  },
+  "matrix": {
+   "group": "E00",
+   "ok": true,
+   "seed": 42
+  },
+  "no_concurrent_detector": {
+   "lock_file": "/home/student20261/workdir/m10_detector.lock",
+   "lock_held": false,
+   "ok": true,
+   "processes": []
+  },
+  "order_predecessors_audited": {
+   "later_roots": [],
+   "missing": [],
+   "ok": true
+  },
+  "owner_decisions": {
+   "ok": true,
+   "sha256": "a93a3189aa031db408435675178da5537662bac46470420bf694034a5b1d7cfe"
+  },
+  "populations": {
+   "counts": {
+    "train_live": 5629,
+    "train_real_spoof": 8838,
+    "val": 3121,
+    "val_videos": 391
+   },
+   "ok": true,
+   "pool_sha256": {
+    "train_live": "8ab3b3a75021f42274fa071727b9da8b89d04dcc2d019be871f8f7f7dc894a93",
+    "train_real_spoof": "3946fb79ce034247573212050634a0d3b886a22f523d31939468b37e9233dce7",
+    "val": "50047511aba7f9892c9af749779d4f88b97e0e69e3b04e062173dfcaf92bfa2d"
+   }
+  },
+  "precision_pin": {
+   "ok": true,
+   "policy": "CUDA_AMP_FP16_GRADSCALER_DETERMINISTIC",
+   "sha256": "063492742b9f9446b069e3c7a3dfdcab1e90832ebdfec21aed59b4e254c933f0"
+  },
+  "run_root_absent": {
+   "ok": true,
+   "run_root": "/media/ext_data/student20261_gpat_m10_detectors/E00/seed_42"
+  },
+  "source": {
+   "clean": true,
+   "head": "2a64ba462eecf08b642e98144def8538d3c92854",
+   "ok": true,
+   "porcelain": ""
+  },
+  "storage_authority": {
+   "ok": true,
+   "sha256": "d8daf2b6736cbd62368cf0181e122003114f69ffc3c0f789b1619d7e2331978b"
+  },
+  "storage_preflight": {
+   "checks": {
+    "exists": true,
+    "filesystem_uuid": true,
+    "free_bytes": true,
+    "free_inodes": true,
+    "fstype": true,
+    "is_directory": true,
+    "mode_exact": true,
+    "mount_point": true,
+    "mount_read_write": true,
+    "no_unexpected_contents": true,
+    "not_symlink": true,
+    "not_udisks_duplicate": true,
+    "owner": true,
+    "owner_is_process_user": true,
+    "path_is_canonical": true,
+    "realpath_equals_path": true,
+    "separate_from_bank_root": true,
+    "user_rwx_access": true
+   },
+   "filesystem": {
+    "device": "8:2",
+    "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+    "free_bytes": 3209247842304,
+    "free_inodes": 243579936,
+    "fstype": "ext4",
+    "mount_options": "rw,relatime",
+    "mount_point": "/media/ext_data",
+    "path": "/media/ext_data/student20261_gpat_m10_detectors",
+    "source": "/dev/sda2",
+    "statvfs_readonly": false,
+    "super_options": "rw,errors=remount-ro"
+   },
+   "ok": true,
+   "unexpected_entries": []
+  },
+  "weights": {
+   "ok": true,
+   "path": "/home/student20261/.cache/torch/hub/checkpoints/resnet18-f37072fd.pth",
+   "sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec"
+  }
+ },
+ "preflight_ok": true
+}
