@@ -105,7 +105,8 @@ OWNER_DECISIONS = [
 ]
 
 
-def build():
+def build(precision_pin_present=None):
+    """precision_pin_present: None = live check; False reproduces the 7d67a7f snapshot (before the O1 pin existed)."""
     from gpatbench.downstream import science_banks as SB, science_manifest as SM
     pa = load(AUDIT)
     bv = load(EV + "/bank_loader_verification.json")
@@ -134,7 +135,8 @@ def build():
     gates["G10_laptop_tests"] = tests["m10_readiness"]["failures"] == 0 and tests["m10_readiness"]["errors"] == 0 \
         and tests["full_suite"]["new_failures"] == [] and tests["full_suite"]["identical_to_baseline"] is True
     gates["G11_threshold_rule_complete"] = False            # O2 (qualification Q6 reproduces the gap)
-    gates["G12_science_precision_pinned"] = (ROOT / "configs/amendments/m10_resnet18_science_precision.yaml").exists()
+    gates["G12_science_precision_pinned"] = ((ROOT / "configs/amendments/m10_resnet18_science_precision.yaml").exists()
+                                             if precision_pin_present is None else precision_pin_present)
     gates["G13_checkpoint_retention_and_run_root_approved"] = False   # O3
     gates["G14_science_environment_approved"] = False                 # O4
     gates["G15_launcher_and_independent_run_auditor"] = False         # to implement after O1-O4

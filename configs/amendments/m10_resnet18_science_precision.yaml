@@ -1,0 +1,35 @@
+{
+ "schema_version": "m10_resnet18_science_precision_v1",
+ "record": "M10_RESNET18_SCIENCE_PRECISION_PIN",
+ "status": "OWNER_APPROVED",
+ "approved": true,
+ "approval_date": "2026-11-26",
+ "decision": "O1_science_precision = A_CUDA_AMP_FP16_GRADSCALER_DETERMINISTIC",
+ "owner_decisions": "configs/amendments/m10_resnet18_owner_decisions.yaml",
+ "policy": "CUDA_AMP_FP16_GRADSCALER_DETERMINISTIC",
+ "autocast_dtype": "float16",
+ "device": "cuda",
+ "grad_scaler": {
+  "init_scale": 65536.0,
+  "growth_factor": 2.0,
+  "backoff_factor": 0.5,
+  "growth_interval": 2000,
+  "enabled": true
+ },
+ "step_order": [
+  "scaler.scale(loss).backward()",
+  "scaler.unscale_(optimizer)",
+  "torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)",
+  "scaler.step(optimizer)",
+  "scaler.update()"
+ ],
+ "determinism": {
+  "use_deterministic_algorithms": true,
+  "cudnn_deterministic": true,
+  "cudnn_benchmark": false,
+  "matmul_allow_tf32": false,
+  "cudnn_allow_tf32": false,
+  "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+ },
+ "fills": "evaluator contract D13 'Science: CUDA with AMP; the AMP dtype and GradScaler policy must be pinned before M10'"
+}

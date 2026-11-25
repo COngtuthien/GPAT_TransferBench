@@ -333,14 +333,19 @@ class PrecisionPin(unittest.TestCase):
         p = ROOT / (rd.OUT + ".json")
         if not p.exists():
             self.skipTest("readiness record not built")
-        d = rd.build()
+        # the committed record is the 7d67a7f snapshot (before the O1 precision pin of 2026-11-26 existed)
+        d = rd.build(precision_pin_present=False)
         self.assertEqual(json.loads(json.dumps(d)), json.loads(p.read_text()))
         self.assertEqual(rd.report(d), (ROOT / (rd.OUT + ".md")).read_text())
         if (ROOT / rd.DRAFT).exists():
             dr = json.loads((ROOT / rd.DRAFT).read_text())
             self.assertEqual(dr, json.loads(json.dumps(rd.draft(d))))
             self.assertEqual((dr["approved"], dr["authorizes"]["scientific_downstream_training"]), (False, False))
-        self.assertFalse((ROOT / "configs/amendments/m10_resnet18_science_launch_authority.yaml").exists())
+        act = ROOT / "configs/amendments/m10_resnet18_science_launch_authority.yaml"
+        if act.exists():          # state-aware: activated only by the owner-approved M10 qualification (2026-11-26)
+            a = json.loads(act.read_text())
+            self.assertEqual((a["status"], a["approved"], a["authorizes"]["test_evaluation"], a["authorizes"]["gpat"],
+                              a["authorizes"]["dinov3"]), ("OWNER_APPROVED_ACTIVE", True, False, False, False))
         self.assertEqual(json.loads((ROOT / rd.TEMPLATE).read_text()), json.loads(json.dumps(rd.template())))
 
     def test_policies(self):
