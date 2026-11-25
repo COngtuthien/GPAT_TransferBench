@@ -827,5 +827,53 @@ class AdapterAllowlistFix(unittest.TestCase):
             self.assertEqual(cm.exception.code, 2)
 
 
+class AcceptedRecord(unittest.TestCase):
+    """outputs/audit/LEARNED_BANK_S7_E04.json (real GPU evidence): re-derives byte-for-byte from its embedded host
+    collection with the committed tool, its SHA list holds, the reproduction manifest re-derives, and tampering with
+    the real collection fails closed."""
+    REC = ROOT / 'outputs' / 'audit' / 'LEARNED_BANK_S7_E04.json'
+
+    @classmethod
+    def setUpClass(cls):
+        if not cls.REC.is_file():
+            raise unittest.SkipTest('E04 S7 not executed yet')
+        cls.doc = json.loads(cls.REC.read_text())
+
+    def test_rebuild_byte_for_byte(self):
+        doc = M.build_e04(self.doc['collected'], ROOT)
+        self.assertEqual((json.dumps(doc, indent=1, sort_keys=True) + '\n').encode(), self.REC.read_bytes())
+        self.assertEqual(M.report_e04(doc), (ROOT / 'outputs/audit/LEARNED_BANK_S7_E04.md').read_text())
+        for line in (ROOT / 'outputs/audit/LEARNED_BANK_S7_E04_SHA256.txt').read_text().splitlines():
+            digest, name = line.split('  ')
+            self.assertEqual(sha((ROOT / name).read_bytes()), digest)
+        self.assertEqual(sha((ROOT / 'outputs/audit/LEARNED_BANK_S7_E04_EVIDENCE/collected.json').read_bytes()),
+                         sha((json.dumps(self.doc['collected'], sort_keys=True, default=str) + '\n').encode()))
+
+    def test_status(self):
+        d = self.doc
+        self.assertEqual((d['status'], d['s7_acceptance_passed'], d['failed_gates'], d['gates_total']),
+                         ('E04_S7_ALL_THREE_SEEDS_QUALIFIED', True, [], 180))
+        self.assertTrue(all(v['bitwise_identical'] for v in d['outputs'].values()))
+        self.assertEqual(d['execution_commit'], 'd5d0cb3ea5d2c15aba4d0d2ddb84cade72ef279d')
+
+    def test_reproduction_manifest_rederives(self):
+        spec = importlib.util.spec_from_file_location('rm', ROOT / 'tools' / 'e04_bank_s7_reproduction_manifest.py')
+        rm = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(rm)
+        self.assertEqual(rm.main(['--check']), 0)
+
+    def test_tampered_real_collection_fails(self):
+        for mutate, gate in (
+                (lambda c: c['replay']['1337']['bytes_differing'].append('PTR000028.png'), 'S.seed1337.bitwise_replay_A_B'),
+                (lambda c: c['atime']['42']['by_split']['TEST'].update(atime_changed=1), 'F.seed42.atime_ledger_zero_changes'),
+                (lambda c: c['checkpoints_after']['2026']['files']['meta'].update(sha256='0' * 64),
+                 'S.seed2026.checkpoint_unchanged_before_after')):
+            c = copy.deepcopy(self.doc['collected'])
+            mutate(c)
+            d = M.build_e04(c, ROOT)
+            self.assertIn(gate, d['failed_gates'])
+            self.assertNotEqual(d['status'], 'E04_S7_ALL_THREE_SEEDS_QUALIFIED')
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -5,7 +5,8 @@ C=$1; B=$2
 W=/home/student20261/workdir
 REPO=$W/m8_learned_banks/clones/s7e04_$C
 test ! -e $REPO || { echo "CLONE EXISTS $REPO"; exit 2; }
-git bundle verify $B >/dev/null
+# `git bundle verify` needs a repository: verify from the existing training checkout (read only)
+git -C $W/GPAT_TransferBench bundle verify $B >/dev/null
 git clone -q --no-checkout $B $REPO
 git -C $REPO checkout -q -B m6-baselines $C
 mkdir -p $REPO/third_party/source_cache
