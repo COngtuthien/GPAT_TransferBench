@@ -1,0 +1,111 @@
+{
+ "actions_taken": "none on the host after contact was lost; nothing was rerun, removed or modified",
+ "backup": "banks exist only on the approved HDD; no independent binary backup",
+ "completed_banks": {
+  "E03|1337": {
+   "audit": "34/34",
+   "manifest_sha256": "c414758d373de2461a805cc785a6bd0767fdd18071132039d6d8b725f49121a3",
+   "outputs": 8838,
+   "run_id": "db67fcf77751b4ed",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E03|2026": {
+   "audit": "34/34",
+   "manifest_sha256": "51fa6bafdf7ea1fd039fbfbb531024b5c5ac689b206117c03749df5595320202",
+   "outputs": 8838,
+   "run_id": "a58f890bb30eda7b",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E03|42": {
+   "audit": "34/34",
+   "manifest_sha256": "5cc8b9e26c4f56791acad3f6d586b4e9f9a6633b4f4dbb7af5f823994a5a558f",
+   "outputs": 8838,
+   "run_id": "bacbbec2e367fa33",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E06b|1337": {
+   "audit": "34/34",
+   "manifest_sha256": "40564cd58982eae4415c8ac5ea173c96bb40c36a41471e2bc476854cfbacb099",
+   "outputs": 8838,
+   "run_id": "2037be09ba25acdc",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E06b|2026": {
+   "audit": "34/34",
+   "manifest_sha256": "e1dd3a2eaa990b05c54fa6bf2939e40a77697eb58ae19e7964ffa9aba042f88c",
+   "outputs": 8838,
+   "run_id": "e2d2ba62af40de21",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E06b|42": {
+   "audit": "34/34",
+   "manifest_sha256": "882017b8fadc532691c43699360147e036fa464e6b7bb0b6d8794e38f1568691",
+   "outputs": 8838,
+   "run_id": "07e64f33b19310b4",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E06c|1337": {
+   "audit": "34/34",
+   "manifest_sha256": "e88e1ca631bd5e63717342816046477bb588d916b3a7008be2f0b8027aa5e23a",
+   "outputs": 8838,
+   "run_id": "219f27730e3025c0",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E06c|2026": {
+   "audit": "34/34",
+   "manifest_sha256": "d30ad186264074a670962e46d535e8a6c6b471004803017027b265fab4f18bee",
+   "outputs": 8838,
+   "run_id": "bfc0e4a6a947c9c4",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  },
+  "E06c|42": {
+   "audit": "34/34",
+   "manifest_sha256": "8da6d40458a2ee420330c92ef3a956d5e06be0560c96f86353d107d48a06ab62",
+   "outputs": 8838,
+   "run_id": "45e035b85c735361",
+   "status": "LEARNED_BANK_PRODUCTION_PASSED"
+  }
+ },
+ "e05": {
+  "authority": {
+   "execution_commit": "125a8b3d5a1553e3fabbbc54cf4c2fdfb55e29a3",
+   "path": "configs/amendments/learned_bank_production_E05.yaml",
+   "sha256": "a95b86e9f546cc2a2b587b1c4610341f61c14222bbb4d81dbcdb8c5edf868c9e"
+  },
+  "seed_42": {
+   "command_sha256_prefix": "f74fdd82e521ee7f",
+   "host_contact_lost": "about 09:01Z: ZeroTier 10.31.131.201 \"No route to host\", Tailscale 100.121.84.44 offline (last seen ~09:00-09:01Z); still unreachable at 09:51Z",
+   "last_observation": "2026-11-25T09:00:23Z (host clock): 63 PNGs written, pane \"Loading custom kernel...\"",
+   "launch_utc": "2026-11-25T09:00:13Z",
+   "preflight_utc": "2026-11-25T09:00:07Z (all checks passed)",
+   "state": "UNKNOWN: completion, abort or host failure cannot be observed",
+   "tmux": "m8prod_E05_s42"
+  },
+  "seeds_1337_2026": "not started"
+ },
+ "family_closures": {
+  "E03": {
+   "gates": "15/15",
+   "sha256": "0a12820392bd12594844ecc48547af11957a4b27336c2ac66ab61b54c420f100",
+   "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+  },
+  "E06b": {
+   "gates": "15/15",
+   "sha256": "3438023f4ba250d1de6a2c536118946061049d84a78450358a1c28280d90b734",
+   "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+  },
+  "E06c": {
+   "gates": "15/15",
+   "sha256": "78f7a9925f6110a9d2d1f584e1b0a862953c8b9a6a860b4372e37def08069f22",
+   "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+  }
+ },
+ "on_reconnect": [
+  "read-only inspection of m8prod_E05_s42 markers, tmux pane, bank directory, ABORTED provenance, HDD identity, uptime/boot time",
+  "if the process exited 0 and the bank is complete: post ledger, collect, independent audit as for every other bank",
+  "otherwise: preserve the partial bank and evidence untouched, stop the E05 family, report for owner review (the registered path E05/seed_42 cannot be reused without an owner decision)"
+ ],
+ "schema": "m8_learned_production_interim_status_v1",
+ "status": "THREE_FAMILIES_COMPLETED_AND_AUDITED_E05_SEED42_STATE_UNKNOWN_HOST_UNREACHABLE",
+ "utc_written": "2026-11-25T09:52Z"
+}
