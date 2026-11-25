@@ -312,9 +312,18 @@ class E04BankAdapter:
 
 
 # ================================================================== TRAIN-only feed-pack access (D2, D4 order)
+ALLOWLIST_SOURCE = 'e04_feed_pack_v1 samples.json (manifest-pinned TRAIN closure; owner ruling ' \
+                   'configs/amendments/e04_s7_input_allowlist_ruling.yaml)'
+
+
 def load_e04_inputs(runtime_root):
-    """The frozen e04_feed_pack_v1 (TRAIN closure only, manifest pinned) cross-checked against split_v1 / M2 accounting:
-    returns the 8838-row relation in ascending pair_id, the TRAIN allowlist and a Q140 lookup."""
+    """The frozen e04_feed_pack_v1 (TRAIN closure only, manifest pinned): returns the 8838-row relation in ascending
+    pair_id, the TRAIN allowlist and a Q140 lookup.
+
+    Owner ruling configs/amendments/e04_s7_input_allowlist_ruling.yaml: the allowlist (split, dataset, M2 face sha256 of
+    every referenced sample) comes from the pinned pack, exactly as E04 training read it; the approved interpreter
+    (gpat-m6-e03) has no pyarrow, so the split_v1 / M2 accounting cross-check of every used sample is a mandatory gate
+    of the independent S7 / production auditors instead of this process. No pixel-affecting operation is involved."""
     from methods.physics_std import feed_pack, production_io as pio
     pack = feed_pack.load(pio.pack_root(runtime_root), pio.PACK_MANIFEST_SHA256)
     relation = [tuple(r) for r in pack.rows]
@@ -322,11 +331,13 @@ def load_e04_inputs(runtime_root):
     used = {}
     for _, live, spoof, ds in relation:
         used[live], used[spoof] = ds, ds
-    allow = lb.train_face_allowlist_parquet(used)
-    for sid, rec in allow.items():
-        require(rec['face_png_sha256'] == pack.sample(sid)['face_png_sha256'], 'pack face sha256 %s' % sid)
+    allow = {}
+    for sid, ds in sorted(used.items()):
+        rec = pack.sample(sid)
+        require(rec['split'] == 'TRAIN' and rec['dataset'] == ds, 'pack sample %s is not a TRAIN %s face' % (sid, ds))
+        allow[sid] = {'split': rec['split'], 'dataset': rec['dataset'], 'face_png_sha256': rec['face_png_sha256']}
     return {'relation': relation, 'allowlist': allow, 'q140': pack.q140_xy,
-            'pack_manifest_sha256': pack.manifest_sha256}
+            'pack_manifest_sha256': pack.manifest_sha256, 'allowlist_source': ALLOWLIST_SOURCE}
 
 
 # ================================================================== constructors

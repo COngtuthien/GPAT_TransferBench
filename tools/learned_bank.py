@@ -32,8 +32,10 @@ from methods.common import learned_bank as lb  # noqa: E402
 
 EXIT_BLOCKED = 3
 # owner ruling B2 P2_ONE_PROCESS_PER_SEED (configs/amendments/e05_s7_b1_b2_ruling.yaml): `s7 --seed S` runs exactly
-# one generator seed in this OS process (E05 only; its CUDA runtime is initialised and verified once per process)
-SEED_SELECTABLE = ('E05',)
+# one generator seed in this OS process (E05; its CUDA runtime is initialised and verified once per process).
+# E04: the owner's S7 authorization (2026-11-25, recorded in configs/amendments/learned_bank_s7_launch_authority_E04.yaml
+# process_layout) runs seeds 42 -> 1337 -> 2026 sequentially, each run A and run B in its own OS process.
+SEED_SELECTABLE = ('E05', 'E04')
 
 
 def emit(obj):
@@ -98,7 +100,8 @@ def e04_inputs(runtime_root, seed, kind):
     inp = load_e04_inputs(runtime_root)
     pop = lb.pair_population('E04', seed, kind, inp['relation'],
                              provenance={'relation_source': 'e04_feed_pack_v1 pairs_train.json',
-                                         'pack_manifest_sha256': inp['pack_manifest_sha256']})
+                                         'pack_manifest_sha256': inp['pack_manifest_sha256'],
+                                         'allowlist_source': inp['allowlist_source'], 'pairs_val_opened': False})
     used = {r.target_live_id for r in pop.rows} | {r.source_spoof_id for r in pop.rows}
     reader = lb.TrainFaceReader(Path(runtime_root) / 'data' / 'processed' / 'faces_256',
                                 {sid: inp['allowlist'][sid] for sid in sorted(used)})

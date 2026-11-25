@@ -1,0 +1,44 @@
+{
+ "allowlist_source": "e04_feed_pack_v1 samples.json (manifest-pinned TRAIN closure; owner ruling configs/amendments/e04_s7_input_allowlist_ruling.yaml)",
+ "approval": "Owner answer in the E04 S7 acceptance session (2026-11-25) to the question raised before any E04 GPU inference: option 'Feed-pack allowlist + audit (Recommended)'.",
+ "approved": true,
+ "change_scope": {
+  "methods/physics_std/bank_adapter.py": [
+   "ALLOWLIST_SOURCE (new constant)",
+   "load_e04_inputs (allowlist built from the pinned feed pack; every referenced sample must be TRAIN with the relation's dataset)"
+  ],
+  "tools/learned_bank.py": [
+   "e04_inputs (population provenance records allowlist_source and pairs_val_opened=false)"
+  ]
+ },
+ "date": "2026-11-25",
+ "decision": "FEED_PACK_ALLOWLIST_WITH_INDEPENDENT_AUDITOR_CROSSCHECK",
+ "defect": {
+  "description": "load_e04_inputs called methods.common.learned_bank.train_face_allowlist_parquet, which imports pyarrow.parquet; the approved E04 interpreter gpat-m6-e03 (Python 3.8.20, TensorFlow 1.15.5, environments/e04_training.lock.json) has no pyarrow, so tools/learned_bank.py s7 --method E04 would abort before writing any output.",
+  "location": "methods/physics_std/bank_adapter.py load_e04_inputs (adapter commit 92ef74c99765109158432fb713a68b3ad238f431)",
+  "observed": "GPU host 2026-11-25, clone e04final_2caff0d: ModuleNotFoundError: No module named 'pyarrow' at learned_bank.py:845",
+  "pixel_affecting": false,
+  "why_not_caught": "the CPU synthetic-fixture qualification (E04_BANK_FIXTURE_QUALIFICATION) never loaded real inputs (feed pack, faces); its record lists that limitation"
+ },
+ "inference_process_checks_kept": [
+  "e04_feed_pack_v1 manifest SHA256 pinned (db1908d56efb23758fee49f88d2158374b85572a213a269419881bd02037520b); feed_pack.load refuses any non-TRAIN sample, a payload hash mismatch or a VAL/TEST row",
+  "TrainFaceReader: allowlisted TRAIN samples only, O_NOATIME read with an atime check, M2 face SHA256 verified before decoding",
+  "the toy population must equal the frozen relation at every toy position"
+ ],
+ "method_id": "E04",
+ "not_authorized": [
+  "installing packages into gpat-m6-e03",
+  "any other adapter change",
+  "production banks",
+  "VAL/TEST access"
+ ],
+ "record": "E04_S7_INPUT_ALLOWLIST_OWNER_RULING",
+ "relocated_check": "The split_v1 / M2 accounting cross-check moves to the independent S7 auditor (tools/learned_bank_s7_audit.py E04 branch, host collector under gpat-m6-e05 with pyarrow, row-filtered to referenced ids): every e04_feed_pack_v1 sample (12668) must be TRAIN in split_v1 with the same dataset and its M2 face_png_sha256 (final_status COMPLETE); the pack relation must equal pairs_train_v1 (8838 rows); every manifest row's target/source face SHA256 must equal M2. Mandatory gates F.feed_pack_allowlist_crosscheck, L.seed<s>.face_lineage_split_v1_m2, F.seed<s>.no_val_test_inputs. The same cross-check is required of the future E04 production audit.",
+ "schema_version": "e04_s7_input_allowlist_ruling_v1",
+ "status": "OWNER_APPROVED",
+ "unchanged": [
+  "every scientific operation, layer, checkpoint, BN mode, synthesis equation, geometry, warp, conversion and PNG encoding (E04 contract 45240cd25e840c16a11256639cab52c2f67c73d2a5a853284d7d9aa96b6df13f, all six decisions)",
+  "methods/common/learned_bank.py",
+  "methods/physics_std/{network,trace_transfer,training_graph}.py"
+ ]
+}
