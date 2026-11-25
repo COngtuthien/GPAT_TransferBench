@@ -1,0 +1,619 @@
+{
+ "blocking_owner_questions": [
+  "E04-Q1_normalization_statistics",
+  "E04-Q2_synthesis_variant",
+  "E04-Q3_float_to_uint8",
+  "E04-Q4_auxiliary_outputs",
+  "E04-Q5_device_and_reproducibility",
+  "E04-Q6_governance_inclusion"
+ ],
+ "date": "2026-11-25",
+ "draft": {
+  "document": "docs/spec/amendments/GPAT_TransferBench_v1_0_E04_Bank_Generation_Contract_DRAFT.md",
+  "path": "configs/amendments/e04_bank_generation_contract.DRAFT.yaml",
+  "recommended": {
+   "E04-Q1_normalization_statistics": "A_MOVING_STATISTICS_PER_PAIR",
+   "E04-Q2_synthesis_variant": "A_PAPER_SPOOF_SYNTHESIS",
+   "E04-Q3_float_to_uint8": "A_PREDECESSOR_CLIP_TRUNCATE",
+   "E04-Q4_auxiliary_outputs": "A_NONE",
+   "E04-Q5_device_and_reproducibility": "A_GPU_FP32_BITWISE_REPLAY",
+   "E04-Q6_governance_inclusion": "A_ADDITIVE_E04_EXTENSION"
+  },
+  "sha256": "dc04e4845524f7388ccf7136fe8ec710dee88ccdadac2de9c164c2f3f1502c23"
+ },
+ "e05_reporting_decision": {
+  "decision": "Retain E05 as the original RAW-MATCHED baseline with a documented near-collapse caveat. Do not retrain, filter, enhance, replace or cherry-pick its outputs.",
+  "path": "configs/amendments/e05_near_collapse_reporting_decision.yaml",
+  "sha256": "58383ed14312c03b9cdde08e47dc27afc1aa66e45ba7e3577d5d17558b141e48"
+ },
+ "existing_banks": {
+  "e01_e02_manifests": {
+   "E01|1337": "38a8c6c5caa7735da475862636ce856dafb91660ba8b1cb43431e23e69017a4b",
+   "E01|2026": "ff7361426c6af222b11db0c86e7ac71c5601ae4f06f83180119525350ec35933",
+   "E01|42": "abd93be76b2659563599fb3cbcb5afaa72b56a7465b52db1e9e75bc1d6873e5f",
+   "E02|1337": "cd34bc02e94ddcb7ef6097260d1d22d1492b9b5b0a3afab9a46e5557e8628cd8",
+   "E02|2026": "9eb09bae542d37b769da25e1216031c7bcd4b365983ec4699532d6304c6fa485",
+   "E02|42": "0b0aa41d714316601f0d9e2120a7d107f5a58d414a9475ab9f0e83feac284d1b"
+  },
+  "equal_to_final_verification_utc": "2026-11-25T11:00:09Z",
+  "family_closures": {
+   "E01": {
+    "outputs": 26514,
+    "record": "outputs/audit/E01_PRODUCTION_FAMILY_CLOSURE.json",
+    "sha256": "49cf749f87c41b055ccdcb7d0b7e9d568d3b84894fe240868b1c823b55468000",
+    "status": "E01_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+   },
+   "E02": {
+    "outputs": 26514,
+    "record": "outputs/audit/E02_PRODUCTION_FAMILY_CLOSURE.json",
+    "sha256": "dbd05fca2c0513d3e92364d1325ffd73e5b8a48960513972d6d5eb6716c31a68",
+    "status": "E02_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+   },
+   "E03": {
+    "outputs": 26514,
+    "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E03_FAMILY_CLOSURE.json",
+    "sha256": "0a12820392bd12594844ecc48547af11957a4b27336c2ac66ab61b54c420f100",
+    "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+   },
+   "E05": {
+    "outputs": 26514,
+    "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E05_FAMILY_CLOSURE.json",
+    "sha256": "9890b3c74b0f0fb320bda91e9f078a019b9f222c166fc34678fe4271c66e1c24",
+    "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+   },
+   "E06b": {
+    "outputs": 26514,
+    "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06b_FAMILY_CLOSURE.json",
+    "sha256": "3438023f4ba250d1de6a2c536118946061049d84a78450358a1c28280d90b734",
+    "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+   },
+   "E06c": {
+    "outputs": 26514,
+    "record": "outputs/audit/LEARNED_BANK_PRODUCTION_E06c_FAMILY_CLOSURE.json",
+    "sha256": "78f7a9925f6110a9d2d1f584e1b0a862953c8b9a6a860b4372e37def08069f22",
+    "status": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+   }
+  },
+  "learned_banks": {
+   "E03|1337": {
+    "manifest_sha256": "c414758d373de2461a805cc785a6bd0767fdd18071132039d6d8b725f49121a3",
+    "png_files": 8838
+   },
+   "E03|2026": {
+    "manifest_sha256": "51fa6bafdf7ea1fd039fbfbb531024b5c5ac689b206117c03749df5595320202",
+    "png_files": 8838
+   },
+   "E03|42": {
+    "manifest_sha256": "5cc8b9e26c4f56791acad3f6d586b4e9f9a6633b4f4dbb7af5f823994a5a558f",
+    "png_files": 8838
+   },
+   "E05|1337": {
+    "manifest_sha256": "f8e9ff6782058c7487fb86e20c424d130a9bdee2214955dacaaa647e63d60fa8",
+    "png_files": 8838
+   },
+   "E05|2026": {
+    "manifest_sha256": "e2407a9ce312e3493cdb991af8d879e5ddefaaf85077e2fca0c7d35d31af30f8",
+    "png_files": 8838
+   },
+   "E05|42": {
+    "manifest_sha256": "079077c86c12a5624b3f2b8117188a0db2466187376b38a5c1432720bc1000a3",
+    "png_files": 8838
+   },
+   "E06b|1337": {
+    "manifest_sha256": "40564cd58982eae4415c8ac5ea173c96bb40c36a41471e2bc476854cfbacb099",
+    "png_files": 8838
+   },
+   "E06b|2026": {
+    "manifest_sha256": "e1dd3a2eaa990b05c54fa6bf2939e40a77697eb58ae19e7964ffa9aba042f88c",
+    "png_files": 8838
+   },
+   "E06b|42": {
+    "manifest_sha256": "882017b8fadc532691c43699360147e036fa464e6b7bb0b6d8794e38f1568691",
+    "png_files": 8838
+   },
+   "E06c|1337": {
+    "manifest_sha256": "e88e1ca631bd5e63717342816046477bb588d916b3a7008be2f0b8027aa5e23a",
+    "png_files": 8838
+   },
+   "E06c|2026": {
+    "manifest_sha256": "d30ad186264074a670962e46d535e8a6c6b471004803017027b265fab4f18bee",
+    "png_files": 8838
+   },
+   "E06c|42": {
+    "manifest_sha256": "8da6d40458a2ee420330c92ef3a956d5e06be0560c96f86353d107d48a06ab62",
+    "png_files": 8838
+   }
+  },
+  "verified_utc": "2026-11-25T12:20:31Z"
+ },
+ "failed_gates": [],
+ "gates": [
+  {
+   "detail": "DRAFT_PENDING_OWNER_DECISION",
+   "id": "draft_not_approved",
+   "pass": true
+  },
+  {
+   "detail": 16,
+   "id": "draft_frozen_inputs",
+   "pass": true
+  },
+  {
+   "detail": "E04_BANK_CONTRACT_EVIDENCE_COLLECTED",
+   "id": "evidence_collected",
+   "pass": true
+  },
+  {
+   "detail": "2026-11-25T12:20:31Z",
+   "id": "existing_banks_unchanged_since_final_verification",
+   "pass": true
+  },
+  {
+   "detail": {
+    "e01_e02": 6,
+    "learned": 12
+   },
+   "id": "existing_bank_counts",
+   "pass": true
+  },
+  {
+   "detail": [
+    "125a8b3",
+    "4c43b51",
+    "4f5d13b",
+    "99ea826"
+   ],
+   "id": "production_clones_clean",
+   "pass": true
+  },
+  {
+   "detail": {
+    "E01": "E01_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED",
+    "E02": "E02_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED",
+    "E03": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED",
+    "E05": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED",
+    "E06b": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED",
+    "E06c": "LEARNED_BANK_PRODUCTION_FAMILY_COMPLETED_AND_AUDITED"
+   },
+   "id": "six_family_closures",
+   "pass": true
+  },
+  {
+   "detail": {
+    "exists": true,
+    "filesystem_uuid": true,
+    "fstype_ext4": true,
+    "is_directory": true,
+    "mode_0700_no_setgid": true,
+    "mount_point": true,
+    "mount_read_write": true,
+    "no_unexpected_contents": true,
+    "not_symlink": true,
+    "not_udisks_duplicate": true,
+    "owner": true,
+    "realpath_equals_path": true,
+    "user_rwx_access": true
+   },
+   "id": "storage_preflight_live",
+   "pass": true
+  },
+  {
+   "detail": {
+    "bank_root_entries": [
+     "E03",
+     "E05",
+     "E06b",
+     "E06c"
+    ],
+    "registry_methods": [
+     "E03",
+     "E05",
+     "E06b",
+     "E06c"
+    ]
+   },
+   "id": "storage_e04_not_silently_added",
+   "pass": true
+  },
+  {
+   "detail": "Retain E05 as the original RAW-MATCHED baseline with a documented near-collapse caveat. Do not retrain, filter, enhance, replace or cherry-pick its outputs.",
+   "id": "e05_reporting_decision",
+   "pass": true
+  }
+ ],
+ "implementation": {
+  "added_this_session": [
+   "tools/e04_bank_contract_probe.py (read-only evidence)",
+   "tools/e04_bank_readiness.py (this record)"
+  ],
+  "learned_bank_refuses_e04": "methods.common.learned_bank.METHODS excludes E04; tools/learned_bank.py --method choices exclude E04",
+  "reason": "E04-Q1, E04-Q2, E04-Q3 and E04-Q5 are pixel-affecting and unresolved; the instruction forbids an arbitrary default. No adapter module, writer path or gate for E04 was added.",
+  "status": "NOT_STARTED_NOT_AUTHORIZED"
+ },
+ "not_done": [
+  "E04 adapter",
+  "E04 S7 GPU inference",
+  "E04 production",
+  "<bank_root>/E04",
+  "downstream training",
+  "TEST access",
+  "DINOv3",
+  "GPAT"
+ ],
+ "pixel_affecting_open_questions": [
+  "E04-Q1_normalization_statistics",
+  "E04-Q2_synthesis_variant",
+  "E04-Q3_float_to_uint8",
+  "E04-Q5_device_and_reproducibility"
+ ],
+ "record": "E04_BANK_READINESS",
+ "s7_proposal": {
+  "atime_protection": "TRAIN faces read with O_NOATIME after SHA256 check; atime ledger of all TRAIN, VAL and TEST faces before and after: zero changes required",
+  "checkpoint_integrity": "full SHA256 of the 3 files per seed before run A and after run B; no write",
+  "checkpoints": {
+   "1337": {
+    "checkpoint_identity_sha256": "01e58c806bbda7f290043e7da5764075b8462f3948b3ca73fb7f13e534b4afef",
+    "files": {
+     "iteration_150000.data-00000-of-00001": {
+      "bytes": 21185796,
+      "sha256": "fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5"
+     },
+     "iteration_150000.index": {
+      "bytes": 17435,
+      "sha256": "1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560"
+     },
+     "iteration_150000.meta": {
+      "bytes": 2827870,
+      "sha256": "bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233"
+     }
+    },
+    "run_id": "a42fdd2a2accaf0a"
+   },
+   "2026": {
+    "checkpoint_identity_sha256": "d18f48e4057a0c14fcfd1974e8ef15dcb9454ec61432732f259739cc97502d54",
+    "files": {
+     "iteration_150000.data-00000-of-00001": {
+      "bytes": 21185796,
+      "sha256": "089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2"
+     },
+     "iteration_150000.index": {
+      "bytes": 17435,
+      "sha256": "af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a"
+     },
+     "iteration_150000.meta": {
+      "bytes": 2827870,
+      "sha256": "b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090"
+     }
+    },
+    "run_id": "e7100eb9a5ab0537"
+   },
+   "42": {
+    "checkpoint_identity_sha256": "ff4c5065757b7169d3acafe8da56dde3636494108f0b9de9da265590b401c540",
+    "files": {
+     "iteration_150000.data-00000-of-00001": {
+      "bytes": 21185796,
+      "sha256": "55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6"
+     },
+     "iteration_150000.index": {
+      "bytes": 17435,
+      "sha256": "f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02"
+     },
+     "iteration_150000.meta": {
+      "bytes": 2827829,
+      "sha256": "fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933"
+     }
+    },
+    "run_id": "40befa6004aee85c"
+   }
+  },
+  "commands_after_implementation": [
+   "tools/learned_bank.py s7 --method E04 --label A --seed <s> (one OS process per seed and run; to be implemented only after approval)",
+   "tools/learned_bank.py s7 --method E04 --label B --seed <s>",
+   "tools/learned_bank.py s7-compare --method E04 --seed <s>"
+  ],
+  "environment": "gpat-m6-e03 (E04 training lock, D9 driver policy, PRECISION_ENV, qualified session configuration), approved RTX 3090; fresh clean clone from a git bundle at the S7 authority commit, never the training checkout 18ba00e",
+  "firewall": "feed-pack TRAIN closure only; any VAL/TEST id refused; no attack_macro read",
+  "gpu_resources": "single RTX 3090; inference generator at batch 1 needs well under 2 GiB; CPU warp and scipy offsets dominate (estimate 0.3-0.6 s per pair, to be measured in S7: about 1-2 min per S7 run, about 45-90 min per production seed); must not interfere with the unrelated GPU jobs present on the host",
+  "independent_audit": "per-seed audit on the host by a separate read-only collector and a laptop builder: population equals the toy manifest, 186 decodable 256x256 RGB PNGs, finite raw outputs, approved conversion re-applied, graph construction record, no optimizer state, reader round trip, A/B comparison",
+  "outputs": {
+   "per_run_per_seed": 186,
+   "total": 1116
+  },
+  "production_unlock": [
+   "E04 S7 record PASS for all three seeds",
+   "configs/amendments/learned_bank_storage_location_E04.yaml (additive registry)",
+   "configs/amendments/learned_bank_production_E04.yaml binding the S7 record",
+   "live storage preflight at every launch; production audit includes toy-row byte equality"
+  ],
+  "reproducibility_standard": "per E04-Q5 (recommended A: bitwise-identical manifests and PNG bytes between runs A and B; failure stops for an owner ruling)",
+  "required_owner_authority": [
+   "configs/amendments/e04_bank_generation_contract.yaml (approves this DRAFT)",
+   "configs/amendments/learned_bank_s7_launch_authority_E04.yaml"
+  ],
+  "runs": "two independent runs (A then B) per seed, sequential, one GPU job at a time, tmux with exit markers, no automatic rerun into an existing root",
+  "status": "PROPOSAL_CONDITIONAL_ON_OWNER_RULINGS",
+  "toy_population": {
+   "manifest": "outputs/audit/M8_SMOKE_EVIDENCE/run_a/select/toy_manifest.json",
+   "pairs": 186,
+   "rule": "the approved M8 toy pairs (TRAIN only, 0 TEST rows) for every seed; E04 is a pair method, so rows keep pair_id / target_live_id / source_spoof_id",
+   "sha256": "50ac8fb8b9fc6938ba630d0853523d358250137c8fbbc62704d2a73830f7f690"
+  }
+ },
+ "schema": "e04_bank_readiness_v1",
+ "semantics_classification": [
+  {
+   "basis": "M6D3e network.generator (B, C, T, P, I_P heads; depth head unused)",
+   "class": "FROZEN",
+   "open_item": "implementation qualification of the inference construction",
+   "point": "generator graph and components"
+  },
+  {
+   "basis": "PAPER Eq.8/13-15; training_graph.py:30-39; pairs_train_v1 roles",
+   "class": "FROZEN",
+   "open_item": null,
+   "point": "source-spoof and target-live inputs"
+  },
+  {
+   "basis": "D1-D3 pre-pass, D2 offsets dense_offsets(source=spoof, target=live), e04_feed_pack_v1",
+   "class": "FROZEN",
+   "open_item": null,
+   "point": "geometry / landmarks / auxiliary tensors"
+  },
+  {
+   "basis": "D8 RGB uint8/255 once; D5 no augmentation",
+   "class": "FROZEN",
+   "open_item": null,
+   "point": "preprocessing"
+  },
+  {
+   "basis": "PAPER Eq.8/13-15 realized as synthesized_spoof",
+   "class": "PAPER_AND_FROZEN_GRAPH",
+   "open_item": "E04-Q2 confirms plain vs harder-sample synthesis",
+   "point": "output synthesis equation"
+  },
+  {
+   "basis": "not frozen; PhySTD silent",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q1",
+   "point": "model inference mode"
+  },
+  {
+   "basis": "frozen graph uses batch statistics (training only); predecessor test uses moving statistics",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q1",
+   "point": "batch-normalization behaviour"
+  },
+  {
+   "basis": "BASELINE_FINAL_STATE_V1 iteration_150000; raw variables (no EMA shadows)",
+   "class": "FROZEN_PLUS_QUALIFICATION",
+   "open_item": "restore generator variables only",
+   "point": "checkpoint restoration"
+  },
+  {
+   "basis": "none under E04-Q2 A; a new RNG domain only under E04-Q2 B",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q2",
+   "point": "randomness and seed derivation"
+  },
+  {
+   "basis": "D8 scale: RGB float32 nominally [0, 1], additive traces may leave it",
+   "class": "FROZEN",
+   "open_item": null,
+   "point": "output tensor interpretation"
+  },
+  {
+   "basis": "no PhySTD writer; predecessor clip + truncating cast is reference only",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q3",
+   "point": "float-to-uint8 conversion"
+  },
+  {
+   "basis": "learned-bank common encoding does not yet cover E04",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q6",
+   "point": "PNG encoding"
+  },
+  {
+   "basis": "spec 7 needs only RGB",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q4",
+   "point": "auxiliary outputs"
+  },
+  {
+   "basis": "spec 6: pair_id, target_live_id, source_spoof_id, dataset",
+   "class": "FROZEN",
+   "open_item": null,
+   "point": "row identities"
+  },
+  {
+   "basis": "spec 6-7: 8838 TRAIN pairs per seed, 26514 per family",
+   "class": "FROZEN",
+   "open_item": null,
+   "point": "expected population"
+  },
+  {
+   "basis": "D12 is a training standard only",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q5",
+   "point": "determinism and replay"
+  },
+  {
+   "basis": "existing S7 authority covers E03/E05/E06b/E06c only",
+   "class": "OWNER_RULING",
+   "open_item": "E04-Q5, E04-Q6 and a new E04 S7 launch authority",
+   "point": "S7 toy acceptance"
+  },
+  {
+   "basis": "CONTROLLED_ADAPTATION; new: inference statistics and conversion provenance",
+   "class": "FROZEN_PLUS_NEW_DISCLOSURE",
+   "open_item": "disclosures follow the approved options",
+   "point": "scientific fidelity disclosures"
+  }
+ ],
+ "start_commit": "7eefb5d8ef04d78371d93e1f87649d44752379d5",
+ "status": "E04_BANK_BLOCKED_BY_SCIENTIFIC_AUTHORITY",
+ "storage": {
+  "bank_root": "/media/ext_data/student20261_gpat_m8_banks",
+  "bank_root_entries": [
+   "E03",
+   "E05",
+   "E06b",
+   "E06c"
+  ],
+  "checks": {
+   "exists": true,
+   "filesystem_uuid": true,
+   "fstype_ext4": true,
+   "is_directory": true,
+   "mode_0700_no_setgid": true,
+   "mount_point": true,
+   "mount_read_write": true,
+   "no_unexpected_contents": true,
+   "not_symlink": true,
+   "not_udisks_duplicate": true,
+   "owner": true,
+   "realpath_equals_path": true,
+   "user_rwx_access": true
+  },
+  "e04_covered_by_existing_authority": false,
+  "e04_estimated_bytes": {
+   "basis": "E03 seed-42 PNG total (8838 face-sized synthetic images); an estimate",
+   "family": 2425703322,
+   "per_seed": 808567774
+  },
+  "e04_finding": "not covered: the activated storage authority registers E03, E05, E06b, E06c only, and the live preflight (bank_root_contents_ok) refuses any other top-level name, so creating <bank_root>/E04 now would block every learned bank. An additive E04 storage record plus a registry change in methods.common.learned_bank are required before any E04 directory exists.",
+  "filesystem": {
+   "device": "8:2",
+   "filesystem_uuid": "608647d2-9cb0-45b0-b999-73c080ba909b",
+   "free_bytes": 3211669680128,
+   "free_inodes": 243606759,
+   "fstype": "ext4",
+   "mount_options": "rw,relatime",
+   "mount_point": "/media/ext_data",
+   "path": "/media/ext_data/student20261_gpat_m8_banks",
+   "source": "/dev/sda2",
+   "super_options": "rw,errors=remount-ro"
+  },
+  "free_bytes": 3211669680128,
+  "free_inodes": 243606759,
+  "mode": "0o700",
+  "total_bytes": 3936655294464,
+  "used_bytes": 524940070912,
+  "verified_utc": "2026-11-25T12:20:31Z"
+ },
+ "training_verification": {
+  "checkpoints": {
+   "1337": {
+    "checkpoint_identity_sha256": "01e58c806bbda7f290043e7da5764075b8462f3948b3ca73fb7f13e534b4afef",
+    "classes": {
+     "D_bn_moving": 32,
+     "D_trainable": 72,
+     "G_bn_moving": 30,
+     "G_trainable": 72,
+     "counter": 4,
+     "optimizer_slot": 288,
+     "other": 2
+    },
+    "files": {
+     "iteration_150000.data-00000-of-00001": {
+      "bytes": 21185796,
+      "sha256": "fffa5f252c6dde2e1c5a49b380cec0bffe5d13e27ab711cbb3983188897ae0c5"
+     },
+     "iteration_150000.index": {
+      "bytes": 17435,
+      "sha256": "1f284d8be5a4234bc4a7cdead2aa49b00ee413907c83c2d962ac1cbc06fea560"
+     },
+     "iteration_150000.meta": {
+      "bytes": 2827870,
+      "sha256": "bade2ca14ae01e67384705543789bf39d4baabd8411f7253fbbda7ba139af233"
+     }
+    },
+    "generator_bn_moving_variables": 30,
+    "moving_mean_abs_max": 1.7845432758331299,
+    "moving_variance_min": 0.00012737543147522956,
+    "prefix": "checkpoints/iteration_150000",
+    "run_id": "a42fdd2a2accaf0a",
+    "variables": 500
+   },
+   "2026": {
+    "checkpoint_identity_sha256": "d18f48e4057a0c14fcfd1974e8ef15dcb9454ec61432732f259739cc97502d54",
+    "classes": {
+     "D_bn_moving": 32,
+     "D_trainable": 72,
+     "G_bn_moving": 30,
+     "G_trainable": 72,
+     "counter": 4,
+     "optimizer_slot": 288,
+     "other": 2
+    },
+    "files": {
+     "iteration_150000.data-00000-of-00001": {
+      "bytes": 21185796,
+      "sha256": "089c5e01da28c086e3660d4ba1ae4248cbf80cae907a163a0282f4af6812e0b2"
+     },
+     "iteration_150000.index": {
+      "bytes": 17435,
+      "sha256": "af333ff6094c178ad08140ebc5a6a42824835eba62b1d722fe924dfac7bc2b5a"
+     },
+     "iteration_150000.meta": {
+      "bytes": 2827870,
+      "sha256": "b0285d65ad41d75979ea5b16ec3e9a54cb422c348975bcd7ad9292b3060d2090"
+     }
+    },
+    "generator_bn_moving_variables": 30,
+    "moving_mean_abs_max": 1.8633718490600586,
+    "moving_variance_min": 0.0002369159337831661,
+    "prefix": "checkpoints/iteration_150000",
+    "run_id": "e7100eb9a5ab0537",
+    "variables": 500
+   },
+   "42": {
+    "checkpoint_identity_sha256": "ff4c5065757b7169d3acafe8da56dde3636494108f0b9de9da265590b401c540",
+    "classes": {
+     "D_bn_moving": 32,
+     "D_trainable": 72,
+     "G_bn_moving": 30,
+     "G_trainable": 72,
+     "counter": 4,
+     "optimizer_slot": 288,
+     "other": 2
+    },
+    "files": {
+     "iteration_150000.data-00000-of-00001": {
+      "bytes": 21185796,
+      "sha256": "55891ee1fd3a46ea3c451680d9a1a67998ede8246d754b6ea92aaf4bc45d71c6"
+     },
+     "iteration_150000.index": {
+      "bytes": 17435,
+      "sha256": "f83983429ee5f7f8b82e8802439173f54e6d7684b4ffab4ad9f6425fb40dcc02"
+     },
+     "iteration_150000.meta": {
+      "bytes": 2827829,
+      "sha256": "fc441707a1300b74a1eaea53f1265bbbf05cb25b7204d7457925cbea66b24933"
+     }
+    },
+    "generator_bn_moving_variables": 30,
+    "moving_mean_abs_max": 1.3243764638900757,
+    "moving_variance_min": 0.0002623342734295875,
+    "prefix": "checkpoints/iteration_150000",
+    "run_id": "40befa6004aee85c",
+    "variables": 500
+   }
+  },
+  "closure": {
+   "checkpoint_rule": "BASELINE_FINAL_STATE_V1 iteration_150000 within seed",
+   "closure_record": "outputs/audit/E04_THREE_SEED_TRAINING_CLOSURE.json",
+   "closure_sha256": "a14d98fdf5a9a0e279ef09ca231d01261a349b9e7b86fc86d7d69c9b8734c55d",
+   "training_commit": "18ba00e94813f005876c8d6235b0b848226b2c1d"
+  },
+  "environment": {
+   "driver_policy": "D9 driver-version-only 595.84 -> 580.178.04 (conditional, narrow)",
+   "gpu": "NVIDIA GeForce RTX 3090 GPU-b722cd9d-c9fa-223c-915e-cc09d9b862b7",
+   "lock": "environments/e04_training.lock.json a9629d46...",
+   "name": "gpat-m6-e03",
+   "python": "3.8",
+   "tensorflow": "1.15.5"
+  },
+  "implementation_compatibility": "the frozen M6D3e graph rebuilds on the host from a clean clone; all 246 generator graph variables (102 model + 144 optimizer slots) exist in every final checkpoint with equal shapes; synthesized_spoof needs only generator variables and the rgb/offset inputs"
+ }
+}

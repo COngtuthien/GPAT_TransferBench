@@ -186,15 +186,17 @@ def gate(gid, ok, detail):
     GATES.append({'id': gid, 'pass': bool(ok), 'detail': detail})
 
 
-def build(repo, collected_path):
+def build(repo, collected_path, out_root=None):
     repo = Path(repo)
     sys.path.insert(0, str(repo))
     from methods.physics_std import production_io as pio
     raw = Path(collected_path).read_bytes()
     c = json.loads(raw)
     del GATES[:]
-    inv = list(csv.DictReader(open(str(repo / INVENTORY))))
-    final = {int(r['seed']): r for r in csv.DictReader(open(str(repo / FINAL_CSV)))}
+    with open(str(repo / INVENTORY)) as f:
+        inv = list(csv.DictReader(f))
+    with open(str(repo / FINAL_CSV)) as f:
+        final = {int(r['seed']): r for r in csv.DictReader(f)}
     closure = json.loads((repo / CLOSURE).read_text())
     gate('H.cpu_only_clean_clone', c['cpu_only'] and c['clean'] and c['python'].startswith('3.8') and
          c['tensorflow'].startswith('1.15'), {k: c[k] for k in ('cpu_only', 'clean', 'head', 'python', 'tensorflow')})
@@ -274,7 +276,8 @@ def build(repo, collected_path):
                                'prepass_manifest_sha256': pio.PREPASS_MANIFEST_SHA256},
            'scope': 'read-only CPU evidence: no Session on data, no face read, no checkpoint restored into a graph, '
                     'no GPU, no VAL/TEST, no write outside this record'}
-    out = repo / OUT
+    out = Path(out_root or repo) / OUT
+    out.parent.mkdir(parents=True, exist_ok=True)
     Path(str(out) + '.json').write_text(dumps(doc))
     Path(str(out) + '.md').write_text(report(doc))
     Path(str(out) + '_SHA256.txt').write_text(''.join(

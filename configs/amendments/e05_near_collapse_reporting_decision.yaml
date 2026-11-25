@@ -1,0 +1,22 @@
+{
+ "schema_version": "e05_reporting_decision_v1",
+ "record": "E05_NEAR_COLLAPSE_REPORTING_DECISION",
+ "status": "OWNER_DECIDED",
+ "kind": "REPORTING_DECISION_ONLY",
+ "date": "2026-11-25",
+ "method_id": "E05",
+ "decision": "Retain E05 as the original RAW-MATCHED baseline with a documented near-collapse caveat. Do not retrain, filter, enhance, replace or cherry-pick its outputs.",
+ "decision_source": "owner session instruction of 2026-11-25 'E04 Physics-STD Bank Contract and Inference Adapter Preparation', section 9 (decision text recorded verbatim)",
+ "changes_any_generation_contract": false,
+ "changes_any_bank_or_record": false,
+ "future_alternative_training_budget": "may only be evaluated as a separate, separately labelled ablation; never substituted into the primary previous-work comparison",
+ "required_disclosure": "E05 outputs are low-contrast (median per-image std 7.3 vs 30.9-49.0 for the other learned methods); seed 1337 is near-constant (12689 of 17205 S7 within-seed pairs differ by less than one grey level; 1249 production rows share a coarse luminance signature). The cause lies in the generator under the frozen paper budget (4000 iterations, lr 1e-6, batch 1, from scratch); conversion and lineage pass every check.",
+ "evidence_sha256": {
+  "outputs/audit/E05_S7_CONTRAST_DIAGNOSTIC.json": "8223a56a0375d983505b3ad9807075228bbf8493bd61636854a9017e455380ea",
+  "outputs/audit/LEARNED_BANK_S7_E05.json": "295776e56814eef17a08d46de860fa4978d79254d534eb3807cdd733c589fd84",
+  "configs/amendments/learned_bank_production_E05.yaml": "a95b86e9f546cc2a2b587b1c4610341f61c14222bbb4d81dbcdb8c5edf868c9e",
+  "outputs/audit/LEARNED_BANK_PRODUCTION_E05_FAMILY_CLOSURE.json": "9890b3c74b0f0fb320bda91e9f078a019b9f222c166fc34678fe4271c66e1c24",
+  "outputs/audit/M8_LEARNED_PRODUCTION_SUMMARY.json": "c2d062ad1894f263a271a95b09fba9046f4767c56189faa4aceef81069a14a25"
+ },
+ "unchanged": ["E05 checkpoints (iteration_4000 of seeds 42, 1337, 2026)", "the three E05 production banks and their audits", "learned_bank_generation_contract.yaml", "spec section 7 RAW-MATCHED and QUALITY-MATCHED rules"]
+}
