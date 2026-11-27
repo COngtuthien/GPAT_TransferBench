@@ -13,7 +13,7 @@ ssh "$H" "set -euo pipefail; G=$G; S=$S; W=\$HOME/workdir; T=\$W/m10_launch/scie
   test ! -e \$W/m10_\${G}_s\${S}.exit; test ! -e \$W/m10_\${G}_s\${S}.command
   test ! -e /media/ext_data/student20261_gpat_m10_detectors/\$G/seed_\$S
   ! tmux has-session -t m10_\${G}_s\${S} 2>/dev/null
-  if ps -eo args | grep -q '[r]un_m10_detector.py'; then echo 'detector already running'; exit 4; fi
+  if ps -eo args | grep -q '^[^ ]*/gpat-m8-downstream/bin/python -B tools/[r]un_m10_detector.py'; then echo 'detector already running'; exit 4; fi
   cd \$T; test -z \"\$(git status --porcelain --untracked-files=normal)\"
   git fetch -q origin m6-baselines; git merge -q --ff-only origin/m6-baselines
   test \"\$(git rev-parse HEAD)\" = $HEAD; test -z \"\$(git status --porcelain --untracked-files=normal)\"

@@ -14,7 +14,7 @@ REC="M10_${G}_SEED${S}_AUDIT.json"
 [ ! -e "$DEST/$REC" ] || { echo "refusing: $DEST/$REC exists"; exit 3; }
 [ ! -e "$DEST/${G}_seed${S}" ] || { echo "refusing: $DEST/${G}_seed${S} exists"; exit 3; }
 ssh "$H" "set -e; test -s ~/workdir/m10_${G}_s${S}.exit; echo exit_marker=\$(cat ~/workdir/m10_${G}_s${S}.exit)
-  if ps -eo args | grep -q '[r]un_m10_detector.py'; then echo 'detector process still running'; exit 4; fi
+  if ps -eo args | grep -q '^[^ ]*/gpat-m8-downstream/bin/python -B tools/[r]un_m10_detector.py'; then echo 'detector process still running'; exit 4; fi
   python3 -c \"import json;print('run_status', json.load(open('/media/ext_data/student20261_gpat_m10_detectors/${G}/seed_${S}/run_status.json'))['status'])\"
   mkdir -p ~/workdir/m10_audits ~/workdir/m10_evidence
   cd ~/workdir/m10_launch/science_exec; git rev-parse HEAD; test -z \"\$(git status --porcelain --untracked-files=normal)\"
