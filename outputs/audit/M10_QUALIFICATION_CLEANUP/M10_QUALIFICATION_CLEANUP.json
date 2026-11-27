@@ -1,0 +1,78 @@
+{
+ "deleted_utc": "2026-11-27T13:10:30Z",
+ "host": "nd-System-Product-Name (student20261)",
+ "kept_on_host": [
+  "/home/student20261/workdir/m10_qualification/<commit>.exit and .log markers (4 files)",
+  "/home/student20261/workdir/m10_launch/ (all execution/qualified clones, logs, qual_outputs tgz)",
+  "/home/student20261/workdir/m10_qual_cleanup/ (inventory, archive, script)"
+ ],
+ "lost_after_deletion": "the 58 fixture checkpoints (.pt) and 3256 fixture/bank PNGs; their SHA256 remain in the inventories. The 17/17 qualification record and its archives remain; re-materialising raw outputs requires re-running tools/m10_launcher_qualification.py at a4dd841 (not done here), so the raw qualification outputs are NOT claimed to remain accessible.",
+ "never_touched": [
+  "M8 bank root",
+  "M10 detector root /media/ext_data/student20261_gpat_m10_detectors",
+  "frozen runtime ~/workdir/GPAT_TransferBench_runtime",
+  "S7 outputs",
+  "execution clones"
+ ],
+ "owner_authorization": "M10 scientific execution authorization of 2026-11-27, section 4 (deletion of disposable M10 qualification directories after independent verification)",
+ "record": "M10_QUALIFICATION_CLEANUP",
+ "root": "/home/student20261/workdir/m10_qualification",
+ "schema": "m10_qualification_cleanup_v1",
+ "script": {
+  "path": "outputs/audit/M10_QUALIFICATION_CLEANUP/qual_cleanup.sh",
+  "sha256": "8fe6eb37395114886ca9508daad6abb13b53cb4248abf4b3d531aaab73280ca2"
+ },
+ "ssd_avail_bytes": {
+  "after": 19127414784,
+  "before": 15897788416,
+  "freed": 3229626368
+ },
+ "targets": [
+  {
+   "attempt": "first attempt (harness firewall-summary predicate defect; pass=false)",
+   "bytes": 1612737650,
+   "files": 2140,
+   "inventory": {
+    "path": "outputs/audit/M10_QUALIFICATION_CLEANUP/inventory_243ac81aa53b9c6c686a323c73d27522f3c59dd0.sha256",
+    "sha256": "86ace5ceaf9f382e5e4962a6158dd34eb780acdee087d0055363b756a8a580c0"
+   },
+   "marker": "exit 1",
+   "path": "/home/student20261/workdir/m10_qualification/243ac81aa53b9c6c686a323c73d27522f3c59dd0",
+   "png": 1628,
+   "pt": 29
+  },
+  {
+   "attempt": "qualified attempt (17/17 basis; pass=true)",
+   "bytes": 1612737064,
+   "files": 2140,
+   "inventory": {
+    "path": "outputs/audit/M10_QUALIFICATION_CLEANUP/inventory_a4dd841b4b2a3e636af3bad2818a0effdc87a544.sha256",
+    "sha256": "ef3362447cc24d4b9ffeca01e3eb95b9b9ab4017adf540bffe920b935a762d2b"
+   },
+   "marker": "exit 0",
+   "path": "/home/student20261/workdir/m10_qualification/a4dd841b4b2a3e636af3bad2818a0effdc87a544",
+   "png": 1628,
+   "pt": 29
+  }
+ ],
+ "total_bytes_deleted": 3225474714,
+ "verification": {
+  "archive": {
+   "content": "every file of both directories except *.pt and *.png (json, parquet, jsonl)",
+   "files": 966,
+   "path": "outputs/audit/M10_QUALIFICATION_CLEANUP/qualification_raw_no_pt_no_png.tgz",
+   "sha256": "1c77722b88f567e087ddd8adf33243278d5f813d0756e7c0af7ac22f0878df55",
+   "verified": "extracted and hash-compared to the inventory (966/966)"
+  },
+  "canonical_paths": "readlink -f equals path; parent equals the qualification root; same device as root (no mount crossing)",
+  "committed_evidence_cross_check": "all 165 files of outputs/audit/M10_SCIENTIFIC_LAUNCH_QUALIFICATION/qualification_outputs_no_checkpoints.tgz hash-identical to the a4dd841 inventory before deletion",
+  "content": "NON_SCIENTIFIC synthetic noise fixtures (gpatbench/downstream/m10_fixture.py), fixture detector checkpoints of 1-2 epochs, negative-control copies, audit/expect JSON; no scientific checkpoint, dataset image, bank output or TEST data",
+  "foreign_owner_files": 0,
+  "m10_processes_running": false,
+  "open_files_under_root": 0,
+  "retention_policy": "configs/amendments/m10_detector_storage_location.yaml lists qualification fixtures as not covered by the detector storage authority; no repository rule requires their retention; owner authorized deletion",
+  "scientific_manifest_references": "no scientific run manifest exists yet; the qualification record host_qualification.json references fixture paths only as qualification provenance",
+  "special_files": 0,
+  "symlinks": 0
+ }
+}
