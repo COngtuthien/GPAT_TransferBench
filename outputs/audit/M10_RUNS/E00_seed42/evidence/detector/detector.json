@@ -1,0 +1,130 @@
+{
+ "amp_observed": {
+  "train_logits_dtype": "torch.float16",
+  "val_logits_dtype": "torch.float16"
+ },
+ "bank_seed": null,
+ "batch": {
+  "live": 32,
+  "real_spoof": 32
+ },
+ "cuda": "13.0",
+ "detector_seed": 42,
+ "determinism_after": {
+  "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+  "cudnn_allow_tf32": false,
+  "cudnn_benchmark": false,
+  "cudnn_deterministic": true,
+  "matmul_allow_tf32": false,
+  "use_deterministic_algorithms": true
+ },
+ "determinism_before": {
+  "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+  "cudnn_allow_tf32": false,
+  "cudnn_benchmark": false,
+  "cudnn_deterministic": true,
+  "matmul_allow_tf32": false,
+  "use_deterministic_algorithms": true
+ },
+ "deterministic_algorithms": true,
+ "end_utc": "2026-11-27T13:34:44Z",
+ "epochs": 40,
+ "grad_scaler": {
+  "backoff_factor": 0.5,
+  "enabled": true,
+  "growth_factor": 2.0,
+  "growth_interval": 2000,
+  "init_scale": 65536.0
+ },
+ "label": "SCIENTIFIC",
+ "method_id": "E00",
+ "optimizer": {
+  "class": "AdamW",
+  "grad_clip_norm": 1.0,
+  "groups": [
+   {
+    "amsgrad": false,
+    "base_lr": 0.0001,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "capturable": false,
+    "decoupled_weight_decay": true,
+    "differentiable": false,
+    "eps": 1e-08,
+    "foreach": null,
+    "fused": null,
+    "maximize": false,
+    "n_parameters": 11176512,
+    "n_tensors": 60,
+    "name": "backbone",
+    "names_sha256": "529267f659ea19bb3d7a5f08b790baebc8acefd03021df898884226b31167cc9",
+    "weight_decay": 0.0001
+   },
+   {
+    "amsgrad": false,
+    "base_lr": 0.0005,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "capturable": false,
+    "decoupled_weight_decay": true,
+    "differentiable": false,
+    "eps": 1e-08,
+    "foreach": null,
+    "fused": null,
+    "maximize": false,
+    "n_parameters": 513,
+    "n_tensors": 2,
+    "name": "head",
+    "names_sha256": "d4999d431fbda9ca236a8dccbc9bc378c7a62851c0a8e2d7ee02dedd6de5e0c4",
+    "weight_decay": 0.0001
+   }
+  ],
+  "head_names": [
+   "fc.weight",
+   "fc.bias"
+  ],
+  "zero_grad_set_to_none": true
+ },
+ "optimizer_steps_applied": 7000,
+ "optimizer_steps_skipped": 0,
+ "pool_discarded": {
+  "real_spoof": 150,
+  "synthetic": null
+ },
+ "pool_passes": {
+  "real_spoof": 25,
+  "synthetic": null
+ },
+ "precision_policy": {
+  "autocast_dtype": "float16",
+  "deterministic": true,
+  "device": "cuda",
+  "grad_scaler": true,
+  "name": "CUDA_AMP_FP16_GRADSCALER_DETERMINISTIC"
+ },
+ "qualification_overrides": null,
+ "retention": "SELECTED_ONLY",
+ "scheduler": {
+  "bases": {
+   "backbone": 0.0001,
+   "head": 0.0005
+  },
+  "min_lr": 1e-06,
+  "rule": "D6 PER_STEP_FROM_ZERO",
+  "total_steps": 7000,
+  "warmup_steps": 525
+ },
+ "start_utc": "2026-11-27T13:11:58Z",
+ "steps_per_epoch": 175,
+ "torch": "2.12.1+cu130",
+ "total_steps": 7000,
+ "track_id": "binary",
+ "wall_seconds": 1365.3857329710154,
+ "warmup_epochs": 3,
+ "weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+ "workers": 8
+}

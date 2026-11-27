@@ -1,0 +1,68 @@
+{
+ "bank_seed": null,
+ "checkpoint_file": "checkpoint_epoch26.pt",
+ "checkpoint_file_sha256": "80c4b4d89fa96df017102c6672ef7a54edab2963cbeda8ba9dc4c59ef63fb7ce",
+ "checkpoint_state_sha256": "80808e42d55f0483816c6e52b68d0538394e0867ffd6915fc7c5d9fe445acdea",
+ "detector_seed": 42,
+ "frozen_val_threshold": 0.39184225198568134,
+ "frozen_val_threshold_hex": "0x1.913f1865e0c2ap-2",
+ "label": "SCIENTIFIC",
+ "method_id": "E00",
+ "metric_implementation": {
+  "auc": "auc (exact Mann-Whitney, ties 1/2)",
+  "module": "gpatbench/downstream/metrics.py + gpatbench/downstream/m10_selection.py",
+  "rule": "SPOOF_IF_SCORE_GE_THRESHOLD",
+  "threshold": "m10_selection.select_threshold_o2 (spec 15 + O2 A_SMALLER_THRESHOLD)"
+ },
+ "selected_epoch": 26,
+ "selection_reasoning": {
+  "best_so_far_trajectory": [
+   0,
+   1,
+   2,
+   26
+  ],
+  "epochs_at_min_acer": [
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39
+  ],
+  "epochs_at_min_acer_and_max_auc": [
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39
+  ],
+  "epochs_evaluated": 40,
+  "min_val_acer": "0"
+ },
+ "selection_rule": "D5 EPOCH_OWN_VAL_THRESHOLD: minimum VAL video ACER, then maximum VAL video AUC, then the earliest epoch (selection.checkpoint min_val_video_acer_then_max_auc)",
+ "selection_source": "VAL only (split_v1 VAL frames, video score = mean frame probability)",
+ "test_used": false,
+ "threshold_rule": "spec 15 + O2 A_SMALLER_THRESHOLD: minimum VAL video ACER over all unique video-score midpoints plus 0 and 1; then minimum abs(threshold - 0.5) (float, as the approved implementation); then the numerically smallest threshold; D4 spoof iff score >= threshold",
+ "threshold_tie_break": "NONE",
+ "track_id": "binary",
+ "val_acer": "0",
+ "val_auc": "1"
+}
